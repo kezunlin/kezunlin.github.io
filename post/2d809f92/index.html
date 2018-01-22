@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+<meta name="referrer" content="no-referrer" />
+<meta name="google-site-verification" content="WSpJFvfcmIPBX_iK8uPbmCHIy_0f1lvd7ZJpbyad2sA" />
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="qt,vtk,windows," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="KeZunLin's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Compile pcl with vtk qt5 support from source on windows 10.">
+<meta name="keywords" content="qt,vtk,windows">
+<meta property="og:type" content="article">
+<meta property="og:title" content="compile pcl with vtk qt support from source on windows">
+<meta property="og:url" content="http://kezunlin.me/post/2d809f92/index.html">
+<meta property="og:site_name" content="KeZunLin&#39;s Blog">
+<meta property="og:description" content="Compile pcl with vtk qt5 support from source on windows 10.">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://images2017.cnblogs.com/blog/635233/201801/635233-20180112145011910-995769793.png">
+<meta property="og:image" content="http://images2017.cnblogs.com/blog/635233/201801/635233-20180112145039222-1499154536.png">
+<meta property="og:image" content="http://images2017.cnblogs.com/blog/635233/201801/635233-20180112145112113-631946507.png">
+<meta property="og:image" content="http://images2017.cnblogs.com/blog/635233/201801/635233-20180112233204410-2114402383.png">
+<meta property="og:image" content="http://images2017.cnblogs.com/blog/635233/201801/635233-20180114180220441-1140420458.png">
+<meta property="og:image" content="http://images2017.cnblogs.com/blog/635233/201801/635233-20180114210710582-1020157530.png">
+<meta property="og:updated_time" content="2018-01-22T08:28:54.927Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="compile pcl with vtk qt support from source on windows">
+<meta name="twitter:description" content="Compile pcl with vtk qt5 support from source on windows 10.">
+<meta name="twitter:image" content="http://images2017.cnblogs.com/blog/635233/201801/635233-20180112145011910-995769793.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://kezunlin.me/post/2d809f92/"/>
+
+
+
+
+
+  <title>compile pcl with vtk qt support from source on windows | KeZunLin's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-111858944-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">KeZunLin's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Live and learn.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://kezunlin.me/post/2d809f92/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/kezunlin_avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="KeZunLin's Blog">
+      <img itemprop="logo" src="/images/kezunlin_logo.png" alt="logo" />
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">compile pcl with vtk qt support from source on windows</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-22T16:26:00+08:00">
+                2018-01-22
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-01-22T16:28:54+08:00">
+                2018-01-22
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/pcl/" itemprop="url" rel="index">
+                    <span itemprop="name">pcl</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,563
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  16
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Compile pcl with vtk qt5 support from source on windows 10.<br><a id="more"></a></p>
+<h1 id="Part-1-Guide"><a href="#Part-1-Guide" class="headerlink" title="Part 1: Guide"></a>Part 1: Guide</h1><blockquote>
+<p>Tips<br>we’d better to use SSD to compile source code instead HDD. So put source code in C folder on windows.</p>
+</blockquote>
+<h2 id="prerequisit"><a href="#prerequisit" class="headerlink" title="prerequisit"></a>prerequisit</h2><h3 id="software"><a href="#software" class="headerlink" title="software"></a>software</h3><ul>
+<li>vs: vs2015 installer</li>
+<li>qt: qt-opensource-windows-x86-msvc2015_64-5.7.1.exe</li>
+<li><p>pcl installer: <a href="https://github.com/PointCloudLibrary/pcl/releases/download/pcl-1.8.1/PCL-1.8.1-AllInOne-msvc2015-win64.exe" target="_blank" rel="noopener">https://github.com/PointCloudLibrary/pcl/releases/download/pcl-1.8.1/PCL-1.8.1-AllInOne-msvc2015-win64.exe</a></p>
+</li>
+<li><p>vtk source:    <a href="https://github.com/Kitware/VTK/archive/v8.0.1.zip" target="_blank" rel="noopener">https://github.com/Kitware/VTK/archive/v8.0.1.zip</a></p>
+</li>
+<li>pcl source:    <a href="https://github.com/PointCloudLibrary/pcl/archive/pcl-1.8.1.zip" target="_blank" rel="noopener">https://github.com/PointCloudLibrary/pcl/archive/pcl-1.8.1.zip</a></li>
+</ul>
+<h3 id="version"><a href="#version" class="headerlink" title="version"></a>version</h3><pre><code>window: 10
+qt: 5.7.1
+qmake: 3.0
+qtcreator: 4.2.0
+
+cmake/gui: 3.10.0
+vtk: 8.0.1 (source)
+pcl: 1.8.1 (source)
+
+$ qmake -v
+QMake version 3.0
+Using Qt version 5.7.1 in C:/Qt/Qt5.7.1/5.7/msvc2015_64/lib
+
+$ qtcreator -version
+Qt Creator 4.2.0 based on Qt 5.7.1
+
+$ cmake -version
+cmake version 3.10.0
+</code></pre><h2 id="install-qt"><a href="#install-qt" class="headerlink" title="install qt"></a>install qt</h2><h3 id="install-vs2015"><a href="#install-vs2015" class="headerlink" title="install vs2015"></a>install vs2015</h3><p>install vs2015 (pass)</p>
+<h3 id="install-qt-1"><a href="#install-qt-1" class="headerlink" title="install qt"></a>install qt</h3><p>install qt path to <code>C:\Qt\Qt5.7.1</code></p>
+<p>add the following to system path.</p>
+<pre><code>C:\Qt\Qt5.7.1\5.7\msvc2015_64\bin
+C:\Qt\Qt5.7.1\Tools\QtCreator\bin
+</code></pre><h3 id="install-Qt-VS-Tools"><a href="#install-Qt-VS-Tools" class="headerlink" title="install Qt VS Tools"></a>install Qt VS Tools</h3><p>start vs2015, and install <code>Qt Visual Sutido Tools</code> and restart vs2015.</p>
+<pre><code>Tools---&gt; Extensions and Update... ---&gt; online search qt ---&gt; install Qt Visual Sutido Tools ---&gt; OK
+</code></pre><p>new menu <code>Qt VS Tools</code> will be added to VS Main menu.</p>
+<h3 id="configure-qt-for-vs"><a href="#configure-qt-for-vs" class="headerlink" title="configure qt for vs"></a>configure qt for vs</h3><p>follow steps</p>
+<pre><code>Qt VS Tools ---&gt; Qt Options ---&gt; Add name and path
+</code></pre><p>Add qt path for vs2015 so that we can find <code>%PATH%\bin\qmake.exe</code></p>
+<pre><code>Name: Qt 5.7.1
+Path: C:\Qt\Qt5.7.1\5.7\msvc2015_64\
+</code></pre><p><img src="http://images2017.cnblogs.com/blog/635233/201801/635233-20180112145011910-995769793.png" alt="qt options"></p>
+<h3 id="new-qt-project-from-vs"><a href="#new-qt-project-from-vs" class="headerlink" title="new qt project from vs"></a>new qt project from vs</h3><p>start vs2015, and new <code>Qt Gui Application</code>. </p>
+<p><img src="http://images2017.cnblogs.com/blog/635233/201801/635233-20180112145039222-1499154536.png" alt="new qt gui application"></p>
+<p>Compile and run first qt program.<br>Success. </p>
+<h2 id="install-pcl"><a href="#install-pcl" class="headerlink" title="install pcl"></a>install pcl</h2><h3 id="install-pcl-by-installer"><a href="#install-pcl-by-installer" class="headerlink" title="install pcl by installer"></a>install pcl by installer</h3><p>start pcl allInOne installer and install pcl to <code>C:\Program Files\PCL 1.8.1\</code></p>
+<p>choose to install OpenNI2 to <code>C:\Program Files\PCL 1.8.1\3rdParty\OpenNI2\</code></p>
+<p>this process will add 4 system env.</p>
+<pre><code>PCL_ROOT          C:\Program Files\PCL 1.8.1
+OPENNI2_INCLUDE64 C:\Program Files\PCL 1.8.1\3rdParty\OpenNI2\Include\
+OPENNI2_LIB64     C:\Program Files\PCL 1.8.1\3rdParty\OpenNI2\Lib\ 
+OPENNI2_REDIST64  C:\Program Files\PCL 1.8.1\3rdParty\OpenNI2\Redist\
+</code></pre><h3 id="configure-env"><a href="#configure-env" class="headerlink" title="configure env"></a>configure env</h3><p>add env to <code>Path</code>.</p>
+<pre><code>%PCL_ROOT\bin
+%PCL_ROOT%\3rdParty\FLANN\bin
+%PCL_ROOT%\3rdParty\OpenNI2\Redist
+%PCL_ROOT%\3rdParty\OpenNI2\Tools
+%PCL_ROOT%\3rdParty\Qhull\bin
+%PCL_ROOT%\3rdParty\VTK\bin
+</code></pre><h3 id="copy-winpap-package"><a href="#copy-winpap-package" class="headerlink" title="copy winpap package"></a>copy winpap package</h3><p>copy winpap to <code>C:\Program Files\PCL 1.8.1\3rdParty\</code>, and 3rdParty folder looks like this:</p>
+<pre><code>$ ls -al
+
+total 16
+drwxr-xr-x 1 zunli 197609 0 1月  11 12:47 ./
+drwxr-xr-x 1 zunli 197609 0 1月  11 08:03 ../
+drwxr-xr-x 1 zunli 197609 0 1月  11 08:02 Boost/
+drwxr-xr-x 1 zunli 197609 0 1月  11 08:01 Eigen/
+drwxr-xr-x 1 zunli 197609 0 1月  11 08:02 FLANN/
+drwxr-xr-x 1 zunli 197609 0 1月  11 08:04 OpenNI2/
+drwxr-xr-x 1 zunli 197609 0 1月  11 08:02 Qhull/
+drwxr-xr-x 1 zunli 197609 0 1月  11 08:03 VTK/
+drwxr-xr-x 1 zunli 197609 0 1月  11 12:47 winpcap/
+</code></pre><h2 id="compile-vtk"><a href="#compile-vtk" class="headerlink" title="compile vtk"></a>compile vtk</h2><h3 id="configure-source"><a href="#configure-source" class="headerlink" title="configure source"></a>configure source</h3><p>we need to compile vtk to replace <code>C:\Program Files\PCL 1.8.1\3rdParty\VTK\</code></p>
+<pre><code>$ cmake-gui 
+</code></pre><p>and configure</p>
+<pre><code>source dir   C:/VTK-8.0.1
+build dir    C:/VTK-8.0.1/build
+</code></pre><p>configure generator to <code>Visual Studio 14 2015 Win64</code></p>
+<p>(1) With VTK = 8.0.1:</p>
+<pre><code>VTK_Group_Qt  ON
+</code></pre><p>configure again, and then <code>QT_QMAKE_EXECUTABLE</code> and <code>VTK_QT_VERSION</code>  will appear.<br><img src="http://images2017.cnblogs.com/blog/635233/201801/635233-20180112145112113-631946507.png" alt="vtk cmake qt version"></p>
+<p>(2) we need to change <code>VTK_QT_VERSION</code> from 4 to 5.</p>
+<pre><code>VTK_QT_VERSION     5  # by default 4
+</code></pre><p>(3) change <code>VTK_RENDERING_BACKEND</code> from OpenGL to OpenGL2.</p>
+<pre><code>VTK_RENDERING_BACKEND OpenGL2 # by default OpenGL
+</code></pre><p>(4) change install path from <code>C:\Program Files\VTK\</code> to <code>D:\VTK\</code> so that we can have write privileges.</p>
+<pre><code>CMAKE_INSTALL_PREFIX  D:/VTK  # by default C:/Program Files/VTK
+</code></pre><p>or</p>
+<p>vim <code>C:\VTK-8.0.1\build\cmake_install.cmake</code></p>
+<pre><code>#set(CMAKE_INSTALL_PREFIX &quot;C:/Program Files/VTK&quot;)
+set(CMAKE_INSTALL_PREFIX &quot;D:/VTK&quot;)
+</code></pre><p>otherwise, when we install, error will occur:</p>
+<pre><code>1&gt;  -- Install configuration: &quot;Release&quot;
+1&gt;  CMake Error at cmake_install.cmake:36 (file):
+1&gt;    file cannot create directory: C:/Program Files/VTK/lib/cmake/vtk-8.0.
+1&gt;    Maybe need administrative privileges.
+</code></pre><p>(5) we should also notice <code>BUILD_SHARED_LIBS</code></p>
+<pre><code>BUILD_SHARED_LIBS  ON
+</code></pre><p>(6) Configure and warning will occur</p>
+<pre><code>CMake Deprecation Warning at ThirdParty/libproj4/vtklibproj4/cmake/policies.cmake:2 (cmake_policy):
+  The OLD behavior for policy CMP0022 will be removed from a future version
+  of CMake.
+
+  The cmake-policies(7) manual explains that the OLD behaviors of all
+  policies are deprecated and that a policy should be set to OLD only under
+  specific short-term circumstances.  Projects should be ported to the NEW
+  behavior and not rely on setting a policy to OLD.
+Call Stack (most recent call first):
+  ThirdParty/libproj4/vtklibproj4/CMakeLists.txt:43 (include)
+</code></pre><p>We can omit this warning.</p>
+<h3 id="generate-vs-solution"><a href="#generate-vs-solution" class="headerlink" title="generate vs solution"></a>generate vs solution</h3><p>If everything goes well, then generate <code>VTK.sln</code></p>
+<h3 id="compile-solution"><a href="#compile-solution" class="headerlink" title="compile solution"></a>compile solution</h3><p>Open <code>VTK.sln</code> in vs2015 and build with <code>Release X64</code>.</p>
+<p>NOTICE: this build process will take about 2 hours.</p>
+<pre><code>... waiting for about 2 hours ...
+
+========== 生成: 成功 192 个，失败 0 个，最新 4 个，跳过 0 个 ==========
+</code></pre><h3 id="fix-errors"><a href="#fix-errors" class="headerlink" title="fix errors"></a>fix errors</h3><p>search for <code>fatal error</code> and fix.</p>
+<h3 id="install-vtk"><a href="#install-vtk" class="headerlink" title="install vtk"></a>install vtk</h3><p>choose <code>INSTALL</code> and generate , and VTK will be installed to <code>D:\VTK\</code>.</p>
+<p>Notice for <code>QVTKWidgetPlugin</code> and copy dll and lib to <code>D:\VTK\</code>.</p>
+<ul>
+<li>dll: copy <code>C:\VTK-8.0.1\build\bin\Release\QVTKWidgetPlugin.dll</code> —&gt; <code>D:\VTK\bin\QVTKWidgetPlugin.dll</code></li>
+<li>lib:  copy <code>C:\VTK-8.0.1\build\lib\Release\QVTKWidgetPlugin.lib</code> —&gt; <code>D:\VTK\lib\QVTKWidgetPlugin.lib</code></li>
+</ul>
+<p>we should also notice that dll has been copied to <code>D:\VTK\plugins\designer\QVTKWidgetPlugin.dll</code></p>
+<h3 id="copy-vtk-to-pcl"><a href="#copy-vtk-to-pcl" class="headerlink" title="copy vtk to pcl"></a>copy vtk to pcl</h3><p>copy vtk from  <code>D:\VTK\</code> to <code>C:/Program Files/PCL 1.8.1/3rdParty/VTK</code> to replace old one.</p>
+<h3 id="install-QVTKWidgetPlugin"><a href="#install-QVTKWidgetPlugin" class="headerlink" title="install QVTKWidgetPlugin"></a>install QVTKWidgetPlugin</h3><p>copy <code>D:\VTK\plugins\designer\QVTKWidgetPlugin.dll</code> —&gt;<br><code>C:\Qt\Qt5.7.1\5.7\msvc2015_64\plugins\designer</code></p>
+<p>start vs2015 again, view mainwindow.ui in <code>Qt Designer</code>.</p>
+<p>Now <code>QVTKWidget</code> will occur.</p>
+<p><img src="http://images2017.cnblogs.com/blog/635233/201801/635233-20180112233204410-2114402383.png" alt="qvtkwidget_in_qt_designer"></p>
+<h2 id="compile-pcl"><a href="#compile-pcl" class="headerlink" title="compile pcl"></a>compile pcl</h2><h3 id="configure-source-1"><a href="#configure-source-1" class="headerlink" title="configure source"></a>configure source</h3><pre><code>$ cmake-gui 
+</code></pre><p>(1) configure include and library</p>
+<pre><code>boost include: C:/Program Files/PCL 1.8.1/3rdParty/Boost/include/boost-1_64 
+boost library: C:/Program Files/PCL 1.8.1/3rdParty/Boost/lib
+
+boost xxx library: C:/Program Files/PCL 1.8.1/3rdParty/Boost/lib/xxx.lib 
+......
+......
+
+eigen include: C:/Program Files/PCL 1.8.1/3rdParty/Eigen/eigen3
+
+FLANN include: C:/Program Files/PCL 1.8.1/3rdParty/FLANN/include
+FLANN library: C:/Program Files/PCL 1.8.1/3rdParty/FLANN/lib/flann_cpp.lib  # NOTICE
+# _s means static, no _s means dynamic. _gd means debug
+
+OpenNI2 include: C:/Program Files/PCL 1.8.1/3rdParty/OpenNI2/Include
+OpenNI2 LIBRARY: C:/Program Files/PCL 1.8.1/3rdParty/OpenNI2/Lib/OpenNI2.lib
+
+qhull include: C:/Program Files/PCL 1.8.1/3rdParty/Qhull/include
+qhull library: C:/Program Files/PCL 1.8.1/3rdParty/Qhull/lib/qhullstatic.lib        # NOTICE
+
+pcap  include: C:/Program Files/PCL 1.8.1/3rdParty/winpcap/Include
+#pcap  library: C:/Program Files/PCL 1.8.1/3rdParty/winpcap/Lib/x64/Packet.lib;C:/Program Files/PCL 1.8.1/3rdParty/winpcap/Lib/x64/wpcap.lib # 2 NOTICE 
+pcap  library: C:/Program Files/PCL 1.8.1/3rdParty/winpcap/Lib/x64/wpcap.lib # 2 NOTICE 
+</code></pre><p>(2) configure vtk dir </p>
+<pre><code>VTK dir: C:/Program Files/PCL 1.8.1/3rdParty/VTK/lib/cmake/vtk-8.0
+# for finding VTKConfig.cmake
+# VTK_MAJOR_VERSION 8, rendering backend: OpenGL2
+</code></pre><p>(3) change install path from <code>C:\Program Files\PCL\</code> to <code>D:\PCL\</code> so that we can have write privileges.</p>
+<pre><code>CMAKE_INSTALL_PREFIX  D:/PCL  # by default C:/Program Files/PCL
+</code></pre><p>or </p>
+<p>vim <code>C:\pcl-1.8.1\build\cmake_install.cmake</code></p>
+<pre><code>#set(CMAKE_INSTALL_PREFIX &quot;C:/Program Files/PCL&quot;)
+set(CMAKE_INSTALL_PREFIX &quot;D:/PCL&quot;)
+</code></pre><p>otherwise, when we install, error will occur: [todo ]</p>
+<pre><code>1&gt;  -- Install configuration: &quot;Release&quot;
+1&gt;  CMake Error at cmake_install.cmake:36 (file):
+1&gt;    file cannot create directory: C:/Program Files/PCL/lib/cmake/pcl-8.0.
+1&gt;    Maybe need administrative privileges.
+</code></pre><p>(4) Configure and errors may occur:</p>
+<pre><code>Could NOT find PkgConfig (missing: PKG_CONFIG_EXECUTABLE)                 # OMIT
+Could NOT find LIBUSB_1 (missing: LIBUSB_1_LIBRARY LIBUSB_1_INCLUDE_DIR)  # OMIT
+Could NOT find ZLIB (missing: ZLIB_LIBRARY ZLIB_INCLUDE_DIR) 
+Could NOT find PNG (missing: PNG_LIBRARY PNG_PNG_INCLUDE_DIR) 
+</code></pre><p>(5) Fix zlib and png</p>
+<pre><code>zlib include: C:/Program Files/PCL 1.8.1/3rdParty/VTK/include/vtk-8.0/vtkzlib
+zlib library: C:/Program Files/PCL 1.8.1/3rdParty/VTK/lib/vtkzlib-8.0.lib
+
+png include:  C:/Program Files/PCL 1.8.1/3rdParty/VTK/include/vtk-8.0/vtkpng
+png library:  C:/Program Files/PCL 1.8.1/3rdParty/VTK/lib/vtkpng-8.0.lib
+</code></pre><p>(6) build examples and apps</p>
+<pre><code>Build_visualization ON
+Build_apps ON
+Build_examples ON
+</code></pre><p>(7) configure will output</p>
+<pre><code>Selecting Windows SDK version 10.0.14393.0 to target Windows 10.0.15063.
+Could NOT find PkgConfig (missing: PKG_CONFIG_EXECUTABLE) 
+Found OpenMP
+Eigen found (include: C:\Program Files\PCL 1.8.1\3rdParty\Eigen\eigen3, version: 3.3.4)
+FLANN found (include: C:/Program Files/PCL 1.8.1/3rdParty/FLANN/include, lib: optimized;C:/Program Files/PCL 1.8.1/3rdParty/FLANN/lib/flann_cpp_s.lib;debug;C:/Program Files/PCL 1.8.1/3rdParty/FLANN/lib/flann_cpp_s-gd.lib)
+Could NOT find LIBUSB_1 (missing: LIBUSB_1_LIBRARY LIBUSB_1_INCLUDE_DIR) 
+OpenNI 2 found (include: C:/Program Files/PCL 1.8.1/3rdParty/OpenNI2/Include, lib: C:/Program Files/PCL 1.8.1/3rdParty/OpenNI2/Lib/OpenNI2.lib, redist: C:\Program Files\PCL 1.8.1\3rdParty\OpenNI2\Redist\)
+QHULL found (include: C:/Program Files/PCL 1.8.1/3rdParty/Qhull/include, lib: optimized;C:/Program Files/PCL 1.8.1/3rdParty/Qhull/lib;debug;C:/Program Files/PCL 1.8.1/3rdParty/Qhull/lib)
+Found CUDA Toolkit v8.0
+CUDA NVCC target flags: -gencode;arch=compute_20,code=sm_20;-gencode;arch=compute_20,code=sm_21;-gencode;arch=compute_30,code=sm_30;-gencode;arch=compute_35,code=sm_35;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_52,code=sm_52;-gencode;arch=compute_53,code=sm_53;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_61,code=sm_61
+VTK_MAJOR_VERSION 8, rendering backend: OpenGL2
+VTK found (include: C:/Program Files/PCL 1.8.1/3rdParty/VTK/include/vtk-8.0, lib: vtkChartsCore;vtkCommonColor;vtkCommonCore;vtksys;vtkCommonDataModel;vtkCommonMath;vtkCommonMisc;vtkCommonSystem;vtkCommonTransforms;vtkCommonExecutionModel;vtkFiltersGeneral;vtkCommonComputationalGeometry;vtkFiltersCore;vtkInfovisCore;vtkFiltersExtraction;vtkFiltersStatistics;vtkImagingFourier;vtkImagingCore;vtkalglib;vtkRenderingContext2D;vtkRenderingCore;vtkFiltersGeometry;vtkFiltersSources;vtkRenderingFreeType;vtkfreetype;vtkzlib;vtkDICOMParser;vtkDomainsChemistry;vtkIOLegacy;vtkIOCore;vtklz4;vtkIOXMLParser;vtkexpat;vtkDomainsChemistryOpenGL2;vtkRenderingOpenGL2;vtkglew;vtkFiltersAMR;vtkIOXML;vtkParallelCore;vtkFiltersFlowPaths;vtkFiltersGeneric;vtkFiltersHybrid;vtkImagingSources;vtkFiltersHyperTree;vtkFiltersImaging;vtkImagingGeneral;vtkFiltersModeling;vtkFiltersParallel;vtkFiltersParallelImaging;vtkFiltersPoints;vtkFiltersProgrammable;vtkFiltersSMP;vtkFiltersSelection;vtkFiltersTexture;vtkFiltersTopology;vtkFiltersVerdict;verdict;vtkGUISupportQt;vtkInteractionStyle;vtkGUISupportQtSQL;vtkIOSQL;vtksqlite;vtkGeovisCore;vtkIOImage;vtkmetaio;vtkjpeg;vtkpng;vtktiff;vtkInfovisLayout;vtkImagingHybrid;vtkInteractionWidgets;vtkImagingColor;vtkRenderingAnnotation;vtkRenderingVolume;vtkViewsCore;vtkproj4;vtkIOAMR;vtkhdf5_hl;vtkhdf5;vtkIOEnSight;vtkIOExodus;vtkexoIIc;vtkNetCDF;vtkIOExport;vtkRenderingGL2PSOpenGL2;vtkgl2ps;vtklibharu;vtkIOExportOpenGL2;vtkIOGeometry;vtkIOImport;vtkIOInfovis;vtklibxml2;vtkIOLSDyna;vtkIOMINC;vtkIOMovie;vtkoggtheora;vtkIONetCDF;vtknetcdfcpp;vtkIOPLY;vtkIOParallel;vtkjsoncpp;vtkIOParallelXML;vtkIOTecplotTable;vtkIOVideo;vtkImagingMath;vtkImagingMorphological;vtkImagingStatistics;vtkImagingStencil;vtkInteractionImage;vtkRenderingContextOpenGL2;vtkRenderingImage;vtkRenderingLOD;vtkRenderingLabel;vtkRenderingQt;vtkRenderingVolumeOpenGL2;vtkTestingGenericBridge;vtkTestingIOSQL;vtkTestingRendering;vtkViewsContext2D;vtkViewsInfovis;vtkViewsQt
+Boost version: 1.64.0
+Found the following Boost libraries:
+  system
+  filesystem
+  thread
+  date_time
+  iostreams
+  chrono
+  atomic
+  regex
+DOXYGEN_FOUND 
+HTML_HELP_COMPILER 
+Found CPack generators: NSIS
+The following subsystems will be built:
+  common
+  octree
+  io
+  kdtree
+  search
+  sample_consensus
+  filters
+  2d
+  geometry
+  features
+  ml
+  segmentation
+  surface
+  registration
+  keypoints
+  tracking
+  recognition
+  stereo
+  tools
+The following subsystems will not be built:
+  visualization: Disabled manually.
+  apps: Disabled: visualization missing.
+  outofcore: Requires visualization.
+  examples: Code examples are disabled by default.
+  people: Requires visualization.
+  simulation: Disabled: visualization missing.
+  global_tests: No reason
+Configuring done
+</code></pre><p>OK. </p>
+<p>We can omit these 2 lines:</p>
+<pre><code>Could NOT find PkgConfig (missing: PKG_CONFIG_EXECUTABLE)                 # OMIT
+Could NOT find LIBUSB_1 (missing: LIBUSB_1_LIBRARY LIBUSB_1_INCLUDE_DIR)  # OMIT
+</code></pre><h3 id="generate-vs-solution-1"><a href="#generate-vs-solution-1" class="headerlink" title="generate vs solution"></a>generate vs solution</h3><p>If everything goes well, then generate <code>PCL.sln</code></p>
+<p>warning ocurrs:</p>
+<pre><code>WARNING: Target &quot;pcl_io&quot; requests linking to directory &quot;C:/Program Files/PCL 1.8.1/3rdParty/OpenNI2/Lib&quot;.  Targets may link only to libraries.  CMake is dropping the item.
+WARNING: Target &quot;pcl_io&quot; requests linking to directory &quot;C:/Program Files/PCL 1.8.1/3rdParty/winpcap/Lib&quot;.  Targets may link only to libraries.  CMake is dropping the item.
+...
+...
+</code></pre><p>we can omit these warnings.</p>
+<h3 id="compile-solution-1"><a href="#compile-solution-1" class="headerlink" title="compile solution"></a>compile solution</h3><p>Open <code>PCL.sln</code> in vs2015 and build with <code>Release X64</code>.</p>
+<p>NOTICE: this build process will take about 30 minutes.</p>
+<pre><code>... waiting for about 30 minutes ...
+
+========== 全部重新生成: 成功 90 个，失败 0 个，跳过 0 个 ==========
+</code></pre><h3 id="fix-errors-1"><a href="#fix-errors-1" class="headerlink" title="fix errors"></a>fix errors</h3><p>search for <code>fatal error</code> and fix.</p>
+<p>errors may occur:</p>
+<pre><code>4&gt;C:\pcl-1.8.1\build\bin\pcl_kdtree_release.dll : fatal error LNK1120: 5 个无法解析的外部命令
+8&gt;C:\pcl-1.8.1\build\bin\pcl_io_release.dll : fatal error LNK1120: 35 个无法解析的外部命令
+14&gt;C:\pcl-1.8.1\build\bin\pcl_surface_release.dll : fatal error LNK1120: 13 个无法解析的外部命令
+62&gt;C:\pcl-1.8.1\build\bin\pcl_segmentation_release.dll : fatal error LNK1120: 5 个无法解析的外部命令
+60&gt;C:\pcl-1.8.1\build\bin\pcl_registration_release.dll : fatal error LNK1120: 5 个无法解析的外部命令
+76&gt;C:\pcl-1.8.1\build\bin\pcl_recognition_release.dll : fatal error LNK1120: 5 个无法解析的外部命令
+</code></pre><p><strong>solution</strong>:<br>copy build log to notepad for searching errors, configure cmake options again,<br>and build error package only, not the full PCL solution.</p>
+<h3 id="install-pcl-1"><a href="#install-pcl-1" class="headerlink" title="install pcl"></a>install pcl</h3><p>install需要使用管理员权限。</p>
+<p>choose <code>INSTALL</code> and generate , and PCL will be installed to <code>D:\PCL\</code>.</p>
+<h3 id="copy-pcl-to-dest"><a href="#copy-pcl-to-dest" class="headerlink" title="copy pcl to dest"></a>copy pcl to dest</h3><p>copy pcl from  <code>D:\PCL\</code> to <code>C:/Program Files/PCL 1.8.1/</code> to replace old one.</p>
+<h1 id="Part-2-New-Project"><a href="#Part-2-New-Project" class="headerlink" title="Part 2: New Project"></a>Part 2: New Project</h1><p>create pcl project with vtk and qt support.</p>
+<blockquote>
+<p>Tips: </p>
+<p>Use <code>.props</code> file to manage include path, library path and linker libraries.</p>
+</blockquote>
+<h2 id="set-linker-libraries"><a href="#set-linker-libraries" class="headerlink" title="set linker libraries"></a>set linker libraries</h2><p>Tips: use bash to collect libraries instead of manually input many libraries.</p>
+<p>eg. for <code>VTK</code> release version libs</p>
+<pre><code>cd D:\VTK\lib
+ls *8.0.lib &gt; names.txt
+
+vim names.txt
+# vim steps: (1)lower: CTLR+q (2)lower: 300j (3) upper: I (4); (5)esc
+
+# process names to look like this:  
+;QVTKWidgetPlugin.lib
+;vtkalglib-8.0.lib
+;vtkChartsCore-8.0.lib
+;vtkCommonColor-8.0.lib
+...
+...
+</code></pre><p>Edit <code>VTK64.props</code> for include, library, and linker libraries.</p>
+<pre><code># edit VTK64.props
+&lt;IncludePath&gt;
+    C:\Program Files\PCL 1.8.1\include\pcl-1.8;
+    ...
+&lt;/IncludePath&gt;
+
+&lt;LibraryPath&gt;
+    C:\Program Files\PCL 1.8.1\lib;
+    ...
+&lt;/LibraryPath&gt;
+
+&lt;AdditionalDependencies&gt;
+    ...
+    ...
+    ;QVTKWidgetPlugin.lib
+    ;vtkalglib-8.0.lib
+    ;vtkChartsCore-8.0.lib
+    ;vtkCommonColor-8.0.lib
+    ...
+    ...
+&lt;/AdditionalDependencies&gt;
+</code></pre><p>in solution <code>PropertyManager</code> ,add <code>VTK64.props</code> file like this:</p>
+<p><img src="http://images2017.cnblogs.com/blog/635233/201801/635233-20180114180220441-1140420458.png" alt="property_manager_props"></p>
+<h2 id="new-qt-project-with-pcl"><a href="#new-qt-project-with-pcl" class="headerlink" title="new qt project with pcl"></a>new qt project with pcl</h2><p>create project named <code>PCLVisualizier</code>, which use <code>QVTKWidgetPlugin</code>.</p>
+<p>compile and run, error occurs:<br><img src="http://images2017.cnblogs.com/blog/635233/201801/635233-20180114210710582-1020157530.png" alt="vtkOutputWindow error: no overide found for &#39;vtkPolyDataMapper&#39;"></p>
+<p>Tips for props:</p>
+<p>There is no need to use <code>QT5.7.1.props</code>,because we use <code>Qt VS Tools</code> to define <code>Qt Options</code></p>
+<pre><code>Qt 5.7.1   C:\Qt\Qt5.7.1\5.7\msvc2015_64
+</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="http://www.pointclouds.org/documentation/tutorials/compiling_pcl_windows.php" target="_blank" rel="noopener">offical: compile pcl on windows</a></li>
+<li><a href="http://www.eaglevi.com/archives/27" target="_blank" rel="noopener">install pcl by isstallers</a></li>
+<li><a href="http://blog.csdn.net/wokaowokaowokao12345/article/details/51695331" target="_blank" rel="noopener">compile pcl on windows</a></li>
+<li><a href="http://blog.csdn.net/cfqcfqcfqcfqcfq/article/details/51735895?locationNum=5&amp;fps=1" target="_blank" rel="noopener">VTK-6.3.0 with qt and QVTKwidget</a></li>
+<li><a href="https://stackoverflow.com/questions/18642155/no-override-found-for-vtkpolydatamapper" target="_blank" rel="noopener">no-override-found-for-vtkpolydatamappe</a></li>
+<li><a href="https://www.vtk.org/Wiki/VTK/VTK_6_Migration/Factories_now_require_defines" target="_blank" rel="noopener">VTK 6 Migration/Factories now require defines</a></li>
+<li><a href="http://blog.csdn.net/u012552296/article/details/50865997" target="_blank" rel="noopener">vtk no override for</a></li>
+</ul>
+<h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
+<li>20180112: created.</li>
+</ul>
+<h1 id="New-Topics"><a href="#New-Topics" class="headerlink" title="New Topics"></a>New Topics</h1><ul>
+<li>babun: best linux shell on windows.</li>
+<li>DependencyWalker: for dll dependes</li>
+<li>DebugView: for release debug logs.</li>
+<li>VeloView: for viewing velo lidar data in realtime</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    kezunlin
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://kezunlin.me/post/2d809f92/" title="compile pcl with vtk qt support from source on windows">http://kezunlin.me/post/2d809f92/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/qt/" rel="tag"># qt</a>
+          
+            <a href="/tags/vtk/" rel="tag"># vtk</a>
+          
+            <a href="/tags/windows/" rel="tag"># windows</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/8932eaec/" rel="next" title="singleton class and usage in cpp">
+                <i class="fa fa-chevron-left"></i> singleton class and usage in cpp
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/kezunlin_avatar.jpg"
+                alt="kezunlin" />
+            
+              <p class="site-author-name" itemprop="name">kezunlin</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Part-1-Guide"><span class="nav-number">1.</span> <span class="nav-text">Part 1: Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#prerequisit"><span class="nav-number">1.1.</span> <span class="nav-text">prerequisit</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#software"><span class="nav-number">1.1.1.</span> <span class="nav-text">software</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#version"><span class="nav-number">1.1.2.</span> <span class="nav-text">version</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-qt"><span class="nav-number">1.2.</span> <span class="nav-text">install qt</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#install-vs2015"><span class="nav-number">1.2.1.</span> <span class="nav-text">install vs2015</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-qt-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">install qt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-Qt-VS-Tools"><span class="nav-number">1.2.3.</span> <span class="nav-text">install Qt VS Tools</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#configure-qt-for-vs"><span class="nav-number">1.2.4.</span> <span class="nav-text">configure qt for vs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#new-qt-project-from-vs"><span class="nav-number">1.2.5.</span> <span class="nav-text">new qt project from vs</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-pcl"><span class="nav-number">1.3.</span> <span class="nav-text">install pcl</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#install-pcl-by-installer"><span class="nav-number">1.3.1.</span> <span class="nav-text">install pcl by installer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#configure-env"><span class="nav-number">1.3.2.</span> <span class="nav-text">configure env</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#copy-winpap-package"><span class="nav-number">1.3.3.</span> <span class="nav-text">copy winpap package</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile-vtk"><span class="nav-number">1.4.</span> <span class="nav-text">compile vtk</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#configure-source"><span class="nav-number">1.4.1.</span> <span class="nav-text">configure source</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#generate-vs-solution"><span class="nav-number">1.4.2.</span> <span class="nav-text">generate vs solution</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#compile-solution"><span class="nav-number">1.4.3.</span> <span class="nav-text">compile solution</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-errors"><span class="nav-number">1.4.4.</span> <span class="nav-text">fix errors</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-vtk"><span class="nav-number">1.4.5.</span> <span class="nav-text">install vtk</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#copy-vtk-to-pcl"><span class="nav-number">1.4.6.</span> <span class="nav-text">copy vtk to pcl</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-QVTKWidgetPlugin"><span class="nav-number">1.4.7.</span> <span class="nav-text">install QVTKWidgetPlugin</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile-pcl"><span class="nav-number">1.5.</span> <span class="nav-text">compile pcl</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#configure-source-1"><span class="nav-number">1.5.1.</span> <span class="nav-text">configure source</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#generate-vs-solution-1"><span class="nav-number">1.5.2.</span> <span class="nav-text">generate vs solution</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#compile-solution-1"><span class="nav-number">1.5.3.</span> <span class="nav-text">compile solution</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-errors-1"><span class="nav-number">1.5.4.</span> <span class="nav-text">fix errors</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-pcl-1"><span class="nav-number">1.5.5.</span> <span class="nav-text">install pcl</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#copy-pcl-to-dest"><span class="nav-number">1.5.6.</span> <span class="nav-text">copy pcl to dest</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Part-2-New-Project"><span class="nav-number">2.</span> <span class="nav-text">Part 2: New Project</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#set-linker-libraries"><span class="nav-number">2.1.</span> <span class="nav-text">set linker libraries</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#new-qt-project-with-pcl"><span class="nav-number">2.2.</span> <span class="nav-text">new qt project with pcl</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#New-Topics"><span class="nav-number">5.</span> <span class="nav-text">New Topics</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+<p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <!--
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+        -->
+        <link rel="stylesheet" href="/lib/gitmint/style/default.css">
+        <script src="/lib/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
