@@ -69,7 +69,7 @@
 
 
 
-  <meta name="keywords" content="boost,fsp," />
+  <meta name="keywords" content="boost,fsp,datetime,ios_string,ios_extended_string," />
 
 
 
@@ -83,14 +83,14 @@
 
 
 <meta name="description" content="guide to store fractional seconds in mysql with boost and c++.">
-<meta name="keywords" content="boost,fsp">
+<meta name="keywords" content="boost,fsp,datetime,ios_string,ios_extended_string">
 <meta property="og:type" content="article">
 <meta property="og:title" content="guide to store fractional seconds in mysql with boost and c++">
 <meta property="og:url" content="http://kezunlin.me/post/60df7e87/index.html">
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="guide to store fractional seconds in mysql with boost and c++.">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-22T13:10:55.661Z">
+<meta property="og:updated_time" content="2018-01-24T00:28:31.255Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="guide to store fractional seconds in mysql with boost and c++">
 <meta name="twitter:description" content="guide to store fractional seconds in mysql with boost and c++.">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-01-22T21:10:55+08:00">
-                2018-01-22
+              <time title="更新于" itemprop="dateModified" datetime="2018-01-24T08:28:31+08:00">
+                2018-01-24
               </time>
             
           </span>
@@ -393,7 +393,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  369
+                  606
                 </span>
               
 
@@ -409,7 +409,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  2
+                  4
                 </span>
               
             </div>
@@ -473,6 +473,40 @@ mysql&gt; select now(6);
 | 2018-01-22 20:58:37.223305 |
 +----------------------------+
 1 row in set (0.00 sec)
+</code></pre><h2 id="store-and-select-with-c"><a href="#store-and-select-with-c" class="headerlink" title="store and select with c++"></a>store and select with c++</h2><h3 id="table"><a href="#table" class="headerlink" title="table"></a>table</h3><blockquote>
+<p>we use <code>DATETIME(6)</code> in mysql to store fsp.</p>
+</blockquote>
+<pre><code>CREATE TABLE fractest( create_time DATETIME(6));
+</code></pre><h3 id="insert"><a href="#insert" class="headerlink" title="insert"></a>insert</h3><blockquote>
+<p>both format are ok to insert to mysql,we use <code>to_iso_extended_string</code> in c++ code to get string <code>2014-09-08T17:51:04.777668</code>.</p>
+</blockquote>
+<p> sql </p>
+<pre><code>#std::string to_iso_string(ptime)         : YYYYMMDDTHHMMSS,fffffffff      20180908T175104.777668
+#std::string to_iso_extended_string(ptime): YYYY-MM-DDTHH:MM:SS,fffffffff  2014-09-08T17:51:04.77766
+
+INSERT INTO fractest VALUES (&apos;2014-09-08T17:51:04.777668&apos;);
+</code></pre><p>code </p>
+<pre><code># 2014-09-08T17:51:04.777668
+std::string iso_extended_string = boost::posix_time::to_iso_extended_string(camera.CreateTime);
+pstmt-&gt;setString(1, iso_string);
+</code></pre><h3 id="select"><a href="#select" class="headerlink" title="select"></a>select</h3><blockquote>
+<p>we need to select datetime as string, because we must keep fsp,we use <code>concat(&quot;&quot;,create_time) as create_time</code> to get string time <code>2014-09-08 17:51:04.777668</code>, and then process with c++ to get boost ptime.</p>
+</blockquote>
+<p>sql </p>
+<pre><code># select datetime as string 
+# (1) concat(&quot;&quot;,create_time) as create_time     [we can have fsp]
+# (2) DATE_FORMAT(create_time,&apos;%Y-%m-%d %h:%m:%s&apos;) AS create_time  [we can not have fsp]
+
+select id, create_time,concat(&quot;&quot;,create_time) as create_time from camera where id = 1;
+</code></pre><p>code </p>
+<pre><code>std::string mysql_string = res-&gt;getString(&quot;create_time&quot;);
+// 2014-09-08 17:51:04.777668 ===&gt; 2014-09-08T17:51:04.777668
+camera.CreateTime = Util::from_mysql_string(mysql_string);
+</code></pre><h3 id="different-datetime-string"><a href="#different-datetime-string" class="headerlink" title="different datetime string"></a>different datetime string</h3><pre><code>filename_string 20180118_111501_208797 
+iso_string      20180118T111501.208797  ===&gt; from_iso_string
+
+mysql_string           2014-09-08 17:51:04.777668
+ios_extended_string    2014-09-08T17:51:04.777668  ===&gt; from_iso_extended_string
 </code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://dev.mysql.com/doc/refman/5.7/en/fractional-seconds.html" target="_blank" rel="noopener">offical mysql fractional-seconds</a></li>
 <li><a href="http://blog.csdn.net/dujianxiong/article/details/60571354" target="_blank" rel="noopener">upgrade mysql leading to round error for datetime</a></li>
@@ -480,6 +514,7 @@ mysql&gt; select now(6);
 </ul>
 <h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>20180122: created.</li>
+<li>20180214: add store and select with c++.</li>
 </ul>
 
       
@@ -520,6 +555,12 @@ mysql&gt; select now(6);
           
             <a href="/tags/fsp/" rel="tag"># fsp</a>
           
+            <a href="/tags/datetime/" rel="tag"># datetime</a>
+          
+            <a href="/tags/ios-string/" rel="tag"># ios_string</a>
+          
+            <a href="/tags/ios-extended-string/" rel="tag"># ios_extended_string</a>
+          
         </div>
       
 
@@ -540,6 +581,10 @@ mysql&gt; select now(6);
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/13f1a6ca/" rel="prev" title="guide to store image longblob with mysql cpp connector in c++">
+                guide to store image longblob with mysql cpp connector in c++ <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -616,7 +661,7 @@ mysql&gt; select now(6);
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -638,7 +683,7 @@ mysql&gt; select now(6);
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-count">39</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -680,7 +725,7 @@ mysql&gt; select now(6);
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#fractional-second-part"><span class="nav-number">1.1.</span> <span class="nav-text">fractional second part</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#create-table"><span class="nav-number">1.1.1.</span> <span class="nav-text">create table</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rounding"><span class="nav-number">1.1.2.</span> <span class="nav-text">rounding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#how-to-generate-fsp-time"><span class="nav-number">1.1.3.</span> <span class="nav-text">how to generate fsp time</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#fractional-second-part"><span class="nav-number">1.1.</span> <span class="nav-text">fractional second part</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#create-table"><span class="nav-number">1.1.1.</span> <span class="nav-text">create table</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rounding"><span class="nav-number">1.1.2.</span> <span class="nav-text">rounding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#how-to-generate-fsp-time"><span class="nav-number">1.1.3.</span> <span class="nav-text">how to generate fsp time</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#store-and-select-with-c"><span class="nav-number">1.2.</span> <span class="nav-text">store and select with c++</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#table"><span class="nav-number">1.2.1.</span> <span class="nav-text">table</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#insert"><span class="nav-number">1.2.2.</span> <span class="nav-text">insert</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select"><span class="nav-number">1.2.3.</span> <span class="nav-text">select</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#different-datetime-string"><span class="nav-number">1.2.4.</span> <span class="nav-text">different datetime string</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>

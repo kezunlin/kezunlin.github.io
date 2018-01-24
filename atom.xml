@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://kezunlin.me/"/>
-  <updated>2018-01-22T13:10:55.661Z</updated>
+  <updated>2018-01-24T02:07:57.120Z</updated>
   <id>http://kezunlin.me/</id>
   
   <author>
@@ -17,13 +17,59 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>mysql user guide on ubuntu 16.04</title>
+    <link href="http://kezunlin.me/post/36e618e7/"/>
+    <id>http://kezunlin.me/post/36e618e7/</id>
+    <published>2018-01-24T01:57:00.000Z</published>
+    <updated>2018-01-24T02:07:57.120Z</updated>
+    
+    <content type="html"><![CDATA[<p>mysql user guide on ubuntu 16.04<br><a id="more"></a></p><h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="install"><a href="#install" class="headerlink" title="install"></a>install</h2><pre><code>sudo apt-get install mysql-server# root,123456mysql -uroot -p123456</code></pre><h2 id="allow-remote-access"><a href="#allow-remote-access" class="headerlink" title="allow remote access"></a>allow remote access</h2><h3 id="change-bind-address"><a href="#change-bind-address" class="headerlink" title="change bind-address"></a>change bind-address</h3><pre><code>cd /etc/mysqlgrep -r &apos;bind-address&apos; ../mysql.conf.d/mysqld.cnf:bind-address          = 127.0.0.1</code></pre><p>change <code>bind-address</code> to <code>0.0.0.0</code></p><pre><code>vim ./mysql.conf.d/mysqld.cnfbind-address          = 0.0.0.0# or sed -i &apos;s/127.0.0.1/0.0.0.0/g&apos; /etc/mysql/mysql.conf.d/mysqld.cnf# restartservice mysql restart</code></pre><h3 id="grant-users"><a href="#grant-users" class="headerlink" title="grant users"></a>grant users</h3><pre><code>mysql&gt; grant all privileges on *.* to &apos;root&apos;@&apos;%&apos; identified by &apos;123456&apos; with grant option;mysql&gt; flush privileges;</code></pre><p>check for users.</p><pre><code>mysql&gt; user mysql;mysql&gt; select user,host from user;+------------------+-----------+| user             | host      |+------------------+-----------+| root             | %         || debian-sys-maint | localhost || mysql.session    | localhost || mysql.sys        | localhost || root             | localhost |+------------------+-----------+5 rows in set (0.00 sec)</code></pre><p>OK. Now we can access mysql from remote machine.</p><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul><li><a href="https://github.com/justasabc/guides/blob/master/mysql/mysql.ini" target="_blank" rel="noopener">mysql guide</a></li><li><a href="https://www.cnblogs.com/linjiqin/p/5270938.html" target="_blank" rel="noopener">mysql remote access</a></li></ul><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul><li>20180124: created.</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;mysql user guide on ubuntu 16.04&lt;br&gt;
+    
+    </summary>
+    
+      <category term="mysql" scheme="http://kezunlin.me/categories/mysql/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>guide to store image longblob with mysql cpp connector in c++</title>
+    <link href="http://kezunlin.me/post/13f1a6ca/"/>
+    <id>http://kezunlin.me/post/13f1a6ca/</id>
+    <published>2018-01-23T03:07:00.000Z</published>
+    <updated>2018-01-23T03:18:49.233Z</updated>
+    
+    <content type="html"><![CDATA[<p>Guide to store image longblob with mysql cpp connector in c++.<br><a id="more"></a></p><h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="create-table"><a href="#create-table" class="headerlink" title="create table"></a>create table</h2><pre><code>CREATE TABLE IF NOT EXISTS `camera` (\        `id`  int(11) NOT NULL AUTO_INCREMENT,\        `camera_id`  tinyint(4) UNSIGNED NOT NULL,\        `image`  longblob NOT NULL,\        `create_time`  datetime NOT NULL)</code></pre><p>camera.Image of type in c++.</p><pre><code>std::shared_ptr&lt;char&gt; Image;</code></pre><h2 id="insert"><a href="#insert" class="headerlink" title="insert"></a>insert</h2><h3 id="sql"><a href="#sql" class="headerlink" title="sql"></a>sql</h3><pre><code>INSERT INTO camera(camera_id, image) VALUES(? , ? );</code></pre><h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><pre><code>// get blob istreamchar *buffer = camera.Image.get();size_t size = camera.ImageLength;membuf mbuf(buffer, size);std::istream blob(&amp;mbuf); // must be local variablepstmt-&gt;setBlob(6, &amp;blob);</code></pre><h2 id="select"><a href="#select" class="headerlink" title="select"></a>select</h2><h3 id="sql-1"><a href="#sql-1" class="headerlink" title="sql"></a>sql</h3><pre><code>SELECT id, camera_id, image FROM camera;</code></pre><h3 id="code-1"><a href="#code-1" class="headerlink" title="code"></a>code</h3><pre><code>std::istream *blob = res-&gt;getBlob(&quot;image&quot;);size_t size = res-&gt;getUInt(&quot;image_length&quot;);auto ptr_buffer = Util::get_buffer_from_stream(blob, size);camera.Image = ptr_buffer;</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul><li>20180123: created.</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Guide to store image longblob with mysql cpp connector in c++.&lt;br&gt;
+    
+    </summary>
+    
+      <category term="mysql" scheme="http://kezunlin.me/categories/mysql/"/>
+    
+    
+      <category term="mysqlcppconn" scheme="http://kezunlin.me/tags/mysqlcppconn/"/>
+    
+      <category term="image" scheme="http://kezunlin.me/tags/image/"/>
+    
+      <category term="longblob" scheme="http://kezunlin.me/tags/longblob/"/>
+    
+  </entry>
+  
+  <entry>
     <title>guide to store fractional seconds in mysql with boost and c++</title>
     <link href="http://kezunlin.me/post/60df7e87/"/>
     <id>http://kezunlin.me/post/60df7e87/</id>
     <published>2018-01-22T12:26:00.000Z</published>
-    <updated>2018-01-22T13:10:55.661Z</updated>
+    <updated>2018-01-24T00:28:31.255Z</updated>
     
-    <content type="html"><![CDATA[<p>guide to store fractional seconds in mysql with boost and c++.<br><a id="more"></a></p><h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><p>for only storing seconds time_t in mysql with c++, see <a href="http://kezunlin.me/post/52a71f5d/">guide to store time_t with mysql cpp connector in c++</a>.</p><h2 id="fractional-second-part"><a href="#fractional-second-part" class="headerlink" title="fractional second part"></a>fractional second part</h2><p>From Mysql 5.6.4 then on，<code>date</code>,<code>datetime</code>,<code>timestamp</code> support <code>fractional second part</code> (fsp), with up to <strong>microseconds (6 digits) precision</strong>:</p><h3 id="create-table"><a href="#create-table" class="headerlink" title="create table"></a>create table</h3><p>To define a column that includes a <code>fractional seconds part</code>, use the syntax <code>type_name(fsp)</code>, where type_name is <code>TIME, DATETIME, or TIMESTAMP</code>, and fsp is the fractional seconds precision. For example:</p><pre><code>CREATE TABLE t1 (t TIME(3), dt DATETIME(6));</code></pre><p>The fsp value, if given, must be in the range 0 to 6, by default is 0.</p><h3 id="rounding"><a href="#rounding" class="headerlink" title="rounding"></a>rounding</h3><p>Inserting a <code>TIME, DATE, or TIMESTAMP</code> value with a fractional seconds part into a column of the same type but <strong>having fewer fractional digits results in rounding</strong>, as shown in this example:</p><p>use time format <code>YYYY-MM-DD HH:MM:SS[.fraction]</code></p><p>insert </p><pre><code>use detection_car;DROP TABLE IF EXISTS fractest ;CREATE TABLE fractest( c1 TIME(2), c2 DATETIME(3), c3 TIMESTAMP(6) );INSERT INTO fractest VALUES (&apos;17:51:04.777666&apos;, &apos;2014-09-08 17:51:04.777666&apos;, &apos;2014-09-08 17:51:04.777666&apos;);</code></pre><p>select </p><pre><code>mysql&gt; select * from fractest;+-------------+-------------------------+----------------------------+| c1          | c2                      | c3                         |+-------------+-------------------------+----------------------------+| 17:51:04.78 | 2014-09-08 17:51:04.778 | 2014-09-08 17:51:04.777666 |+-------------+-------------------------+----------------------------+1 row in set (0.00 sec)</code></pre><p>No warning or error is given when such rounding occurs. </p><h3 id="how-to-generate-fsp-time"><a href="#how-to-generate-fsp-time" class="headerlink" title="how to generate fsp time"></a>how to generate fsp time</h3><p>Functions that take <strong>temporal arguments</strong> accept values with fractional seconds. Return values from <strong>temporal functions</strong> include fractional seconds as appropriate. </p><p>For example, <code>NOW()</code> with no argument returns the current date and time with no fractional part, but takes an optional argument from 0 to 6 to specify that the return value includes a fractional seconds part of that many digits.</p><p>now() or now(6)</p><pre><code>mysql&gt; select now();+---------------------+| now()               |+---------------------+| 2018-01-22 20:58:31 |+---------------------+1 row in set (0.00 sec)mysql&gt; select now(6);+----------------------------+| now(6)                     |+----------------------------+| 2018-01-22 20:58:37.223305 |+----------------------------+1 row in set (0.00 sec)</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul><li><a href="https://dev.mysql.com/doc/refman/5.7/en/fractional-seconds.html" target="_blank" rel="noopener">offical mysql fractional-seconds</a></li><li><a href="http://blog.csdn.net/dujianxiong/article/details/60571354" target="_blank" rel="noopener">upgrade mysql leading to round error for datetime</a></li><li><a href="https://www.cnblogs.com/ivictor/p/5028368.html" target="_blank" rel="noopener">datetime vs timestamp</a></li></ul><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul><li>20180122: created.</li></ul>]]></content>
+    <content type="html"><![CDATA[<p>guide to store fractional seconds in mysql with boost and c++.<br><a id="more"></a></p><h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><p>for only storing seconds time_t in mysql with c++, see <a href="http://kezunlin.me/post/52a71f5d/">guide to store time_t with mysql cpp connector in c++</a>.</p><h2 id="fractional-second-part"><a href="#fractional-second-part" class="headerlink" title="fractional second part"></a>fractional second part</h2><p>From Mysql 5.6.4 then on，<code>date</code>,<code>datetime</code>,<code>timestamp</code> support <code>fractional second part</code> (fsp), with up to <strong>microseconds (6 digits) precision</strong>:</p><h3 id="create-table"><a href="#create-table" class="headerlink" title="create table"></a>create table</h3><p>To define a column that includes a <code>fractional seconds part</code>, use the syntax <code>type_name(fsp)</code>, where type_name is <code>TIME, DATETIME, or TIMESTAMP</code>, and fsp is the fractional seconds precision. For example:</p><pre><code>CREATE TABLE t1 (t TIME(3), dt DATETIME(6));</code></pre><p>The fsp value, if given, must be in the range 0 to 6, by default is 0.</p><h3 id="rounding"><a href="#rounding" class="headerlink" title="rounding"></a>rounding</h3><p>Inserting a <code>TIME, DATE, or TIMESTAMP</code> value with a fractional seconds part into a column of the same type but <strong>having fewer fractional digits results in rounding</strong>, as shown in this example:</p><p>use time format <code>YYYY-MM-DD HH:MM:SS[.fraction]</code></p><p>insert </p><pre><code>use detection_car;DROP TABLE IF EXISTS fractest ;CREATE TABLE fractest( c1 TIME(2), c2 DATETIME(3), c3 TIMESTAMP(6) );INSERT INTO fractest VALUES (&apos;17:51:04.777666&apos;, &apos;2014-09-08 17:51:04.777666&apos;, &apos;2014-09-08 17:51:04.777666&apos;);</code></pre><p>select </p><pre><code>mysql&gt; select * from fractest;+-------------+-------------------------+----------------------------+| c1          | c2                      | c3                         |+-------------+-------------------------+----------------------------+| 17:51:04.78 | 2014-09-08 17:51:04.778 | 2014-09-08 17:51:04.777666 |+-------------+-------------------------+----------------------------+1 row in set (0.00 sec)</code></pre><p>No warning or error is given when such rounding occurs. </p><h3 id="how-to-generate-fsp-time"><a href="#how-to-generate-fsp-time" class="headerlink" title="how to generate fsp time"></a>how to generate fsp time</h3><p>Functions that take <strong>temporal arguments</strong> accept values with fractional seconds. Return values from <strong>temporal functions</strong> include fractional seconds as appropriate. </p><p>For example, <code>NOW()</code> with no argument returns the current date and time with no fractional part, but takes an optional argument from 0 to 6 to specify that the return value includes a fractional seconds part of that many digits.</p><p>now() or now(6)</p><pre><code>mysql&gt; select now();+---------------------+| now()               |+---------------------+| 2018-01-22 20:58:31 |+---------------------+1 row in set (0.00 sec)mysql&gt; select now(6);+----------------------------+| now(6)                     |+----------------------------+| 2018-01-22 20:58:37.223305 |+----------------------------+1 row in set (0.00 sec)</code></pre><h2 id="store-and-select-with-c"><a href="#store-and-select-with-c" class="headerlink" title="store and select with c++"></a>store and select with c++</h2><h3 id="table"><a href="#table" class="headerlink" title="table"></a>table</h3><blockquote><p>we use <code>DATETIME(6)</code> in mysql to store fsp.</p></blockquote><pre><code>CREATE TABLE fractest( create_time DATETIME(6));</code></pre><h3 id="insert"><a href="#insert" class="headerlink" title="insert"></a>insert</h3><blockquote><p>both format are ok to insert to mysql,we use <code>to_iso_extended_string</code> in c++ code to get string <code>2014-09-08T17:51:04.777668</code>.</p></blockquote><p> sql </p><pre><code>#std::string to_iso_string(ptime)         : YYYYMMDDTHHMMSS,fffffffff      20180908T175104.777668#std::string to_iso_extended_string(ptime): YYYY-MM-DDTHH:MM:SS,fffffffff  2014-09-08T17:51:04.77766INSERT INTO fractest VALUES (&apos;2014-09-08T17:51:04.777668&apos;);</code></pre><p>code </p><pre><code># 2014-09-08T17:51:04.777668std::string iso_extended_string = boost::posix_time::to_iso_extended_string(camera.CreateTime);pstmt-&gt;setString(1, iso_string);</code></pre><h3 id="select"><a href="#select" class="headerlink" title="select"></a>select</h3><blockquote><p>we need to select datetime as string, because we must keep fsp,we use <code>concat(&quot;&quot;,create_time) as create_time</code> to get string time <code>2014-09-08 17:51:04.777668</code>, and then process with c++ to get boost ptime.</p></blockquote><p>sql </p><pre><code># select datetime as string # (1) concat(&quot;&quot;,create_time) as create_time     [we can have fsp]# (2) DATE_FORMAT(create_time,&apos;%Y-%m-%d %h:%m:%s&apos;) AS create_time  [we can not have fsp]select id, create_time,concat(&quot;&quot;,create_time) as create_time from camera where id = 1;</code></pre><p>code </p><pre><code>std::string mysql_string = res-&gt;getString(&quot;create_time&quot;);// 2014-09-08 17:51:04.777668 ===&gt; 2014-09-08T17:51:04.777668camera.CreateTime = Util::from_mysql_string(mysql_string);</code></pre><h3 id="different-datetime-string"><a href="#different-datetime-string" class="headerlink" title="different datetime string"></a>different datetime string</h3><pre><code>filename_string 20180118_111501_208797 iso_string      20180118T111501.208797  ===&gt; from_iso_stringmysql_string           2014-09-08 17:51:04.777668ios_extended_string    2014-09-08T17:51:04.777668  ===&gt; from_iso_extended_string</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul><li><a href="https://dev.mysql.com/doc/refman/5.7/en/fractional-seconds.html" target="_blank" rel="noopener">offical mysql fractional-seconds</a></li><li><a href="http://blog.csdn.net/dujianxiong/article/details/60571354" target="_blank" rel="noopener">upgrade mysql leading to round error for datetime</a></li><li><a href="https://www.cnblogs.com/ivictor/p/5028368.html" target="_blank" rel="noopener">datetime vs timestamp</a></li></ul><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul><li>20180122: created.</li><li>20180214: add store and select with c++.</li></ul>]]></content>
     
     <summary type="html">
     
@@ -38,6 +84,12 @@
     
       <category term="fsp" scheme="http://kezunlin.me/tags/fsp/"/>
     
+      <category term="datetime" scheme="http://kezunlin.me/tags/datetime/"/>
+    
+      <category term="ios_string" scheme="http://kezunlin.me/tags/ios-string/"/>
+    
+      <category term="ios_extended_string" scheme="http://kezunlin.me/tags/ios-extended-string/"/>
+    
   </entry>
   
   <entry>
@@ -45,9 +97,9 @@
     <link href="http://kezunlin.me/post/52a71f5d/"/>
     <id>http://kezunlin.me/post/52a71f5d/</id>
     <published>2018-01-22T09:29:00.000Z</published>
-    <updated>2018-01-22T09:38:22.359Z</updated>
+    <updated>2018-01-23T03:19:49.072Z</updated>
     
-    <content type="html"><![CDATA[<p>Guide to store time_t with mysql cpp connector in c++.<br><a id="more"></a></p><h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="create-table"><a href="#create-table" class="headerlink" title="create table"></a>create table</h2><pre><code>CREATE TABLE IF NOT EXISTS `camera` (\        `id`  int(11) NOT NULL AUTO_INCREMENT,\        `camera_id`  tinyint(4) UNSIGNED NOT NULL,\        `create_time`  datetime NOT NULL)</code></pre><p>camera.CreateTime of type <code>time_t</code> in c++.</p><blockquote><p>time_t can at most contain seconds, if we want to get millisecond or microsecond, we can use boost.date_time.<br>see ref: <a href="http://kezunlin.me/post/107cbcbb/">using boost.date_time to get time in millisecond microsecond level</a></p></blockquote><p>in sql, we use <code>FROM_UNIXTIME</code> and <code>UNIX_TIMESTAMP</code> to insert and select <code>time_t</code> value.</p><h2 id="insert"><a href="#insert" class="headerlink" title="insert"></a>insert</h2><pre><code>INSERT INTO camera(camera_id,create_time) VALUES ( ?,FROM_UNIXTIME(?) );pstmt-&gt;setUInt64(2, camera.CreateTime); // unix_ts(integer) ===&gt;mysql_ts(string)</code></pre><h2 id="select"><a href="#select" class="headerlink" title="select"></a>select</h2><pre><code>SELECT id,camera_id,UNIX_TIMESTAMP(create_time) as unix_ts FROM camera;camera.CreateTime = res-&gt;getUInt64(&quot;unix_ts&quot;);</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul><li>20180122: created.</li></ul>]]></content>
+    <content type="html"><![CDATA[<p>Guide to store time_t with mysql cpp connector in c++.<br><a id="more"></a></p><h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="create-table"><a href="#create-table" class="headerlink" title="create table"></a>create table</h2><pre><code>CREATE TABLE IF NOT EXISTS `camera` (\        `id`  int(11) NOT NULL AUTO_INCREMENT,\        `camera_id`  tinyint(4) UNSIGNED NOT NULL,\        `create_time`  datetime NOT NULL)</code></pre><p>camera.CreateTime of type in c++.</p><pre><code>time_t CreateTime;</code></pre><blockquote><p>time_t can at most contain seconds, if we want to get millisecond or microsecond, we can use boost.date_time.<br>see ref: <a href="http://kezunlin.me/post/107cbcbb/">using boost.date_time to get time in millisecond microsecond level</a></p></blockquote><p>in sql, we use <code>FROM_UNIXTIME</code> and <code>UNIX_TIMESTAMP</code> to insert and select <code>time_t</code> value.</p><h2 id="insert"><a href="#insert" class="headerlink" title="insert"></a>insert</h2><h3 id="sql"><a href="#sql" class="headerlink" title="sql"></a>sql</h3><pre><code>INSERT INTO camera(camera_id,create_time) VALUES ( ?,FROM_UNIXTIME(?) );</code></pre><h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><pre><code>pstmt-&gt;setUInt64(2, camera.CreateTime); // unix_ts(integer) ===&gt;mysql_ts(string)</code></pre><h2 id="select"><a href="#select" class="headerlink" title="select"></a>select</h2><h3 id="sql-1"><a href="#sql-1" class="headerlink" title="sql"></a>sql</h3><pre><code>SELECT id,camera_id,UNIX_TIMESTAMP(create_time) as unix_ts FROM camera;</code></pre><h3 id="code-1"><a href="#code-1" class="headerlink" title="code"></a>code</h3><pre><code>camera.CreateTime = res-&gt;getUInt64(&quot;unix_ts&quot;);</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul><li>20180122: created.</li></ul>]]></content>
     
     <summary type="html">
     
@@ -104,9 +156,9 @@
       <category term="faq" scheme="http://kezunlin.me/categories/faq/"/>
     
     
-      <category term="windows" scheme="http://kezunlin.me/tags/windows/"/>
-    
       <category term="tools" scheme="http://kezunlin.me/tags/tools/"/>
+    
+      <category term="windows" scheme="http://kezunlin.me/tags/windows/"/>
     
   </entry>
   
@@ -128,9 +180,9 @@
       <category term="pcl" scheme="http://kezunlin.me/categories/pcl/"/>
     
     
-      <category term="vtk" scheme="http://kezunlin.me/tags/vtk/"/>
-    
       <category term="qt" scheme="http://kezunlin.me/tags/qt/"/>
+    
+      <category term="vtk" scheme="http://kezunlin.me/tags/vtk/"/>
     
       <category term="windows" scheme="http://kezunlin.me/tags/windows/"/>
     
@@ -396,11 +448,11 @@
       <category term="ubuntu" scheme="http://kezunlin.me/categories/ubuntu/"/>
     
     
+      <category term="qt" scheme="http://kezunlin.me/tags/qt/"/>
+    
       <category term="vtk" scheme="http://kezunlin.me/tags/vtk/"/>
     
       <category term="source" scheme="http://kezunlin.me/tags/source/"/>
-    
-      <category term="qt" scheme="http://kezunlin.me/tags/qt/"/>
     
   </entry>
   
@@ -447,50 +499,6 @@
     
     
       <category term="qt" scheme="http://kezunlin.me/tags/qt/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Ubuntu ldconfig</title>
-    <link href="http://kezunlin.me/post/2059dc88/"/>
-    <id>http://kezunlin.me/post/2059dc88/</id>
-    <published>2018-01-08T03:19:00.000Z</published>
-    <updated>2018-01-18T04:40:47.087Z</updated>
-    
-    <content type="html"><![CDATA[<p>Ubuntu ldconfig<br><a id="more"></a></p><h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="libEGL"><a href="#libEGL" class="headerlink" title="libEGL"></a>libEGL</h2><h3 id="error"><a href="#error" class="headerlink" title="error"></a>error</h3><pre><code>$ sudo ldconfig/sbin/ldconfig.real: /usr/lib/nvidia-384/libEGL.so.1 is not a symbolic link/sbin/ldconfig.real: /usr/lib32/nvidia-384/libEGL.so.1 is not a symbolic link</code></pre><h3 id="fix"><a href="#fix" class="headerlink" title="fix"></a>fix</h3><pre><code># fix libsudo rm /usr/lib/nvidia-384/libEGL.so sudo rm /usr/lib/nvidia-384/libEGL.so.1 sudo ln -s /usr/lib/nvidia-384/libEGL.so.384.90 /usr/lib/nvidia-384/libEGL.so.1sudo ln -s /usr/lib/nvidia-384/libEGL.so.1 /usr/lib/nvidia-384/libEGL.so# fix lib32sudo rm /usr/lib32/nvidia-384/libEGL.so sudo rm /usr/lib32/nvidia-384/libEGL.so.1 sudo ln -s /usr/lib32/nvidia-384/libEGL.so.384.90 /usr/lib32/nvidia-384/libEGL.so.1sudo ln -s /usr/lib32/nvidia-384/libEGL.so.1 /usr/lib32/nvidia-384/libEGL.so</code></pre><p>list libEGL.so of lib</p><pre><code>$ ls -al libEGL.so*lrwxrwxrwx 1 root root    33 1月   8 11:24 libEGL.so -&gt; /usr/lib/nvidia-384/libEGL.so.1lrwxrwxrwx 1 root root    38 1月   8 11:24 libEGL.so.1 -&gt; /usr/lib/nvidia-384/libEGL.so.384.90-rw-r--r-- 1 root root 15012 9月  20 08:44 libEGL.so.384.90</code></pre><p>list libEGL.so of lib32</p><pre><code>$ ls -al libEGL.so*lrwxrwxrwx 1 root root    33 1月   8 11:24 libEGL.so -&gt; /usr/lib32/nvidia-384/libEGL.so.1lrwxrwxrwx 1 root root    38 1月   8 11:24 libEGL.so.1 -&gt; /usr/lib32/nvidia-384/libEGL.so.384.90-rw-r--r-- 1 root root 15012 9月  20 08:44 libEGL.so.384.90</code></pre><h3 id="check"><a href="#check" class="headerlink" title="check"></a>check</h3><pre><code>$ sudo ldconfig</code></pre><p>OK. no errors.</p><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul><li><a href="https://askubuntu.com/questions/900285/libegl-so-1-is-not-a-symbolic-link" target="_blank" rel="noopener">libegl so not symbolic link</a></li><li><a href="http://www.iesensor.com/blog/2017/02/27/solved-fenics-2016-2-cpp-code-compiling-error-on-ubuntu-16-04/" target="_blank" rel="noopener">libvtkRenderingPythonTkWidgets.so</a></li></ul>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;Ubuntu ldconfig&lt;br&gt;
-    
-    </summary>
-    
-      <category term="ubuntu" scheme="http://kezunlin.me/categories/ubuntu/"/>
-    
-    
-      <category term="ldconfig" scheme="http://kezunlin.me/tags/ldconfig/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Ubuntu network proxy</title>
-    <link href="http://kezunlin.me/post/5076bc45/"/>
-    <id>http://kezunlin.me/post/5076bc45/</id>
-    <published>2018-01-08T02:03:00.000Z</published>
-    <updated>2018-01-18T04:40:47.087Z</updated>
-    
-    <content type="html"><![CDATA[<p>ubuntu network proxy<br><a id="more"></a></p><h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><ul><li><p>System wide: Network—&gt;None/Manual</p></li><li><p>chrome: can not set</p></li><li>firefox: about:preferences—&gt; Network Proxy</li></ul><p>start lantern will auto change system wide <code>Network Proxy</code> to 127.0.0.1 45139</p><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul><li>20180108: created</li></ul>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;ubuntu network proxy&lt;br&gt;
-    
-    </summary>
-    
-      <category term="ubuntu" scheme="http://kezunlin.me/categories/ubuntu/"/>
-    
-    
-      <category term="network proxy" scheme="http://kezunlin.me/tags/network-proxy/"/>
     
   </entry>
   
