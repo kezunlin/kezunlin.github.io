@@ -69,7 +69,7 @@
 
 
 
-  <meta name="keywords" content="KeZunLin, kezunlin, Hexo, NexT, c++, python, linux, ubuntu, mysql, deep learning, caffe, tensorflow, mxnet, keras, ros, pcl, opencv, vtk, qt, cmake, git, vim, google, github, stackoverflow" />
+  <meta name="keywords" content="cmake," />
 
 
 
@@ -83,13 +83,14 @@
 
 
 <meta name="description" content="compile and install poco cpp library on windows">
+<meta name="keywords" content="cmake">
 <meta property="og:type" content="article">
 <meta property="og:title" content="compile and install poco cpp library on windows">
 <meta property="og:url" content="http://kezunlin.me/post/9587bb47/index.html">
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="compile and install poco cpp library on windows">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-24T18:23:12.361Z">
+<meta property="og:updated_time" content="2018-01-25T00:11:45.022Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="compile and install poco cpp library on windows">
 <meta name="twitter:description" content="compile and install poco cpp library on windows">
@@ -344,7 +345,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-01-25T02:23:12+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2018-01-25T08:11:45+08:00">
                 2018-01-25
               </time>
             
@@ -392,7 +393,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  43
+                  535
                 </span>
               
 
@@ -408,7 +409,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  3
                 </span>
               
             </div>
@@ -432,7 +433,50 @@
         <p>compile and install poco cpp library on windows<br><a id="more"></a></p>
 <h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="download"><a href="#download" class="headerlink" title="download"></a>download</h2><pre><code>wget https://pocoproject.org/releases/poco-1.8.1/poco-1.8.1.zip
 wget https://pocoproject.org/releases/poco-1.8.1/poco-1.8.1.tar.gz
-</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
+</code></pre><h2 id="build"><a href="#build" class="headerlink" title="build"></a>build</h2><h3 id="build-options"><a href="#build-options" class="headerlink" title="build options"></a>build options</h3><p><code>buildwin.cmd</code></p>
+<pre><code>rem Usage:
+rem ------
+rem buildwin VS_VERSION [ACTION] [LINKMODE] [CONFIGURATION] [PLATFORM] [SAMPLES] [TESTS] [TOOL]
+rem VS_VERSION:    90|100|110|120|140|150
+rem ACTION:        build|rebuild|clean
+rem LINKMODE:      static_mt|static_md|shared|all
+rem CONFIGURATION: release|debug|both
+rem PLATFORM:      Win32|x64|WinCE|WEC2013
+rem SAMPLES:       samples|nosamples
+rem TESTS:         tests|notests
+rem TOOL:          devenv|vcexpress|wdexpress|msbuild
+</code></pre><p>we choose to build with <code>visual studio 2015</code></p>
+<p><code>build_vs140.cmd</code><br>change to this:</p>
+<pre><code>@echo off
+buildwin 140 build shared release x64 samples
+</code></pre><h3 id="build-1"><a href="#build-1" class="headerlink" title="build"></a>build</h3><p><code>./build_vs140.cmd</code></p>
+<p>or </p>
+<p><code>cmake-gui</code> and open <code>sln</code> to build with <code>release x64</code>and install to <code>D:/Poco</code> like this:</p>
+<p>Finally, copy <code>D:/Poco</code> to <code>C:/Program Files/Poco</code> so that <code>find_package(Poco REQURIED)</code> take effect.</p>
+<pre><code>$ ls Poco
+
+bin  include  lib
+
+$ ll Poco/lib
+
+total 3.5M
+drwxr-xr-x 1 zunli zunli     0 Jan 25 07:39 cmake
+-rw-r--r-- 1 zunli zunli  1.5M Jan 25 06:59 PocoFoundation.lib
+-rw-r--r-- 1 zunli zunli  111K Jan 25 06:59 PocoJSON.lib
+-rw-r--r-- 1 zunli zunli 1007K Jan 25 07:00 PocoNet.lib
+-rw-r--r-- 1 zunli zunli  320K Jan 25 07:00 PocoUtil.lib
+-rw-r--r-- 1 zunli zunli  595K Jan 25 07:00 PocoXML.lib
+</code></pre><h1 id="Poco-Example"><a href="#Poco-Example" class="headerlink" title="Poco Example"></a>Poco Example</h1><h2 id="event"><a href="#event" class="headerlink" title="event"></a>event</h2><h3 id="event-demo-cpp"><a href="#event-demo-cpp" class="headerlink" title="event_demo.cpp"></a>event_demo.cpp</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"Poco/BasicEvent.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"Poco/Delegate.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> Poco::BasicEvent;</span><br><span class="line"><span class="keyword">using</span> Poco::Delegate;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Source</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    BasicEvent&lt;<span class="keyword">int</span>&gt; theEvent;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">fireEvent</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        theEvent(<span class="keyword">this</span>, n);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Target</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">onEvent</span><span class="params">(<span class="keyword">const</span> <span class="keyword">void</span>* pSender, <span class="keyword">int</span>&amp; arg)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"onEvent: "</span> &lt;&lt; arg &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Source source;</span><br><span class="line">    Target target;</span><br><span class="line"></span><br><span class="line">    source.theEvent += Delegate&lt;Target, <span class="keyword">int</span>&gt;(</span><br><span class="line">        &amp;target, &amp;Target::onEvent);</span><br><span class="line"></span><br><span class="line">    source.fireEvent(<span class="number">42</span>);</span><br><span class="line"></span><br><span class="line">    source.theEvent -= Delegate&lt;Target, <span class="keyword">int</span>&gt;(</span><br><span class="line">        &amp;target, &amp;Target::onEvent);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required (VERSION 2.6)</span><br><span class="line"></span><br><span class="line">project (event_demo)</span><br><span class="line">enable_language(C)</span><br><span class="line">enable_language(CXX)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Always include the source and build directories in the include path.</span></span><br><span class="line"><span class="built_in">set</span>(CMAKE_INCLUDE_CURRENT_DIR ON)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Set the output folder where your program will be created</span></span><br><span class="line"><span class="built_in">set</span>(CMAKE_BINARY_DIR <span class="variable">$&#123;CMAKE_SOURCE_DIR&#125;</span>/bin)</span><br><span class="line"><span class="built_in">set</span>(EXECUTABLE_OUTPUT_PATH <span class="variable">$&#123;CMAKE_BINARY_DIR&#125;</span>)</span><br><span class="line"><span class="built_in">set</span>(LIBRARY_OUTPUT_PATH <span class="variable">$&#123;CMAKE_BINARY_DIR&#125;</span>)</span><br><span class="line"></span><br><span class="line">find_package(Poco REQUIRED COMPONENTS Foundation Util Net XML JSON)</span><br><span class="line"><span class="comment"># no Poco_INCLUDE_DIRS, we have to set by hand </span></span><br><span class="line">SET(Poco_INCLUDE_DIRS <span class="string">"C:/Program Files/Poco/include"</span>)</span><br><span class="line">MESSAGE( [Main] <span class="string">" Poco_INCLUDE_DIRS = <span class="variable">$&#123;Poco_INCLUDE_DIRS&#125;</span>"</span>)</span><br><span class="line">MESSAGE( [Main] <span class="string">" Poco_LIBRARIES = <span class="variable">$&#123;Poco_LIBRARIES&#125;</span>"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># The following folder will be included</span></span><br><span class="line">include_directories(</span><br><span class="line">    <span class="variable">$&#123;MY_SRC_INCLUDE&#125;</span>  </span><br><span class="line">	<span class="variable">$&#123;Poco_INCLUDE_DIRS&#125;</span> </span><br><span class="line">    )   </span><br><span class="line"></span><br><span class="line">link_directories(<span class="variable">$&#123;CMAKE_BINARY_DIR&#125;</span>) </span><br><span class="line"></span><br><span class="line">add_executable(event_demo event_demo.cpp)</span><br><span class="line">target_link_libraries(event_demo <span class="variable">$&#123;Poco_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Notice 1: <code>find_package(Poco REQUIRED COMPONENTS Foundation Util Net XML JSON)</code> and use <code>${Poco_INCLUDE_DIRS}</code>, <code>${Poco_LIBRARIES}</code>.</p>
+<p>Notice 2: we have to set <code>SET(Poco_INCLUDE_DIRS &quot;C:/Program Files/Poco/include&quot;)</code> by hand.</p>
+</blockquote>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="https://pocoproject.org/docs/99150-WindowsPlatformNotes.html" target="_blank" rel="noopener">poco windows</a></li>
+<li><a href="https://pocoproject.org/docs/00100-GuidedTour.html" target="_blank" rel="noopener">poco guide</a></li>
+</ul>
+<h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>20180125: created.</li>
 </ul>
 
@@ -467,6 +511,12 @@ wget https://pocoproject.org/releases/poco-1.8.1/poco-1.8.1.tar.gz
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/cmake/" rel="tag"># cmake</a>
+          
+        </div>
       
 
       
@@ -577,7 +627,7 @@ wget https://pocoproject.org/releases/poco-1.8.1/poco-1.8.1.tar.gz
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -588,7 +638,7 @@ wget https://pocoproject.org/releases/poco-1.8.1/poco-1.8.1.tar.gz
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-count">42</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -630,7 +680,7 @@ wget https://pocoproject.org/releases/poco-1.8.1/poco-1.8.1.tar.gz
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#download"><span class="nav-number">1.1.</span> <span class="nav-text">download</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#download"><span class="nav-number">1.1.</span> <span class="nav-text">download</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#build"><span class="nav-number">1.2.</span> <span class="nav-text">build</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#build-options"><span class="nav-number">1.2.1.</span> <span class="nav-text">build options</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#build-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">build</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Poco-Example"><span class="nav-number">2.</span> <span class="nav-text">Poco Example</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#event"><span class="nav-number">2.1.</span> <span class="nav-text">event</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#event-demo-cpp"><span class="nav-number">2.1.1.</span> <span class="nav-text">event_demo.cpp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">2.1.2.</span> <span class="nav-text">CMakeLists.txt</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
