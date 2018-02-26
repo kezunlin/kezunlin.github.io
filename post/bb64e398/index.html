@@ -69,7 +69,7 @@
 
 
 
-  <meta name="keywords" content="cmake,glog,gflags," />
+  <meta name="keywords" content="cmake,gflags," />
 
 
 
@@ -83,14 +83,14 @@
 
 
 <meta name="description" content="compile glog v0.3.5 and glags on windows from source.">
-<meta name="keywords" content="cmake,glog,gflags">
+<meta name="keywords" content="cmake,gflags">
 <meta property="og:type" content="article">
 <meta property="og:title" content="compile glog and glags on windows">
 <meta property="og:url" content="http://kezunlin.me/post/bb64e398/index.html">
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="compile glog v0.3.5 and glags on windows from source.">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-02-09T01:23:19.385Z">
+<meta property="og:updated_time" content="2018-02-24T00:24:52.417Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="compile glog and glags on windows">
 <meta name="twitter:description" content="compile glog v0.3.5 and glags on windows from source.">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-02-09T09:23:19+08:00">
-                2018-02-09
+              <time title="Post modified" itemprop="dateModified" datetime="2018-02-24T08:24:52+08:00">
+                2018-02-24
               </time>
             
           </span>
@@ -364,8 +364,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cpp/" itemprop="url" rel="index">
-                    <span itemprop="name">cpp</span>
+                  <a href="/categories/glog/" itemprop="url" rel="index">
+                    <span itemprop="name">glog</span>
                   </a>
                 </span>
 
@@ -495,7 +495,7 @@ LIBGLOG_EXPORTS
 <li>linux: <code>make -j8</code></li>
 </ul>
 <p>with cmake options <code>/MD</code> added to <code>CMAKE_CXX_FLAGS_RELEASE</code></p>
-<pre><code>CMAKE_CXX_FLAGS_RELEASE /MD /O2 /Ob2 /DNDEBUG /MD
+<pre><code>CMAKE_CXX_FLAGS_RELEASE /MD /O2 /Ob2 /DNDEBUG /MP
 </code></pre><p>or </p>
 <p>with <code>CMakeLists.txt</code><br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(MSVC) # WIN32</span><br><span class="line">  set_target_properties(target1 PROPERTIES COMPILE_FLAGS <span class="string">"/MP"</span>)</span><br><span class="line">  set_target_properties(target2 PROPERTIES COMPILE_FLAGS <span class="string">"/MP"</span>)</span><br><span class="line">  set_target_properties(target3 PROPERTIES COMPILE_FLAGS <span class="string">"/MP"</span>)</span><br><span class="line">endif()</span><br></pre></td></tr></table></figure></p>
 <h2 id="project-dependency"><a href="#project-dependency" class="headerlink" title="project dependency"></a>project dependency</h2><p>select <code>ALL-BUILD</code> and change build order by hand.</p>
@@ -517,7 +517,7 @@ ALL_BUILD
 </blockquote>
 <h3 id="gflags-config-cmake"><a href="#gflags-config-cmake" class="headerlink" title="gflags-config.cmake"></a>gflags-config.cmake</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span>(GFLAGS_FOUND TRUE) <span class="comment"># auto </span></span><br><span class="line"><span class="built_in">set</span>(GFLAGS_ROOT_DIR <span class="string">"D:/gflags"</span>)</span><br><span class="line"></span><br><span class="line">find_path(GFLAGS_INCLUDE_DIR NAMES gflags/gflags.h PATHS <span class="string">"<span class="variable">$&#123;GFLAGS_ROOT_DIR&#125;</span>/include"</span>) </span><br><span class="line">mark_as_advanced(GFLAGS_INCLUDE_DIR) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line">find_library(GFLAGS_LIBRARY NAMES gflags.lib PATHS <span class="string">"<span class="variable">$&#123;GFLAGS_ROOT_DIR&#125;</span>/lib"</span>) </span><br><span class="line">mark_as_advanced(GFLAGS_LIBRARY) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># use xxx_INCLUDE_DIRS and xxx_LIBRARIES in CMakeLists.txt</span></span><br><span class="line"><span class="built_in">set</span>(GFLAGS_INCLUDE_DIRS <span class="variable">$&#123;GFLAGS_INCLUDE_DIR&#125;</span> )</span><br><span class="line"><span class="built_in">set</span>(GFLAGS_LIBRARIES <span class="variable">$&#123;GFLAGS_LIBRARY&#125;</span> )</span><br><span class="line"></span><br><span class="line">message( <span class="string">"gflags-config.cmake "</span> <span class="variable">$&#123;GFLAGS_ROOT_DIR&#125;</span>)</span><br></pre></td></tr></table></figure>
 <h3 id="glog-config-cmake"><a href="#glog-config-cmake" class="headerlink" title="glog-config.cmake"></a>glog-config.cmake</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span>(GLOG_FOUND TRUE) <span class="comment"># auto </span></span><br><span class="line"><span class="built_in">set</span>(GLOG_ROOT_DIR <span class="string">"D:/glog"</span>)</span><br><span class="line"></span><br><span class="line">find_path(GLOG_INCLUDE_DIR NAMES glog/logging.h PATHS <span class="string">"<span class="variable">$&#123;GLOG_ROOT_DIR&#125;</span>/include"</span>) </span><br><span class="line">mark_as_advanced(GLOG_INCLUDE_DIR) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line">find_library(GLOG_LIBRARY NAMES glog.lib PATHS <span class="string">"<span class="variable">$&#123;GLOG_ROOT_DIR&#125;</span>/lib"</span>) </span><br><span class="line">mark_as_advanced(GLOG_LIBRARY) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># use xxx_INCLUDE_DIRS and xxx_LIBRARIES in CMakeLists.txt</span></span><br><span class="line"><span class="built_in">set</span>(GLOG_INCLUDE_DIRS <span class="variable">$&#123;GLOG_INCLUDE_DIR&#125;</span> )</span><br><span class="line"><span class="built_in">set</span>(GLOG_LIBRARIES <span class="variable">$&#123;GLOG_LIBRARY&#125;</span> )</span><br><span class="line"></span><br><span class="line">message( <span class="string">"glog-config.cmake "</span> <span class="variable">$&#123;GLOG_ROOT_DIR&#125;</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="main-cpp"><a href="#main-cpp" class="headerlink" title="main.cpp"></a>main.cpp</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;gflags/gflags.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;glog/logging.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">init_global_logging</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	FLAGS_logtostderr = true;  </span></span><br><span class="line"><span class="comment">	FLAGS_alsologtostderr = true;  </span></span><br><span class="line"><span class="comment">	FLAGS_colorlogtostderr = true;  </span></span><br><span class="line"><span class="comment">	FLAGS_log_prefix = true;  </span></span><br><span class="line"><span class="comment">	</span></span><br><span class="line"><span class="comment">	FLAGS_logbufsecs = 0;  //0 means realtime</span></span><br><span class="line"><span class="comment">	FLAGS_max_log_size = 10;  // MB</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	google::InitGoogleLogging(argv[<span class="number">0</span>]); <span class="comment">// init google logging</span></span><br><span class="line">	google::SetLogDestination(google::GLOG_FATAL, <span class="string">"../log/log_fatal_"</span>); </span><br><span class="line">	google::SetLogDestination(google::GLOG_ERROR, <span class="string">"../log/log_error_"</span>); </span><br><span class="line">	google::SetLogDestination(google::GLOG_WARNING, <span class="string">"../log/log_warning_"</span>);</span><br><span class="line">	google::SetLogDestination(google::GLOG_INFO, <span class="string">"../log/log_info_"</span>); </span><br><span class="line"></span><br><span class="line">	LOG(INFO) &lt;&lt; <span class="string">"Hello GLOG"</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="main-cpp"><a href="#main-cpp" class="headerlink" title="main.cpp"></a>main.cpp</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;gflags/gflags.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;glog/logging.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	FLAGS_logtostderr = true;  </span></span><br><span class="line"><span class="comment">	FLAGS_alsologtostderr = true;  </span></span><br><span class="line"><span class="comment">	FLAGS_colorlogtostderr = true;  </span></span><br><span class="line"><span class="comment">	FLAGS_log_prefix = true;  </span></span><br><span class="line"><span class="comment">	</span></span><br><span class="line"><span class="comment">	FLAGS_logbufsecs = 0;  //0 means realtime</span></span><br><span class="line"><span class="comment">	FLAGS_max_log_size = 10;  // MB</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	google::InitGoogleLogging(argv[<span class="number">0</span>]); <span class="comment">// init google logging</span></span><br><span class="line">	google::SetLogDestination(google::GLOG_FATAL, <span class="string">"../log/log_fatal_"</span>); </span><br><span class="line">	google::SetLogDestination(google::GLOG_ERROR, <span class="string">"../log/log_error_"</span>); </span><br><span class="line">	google::SetLogDestination(google::GLOG_WARNING, <span class="string">"../log/log_warning_"</span>);</span><br><span class="line">	google::SetLogDestination(google::GLOG_INFO, <span class="string">"../log/log_info_"</span>); </span><br><span class="line"></span><br><span class="line">	LOG(INFO) &lt;&lt; <span class="string">"Hello GLOG"</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>copy <code>gflags.dll</code> and <code>glog.dll</code> to main executable folder.</p>
 </blockquote>
@@ -575,8 +575,6 @@ ALL_BUILD
         <div class="post-tags">
           
             <a href="/tags/cmake/" rel="tag"># cmake</a>
-          
-            <a href="/tags/glog/" rel="tag"># glog</a>
           
             <a href="/tags/gflags/" rel="tag"># gflags</a>
           
@@ -680,7 +678,7 @@ ALL_BUILD
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-count">47</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -691,7 +689,7 @@ ALL_BUILD
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -702,7 +700,7 @@ ALL_BUILD
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-count">68</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

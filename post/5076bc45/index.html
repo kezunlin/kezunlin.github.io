@@ -82,18 +82,18 @@
 
 
 
-<meta name="description" content="ubuntu network proxy">
+<meta name="description" content="ubuntu network">
 <meta name="keywords" content="network proxy">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Ubuntu network proxy">
+<meta property="og:title" content="Ubuntu network configuration">
 <meta property="og:url" content="http://kezunlin.me/post/5076bc45/index.html">
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
-<meta property="og:description" content="ubuntu network proxy">
+<meta property="og:description" content="ubuntu network">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-01-18T04:40:47.087Z">
+<meta property="og:updated_time" content="2018-02-22T17:51:28.127Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Ubuntu network proxy">
-<meta name="twitter:description" content="ubuntu network proxy">
+<meta name="twitter:title" content="Ubuntu network configuration">
+<meta name="twitter:description" content="ubuntu network">
 
 
 
@@ -129,7 +129,7 @@
 
 
 
-  <title>Ubuntu network proxy | KeZunLin's Blog</title>
+  <title>Ubuntu network configuration | KeZunLin's Blog</title>
   
 
 
@@ -317,7 +317,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">Ubuntu network proxy</h2>
+          <h2 class="post-title" itemprop="name headline">Ubuntu network configuration</h2>
         
 
         <div class="post-meta">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-01-18T12:40:47+08:00">
-                2018-01-18
+              <time title="Post modified" itemprop="dateModified" datetime="2018-02-23T01:51:28+08:00">
+                2018-02-23
               </time>
             
           </span>
@@ -393,7 +393,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  36
+                  416
                 </span>
               
 
@@ -409,7 +409,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  1
+                  3
                 </span>
               
             </div>
@@ -430,17 +430,77 @@
       
 
       
-        <p>ubuntu network proxy<br><a id="more"></a></p>
-<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><ul>
+        <p>ubuntu network<br><a id="more"></a></p>
+<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="network-proxy"><a href="#network-proxy" class="headerlink" title="network proxy"></a>network proxy</h2><ul>
 <li><p>System wide: Network—&gt;None/Manual</p>
 </li>
 <li><p>chrome: can not set</p>
 </li>
 <li>firefox: about:preferences—&gt; Network Proxy</li>
 </ul>
-<p>start lantern will auto change system wide <code>Network Proxy</code> to 127.0.0.1 45139</p>
+<p>start lantern will auto change system wide <code>Network Proxy</code> to <code>127.0.0.1 :45139</code></p>
+<h2 id="eth0-config"><a href="#eth0-config" class="headerlink" title="eth0 config"></a>eth0 config</h2><h3 id="rename-xxx-to-eth0"><a href="#rename-xxx-to-eth0" class="headerlink" title="rename xxx to eth0"></a>rename xxx to eth0</h3><p>errors may occur:</p>
+<pre><code>Ubuntu networking restart | cannot find device &apos;eth0&apos;
+</code></pre><p>check eth0 </p>
+<pre><code>$ dmesg | grep eth 
+
+[5.715564] e1000 0000:02:01.0 eth0: (PCI:66MHz:32-bit) 00:0c:29:7d:bf:43
+[5.715573] e1000 0000:02:01.0 eth0: Intel(R) PRO/1000 Network Connection
+[5.719709] e1000 0000:02:01.0 ens33: renamed from eth0
+</code></pre><p>and we get <code>ens33</code> renamed from <code>eth0</code>, we need to change it back to <code>eth0</code>.</p>
+<h3 id="solution"><a href="#solution" class="headerlink" title="solution"></a>solution</h3><p>(1). edit grub and update</p>
+<pre><code>$ sudo vim /etc/default/grub
+
+#GRUB_CMDLINE_LINUX=&quot;&quot;
+GRUB_CMDLINE_LINUX=&quot;net.ifnames=0 biosdevname=0&quot;
+
+$ sudo update-grub
+</code></pre><p>(2) edit network interfaces</p>
+<pre><code>auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+address 192.168.1.77 
+netmask 255.255.255.0
+gateway 192.168.1.1 
+</code></pre><p>(3) reboot </p>
+<pre><code>sudo reboot now
+</code></pre><p>(4) check eth0</p>
+<pre><code>$ sudo ifconfig
+
+eth0      Link encap:Ethernet  HWaddr 80:fa:5b:47:92:8a  
+          inet addr:192.168.1.77  Bcast:192.168.1.255  Mask:255.255.255.0
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:4640 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:4640 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:865530 (865.5 KB)  TX bytes:865530 (865.5 KB)
+
+wlan0     Link encap:Ethernet  HWaddr b0:35:9f:53:68:c6  
+          inet addr:192.168.0.130  Bcast:192.168.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::a3d7:e190:6fb3:133/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:6536 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:380 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:581427 (581.4 KB)  TX bytes:46439 (46.4 KB)
+</code></pre><p>OK. Now we get <code>eth0</code>,<code>wlan0</code> properly set.</p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="http://blog.csdn.net/u011521019/article/details/70218642" target="_blank" rel="noopener">ubuntu rename eth0</a></li>
+</ul>
 <h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>20180108: created</li>
+<li>20180222: add eth0 part.</li>
 </ul>
 
       
@@ -462,7 +522,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="http://kezunlin.me/post/5076bc45/" title="Ubuntu network proxy">http://kezunlin.me/post/5076bc45/</a>
+    <a href="http://kezunlin.me/post/5076bc45/" title="Ubuntu network configuration">http://kezunlin.me/post/5076bc45/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -579,7 +639,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-count">47</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -590,7 +650,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -601,7 +661,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-count">68</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -643,7 +703,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">2.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#network-proxy"><span class="nav-number">1.1.</span> <span class="nav-text">network proxy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#eth0-config"><span class="nav-number">1.2.</span> <span class="nav-text">eth0 config</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#rename-xxx-to-eth0"><span class="nav-number">1.2.1.</span> <span class="nav-text">rename xxx to eth0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#solution"><span class="nav-number">1.2.2.</span> <span class="nav-text">solution</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>

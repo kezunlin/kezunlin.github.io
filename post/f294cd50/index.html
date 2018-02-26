@@ -69,7 +69,7 @@
 
 
 
-  <meta name="keywords" content="find_package," />
+  <meta name="keywords" content="vtk,boost,qt,poco,find_package,glog,pcl," />
 
 
 
@@ -83,14 +83,14 @@
 
 
 <meta name="description" content="cmake find_package for different packages">
-<meta name="keywords" content="find_package">
+<meta name="keywords" content="vtk,boost,qt,poco,find_package,glog,pcl">
 <meta property="og:type" content="article">
 <meta property="og:title" content="cmake find_package for different packages">
 <meta property="og:url" content="http://kezunlin.me/post/f294cd50/index.html">
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="cmake find_package for different packages">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-02-10T22:27:14.096Z">
+<meta property="og:updated_time" content="2018-02-24T00:24:52.417Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="cmake find_package for different packages">
 <meta name="twitter:description" content="cmake find_package for different packages">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-02-11T06:27:14+08:00">
-                2018-02-11
+              <time title="Post modified" itemprop="dateModified" datetime="2018-02-24T08:24:52+08:00">
+                2018-02-24
               </time>
             
           </span>
@@ -393,7 +393,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  26
+                  385
                 </span>
               
 
@@ -409,7 +409,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  1
+                  2
                 </span>
               
             </div>
@@ -431,7 +431,31 @@
 
       
         <p>cmake find_package for different packages<br><a id="more"></a></p>
-<h1 id="Offical"><a href="#Offical" class="headerlink" title="Offical"></a>Offical</h1><h2 id="Boost"><a href="#Boost" class="headerlink" title="Boost"></a>Boost</h2><h2 id="GTest"><a href="#GTest" class="headerlink" title="GTest"></a>GTest</h2><h2 id="gflags"><a href="#gflags" class="headerlink" title="gflags"></a>gflags</h2><h2 id="glog"><a href="#glog" class="headerlink" title="glog"></a>glog</h2><h2 id="QT"><a href="#QT" class="headerlink" title="QT"></a>QT</h2><h2 id="VTK"><a href="#VTK" class="headerlink" title="VTK"></a>VTK</h2><h2 id="PCL"><a href="#PCL" class="headerlink" title="PCL"></a>PCL</h2><h2 id="User-defined"><a href="#User-defined" class="headerlink" title="User-defined"></a>User-defined</h2><h2 id="halcon"><a href="#halcon" class="headerlink" title="halcon"></a>halcon</h2><h2 id="mysqlconcpp"><a href="#mysqlconcpp" class="headerlink" title="mysqlconcpp"></a>mysqlconcpp</h2><h2 id="gflags-1"><a href="#gflags-1" class="headerlink" title="gflags"></a>gflags</h2><h2 id="glog-1"><a href="#glog-1" class="headerlink" title="glog"></a>glog</h2><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<h1 id="Packages"><a href="#Packages" class="headerlink" title="Packages"></a>Packages</h1><h2 id="Boost"><a href="#Boost" class="headerlink" title="Boost"></a>Boost</h2><pre><code>sudo apt-get install libboost-all-dev
+</code></pre><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span>(Boost_USE_RELEASE_LIBS ON)</span><br><span class="line"><span class="comment">#set(Boost_USE_STATIC_LIBS OFF) # use .a or .so file</span></span><br><span class="line"><span class="built_in">set</span>(Boost_USE_MULTITHREAD ON)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Find Boost package 1.64.0</span></span><br><span class="line">find_package(Boost REQUIRED COMPONENTS serialization date_time system filesystem thread timer)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">include_directories(<span class="variable">$&#123;Boost_INCLUDE_DIRS&#125;</span>)</span><br><span class="line">target_link_libraries(demo <span class="variable">$&#123;Boost_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="GTest"><a href="#GTest" class="headerlink" title="GTest"></a>GTest</h2><pre><code>git clone https://github.com/google/googletest.git
+</code></pre><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Locate GTEST</span></span><br><span class="line">find_package(GTEST REQUIRED)</span><br><span class="line">include_directories(<span class="variable">$&#123;GTEST_INCLUDE_DIRS&#125;</span>)</span><br><span class="line">target_link_libraries(demo <span class="variable">$&#123;GTEST_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="gflags-glog"><a href="#gflags-glog" class="headerlink" title="gflags+glog"></a>gflags+glog</h2><pre><code>wget https://github.com/schuhschuh/gflags/archive/v2.2.1.tar.gz
+wget https://github.com/google/glog/archive/v0.3.5.tar.gz
+</code></pre><blockquote>
+<p>for <code>find_package(GFLAGS REQUIRED)</code> we copy user-defined <code>gflags-config.cmake</code> from <code>caffe</code> project to <code>/usr/local/lib/cmake/gflags</code><br>for <code>find_package(GLOG REQUIRED)</code> we copy user-defined <code>glog-config.cmake</code> from <code>caffe</code> project to <code>/usr/local/lib/cmake/glog</code><br>see <a href="http://www.kezunlin.me/post/977f5125/" target="_blank" rel="noopener">compile glog and glags on ubuntu 16.04</a></p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">find_package(GFLAGS REQUIRED) </span><br><span class="line">include_directories(<span class="variable">$&#123;GFLAGS_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line">find_package(GLOG REQUIRED) </span><br><span class="line">include_directories(<span class="variable">$&#123;GLOG_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># for windows</span></span><br><span class="line"><span class="comment">#add_definitions( -DGLOG_NO_ABBREVIATED_SEVERITIES ) </span></span><br><span class="line"></span><br><span class="line">add_executable(demo glog_main.cpp)</span><br><span class="line">target_link_libraries (demo  <span class="variable">$&#123;GLOG_LIBRARIES&#125;</span> <span class="variable">$&#123;GFLAGS_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="mysqlconcpp"><a href="#mysqlconcpp" class="headerlink" title="mysqlconcpp"></a>mysqlconcpp</h2><pre><code>sudo apt-cache search libmysqlcppconn
+sudo apt-get -y install libmysqlcppconn-dev libmysqlcppconn7v5
+</code></pre><blockquote>
+<p>for <code>find_package(MYSQLCPPCONN REQUIRED)</code> we copy user-defined <code>mysqlcppconn-config.cmake</code> to <code>/usr/lib/cmake/mysqlcppconn</code></p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">find_package(MYSQLCPPCONN REQUIRED)</span><br><span class="line"></span><br><span class="line">include_directories(<span class="variable">$&#123;MYSQLCPPCONN_INCLUDE_DIRS&#125;</span>)</span><br><span class="line">target_link_libraries (demo  <span class="variable">$&#123;MYSQLCPPCONN_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="libjpegturbo"><a href="#libjpegturbo" class="headerlink" title="libjpegturbo"></a>libjpegturbo</h2><pre><code>git clone https://github.com/libjpeg-turbo/libjpeg-turbo.git
+</code></pre><blockquote>
+<p>for <code>find_package(LIBJPEGTURBO REQUIRED)</code> we copy user-defined <code>libjpegturbo-config.cmake</code> to <code>/usr/lib/cmake/libjpegturbo</code></p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">find_package(LIBJPEGTURBO REQUIRED)</span><br><span class="line">include_directories(<span class="variable">$&#123;LIBJPEGTURBO_INCLUDE_DIRS&#125;</span>)  </span><br><span class="line">target_link_libraries (example_jpeg <span class="variable">$&#123;LIBJPEGTURBO_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="Poco"><a href="#Poco" class="headerlink" title="Poco"></a>Poco</h2><pre><code>wget https://pocoproject.org/releases/poco-1.8.1/poco-1.8.1.zip
+wget https://pocoproject.org/releases/poco-1.8.1/poco-1.8.1.tar.gz
+</code></pre><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">find_package(Poco REQUIRED COMPONENTS Foundation Util Net XML JSON)</span><br><span class="line"></span><br><span class="line"><span class="comment"># no Poco_INCLUDE_DIRS, we have to set by hand </span></span><br><span class="line"><span class="keyword">if</span>(MSVC) <span class="comment"># WIN32</span></span><br><span class="line">	SET(Poco_INCLUDE_DIRS <span class="string">"C:/Program Files/Poco/include"</span>)</span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line">	SET(Poco_INCLUDE_DIRS <span class="string">"/usr/local/include/Poco"</span>)</span><br><span class="line">endif(MSVC)</span><br><span class="line"></span><br><span class="line">MESSAGE( [Main] <span class="string">" Poco_INCLUDE_DIRS = <span class="variable">$&#123;Poco_INCLUDE_DIRS&#125;</span>"</span>)</span><br><span class="line">MESSAGE( [Main] <span class="string">" Poco_LIBRARIES = <span class="variable">$&#123;Poco_LIBRARIES&#125;</span>"</span>)</span><br><span class="line"></span><br><span class="line">include_directories(<span class="variable">$&#123;Poco_INCLUDE_DIRS&#125;</span> )   </span><br><span class="line">target_link_libraries(demo <span class="variable">$&#123;Poco_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="QT"><a href="#QT" class="headerlink" title="QT"></a>QT</h2><h2 id="VTK"><a href="#VTK" class="headerlink" title="VTK"></a>VTK</h2><h2 id="PCL"><a href="#PCL" class="headerlink" title="PCL"></a>PCL</h2><h1 id="User-defined-cmake"><a href="#User-defined-cmake" class="headerlink" title="User-defined cmake"></a>User-defined cmake</h1><h2 id="gflags-config-cmake"><a href="#gflags-config-cmake" class="headerlink" title="gflags-config.cmake"></a>gflags-config.cmake</h2><h2 id="glog-config-cmake"><a href="#glog-config-cmake" class="headerlink" title="glog-config.cmake"></a>glog-config.cmake</h2><h2 id="mysqlconcpp-config-cmake"><a href="#mysqlconcpp-config-cmake" class="headerlink" title="mysqlconcpp-config.cmake"></a>mysqlconcpp-config.cmake</h2><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://github.com/UnaNancyOwen/VelodyneCapture/blob/master/sample/viewer/FindPCAP.cmake" target="_blank" rel="noopener">FindPCAP cmake example</a></li>
 </ul>
 <h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
@@ -472,7 +496,19 @@
       
         <div class="post-tags">
           
+            <a href="/tags/vtk/" rel="tag"># vtk</a>
+          
+            <a href="/tags/boost/" rel="tag"># boost</a>
+          
+            <a href="/tags/qt/" rel="tag"># qt</a>
+          
+            <a href="/tags/poco/" rel="tag"># poco</a>
+          
             <a href="/tags/find-package/" rel="tag"># find_package</a>
+          
+            <a href="/tags/glog/" rel="tag"># glog</a>
+          
+            <a href="/tags/pcl/" rel="tag"># pcl</a>
           
         </div>
       
@@ -574,7 +610,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-count">47</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -585,7 +621,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -596,7 +632,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-count">68</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -638,7 +674,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Offical"><span class="nav-number">1.</span> <span class="nav-text">Offical</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Boost"><span class="nav-number">1.1.</span> <span class="nav-text">Boost</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GTest"><span class="nav-number">1.2.</span> <span class="nav-text">GTest</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gflags"><span class="nav-number">1.3.</span> <span class="nav-text">gflags</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#glog"><span class="nav-number">1.4.</span> <span class="nav-text">glog</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QT"><span class="nav-number">1.5.</span> <span class="nav-text">QT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VTK"><span class="nav-number">1.6.</span> <span class="nav-text">VTK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PCL"><span class="nav-number">1.7.</span> <span class="nav-text">PCL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#User-defined"><span class="nav-number">1.8.</span> <span class="nav-text">User-defined</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#halcon"><span class="nav-number">1.9.</span> <span class="nav-text">halcon</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mysqlconcpp"><span class="nav-number">1.10.</span> <span class="nav-text">mysqlconcpp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gflags-1"><span class="nav-number">1.11.</span> <span class="nav-text">gflags</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#glog-1"><span class="nav-number">1.12.</span> <span class="nav-text">glog</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Packages"><span class="nav-number">1.</span> <span class="nav-text">Packages</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Boost"><span class="nav-number">1.1.</span> <span class="nav-text">Boost</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GTest"><span class="nav-number">1.2.</span> <span class="nav-text">GTest</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gflags-glog"><span class="nav-number">1.3.</span> <span class="nav-text">gflags+glog</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mysqlconcpp"><span class="nav-number">1.4.</span> <span class="nav-text">mysqlconcpp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#libjpegturbo"><span class="nav-number">1.5.</span> <span class="nav-text">libjpegturbo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Poco"><span class="nav-number">1.6.</span> <span class="nav-text">Poco</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QT"><span class="nav-number">1.7.</span> <span class="nav-text">QT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VTK"><span class="nav-number">1.8.</span> <span class="nav-text">VTK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PCL"><span class="nav-number">1.9.</span> <span class="nav-text">PCL</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#User-defined-cmake"><span class="nav-number">2.</span> <span class="nav-text">User-defined cmake</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#gflags-config-cmake"><span class="nav-number">2.1.</span> <span class="nav-text">gflags-config.cmake</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#glog-config-cmake"><span class="nav-number">2.2.</span> <span class="nav-text">glog-config.cmake</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mysqlconcpp-config-cmake"><span class="nav-number">2.3.</span> <span class="nav-text">mysqlconcpp-config.cmake</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>

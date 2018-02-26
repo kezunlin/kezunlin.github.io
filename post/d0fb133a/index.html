@@ -90,7 +90,7 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="instal mysql cpp connector on ubuntu 16.04">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-01-18T04:40:47.089Z">
+<meta property="og:updated_time" content="2018-02-24T00:24:52.386Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="instal mysql cpp connector on ubuntu 16.04">
 <meta name="twitter:description" content="instal mysql cpp connector on ubuntu 16.04">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-01-18T12:40:47+08:00">
-                2018-01-18
+              <time title="Post modified" itemprop="dateModified" datetime="2018-02-24T08:24:52+08:00">
+                2018-02-24
               </time>
             
           </span>
@@ -393,7 +393,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  88
+                  294
                 </span>
               
 
@@ -409,7 +409,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  1
+                  2
                 </span>
               
             </div>
@@ -454,11 +454,17 @@ sudo apt-get install libmysqlcppconn7v5
     Model
     mysqlcppconn
     )
-</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+</code></pre><h2 id="mysqlcppconn-config-cmake"><a href="#mysqlcppconn-config-cmake" class="headerlink" title="mysqlcppconn-config.cmake"></a>mysqlcppconn-config.cmake</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># - Try to find MYSQLCPPCONN</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># The following variables are optionally searched for defaults</span></span><br><span class="line"><span class="comment">#  MYSQLCPPCONN_ROOT_DIR:            Base directory where all MYSQLCPPCONN components are found</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># The following are set after configuration is done:</span></span><br><span class="line"><span class="comment">#  MYSQLCPPCONN_FOUND</span></span><br><span class="line"><span class="comment">#  MYSQLCPPCONN_INCLUDE_DIRS</span></span><br><span class="line"><span class="comment">#  MYSQLCPPCONN_LIBRARIES</span></span><br><span class="line"><span class="comment">#  MYSQLCPPCONN_LIBRARYRARY_DIRS</span></span><br><span class="line"></span><br><span class="line">include(FindPackageHandleStandardArgs)</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span>(MYSQLCPPCONN_ROOT_DIR <span class="string">""</span> CACHE PATH <span class="string">"Folder contains mysqlcppconn"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(WIN32)</span><br><span class="line">    find_path(MYSQLCPPCONN_INCLUDE_DIR cppconn/driver.h</span><br><span class="line">        PATHS <span class="variable">$&#123;MYSQLCPPCONN_ROOT_DIR&#125;</span>)</span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line">    find_path(MYSQLCPPCONN_INCLUDE_DIR cppconn/dirver.h</span><br><span class="line">        PATHS <span class="variable">$&#123;MYSQLCPPCONN_ROOT_DIR&#125;</span>)</span><br><span class="line">endif()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(MSVC)</span><br><span class="line">    find_library(MYSQLCPPCONN_LIBRARY_RELEASE mysqlcppconn</span><br><span class="line">        PATHS <span class="variable">$&#123;MYSQLCPPCONN_ROOT_DIR&#125;</span></span><br><span class="line">        PATH_SUFFIXES Release)</span><br><span class="line"></span><br><span class="line">    find_library(MYSQLCPPCONN_LIBRARY_DEBUG mysqlcppconn</span><br><span class="line">        PATHS <span class="variable">$&#123;MYSQLCPPCONN_ROOT_DIR&#125;</span></span><br><span class="line">        PATH_SUFFIXES Debug)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">set</span>(MYSQLCPPCONN_LIBRARY optimized <span class="variable">$&#123;MYSQLCPPCONN_LIBRARY_RELEASE&#125;</span> debug <span class="variable">$&#123;MYSQLCPPCONN_LIBRARY_DEBUG&#125;</span>)</span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line">    find_library(MYSQLCPPCONN_LIBRARY mysqlcppconn</span><br><span class="line">        PATHS <span class="variable">$&#123;MYSQLCPPCONN_ROOT_DIR&#125;</span></span><br><span class="line">        PATH_SUFFIXES lib lib64)</span><br><span class="line">endif()</span><br><span class="line"></span><br><span class="line">find_package_handle_standard_args(MYSQLCPPCONN DEFAULT_MSG MYSQLCPPCONN_INCLUDE_DIR MYSQLCPPCONN_LIBRARY)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(MYSQLCPPCONN_FOUND)</span><br><span class="line">  <span class="built_in">set</span>(MYSQLCPPCONN_INCLUDE_DIRS <span class="variable">$&#123;MYSQLCPPCONN_INCLUDE_DIR&#125;</span>)</span><br><span class="line">  <span class="built_in">set</span>(MYSQLCPPCONN_LIBRARIES <span class="variable">$&#123;MYSQLCPPCONN_LIBRARY&#125;</span>)</span><br><span class="line">  message(STATUS <span class="string">"Found mysqlcppconn    (include: <span class="variable">$&#123;MYSQLCPPCONN_INCLUDE_DIR&#125;</span>, library: <span class="variable">$&#123;MYSQLCPPCONN_LIBRARY&#125;</span>)"</span>)</span><br><span class="line">  mark_as_advanced(MYSQLCPPCONN_ROOT_DIR MYSQLCPPCONN_LIBRARY_RELEASE MYSQLCPPCONN_LIBRARY_DEBUG</span><br><span class="line">                                 MYSQLCPPCONN_LIBRARY MYSQLCPPCONN_INCLUDE_DIR)</span><br><span class="line">endif()</span><br></pre></td></tr></table></figure>
+<h2 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h2><blockquote>
+<p>for <code>find_package(MYSQLCPPCONN REQUIRED)</code> we copy user-defined <code>mysqlcppconn-config.cmake</code> to <code>/usr/lib/cmake/mysqlcppconn</code></p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">find_package(MYSQLCPPCONN REQUIRED)</span><br><span class="line"></span><br><span class="line">include_directories(<span class="variable">$&#123;MYSQLCPPCONN_INCLUDE_DIRS&#125;</span>)</span><br><span class="line">target_link_libraries (demo  <span class="variable">$&#123;MYSQLCPPCONN_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://aaronxu17.github.io/blog/install-mysql-connector/" target="_blank" rel="noopener">install-mysql-connector</a></li>
 </ul>
 <h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>2180118: created.</li>
+<li>20180223: add mysqlcppconn-config.cmake.</li>
 </ul>
 
       
@@ -599,7 +605,7 @@ sudo apt-get install libmysqlcppconn7v5
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-count">47</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -610,7 +616,7 @@ sudo apt-get install libmysqlcppconn7v5
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -621,7 +627,7 @@ sudo apt-get install libmysqlcppconn7v5
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-count">68</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -663,7 +669,7 @@ sudo apt-get install libmysqlcppconn7v5
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install-mysql-connector-for-c"><span class="nav-number">1.1.</span> <span class="nav-text">install mysql connector for c++</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#link-in-CMakeLists-txt"><span class="nav-number">1.2.</span> <span class="nav-text">link in CMakeLists.txt</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install-mysql-connector-for-c"><span class="nav-number">1.1.</span> <span class="nav-text">install mysql connector for c++</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#link-in-CMakeLists-txt"><span class="nav-number">1.2.</span> <span class="nav-text">link in CMakeLists.txt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mysqlcppconn-config-cmake"><span class="nav-number">1.3.</span> <span class="nav-text">mysqlcppconn-config.cmake</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">1.4.</span> <span class="nav-text">CMakeLists.txt</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
