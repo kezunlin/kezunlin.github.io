@@ -82,19 +82,19 @@
 
 
 
-<meta name="description" content="Guide to compile VTK from source with Qt 5 on Ubuntu　16.04">
+<meta name="description" content="Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04">
 <meta name="keywords" content="vtk">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Guide to compile VTK from source with Qt on Ubuntu 16.04">
+<meta property="og:title" content="Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04">
 <meta property="og:url" content="http://kezunlin.me/post/b901735e/index.html">
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
-<meta property="og:description" content="Guide to compile VTK from source with Qt 5 on Ubuntu　16.04">
+<meta property="og:description" content="Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://images2017.cnblogs.com/blog/635233/201801/635233-20180109102359785-330027676.png">
-<meta property="og:updated_time" content="2018-01-25T00:15:40.141Z">
+<meta property="og:updated_time" content="2018-02-28T01:32:53.834Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Guide to compile VTK from source with Qt on Ubuntu 16.04">
-<meta name="twitter:description" content="Guide to compile VTK from source with Qt 5 on Ubuntu　16.04">
+<meta name="twitter:title" content="Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04">
+<meta name="twitter:description" content="Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04">
 <meta name="twitter:image" content="http://images2017.cnblogs.com/blog/635233/201801/635233-20180109102359785-330027676.png">
 
 
@@ -131,7 +131,7 @@
 
 
 
-  <title>Guide to compile VTK from source with Qt on Ubuntu 16.04 | KeZunLin's Blog</title>
+  <title>Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04 | KeZunLin's Blog</title>
   
 
 
@@ -319,7 +319,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">Guide to compile VTK from source with Qt on Ubuntu 16.04</h2>
+          <h2 class="post-title" itemprop="name headline">Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04</h2>
         
 
         <div class="post-meta">
@@ -347,8 +347,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-01-25T08:15:40+08:00">
-                2018-01-25
+              <time title="Post modified" itemprop="dateModified" datetime="2018-02-28T09:32:53+08:00">
+                2018-02-28
               </time>
             
           </span>
@@ -395,7 +395,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  351
+                  475
                 </span>
               
 
@@ -411,7 +411,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  2
+                  3
                 </span>
               
             </div>
@@ -432,17 +432,23 @@
       
 
       
-        <p>Guide to compile VTK from source with Qt 5 on Ubuntu　16.04<br><a id="more"></a></p>
+        <p>Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04<br><a id="more"></a></p>
+<ul>
+<li><a href="http://kezunlin.me/post/91842b71/">Part-1: Install and Configure Qt5 on Ubuntu 16.04</a></li>
+<li><a href="http://kezunlin.me/post/b901735e/"><strong>Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04</strong></a></li>
+<li><a href="http://kezunlin.me/post/137aa5fc/">Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubuntu 16.04 from source</a></li>
+</ul>
 <h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="version"><a href="#version" class="headerlink" title="version"></a>version</h2><ul>
 <li>ubuntu: 16.04</li>
-<li>qt: 5.5.1</li>
 <li>qmake: 3.0</li>
+<li>qt: 5.7.0</li>
 <li>qtcreator: 3.5.1</li>
 <li>cmake: 3.2.2</li>
 <li>cmake-gui: 3.5.1</li>
-<li>vtk: 6.3.0  (from source)</li>
+<li><del>vtk: 6.3.0  (from source)</del></li>
+<li>vtk: 8.1.0  (from source)</li>
 </ul>
-<h2 id="install-qt"><a href="#install-qt" class="headerlink" title="install qt"></a>install qt</h2><pre><code>$ sudo apt-get install qtcreator
+<h1 id="install-qt"><a href="#install-qt" class="headerlink" title="install qt"></a><del>install qt</del></h1><pre><code>$ sudo apt-get install qtcreator
 
 $ qtcreator -version
 Qt Creator 3.5.1 based on Qt 5.5.1
@@ -456,32 +462,39 @@ cmake version 3.2.2
 
 $ cmake-gui --version
 cmake version 3.5.1
-</code></pre><p>purge qt4<br><code>/usr/lib/x86_64-linux-gnu/qt4</code></p>
-<pre><code>sudo apt-get purge qt4-designer
-sudo apt-get purge qt4-dev-tools
-</code></pre><p>use qt5<br><code>/usr/lib/x86_64-linux-gnu/qt5</code></p>
-<h2 id="install-vtk"><a href="#install-vtk" class="headerlink" title="install vtk"></a>install vtk</h2><h3 id="download-source"><a href="#download-source" class="headerlink" title="download source"></a>download source</h3><p>Download vtk source from <code>https://www.vtk.org/download/</code></p>
-<pre><code>wget https://www.vtk.org/files/release/6.3/VTK-6.3.0.tar.gz
-</code></pre><p>integrate VTK with Qt for a pretty graphical user interface, we need to turn on some options.</p>
-<h3 id="configure-vtk-with-qt"><a href="#configure-vtk-with-qt" class="headerlink" title="configure vtk with qt"></a>configure vtk with qt</h3><p>With <code>VTK 6.3.0</code>:</p>
-<pre><code>VTK_QT_VERSION     5  # by default 4
+</code></pre><h2 id="install-qt-to-opt-Qt5-7-0"><a href="#install-qt-to-opt-Qt5-7-0" class="headerlink" title="install qt to /opt/Qt5.7.0"></a>install qt to /opt/Qt5.7.0</h2><pre><code>sudo apt-get install build-essential libgl1-mesa-dev
+wget http://download.qt.io/official_releases/qt/5.7/5.7.0/qt-opensource-linux-x64-5.7.0.run
+chmod +x qt-opensource-linux-x64-5.7.0.run
+./qt-opensource-linux-x64-5.7.0.run
 
-VTK_Group_Qt       ON
+./qmake -v 
+QMake version 3.0
+Using Qt version 5.7.0 in /opt/Qt5.7.0/5.7/gcc_64/lib
+</code></pre><h2 id="install-vtk"><a href="#install-vtk" class="headerlink" title="install vtk"></a>install vtk</h2><h3 id="download-source"><a href="#download-source" class="headerlink" title="download source"></a>download source</h3><p>Download vtk source</p>
+<pre><code>wget https://www.vtk.org/files/release/8.1/VTK-8.1.0.tar.gz
+
+wget https://www.vtk.org/files/release/8.1/VTKData-8.1.0.tar.gz
+</code></pre><p>integrate VTK with Qt for a pretty graphical user interface, we need to turn on some options.</p>
+<h3 id="configure-vtk-with-qt"><a href="#configure-vtk-with-qt" class="headerlink" title="configure vtk with qt"></a>configure vtk with qt</h3><pre><code>cd VTK-8.1.0
+mkdir build
+cd build
+cmake-gui ..
+</code></pre><p>with options:</p>
+<pre><code>VTK_Group_Qt       ON
+VTK_QT_VERSION     5 # default
+QT5_DIR            /opt/qt/5.7/gcc_64/lib/cmake/Qt5
+
+VTK_RENDERING_BACKEND OpenGL2 # default
 BUILD_SHARED_LIBS  ON
 CMAKE_BUILD_TYPE   Release
-</code></pre><p>by default <code>vtk 6.3.0</code> use <code>qt 4</code>, we need to change qt version from 4 to 5.</p>
-<p>cmake </p>
-<pre><code>cmake -DVTK_Group_Qt:BOOL=ON \
-     -DBUILD_SHARED_LIBS:BOOL=ON \
-     -DVTK_QT_VERSION:STRING=5  \
-     -DCMAKE_BUILD_TYPE:STRING=Release
-</code></pre><p>or </p>
-<pre><code>cmake-gui
-# configure ...
-</code></pre><h3 id="make-and-install"><a href="#make-and-install" class="headerlink" title="make and install"></a>make and install</h3><pre><code>cd build
-make -j8
+CMAKE_INSTALL_PREFIX /usr/local
+</code></pre><blockquote>
+<p>QT5_Dir            /opt/qt/5.7/gcc_64/lib/cmake/Qt5</p>
+</blockquote>
+<h3 id="download-MD5-VTKData"><a href="#download-MD5-VTKData" class="headerlink" title="download MD5 VTKData"></a>download MD5 VTKData</h3><p>tar <code>VTKData-8.1.0.tar.gz</code> and copy <code>MD5</code> to <code>VTK-8.1.0/build/ExternalData/Objects/MD5</code></p>
+<h3 id="make-and-install"><a href="#make-and-install" class="headerlink" title="make and install"></a>make and install</h3><pre><code>make -j8
 sudo make -j8 install
-</code></pre><p>will install to <code>/usr/local/include/vtk-6.3</code> and <code>/usr/local/lib/cmake/vtk-6.3</code></p>
+</code></pre><p>will install to <code>/usr/local/include/vtk-8.1</code> and <code>/usr/local/lib/cmake/vtk-8.1</code></p>
 <h3 id="install-QVTKWidget-plugin"><a href="#install-QVTKWidget-plugin" class="headerlink" title="install QVTKWidget plugin"></a>install QVTKWidget plugin</h3><p>copy <code>libQVTKWidgetPlugin.so</code> to<br>install path: <code>/usr/lib/x86_64-linux-gnu/qt5/plugins/designer</code></p>
 <pre><code>cd build/lib
 ls -al libQVTKWidgetPlugin.so 
@@ -522,7 +535,7 @@ libqquickwidget.so  libQVTKWidgetPlugin.so  libqwebview.so
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="http://kezunlin.me/post/b901735e/" title="Guide to compile VTK from source with Qt on Ubuntu 16.04">http://kezunlin.me/post/b901735e/</a>
+    <a href="http://kezunlin.me/post/b901735e/" title="Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04">http://kezunlin.me/post/b901735e/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -639,7 +652,7 @@ libqquickwidget.so  libQVTKWidgetPlugin.so  libqwebview.so
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-count">50</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -650,7 +663,7 @@ libqquickwidget.so  libQVTKWidgetPlugin.so  libqwebview.so
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -661,7 +674,7 @@ libqquickwidget.so  libQVTKWidgetPlugin.so  libqwebview.so
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">68</span>
+                  <span class="site-state-item-count">71</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -703,7 +716,7 @@ libqquickwidget.so  libQVTKWidgetPlugin.so  libqwebview.so
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#version"><span class="nav-number">1.1.</span> <span class="nav-text">version</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-qt"><span class="nav-number">1.2.</span> <span class="nav-text">install qt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-vtk"><span class="nav-number">1.3.</span> <span class="nav-text">install vtk</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#download-source"><span class="nav-number">1.3.1.</span> <span class="nav-text">download source</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#configure-vtk-with-qt"><span class="nav-number">1.3.2.</span> <span class="nav-text">configure vtk with qt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#make-and-install"><span class="nav-number">1.3.3.</span> <span class="nav-text">make and install</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-QVTKWidget-plugin"><span class="nav-number">1.3.4.</span> <span class="nav-text">install QVTKWidget plugin</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#version"><span class="nav-number">1.1.</span> <span class="nav-text">version</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#install-qt"><span class="nav-number">2.</span> <span class="nav-text">install qt</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install-qt-to-opt-Qt5-7-0"><span class="nav-number">2.1.</span> <span class="nav-text">install qt to /opt/Qt5.7.0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-vtk"><span class="nav-number">2.2.</span> <span class="nav-text">install vtk</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#download-source"><span class="nav-number">2.2.1.</span> <span class="nav-text">download source</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#configure-vtk-with-qt"><span class="nav-number">2.2.2.</span> <span class="nav-text">configure vtk with qt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#download-MD5-VTKData"><span class="nav-number">2.2.3.</span> <span class="nav-text">download MD5 VTKData</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#make-and-install"><span class="nav-number">2.2.4.</span> <span class="nav-text">make and install</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-QVTKWidget-plugin"><span class="nav-number">2.2.5.</span> <span class="nav-text">install QVTKWidget plugin</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>

@@ -82,19 +82,19 @@
 
 
 
-<meta name="description" content="Install and Configure PCL on Ubuntu 16.04 from source.">
+<meta name="description" content="Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubuntu 16.04 from source">
 <meta name="keywords" content="ubuntu,vtk,source">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Install and Configure PCL on Ubuntu 16.04 from source">
+<meta property="og:title" content="Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubuntu 16.04 from source">
 <meta property="og:url" content="http://kezunlin.me/post/137aa5fc/index.html">
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
-<meta property="og:description" content="Install and Configure PCL on Ubuntu 16.04 from source.">
+<meta property="og:description" content="Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubuntu 16.04 from source">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://images2017.cnblogs.com/blog/635233/201801/635233-20180105160000315-1719986018.png">
-<meta property="og:updated_time" content="2018-02-22T17:51:28.127Z">
+<meta property="og:updated_time" content="2018-03-01T03:09:34.626Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Install and Configure PCL on Ubuntu 16.04 from source">
-<meta name="twitter:description" content="Install and Configure PCL on Ubuntu 16.04 from source.">
+<meta name="twitter:title" content="Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubuntu 16.04 from source">
+<meta name="twitter:description" content="Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubuntu 16.04 from source">
 <meta name="twitter:image" content="http://images2017.cnblogs.com/blog/635233/201801/635233-20180105160000315-1719986018.png">
 
 
@@ -131,7 +131,7 @@
 
 
 
-  <title>Install and Configure PCL on Ubuntu 16.04 from source | KeZunLin's Blog</title>
+  <title>Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubuntu 16.04 from source | KeZunLin's Blog</title>
   
 
 
@@ -319,7 +319,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">Install and Configure PCL on Ubuntu 16.04 from source</h2>
+          <h2 class="post-title" itemprop="name headline">Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubuntu 16.04 from source</h2>
         
 
         <div class="post-meta">
@@ -347,8 +347,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-02-23T01:51:28+08:00">
-                2018-02-23
+              <time title="Post modified" itemprop="dateModified" datetime="2018-03-01T11:09:34+08:00">
+                2018-03-01
               </time>
             
           </span>
@@ -395,7 +395,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  529
+                  649
                 </span>
               
 
@@ -411,7 +411,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  3
+                  4
                 </span>
               
             </div>
@@ -432,35 +432,33 @@
       
 
       
-        <p>Install and Configure PCL on Ubuntu 16.04 from source.<br><a id="more"></a></p>
-<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="Setup-Prerequisites"><a href="#Setup-Prerequisites" class="headerlink" title="Setup Prerequisites"></a>Setup Prerequisites</h2><pre><code>sudo apt-get update
+        <p>Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubuntu 16.04 from source<br><a id="more"></a></p>
+<ul>
+<li><a href="http://kezunlin.me/post/91842b71/">Part-1: Install and Configure Qt5 on Ubuntu 16.04</a></li>
+<li><a href="http://kezunlin.me/post/b901735e/">Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04</a></li>
+<li><a href="http://kezunlin.me/post/137aa5fc/"><strong>Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubuntu 16.04 from source</strong></a><h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1></li>
+</ul>
+<h2 id="Setup-Prerequisites"><a href="#Setup-Prerequisites" class="headerlink" title="Setup Prerequisites"></a>Setup Prerequisites</h2><pre><code>sudo apt-get update
 sudo apt-get install git build-essential linux-libc-dev
 sudo apt-get install cmake cmake-gui 
 sudo apt-get install libusb-dev libudev-dev
-sudo apt-get install mpi-default-dev openmpi-bin openmpi-common  
+sudo apt-get install mpi-default-dev openmpi-bin openmpi-common 
+
+sudo apt-get install libpcap-dev
 sudo apt-get install libflann1.8 libflann-dev
 sudo apt-get install libeigen3-dev
-sudo apt-get install libboost-all-dev
-
-# for PCLVisualizer
 sudo apt-get install libopenni2-dev
+sudo apt-get install libqhull7 libqhull-dev 
 
-sudo apt-get install libqhull7 libqhull7-dev libgtest-dev
 sudo apt-get install freeglut3-dev pkg-config
 sudo apt-get install libxmu-dev libxi-dev 
 sudo apt-get install mono-complete
-sudo apt-get install qt-sdk openjdk-8-jdk openjdk-8-jre
-
-# for vtk [IMPORTANT]
-#sudo apt-get install libvtk5.10-qt4 libvtk5.10 libvtk5-dev
+sudo apt-get install openjdk-8-jdk openjdk-8-jre
+</code></pre><h3 id="dropped"><a href="#dropped" class="headerlink" title="dropped"></a><del>dropped</del></h3><pre><code>sudo apt-get install qt-sdk 
+sudo apt-get install libvtk5.10-qt4 libvtk5.10 libvtk5-dev
 sudo apt-get install vtk6 libvtk6-dev libvtk6-qt-dev 
 </code></pre><p>Notice for <code>vtk</code> version.</p>
-<h3 id="extra"><a href="#extra" class="headerlink" title="extra"></a>extra</h3><p>(1) pcap</p>
-<p>for cmake error:</p>
-<pre><code>Could NOT find PCAP (missing:  PCAP_LIBRARIES PCAP_INCLUDE_DIRS) 
-</code></pre><p>fix by</p>
-<pre><code>sudo apt-get install libpcap-dev
-</code></pre><p>(2) metslib</p>
+<h3 id="extra"><a href="#extra" class="headerlink" title="extra"></a>extra</h3><p>metslib</p>
 <p>for cmake error:</p>
 <pre><code>no metslib found.
 </code></pre><p>fix by</p>
@@ -470,20 +468,45 @@ cd metslib-0.5.3
 ./configure
 make 
 sudo make install
-</code></pre><h2 id="Build-Point-Cloud-Library"><a href="#Build-Point-Cloud-Library" class="headerlink" title="Build Point Cloud Library"></a>Build Point Cloud Library</h2><p>clone repo</p>
-<pre><code>git clone https://github.com/PointCloudLibrary/pcl.git
-</code></pre><p>compile and install</p>
-<pre><code>cd pcl
-mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_GPU=ON -DBUILD_apps=ON -DBUILD_examples=ON ..
-# it may take more than 30 minutes, wait ...
+</code></pre><h2 id="Build-PCL"><a href="#Build-PCL" class="headerlink" title="Build PCL"></a>Build PCL</h2><h3 id="compile-pcl"><a href="#compile-pcl" class="headerlink" title="compile pcl"></a>compile pcl</h3><pre><code>wget https://github.com/PointCloudLibrary/pcl/archive/pcl-1.8.1.tar.gz
+
+ cd pcl
+ mkdir build
+ cd build
+ cmake-gui ..
+</code></pre><p>with options</p>
+<pre><code>QT_USE_FILE /home/kezunlin/program/pcl-1.8.1/build/use-qt5.cmake
+
+VTK_DIR  /usr/local/lib/cmake/vtk-8.1
+
+
+CMAKE_BUILD_TYPE       Release
+CMAKE_CONFIGURATION_TYPES Release
+CMAKE_INSTALL_PREFIX  /usr/local
+
+PCL_SHARED_LIBS       ON
+PCL_QT_VERSION        5
+PCL_ENABLE_SSE        ON
+
+Build_visualization ON
+Build_apps ON
+Build_examples OFF # error may occur
+</code></pre><blockquote>
+<p>Using CPU native flags for SSE optimization:  -march=native</p>
+</blockquote>
+<p>make and install </p>
+<pre><code># it may take several minutes, wait ...
 make -j8
 sudo make -j8 install
-</code></pre><p>Tips: apt-get install to <code>/usr</code>, user cmake install to <code>/usr/local</code>.<br>By default:</p>
-<pre><code>-DCMAKE_INSTALL_PREFIX=/usr/local
+</code></pre><blockquote>
+<p>cmake install to <code>/usr/local</code><br><code>PCL_DIR</code> will be <code>/usr/local/share/pcl-1.8</code></p>
+</blockquote>
+<h3 id="error-for-example"><a href="#error-for-example" class="headerlink" title="error for example"></a>error for example</h3><pre><code>/home/kezunlin/program/pcl-1.8.1/examples/segmentation/example_cpc_segmentation.cpp:493:17: error: ‘class vtkUnsignedCharArray’ has no member named ‘InsertNextTupleValue’
+         colors-&gt;InsertNextTupleValue (color);
+</code></pre><p>so cmake with options </p>
+<pre><code>Build_examples OFF
 </code></pre><h2 id="Test-pcl-viewer"><a href="#Test-pcl-viewer" class="headerlink" title="Test pcl_viewer"></a>Test pcl_viewer</h2><p>test <code>pcl_viewer</code></p>
-<pre><code>/usr/local/bin/pcl_viewer ~/program/pcl/data/car6.pcd
+<pre><code>/usr/local/bin/pcl_viewer ~/program/pcl-1.8.1/test/car6.pcd
 </code></pre><p>Success.</p>
 <p><img src="http://images2017.cnblogs.com/blog/635233/201801/635233-20180105160000315-1719986018.png" alt="car"></p>
 <p>Tips: screen snapshot by <code>gnome-screenshot -a</code>.</p>
@@ -528,6 +551,11 @@ OpenGL ES profile extensions:
 <li><a href="http://pointclouds.org/documentation/tutorials/compiling_pcl_windows.php" target="_blank" rel="noopener">compiling pcl on windows</a></li>
 <li><a href="https://github.com/PointCloudLibrary/pcl/blob/master/doc/tutorials/content/compiling_pcl_dependencies_windows.rst" target="_blank" rel="noopener">compiling pcl dependencies on windows</a></li>
 <li><a href="http://blog.csdn.net/sinat_24206709/article/details/51501531" target="_blank" rel="noopener">coding pcl viewer</a></li>
+<li><a href="https://www.cnblogs.com/zyl910/archive/2012/06/29/getcpuidfield.html" target="_blank" rel="noopener">SSE AES</a></li>
+</ul>
+<h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
+<li>20180105: created.</li>
+<li>20180227: rewrite pcl compile part.</li>
 </ul>
 
       
@@ -549,7 +577,7 @@ OpenGL ES profile extensions:
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="http://kezunlin.me/post/137aa5fc/" title="Install and Configure PCL on Ubuntu 16.04 from source">http://kezunlin.me/post/137aa5fc/</a>
+    <a href="http://kezunlin.me/post/137aa5fc/" title="Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubuntu 16.04 from source">http://kezunlin.me/post/137aa5fc/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -670,7 +698,7 @@ OpenGL ES profile extensions:
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-count">50</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -681,7 +709,7 @@ OpenGL ES profile extensions:
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -692,7 +720,7 @@ OpenGL ES profile extensions:
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">68</span>
+                  <span class="site-state-item-count">71</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -734,7 +762,7 @@ OpenGL ES profile extensions:
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Setup-Prerequisites"><span class="nav-number">1.1.</span> <span class="nav-text">Setup Prerequisites</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#extra"><span class="nav-number">1.1.1.</span> <span class="nav-text">extra</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Build-Point-Cloud-Library"><span class="nav-number">1.2.</span> <span class="nav-text">Build Point Cloud Library</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Test-pcl-viewer"><span class="nav-number">1.3.</span> <span class="nav-text">Test pcl_viewer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#glxinfo"><span class="nav-number">1.3.1.</span> <span class="nav-text">glxinfo</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Setup-Prerequisites"><span class="nav-number">1.1.</span> <span class="nav-text">Setup Prerequisites</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dropped"><span class="nav-number">1.1.1.</span> <span class="nav-text">dropped</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#extra"><span class="nav-number">1.1.2.</span> <span class="nav-text">extra</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Build-PCL"><span class="nav-number">1.2.</span> <span class="nav-text">Build PCL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#compile-pcl"><span class="nav-number">1.2.1.</span> <span class="nav-text">compile pcl</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#error-for-example"><span class="nav-number">1.2.2.</span> <span class="nav-text">error for example</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Test-pcl-viewer"><span class="nav-number">1.3.</span> <span class="nav-text">Test pcl_viewer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#glxinfo"><span class="nav-number">1.3.1.</span> <span class="nav-text">glxinfo</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>

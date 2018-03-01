@@ -69,7 +69,7 @@
 
 
 
-  <meta name="keywords" content="qt creator," />
+  <meta name="keywords" content="ldconfig,qt creator,qt5," />
 
 
 
@@ -82,18 +82,18 @@
 
 
 
-<meta name="description" content="Getting Started With Qt and Qt Creator on Ubuntu 16.04">
-<meta name="keywords" content="qt creator">
+<meta name="description" content="Part-1: Install and Configure Qt5 on Ubuntu 16.04">
+<meta name="keywords" content="ldconfig,qt creator,qt5">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Getting Started With Qt and Qt Creator on Ubuntu 16.04">
+<meta property="og:title" content="Part-1: Install and Configure Qt5 on Ubuntu 16.04">
 <meta property="og:url" content="http://kezunlin.me/post/91842b71/index.html">
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
-<meta property="og:description" content="Getting Started With Qt and Qt Creator on Ubuntu 16.04">
+<meta property="og:description" content="Part-1: Install and Configure Qt5 on Ubuntu 16.04">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-01-25T00:16:52.933Z">
+<meta property="og:updated_time" content="2018-02-28T01:32:53.802Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Getting Started With Qt and Qt Creator on Ubuntu 16.04">
-<meta name="twitter:description" content="Getting Started With Qt and Qt Creator on Ubuntu 16.04">
+<meta name="twitter:title" content="Part-1: Install and Configure Qt5 on Ubuntu 16.04">
+<meta name="twitter:description" content="Part-1: Install and Configure Qt5 on Ubuntu 16.04">
 
 
 
@@ -129,7 +129,7 @@
 
 
 
-  <title>Getting Started With Qt and Qt Creator on Ubuntu 16.04 | KeZunLin's Blog</title>
+  <title>Part-1: Install and Configure Qt5 on Ubuntu 16.04 | KeZunLin's Blog</title>
   
 
 
@@ -317,7 +317,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">Getting Started With Qt and Qt Creator on Ubuntu 16.04</h2>
+          <h2 class="post-title" itemprop="name headline">Part-1: Install and Configure Qt5 on Ubuntu 16.04</h2>
         
 
         <div class="post-meta">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-01-25T08:16:52+08:00">
-                2018-01-25
+              <time title="Post modified" itemprop="dateModified" datetime="2018-02-28T09:32:53+08:00">
+                2018-02-28
               </time>
             
           </span>
@@ -393,7 +393,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  138
+                  597
                 </span>
               
 
@@ -409,7 +409,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  1
+                  4
                 </span>
               
             </div>
@@ -430,18 +430,102 @@
       
 
       
-        <p>Getting Started With Qt and Qt Creator on Ubuntu 16.04<br><a id="more"></a></p>
+        <p>Part-1: Install and Configure Qt5 on Ubuntu 16.04<br><a id="more"></a></p>
+<ul>
+<li><a href="http://kezunlin.me/post/91842b71/"><strong>Part-1: Install and Configure Qt5 on Ubuntu 16.04</strong></a></li>
+<li><a href="http://kezunlin.me/post/b901735e/">Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04</a></li>
+<li><a href="http://kezunlin.me/post/137aa5fc/">Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubuntu 16.04 from source</a></li>
+</ul>
 <h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="install"><a href="#install" class="headerlink" title="install"></a>install</h2><p>In addition, building graphical Qt applications requires OpenGL libraries and headers installed. On Ubuntu and other Debian-based Linux systems you can get OpenGL and the minimal set of development tools by installing the packages  <strong>libgl1-mesa-dev</strong> and <strong>build-essential</strong>, i.e. by running this command:</p>
 <pre><code>$ sudo apt-get install build-essential libgl1-mesa-dev
 </code></pre><p>Download qt and install.</p>
-<pre><code>wget http://download.qt.io/official_releases/qt/5.7/5.7.0/qt-opensource-linux-x64-5.7.0.run
+<pre><code>sudo apt-get install build-essential libgl1-mesa-dev
+wget http://download.qt.io/official_releases/qt/5.7/5.7.0/qt-opensource-linux-x64-5.7.0.run
 chmod +x qt-opensource-linux-x64-5.7.0.run
 ./qt-opensource-linux-x64-5.7.0.run
-</code></pre><p>or only install qtcreator</p>
-<pre><code>$ sudo apt-get install qtcreator
-</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+</code></pre><h3 id="install-to-opt-Qt5-7-0"><a href="#install-to-opt-Qt5-7-0" class="headerlink" title="install to /opt/Qt5.7.0"></a>install to /opt/Qt5.7.0</h3><pre><code>cd /usr/local
+sudo ln -s /usr/local/Qt5.7.0 qt
+</code></pre><blockquote>
+<p>configure like <code>cuda-8.0</code></p>
+</blockquote>
+<h3 id="add-qt-bin-to-path"><a href="#add-qt-bin-to-path" class="headerlink" title="add qt bin to path"></a><del>add qt bin to path</del></h3><pre><code>$ vim .bashrc
+
+# added by kzl
+export PATH=/opt/cuda-8.0/bin:$PATH
+export PATH=/opt/MATLAB/R2016b/bin:$PATH
+export PATH=/opt/qt/5.7/gcc_64/bin:$PATH
+</code></pre><h3 id="qt-conf-for-ld-so-conf-d"><a href="#qt-conf-for-ld-so-conf-d" class="headerlink" title="qt.conf for ld.so.conf.d"></a><del>qt.conf for ld.so.conf.d</del></h3><pre><code>$ cd /etc/ld.so.conf.d
+$ sudo vim qt.conf
+
+/usr/local/qt/5.7/gcc_64/lib
+
+$ sudo ldconfig
+</code></pre><p><del>or only install qtcreator</del> (find_package error for <code>qt5x11extra-config.cmake</code>)</p>
+<pre><code>$ sudo apt-get install qt5-default qtcreator
+
+$ sudo apt-get install qt4-designer qt4-dev-tools
+</code></pre><h3 id="purge-existing-qt5-and-qt4"><a href="#purge-existing-qt5-and-qt4" class="headerlink" title="purge existing qt5 and qt4"></a>purge existing qt5 and qt4</h3><pre><code>$ sudo apt-get purge qt5-default qtcreator 
+
+$ sudo apt-get purge qt4-designer qt4-dev-tools
+</code></pre><p><del>dropped</del></p>
+<pre><code>sudo rm -rf /usr/include/qt4
+sudo rm -rf /usr/include/qt5
+
+sudo rm -rf /usr/lib/libQt*
+# sudo rm -rf /usr/lib/x86_64-linux-gnu/libQt*  (MUST KEEP)
+
+sudo rm -rf /usr/lib/x86_64-linux-gnu/cmake/Qt*
+</code></pre><h2 id="qtchooser"><a href="#qtchooser" class="headerlink" title="qtchooser"></a>qtchooser</h2><h3 id="qt-conf"><a href="#qt-conf" class="headerlink" title="qt conf"></a>qt conf</h3><pre><code>$ ls -al /usr/lib/x86_64-linux-gnu/qtchooser
+
+lrwxrwxrwx   1 root root     50 8月   8  2017 4.conf -&gt; ../../../share/qtchooser/qt4-x86_64-linux-gnu.conf
+lrwxrwxrwx   1 root root     50 5月  13  2017 5.conf -&gt; ../../../share/qtchooser/qt5-x86_64-linux-gnu.conf
+lrwxrwxrwx   1 root root     50 8月   8  2017 qt4.conf -&gt; ../../../share/qtchooser/qt4-x86_64-linux-gnu.conf
+lrwxrwxrwx   1 root root     50 5月  13  2017 qt5.conf -&gt; ../../../share/qtchooser/qt5-x86_64-linux-gnu.conf
+
+$ ls /usr/share/qtchooser
+qt4-x86_64-linux-gnu.conf  qt5-x86_64-linux-gnu.conf
+
+$ qtchooser -l
+
+4
+5
+default
+qt4-x86_64-linux-gnu
+qt4
+qt5-x86_64-linux-gnu
+qt5
+</code></pre><h2 id="add-qt57-conf"><a href="#add-qt57-conf" class="headerlink" title="add qt57.conf"></a>add qt57.conf</h2><pre><code>cat /usr/share/qtchooser/qt57.conf 
+/opt/qt/5.7/gcc_64/bin
+/opt/qt/5.7/gcc_64/lib
+
+# link to qt57
+cd /usr/lib/x86_64-linux-gnu/qtchooser
+sudo ln -s ../../../share/qtchooser/qt57.conf qt57.conf
+
+# link to default
+cd /usr/lib/x86_64-linux-gnu/qt-default/qtchooser
+
+sudo rm default.conf
+sudo ln -s ../../../../share/qtchooser/qt57.conf default.conf
+ls -l default.conf
+default.conf -&gt; ../../../../share/qtchooser/qt57.conf
+
+
+qtchooser -print-env
+QT_SELECT=&quot;default&quot;
+QTTOOLDIR=&quot;/opt/qt/5.7/gcc_64/bin&quot;
+QTLIBDIR=&quot;/opt/qt/5.7/gcc_64/lib&quot;
+</code></pre><h2 id="export-QT-QPA-PLATFORM-PLUGIN-PATH"><a href="#export-QT-QPA-PLATFORM-PLUGIN-PATH" class="headerlink" title="export QT_QPA_PLATFORM_PLUGIN_PATH"></a>export QT_QPA_PLATFORM_PLUGIN_PATH</h2><pre><code>vim .bashrc
+export QT_QPA_PLATFORM_PLUGIN_PATH=/opt/qt/5.7/gcc_64/plugins/platforms
+</code></pre><blockquote>
+<p>otherwise,errors may occur.<br>Failed to load platform plugin “xcb”. </p>
+</blockquote>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="http://wiki.qt.io/Install_Qt_5_on_Ubuntu" target="_blank" rel="noopener">Install_Qt_5_on_Ubuntu</a></li>
 <li><a href="http://sourcedigit.com/20623-how-to-install-qt-creator-on-ubuntu-16-04/" target="_blank" rel="noopener">install-qt-creator-on-ubuntu-16-04</a></li>
 <li><a href="https://www.ics.com/blog/getting-started-qt-and-qt-creator-linux" target="_blank" rel="noopener">getting-started-qt-and-qt-creator-linux</a></li>
+<li><a href="https://stackoverflow.com/questions/17106315/failed-to-load-platform-plugin-xcb-while-launching-qt5-app-on-linux-without" target="_blank" rel="noopener">failed-to-load-platform-plugin-xcb</a></li>
+<li><a href="https://lemirep.wordpress.com/2013/06/01/deploying-qt-applications-on-linux-and-windows-3/" target="_blank" rel="noopener">deploying-qt-applications-on-linux-and-windows-3</a></li>
 </ul>
 <h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>20180108: created.</li>
@@ -466,7 +550,7 @@ chmod +x qt-opensource-linux-x64-5.7.0.run
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="http://kezunlin.me/post/91842b71/" title="Getting Started With Qt and Qt Creator on Ubuntu 16.04">http://kezunlin.me/post/91842b71/</a>
+    <a href="http://kezunlin.me/post/91842b71/" title="Part-1: Install and Configure Qt5 on Ubuntu 16.04">http://kezunlin.me/post/91842b71/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -481,7 +565,11 @@ chmod +x qt-opensource-linux-x64-5.7.0.run
       
         <div class="post-tags">
           
+            <a href="/tags/ldconfig/" rel="tag"># ldconfig</a>
+          
             <a href="/tags/qt-creator/" rel="tag"># qt creator</a>
+          
+            <a href="/tags/qt5/" rel="tag"># qt5</a>
           
         </div>
       
@@ -583,7 +671,7 @@ chmod +x qt-opensource-linux-x64-5.7.0.run
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-count">50</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -594,7 +682,7 @@ chmod +x qt-opensource-linux-x64-5.7.0.run
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -605,7 +693,7 @@ chmod +x qt-opensource-linux-x64-5.7.0.run
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">68</span>
+                  <span class="site-state-item-count">71</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -647,7 +735,7 @@ chmod +x qt-opensource-linux-x64-5.7.0.run
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install"><span class="nav-number">1.1.</span> <span class="nav-text">install</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install"><span class="nav-number">1.1.</span> <span class="nav-text">install</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#install-to-opt-Qt5-7-0"><span class="nav-number">1.1.1.</span> <span class="nav-text">install to /opt/Qt5.7.0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#add-qt-bin-to-path"><span class="nav-number">1.1.2.</span> <span class="nav-text">add qt bin to path</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#qt-conf-for-ld-so-conf-d"><span class="nav-number">1.1.3.</span> <span class="nav-text">qt.conf for ld.so.conf.d</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#purge-existing-qt5-and-qt4"><span class="nav-number">1.1.4.</span> <span class="nav-text">purge existing qt5 and qt4</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#qtchooser"><span class="nav-number">1.2.</span> <span class="nav-text">qtchooser</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#qt-conf"><span class="nav-number">1.2.1.</span> <span class="nav-text">qt conf</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#add-qt57-conf"><span class="nav-number">1.3.</span> <span class="nav-text">add qt57.conf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#export-QT-QPA-PLATFORM-PLUGIN-PATH"><span class="nav-number">1.4.</span> <span class="nav-text">export QT_QPA_PLATFORM_PLUGIN_PATH</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
