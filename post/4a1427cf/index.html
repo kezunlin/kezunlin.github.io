@@ -82,18 +82,18 @@
 
 
 
-<meta name="description" content="guide to setup gtest as static or shared library on Ubuntu.">
+<meta name="description" content="guide to compile gtest from source on Ubuntu">
 <meta name="keywords" content="cmake">
 <meta property="og:type" content="article">
-<meta property="og:title" content="guide to setup gtest as static or shared library on Ubuntu">
+<meta property="og:title" content="guide to compile gtest from source on Ubuntu">
 <meta property="og:url" content="http://kezunlin.me/post/4a1427cf/index.html">
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
-<meta property="og:description" content="guide to setup gtest as static or shared library on Ubuntu.">
+<meta property="og:description" content="guide to compile gtest from source on Ubuntu">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-02-24T00:24:52.386Z">
+<meta property="og:updated_time" content="2018-03-01T12:13:50.725Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="guide to setup gtest as static or shared library on Ubuntu">
-<meta name="twitter:description" content="guide to setup gtest as static or shared library on Ubuntu.">
+<meta name="twitter:title" content="guide to compile gtest from source on Ubuntu">
+<meta name="twitter:description" content="guide to compile gtest from source on Ubuntu">
 
 
 
@@ -129,7 +129,7 @@
 
 
 
-  <title>guide to setup gtest as static or shared library on Ubuntu | KeZunLin's Blog</title>
+  <title>guide to compile gtest from source on Ubuntu | KeZunLin's Blog</title>
   
 
 
@@ -317,7 +317,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">guide to setup gtest as static or shared library on Ubuntu</h2>
+          <h2 class="post-title" itemprop="name headline">guide to compile gtest from source on Ubuntu</h2>
         
 
         <div class="post-meta">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-02-24T08:24:52+08:00">
-                2018-02-24
+              <time title="Post modified" itemprop="dateModified" datetime="2018-03-01T20:13:50+08:00">
+                2018-03-01
               </time>
             
           </span>
@@ -393,7 +393,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  722
+                  749
                 </span>
               
 
@@ -430,19 +430,18 @@
       
 
       
-        <p>guide to setup gtest as static or shared library on Ubuntu.<br><a id="more"></a></p>
+        <p>guide to compile gtest from source on Ubuntu<br><a id="more"></a></p>
 <h1 id="Part-1-static-library"><a href="#Part-1-static-library" class="headerlink" title="Part 1: static library"></a>Part 1: static library</h1><ul>
 <li>for static library, we use <code>libgtest.a</code></li>
 <li>for shared library, use use <code>ligbtest.so</code>.</li>
 </ul>
-<h2 id="compile-gtest"><a href="#compile-gtest" class="headerlink" title="compile gtest"></a>compile gtest</h2><p>clone repo</p>
-<pre><code>git clone https://github.com/google/googletest.git
+<h2 id="compile-gtest"><a href="#compile-gtest" class="headerlink" title="compile gtest"></a>compile gtest</h2><p>download gtest</p>
+<pre><code>wget https://github.com/google/googletest/archive/release-1.8.0.tar.gz
 </code></pre><p><del>or by apt-get</del></p>
 <pre><code>#sudo apt-get install libgtest-dev
 #cd /usr/src/gtest
 </code></pre><p>compile </p>
-<pre><code>sudo apt-get install cmake
-sudo mkdir build 
+<pre><code>mkdir build 
 cd build
 sudo cmake-gui ..
 sudo make -j8 
@@ -455,7 +454,7 @@ sudo ls /usr/lib/libgtest*
 libgtest.a libgtest_main.a 
 </code></pre><h2 id="gtest-demo"><a href="#gtest-demo" class="headerlink" title="gtest demo"></a>gtest demo</h2><h3 id="whattotest-cpp"><a href="#whattotest-cpp" class="headerlink" title="whattotest.cpp"></a>whattotest.cpp</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;math.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">squareRoot</span><span class="params">(<span class="keyword">const</span> <span class="keyword">double</span> a)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">double</span> b = <span class="built_in">sqrt</span>(a);</span><br><span class="line">    <span class="keyword">if</span>(b != b) &#123; <span class="comment">// nan check</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1.0</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">sqrt</span>(a);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="tests-cpp"><a href="#tests-cpp" class="headerlink" title="tests.cpp"></a>tests.cpp</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"whattotest.cpp"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;gtest/gtest.h&gt;</span></span></span><br><span class="line"> </span><br><span class="line">TEST(SquareRootTest, PositiveNos) &#123; </span><br><span class="line">    ASSERT_EQ(<span class="number">6</span>, squareRoot(<span class="number">36.0</span>));</span><br><span class="line">    ASSERT_EQ(<span class="number">18.0</span>, squareRoot(<span class="number">324.0</span>));</span><br><span class="line">    ASSERT_EQ(<span class="number">25.4</span>, squareRoot(<span class="number">645.16</span>));</span><br><span class="line">    ASSERT_EQ(<span class="number">0</span>, squareRoot(<span class="number">0.0</span>));</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">TEST(SquareRootTest, NegativeNos) &#123;</span><br><span class="line">    ASSERT_EQ(<span class="number">-1.0</span>, squareRoot(<span class="number">-15.0</span>));</span><br><span class="line">    ASSERT_EQ(<span class="number">-1.0</span>, squareRoot(<span class="number">-0.2</span>));</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span> </span>&#123;</span><br><span class="line">    testing::InitGoogleTest(&amp;argc, argv);</span><br><span class="line">    <span class="keyword">return</span> RUN_ALL_TESTS();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 2.6)</span><br><span class="line"> </span><br><span class="line"><span class="comment"># Locate GTest</span></span><br><span class="line">find_package(GTest REQUIRED)</span><br><span class="line">include_directories(<span class="variable">$&#123;GTEST_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"> </span><br><span class="line"><span class="comment"># Link runTests with what we want to test and the GTest and pthread library</span></span><br><span class="line">add_executable(runTests tests.cpp)</span><br><span class="line">target_link_libraries(runTests <span class="variable">$&#123;GTEST_LIBRARIES&#125;</span> pthread)</span><br><span class="line"><span class="comment">#target_link_libraries(runTests gtest pthread)</span></span><br></pre></td></tr></table></figure>
+<h3 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 2.6)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(MSVC) </span><br><span class="line">	SET(GTEST_ROOT <span class="string">"C:/Program Files/gtest"</span>)</span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line">	<span class="comment"># BOOST_THREAD_LIBRARY  /usr/lib/x86_64-linux-gnu/libpthread.so</span></span><br><span class="line">	MESSAGE( [Main] <span class="string">" BOOST_THREAD_LIBRARY = <span class="variable">$&#123;BOOST_THREAD_LIBRARY&#125;</span>"</span>)</span><br><span class="line">endif(MSVC)</span><br><span class="line"></span><br><span class="line">find_package(GTest REQUIRED) <span class="comment"># GTest 1.8.0</span></span><br><span class="line">include_directories(<span class="variable">$&#123;GTEST_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Link runTests with what we want to test and the GTest and pthread library</span></span><br><span class="line">add_executable(runTests tests.cpp)</span><br><span class="line">target_link_libraries(runTests <span class="variable">$&#123;GTEST_LIBRARIES&#125;</span> <span class="variable">$&#123;BOOST_THREAD_LIBRARY&#125;</span>)</span><br><span class="line"><span class="comment">#target_link_libraries(runTests gtest pthread)</span></span><br></pre></td></tr></table></figure>
 <p><code>${GTEST_LIBRARIES}</code> will be found: <code>/usr/lib/libgtest.a</code>.</p>
 <h3 id="run-gtest-demo"><a href="#run-gtest-demo" class="headerlink" title="run gtest demo"></a>run gtest demo</h3><pre><code>cmake CMakeLists.txt
 make
@@ -526,7 +525,7 @@ sudo make install
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="http://kezunlin.me/post/4a1427cf/" title="guide to setup gtest as static or shared library on Ubuntu">http://kezunlin.me/post/4a1427cf/</a>
+    <a href="http://kezunlin.me/post/4a1427cf/" title="guide to compile gtest from source on Ubuntu">http://kezunlin.me/post/4a1427cf/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -643,7 +642,7 @@ sudo make install
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-count">54</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
