@@ -90,7 +90,7 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="Guide to store image longblob with mysql cpp connector in c++.">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-02-02T09:52:53.755Z">
+<meta property="og:updated_time" content="2018-03-07T08:48:12.482Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="guide to store image longblob with mysql cpp connector in c++">
 <meta name="twitter:description" content="Guide to store image longblob with mysql cpp connector in c++.">
@@ -329,7 +329,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-23T11:07:00+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-23T12:07:00+09:00">
                 2018-01-23
               </time>
             
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-02-02T17:52:53+08:00">
-                2018-02-02
+              <time title="Post modified" itemprop="dateModified" datetime="2018-03-07T17:48:12+09:00">
+                2018-03-07
               </time>
             
           </span>
@@ -393,7 +393,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  132
+                  156
                 </span>
               
 
@@ -439,10 +439,13 @@
 </code></pre><p>camera.Image of type in c++.</p>
 <pre><code>std::shared_ptr&lt;char&gt; Image;
 </code></pre><h2 id="insert"><a href="#insert" class="headerlink" title="insert"></a>insert</h2><h3 id="sql"><a href="#sql" class="headerlink" title="sql"></a>sql</h3><pre><code>INSERT INTO camera(camera_id, image) VALUES(? , ? );
-</code></pre><h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// get blob istream</span></span><br><span class="line"><span class="keyword">char</span> *buffer = camera.Image.get();</span><br><span class="line"><span class="keyword">size_t</span> size = camera.ImageLength;</span><br><span class="line"><span class="function">membuf <span class="title">mbuf</span><span class="params">(buffer, size)</span></span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="function">istream <span class="title">blob</span><span class="params">(&amp;mbuf)</span></span>; <span class="comment">// must be local variable</span></span><br><span class="line"></span><br><span class="line">pstmt-&gt;setBlob(<span class="number">6</span>, &amp;blob);</span><br></pre></td></tr></table></figure>
+</code></pre><h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">membuf</span> :</span> <span class="built_in">std</span>::streambuf &#123;</span><br><span class="line">    membuf(<span class="keyword">char</span>* base, <span class="built_in">std</span>::<span class="keyword">size_t</span> n) &#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;setg(base, base, base + n);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// get blob istream</span></span><br><span class="line"><span class="keyword">char</span> *buffer = camera.Image.get();</span><br><span class="line"><span class="keyword">size_t</span> size = camera.ImageLength;</span><br><span class="line"><span class="function">membuf <span class="title">mbuf</span><span class="params">(buffer, size)</span></span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="function">istream <span class="title">blob</span><span class="params">(&amp;mbuf)</span></span>; <span class="comment">// must be local variable</span></span><br><span class="line"></span><br><span class="line">pstmt-&gt;setBlob(<span class="number">6</span>, &amp;blob);</span><br></pre></td></tr></table></figure>
 <h2 id="select"><a href="#select" class="headerlink" title="select"></a>select</h2><h3 id="sql-1"><a href="#sql-1" class="headerlink" title="sql"></a>sql</h3><pre><code>SELECT id, camera_id, image FROM camera;
 </code></pre><h3 id="code-1"><a href="#code-1" class="headerlink" title="code"></a>code</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::istream *blob = res-&gt;getBlob(<span class="string">"image"</span>);</span><br><span class="line"><span class="keyword">size_t</span> size = res-&gt;getUInt(<span class="string">"image_length"</span>);</span><br><span class="line"><span class="keyword">auto</span> ptr_buffer = Util::get_buffer_from_stream(blob, size);</span><br><span class="line"></span><br><span class="line">camera.Image = ptr_buffer;</span><br></pre></td></tr></table></figure>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="https://stackoverflow.com/questions/35042328/how-to-feed-binary-hex-literal-into-stdistream" target="_blank" rel="noopener">membuf</a></li>
+</ul>
+<h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>20180123: created.</li>
 </ul>
 
@@ -507,8 +510,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/post/36e618e7/" rel="prev" title="mysql user guide on ubuntu 16.04">
-                mysql user guide on ubuntu 16.04 <i class="fa fa-chevron-right"></i>
+              <a href="/post/36e618e7/" rel="prev" title="mysql user guide on ubuntu 16.04 and windows">
+                mysql user guide on ubuntu 16.04 and windows <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -586,7 +589,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">54</span>
+                  <span class="site-state-item-count">59</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -597,7 +600,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -608,7 +611,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">73</span>
+                  <span class="site-state-item-count">76</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

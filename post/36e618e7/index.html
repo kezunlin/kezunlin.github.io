@@ -84,14 +84,14 @@
 
 <meta name="description" content="mysql user guide on ubuntu 16.04">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mysql user guide on ubuntu 16.04">
+<meta property="og:title" content="mysql user guide on ubuntu 16.04 and windows">
 <meta property="og:url" content="http://kezunlin.me/post/36e618e7/index.html">
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="mysql user guide on ubuntu 16.04">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-01-24T02:07:57.120Z">
+<meta property="og:updated_time" content="2018-03-08T02:01:42.326Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="mysql user guide on ubuntu 16.04">
+<meta name="twitter:title" content="mysql user guide on ubuntu 16.04 and windows">
 <meta name="twitter:description" content="mysql user guide on ubuntu 16.04">
 
 
@@ -128,7 +128,7 @@
 
 
 
-  <title>mysql user guide on ubuntu 16.04 | KeZunLin's Blog</title>
+  <title>mysql user guide on ubuntu 16.04 and windows | KeZunLin's Blog</title>
   
 
 
@@ -316,7 +316,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">mysql user guide on ubuntu 16.04</h2>
+          <h2 class="post-title" itemprop="name headline">mysql user guide on ubuntu 16.04 and windows</h2>
         
 
         <div class="post-meta">
@@ -328,7 +328,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-24T09:57:00+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-24T10:57:00+09:00">
                 2018-01-24
               </time>
             
@@ -344,8 +344,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-01-24T10:07:57+08:00">
-                2018-01-24
+              <time title="Post modified" itemprop="dateModified" datetime="2018-03-08T11:01:42+09:00">
+                2018-03-08
               </time>
             
           </span>
@@ -392,7 +392,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  158
+                  232
                 </span>
               
 
@@ -430,7 +430,7 @@
 
       
         <p>mysql user guide on ubuntu 16.04<br><a id="more"></a></p>
-<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="install"><a href="#install" class="headerlink" title="install"></a>install</h2><pre><code>sudo apt-get install mysql-server
+<h1 id="Part-1-Ubuntu"><a href="#Part-1-Ubuntu" class="headerlink" title="Part-1: Ubuntu"></a>Part-1: Ubuntu</h1><h2 id="install"><a href="#install" class="headerlink" title="install"></a>install</h2><pre><code>sudo apt-get install mysql-server
 # root,123456
 
 mysql -uroot -p123456
@@ -449,7 +449,7 @@ service mysql restart
 </code></pre><h3 id="grant-users"><a href="#grant-users" class="headerlink" title="grant users"></a>grant users</h3><pre><code>mysql&gt; grant all privileges on *.* to &apos;root&apos;@&apos;%&apos; identified by &apos;123456&apos; with grant option;
 mysql&gt; flush privileges;
 </code></pre><p>check for users.</p>
-<pre><code>mysql&gt; user mysql;
+<pre><code>mysql&gt; use mysql;
 mysql&gt; select user,host from user;
 +------------------+-----------+
 | user             | host      |
@@ -462,12 +462,21 @@ mysql&gt; select user,host from user;
 +------------------+-----------+
 5 rows in set (0.00 sec)
 </code></pre><p>OK. Now we can access mysql from remote machine.</p>
+<h2 id="Test-connection"><a href="#Test-connection" class="headerlink" title="Test connection"></a>Test connection</h2><pre><code>mysql -uroot -p123456 -h 192.168.0.130
+</code></pre><h1 id="Part-2-Windows"><a href="#Part-2-Windows" class="headerlink" title="Part-2: Windows"></a>Part-2: Windows</h1><h2 id="install-mysql-server-5-7"><a href="#install-mysql-server-5-7" class="headerlink" title="install mysql server 5.7"></a>install mysql server 5.7</h2><p>OK</p>
+<h2 id="allow-remote-access-1"><a href="#allow-remote-access-1" class="headerlink" title="allow remote access"></a>allow remote access</h2><h3 id="grant-users-1"><a href="#grant-users-1" class="headerlink" title="grant users"></a>grant users</h3><pre><code>mysql&gt; grant all privileges on *.* to &apos;root&apos;@&apos;%&apos; identified by &apos;123456&apos; with grant option;
+mysql&gt; flush privileges;
+</code></pre><h3 id="close-fireware"><a href="#close-fireware" class="headerlink" title="close fireware"></a>close fireware</h3><p>close fireware and allow 3306 tcp connection.</p>
+<h2 id="Test-connection-1"><a href="#Test-connection-1" class="headerlink" title="Test connection"></a>Test connection</h2><pre><code>mysql -uroot -p123456 -h 192.168.0.130
+</code></pre><p>or by mysql client.</p>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://github.com/justasabc/guides/blob/master/mysql/mysql.ini" target="_blank" rel="noopener">mysql guide</a></li>
 <li><a href="https://www.cnblogs.com/linjiqin/p/5270938.html" target="_blank" rel="noopener">mysql remote access</a></li>
+<li><a href="http://blog.csdn.net/wrs120/article/details/78805004" target="_blank" rel="noopener">mysql on windows remote access</a></li>
 </ul>
 <h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>20180124: created.</li>
+<li>20180308: add windows part.</li>
 </ul>
 
       
@@ -489,7 +498,7 @@ mysql&gt; select user,host from user;
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="http://kezunlin.me/post/36e618e7/" title="mysql user guide on ubuntu 16.04">http://kezunlin.me/post/36e618e7/</a>
+    <a href="http://kezunlin.me/post/36e618e7/" title="mysql user guide on ubuntu 16.04 and windows">http://kezunlin.me/post/36e618e7/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -600,7 +609,7 @@ mysql&gt; select user,host from user;
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">54</span>
+                  <span class="site-state-item-count">59</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -611,7 +620,7 @@ mysql&gt; select user,host from user;
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -622,7 +631,7 @@ mysql&gt; select user,host from user;
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">73</span>
+                  <span class="site-state-item-count">76</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -664,7 +673,7 @@ mysql&gt; select user,host from user;
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install"><span class="nav-number">1.1.</span> <span class="nav-text">install</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#allow-remote-access"><span class="nav-number">1.2.</span> <span class="nav-text">allow remote access</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#change-bind-address"><span class="nav-number">1.2.1.</span> <span class="nav-text">change bind-address</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#grant-users"><span class="nav-number">1.2.2.</span> <span class="nav-text">grant users</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Part-1-Ubuntu"><span class="nav-number">1.</span> <span class="nav-text">Part-1: Ubuntu</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install"><span class="nav-number">1.1.</span> <span class="nav-text">install</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#allow-remote-access"><span class="nav-number">1.2.</span> <span class="nav-text">allow remote access</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#change-bind-address"><span class="nav-number">1.2.1.</span> <span class="nav-text">change bind-address</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#grant-users"><span class="nav-number">1.2.2.</span> <span class="nav-text">grant users</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Test-connection"><span class="nav-number">1.3.</span> <span class="nav-text">Test connection</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Part-2-Windows"><span class="nav-number">2.</span> <span class="nav-text">Part-2: Windows</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install-mysql-server-5-7"><span class="nav-number">2.1.</span> <span class="nav-text">install mysql server 5.7</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#allow-remote-access-1"><span class="nav-number">2.2.</span> <span class="nav-text">allow remote access</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#grant-users-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">grant users</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#close-fireware"><span class="nav-number">2.2.2.</span> <span class="nav-text">close fireware</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Test-connection-1"><span class="nav-number">2.3.</span> <span class="nav-text">Test connection</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
