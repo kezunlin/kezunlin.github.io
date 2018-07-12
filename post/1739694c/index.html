@@ -89,12 +89,16 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="guide to compile and install caffe on windows 10">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201807/635233-20180712160043489-1770218269.png">
+<meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201807/635233-20180712160049037-759459538.png">
+<meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201807/635233-20180712160105370-829401166.png">
+<meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201807/635233-20180712160109898-486036158.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201804/635233-20180413142258286-2028896876.png">
-<meta property="og:updated_time" content="2018-04-13T13:05:55.143Z">
+<meta property="og:updated_time" content="2018-07-12T08:02:18.397Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="guide to compile and install caffe on windows 10">
 <meta name="twitter:description" content="guide to compile and install caffe on windows 10">
-<meta name="twitter:image" content="https://images2018.cnblogs.com/blog/635233/201804/635233-20180413142258286-2028896876.png">
+<meta name="twitter:image" content="https://images2018.cnblogs.com/blog/635233/201807/635233-20180712160043489-1770218269.png">
 
 
 
@@ -346,8 +350,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-04-13T22:05:55+09:00">
-                2018-04-13
+              <time title="Post modified" itemprop="dateModified" datetime="2018-07-12T17:02:18+09:00">
+                2018-07-12
               </time>
             
           </span>
@@ -394,7 +398,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1,005
+                  1,146
                 </span>
               
 
@@ -410,7 +414,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  6
+                  7
                 </span>
               
             </div>
@@ -432,7 +436,24 @@
 
       
         <p>guide to compile and install caffe on windows 10<br><a id="more"></a></p>
-<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h2><h3 id="download"><a href="#download" class="headerlink" title="download"></a>download</h3><ul>
+<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="cuda-cudnn"><a href="#cuda-cudnn" class="headerlink" title="cuda+cudnn"></a>cuda+cudnn</h2><h3 id="cuda"><a href="#cuda" class="headerlink" title="cuda"></a>cuda</h3><p><a href="https://developer.download.nvidia.com/compute/cuda/9.2/Prod2/docs/sidebar/CUDA_Installation_Guide_Windows.pdf" target="_blank" rel="noopener">cuda install guides for windows</a></p>
+<p>download <code>cuda_8.0.61_win10.exe</code> from <a href="https://developer.nvidia.com/cuda-downloads?target_os=Windows&amp;target_arch=x86_64&amp;target_version=10&amp;target_type=exelocal" target="_blank" rel="noopener">here</a></p>
+<blockquote>
+<p>The CUDA Toolkit installs the CUDA driver and tools needed to create, build and run a CUDA application as well as libraries, header files, CUDA samples source code, and other resources</p>
+<p><code>cuda_8.0.61_win10.exe</code> includes: Nvidia driver +  toolkit.</p>
+<p>driver can be installed from standalone or from <code>cuda_xxx_win10.exe</code>.</p>
+</blockquote>
+<ul>
+<li>driver install to <code>C:/Program Files/NVIDIA Corporation</code> and              <code>C:/ProgramData/NVIDIA Corporation</code></li>
+<li>tookit install to <code>C:/Program Files/NVIDIA GPU Computing Toolkit</code>,which contains headers,libs,tools for compiling CUDA applications. <code>C:/ProgramData/NVIDIA GPU Computing Toolkit</code> contains cuda plugins for Visual Studio.</li>
+</ul>
+<p><img src="https://images2018.cnblogs.com/blog/635233/201807/635233-20180712160043489-1770218269.png" alt="cuda driver"></p>
+<p><img src="https://images2018.cnblogs.com/blog/635233/201807/635233-20180712160049037-759459538.png" alt="cuda toolkit"></p>
+<p><img src="https://images2018.cnblogs.com/blog/635233/201807/635233-20180712160105370-829401166.png" alt="cuda driver data"></p>
+<p><img src="https://images2018.cnblogs.com/blog/635233/201807/635233-20180712160109898-486036158.png" alt="cuda toolkit data"></p>
+<p>or install standalone dirver<br>download dirver <code>398.36-notebook-win10-64bit-international-whql.exe</code> from <a href="https://www.nvidia.com/Download/index.aspx" target="_blank" rel="noopener">here</a></p>
+<p>verify<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> C:\ProgramData\NVIDIA Corporation\CUDA Samples\v9.2\bin\win64\Release</span><br><span class="line">./deviceQuery.exe</span><br></pre></td></tr></table></figure></p>
+<h2 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h2><h3 id="download"><a href="#download" class="headerlink" title="download"></a>download</h3><ul>
 <li>caffe-windows:  <a href="https://codeload.github.com/BVLC/caffe/zip/windows" target="_blank" rel="noopener">https://codeload.github.com/BVLC/caffe/zip/windows</a></li>
 <li>caffe depencencies: <a href="https://github.com/willyd/caffe-builder/releases/download/v1.0.1/libraries_v140_x64_py27_1.1.0.tar.bz2" target="_blank" rel="noopener">https://github.com/willyd/caffe-builder/releases/download/v1.0.1/libraries_v140_x64_py27_1.1.0.tar.bz2</a></li>
 </ul>
@@ -702,7 +723,7 @@ copy `C:\Windows\SysWOW64\ntdll.dll` to `C:\Users\zunli\.caffe\dependencies\libr
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">1.1.</span> <span class="nav-text">compile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#download"><span class="nav-number">1.1.1.</span> <span class="nav-text">download</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#config"><span class="nav-number">1.1.2.</span> <span class="nav-text">config</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#caffe-usage"><span class="nav-number">1.2.</span> <span class="nav-text">caffe usage</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">1.2.1.</span> <span class="nav-text">CMakeLists.txt</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#error-fix"><span class="nav-number">1.3.</span> <span class="nav-text">error fix</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CaffeTargets-release-cmake"><span class="nav-number">1.3.1.</span> <span class="nav-text">CaffeTargets-release.cmake</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#comiple-errors-with-caffe-pb-h"><span class="nav-number">1.3.2.</span> <span class="nav-text">comiple errors with caffe.pb.h</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#cuda-cudnn"><span class="nav-number">1.1.</span> <span class="nav-text">cuda+cudnn</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cuda"><span class="nav-number">1.1.1.</span> <span class="nav-text">cuda</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">1.2.</span> <span class="nav-text">compile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#download"><span class="nav-number">1.2.1.</span> <span class="nav-text">download</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#config"><span class="nav-number">1.2.2.</span> <span class="nav-text">config</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#caffe-usage"><span class="nav-number">1.3.</span> <span class="nav-text">caffe usage</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">1.3.1.</span> <span class="nav-text">CMakeLists.txt</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#error-fix"><span class="nav-number">1.4.</span> <span class="nav-text">error fix</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CaffeTargets-release-cmake"><span class="nav-number">1.4.1.</span> <span class="nav-text">CaffeTargets-release.cmake</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#comiple-errors-with-caffe-pb-h"><span class="nav-number">1.4.2.</span> <span class="nav-text">comiple errors with caffe.pb.h</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
