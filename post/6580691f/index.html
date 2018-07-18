@@ -90,16 +90,17 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="Guide to compile and use opencv with CUDA(GPU) support on windows 10">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201807/635233-20180717092113975-663849717.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201807/635233-20180713160537940-1813231033.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201807/635233-20180716195321260-638321227.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201807/635233-20180716195324728-1445413102.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201807/635233-20180716195328292-1498836513.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201807/635233-20180716195739586-1774251249.png">
-<meta property="og:updated_time" content="2018-07-16T12:40:36.548Z">
+<meta property="og:updated_time" content="2018-07-18T06:53:00.995Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Guide to compile and use opencv with CUDA support on windows 10">
 <meta name="twitter:description" content="Guide to compile and use opencv with CUDA(GPU) support on windows 10">
-<meta name="twitter:image" content="https://images2018.cnblogs.com/blog/635233/201807/635233-20180713160537940-1813231033.png">
+<meta name="twitter:image" content="https://images2018.cnblogs.com/blog/635233/201807/635233-20180717092113975-663849717.png">
 
 
 
@@ -351,8 +352,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-07-16T21:40:36+09:00">
-                2018-07-16
+              <time title="Post modified" itemprop="dateModified" datetime="2018-07-18T15:53:00+09:00">
+                2018-07-18
               </time>
             
           </span>
@@ -399,7 +400,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1,650
+                  2,172
                 </span>
               
 
@@ -415,7 +416,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  10
+                  12
                 </span>
               
             </div>
@@ -442,11 +443,14 @@
 <li>windows: 10</li>
 <li>opencv: 3.1.0</li>
 <li>nvidia driver: gtx 1060  382.05</li>
+<li>GPU arch(s): sm_61</li>
 <li>cuda: 8.0 </li>
 <li>cudnn: 5.0.5</li>
 <li>cmake: 3.10.0</li>
 <li>vs: vs2015 64</li>
 </ul>
+<h2 id="nvidia-cuda-CC"><a href="#nvidia-cuda-CC" class="headerlink" title="nvidia cuda CC"></a>nvidia cuda CC</h2><p>see <a href="https://developer.nvidia.com/cuda-gpus" target="_blank" rel="noopener">cuda compute capacity</a></p>
+<p><img src="https://images2018.cnblogs.com/blog/635233/201807/635233-20180717092113975-663849717.png" alt="cuda-enabled nvidia GeForce cc"></p>
 <h2 id="cpu-vs-gpu"><a href="#cpu-vs-gpu" class="headerlink" title="cpu vs gpu"></a>cpu vs gpu</h2><p>for opencv functions</p>
 <p><img src="https://images2018.cnblogs.com/blog/635233/201807/635233-20180713160537940-1813231033.png" alt="speed for cpu and gpu"></p>
 <h2 id="get-source"><a href="#get-source" class="headerlink" title="get source"></a>get source</h2><p>Get opencv 3.1.0 for git and fix some bugs </p>
@@ -477,8 +481,35 @@
 <h3 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">find_package(OpenCV REQUIRED COMPONENTS core highgui imgproc features2d calib3d </span><br><span class="line">	cudaarithm cudabgsegm cudafilters cudaimgproc cudawarping cudafeatures2d # for cuda-enabled</span><br><span class="line">) #</span><br><span class="line">MESSAGE( [Main] &quot; OpenCV_INCLUDE_DIRS = $&#123;OpenCV_INCLUDE_DIRS&#125;&quot;)</span><br><span class="line">MESSAGE( [Main] &quot; OpenCV_LIBS = $&#123;OpenCV_LIBS&#125;&quot;)</span><br></pre></td></tr></table></figure>
 <h3 id="demo-cpp"><a href="#demo-cpp" class="headerlink" title="demo.cpp"></a>demo.cpp</h3><p>In the sample below an image is loaded from local file, next it is uploaded to GPU, thresholded, downloaded and displayed.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;opencv2/cudaarithm.hpp&gt;</span><br><span class="line">#include &lt;opencv2/cudabgsegm.hpp&gt;</span><br><span class="line">#include &lt;opencv2/cudafilters.hpp&gt;</span><br><span class="line">#include &lt;opencv2/cudaimgproc.hpp&gt;</span><br><span class="line">#include &lt;opencv2/cudawarping.hpp&gt;</span><br><span class="line">#include &lt;opencv2/cudafeatures2d.hpp&gt;</span><br><span class="line"></span><br><span class="line">int test_opencv_gpu()</span><br><span class="line">		&#123;</span><br><span class="line">			try</span><br><span class="line">			&#123;</span><br><span class="line">				cv::Mat src_host = cv::imread(&quot;file.png&quot;, CV_LOAD_IMAGE_GRAYSCALE);</span><br><span class="line">				cv::cuda::GpuMat dst, src;</span><br><span class="line">				src.upload(src_host);</span><br><span class="line"></span><br><span class="line">				cv::cuda::threshold(src, dst, 128.0, 255.0, CV_THRESH_BINARY);</span><br><span class="line"></span><br><span class="line">				cv::Mat result_host;</span><br><span class="line">				dst.download(result_host);</span><br><span class="line"></span><br><span class="line">				cv::imshow(&quot;Result&quot;, result_host);</span><br><span class="line">				cv::waitKey();</span><br><span class="line">			&#125;</span><br><span class="line">			catch (const cv::Exception&amp; ex)</span><br><span class="line">			&#123;</span><br><span class="line">				std::cout &lt;&lt; &quot;Error: &quot; &lt;&lt; ex.what() &lt;&lt; std::endl;</span><br><span class="line">			&#125;</span><br><span class="line">			return 0;</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="tips-for-caffe-opencv"><a href="#tips-for-caffe-opencv" class="headerlink" title="tips for caffe+opencv"></a>tips for caffe+opencv</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">opencv使用cuda版本的lib,dll；</span><br><span class="line">caffe任然使用无cuda版本的opencv编译的lib,dll</span><br><span class="line">exe中用opencv dll,lib替换为cuda版本即可。无需重新编译caffe。</span><br></pre></td></tr></table></figure>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<h3 id="tips-for-caffe-opencv"><a href="#tips-for-caffe-opencv" class="headerlink" title="tips for caffe+opencv"></a>tips for caffe+opencv</h3><pre><code>opencv使用cuda版本的lib,dll；
+caffe任然使用无cuda版本的opencv编译的lib,dll
+exe中用opencv dll,lib替换为cuda版本即可。无需重新编译caffe。
+</code></pre><h2 id="cpu-vs-gpu-time-cost"><a href="#cpu-vs-gpu-time-cost" class="headerlink" title="cpu vs gpu time cost"></a>cpu vs gpu time cost</h2><pre><code>https://blog.csdn.net/m0_37857300/article/details/79039214
+对于分辨率不特别大的图片间的ORB特征匹配，CPU运算得比GPU版的快（由于图像上传到GPU消耗了时间）
+但对于分辨率较大的图片，或者GPU比CPU好的机器（比如Nvidia Jetson系列），GPU版的ORB算法比CPU版的程序更高效。
+</code></pre><p>opencv cuda代码初始化非常慢</p>
+<h3 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h3><pre><code>(1) 使用cuda版本的opencv caffe网络的第一次创建非常耗时，后面的网络创建则非常快。
+(2) opencv的gpu代码比cpu代码慢，初次启动多耗费20s左右。
+https://stackoverflow.com/questions/12074281/why-opencv-gpu-code-is-slower-than-cpu/16038287#16038287
+https://www.zhihu.com/question/28449000/answer/55287980
+</code></pre><h3 id="Reasons"><a href="#Reasons" class="headerlink" title="Reasons:"></a>Reasons:</h3><pre><code>  `Your problem is that CUDA needs to initialize! And it will generally takes between 1-20 seconds`
+
+  Why first function call is slow?
+  That is because of initialization overheads. On first GPU function call `Cuda Runtime API` is initialized implicitly.
+
+  The first gpu function call is always takes more time, because CUDA initialize context for device. 
+The following calls will be faster.
+
+
+  Not Reasons:
+  (1) CPU clockspeed is 10x faster than GPU clockspeed.
+  (2) memory transfer times between host (CPU) and device (GPU)  (upload,downloa data)
+</code></pre><blockquote>
+<p>首先对于任何一个CUDA程序，在调用它的第一个CUDA API时后都要花费秒级的时间去初始化运行环境，后续还要分配显存，传输数据，启动内核，每一样都有延迟。这样如果你一个任务CPU运算都仅要几十毫秒，相比而言必须带上这些延迟的GPU程序就会显得非常慢。<br>其次，一个运算量很小的程序，你的CUDA内核不可能启动太多的线程，没有足够的线程<br>来屏蔽算法执行时从显存加载数据到GPU SM中的时延，这就没有发挥GPU的真正功能。</p>
+</blockquote>
+<h3 id="Conclusions"><a href="#Conclusions" class="headerlink" title="Conclusions"></a>Conclusions</h3><pre><code>   对于任何一个CUDA程序，在调用它的第一个CUDA API后都要花费较长的时间(1-20s左右)去初始化运行环境，
+这个过程非常耗时。之后在GPU上调用api速度就非常快了。
+</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://docs.opencv.org/3.2.0/d6/d15/tutorial_building_tegra_cuda.html" target="_blank" rel="noopener">Building OpenCV for Tegra with CUDA</a></li>
 <li><a href="https://opencv.org/platforms/cuda.html" target="_blank" rel="noopener">opencv with cuda introduction</a></li>
 <li><a href="https://docs.opencv.org/2.4/modules/gpu/doc/gpu.html" target="_blank" rel="noopener">ref doc for opencv gpu</a></li>
@@ -486,6 +517,8 @@
 <li><a href="https://github.com/opencv/opencv/issues/6716" target="_blank" rel="noopener">std::tuple errors when Building OpenCV (Main Branch) for Microsoft VS 2015 (x64) </a></li>
 <li><a href="https://github.com/opencv/opencv/issues/7992" target="_blank" rel="noopener">Opencv 3.2 failing to build with CUDA 8.0</a></li>
 <li><a href="https://stackoverflow.com/questions/42122634/building-opencv-3-cuda-errors" target="_blank" rel="noopener">Opencv 3.2 failing to build with CUDA 8.0</a></li>
+<li><a href="https://stackoverflow.com/questions/12074281/why-opencv-gpu-code-is-slower-than-cpu/16038287#16038287" target="_blank" rel="noopener">why-opencv-gpu-code-is-slower-than-cpu</a></li>
+<li><a href="http://answers.opencv.org/question/1670/huge-time-to-upload-data-to-gpu/#1676" target="_blank" rel="noopener">huge-time-to-upload-data-to-gpu</a></li>
 </ul>
 <h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>20180713: created.</li>
@@ -687,7 +720,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#cpu-vs-gpu"><span class="nav-number">1.1.</span> <span class="nav-text">cpu vs gpu</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#get-source"><span class="nav-number">1.2.</span> <span class="nav-text">get source</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">1.3.</span> <span class="nav-text">compile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#config"><span class="nav-number">1.3.1.</span> <span class="nav-text">config</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#build"><span class="nav-number">1.3.2.</span> <span class="nav-text">build</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#errors"><span class="nav-number">1.3.3.</span> <span class="nav-text">errors</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#demo"><span class="nav-number">1.4.</span> <span class="nav-text">demo</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cuda-module"><span class="nav-number">1.4.1.</span> <span class="nav-text">cuda-module</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">1.4.2.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#demo-cpp"><span class="nav-number">1.4.3.</span> <span class="nav-text">demo.cpp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tips-for-caffe-opencv"><span class="nav-number">1.4.4.</span> <span class="nav-text">tips for caffe+opencv</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#nvidia-cuda-CC"><span class="nav-number">1.1.</span> <span class="nav-text">nvidia cuda CC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cpu-vs-gpu"><span class="nav-number">1.2.</span> <span class="nav-text">cpu vs gpu</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#get-source"><span class="nav-number">1.3.</span> <span class="nav-text">get source</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">1.4.</span> <span class="nav-text">compile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#config"><span class="nav-number">1.4.1.</span> <span class="nav-text">config</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#build"><span class="nav-number">1.4.2.</span> <span class="nav-text">build</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#errors"><span class="nav-number">1.4.3.</span> <span class="nav-text">errors</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#demo"><span class="nav-number">1.5.</span> <span class="nav-text">demo</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cuda-module"><span class="nav-number">1.5.1.</span> <span class="nav-text">cuda-module</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">1.5.2.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#demo-cpp"><span class="nav-number">1.5.3.</span> <span class="nav-text">demo.cpp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tips-for-caffe-opencv"><span class="nav-number">1.5.4.</span> <span class="nav-text">tips for caffe+opencv</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cpu-vs-gpu-time-cost"><span class="nav-number">1.6.</span> <span class="nav-text">cpu vs gpu time cost</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Problems"><span class="nav-number">1.6.1.</span> <span class="nav-text">Problems</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reasons"><span class="nav-number">1.6.2.</span> <span class="nav-text">Reasons:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Conclusions"><span class="nav-number">1.6.3.</span> <span class="nav-text">Conclusions</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
