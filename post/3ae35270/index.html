@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+<meta name="referrer" content="no-referrer" />
+<meta name="google-site-verification" content="WSpJFvfcmIPBX_iK8uPbmCHIy_0f1lvd7ZJpbyad2sA" />
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="fine-tune," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="KeZunLin's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Fine-tuning a Pretrained Network for Style Recognition">
+<meta name="keywords" content="fine-tune">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fine-tuning a Pretrained Network for Style Recognition">
+<meta property="og:url" content="http://kezunlin.me/post/3ae35270/index.html">
+<meta property="og:site_name" content="KeZunLin&#39;s Blog">
+<meta property="og:description" content="Fine-tuning a Pretrained Network for Style Recognition">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180808102003231-729149953.png">
+<meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180808102005756-1000541529.png">
+<meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180808102008709-1558718778.png">
+<meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180808102011453-804222341.png">
+<meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180808102014230-1327642113.png">
+<meta property="og:updated_time" content="2018-08-19T18:56:42.200Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fine-tuning a Pretrained Network for Style Recognition">
+<meta name="twitter:description" content="Fine-tuning a Pretrained Network for Style Recognition">
+<meta name="twitter:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180808102003231-729149953.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://kezunlin.me/post/3ae35270/"/>
+
+
+
+
+
+  <title>Fine-tuning a Pretrained Network for Style Recognition | KeZunLin's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-111858944-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">KeZunLin's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Live and learn.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://kezunlin.me/post/3ae35270/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/kezunlin_avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="KeZunLin's Blog">
+      <img itemprop="logo" src="/images/kezunlin_logo.png" alt="logo" />
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Fine-tuning a Pretrained Network for Style Recognition</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-08T11:18:00+09:00">
+                2018-08-08
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2018-08-20T03:56:42+09:00">
+                2018-08-20
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/caffe/" itemprop="url" rel="index">
+                    <span itemprop="name">caffe</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/caffe/tutorials/" itemprop="url" rel="index">
+                    <span itemprop="name">tutorials</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  4,800
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  30
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Fine-tuning a Pretrained Network for Style Recognition<br><a id="more"></a></p>
+<h1 id="Fine-tuning-a-Pretrained-Network-for-Style-Recognition"><a href="#Fine-tuning-a-Pretrained-Network-for-Style-Recognition" class="headerlink" title="Fine-tuning a Pretrained Network for Style Recognition"></a>Fine-tuning a Pretrained Network for Style Recognition</h1><p>In this example, we’ll explore a common approach that is particularly useful in real-world applications: take a pre-trained Caffe network and fine-tune the parameters on your custom data.</p>
+<p>The advantage of this approach is that, since pre-trained networks are learned on a large set of images, the intermediate layers capture the “semantics” of the general visual appearance. Think of it as a very powerful generic visual feature that you can treat as a black box. On top of that, only a relatively small amount of data is needed for good performance on the target task.</p>
+<p>First, we will need to prepare the data. This involves the following parts:<br>(1) Get the ImageNet ilsvrc pretrained model with the provided shell scripts.<br>(2) Download a subset of the overall Flickr style dataset for this demo.<br>(3) Compile the downloaded Flickr dataset into a database that Caffe can then consume.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">caffe_root = <span class="string">'../'</span>  <span class="comment"># this file should be run from &#123;caffe_root&#125;/examples (otherwise change this line)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.path.insert(<span class="number">0</span>, caffe_root + <span class="string">'python'</span>)</span><br><span class="line"><span class="keyword">import</span> caffe</span><br><span class="line"></span><br><span class="line">caffe.set_device(<span class="number">0</span>)</span><br><span class="line">caffe.set_mode_gpu()</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> pylab <span class="keyword">import</span> *</span><br><span class="line">%matplotlib inline</span><br><span class="line"><span class="keyword">import</span> tempfile</span><br><span class="line"></span><br><span class="line"><span class="comment"># Helper function for deprocessing preprocessed images, e.g., for display.</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">deprocess_net_image</span><span class="params">(image)</span>:</span></span><br><span class="line">    image = image.copy()              <span class="comment"># don't modify destructively</span></span><br><span class="line">    image = image[::<span class="number">-1</span>]               <span class="comment"># BGR -&gt; RGB</span></span><br><span class="line">    image = image.transpose(<span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>)  <span class="comment"># CHW -&gt; HWC</span></span><br><span class="line">    image += [<span class="number">123</span>, <span class="number">117</span>, <span class="number">104</span>]          <span class="comment"># (approximately) undo mean subtraction</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># clamp values in [0, 255]</span></span><br><span class="line">    image[image &lt; <span class="number">0</span>], image[image &gt; <span class="number">255</span>] = <span class="number">0</span>, <span class="number">255</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># round and cast from float32 to uint8</span></span><br><span class="line">    image = np.round(image)</span><br><span class="line">    image = np.require(image, dtype=np.uint8)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> image</span><br></pre></td></tr></table></figure>
+<h2 id="Setup-and-dataset-download"><a href="#Setup-and-dataset-download" class="headerlink" title="Setup and dataset download"></a>Setup and dataset download</h2><p>Download data required for this exercise.</p>
+<ul>
+<li><code>get_ilsvrc_aux.sh</code> to download the ImageNet data mean, labels, etc.</li>
+<li><code>download_model_binary.py</code> to download the pretrained reference model</li>
+<li><code>finetune_flickr_style/assemble_data.py</code> downloads the style training and testing data</li>
+</ul>
+<p>We’ll download just a small subset of the full dataset for this exercise: just 2000 of the 80K images, from 5 of the 20 style categories.  (To download the full dataset, set <code>full_dataset = True</code> in the cell below.)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Download just a small subset of the data for this exercise.</span></span><br><span class="line"><span class="comment"># (2000 of 80K images, 5 of 20 labels.)</span></span><br><span class="line"><span class="comment"># To download the entire dataset, set `full_dataset = True`.</span></span><br><span class="line">full_dataset = <span class="keyword">False</span></span><br><span class="line"><span class="keyword">if</span> full_dataset:</span><br><span class="line">    NUM_STYLE_IMAGES = NUM_STYLE_LABELS = <span class="number">-1</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    NUM_STYLE_IMAGES = <span class="number">2000</span></span><br><span class="line">    NUM_STYLE_LABELS = <span class="number">5</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># This downloads the ilsvrc auxiliary data (mean file, etc),</span></span><br><span class="line"><span class="comment"># and a subset of 2000 images for the style recognition task.</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.chdir(caffe_root)  <span class="comment"># run scripts from caffe root</span></span><br><span class="line">!data/ilsvrc12/get_ilsvrc_aux.sh</span><br><span class="line">!scripts/download_model_binary.py models/bvlc_reference_caffenet</span><br><span class="line">!python examples/finetune_flickr_style/assemble_data.py \</span><br><span class="line">    --workers=<span class="number">-1</span>  --seed=<span class="number">1701</span> \</span><br><span class="line">    --images=$NUM_STYLE_IMAGES  --label=$NUM_STYLE_LABELS</span><br><span class="line"><span class="comment"># back to examples</span></span><br><span class="line">os.chdir(<span class="string">'examples'</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>Downloading...
+--2016-02-24 00:28:36--  http://dl.caffe.berkeleyvision.org/caffe_ilsvrc12.tar.gz
+Resolving dl.caffe.berkeleyvision.org (dl.caffe.berkeleyvision.org)... 169.229.222.251
+Connecting to dl.caffe.berkeleyvision.org (dl.caffe.berkeleyvision.org)|169.229.222.251|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 17858008 (17M) [application/octet-stream]
+Saving to: ‘caffe_ilsvrc12.tar.gz’
+
+100%[======================================&gt;] 17,858,008   112MB/s   in 0.2s   
+
+2016-02-24 00:28:36 (112 MB/s) - ‘caffe_ilsvrc12.tar.gz’ saved [17858008/17858008]
+
+Unzipping...
+Done.
+Model already exists.
+Downloading 2000 images with 7 workers...
+Writing train/val for 1996 successfully downloaded images.
+</code></pre><p>Define <code>weights</code>, the path to the ImageNet pretrained weights we just downloaded, and make sure it exists.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">weights = os.path.join(caffe_root, <span class="string">'models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel'</span>)</span><br><span class="line"><span class="keyword">assert</span> os.path.exists(weights)</span><br></pre></td></tr></table></figure>
+<p>Load the 1000 ImageNet labels from <code>ilsvrc12/synset_words.txt</code>, and the 5 style labels from <code>finetune_flickr_style/style_names.txt</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Load ImageNet labels to imagenet_labels</span></span><br><span class="line">imagenet_label_file = caffe_root + <span class="string">'data/ilsvrc12/synset_words.txt'</span></span><br><span class="line">imagenet_labels = list(np.loadtxt(imagenet_label_file, str, delimiter=<span class="string">'\t'</span>))</span><br><span class="line"><span class="keyword">assert</span> len(imagenet_labels) == <span class="number">1000</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">'Loaded ImageNet labels:\n'</span>, <span class="string">'\n'</span>.join(imagenet_labels[:<span class="number">10</span>] + [<span class="string">'...'</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># Load style labels to style_labels</span></span><br><span class="line">style_label_file = caffe_root + <span class="string">'examples/finetune_flickr_style/style_names.txt'</span></span><br><span class="line">style_labels = list(np.loadtxt(style_label_file, str, delimiter=<span class="string">'\n'</span>))</span><br><span class="line"><span class="keyword">if</span> NUM_STYLE_LABELS &gt; <span class="number">0</span>:</span><br><span class="line">    style_labels = style_labels[:NUM_STYLE_LABELS]</span><br><span class="line"><span class="keyword">print</span> <span class="string">'\nLoaded style labels:\n'</span>, <span class="string">', '</span>.join(style_labels)</span><br></pre></td></tr></table></figure>
+<pre><code>Loaded ImageNet labels:
+n01440764 tench, Tinca tinca
+n01443537 goldfish, Carassius auratus
+n01484850 great white shark, white shark, man-eater, man-eating shark, Carcharodon carcharias
+n01491361 tiger shark, Galeocerdo cuvieri
+n01494475 hammerhead, hammerhead shark
+n01496331 electric ray, crampfish, numbfish, torpedo
+n01498041 stingray
+n01514668 cock
+n01514859 hen
+n01518878 ostrich, Struthio camelus
+...
+
+Loaded style labels:
+Detailed, Pastel, Melancholy, Noir, HDR
+</code></pre><h2 id="Defining-and-running-the-nets"><a href="#Defining-and-running-the-nets" class="headerlink" title="Defining and running the nets"></a>Defining and running the nets</h2><p>We’ll start by defining <code>caffenet</code>, a function which initializes the <em>CaffeNet</em> architecture (a minor variant on <em>AlexNet</em>), taking arguments specifying the data and number of output classes.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> caffe <span class="keyword">import</span> layers <span class="keyword">as</span> L</span><br><span class="line"><span class="keyword">from</span> caffe <span class="keyword">import</span> params <span class="keyword">as</span> P</span><br><span class="line"></span><br><span class="line">weight_param = dict(lr_mult=<span class="number">1</span>, decay_mult=<span class="number">1</span>)</span><br><span class="line">bias_param   = dict(lr_mult=<span class="number">2</span>, decay_mult=<span class="number">0</span>)</span><br><span class="line">learned_param = [weight_param, bias_param]</span><br><span class="line"></span><br><span class="line">frozen_param = [dict(lr_mult=<span class="number">0</span>)] * <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">conv_relu</span><span class="params">(bottom, ks, nout, stride=<span class="number">1</span>, pad=<span class="number">0</span>, group=<span class="number">1</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">              param=learned_param,</span></span></span><br><span class="line"><span class="function"><span class="params">              weight_filler=dict<span class="params">(type=<span class="string">'gaussian'</span>, std=<span class="number">0.01</span>)</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">              bias_filler=dict<span class="params">(type=<span class="string">'constant'</span>, value=<span class="number">0.1</span>)</span>)</span>:</span></span><br><span class="line">    conv = L.Convolution(bottom, kernel_size=ks, stride=stride,</span><br><span class="line">                         num_output=nout, pad=pad, group=group,</span><br><span class="line">                         param=param, weight_filler=weight_filler,</span><br><span class="line">                         bias_filler=bias_filler)</span><br><span class="line">    <span class="keyword">return</span> conv, L.ReLU(conv, in_place=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fc_relu</span><span class="params">(bottom, nout, param=learned_param,</span></span></span><br><span class="line"><span class="function"><span class="params">            weight_filler=dict<span class="params">(type=<span class="string">'gaussian'</span>, std=<span class="number">0.005</span>)</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">            bias_filler=dict<span class="params">(type=<span class="string">'constant'</span>, value=<span class="number">0.1</span>)</span>)</span>:</span></span><br><span class="line">    fc = L.InnerProduct(bottom, num_output=nout, param=param,</span><br><span class="line">                        weight_filler=weight_filler,</span><br><span class="line">                        bias_filler=bias_filler)</span><br><span class="line">    <span class="keyword">return</span> fc, L.ReLU(fc, in_place=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">max_pool</span><span class="params">(bottom, ks, stride=<span class="number">1</span>)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> L.Pooling(bottom, pool=P.Pooling.MAX, kernel_size=ks, stride=stride)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">caffenet</span><span class="params">(data, label=None, train=True, num_classes=<span class="number">1000</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">             classifier_name=<span class="string">'fc8'</span>, learn_all=False)</span>:</span></span><br><span class="line">    <span class="string">"""Returns a NetSpec specifying CaffeNet, following the original proto text</span></span><br><span class="line"><span class="string">       specification (./models/bvlc_reference_caffenet/train_val.prototxt)."""</span></span><br><span class="line">    n = caffe.NetSpec()</span><br><span class="line">    n.data = data</span><br><span class="line">    param = learned_param <span class="keyword">if</span> learn_all <span class="keyword">else</span> frozen_param</span><br><span class="line">    n.conv1, n.relu1 = conv_relu(n.data, <span class="number">11</span>, <span class="number">96</span>, stride=<span class="number">4</span>, param=param)</span><br><span class="line">    n.pool1 = max_pool(n.relu1, <span class="number">3</span>, stride=<span class="number">2</span>)</span><br><span class="line">    n.norm1 = L.LRN(n.pool1, local_size=<span class="number">5</span>, alpha=<span class="number">1e-4</span>, beta=<span class="number">0.75</span>)</span><br><span class="line">    n.conv2, n.relu2 = conv_relu(n.norm1, <span class="number">5</span>, <span class="number">256</span>, pad=<span class="number">2</span>, group=<span class="number">2</span>, param=param)</span><br><span class="line">    n.pool2 = max_pool(n.relu2, <span class="number">3</span>, stride=<span class="number">2</span>)</span><br><span class="line">    n.norm2 = L.LRN(n.pool2, local_size=<span class="number">5</span>, alpha=<span class="number">1e-4</span>, beta=<span class="number">0.75</span>)</span><br><span class="line">    n.conv3, n.relu3 = conv_relu(n.norm2, <span class="number">3</span>, <span class="number">384</span>, pad=<span class="number">1</span>, param=param)</span><br><span class="line">    n.conv4, n.relu4 = conv_relu(n.relu3, <span class="number">3</span>, <span class="number">384</span>, pad=<span class="number">1</span>, group=<span class="number">2</span>, param=param)</span><br><span class="line">    n.conv5, n.relu5 = conv_relu(n.relu4, <span class="number">3</span>, <span class="number">256</span>, pad=<span class="number">1</span>, group=<span class="number">2</span>, param=param)</span><br><span class="line">    n.pool5 = max_pool(n.relu5, <span class="number">3</span>, stride=<span class="number">2</span>)</span><br><span class="line">    n.fc6, n.relu6 = fc_relu(n.pool5, <span class="number">4096</span>, param=param)</span><br><span class="line">    <span class="keyword">if</span> train:</span><br><span class="line">        n.drop6 = fc7input = L.Dropout(n.relu6, in_place=<span class="keyword">True</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        fc7input = n.relu6</span><br><span class="line">    n.fc7, n.relu7 = fc_relu(fc7input, <span class="number">4096</span>, param=param)</span><br><span class="line">    <span class="keyword">if</span> train:</span><br><span class="line">        n.drop7 = fc8input = L.Dropout(n.relu7, in_place=<span class="keyword">True</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        fc8input = n.relu7</span><br><span class="line">    <span class="comment"># always learn fc8 (param=learned_param)</span></span><br><span class="line">    fc8 = L.InnerProduct(fc8input, num_output=num_classes, param=learned_param)</span><br><span class="line">    <span class="comment"># give fc8 the name specified by argument `classifier_name`</span></span><br><span class="line">    n.__setattr__(classifier_name, fc8)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> train:</span><br><span class="line">        n.probs = L.Softmax(fc8)</span><br><span class="line">    <span class="keyword">if</span> label <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">        n.label = label</span><br><span class="line">        n.loss = L.SoftmaxWithLoss(fc8, n.label)</span><br><span class="line">        n.acc = L.Accuracy(fc8, n.label)</span><br><span class="line">    <span class="comment"># write the net to a temporary file and return its filename</span></span><br><span class="line">    <span class="keyword">with</span> tempfile.NamedTemporaryFile(delete=<span class="keyword">False</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(str(n.to_proto()))</span><br><span class="line">        <span class="keyword">return</span> f.name</span><br></pre></td></tr></table></figure>
+<p>Now, let’s create a <em>CaffeNet</em> that takes unlabeled “dummy data” as input, allowing us to set its input images externally and see what ImageNet classes it predicts.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dummy_data = L.DummyData(shape=dict(dim=[<span class="number">1</span>, <span class="number">3</span>, <span class="number">227</span>, <span class="number">227</span>]))</span><br><span class="line">imagenet_net_filename = caffenet(data=dummy_data, train=<span class="keyword">False</span>)</span><br><span class="line">imagenet_net = caffe.Net(imagenet_net_filename, weights, caffe.TEST)</span><br></pre></td></tr></table></figure>
+<p>Define a function <code>style_net</code> which calls <code>caffenet</code> on data from the Flickr style dataset.</p>
+<p>The new network will also have the <em>CaffeNet</em> architecture, with differences in the input and output:</p>
+<ul>
+<li>the input is the Flickr style data we downloaded, provided by an <code>ImageData</code> layer</li>
+<li>the output is a distribution over 20 classes rather than the original 1000 ImageNet classes</li>
+<li>the classification layer is renamed from <code>fc8</code> to <code>fc8_flickr</code> to tell Caffe not to load the original classifier (<code>fc8</code>) weights from the ImageNet-pretrained model</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">style_net</span><span class="params">(train=True, learn_all=False, subset=None)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> subset <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        subset = <span class="string">'train'</span> <span class="keyword">if</span> train <span class="keyword">else</span> <span class="string">'test'</span></span><br><span class="line">    source = caffe_root + <span class="string">'data/flickr_style/%s.txt'</span> % subset</span><br><span class="line">    transform_param = dict(mirror=train, crop_size=<span class="number">227</span>,</span><br><span class="line">        mean_file=caffe_root + <span class="string">'data/ilsvrc12/imagenet_mean.binaryproto'</span>)</span><br><span class="line">    style_data, style_label = L.ImageData(</span><br><span class="line">        transform_param=transform_param, source=source,</span><br><span class="line">        batch_size=<span class="number">50</span>, new_height=<span class="number">256</span>, new_width=<span class="number">256</span>, ntop=<span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> caffenet(data=style_data, label=style_label, train=train,</span><br><span class="line">                    num_classes=NUM_STYLE_LABELS,</span><br><span class="line">                    classifier_name=<span class="string">'fc8_flickr'</span>,</span><br><span class="line">                    learn_all=learn_all)</span><br></pre></td></tr></table></figure>
+<p>Use the <code>style_net</code> function defined above to initialize <code>untrained_style_net</code>, a <em>CaffeNet</em> with input images from the style dataset and weights from the pretrained ImageNet model.</p>
+<p>Call <code>forward</code> on <code>untrained_style_net</code> to get a batch of style training data.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">untrained_style_net = caffe.Net(style_net(train=<span class="keyword">False</span>, subset=<span class="string">'train'</span>),</span><br><span class="line">                                weights, caffe.TEST)</span><br><span class="line">untrained_style_net.forward()</span><br><span class="line">style_data_batch = untrained_style_net.blobs[<span class="string">'data'</span>].data.copy()</span><br><span class="line">style_label_batch = np.array(untrained_style_net.blobs[<span class="string">'label'</span>].data, dtype=np.int32)</span><br></pre></td></tr></table></figure>
+<p>Pick one of the style net training images from the batch of 50 (we’ll arbitrarily choose #8 here).  Display it, then run it through <code>imagenet_net</code>, the ImageNet-pretrained network to view its top 5 predicted classes from the 1000 ImageNet classes.</p>
+<p>Below we chose an image where the network’s predictions happen to be reasonable, as the image is of a beach, and “sandbar” and “seashore” both happen to be ImageNet-1000 categories.  For other images, the predictions won’t be this good, sometimes due to the network actually failing to recognize the object(s) present in the image, but perhaps even more often due to the fact that not all images contain an object from the (somewhat arbitrarily chosen) 1000 ImageNet categories. Modify the <code>batch_index</code> variable by changing its default setting of 8 to another value from 0-49 (since the batch size is 50) to see predictions for other images in the batch.  (To go beyond this batch of 50 images, first rerun the <em>above</em> cell to load a fresh batch of data into <code>style_net</code>.)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">disp_preds</span><span class="params">(net, image, labels, k=<span class="number">5</span>, name=<span class="string">'ImageNet'</span>)</span>:</span></span><br><span class="line">    input_blob = net.blobs[<span class="string">'data'</span>]</span><br><span class="line">    net.blobs[<span class="string">'data'</span>].data[<span class="number">0</span>, ...] = image</span><br><span class="line">    probs = net.forward(start=<span class="string">'conv1'</span>)[<span class="string">'probs'</span>][<span class="number">0</span>]</span><br><span class="line">    top_k = (-probs).argsort()[:k]</span><br><span class="line">    <span class="keyword">print</span> <span class="string">'top %d predicted %s labels ='</span> % (k, name)</span><br><span class="line">    <span class="keyword">print</span> <span class="string">'\n'</span>.join(<span class="string">'\t(%d) %5.2f%% %s'</span> % (i+<span class="number">1</span>, <span class="number">100</span>*probs[p], labels[p])</span><br><span class="line">                    <span class="keyword">for</span> i, p <span class="keyword">in</span> enumerate(top_k))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">disp_imagenet_preds</span><span class="params">(net, image)</span>:</span></span><br><span class="line">    disp_preds(net, image, imagenet_labels, name=<span class="string">'ImageNet'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">disp_style_preds</span><span class="params">(net, image)</span>:</span></span><br><span class="line">    disp_preds(net, image, style_labels, name=<span class="string">'style'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">batch_index = <span class="number">8</span></span><br><span class="line">image = style_data_batch[batch_index]</span><br><span class="line">plt.imshow(deprocess_net_image(image))</span><br><span class="line"><span class="keyword">print</span> <span class="string">'actual label ='</span>, style_labels[style_label_batch[batch_index]]</span><br></pre></td></tr></table></figure>
+<pre><code>actual label = Melancholy
+</code></pre><p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180808102003231-729149953.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">disp_imagenet_preds(imagenet_net, image)</span><br></pre></td></tr></table></figure>
+<pre><code>top 5 predicted ImageNet labels =
+    (1) 69.89% n09421951 sandbar, sand bar
+    (2) 21.76% n09428293 seashore, coast, seacoast, sea-coast
+    (3)  3.22% n02894605 breakwater, groin, groyne, mole, bulwark, seawall, jetty
+    (4)  1.89% n04592741 wing
+    (5)  1.23% n09332890 lakeside, lakeshore
+</code></pre><p>We can also look at <code>untrained_style_net</code>‘s predictions, but we won’t see anything interesting as its classifier hasn’t been trained yet.</p>
+<p>In fact, since we zero-initialized the classifier (see <code>caffenet</code> definition – no <code>weight_filler</code> is passed to the final <code>InnerProduct</code> layer), the softmax inputs should be all zero and we should therefore see a predicted probability of 1/N for each label (for N labels).  Since we set N = 5, we get a predicted probability of 20% for each class.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">disp_style_preds(untrained_style_net, image)</span><br></pre></td></tr></table></figure>
+<pre><code>top 5 predicted style labels =
+    (1) 20.00% Detailed
+    (2) 20.00% Pastel
+    (3) 20.00% Melancholy
+    (4) 20.00% Noir
+    (5) 20.00% HDR
+</code></pre><p>We can also verify that the activations in layer <code>fc7</code> immediately before the classification layer are the same as (or very close to) those in the ImageNet-pretrained model, since both models are using the same pretrained weights in the <code>conv1</code> through <code>fc7</code> layers.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">diff = untrained_style_net.blobs[<span class="string">'fc7'</span>].data[<span class="number">0</span>] - imagenet_net.blobs[<span class="string">'fc7'</span>].data[<span class="number">0</span>]</span><br><span class="line">error = (diff ** <span class="number">2</span>).sum()</span><br><span class="line"><span class="keyword">assert</span> error &lt; <span class="number">1e-8</span></span><br></pre></td></tr></table></figure>
+<p>Delete <code>untrained_style_net</code> to save memory.  (Hang on to <code>imagenet_net</code> as we’ll use it again later.)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">del</span> untrained_style_net</span><br></pre></td></tr></table></figure>
+<h2 id="Training-the-style-classifier"><a href="#Training-the-style-classifier" class="headerlink" title="Training the style classifier"></a>Training the style classifier</h2><p>Now, we’ll define a function <code>solver</code> to create our Caffe solvers, which are used to train the network (learn its weights).  In this function we’ll set values for various parameters used for learning, display, and “snapshotting” – see the inline comments for explanations of what they mean.  You may want to play with some of the learning parameters to see if you can improve on the results here!</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> caffe.proto <span class="keyword">import</span> caffe_pb2</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">solver</span><span class="params">(train_net_path, test_net_path=None, base_lr=<span class="number">0.001</span>)</span>:</span></span><br><span class="line">    s = caffe_pb2.SolverParameter()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Specify locations of the train and (maybe) test networks.</span></span><br><span class="line">    s.train_net = train_net_path</span><br><span class="line">    <span class="keyword">if</span> test_net_path <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">        s.test_net.append(test_net_path)</span><br><span class="line">        s.test_interval = <span class="number">1000</span>  <span class="comment"># Test after every 1000 training iterations.</span></span><br><span class="line">        s.test_iter.append(<span class="number">100</span>) <span class="comment"># Test on 100 batches each time we test.</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># The number of iterations over which to average the gradient.</span></span><br><span class="line">    <span class="comment"># Effectively boosts the training batch size by the given factor, without</span></span><br><span class="line">    <span class="comment"># affecting memory utilization.</span></span><br><span class="line">    s.iter_size = <span class="number">1</span></span><br><span class="line">    </span><br><span class="line">    s.max_iter = <span class="number">100000</span>     <span class="comment"># # of times to update the net (training iterations)</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Solve using the stochastic gradient descent (SGD) algorithm.</span></span><br><span class="line">    <span class="comment"># Other choices include 'Adam' and 'RMSProp'.</span></span><br><span class="line">    s.type = <span class="string">'SGD'</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Set the initial learning rate for SGD.</span></span><br><span class="line">    s.base_lr = base_lr</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Set `lr_policy` to define how the learning rate changes during training.</span></span><br><span class="line">    <span class="comment"># Here, we 'step' the learning rate by multiplying it by a factor `gamma`</span></span><br><span class="line">    <span class="comment"># every `stepsize` iterations.</span></span><br><span class="line">    s.lr_policy = <span class="string">'step'</span></span><br><span class="line">    s.gamma = <span class="number">0.1</span></span><br><span class="line">    s.stepsize = <span class="number">20000</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Set other SGD hyperparameters. Setting a non-zero `momentum` takes a</span></span><br><span class="line">    <span class="comment"># weighted average of the current gradient and previous gradients to make</span></span><br><span class="line">    <span class="comment"># learning more stable. L2 weight decay regularizes learning, to help prevent</span></span><br><span class="line">    <span class="comment"># the model from overfitting.</span></span><br><span class="line">    s.momentum = <span class="number">0.9</span></span><br><span class="line">    s.weight_decay = <span class="number">5e-4</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Display the current training loss and accuracy every 1000 iterations.</span></span><br><span class="line">    s.display = <span class="number">1000</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Snapshots are files used to store networks we've trained.  Here, we'll</span></span><br><span class="line">    <span class="comment"># snapshot every 10K iterations -- ten times during training.</span></span><br><span class="line">    s.snapshot = <span class="number">10000</span></span><br><span class="line">    s.snapshot_prefix = caffe_root + <span class="string">'models/finetune_flickr_style/finetune_flickr_style'</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Train on the GPU.  Using the CPU to train large networks is very slow.</span></span><br><span class="line">    s.solver_mode = caffe_pb2.SolverParameter.GPU</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Write the solver to a temporary file and return its filename.</span></span><br><span class="line">    <span class="keyword">with</span> tempfile.NamedTemporaryFile(delete=<span class="keyword">False</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(str(s))</span><br><span class="line">        <span class="keyword">return</span> f.name</span><br></pre></td></tr></table></figure>
+<p>Now we’ll invoke the solver to train the style net’s classification layer.</p>
+<p>For the record, if you want to train the network using only the command line tool, this is the command:</p>
+<p><code><br>build/tools/caffe train \<br>    -solver models/finetune_flickr_style/solver.prototxt \<br>    -weights models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel \<br>    -gpu 0<br></code></p>
+<p>However, we will train using Python in this example.</p>
+<p>We’ll first define <code>run_solvers</code>, a function that takes a list of solvers and steps each one in a round robin manner, recording the accuracy and loss values each iteration.  At the end, the learned weights are saved to a file.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run_solvers</span><span class="params">(niter, solvers, disp_interval=<span class="number">10</span>)</span>:</span></span><br><span class="line">    <span class="string">"""Run solvers for niter iterations,</span></span><br><span class="line"><span class="string">       returning the loss and accuracy recorded each iteration.</span></span><br><span class="line"><span class="string">       `solvers` is a list of (name, solver) tuples."""</span></span><br><span class="line">    blobs = (<span class="string">'loss'</span>, <span class="string">'acc'</span>)</span><br><span class="line">    loss, acc = (&#123;name: np.zeros(niter) <span class="keyword">for</span> name, _ <span class="keyword">in</span> solvers&#125;</span><br><span class="line">                 <span class="keyword">for</span> _ <span class="keyword">in</span> blobs)</span><br><span class="line">    <span class="keyword">for</span> it <span class="keyword">in</span> range(niter):</span><br><span class="line">        <span class="keyword">for</span> name, s <span class="keyword">in</span> solvers:</span><br><span class="line">            s.step(<span class="number">1</span>)  <span class="comment"># run a single SGD step in Caffe</span></span><br><span class="line">            loss[name][it], acc[name][it] = (s.net.blobs[b].data.copy()</span><br><span class="line">                                             <span class="keyword">for</span> b <span class="keyword">in</span> blobs)</span><br><span class="line">        <span class="keyword">if</span> it % disp_interval == <span class="number">0</span> <span class="keyword">or</span> it + <span class="number">1</span> == niter:</span><br><span class="line">            loss_disp = <span class="string">'; '</span>.join(<span class="string">'%s: loss=%.3f, acc=%2d%%'</span> %</span><br><span class="line">                                  (n, loss[n][it], np.round(<span class="number">100</span>*acc[n][it]))</span><br><span class="line">                                  <span class="keyword">for</span> n, _ <span class="keyword">in</span> solvers)</span><br><span class="line">            <span class="keyword">print</span> <span class="string">'%3d) %s'</span> % (it, loss_disp)     </span><br><span class="line">    <span class="comment"># Save the learned weights from both nets.</span></span><br><span class="line">    weight_dir = tempfile.mkdtemp()</span><br><span class="line">    weights = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> name, s <span class="keyword">in</span> solvers:</span><br><span class="line">        filename = <span class="string">'weights.%s.caffemodel'</span> % name</span><br><span class="line">        weights[name] = os.path.join(weight_dir, filename)</span><br><span class="line">        s.net.save(weights[name])</span><br><span class="line">    <span class="keyword">return</span> loss, acc, weights</span><br></pre></td></tr></table></figure>
+<p>Let’s create and run solvers to train nets for the style recognition task.  We’ll create two solvers – one (<code>style_solver</code>) will have its train net initialized to the ImageNet-pretrained weights (this is done by the call to the <code>copy_from</code> method), and the other (<code>scratch_style_solver</code>) will start from a <em>randomly</em> initialized net.</p>
+<p>During training, we should see that the ImageNet pretrained net is learning faster and attaining better accuracies than the scratch net.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">niter = <span class="number">200</span>  <span class="comment"># number of iterations to train</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Reset style_solver as before.</span></span><br><span class="line">style_solver_filename = solver(style_net(train=<span class="keyword">True</span>))</span><br><span class="line">style_solver = caffe.get_solver(style_solver_filename)</span><br><span class="line">style_solver.net.copy_from(weights)</span><br><span class="line"></span><br><span class="line"><span class="comment"># For reference, we also create a solver that isn't initialized from</span></span><br><span class="line"><span class="comment"># the pretrained ImageNet weights.</span></span><br><span class="line">scratch_style_solver_filename = solver(style_net(train=<span class="keyword">True</span>))</span><br><span class="line">scratch_style_solver = caffe.get_solver(scratch_style_solver_filename)</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">'Running solvers for %d iterations...'</span> % niter</span><br><span class="line">solvers = [(<span class="string">'pretrained'</span>, style_solver),</span><br><span class="line">           (<span class="string">'scratch'</span>, scratch_style_solver)]</span><br><span class="line">loss, acc, weights = run_solvers(niter, solvers)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'Done.'</span></span><br><span class="line"></span><br><span class="line">train_loss, scratch_train_loss = loss[<span class="string">'pretrained'</span>], loss[<span class="string">'scratch'</span>]</span><br><span class="line">train_acc, scratch_train_acc = acc[<span class="string">'pretrained'</span>], acc[<span class="string">'scratch'</span>]</span><br><span class="line">style_weights, scratch_style_weights = weights[<span class="string">'pretrained'</span>], weights[<span class="string">'scratch'</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># Delete solvers to save memory.</span></span><br><span class="line"><span class="keyword">del</span> style_solver, scratch_style_solver, solvers</span><br></pre></td></tr></table></figure>
+<pre><code>Running solvers for 200 iterations...
+  0) pretrained: loss=1.609, acc=28%; scratch: loss=1.609, acc=28%
+ 10) pretrained: loss=1.293, acc=52%; scratch: loss=1.626, acc=14%
+ 20) pretrained: loss=1.110, acc=56%; scratch: loss=1.646, acc=10%
+ 30) pretrained: loss=1.084, acc=60%; scratch: loss=1.616, acc=20%
+ 40) pretrained: loss=0.898, acc=64%; scratch: loss=1.588, acc=26%
+ 50) pretrained: loss=1.024, acc=54%; scratch: loss=1.607, acc=32%
+ 60) pretrained: loss=0.925, acc=66%; scratch: loss=1.616, acc=20%
+ 70) pretrained: loss=0.861, acc=74%; scratch: loss=1.598, acc=24%
+ 80) pretrained: loss=0.967, acc=60%; scratch: loss=1.588, acc=30%
+ 90) pretrained: loss=1.274, acc=52%; scratch: loss=1.608, acc=20%
+100) pretrained: loss=1.113, acc=62%; scratch: loss=1.588, acc=30%
+110) pretrained: loss=0.922, acc=62%; scratch: loss=1.578, acc=36%
+120) pretrained: loss=0.918, acc=62%; scratch: loss=1.599, acc=20%
+130) pretrained: loss=0.959, acc=58%; scratch: loss=1.594, acc=22%
+140) pretrained: loss=1.228, acc=50%; scratch: loss=1.608, acc=14%
+150) pretrained: loss=0.727, acc=76%; scratch: loss=1.623, acc=16%
+160) pretrained: loss=1.074, acc=66%; scratch: loss=1.607, acc=20%
+170) pretrained: loss=0.887, acc=60%; scratch: loss=1.614, acc=20%
+180) pretrained: loss=0.961, acc=62%; scratch: loss=1.614, acc=18%
+190) pretrained: loss=0.737, acc=76%; scratch: loss=1.613, acc=18%
+199) pretrained: loss=0.836, acc=70%; scratch: loss=1.614, acc=16%
+Done.
+</code></pre><p>Let’s look at the training loss and accuracy produced by the two training procedures.  Notice how quickly the ImageNet pretrained model’s loss value (blue) drops, and that the randomly initialized model’s loss value (green) barely (if at all) improves from training only the classifier layer.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">plot(np.vstack([train_loss, scratch_train_loss]).T)</span><br><span class="line">xlabel(<span class="string">'Iteration #'</span>)</span><br><span class="line">ylabel(<span class="string">'Loss'</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;matplotlib.text.Text at 0x7f75d49e1090&gt;
+</code></pre><p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180808102005756-1000541529.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">plot(np.vstack([train_acc, scratch_train_acc]).T)</span><br><span class="line">xlabel(<span class="string">'Iteration #'</span>)</span><br><span class="line">ylabel(<span class="string">'Accuracy'</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;matplotlib.text.Text at 0x7f75d49e1a90&gt;
+</code></pre><p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180808102008709-1558718778.png" alt="png"></p>
+<p>Let’s take a look at the testing accuracy after running 200 iterations of training. Note that we’re classifying among 5 classes, giving chance accuracy of 20%. We expect both results to be better than chance accuracy (20%), and we further expect the result from training using the ImageNet pretraining initialization to be much better than the one from training from scratch. Let’s see.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">eval_style_net</span><span class="params">(weights, test_iters=<span class="number">10</span>)</span>:</span></span><br><span class="line">    test_net = caffe.Net(style_net(train=<span class="keyword">False</span>), weights, caffe.TEST)</span><br><span class="line">    accuracy = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> it <span class="keyword">in</span> xrange(test_iters):</span><br><span class="line">        accuracy += test_net.forward()[<span class="string">'acc'</span>]</span><br><span class="line">    accuracy /= test_iters</span><br><span class="line">    <span class="keyword">return</span> test_net, accuracy</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">test_net, accuracy = eval_style_net(style_weights)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'Accuracy, trained from ImageNet initialization: %3.1f%%'</span> % (<span class="number">100</span>*accuracy, )</span><br><span class="line">scratch_test_net, scratch_accuracy = eval_style_net(scratch_style_weights)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'Accuracy, trained from   random initialization: %3.1f%%'</span> % (<span class="number">100</span>*scratch_accuracy, )</span><br></pre></td></tr></table></figure>
+<pre><code>Accuracy, trained from ImageNet initialization: 50.0%
+Accuracy, trained from   random initialization: 23.6%
+</code></pre><h2 id="End-to-end-finetuning-for-style"><a href="#End-to-end-finetuning-for-style" class="headerlink" title="End-to-end finetuning for style"></a>End-to-end finetuning for style</h2><p>Finally, we’ll train both nets again, starting from the weights we just learned.  The only difference this time is that we’ll be learning the weights “end-to-end” by turning on learning in <em>all</em> layers of the network, starting from the RGB <code>conv1</code> filters directly applied to the input image.  We pass the argument <code>learn_all=True</code> to the <code>style_net</code> function defined earlier in this notebook, which tells the function to apply a positive (non-zero) <code>lr_mult</code> value for all parameters.  Under the default, <code>learn_all=False</code>, all parameters in the pretrained layers (<code>conv1</code> through <code>fc7</code>) are frozen (<code>lr_mult = 0</code>), and we learn only the classifier layer <code>fc8_flickr</code>.</p>
+<p>Note that both networks start at roughly the accuracy achieved at the end of the previous training session, and improve significantly with end-to-end training.  To be more scientific, we’d also want to follow the same additional training procedure <em>without</em> the end-to-end training, to ensure that our results aren’t better simply because we trained for twice as long.  Feel free to try this yourself!</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">end_to_end_net = style_net(train=<span class="keyword">True</span>, learn_all=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Set base_lr to 1e-3, the same as last time when learning only the classifier.</span></span><br><span class="line"><span class="comment"># You may want to play around with different values of this or other</span></span><br><span class="line"><span class="comment"># optimization parameters when fine-tuning.  For example, if learning diverges</span></span><br><span class="line"><span class="comment"># (e.g., the loss gets very large or goes to infinity/NaN), you should try</span></span><br><span class="line"><span class="comment"># decreasing base_lr (e.g., to 1e-4, then 1e-5, etc., until you find a value</span></span><br><span class="line"><span class="comment"># for which learning does not diverge).</span></span><br><span class="line">base_lr = <span class="number">0.001</span></span><br><span class="line"></span><br><span class="line">style_solver_filename = solver(end_to_end_net, base_lr=base_lr)</span><br><span class="line">style_solver = caffe.get_solver(style_solver_filename)</span><br><span class="line">style_solver.net.copy_from(style_weights)</span><br><span class="line"></span><br><span class="line">scratch_style_solver_filename = solver(end_to_end_net, base_lr=base_lr)</span><br><span class="line">scratch_style_solver = caffe.get_solver(scratch_style_solver_filename)</span><br><span class="line">scratch_style_solver.net.copy_from(scratch_style_weights)</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">'Running solvers for %d iterations...'</span> % niter</span><br><span class="line">solvers = [(<span class="string">'pretrained, end-to-end'</span>, style_solver),</span><br><span class="line">           (<span class="string">'scratch, end-to-end'</span>, scratch_style_solver)]</span><br><span class="line">_, _, finetuned_weights = run_solvers(niter, solvers)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'Done.'</span></span><br><span class="line"></span><br><span class="line">style_weights_ft = finetuned_weights[<span class="string">'pretrained, end-to-end'</span>]</span><br><span class="line">scratch_style_weights_ft = finetuned_weights[<span class="string">'scratch, end-to-end'</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># Delete solvers to save memory.</span></span><br><span class="line"><span class="keyword">del</span> style_solver, scratch_style_solver, solvers</span><br></pre></td></tr></table></figure>
+<pre><code>Running solvers for 200 iterations...
+  0) pretrained, end-to-end: loss=0.781, acc=64%; scratch, end-to-end: loss=1.585, acc=28%
+ 10) pretrained, end-to-end: loss=1.178, acc=62%; scratch, end-to-end: loss=1.638, acc=14%
+ 20) pretrained, end-to-end: loss=1.084, acc=60%; scratch, end-to-end: loss=1.637, acc= 8%
+ 30) pretrained, end-to-end: loss=0.902, acc=76%; scratch, end-to-end: loss=1.600, acc=20%
+ 40) pretrained, end-to-end: loss=0.865, acc=64%; scratch, end-to-end: loss=1.574, acc=26%
+ 50) pretrained, end-to-end: loss=0.888, acc=60%; scratch, end-to-end: loss=1.604, acc=26%
+ 60) pretrained, end-to-end: loss=0.538, acc=78%; scratch, end-to-end: loss=1.555, acc=34%
+ 70) pretrained, end-to-end: loss=0.717, acc=72%; scratch, end-to-end: loss=1.563, acc=30%
+ 80) pretrained, end-to-end: loss=0.695, acc=74%; scratch, end-to-end: loss=1.502, acc=42%
+ 90) pretrained, end-to-end: loss=0.708, acc=68%; scratch, end-to-end: loss=1.523, acc=26%
+100) pretrained, end-to-end: loss=0.432, acc=78%; scratch, end-to-end: loss=1.500, acc=38%
+110) pretrained, end-to-end: loss=0.611, acc=78%; scratch, end-to-end: loss=1.618, acc=18%
+120) pretrained, end-to-end: loss=0.610, acc=76%; scratch, end-to-end: loss=1.473, acc=30%
+130) pretrained, end-to-end: loss=0.471, acc=78%; scratch, end-to-end: loss=1.488, acc=26%
+140) pretrained, end-to-end: loss=0.500, acc=76%; scratch, end-to-end: loss=1.514, acc=38%
+150) pretrained, end-to-end: loss=0.476, acc=80%; scratch, end-to-end: loss=1.452, acc=46%
+160) pretrained, end-to-end: loss=0.368, acc=82%; scratch, end-to-end: loss=1.419, acc=34%
+170) pretrained, end-to-end: loss=0.556, acc=76%; scratch, end-to-end: loss=1.583, acc=36%
+180) pretrained, end-to-end: loss=0.574, acc=72%; scratch, end-to-end: loss=1.556, acc=22%
+190) pretrained, end-to-end: loss=0.360, acc=88%; scratch, end-to-end: loss=1.429, acc=44%
+199) pretrained, end-to-end: loss=0.458, acc=78%; scratch, end-to-end: loss=1.370, acc=44%
+Done.
+</code></pre><p>Let’s now test the end-to-end finetuned models.  Since all layers have been optimized for the style recognition task at hand, we expect both nets to get better results than the ones above, which were achieved by nets with only their classifier layers trained for the style task (on top of either ImageNet pretrained or randomly initialized weights).</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">test_net, accuracy = eval_style_net(style_weights_ft)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'Accuracy, finetuned from ImageNet initialization: %3.1f%%'</span> % (<span class="number">100</span>*accuracy, )</span><br><span class="line">scratch_test_net, scratch_accuracy = eval_style_net(scratch_style_weights_ft)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'Accuracy, finetuned from   random initialization: %3.1f%%'</span> % (<span class="number">100</span>*scratch_accuracy, )</span><br></pre></td></tr></table></figure>
+<pre><code>Accuracy, finetuned from ImageNet initialization: 53.6%
+Accuracy, finetuned from   random initialization: 39.2%
+</code></pre><p>We’ll first look back at the image we started with and check our end-to-end trained model’s predictions.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">plt.imshow(deprocess_net_image(image))</span><br><span class="line">disp_style_preds(test_net, image)</span><br></pre></td></tr></table></figure>
+<pre><code>top 5 predicted style labels =
+    (1) 55.67% Melancholy
+    (2) 27.21% HDR
+    (3) 16.46% Pastel
+    (4)  0.63% Detailed
+    (5)  0.03% Noir
+</code></pre><p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180808102011453-804222341.png" alt="png"></p>
+<p>Whew, that looks a lot better than before!  But note that this image was from the training set, so the net got to see its label at training time.</p>
+<p>Finally, we’ll pick an image from the test set (an image the model hasn’t seen) and look at our end-to-end finetuned style model’s predictions for it.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">batch_index = <span class="number">1</span></span><br><span class="line">image = test_net.blobs[<span class="string">'data'</span>].data[batch_index]</span><br><span class="line">plt.imshow(deprocess_net_image(image))</span><br><span class="line"><span class="keyword">print</span> <span class="string">'actual label ='</span>, style_labels[int(test_net.blobs[<span class="string">'label'</span>].data[batch_index])]</span><br></pre></td></tr></table></figure>
+<pre><code>actual label = Pastel
+</code></pre><p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180808102014230-1327642113.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">disp_style_preds(test_net, image)</span><br></pre></td></tr></table></figure>
+<pre><code>top 5 predicted style labels =
+    (1) 99.76% Pastel
+    (2)  0.13% HDR
+    (3)  0.11% Detailed
+    (4)  0.00% Melancholy
+    (5)  0.00% Noir
+</code></pre><p>We can also look at the predictions of the network trained from scratch.  We see that in this case, the scratch network also predicts the correct label for the image (<em>Pastel</em>), but is much less confident in its prediction than the pretrained net.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">disp_style_preds(scratch_test_net, image)</span><br></pre></td></tr></table></figure>
+<pre><code>top 5 predicted style labels =
+    (1) 49.81% Pastel
+    (2) 19.76% Detailed
+    (3) 17.06% Melancholy
+    (4) 11.66% HDR
+    (5)  1.72% Noir
+</code></pre><p>Of course, we can again look at the ImageNet model’s predictions for the above image:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">disp_imagenet_preds(imagenet_net, image)</span><br></pre></td></tr></table></figure>
+<pre><code>top 5 predicted ImageNet labels =
+    (1) 34.90% n07579787 plate
+    (2) 21.63% n04263257 soup bowl
+    (3) 17.75% n07875152 potpie
+    (4)  5.72% n07711569 mashed potato
+    (5)  5.27% n07584110 consomme
+</code></pre><p>So we did finetuning and it is awesome. Let’s take a look at what kind of results we are able to get with a longer, more complete run of the style recognition dataset. Note: the below URL might be occasionally down because it is run on a research machine.</p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="http://demo.vislab.berkeleyvision.org/" target="_blank" rel="noopener">demo</a></li>
+<li><a href="https://github.com/BVLC/caffe" target="_blank" rel="noopener">caffe git</a></li>
+</ul>
+<h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
+<li>20180808: created.</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    kezunlin
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="http://kezunlin.me/post/3ae35270/" title="Fine-tuning a Pretrained Network for Style Recognition">http://kezunlin.me/post/3ae35270/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/fine-tune/" rel="tag"># fine-tune</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/9f5552a3/" rel="next" title="learning lenet">
+                <i class="fa fa-chevron-left"></i> learning lenet
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/c0d03e8e/" rel="prev" title="a quick introduction to rcnn,fast rcnn, faster rcnn and mask rcnn series ">
+                a quick introduction to rcnn,fast rcnn, faster rcnn and mask rcnn series  <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/kezunlin_avatar.jpg"
+                alt="kezunlin" />
+            
+              <p class="site-author-name" itemprop="name">kezunlin</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">99</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">90</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Fine-tuning-a-Pretrained-Network-for-Style-Recognition"><span class="nav-number">1.</span> <span class="nav-text">Fine-tuning a Pretrained Network for Style Recognition</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Setup-and-dataset-download"><span class="nav-number">1.1.</span> <span class="nav-text">Setup and dataset download</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Defining-and-running-the-nets"><span class="nav-number">1.2.</span> <span class="nav-text">Defining and running the nets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Training-the-style-classifier"><span class="nav-number">1.3.</span> <span class="nav-text">Training the style classifier</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#End-to-end-finetuning-for-style"><span class="nav-number">1.4.</span> <span class="nav-text">End-to-end finetuning for style</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+<p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <!--
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+        -->
+        <link rel="stylesheet" href="/lib/gitmint/style/default.css">
+        <script src="/lib/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
