@@ -69,7 +69,7 @@
 
 
 
-  <meta name="keywords" content="ubuntu,github pages,nodejs,npm," />
+  <meta name="keywords" content="github pages,nodejs,npm,ubuntu," />
 
 
 
@@ -83,14 +83,14 @@
 
 
 <meta name="description" content="Part 1: Using Github Pages and Hexo to manage personal blogs.">
-<meta name="keywords" content="ubuntu,github pages,nodejs,npm">
+<meta name="keywords" content="github pages,nodejs,npm,ubuntu">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Part 1: Using Github Pages and Hexo to manage personal blogs on Ubuntu">
 <meta property="og:url" content="http://kezunlin.me/post/98df88a8/index.html">
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="Part 1: Using Github Pages and Hexo to manage personal blogs.">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-09-03T08:44:55.328Z">
+<meta property="og:updated_time" content="2018-09-03T09:06:59.309Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Part 1: Using Github Pages and Hexo to manage personal blogs on Ubuntu">
 <meta name="twitter:description" content="Part 1: Using Github Pages and Hexo to manage personal blogs.">
@@ -345,7 +345,7 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-09-03T17:44:55+09:00">
+              <time title="Post modified" itemprop="dateModified" datetime="2018-09-03T18:06:59+09:00">
                 2018-09-03
               </time>
             
@@ -393,7 +393,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  2,222
+                  2,194
                 </span>
               
 
@@ -601,13 +601,17 @@ date: 2017-12-26 17:20:10
 <h2 id="custom-domain"><a href="#custom-domain" class="headerlink" title="custom domain"></a>custom domain</h2><ol>
 <li>register domin in <code>godaddy</code>: <code>kezunlin.me</code></li>
 <li>add <code>kezunlin.me</code> to dnspod and get dnspod nameservers.</li>
-<li><p>visit <code>https://dcc.godaddy.com/manage/kezunlin.me/dns#divDnsManagement</code> to add dnspod nameservers. </p>
-<p> f1g1ns1.dnspod.net<br> f1g1ns2.dnspod.net</p>
-</li>
-<li><p>add CNAME records in dnspod</p>
+<li>visit <code>https://dcc.godaddy.com/manage/kezunlin.me/dns#divDnsManagement</code> to add dnspod nameservers. </li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">f1g1ns1.dnspod.net</span><br><span class="line">f1g1ns2.dnspod.net</span><br></pre></td></tr></table></figure>
+<ol>
+<li>add CNAME records in dnspod</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  </span></span><br><span class="line"><span class="comment"># for china users , kezunlin.me ---&gt; kezunlin.coding.me</span></span><br><span class="line"><span class="comment"># for foreign users,kezunlin.me ---&gt; kezunlin.github.io</span></span><br><span class="line"></span><br><span class="line"> @ CNAME 207.97.227.245  <span class="comment"># for github pages</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li>vim <code>blog/public/CNAME</code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kezunlin.me</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  </span></span><br><span class="line"><span class="comment"># for china users , kezunlin.me ---&gt; kezunlin.coding.me</span></span><br><span class="line"><span class="comment"># for foreign users,kezunlin.me ---&gt; kezunlin.github.io</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># must use `pages.coding.me` instead of `kezunlin.coding.me` </span></span><br><span class="line"><span class="comment"># for sleep 5 on pages.coding.me when visit kezunlin.me</span></span><br><span class="line">@ CNAME pages.coding.me</span><br><span class="line">@ CNAME kezunlin.github.io</span><br><span class="line"></span><br><span class="line">www CNAME pages.coding.me</span><br><span class="line">www CNAME kezunlin.github.io</span><br></pre></td></tr></table></figure>
 <h2 id="upload-images-to-cnblog"><a href="#upload-images-to-cnblog" class="headerlink" title="upload images to cnblog"></a>upload images to cnblog</h2><ol>
 <li><p>edit <code>_config.yml</code></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">post_asset_folder: <span class="literal">true</span> <span class="comment"># for image asset</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># when hexo new 'test-post'</span></span><br><span class="line"><span class="comment"># will create test-post.md and test-post/ folder</span></span><br></pre></td></tr></table></figure>
@@ -729,13 +733,13 @@ gitmint/
       
         <div class="post-tags">
           
-            <a href="/tags/ubuntu/" rel="tag"># ubuntu</a>
-          
             <a href="/tags/github-pages/" rel="tag"># github pages</a>
           
             <a href="/tags/nodejs/" rel="tag"># nodejs</a>
           
             <a href="/tags/npm/" rel="tag"># npm</a>
+          
+            <a href="/tags/ubuntu/" rel="tag"># ubuntu</a>
           
         </div>
       
