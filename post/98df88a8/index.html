@@ -69,7 +69,7 @@
 
 
 
-  <meta name="keywords" content="ubuntu,github pages,nodejs,npm," />
+  <meta name="keywords" content="github pages,nodejs,npm,ubuntu," />
 
 
 
@@ -83,14 +83,14 @@
 
 
 <meta name="description" content="Part 1: Using Github Pages and Hexo to manage personal blogs.">
-<meta name="keywords" content="ubuntu,github pages,nodejs,npm">
+<meta name="keywords" content="github pages,nodejs,npm,ubuntu">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Part 1: Using Github Pages and Hexo to manage personal blogs on Ubuntu">
 <meta property="og:url" content="http://kezunlin.me/post/98df88a8/index.html">
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="Part 1: Using Github Pages and Hexo to manage personal blogs.">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-09-03T09:09:16.795Z">
+<meta property="og:updated_time" content="2018-09-06T01:58:30.283Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Part 1: Using Github Pages and Hexo to manage personal blogs on Ubuntu">
 <meta name="twitter:description" content="Part 1: Using Github Pages and Hexo to manage personal blogs.">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-09-03T18:09:16+09:00">
-                2018-09-03
+              <time title="Post modified" itemprop="dateModified" datetime="2018-09-06T10:58:30+09:00">
+                2018-09-06
               </time>
             
           </span>
@@ -393,7 +393,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  2,174
+                  2,330
                 </span>
               
 
@@ -409,7 +409,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  14
+                  15
                 </span>
               
             </div>
@@ -675,8 +675,35 @@ gitmint/
 <li>edit <code>_config.yml</code> to skip gitmint file<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">skip_render: <span class="comment"># relative to source/ folder</span></span><br><span class="line">    - README.md</span><br><span class="line">    - lib/gitmint/dist/*.js</span><br><span class="line">    - lib/gitmint/style/*.css</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="https"><a href="#https" class="headerlink" title="https"></a>https</h2><h2 id="reward"><a href="#reward" class="headerlink" title="reward"></a>reward</h2><h1 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h1><h2 id="warning-LF-will-be-replaced-by-CRLF"><a href="#warning-LF-will-be-replaced-by-CRLF" class="headerlink" title="warning: LF will be replaced by CRLF"></a>warning: LF will be replaced by CRLF</h2><p>git config –global core.autocrlf false</p>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<h2 id="https"><a href="#https" class="headerlink" title="https"></a>https</h2><ul>
+<li>blog: Github pages</li>
+<li>SSL：CloudFlare</li>
+<li>domain: Godaddy (dns nameservers from CloudFlare)</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dig kezunlin.github.io +noall +answer</span><br><span class="line"></span><br><span class="line"># we get 185.199.109.153</span><br></pre></td></tr></table></figure>
+<ul>
+<li>A: point to 185.199.109.153 </li>
+<li>CNAME: point to kezunlin.me</li>
+</ul>
+<p>steps:</p>
+<ol>
+<li>get <code>kezunlin.me</code> from <code>Godaddy.com</code></li>
+<li>add <code>kezunlin.me</code> to github blog’s <code>CNAME</code> file</li>
+<li>register <code>CloudFlare.com</code> and add <code>A</code> record with github page IP <code>185.199.109.153</code> and get dns nameservers <code>dina.ns.cloudflare.com</code> and <code>paul.ns.cloudflare.com</code><br>4、add dns nameservers <code>dina.ns.cloudflare.com</code> and <code>paul.ns.cloudflare.com</code> from <a href="https://dcc.godaddy.com/manage/KEZUNLIN.ME/dns" target="_blank" rel="noopener">here</a></li>
+</ol>
+<p>wait for some seconds and we get results from <code>CloudFlare</code></p>
+<pre><code>kezunlin.me
+Status: Active
+
+This website is active on Cloudflare.
+
+Universal SSL Status Active Certificate
+</code></pre><p><code>Active</code> means nameservers take effect.</p>
+<p>configure </p>
+<pre><code>Crypto | Always use HTTPS
+Page Rules| 2 rules for Always use HTTPS
+</code></pre><h2 id="reward"><a href="#reward" class="headerlink" title="reward"></a>reward</h2><h1 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h1><h2 id="warning-LF-will-be-replaced-by-CRLF"><a href="#warning-LF-will-be-replaced-by-CRLF" class="headerlink" title="warning: LF will be replaced by CRLF"></a>warning: LF will be replaced by CRLF</h2><pre><code>git config --global core.autocrlf false
+</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="http://theme-next.iissnan.com/third-party-services.html#disqus" target="_blank" rel="noopener">third party services</a></li>
 <li><a href="https://imsun.net/posts/gitment-introduction/#more" target="_blank" rel="noopener">gitment</a></li>
 <li><a href="https://rainylog.com/post/hexo-post-image-manage/" target="_blank" rel="noopener">hexo image manage</a></li>
@@ -689,6 +716,9 @@ gitmint/
 <li><a href="http://winterttr.me/2015/10/23/from-dns-to-github-custom-domain/" target="_blank" rel="noopener">domain dnspod godaddy</a></li>
 <li><a href="https://thecodeway.com/blog/?p=1447" target="_blank" rel="noopener">use https</a></li>
 <li><a href="http://www.joryhe.com/2016-06-05-hexo_site_seo_speed_more_optimization.html" target="_blank" rel="noopener">optimize for speed</a></li>
+<li><a href="https://blog.csdn.net/yucicheung/article/details/79560027" target="_blank" rel="noopener">ssl for github blog</a></li>
+<li><a href="https://blog.csdn.net/judikator/article/details/79368172" target="_blank" rel="noopener">ssl</a></li>
+<li><a href="https://help.github.com/articles/setting-up-an-apex-domain/" target="_blank" rel="noopener">github page IP</a></li>
 </ul>
 <h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>2017/12/26: created.</li>
@@ -697,6 +727,7 @@ gitmint/
 <li>2018/01/02: upload images to cnblogs.</li>
 <li>2018/01/03: hexo-neat to compress,cdn,etc.</li>
 <li>2018/01/22: add part2.</li>
+<li>2018/09/05: add ssl.</li>
 </ul>
 
       
@@ -733,13 +764,13 @@ gitmint/
       
         <div class="post-tags">
           
-            <a href="/tags/ubuntu/" rel="tag"># ubuntu</a>
-          
             <a href="/tags/github-pages/" rel="tag"># github pages</a>
           
             <a href="/tags/nodejs/" rel="tag"># nodejs</a>
           
             <a href="/tags/npm/" rel="tag"># npm</a>
+          
+            <a href="/tags/ubuntu/" rel="tag"># ubuntu</a>
           
         </div>
       

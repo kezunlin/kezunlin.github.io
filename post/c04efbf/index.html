@@ -90,10 +90,12 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="anakin guide on ubuntu 16.04">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-09-04T17:45:48.683Z">
+<meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201809/635233-20180906173919156-600432026.png">
+<meta property="og:updated_time" content="2018-09-06T09:39:29.175Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="anakin guide on ubuntu 16.04">
 <meta name="twitter:description" content="anakin guide on ubuntu 16.04">
+<meta name="twitter:image" content="https://images2018.cnblogs.com/blog/635233/201809/635233-20180906173919156-600432026.png">
 
 
 
@@ -345,8 +347,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-09-05T02:45:48+09:00">
-                2018-09-05
+              <time title="Post modified" itemprop="dateModified" datetime="2018-09-06T18:39:29+09:00">
+                2018-09-06
               </time>
             
           </span>
@@ -404,7 +406,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  71
+                  1,501
                 </span>
               
 
@@ -420,7 +422,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  1
+                  8
                 </span>
               
             </div>
@@ -442,15 +444,390 @@
 
       
         <p>anakin guide on ubuntu 16.04<br><a id="more"></a></p>
-<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="install-nvidia-docker2"><a href="#install-nvidia-docker2" class="headerlink" title="install nvidia-docker2"></a>install nvidia-docker2</h2><p>see <a href="http://kezunlin.me/post/6293dd25/">nvidia-docker2 guide on ubuntu 16.04</a></p>
-<h2 id="anakin"><a href="#anakin" class="headerlink" title="anakin"></a>anakin</h2><h3 id="build-image"><a href="#build-image" class="headerlink" title="build image"></a>build image</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/PaddlePaddle/Anakin.git</span><br><span class="line">cd anakin/docker</span><br><span class="line">sudo ./anakin_docker_build_and_run.sh -p NVIDIA-GPU -o Ubuntu -m Build</span><br></pre></td></tr></table></figure>
+<h1 id="compile-anakin-with-docker"><a href="#compile-anakin-with-docker" class="headerlink" title="compile anakin with docker"></a>compile anakin with docker</h1><h2 id="install-nvidia-docker2"><a href="#install-nvidia-docker2" class="headerlink" title="install nvidia-docker2"></a>install nvidia-docker2</h2><p>see <a href="http://kezunlin.me/post/6293dd25/">nvidia-docker2 guide on ubuntu 16.04</a></p>
+<h2 id="build-and-run"><a href="#build-and-run" class="headerlink" title="build and run"></a>build and run</h2><p>build<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/PaddlePaddle/Anakin.git</span><br><span class="line">cd anakin/docker</span><br><span class="line">sudo ./anakin_docker_build_and_run.sh -p NVIDIA-GPU -o Ubuntu -m Build</span><br></pre></td></tr></table></figure></p>
 <p>error occur with <code>cudnn</code>. skip.</p>
-<h3 id="run-docker"><a href="#run-docker" class="headerlink" title="run docker"></a>run docker</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ./anakin_docker_build_and_run.sh  -p NVIDIA-GPU -o Ubuntu -m Run</span><br></pre></td></tr></table></figure>
+<p>run<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ./anakin_docker_build_and_run.sh  -p NVIDIA-GPU -o Ubuntu -m Run</span><br></pre></td></tr></table></figure></p>
+<h2 id="compile-anakin"><a href="#compile-anakin" class="headerlink" title="compile anakin"></a>compile anakin</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run -it --runtime=nvidia fdcda959f60a bin/bash</span><br><span class="line">root@962077742ae9:/# cd Anakin/</span><br><span class="line">git checkout developing</span><br></pre></td></tr></table></figure>
+<p>build<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 1. use script to build</span><br><span class="line">./tools/gpu_build.sh</span><br><span class="line"></span><br><span class="line"># 2. or you can build directly.</span><br><span class="line">mkdir build  </span><br><span class="line">cd build  </span><br><span class="line">cmake ..  </span><br><span class="line">make -j8</span><br></pre></td></tr></table></figure></p>
+<h3 id="x86-build"><a href="#x86-build" class="headerlink" title="x86 build"></a>x86 build</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./tools/x86_build.sh</span><br></pre></td></tr></table></figure>
+<p>OK. no errors.</p>
+<h3 id="gpu-build"><a href="#gpu-build" class="headerlink" title="gpu build"></a>gpu build</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./tools/gpu_build.sh</span><br></pre></td></tr></table></figure>
+<p>build errors occur. no <code>cudnn</code> found.</p>
+<h1 id="compile-anakin-in-host"><a href="#compile-anakin-in-host" class="headerlink" title="compile anakin in host"></a>compile anakin in host</h1><h2 id="install-proto"><a href="#install-proto" class="headerlink" title="install proto"></a>install proto</h2><p>remove exist <code>protobuf 2.6.1</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">protoc --version</span><br><span class="line">2.6.1</span><br><span class="line"></span><br><span class="line">sudo apt-get remove libprotobuf-dev</span><br></pre></td></tr></table></figure>
+<p>install <code>protobuf 3.4.0</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">wget --no-check-certificate https://mirror.sobukus.de/files/src/protobuf/protobuf-cpp-3.4.0.tar.gz </span><br><span class="line"></span><br><span class="line">tar -xvf protobuf-cpp-3.4.0.tar.gz</span><br><span class="line">cd protobuf-3.4.0 </span><br><span class="line">./configure </span><br><span class="line">make -j4 </span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure></p>
+<p>test </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">which protoc</span><br><span class="line">/usr/local/bin/protoc</span><br><span class="line"></span><br><span class="line">protoc --version</span><br><span class="line">libprotoc 3.4.0</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install -y  libiomp-dev libopenmpi-dev</span><br></pre></td></tr></table></figure>
+<h2 id="build-anakin"><a href="#build-anakin" class="headerlink" title="build anakin"></a>build anakin</h2><h3 id="x86-build-1"><a href="#x86-build-1" class="headerlink" title="x86 build"></a>x86 build</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ./tools/x86_build.sh</span><br></pre></td></tr></table></figure>
+<p>OK. no errors.</p>
+<h3 id="gpu-build-1"><a href="#gpu-build-1" class="headerlink" title="gpu build"></a>gpu build</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./tools/gpu_build.sh</span><br></pre></td></tr></table></figure>
+<p>output </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">-- cudnn include header is /opt/cuda/include/cudnn.h</span><br><span class="line">-- cudnn library is /opt/cuda/lib64/libcudnn.so/libcudnn.so</span><br><span class="line">-- Found cudnn: /opt/cuda/include</span><br><span class="line">-- Found CUDA: /opt/cuda (found suitable version &quot;8.0&quot;, minimum required is &quot;7.5&quot;) </span><br><span class="line">-- Building fat-bin for cuda code !</span><br><span class="line">--  `--support arch :  3.5</span><br><span class="line">--  `--support arch :  5.0</span><br><span class="line">--  `--support arch :  6.0</span><br><span class="line">--  `--support arch :  6.1</span><br></pre></td></tr></table></figure>
+<p>can not proceed to next step…</p>
+<h3 id="gpu-build-with-cmake"><a href="#gpu-build-with-cmake" class="headerlink" title="gpu build with cmake"></a>gpu build with cmake</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd anakin</span><br><span class="line">mkdir build</span><br><span class="line">cd build &amp;&amp; cmake-gui ..</span><br></pre></td></tr></table></figure>
+<h1 id="anakin-cpp-example"><a href="#anakin-cpp-example" class="headerlink" title="anakin cpp example"></a>anakin cpp example</h1><p><img src="https://images2018.cnblogs.com/blog/635233/201809/635233-20180906173919156-600432026.png" alt="anakin"></p>
+<p>用Anakin来进行前向计算主要分为三个步骤：</p>
+<ol>
+<li>将外部模型通过Anakin Parser解析为Anakin模型</li>
+<li>加载Anakin模型生成原始计算图，然后需要对原始计算图进行优化。</li>
+<li>Anakin会选择不同硬件平台执行计算图。</li>
+</ol>
+<h2 id="Tensor"><a href="#Tensor" class="headerlink" title="Tensor"></a>Tensor</h2><p><code>Tensor</code>接受三个模板参数:</p>
+<pre><code>template&lt;typename TargetType, DataType datatype, typename LayOutType = NCHW&gt;
+class Tensor .../* Inherit other class */{
+ //some implements
+ ...
+};
+</code></pre><ul>
+<li><a href="#target">TargetType</a>是平台类型，如X86，GPU等等，在Anakin内部有相应的标识与之对应；</li>
+<li><a href="#datatype">datatype</a>是普通的数据类型，在Anakin内部也有相应的标志与之对应；</li>
+<li><a href="#layout">LayOutType</a>是数据分布类型，如batch x channel x height x width [NxCxHxW], 在Anakin内部用一个struct来标识。 Anakin中数据类型与基本数据类型的对应如下:</li>
+</ul>
+<p><span id="target">TargetType</span></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Anakin TargetType</th>
+<th>platform</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">NV</td>
+<td>NVIDIA GPU</td>
+</tr>
+<tr>
+<td style="text-align:center">ARM</td>
+<td>ARM</td>
+</tr>
+<tr>
+<td style="text-align:center">AMD</td>
+<td>AMD GPU</td>
+</tr>
+<tr>
+<td style="text-align:center">X86</td>
+<td>X86</td>
+</tr>
+<tr>
+<td style="text-align:center">NVHX86</td>
+<td>NVIDIA GPU with Pinned Memory</td>
+</tr>
+</tbody>
+</table>
+<p><sapn id="datatype">DataType</sapn></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Anakin DataType</th>
+<th style="text-align:center">C++</th>
+<th style="text-align:center">Description </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">AK_HALF</td>
+<td style="text-align:center">short</td>
+<td style="text-align:center">fp16</td>
+</tr>
+<tr>
+<td style="text-align:center">AK_FLOAT</td>
+<td style="text-align:center">float</td>
+<td style="text-align:center">fp32</td>
+</tr>
+<tr>
+<td style="text-align:center">AK_DOUBLE</td>
+<td style="text-align:center">double</td>
+<td style="text-align:center">fp64</td>
+</tr>
+<tr>
+<td style="text-align:center">AK_INT8</td>
+<td style="text-align:center">char</td>
+<td style="text-align:center">int8</td>
+</tr>
+<tr>
+<td style="text-align:center">AK_INT16</td>
+<td style="text-align:center">short</td>
+<td style="text-align:center">int16</td>
+</tr>
+<tr>
+<td style="text-align:center">AK_INT32</td>
+<td style="text-align:center">int</td>
+<td style="text-align:center">int32</td>
+</tr>
+<tr>
+<td style="text-align:center">AK_INT64</td>
+<td style="text-align:center">long</td>
+<td style="text-align:center">int64</td>
+</tr>
+<tr>
+<td style="text-align:center">AK_UINT8</td>
+<td style="text-align:center">unsigned char</td>
+<td style="text-align:center">uint8</td>
+</tr>
+<tr>
+<td style="text-align:center">AK_UINT16</td>
+<td style="text-align:center">unsigned short</td>
+<td style="text-align:center">uint8</td>
+</tr>
+<tr>
+<td style="text-align:center">AK_UINT32</td>
+<td style="text-align:center">unsigned int</td>
+<td style="text-align:center">uint32</td>
+</tr>
+<tr>
+<td style="text-align:center">AK_STRING</td>
+<td style="text-align:center">std::string</td>
+<td style="text-align:center">/</td>
+</tr>
+<tr>
+<td style="text-align:center">AK_BOOL</td>
+<td style="text-align:center">bool</td>
+<td style="text-align:center">/</td>
+</tr>
+<tr>
+<td style="text-align:center">AK_SHAPE</td>
+<td style="text-align:center">/</td>
+<td style="text-align:center">Anakin Shape </td>
+</tr>
+<tr>
+<td style="text-align:center">AK_TENSOR</td>
+<td style="text-align:center">/</td>
+<td style="text-align:center">Anakin Tensor </td>
+</tr>
+</tbody>
+</table>
+<p><span id="layout">LayOutType </span></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Anakin LayOutType ( Tensor LayOut )</th>
+<th style="text-align:center">Tensor Dimention</th>
+<th style="text-align:center">Tensor Support</th>
+<th style="text-align:center">Op Support</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">W</td>
+<td style="text-align:center">1-D</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">NO</td>
+</tr>
+<tr>
+<td style="text-align:center">HW</td>
+<td style="text-align:center">2-D</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">NO</td>
+</tr>
+<tr>
+<td style="text-align:center">WH</td>
+<td style="text-align:center">2-D</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">NO</td>
+</tr>
+<tr>
+<td style="text-align:center">NW</td>
+<td style="text-align:center">2-D</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+</tr>
+<tr>
+<td style="text-align:center">NHW</td>
+<td style="text-align:center">3-D</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+</tr>
+<tr>
+<td style="text-align:center">NCHW ( default )</td>
+<td style="text-align:center">4-D</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+</tr>
+<tr>
+<td style="text-align:center">NHWC</td>
+<td style="text-align:center">4-D</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">NO</td>
+</tr>
+<tr>
+<td style="text-align:center">NCHW_C4</td>
+<td style="text-align:center">5-D</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+</tr>
+</tbody>
+</table>
+<p>理论上，Anakin支持申明1维以上的tensor，但是对于Anakin中的Op来说，只支持NW、NHW、NCHW、NCHW_C4这四种LayOut，其中NCHW是默认的LayOutType，NCHW_C4是专门针对于int8这种数据类型的。</p>
+<h2 id="Graph"><a href="#Graph" class="headerlink" title="Graph"></a>Graph</h2><p><code>Graph</code>类负责加载Anakin模型生成计算图、对图进行优化、存储模型等操作。</p>
+<pre><code>template&lt;typename TargetType, DataType Dtype, Precision Ptype&gt;
+class Graph ... /* inherit other class*/{
+
+  //some implements
+  ...
+
+};
+</code></pre><h3 id="load"><a href="#load" class="headerlink" title="load"></a>load</h3><pre><code>//some declarations
+...
+auto graph = new Graph&lt;NV, AK_FLOAT, Precision::FP32&gt;();
+std::string model_path = &quot;the/path/to/where/your/models/are&quot;;
+const char *model_path1 = &quot;the/path/to/where/your/models/are&quot;;
+
+//Loading Anakin model to generate a compute graph.
+auto status = graph-&gt;load(model_path);
+
+//Or this way.
+auto status = graph-&gt;load(model_path1);
+//Check whether load operation success.
+if(!status){
+  std::cout &lt;&lt; &quot;error&quot; &lt;&lt; endl;
+  //do something...
+}
+</code></pre><h3 id="optimize"><a href="#optimize" class="headerlink" title="optimize"></a>optimize</h3><pre><code>//some declarations
+...
+//Load graph.
+...
+//According to the ops of loaded graph, optimize compute graph.
+graph-&gt;Optimize();
+</code></pre><h3 id="save"><a href="#save" class="headerlink" title="save"></a>save</h3><pre><code>//some declarations
+...
+//Load graph.
+...
+// save a model
+//save_model_path: the path to where your model is.
+auto status = graph-&gt;save(save_model_path);
+
+//Checking
+if(!status){
+  cout &lt;&lt; &quot;error&quot; &lt;&lt; endl;
+  //do somethin...
+}
+</code></pre><h2 id="Net"><a href="#Net" class="headerlink" title="Net"></a>Net</h2><p><code>Net</code>是计算图的执行器，通过Net对象获得输入和输出。</p>
+<pre><code>template&lt;typename TargetType, DataType Dtype, Precision PType, OpRunType RunType = OpRunType::ASYNC&gt;
+class Net{
+  //some implements
+  ...
+
+};
+</code></pre><ul>
+<li><a href="#precision">Precision</a>指定Op的精度。</li>
+<li><a href="#opruntype">OpRunType</a>表示同步或异步类型，异步是默认类型。OpRunType::SYNC表示同步，在GPU上只有单个流；OpRunType::ASYNC表示异步，在GPU上有多个流并以异步方式执行。</li>
+</ul>
+<p><span id="precision"> Precision </span></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Precision</th>
+<th style="text-align:center">Op support</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Precision::INT4</td>
+<td style="text-align:center">NO</td>
+</tr>
+<tr>
+<td style="text-align:center">Precision::INT8</td>
+<td style="text-align:center">NO</td>
+</tr>
+<tr>
+<td style="text-align:center">Precision::FP16</td>
+<td style="text-align:center">NO</td>
+</tr>
+<tr>
+<td style="text-align:center">Precision::FP32</td>
+<td style="text-align:center">YES</td>
+</tr>
+<tr>
+<td style="text-align:center">Precision::FP64</td>
+<td style="text-align:center">NO</td>
+</tr>
+</tbody>
+</table>
+<p>现在Op的精度只支持FP32， 但在将来我们会支持剩下的Precision.</p>
+<p><span id="opruntype"> OpRunType </span></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">OpRunType</th>
+<th style="text-align:center">Sync/Aync</th>
+<th style="text-align:center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">OpRunType::SYNC</td>
+<td style="text-align:center">Synchronization</td>
+<td style="text-align:center">single-stream on GPU</td>
+</tr>
+<tr>
+<td style="text-align:center">OpRunType::ASYNC</td>
+<td style="text-align:center">Asynchronization</td>
+<td style="text-align:center">multi-stream on GPU</td>
+</tr>
+</tbody>
+</table>
+<h3 id="create-a-executor"><a href="#create-a-executor" class="headerlink" title="create a executor"></a>create a executor</h3><pre><code>//some declarations
+...
+//Create a pointer to a graph.
+auto graph = new Graph&lt;NV, AK_FLOAT, Precision::FP32&gt;();
+//do something...
+...
+
+//create a executor
+Net&lt;NV, AK_FLOAT, Precision::FP32&gt; executor(*graph);
+</code></pre><h3 id="get-input-tensor"><a href="#get-input-tensor" class="headerlink" title="get input tensor"></a>get input tensor</h3><pre><code>//some declaratinos
+...
+
+//create a executor
+//TargetType is NV [NVIDIA GPU]
+Net&lt;NV, AK_FLOAT, Precision::FP32&gt; executor(*graph);
+
+//Get the first input tensor.
+//The following tensors(tensor_in0, tensor_in2 ...) are resident at GPU.
+//Note: Member function get_in returns an pointer to tensor.
+Tensor&lt;NV, AK_FLOAT&gt;* tensor_in0 = executor.get_in(&quot;input_0&quot;);
+
+//If you have multiple input tensors
+//You just type this code below.
+Tensor&lt;NV, AK_FLOAT&gt;* tensor_in1 = executor.get_in(&quot;input_1&quot;);
+...
+auto tensor_inn = executor.get_in(&quot;input_n&quot;);
+</code></pre><h3 id="fill-input-tensor"><a href="#fill-input-tensor" class="headerlink" title="fill input tensor"></a>fill input tensor</h3><pre><code>//This tensor is resident at GPU.
+auto tensor_d_in = executor.get_in(&quot;input_0&quot;);
+
+//If we want to feed above tensor, we must feed the tensor which is resident at host. And then copy the host tensor to the device&apos;s one.
+
+//using Tensor4d = Tensor&lt;Ttype, Dtype&gt;;
+Tensor4d&lt;X86, AK_FLOAT&gt; tensor_h_in; //host tensor;
+//Tensor&lt;X86, AK_FLOAT&gt; tensor_h_in; 
+
+//Allocate memory for host tensor.
+tensor_h_in.re_alloc(tensor_d_in-&gt;valid_shape());
+//Get a writable pointer to tensor.
+float *h_data = tensor_h_in.mutable_data();
+
+//Feed your tensor.
+/** example
+for(int i = 0; i &lt; tensor_h_in.size(); i++){
+  h_data[i] = 1.0f;
+}
+*/
+//Copy host tensor&apos;s data to device tensor.
+tensor_d_in-&gt;copy_from(tensor_h_in);
+
+// And then
+</code></pre><h3 id="get-output-tensor"><a href="#get-output-tensor" class="headerlink" title="get output tensor"></a>get output tensor</h3><pre><code>//Note: this tensor are resident at GPU.
+Tensor&lt;NV, AK_FLOAT&gt;* tensor_out_d = executor.get_out(&quot;pred_out&quot;);
+</code></pre><h3 id="execute-graph"><a href="#execute-graph" class="headerlink" title="execute graph"></a>execute graph</h3><pre><code>executor.prediction();
+</code></pre><h2 id="code-example"><a href="#code-example" class="headerlink" title="code example"></a>code example</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span> model_path = <span class="string">"your_Anakin_models/xxxxx.anakin.bin"</span>;</span><br><span class="line"><span class="comment">// Create an empty graph object.</span></span><br><span class="line"><span class="keyword">auto</span> graph = <span class="keyword">new</span> Graph&lt;NV, AK_FLOAT, Precision::FP32&gt;();</span><br><span class="line"><span class="comment">// Load Anakin model.</span></span><br><span class="line"><span class="keyword">auto</span> status = graph-&gt;load(model_path);</span><br><span class="line"><span class="keyword">if</span>(!status ) &#123;</span><br><span class="line">    LOG(FATAL) &lt;&lt; <span class="string">" [ERROR] "</span> &lt;&lt; status.info();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Reshape</span></span><br><span class="line">graph-&gt;Reshape(<span class="string">"input_0"</span>, &#123;<span class="number">10</span>, <span class="number">384</span>, <span class="number">960</span>, <span class="number">10</span>&#125;);</span><br><span class="line"><span class="comment">// You must optimize graph for the first time.</span></span><br><span class="line">graph-&gt;Optimize();</span><br><span class="line"><span class="comment">// Create a executer.</span></span><br><span class="line">Net&lt;NV, AK_FLOAT, Precision::FP32&gt; net_executer(*graph);</span><br><span class="line"></span><br><span class="line"><span class="comment">//Get your input tensors through some specific string such as "input_0", "input_1", and </span></span><br><span class="line"><span class="comment">//so on. </span></span><br><span class="line"><span class="comment">//And then, feed the input tensor.</span></span><br><span class="line"><span class="comment">//If you don't know Which input do these specific string ("input_0", "input_1") correspond with, you can launch dash board to find out.</span></span><br><span class="line"><span class="keyword">auto</span> d_tensor_in_p = net_executer.get_in(<span class="string">"input_0"</span>);</span><br><span class="line">Tensor4d&lt;X86, AK_FLOAT&gt; h_tensor_in;</span><br><span class="line"><span class="keyword">auto</span> valid_shape_in = d_tensor_in_p-&gt;valid_shape();</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;valid_shape_in.size(); i++) &#123;</span><br><span class="line">    LOG(INFO) &lt;&lt; <span class="string">"detect input dims["</span> &lt;&lt; i &lt;&lt; <span class="string">"]"</span> &lt;&lt; valid_shape_in[i]; <span class="comment">//see tensor's dimentions</span></span><br><span class="line">&#125;</span><br><span class="line">h_tensor_in.re_alloc(valid_shape_in);</span><br><span class="line"><span class="keyword">float</span>* h_data = h_tensor_in.mutable_data();</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;h_tensor_in.size(); i++) &#123;</span><br><span class="line">    h_data[i] = <span class="number">1.0f</span>;</span><br><span class="line">&#125;</span><br><span class="line">d_tensor_in_p-&gt;copy_from(h_tensor_in);</span><br><span class="line"></span><br><span class="line"><span class="comment">//Do inference.</span></span><br><span class="line">net_executer.prediction();</span><br><span class="line"></span><br><span class="line"><span class="comment">//Get result tensor through the name of output node.</span></span><br><span class="line"><span class="comment">//And also, you need to see the dash board again to find out how many output nodes are and remember their name.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//For example, you've got a output node named obj_pre_out</span></span><br><span class="line"><span class="comment">//Then, you can get an output tensor.</span></span><br><span class="line"><span class="keyword">auto</span> d_tensor_out_0_p = net_executer.get_out(<span class="string">"obj_pred_out"</span>); <span class="comment">//get_out returns a pointer to output tensor.</span></span><br><span class="line"><span class="keyword">auto</span> d_tensor_out_1_p = net_executer.get_out(<span class="string">"lc_pred_out"</span>); <span class="comment">//get_out returns a pointer to output tensor.</span></span><br><span class="line"><span class="comment">//......</span></span><br><span class="line"><span class="comment">// do something else ...</span></span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="comment">//save model.</span></span><br><span class="line"><span class="comment">//You might not optimize the graph when you load the saved model again.</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span> save_model_path = model_path + <span class="built_in">std</span>::<span class="built_in">string</span>(<span class="string">".saved"</span>);</span><br><span class="line"><span class="keyword">auto</span> status = graph-&gt;save(save_model_path);</span><br><span class="line"><span class="keyword">if</span> (!status ) &#123;</span><br><span class="line">    LOG(FATAL) &lt;&lt; <span class="string">" [ERROR] "</span> &lt;&lt; status.info();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://github.com/PaddlePaddle/Anakin/blob/developing/docker/README.md" target="_blank" rel="noopener">anakin with docker on ubuntu</a></li>
+<li><a href="https://github.com/PaddlePaddle/Anakin/blob/developing/docs/Manual/Tutorial_ch.md" target="_blank" rel="noopener">anakin tutorial</a></li>
 </ul>
 <h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
-<li>created.</li>
+<li>20180903: created.</li>
 </ul>
 
       
@@ -657,7 +1034,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install-nvidia-docker2"><span class="nav-number">1.1.</span> <span class="nav-text">install nvidia-docker2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#anakin"><span class="nav-number">1.2.</span> <span class="nav-text">anakin</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#build-image"><span class="nav-number">1.2.1.</span> <span class="nav-text">build image</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#run-docker"><span class="nav-number">1.2.2.</span> <span class="nav-text">run docker</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#compile-anakin-with-docker"><span class="nav-number">1.</span> <span class="nav-text">compile anakin with docker</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install-nvidia-docker2"><span class="nav-number">1.1.</span> <span class="nav-text">install nvidia-docker2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#build-and-run"><span class="nav-number">1.2.</span> <span class="nav-text">build and run</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile-anakin"><span class="nav-number">1.3.</span> <span class="nav-text">compile anakin</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#x86-build"><span class="nav-number">1.3.1.</span> <span class="nav-text">x86 build</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gpu-build"><span class="nav-number">1.3.2.</span> <span class="nav-text">gpu build</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#compile-anakin-in-host"><span class="nav-number">2.</span> <span class="nav-text">compile anakin in host</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install-proto"><span class="nav-number">2.1.</span> <span class="nav-text">install proto</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#build-anakin"><span class="nav-number">2.2.</span> <span class="nav-text">build anakin</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#x86-build-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">x86 build</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gpu-build-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">gpu build</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gpu-build-with-cmake"><span class="nav-number">2.2.3.</span> <span class="nav-text">gpu build with cmake</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#anakin-cpp-example"><span class="nav-number">3.</span> <span class="nav-text">anakin cpp example</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Tensor"><span class="nav-number">3.1.</span> <span class="nav-text">Tensor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Graph"><span class="nav-number">3.2.</span> <span class="nav-text">Graph</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#load"><span class="nav-number">3.2.1.</span> <span class="nav-text">load</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#optimize"><span class="nav-number">3.2.2.</span> <span class="nav-text">optimize</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#save"><span class="nav-number">3.2.3.</span> <span class="nav-text">save</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Net"><span class="nav-number">3.3.</span> <span class="nav-text">Net</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#create-a-executor"><span class="nav-number">3.3.1.</span> <span class="nav-text">create a executor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get-input-tensor"><span class="nav-number">3.3.2.</span> <span class="nav-text">get input tensor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fill-input-tensor"><span class="nav-number">3.3.3.</span> <span class="nav-text">fill input tensor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get-output-tensor"><span class="nav-number">3.3.4.</span> <span class="nav-text">get output tensor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#execute-graph"><span class="nav-number">3.3.5.</span> <span class="nav-text">execute graph</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#code-example"><span class="nav-number">3.4.</span> <span class="nav-text">code example</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
