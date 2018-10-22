@@ -90,8 +90,9 @@
 <meta property="og:description" content="install and configure tensorflow on windows 10">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180830181732605-573127103.png">
+<meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201809/635233-20180913114222255-1520775956.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180829180600357-194824745.png">
-<meta property="og:updated_time" content="2018-08-30T10:24:47.435Z">
+<meta property="og:updated_time" content="2018-09-14T00:27:08.845Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="install and configure tensorflow on windows 10">
 <meta name="twitter:description" content="install and configure tensorflow on windows 10">
@@ -347,8 +348,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-08-30T19:24:47+09:00">
-                2018-08-30
+              <time title="Post modified" itemprop="dateModified" datetime="2018-09-14T09:27:08+09:00">
+                2018-09-14
               </time>
             
           </span>
@@ -395,7 +396,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  316
+                  673
                 </span>
               
 
@@ -411,7 +412,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  2
+                  4
                 </span>
               
             </div>
@@ -437,22 +438,38 @@
 <li><a href="http://kezunlin.me/post/f7eab850/">Part 1: Tensorflow for Unbutu 16.04</a></li>
 <li><strong><a href="http://kezunlin.me/post/a123bf9e/">Part 2: Tensorflow for Windows 10</a></strong></li>
 </ul>
-<h2 id="prerequisit"><a href="#prerequisit" class="headerlink" title="prerequisit"></a>prerequisit</h2><ul>
-<li>windows 10 64 bit</li>
-<li>cuda driver 384.130</li>
-<li>CUDA Toolkit 8.0</li>
-<li>cudnn 6.0</li>
-<li>tensorflow-gpu 1.4.0 (CUDA 8.0 + cudnn 6.0)</li>
+<h2 id="prerequisit"><a href="#prerequisit" class="headerlink" title="prerequisit"></a>prerequisit</h2><p>version 1:</p>
+<ul>
+<li>windows 10 64 bit + GTX 1060 + cuda driver 382.05</li>
+<li>windows 10 64 bit + GTX 1080 + cuda driver 384.13</li>
+<li>CUDA 8.0 + cudnn 6.0.1(win10) + tensorflow-gpu 1.4.0</li>
 <li>python 3.5.3</li>
 <li>pip3</li>
+<li>NOT USE: CUDA 9.2 + cudnn 7.1.4(win10) + python 3.6 + tensorflow-gpu (from <a href="https://github.com/fo40225/tensorflow-windows-wheel" target="_blank" rel="noopener">https://github.com/fo40225/tensorflow-windows-wheel</a>)</li>
 </ul>
+<p>version 2:</p>
+<ul>
+<li>windows 10 64 bit + Titan xp(12G) + cuda driver 382.05</li>
+<li>CUDA 9.0 + cudnn 7.1.4(win10) + tensorflow-gpu 1.8.0 ( 1.8.0, 1.9.0 for cuda 9.0)</li>
+</ul>
+<p>errors </p>
+<pre><code>error retrieving driver version: Unimplemented: kernel reported driver version not implemented on Windows
+</code></pre><p>see <a href="https://pypi.org/project/tensorflow-gpu/1.4.0/#files" target="_blank" rel="noopener">tensorflow-gpu==1.4.0</a></p>
 <blockquote>
 <p>Tips:  for tensorflow-gpu==1.4.0<br>on linux, support python 2.7,3.3,3.4,3.5,3.6.<br>on windows, only support python 3.5,3.6. </p>
 </blockquote>
+<p>see <a href="https://pypi.org/project/tensorflow-gpu/1.8.0/#files" target="_blank" rel="noopener">tensorflow-gpu==1.8.0</a></p>
+<blockquote>
+<p>Tips:  for tensorflow-gpu==1.8.0<br>on linux, support python 2.7,3.3,3.4,3.5,3.6.<br>on windows, only support python 3.5,3.6. </p>
+</blockquote>
+<p>from Tensorflow1.6 use CUDA9.0+cuDNN7.</p>
 <p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180830181732605-573127103.png" alt="tensorflow download pages"></p>
 <h2 id="cuda-amp-cudnn"><a href="#cuda-amp-cudnn" class="headerlink" title="cuda &amp; cudnn"></a>cuda &amp; cudnn</h2><p>see <a href="http://kezunlin.me/post/1739694c/">Part 1: Install and Configure Caffe on windows 10</a></p>
-<h2 id="python"><a href="#python" class="headerlink" title="python"></a>python</h2><p>install <code>python 3.5.3</code>,add python and pip path to system env.</p>
+<p>system env </p>
+<pre><code>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin
+</code></pre><h2 id="python"><a href="#python" class="headerlink" title="python"></a>python</h2><p>install <code>python 3.5.3</code>,add python and pip path to system env.</p>
 <p>copy <code>python.exe</code> to <code>python3.exe</code>,<br>copy <code>pip.exe</code> to <code>pip3.exe</code></p>
+<p>system env</p>
 <pre><code>C:\Users\zunli\AppData\Local\Programs\Python\Python35\
 C:\Users\zunli\AppData\Local\Programs\Python\Python35\Scripts
 </code></pre><h3 id="test"><a href="#test" class="headerlink" title="test"></a>test</h3><p>python3</p>
@@ -464,10 +481,12 @@ Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;licen
 <pre><code>pip3 -V
 pip 9.0.1 from c:\users\zunli\appdata\local\programs\python\python35\lib\site-packages (python 3.5)
 </code></pre><h2 id="tensorflow"><a href="#tensorflow" class="headerlink" title="tensorflow"></a>tensorflow</h2><pre><code>pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple tensorflow-gpu==1.4.0
-pip install Pillow scipy sklearn scikit-image ipython matplotlib
-</code></pre><h3 id="requirements-txt"><a href="#requirements-txt" class="headerlink" title="requirements.txt"></a>requirements.txt</h3><pre><code>pip freeze &gt; requirements.txt 
-pip install -r requirements.txt 
-</code></pre><h3 id="test-1"><a href="#test-1" class="headerlink" title="test"></a>test</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line">hello=tf.constant(&apos;hhh&apos;)</span><br><span class="line">sess=tf.Session()</span><br><span class="line">print (sess.run(hello))</span><br></pre></td></tr></table></figure>
+
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple Pillow scipy sklearn scikit-image matplotlib
+</code></pre><h3 id="test-tensorflow"><a href="#test-tensorflow" class="headerlink" title="test tensorflow"></a>test tensorflow</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line">hello=tf.constant(&apos;hhh&apos;)</span><br><span class="line">sess=tf.Session()</span><br><span class="line">print (sess.run(hello))</span><br></pre></td></tr></table></figure>
+<h3 id="test-cuda-and-gpu"><a href="#test-cuda-and-gpu" class="headerlink" title="test cuda and gpu"></a>test cuda and gpu</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line"></span><br><span class="line">a = tf.test.is_built_with_cuda()  # 判断CUDA是否可以用</span><br><span class="line"></span><br><span class="line">b = tf.test.is_gpu_available(</span><br><span class="line">    cuda_only=False,</span><br><span class="line">    min_cuda_compute_capability=None</span><br><span class="line">)  # 判断GPU是否可以用</span><br><span class="line"></span><br><span class="line">print(a)</span><br><span class="line">print(b)</span><br></pre></td></tr></table></figure>
+<h3 id="test-gpu"><a href="#test-gpu" class="headerlink" title="test gpu"></a>test gpu</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line"></span><br><span class="line">with tf.device(&apos;/cpu:0&apos;):</span><br><span class="line">    a = tf.constant([1.0, 2.0, 3.0], shape=[3], name=&apos;a&apos;)</span><br><span class="line">    b = tf.constant([1.0, 2.0, 3.0], shape=[3], name=&apos;b&apos;)</span><br><span class="line">with tf.device(&apos;/gpu:0&apos;):</span><br><span class="line">    c = a + b</span><br><span class="line"></span><br><span class="line"># 注意：allow_soft_placement=True表明：计算设备可自行选择，如果没有这个参数，会报错。</span><br><span class="line"># 因为不是所有的操作都可以被放在GPU上，如果强行将无法放在GPU上的操作指定到GPU上，将会报错。</span><br><span class="line">sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True))</span><br><span class="line"># sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))</span><br><span class="line">sess.run(tf.global_variables_initializer())</span><br><span class="line">print(sess.run(c))</span><br></pre></td></tr></table></figure>
+<p><img src="https://images2018.cnblogs.com/blog/635233/201809/635233-20180913114222255-1520775956.png" alt="gpu run"></p>
 <h2 id="pycharm"><a href="#pycharm" class="headerlink" title="pycharm"></a>pycharm</h2><p>run code with pycharm</p>
 <p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180829180600357-194824745.png" alt="pycharm with python3"></p>
 <h2 id="jupyter-notebook"><a href="#jupyter-notebook" class="headerlink" title="jupyter notebook"></a>jupyter notebook</h2><pre><code>pip install ipykernel
@@ -480,6 +499,8 @@ Installed kernelspec tensorflow in C:\Users\zunli\AppData\Roaming\jupyter\kernel
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://blog.csdn.net/achirandliu/article/details/72997005" target="_blank" rel="noopener">tensorflow on windows error</a></li>
 <li><a href="https://www.cnblogs.com/Jeiwen/p/8053757.html" target="_blank" rel="noopener">install tensorflow on windows</a></li>
+<li><a href="https://blog.csdn.net/weixin_42359147/article/details/80622306" target="_blank" rel="noopener">tensorflow 1.8.0 + cuda 9.2 + cudnn 7.1</a></li>
+<li><a href="https://github.com/fo40225/tensorflow-windows-wheel" target="_blank" rel="noopener">tensorflow-windows-wheel</a></li>
 </ul>
 <h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>created.</li>
@@ -615,7 +636,7 @@ Installed kernelspec tensorflow in C:\Users\zunli\AppData\Roaming\jupyter\kernel
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">101</span>
+                  <span class="site-state-item-count">109</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -626,7 +647,7 @@ Installed kernelspec tensorflow in C:\Users\zunli\AppData\Roaming\jupyter\kernel
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-count">41</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -637,7 +658,7 @@ Installed kernelspec tensorflow in C:\Users\zunli\AppData\Roaming\jupyter\kernel
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">92</span>
+                  <span class="site-state-item-count">97</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -687,7 +708,7 @@ Installed kernelspec tensorflow in C:\Users\zunli\AppData\Roaming\jupyter\kernel
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#prerequisit"><span class="nav-number">1.1.</span> <span class="nav-text">prerequisit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cuda-amp-cudnn"><span class="nav-number">1.2.</span> <span class="nav-text">cuda &amp; cudnn</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python"><span class="nav-number">1.3.</span> <span class="nav-text">python</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#test"><span class="nav-number">1.3.1.</span> <span class="nav-text">test</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tensorflow"><span class="nav-number">1.4.</span> <span class="nav-text">tensorflow</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#requirements-txt"><span class="nav-number">1.4.1.</span> <span class="nav-text">requirements.txt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#test-1"><span class="nav-number">1.4.2.</span> <span class="nav-text">test</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pycharm"><span class="nav-number">1.5.</span> <span class="nav-text">pycharm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jupyter-notebook"><span class="nav-number">1.6.</span> <span class="nav-text">jupyter notebook</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#error-fix"><span class="nav-number">1.7.</span> <span class="nav-text">error fix</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#prerequisit"><span class="nav-number">1.1.</span> <span class="nav-text">prerequisit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cuda-amp-cudnn"><span class="nav-number">1.2.</span> <span class="nav-text">cuda &amp; cudnn</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python"><span class="nav-number">1.3.</span> <span class="nav-text">python</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#test"><span class="nav-number">1.3.1.</span> <span class="nav-text">test</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tensorflow"><span class="nav-number">1.4.</span> <span class="nav-text">tensorflow</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#test-tensorflow"><span class="nav-number">1.4.1.</span> <span class="nav-text">test tensorflow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#test-cuda-and-gpu"><span class="nav-number">1.4.2.</span> <span class="nav-text">test cuda and gpu</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#test-gpu"><span class="nav-number">1.4.3.</span> <span class="nav-text">test gpu</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pycharm"><span class="nav-number">1.5.</span> <span class="nav-text">pycharm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jupyter-notebook"><span class="nav-number">1.6.</span> <span class="nav-text">jupyter notebook</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#error-fix"><span class="nav-number">1.7.</span> <span class="nav-text">error fix</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>

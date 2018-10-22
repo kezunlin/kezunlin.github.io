@@ -89,14 +89,15 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="Install and Configure Caffe on ubuntu 16.04">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201809/635233-20180912154818552-851608997.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180822092144550-1991113026.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180822092148096-1441323229.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180807151218024-1073147705.png">
-<meta property="og:updated_time" content="2018-08-30T10:23:52.690Z">
+<meta property="og:updated_time" content="2018-10-11T03:05:43.603Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Install and Configure Caffe on ubuntu 16.04">
 <meta name="twitter:description" content="Install and Configure Caffe on ubuntu 16.04">
-<meta name="twitter:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180822092144550-1991113026.png">
+<meta name="twitter:image" content="https://images2018.cnblogs.com/blog/635233/201809/635233-20180912154818552-851608997.png">
 
 
 
@@ -348,8 +349,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-08-30T19:23:52+09:00">
-                2018-08-30
+              <time title="Post modified" itemprop="dateModified" datetime="2018-10-11T12:05:43+09:00">
+                2018-10-11
               </time>
             
           </span>
@@ -407,7 +408,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  2,120
+                  1,316
                 </span>
               
 
@@ -423,7 +424,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  13
+                  8
                 </span>
               
             </div>
@@ -449,60 +450,22 @@
 <li><a href="http://kezunlin.me/post/1739694c/">Part 1: Install and Configure Caffe on windows 10</a></li>
 <li><strong><a href="http://kezunlin.me/post/b90033a9/">Part 2: Install and Configure Caffe on ubuntu 16.04</a></strong></li>
 </ul>
-<h1 id="Install-and-Configure-CUDA"><a href="#Install-and-Configure-CUDA" class="headerlink" title="Install and Configure CUDA"></a>Install and Configure CUDA</h1><ul>
-<li>NVIDIA driver </li>
-<li>CUDA Toolkit 8.0</li>
-<li>cudnn 6.0.21</li>
+<p>requirements:</p>
+<ul>
+<li>NVIDIA driver 396.54</li>
+<li>CUDA Toolkit 9.2</li>
+<li>cudnn 6.0.21 (dropped)</li>
+<li>cudnn 7.1.4</li>
+<li>opencv 3.1.0</li>
+<li>caffe  latest</li>
 </ul>
-<h2 id="install-general-dependencies"><a href="#install-general-dependencies" class="headerlink" title="install general dependencies"></a>install general dependencies</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libhdf5-serial-dev protobuf-compiler</span><br><span class="line">apt-get install --no-install-recommends libboost-all-dev</span><br><span class="line"></span><br><span class="line"># blas</span><br><span class="line">sudo apt-get install libopenblas-dev liblapack-dev libatlas-base-dev</span><br><span class="line"></span><br><span class="line">sudo apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev</span><br><span class="line"></span><br><span class="line">sudo apt-get install git cmake build-essential</span><br><span class="line"></span><br><span class="line"># fix missing </span><br><span class="line">#sudo apt-get install freeglut3-dev build-essential libx11-dev libxmu-dev libxi-dev libgl1-mesa-glx libglu1-mesa libglu1-mesa-dev</span><br></pre></td></tr></table></figure>
-<h2 id="install-cuda-driver"><a href="#install-cuda-driver" class="headerlink" title="install cuda driver"></a>install cuda driver</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># stop x server for loop login</span><br><span class="line">sudo service lightdm stop</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># remove installed nvidia drivers</span><br><span class="line">sudo apt-get remove --purge nvidia-*</span><br><span class="line">sudo apt-get autoremove</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># use offical repository instead of xxx.run file</span><br><span class="line">sudo add-apt-repository ppa:graphics-drivers/ppa</span><br><span class="line">sudp apt-get update</span><br><span class="line"></span><br><span class="line">sudo apt-cache search nvidia-*</span><br><span class="line">sudo apt-get install nvidia-384</span><br></pre></td></tr></table></figure>
+<h1 id="Install-CUDA-cudnn"><a href="#Install-CUDA-cudnn" class="headerlink" title="Install CUDA + cudnn"></a>Install CUDA + cudnn</h1><p>see <a href="http://kezunlin.me/post/3f33896b/">install and configure cuda 9.2 with cudnn 7.1 on ubuntu 16.04</a></p>
 <blockquote>
-<p>ctrl+alt+f1 to enter tty and install cuda (Loop Login if we logged in)<br>需要注意的是：安装显卡驱动推荐使用官方源的方式进行安装，不建议下载后离线安装！离线安装会导致循环登录问题。</p>
+<p>tips: we need to recompile caffe with cudnn 7.1</p>
 </blockquote>
-<h2 id="install-cuda-tookit"><a href="#install-cuda-tookit" class="headerlink" title="install cuda tookit"></a>install cuda tookit</h2><p>download cuda tookit from <a href="https://developer.nvidia.com/cuda-downloads" target="_blank" rel="noopener">https://developer.nvidia.com/cuda-downloads</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># xxx.run</span><br><span class="line">sudo chmod +x xxx.run</span><br><span class="line"></span><br><span class="line"># Using unspported compiler---&gt; override</span><br><span class="line">sudo ./xxx.run --override</span><br><span class="line"># accept,not install driver,....defalt</span><br></pre></td></tr></table></figure>
-<p>install summary </p>
-<pre><code>Driver: Installed
-Toolkit: Installed in /usr/local/cuda-8.0
-Samples: Installed in /home/kezunlin, but missing recommended libraries
-
-Please make sure that
-– PATH includes /usr/local/cuda-8.0/bin
-– LD_LIBRARY_PATH includes /usr/local/cuda-8.0/lib64, or, add /usr/local/cuda-8.0/lib64 to /etc/ld.so.conf and run ldconfig as root
-To uninstall the CUDA Toolkit, run the uninstall script in /usr/local/cuda-8.0/bin
-</code></pre><h3 id="reboot-to-enter-GUI-mode"><a href="#reboot-to-enter-GUI-mode" class="headerlink" title="reboot to enter GUI mode"></a>reboot to enter GUI mode</h3><p>sudo reboot</p>
-<h3 id="add-cuda-bin-to-env"><a href="#add-cuda-bin-to-env" class="headerlink" title="add cuda bin to env"></a>add cuda bin to env</h3><pre><code>vim ~/.bashrc
-export PATH=/opt/cuda/bin:$PATH
-source ~/.bashrc
-
-
-#export PATH=/usr/local/cuda-8.0/bin:$PATH
-#export CUDA_ROOT=/usr/local/cuda-8.0
-#export CUDA_INC_DIR=/usr/local/cuda8.0/include
-#export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64:$LD_LIBRARY_PATH
-#export LD_LIBRARY_PAT=/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH 
-</code></pre><h3 id="ldconfig"><a href="#ldconfig" class="headerlink" title="ldconfig"></a>ldconfig</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/ld.so.conf.d/cuda.conf</span><br><span class="line">/opt/cuda/lib64</span><br><span class="line"></span><br><span class="line"> cat /etc/ld.so.conf.d/x86_64-linux-gnu.conf</span><br><span class="line">/lib/x86_64-linux-gnu</span><br><span class="line">/usr/lib/x86_64-linux-gnu</span><br><span class="line"></span><br><span class="line">sudo ldconifg</span><br></pre></td></tr></table></figure>
-<h3 id="check-version"><a href="#check-version" class="headerlink" title="check version"></a>check version</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nvcc -V</span><br><span class="line">nvcc --version</span><br></pre></td></tr></table></figure>
-<pre><code>nvcc: NVIDIA (R) Cuda compiler driver
-Copyright (c) 2005-2016 NVIDIA Corporation
-Built on Wed_May__4_21:01:56_CDT_2016
-Cuda compilation tools, release 8.0, V8.0.26
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /proc/driver/nvidia/version</span><br></pre></td></tr></table></figure>
-<pre><code>NVRM version: NVIDIA UNIX x86_64 Kernel Module  384.111  Tue Dec 19 23:51:45 PST 2017
-GCC version:  gcc version 5.4.0 20160609 (Ubuntu 5.4.0-6ubuntu1~16.04.9) 
-</code></pre><h3 id="deviceQuery"><a href="#deviceQuery" class="headerlink" title="deviceQuery"></a>deviceQuery</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd NVIDIA_CUDA-8.0_Samples/1_Utilities/deviceQuery</span><br><span class="line">sudo make </span><br><span class="line">./deviceQuery</span><br></pre></td></tr></table></figure>
-<h2 id="install-cuDNN"><a href="#install-cuDNN" class="headerlink" title="install cuDNN"></a>install cuDNN</h2><p>download <code>cudnn-8.0-linux-x64-v6.0</code> for ubuntu 16.04</p>
-<p> copy <code>include</code> to <code>/usr/local/cuda-8.0/include</code><br> copy lib64 to /usr/local/cuda-8.0/lib64</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">cd include</span><br><span class="line">sudo cp cudnn.h /opt/cuda-8.0/include/</span><br><span class="line"></span><br><span class="line">cd lib64</span><br><span class="line">sudo cp * /opt/cuda-8.0/lib64/</span><br><span class="line"></span><br><span class="line">cd /opt/cuda/lib64/</span><br><span class="line"></span><br><span class="line">sudo rm -rf libcudnn.so libcudnn.so.6</span><br><span class="line">sudo ln -s libcudnn.so.6.0.21 libcudnn.so.6</span><br><span class="line">sudo ln -s libcudnn.so.6 libcudnn.so</span><br><span class="line"></span><br><span class="line">locate libcudnn.so</span><br></pre></td></tr></table></figure>
-<pre><code>lrwxrwxrwx 1 root root        13 8月  21 18:35 libcudnn.so -&gt; libcudnn.so.6
-lrwxrwxrwx 1 root root        18 8月  21 18:34 libcudnn.so.6 -&gt; libcudnn.so.6.0.21
--rwxr-xr-x 1 root root 154322864 8月  21 18:33 libcudnn.so.6.0.21
-</code></pre><h1 id="install-opencv"><a href="#install-opencv" class="headerlink" title="install opencv"></a>install opencv</h1><h2 id="install-dependencies"><a href="#install-dependencies" class="headerlink" title="install dependencies"></a>install dependencies</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install build-essential</span><br><span class="line">sudo apt-get install cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev</span><br><span class="line">sudo apt-get install python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev</span><br><span class="line"></span><br><span class="line">sudo apt-get install cmake-gui</span><br></pre></td></tr></table></figure>
-<h2 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/opencv/opencv/archive/3.1.0.zip</span><br><span class="line"></span><br><span class="line">cd opencv-3.1.0</span><br><span class="line">mkdir build</span><br><span class="line">sudo cmake-gui</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">cd build</span><br><span class="line"># may take several minutes</span><br><span class="line">sudo make -j8 </span><br><span class="line"></span><br><span class="line"># install to /usr/local/bin</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
-<h2 id="ldconfig-1"><a href="#ldconfig-1" class="headerlink" title="ldconfig"></a>ldconfig</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo /bin/bash -c &apos;echo &quot;/usr/local/lib&quot; &gt; /etc/ld.so.conf.d/opencv.conf&apos;</span><br><span class="line">sudo ldconfig</span><br></pre></td></tr></table></figure>
-<h2 id="check-version-1"><a href="#check-version-1" class="headerlink" title="check version"></a>check version</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">which opencv_version</span><br></pre></td></tr></table></figure>
-<h2 id="python-cv2"><a href="#python-cv2" class="headerlink" title="python cv2"></a>python cv2</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line">&gt;&gt;&gt; import cv2</span><br><span class="line">&gt;&gt;&gt; cv2.__version__</span><br></pre></td></tr></table></figure>
-<h2 id="opencv-samples"><a href="#opencv-samples" class="headerlink" title="opencv samples"></a>opencv samples</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd samples</span><br><span class="line">cmake .</span><br><span class="line">make</span><br></pre></td></tr></table></figure>
+<p>before we compile caffe, move <code>caffe/python/caffe/selective_search_ijcv_with_python</code> folder outside caffe source folder, otherwise error occurs.</p>
+<p><img src="https://images2018.cnblogs.com/blog/635233/201809/635233-20180912154818552-851608997.png" alt="recompile caffe with cudnn"></p>
+<h1 id="install-opencv"><a href="#install-opencv" class="headerlink" title="install opencv"></a>install opencv</h1><p> see <a href="http://kezunlin.me/post/15f5c3e8/">compile opencv on ubuntu 16.04</a></p>
 <h1 id="install-caffe"><a href="#install-caffe" class="headerlink" title="install caffe"></a>install caffe</h1><h2 id="clone-repo"><a href="#clone-repo" class="headerlink" title="clone repo"></a>clone repo</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/BVLC/caffe.git </span><br><span class="line">cd caffe</span><br><span class="line">mkdir build</span><br><span class="line">cmake-gui ..</span><br></pre></td></tr></table></figure>
 <h2 id="update-repo"><a href="#update-repo" class="headerlink" title="update repo"></a>update repo</h2><p>update at 20180822.</p>
 <p>if you change your local Makefile and <code>git pull origin master</code> merge conflict, solution</p>
@@ -622,7 +585,6 @@ Fast-forward
 </code></pre><h2 id="configure"><a href="#configure" class="headerlink" title="configure"></a>configure</h2><p>cmake-gui options</p>
 <pre><code>USE_CUDNN True
 USE_OPENCV True
-OPENCV_VERSION := 3 
 WITH_PYTHON_LAYER True
 BLAS atlas
 </code></pre><p>CUDA </p>
@@ -634,7 +596,7 @@ BLAS atlas
   Target GPU(s)     :   Auto
   GPU arch(s)       :   sm_61
   cuDNN             :   Yes (ver. 6.0.21)
-</code></pre><h3 id="edit-Makefile-NO-MORE"><a href="#edit-Makefile-NO-MORE" class="headerlink" title="edit Makefile (NO MORE)"></a>edit Makefile (NO MORE)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vim Makefile</span><br><span class="line"></span><br><span class="line">#增加hdf5的include和lib路径</span><br><span class="line">INCLUDE_DIRS += /usr/include/hdf5/serial</span><br><span class="line">LIBRARY_DIRS += /usr/lib/x86_64-linux-gnu/hdf5/serial</span><br><span class="line"></span><br><span class="line">LIBRARIES += glog gflags protobuf boost_system boost_filesystem m hdf5_hl hdf5</span><br></pre></td></tr></table></figure>
+</code></pre><h3 id="edit-Makefile"><a href="#edit-Makefile" class="headerlink" title="edit Makefile"></a><del>edit Makefile</del></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vim Makefile</span><br><span class="line"></span><br><span class="line">#增加hdf5的include和lib路径</span><br><span class="line">INCLUDE_DIRS += /usr/include/hdf5/serial</span><br><span class="line">LIBRARY_DIRS += /usr/lib/x86_64-linux-gnu/hdf5/serial</span><br><span class="line"></span><br><span class="line">LIBRARIES += glog gflags protobuf boost_system boost_filesystem m hdf5_hl hdf5</span><br></pre></td></tr></table></figure>
 <h3 id="fix-gcc-error"><a href="#fix-gcc-error" class="headerlink" title="fix gcc error"></a>fix gcc error</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vim /usr/local/cuda/include/host_config.h</span><br><span class="line"># 将其中的第115行注释掉：</span><br><span class="line"></span><br><span class="line">#error-- unsupported GNU version! gcc versions later than 4.9 are not supported!</span><br><span class="line">======&gt;</span><br><span class="line">//#error-- unsupported GNU version! gcc versions later than 4.9 are not supported!</span><br></pre></td></tr></table></figure>
 <h3 id="fix-gflags-error"><a href="#fix-gflags-error" class="headerlink" title="fix gflags error"></a>fix gflags error</h3><ul>
 <li>caffe/include/caffe/common.hpp</li>
@@ -644,11 +606,7 @@ BLAS atlas
 <pre><code>// #ifndef GFLAGS_GFLAGS_H_
 namespace gflags = google;
 // #endif  // GFLAGS_GFLAGS_H_
-</code></pre><h2 id="compile-1"><a href="#compile-1" class="headerlink" title="compile"></a>compile</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make clean</span><br><span class="line">make -j8 &amp;&amp; make pycaffe</span><br></pre></td></tr></table></figure>
-<h3 id="change-pip-source"><a href="#change-pip-source" class="headerlink" title="change pip source"></a>change pip source</h3><p>for ubuntu<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo vim .pip/pip.conf</span><br><span class="line">[global]</span><br><span class="line">index-url = http://pypi.douban.com/simple</span><br><span class="line">[install]</span><br><span class="line">trusted-host = pypi.douban.com</span><br></pre></td></tr></table></figure></p>
-<p>for windows<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim C:\Users\zunli\AppData\Roaming\pip\pip.ini</span><br><span class="line">[global]</span><br><span class="line">index-url = http://pypi.douban.com/simple</span><br><span class="line">[install]</span><br><span class="line">trusted-host = pypi.douban.com</span><br></pre></td></tr></table></figure></p>
-<p>temp solutions:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple tensorflow-gpu</span><br></pre></td></tr></table></figure>
+</code></pre><h2 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make clean</span><br><span class="line">make -j8 &amp;&amp; make pycaffe</span><br></pre></td></tr></table></figure>
 <h3 id="fix-python-caffe"><a href="#fix-python-caffe" class="headerlink" title="fix python caffe"></a>fix python caffe</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># fix ipython 6.1 version conflict</span><br><span class="line">vim caffe/python/requirements.txt</span><br><span class="line">ipython&gt;=3.0.0</span><br><span class="line">====&gt;</span><br><span class="line">ipython==5.4.1</span><br><span class="line"></span><br><span class="line">pip install -r requirements.txt</span><br><span class="line"></span><br><span class="line">cd caffe/python</span><br><span class="line">python</span><br><span class="line">&gt;&gt;&gt;import caffe</span><br></pre></td></tr></table></figure>
 <h2 id="python-draw-net"><a href="#python-draw-net" class="headerlink" title="python draw net"></a>python draw net</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install graphviz</span><br><span class="line">sudo pip install theano=0.9</span><br><span class="line"></span><br><span class="line"># for theano d3viz</span><br><span class="line">sudo pip install pydot==1.1.0</span><br><span class="line">sudo pip install pydot-ng</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># other usefull tools</span><br><span class="line">sudo pip install jupyter</span><br><span class="line">sudo pip install seaborn</span><br></pre></td></tr></table></figure>
 <blockquote>
@@ -656,10 +614,23 @@ namespace gflags = google;
 </blockquote>
 <p>draw net<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd $CAFFE_HOME</span><br><span class="line">./python/draw_net.py ./examples/mnist/lenet.prototxt ./examples/mnist/lenet.png</span><br><span class="line"></span><br><span class="line">eog ./examples/mnist/lenet.png</span><br></pre></td></tr></table></figure></p>
 <p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180807151218024-1073147705.png" alt="lenet"></p>
-<h3 id="deploy-watrix-no-more"><a href="#deploy-watrix-no-more" class="headerlink" title="deploy watrix (no more)"></a>deploy watrix (no more)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># install libcrypto and superdog</span><br><span class="line">sudo apt-get -y install libcrypto++-dev</span><br><span class="line"></span><br><span class="line">#sudo dpkg -i superdog_1.0-1_i386.deb </span><br><span class="line"></span><br><span class="line">cp libdog* /usr/lib/x86_64-linux-gnu</span><br><span class="line"></span><br><span class="line">sudo pip install munkres</span><br><span class="line"></span><br><span class="line">vim ./run_gait.sh</span><br><span class="line"></span><br><span class="line">vim /etc/profile</span><br><span class="line">export PYTHONPATH=/home/kezunlin/program/caffe-gait/python/</span><br><span class="line">source /etc/profile</span><br><span class="line"></span><br><span class="line">sudo apt-get -y install python-qt4</span><br><span class="line"></span><br><span class="line"># run </span><br><span class="line">./run_gait.sh</span><br></pre></td></tr></table></figure>
-<h2 id="train-net"><a href="#train-net" class="headerlink" title="train net"></a>train net</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd caffe </span><br><span class="line">./examples/mnist/train_lenet.sh</span><br></pre></td></tr></table></figure>
+<h2 id="test-caffe"><a href="#test-caffe" class="headerlink" title="test caffe"></a>test caffe</h2><h3 id="train-net"><a href="#train-net" class="headerlink" title="train net"></a>train net</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd caffe </span><br><span class="line">./examples/mnist/train_lenet.sh</span><br></pre></td></tr></table></figure>
 <pre><code>cat ./examples/mnist/train_lenet.sh 
+
 ./build/tools/caffe train --solver=examples/mnist/lenet_solver.prototxt $@
+</code></pre><p>output results</p>
+<pre><code>I0912 15:57:28.812655 14094 solver.cpp:327] Iteration 10000, loss = 0.00272129
+I0912 15:57:28.812675 14094 solver.cpp:347] Iteration 10000, Testing net (#0)
+I0912 15:57:28.891481 14100 data_layer.cpp:73] Restarting data prefetching from start.
+I0912 15:57:28.893678 14094 solver.cpp:414]     Test net output #0: accuracy = 0.9904
+I0912 15:57:28.893707 14094 solver.cpp:414]     Test net output #1: loss = 0.0276084 (* 1 = 0.0276084 loss)
+I0912 15:57:28.893714 14094 solver.cpp:332] Optimization Done.
+I0912 15:57:28.893719 14094 caffe.cpp:250] Optimization Done.
+</code></pre><h3 id="python-caffe"><a href="#python-caffe" class="headerlink" title="python caffe"></a>python caffe</h3><pre><code>cd caffe/python
+python
+&gt;&gt;&gt;import caffe 
+</code></pre><h3 id="upgrade-net"><a href="#upgrade-net" class="headerlink" title="upgrade net"></a>upgrade net</h3><pre><code>./tools/upgrade_net_proto_text  old.prototxt new.prototxt
+./tools/upgrade_net_proto_binary  old.caffemodel new.caffemodel
 </code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="http://caffe.berkeleyvision.org/install_apt.html" target="_blank" rel="noopener">caffe offical</a> </li>
 <li>[setting-up-ubuntu-16-04-cuda-gpu-for-deep-learning-with-python](<a href="https://www.pyimagesearch.com/2017/09/27/setting-up-ubuntu-16-04-cuda-gpu-for-deep-learning-with-python/" target="_blank" rel="noopener">https://www.pyimagesearch.com/2017/09/27/setting-up-ubuntu-16-04-cuda-gpu-for-deep-learning-with-python/</a></li>
@@ -803,7 +774,7 @@ namespace gflags = google;
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">101</span>
+                  <span class="site-state-item-count">109</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -814,7 +785,7 @@ namespace gflags = google;
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-count">41</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -825,7 +796,7 @@ namespace gflags = google;
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">92</span>
+                  <span class="site-state-item-count">97</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -875,7 +846,7 @@ namespace gflags = google;
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Install-and-Configure-CUDA"><span class="nav-number">1.</span> <span class="nav-text">Install and Configure CUDA</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install-general-dependencies"><span class="nav-number">1.1.</span> <span class="nav-text">install general dependencies</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-cuda-driver"><span class="nav-number">1.2.</span> <span class="nav-text">install cuda driver</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-cuda-tookit"><span class="nav-number">1.3.</span> <span class="nav-text">install cuda tookit</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#reboot-to-enter-GUI-mode"><span class="nav-number">1.3.1.</span> <span class="nav-text">reboot to enter GUI mode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#add-cuda-bin-to-env"><span class="nav-number">1.3.2.</span> <span class="nav-text">add cuda bin to env</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ldconfig"><span class="nav-number">1.3.3.</span> <span class="nav-text">ldconfig</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#check-version"><span class="nav-number">1.3.4.</span> <span class="nav-text">check version</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#deviceQuery"><span class="nav-number">1.3.5.</span> <span class="nav-text">deviceQuery</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-cuDNN"><span class="nav-number">1.4.</span> <span class="nav-text">install cuDNN</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#install-opencv"><span class="nav-number">2.</span> <span class="nav-text">install opencv</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install-dependencies"><span class="nav-number">2.1.</span> <span class="nav-text">install dependencies</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">2.2.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ldconfig-1"><span class="nav-number">2.3.</span> <span class="nav-text">ldconfig</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#check-version-1"><span class="nav-number">2.4.</span> <span class="nav-text">check version</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python-cv2"><span class="nav-number">2.5.</span> <span class="nav-text">python cv2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#opencv-samples"><span class="nav-number">2.6.</span> <span class="nav-text">opencv samples</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#install-caffe"><span class="nav-number">3.</span> <span class="nav-text">install caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#clone-repo"><span class="nav-number">3.1.</span> <span class="nav-text">clone repo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#update-repo"><span class="nav-number">3.2.</span> <span class="nav-text">update repo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#configure"><span class="nav-number">3.3.</span> <span class="nav-text">configure</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#edit-Makefile-NO-MORE"><span class="nav-number">3.3.1.</span> <span class="nav-text">edit Makefile (NO MORE)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-gcc-error"><span class="nav-number">3.3.2.</span> <span class="nav-text">fix gcc error</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-gflags-error"><span class="nav-number">3.3.3.</span> <span class="nav-text">fix gflags error</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile-1"><span class="nav-number">3.4.</span> <span class="nav-text">compile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#change-pip-source"><span class="nav-number">3.4.1.</span> <span class="nav-text">change pip source</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-python-caffe"><span class="nav-number">3.4.2.</span> <span class="nav-text">fix python caffe</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python-draw-net"><span class="nav-number">3.5.</span> <span class="nav-text">python draw net</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#deploy-watrix-no-more"><span class="nav-number">3.5.1.</span> <span class="nav-text">deploy watrix (no more)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#train-net"><span class="nav-number">3.6.</span> <span class="nav-text">train net</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Install-CUDA-cudnn"><span class="nav-number">1.</span> <span class="nav-text">Install CUDA + cudnn</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#install-opencv"><span class="nav-number">2.</span> <span class="nav-text">install opencv</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#install-caffe"><span class="nav-number">3.</span> <span class="nav-text">install caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#clone-repo"><span class="nav-number">3.1.</span> <span class="nav-text">clone repo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#update-repo"><span class="nav-number">3.2.</span> <span class="nav-text">update repo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#configure"><span class="nav-number">3.3.</span> <span class="nav-text">configure</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#edit-Makefile"><span class="nav-number">3.3.1.</span> <span class="nav-text">edit Makefile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-gcc-error"><span class="nav-number">3.3.2.</span> <span class="nav-text">fix gcc error</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-gflags-error"><span class="nav-number">3.3.3.</span> <span class="nav-text">fix gflags error</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">3.4.</span> <span class="nav-text">compile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-python-caffe"><span class="nav-number">3.4.1.</span> <span class="nav-text">fix python caffe</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python-draw-net"><span class="nav-number">3.5.</span> <span class="nav-text">python draw net</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#test-caffe"><span class="nav-number">3.6.</span> <span class="nav-text">test caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#train-net"><span class="nav-number">3.6.1.</span> <span class="nav-text">train net</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python-caffe"><span class="nav-number">3.6.2.</span> <span class="nav-text">python caffe</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#upgrade-net"><span class="nav-number">3.6.3.</span> <span class="nav-text">upgrade net</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
