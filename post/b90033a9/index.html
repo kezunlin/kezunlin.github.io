@@ -93,7 +93,7 @@
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180822092144550-1991113026.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180822092148096-1441323229.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180807151218024-1073147705.png">
-<meta property="og:updated_time" content="2018-11-01T01:41:26.574Z">
+<meta property="og:updated_time" content="2018-11-28T02:55:43.701Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Install and Configure Caffe on ubuntu 16.04">
 <meta name="twitter:description" content="Install and Configure Caffe on ubuntu 16.04">
@@ -349,8 +349,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-11-01T09:41:26+08:00">
-                2018-11-01
+              <time title="Post modified" itemprop="dateModified" datetime="2018-11-28T10:55:43+08:00">
+                2018-11-28
               </time>
             
           </span>
@@ -408,7 +408,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1,323
+                  1,626
                 </span>
               
 
@@ -424,7 +424,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  8
+                  10
                 </span>
               
             </div>
@@ -453,10 +453,10 @@
 <p>requirements:</p>
 <ul>
 <li>NVIDIA driver 396.54</li>
-<li>CUDA Toolkit 9.2</li>
-<li>cudnn 6.0.21 (dropped)</li>
-<li>cudnn 7.1.4</li>
+<li><del>CUDA 8.0 + cudnn 6.0.21</del></li>
+<li>CUDA 9.0 +cudnn 7.1.4</li>
 <li>opencv 3.1.0—&gt;3.3.0</li>
+<li>python 2.7</li>
 <li>caffe  latest</li>
 </ul>
 <h1 id="Install-CUDA-cudnn"><a href="#Install-CUDA-cudnn" class="headerlink" title="Install CUDA + cudnn"></a>Install CUDA + cudnn</h1><p>see <a href="http://kezunlin.me/post/3f33896b/">install and configure cuda 9.2 with cudnn 7.1 on ubuntu 16.04</a></p>
@@ -468,11 +468,13 @@
 <h1 id="install-opencv"><a href="#install-opencv" class="headerlink" title="install opencv"></a>install opencv</h1><p> see <a href="http://kezunlin.me/post/15f5c3e8/">compile opencv on ubuntu 16.04</a></p>
 <pre><code>opencv_version 
 3.3.0
-</code></pre><h1 id="install-caffe"><a href="#install-caffe" class="headerlink" title="install caffe"></a>install caffe</h1><h2 id="clone-repo"><a href="#clone-repo" class="headerlink" title="clone repo"></a>clone repo</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/BVLC/caffe.git </span><br><span class="line">cd caffe</span><br><span class="line">mkdir build</span><br><span class="line">cmake-gui ..</span><br></pre></td></tr></table></figure>
-<h2 id="update-repo"><a href="#update-repo" class="headerlink" title="update repo"></a>update repo</h2><p>update at 20180822.</p>
+</code></pre><h1 id="install-caffe"><a href="#install-caffe" class="headerlink" title="install caffe"></a>install caffe</h1><h2 id="clone-repo"><a href="#clone-repo" class="headerlink" title="clone repo"></a>clone repo</h2><pre><code>git clone https://github.com/BVLC/caffe.git 
+cd caffe
+</code></pre><h2 id="update-repo"><a href="#update-repo" class="headerlink" title="update repo"></a>update repo</h2><p>update at 20180822.</p>
 <p>if you change your local Makefile and <code>git pull origin master</code> merge conflict, solution</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout HEAD Makefile</span><br><span class="line">git pull origin master</span><br></pre></td></tr></table></figure>
-<p>output </p>
+<pre><code>git checkout HEAD Makefile
+git pull origin master
+</code></pre><p>output </p>
 <pre><code>From https://github.com/BVLC/caffe
  * branch            master     -&gt; FETCH_HEAD
 Updating 86d451e..99bd997
@@ -584,23 +586,35 @@ Fast-forward
  delete mode 100644 tools/net_speed_benchmark.cpp
  delete mode 100644 tools/test_net.cpp
  delete mode 100644 tools/train_net.cpp
-</code></pre><h2 id="configure"><a href="#configure" class="headerlink" title="configure"></a>configure</h2><p>cmake-gui options</p>
+</code></pre><h2 id="configure"><a href="#configure" class="headerlink" title="configure"></a>configure</h2><pre><code>cd build &amp;&amp; cmake-gui ..
+</code></pre><p>cmake-gui options</p>
 <pre><code>USE_CUDNN True
 USE_OPENCV True
 WITH_PYTHON_LAYER True
 BLAS atlas
-</code></pre><p>CUDA </p>
-<p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180822092144550-1991113026.png" alt="png"></p>
-<p>CUDNN </p>
-<p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180822092148096-1441323229.png" alt="png"></p>
+
+CMAKE_INSTALL_PREFIX /home/kezunlin/program/caffe/build/install
+</code></pre><ul>
+<li>CUDA<br><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180822092144550-1991113026.png" alt="png"></li>
+<li>CUDNN<br><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180822092148096-1441323229.png" alt="png"></li>
+</ul>
 <p>configure output </p>
 <pre><code>NVIDIA CUDA:
   Target GPU(s)     :   Auto
   GPU arch(s)       :   sm_61
   cuDNN             :   Yes (ver. 6.0.21)
-</code></pre><h3 id="edit-Makefile"><a href="#edit-Makefile" class="headerlink" title="edit Makefile"></a><del>edit Makefile</del></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vim Makefile</span><br><span class="line"></span><br><span class="line">#增加hdf5的include和lib路径</span><br><span class="line">INCLUDE_DIRS += /usr/include/hdf5/serial</span><br><span class="line">LIBRARY_DIRS += /usr/lib/x86_64-linux-gnu/hdf5/serial</span><br><span class="line"></span><br><span class="line">LIBRARIES += glog gflags protobuf boost_system boost_filesystem m hdf5_hl hdf5</span><br></pre></td></tr></table></figure>
-<h3 id="fix-gcc-error"><a href="#fix-gcc-error" class="headerlink" title="fix gcc error"></a>fix gcc error</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vim /usr/local/cuda/include/host_config.h</span><br><span class="line"># 将其中的第115行注释掉：</span><br><span class="line"></span><br><span class="line">#error-- unsupported GNU version! gcc versions later than 4.9 are not supported!</span><br><span class="line">======&gt;</span><br><span class="line">//#error-- unsupported GNU version! gcc versions later than 4.9 are not supported!</span><br></pre></td></tr></table></figure>
-<h3 id="fix-gflags-error"><a href="#fix-gflags-error" class="headerlink" title="fix gflags error"></a>fix gflags error</h3><ul>
+</code></pre><h3 id="edit-Makefile"><a href="#edit-Makefile" class="headerlink" title="edit Makefile"></a><del>edit Makefile</del></h3><p>vim <code>Makefile</code></p>
+<pre><code>#增加hdf5的include和lib路径
+INCLUDE_DIRS += /usr/include/hdf5/serial
+LIBRARY_DIRS += /usr/lib/x86_64-linux-gnu/hdf5/serial
+
+LIBRARIES += glog gflags protobuf boost_system boost_filesystem m hdf5_hl hdf5
+</code></pre><h3 id="fix-gcc-error"><a href="#fix-gcc-error" class="headerlink" title="fix gcc error"></a>fix gcc error</h3><p>vim <code>/usr/local/cuda/include/host_config.h</code></p>
+<pre><code># 将其中的第115行注释掉：
+#error-- unsupported GNU version! gcc versions later than 4.9 are not supported!
+======&gt;
+//#error-- unsupported GNU version! gcc versions later than 4.9 are not supported!
+</code></pre><h3 id="fix-gflags-error"><a href="#fix-gflags-error" class="headerlink" title="fix gflags error"></a>fix gflags error</h3><ul>
 <li>caffe/include/caffe/common.hpp</li>
 <li>caffe/examples/mnist/convert_mnist_data.cpp</li>
 </ul>
@@ -608,9 +622,185 @@ BLAS atlas
 <pre><code>// #ifndef GFLAGS_GFLAGS_H_
 namespace gflags = google;
 // #endif  // GFLAGS_GFLAGS_H_
-</code></pre><h2 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make clean</span><br><span class="line">make -j8 &amp;&amp; make pycaffe</span><br></pre></td></tr></table></figure>
-<h3 id="fix-python-caffe"><a href="#fix-python-caffe" class="headerlink" title="fix python caffe"></a>fix python caffe</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># fix ipython 6.1 version conflict</span><br><span class="line">vim caffe/python/requirements.txt</span><br><span class="line">ipython&gt;=3.0.0</span><br><span class="line">====&gt;</span><br><span class="line">ipython==5.4.1</span><br><span class="line"></span><br><span class="line">pip install -r requirements.txt</span><br><span class="line"></span><br><span class="line">cd caffe/python</span><br><span class="line">python</span><br><span class="line">&gt;&gt;&gt;import caffe</span><br></pre></td></tr></table></figure>
-<h2 id="python-draw-net"><a href="#python-draw-net" class="headerlink" title="python draw net"></a>python draw net</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install graphviz</span><br><span class="line">sudo pip install theano=0.9</span><br><span class="line"></span><br><span class="line"># for theano d3viz</span><br><span class="line">sudo pip install pydot==1.1.0</span><br><span class="line">sudo pip install pydot-ng</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># other usefull tools</span><br><span class="line">sudo pip install jupyter</span><br><span class="line">sudo pip install seaborn</span><br></pre></td></tr></table></figure>
+</code></pre><h2 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h2><pre><code>make clean
+make -j8 &amp;&amp; make pycaffe
+</code></pre><h2 id="install"><a href="#install" class="headerlink" title="install"></a>install</h2><pre><code>make install
+
+ls install
+bin  include  lib  python  share
+</code></pre><p>output </p>
+<pre><code>tree build/install
+.
+├── bin
+│   ├── caffe
+│   ├── classification
+│   ├── compute_image_mean
+│   ├── convert_cifar_data
+│   ├── convert_imageset
+│   ├── convert_mnist_data
+│   ├── convert_mnist_siamese_data
+│   ├── extract_features
+│   ├── upgrade_net_proto_binary
+│   ├── upgrade_net_proto_text
+│   └── upgrade_solver_proto_text
+├── include
+│   └── caffe
+│       ├── blob.hpp
+│       ├── caffe.hpp
+│       ├── common.hpp
+│       ├── data_transformer.hpp
+│       ├── filler.hpp
+│       ├── internal_thread.hpp
+│       ├── layer_factory.hpp
+│       ├── layer.hpp
+│       ├── layers
+│       │   ├── absval_layer.hpp
+│       │   ├── accuracy_layer.hpp
+│       │   ├── argmax_layer.hpp
+│       │   ├── base_conv_layer.hpp
+│       │   ├── base_data_layer.hpp
+│       │   ├── batch_norm_layer.hpp
+│       │   ├── batch_reindex_layer.hpp
+│       │   ├── bias_layer.hpp
+│       │   ├── bnll_layer.hpp
+│       │   ├── clip_layer.hpp
+│       │   ├── concat_layer.hpp
+│       │   ├── contrastive_loss_layer.hpp
+│       │   ├── conv_layer.hpp
+│       │   ├── crop_layer.hpp
+│       │   ├── cudnn_conv_layer.hpp
+│       │   ├── cudnn_deconv_layer.hpp
+│       │   ├── cudnn_lcn_layer.hpp
+│       │   ├── cudnn_lrn_layer.hpp
+│       │   ├── cudnn_pooling_layer.hpp
+│       │   ├── cudnn_relu_layer.hpp
+│       │   ├── cudnn_sigmoid_layer.hpp
+│       │   ├── cudnn_softmax_layer.hpp
+│       │   ├── cudnn_tanh_layer.hpp
+│       │   ├── data_layer.hpp
+│       │   ├── deconv_layer.hpp
+│       │   ├── dropout_layer.hpp
+│       │   ├── dummy_data_layer.hpp
+│       │   ├── eltwise_layer.hpp
+│       │   ├── elu_layer.hpp
+│       │   ├── embed_layer.hpp
+│       │   ├── euclidean_loss_layer.hpp
+│       │   ├── exp_layer.hpp
+│       │   ├── filter_layer.hpp
+│       │   ├── flatten_layer.hpp
+│       │   ├── hdf5_data_layer.hpp
+│       │   ├── hdf5_output_layer.hpp
+│       │   ├── hinge_loss_layer.hpp
+│       │   ├── im2col_layer.hpp
+│       │   ├── image_data_layer.hpp
+│       │   ├── infogain_loss_layer.hpp
+│       │   ├── inner_product_layer.hpp
+│       │   ├── input_layer.hpp
+│       │   ├── log_layer.hpp
+│       │   ├── loss_layer.hpp
+│       │   ├── lrn_layer.hpp
+│       │   ├── lstm_layer.hpp
+│       │   ├── memory_data_layer.hpp
+│       │   ├── multinomial_logistic_loss_layer.hpp
+│       │   ├── mvn_layer.hpp
+│       │   ├── neuron_layer.hpp
+│       │   ├── parameter_layer.hpp
+│       │   ├── pooling_layer.hpp
+│       │   ├── power_layer.hpp
+│       │   ├── prelu_layer.hpp
+│       │   ├── python_layer.hpp
+│       │   ├── recurrent_layer.hpp
+│       │   ├── reduction_layer.hpp
+│       │   ├── relu_layer.hpp
+│       │   ├── reshape_layer.hpp
+│       │   ├── rnn_layer.hpp
+│       │   ├── scale_layer.hpp
+│       │   ├── sigmoid_cross_entropy_loss_layer.hpp
+│       │   ├── sigmoid_layer.hpp
+│       │   ├── silence_layer.hpp
+│       │   ├── slice_layer.hpp
+│       │   ├── softmax_layer.hpp
+│       │   ├── softmax_loss_layer.hpp
+│       │   ├── split_layer.hpp
+│       │   ├── spp_layer.hpp
+│       │   ├── swish_layer.hpp
+│       │   ├── tanh_layer.hpp
+│       │   ├── threshold_layer.hpp
+│       │   ├── tile_layer.hpp
+│       │   └── window_data_layer.hpp
+│       ├── net.hpp
+│       ├── parallel.hpp
+│       ├── proto
+│       │   └── caffe.pb.h
+│       ├── sgd_solvers.hpp
+│       ├── solver_factory.hpp
+│       ├── solver.hpp
+│       ├── syncedmem.hpp
+│       ├── test
+│       │   ├── test_caffe_main.hpp
+│       │   └── test_gradient_check_util.hpp
+│       └── util
+│           ├── benchmark.hpp
+│           ├── blocking_queue.hpp
+│           ├── cudnn.hpp
+│           ├── db.hpp
+│           ├── db_leveldb.hpp
+│           ├── db_lmdb.hpp
+│           ├── device_alternate.hpp
+│           ├── format.hpp
+│           ├── gpu_util.cuh
+│           ├── hdf5.hpp
+│           ├── im2col.hpp
+│           ├── insert_splits.hpp
+│           ├── io.hpp
+│           ├── math_functions.hpp
+│           ├── mkl_alternate.hpp
+│           ├── nccl.hpp
+│           ├── rng.hpp
+│           ├── signal_handler.h
+│           └── upgrade_proto.hpp
+├── lib
+│   ├── libcaffeproto.a
+│   ├── libcaffe.so -&gt; libcaffe.so.1.0.0
+│   └── libcaffe.so.1.0.0
+├── python
+│   ├── caffe
+│   │   ├── _caffe.so
+│   │   ├── classifier.py
+│   │   ├── coord_map.py
+│   │   ├── detector.py
+│   │   ├── draw.py
+│   │   ├── imagenet
+│   │   │   └── ilsvrc_2012_mean.npy
+│   │   ├── __init__.py
+│   │   ├── io.py
+│   │   ├── net_spec.py
+│   │   ├── proto
+│   │   │   ├── caffe_pb2.py
+│   │   │   └── __init__.py
+│   │   └── pycaffe.py
+│   ├── classify.py
+│   ├── detect.py
+│   ├── draw_net.py
+│   ├── requirements.txt
+│   └── train.py
+└── share
+    └── Caffe
+        ├── CaffeConfig.cmake
+        ├── CaffeTargets.cmake
+        └── CaffeTargets-release.cmake
+
+14 directories, 144 files
+</code></pre><h3 id="fix-python-caffe"><a href="#fix-python-caffe" class="headerlink" title="fix python caffe"></a>fix python caffe</h3><p>fix ipython 6.1 version conflict</p>
+<p>vim <code>caffe/python/requirements.txt</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ipython&gt;=3.0.0</span><br><span class="line">====&gt;</span><br><span class="line">ipython==5.4.1</span><br></pre></td></tr></table></figure>
+<p>reinstall ipython</p>
+<pre><code>pip install -r requirements.txt
+
+cd caffe/python
+python
+&gt;&gt;&gt;import caffe 
+</code></pre><h2 id="python-draw-net"><a href="#python-draw-net" class="headerlink" title="python draw net"></a>python draw net</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install graphviz</span><br><span class="line">sudo pip install theano=0.9</span><br><span class="line"></span><br><span class="line"># for theano d3viz</span><br><span class="line">sudo pip install pydot==1.1.0</span><br><span class="line">sudo pip install pydot-ng</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># other usefull tools</span><br><span class="line">sudo pip install jupyter</span><br><span class="line">sudo pip install seaborn</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>需要安装graphviz, otherwise we get ERROR:”dot” not found in path<br>需要指定安装1.1.0版本的pydot，是因为最新版（截止2016.8最新版本号是1.2.x）中 find_graphviz函数是deprecated的，使用时会报错</p>
 </blockquote>
@@ -776,7 +966,7 @@ python
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">126</span>
+                  <span class="site-state-item-count">141</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -787,7 +977,7 @@ python
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -798,7 +988,7 @@ python
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">111</span>
+                  <span class="site-state-item-count">115</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -848,7 +1038,7 @@ python
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Install-CUDA-cudnn"><span class="nav-number">1.</span> <span class="nav-text">Install CUDA + cudnn</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#install-opencv"><span class="nav-number">2.</span> <span class="nav-text">install opencv</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#install-caffe"><span class="nav-number">3.</span> <span class="nav-text">install caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#clone-repo"><span class="nav-number">3.1.</span> <span class="nav-text">clone repo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#update-repo"><span class="nav-number">3.2.</span> <span class="nav-text">update repo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#configure"><span class="nav-number">3.3.</span> <span class="nav-text">configure</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#edit-Makefile"><span class="nav-number">3.3.1.</span> <span class="nav-text">edit Makefile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-gcc-error"><span class="nav-number">3.3.2.</span> <span class="nav-text">fix gcc error</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-gflags-error"><span class="nav-number">3.3.3.</span> <span class="nav-text">fix gflags error</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">3.4.</span> <span class="nav-text">compile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-python-caffe"><span class="nav-number">3.4.1.</span> <span class="nav-text">fix python caffe</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python-draw-net"><span class="nav-number">3.5.</span> <span class="nav-text">python draw net</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#test-caffe"><span class="nav-number">3.6.</span> <span class="nav-text">test caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#train-net"><span class="nav-number">3.6.1.</span> <span class="nav-text">train net</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python-caffe"><span class="nav-number">3.6.2.</span> <span class="nav-text">python caffe</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#upgrade-net"><span class="nav-number">3.6.3.</span> <span class="nav-text">upgrade net</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Install-CUDA-cudnn"><span class="nav-number">1.</span> <span class="nav-text">Install CUDA + cudnn</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#install-opencv"><span class="nav-number">2.</span> <span class="nav-text">install opencv</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#install-caffe"><span class="nav-number">3.</span> <span class="nav-text">install caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#clone-repo"><span class="nav-number">3.1.</span> <span class="nav-text">clone repo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#update-repo"><span class="nav-number">3.2.</span> <span class="nav-text">update repo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#configure"><span class="nav-number">3.3.</span> <span class="nav-text">configure</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#edit-Makefile"><span class="nav-number">3.3.1.</span> <span class="nav-text">edit Makefile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-gcc-error"><span class="nav-number">3.3.2.</span> <span class="nav-text">fix gcc error</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-gflags-error"><span class="nav-number">3.3.3.</span> <span class="nav-text">fix gflags error</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">3.4.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install"><span class="nav-number">3.5.</span> <span class="nav-text">install</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-python-caffe"><span class="nav-number">3.5.1.</span> <span class="nav-text">fix python caffe</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python-draw-net"><span class="nav-number">3.6.</span> <span class="nav-text">python draw net</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#test-caffe"><span class="nav-number">3.7.</span> <span class="nav-text">test caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#train-net"><span class="nav-number">3.7.1.</span> <span class="nav-text">train net</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python-caffe"><span class="nav-number">3.7.2.</span> <span class="nav-text">python caffe</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#upgrade-net"><span class="nav-number">3.7.3.</span> <span class="nav-text">upgrade net</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>

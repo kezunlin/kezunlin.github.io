@@ -91,7 +91,8 @@
 <meta property="og:description" content="install and configure TensorRT 4 on ubuntu 16.04">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201809/635233-20180912150412426-572657767.png">
-<meta property="og:updated_time" content="2018-10-11T03:05:43.702Z">
+<meta property="og:image" content="https://img2018.cnblogs.com/blog/635233/201811/635233-20181119095055341-1432624267.png">
+<meta property="og:updated_time" content="2018-11-20T06:33:25.649Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="install and configure TensorRT 4 on ubuntu 16.04">
 <meta name="twitter:description" content="install and configure TensorRT 4 on ubuntu 16.04">
@@ -347,8 +348,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-10-11T11:05:43+08:00">
-                2018-10-11
+              <time title="Post modified" itemprop="dateModified" datetime="2018-11-20T14:33:25+08:00">
+                2018-11-20
               </time>
             
           </span>
@@ -406,7 +407,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  595
+                  761
                 </span>
               
 
@@ -422,7 +423,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  4
+                  5
                 </span>
               
             </div>
@@ -446,13 +447,19 @@
         <p>install and configure TensorRT 4 on ubuntu 16.04<br><a id="more"></a></p>
 <h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><ul>
 <li>ubuntu 16.04 (14.04,16.04 only) not support Windows</li>
-<li>CUDA 8.0 (8.0,9.0,9.2 only)</li>
+<li><del>CUDA 8.0</del> (8.0,9.0,9.2 only)</li>
+<li>CUDA 9.2</li>
 <li>cudnn 7.1.4 (7.1 only)</li>
 <li>TensorRT 4.0.1.6 </li>
 <li>TensorFlow-gpu v1.4+</li>
 <li>python: 3.5.2 (2.7 or 3.5)</li>
 </ul>
-<h2 id="TensorRT-support-matrix"><a href="#TensorRT-support-matrix" class="headerlink" title="TensorRT support matrix"></a>TensorRT support matrix</h2><p><img src="https://images2018.cnblogs.com/blog/635233/201809/635233-20180912150412426-572657767.png" alt="support matrix"></p>
+<h2 id="TensorRT-support-matrix"><a href="#TensorRT-support-matrix" class="headerlink" title="TensorRT support matrix"></a>TensorRT support matrix</h2><ul>
+<li><p>4.0.1.6<br><img src="https://images2018.cnblogs.com/blog/635233/201809/635233-20180912150412426-572657767.png" alt="support matrix"></p>
+</li>
+<li><p>5.0.2.6<br><img src="https://img2018.cnblogs.com/blog/635233/201811/635233-20181119095055341-1432624267.png" alt="support matrix"></p>
+</li>
+</ul>
 <h2 id="install"><a href="#install" class="headerlink" title="install"></a>install</h2><h3 id="download-and-install"><a href="#download-and-install" class="headerlink" title="download and install"></a>download and install</h3><p>download <code>TensorRT-4.0.1.6.Ubuntu-16.04.4.x86_64-gnu.cuda-8.0.cudnn7.1.tar.gz</code> from <a href="https://developer.nvidia.com/tensorrt" target="_blank" rel="noopener">here</a></p>
 <pre><code>tar zxvf TensorRT-4.0.1.6.Ubuntu-16.04.4.x86_64-gnu.cuda-8.0.cudnn7.1.tar.gz 
 
@@ -462,7 +469,10 @@ bin  data  doc  graphsurgeon  include  lib  python  samples  targets  TensorRT-R
 sudo mv TensorRT-4.0.1.6 /opt/
 cd /opt
 sudo ln -s TensorRT-4.0.1.6/ tensorrt
-</code></pre><h3 id="add-lib-to-path"><a href="#add-lib-to-path" class="headerlink" title="add lib to path"></a>add lib to path</h3><pre><code>sudo vim /etc/ld.so.conf.d/tensorrt
+</code></pre><blockquote>
+<p>Updates: from cuda-8.0 ===&gt; cuda-9.2. download <code>TensorRT-4.0.1.6.Ubuntu-16.04.4.x86_64-gnu.cuda-9.2.cudnn7.1.tar.gz</code> from <a href="https://developer.nvidia.com/tensorrt" target="_blank" rel="noopener">here</a></p>
+</blockquote>
+<h3 id="add-lib-to-path"><a href="#add-lib-to-path" class="headerlink" title="add lib to path"></a>add lib to path</h3><pre><code>sudo vim /etc/ld.so.conf.d/tensorrt
 /opt/tensorrt/lib
 
 sudo ldconfig
@@ -476,8 +486,6 @@ sudo pip2 install tensorrt-4.0.1.6-cp27-cp27mu-linux_x86_64.whl
 </code></pre><p>or </p>
 <pre><code>cd /opt/tensorrt/python
 sudo pip3 install tensorrt-4.0.1.6-cp35-cp35m-linux_x86_64.whl 
-
-which tensorrt
 </code></pre><h3 id="uff-package"><a href="#uff-package" class="headerlink" title="uff package"></a>uff package</h3><pre><code>cd /opt/tensorrt/uff 
 sudo pip install uff-0.4.0-py2.py3-none-any.whl 
 
@@ -492,17 +500,28 @@ include/
 ├── NvOnnxParser.h
 ├── NvUffParser.h
 └── NvUtils.h
-</code></pre><h2 id="lib"><a href="#lib" class="headerlink" title="lib"></a>lib</h2><pre><code>ls -al *.4.1.2
+</code></pre><h3 id="lib"><a href="#lib" class="headerlink" title="lib"></a>lib</h3><pre><code>ls -al *.4.1.2
 lrwxrwxrwx 1 kezunlin kezunlin       21 6月  12 15:42 libnvcaffe_parser.so.4.1.2 -&gt; libnvparsers.so.4.1.2
 -rwxrwxr-x 1 kezunlin kezunlin  2806840 6月  12 15:42 libnvinfer_plugin.so.4.1.2
 -rwxrwxr-x 1 kezunlin kezunlin 80434488 6月  12 15:42 libnvinfer.so.4.1.2
 -rwxrwxr-x 1 kezunlin kezunlin  3951712 6月  12 15:42 libnvparsers.so.4.1.2
-</code></pre><h2 id="bin"><a href="#bin" class="headerlink" title="bin"></a>bin</h2><pre><code>tree bin
+</code></pre><h3 id="bin"><a href="#bin" class="headerlink" title="bin"></a>bin</h3><pre><code>tree bin
 bin
 ├── download-digits-model.py
 ├── giexec
 └── trtexec
-</code></pre><h2 id="sampleMNIST"><a href="#sampleMNIST" class="headerlink" title="sampleMNIST"></a>sampleMNIST</h2><pre><code>cd samples/sampleMNIST
+</code></pre><h3 id="sample"><a href="#sample" class="headerlink" title="sample"></a>sample</h3><p>add envs </p>
+<pre><code>vim ~/.bashrc
+
+# tensorrt cuda and cudnn
+export CUDA_INSTALL_DIR=/usr/local/cuda
+export CUDNN_INSTALL_DIR=/usr/local/cuda
+</code></pre><h4 id="compile-all"><a href="#compile-all" class="headerlink" title="compile all"></a>compile all</h4><pre><code>cd samples/
+make -j8
+</code></pre><blockquote>
+<p>generate all sample_xxx to bin/ folder.</p>
+</blockquote>
+<h4 id="compile-sampleMNIST"><a href="#compile-sampleMNIST" class="headerlink" title="compile sampleMNIST"></a>compile sampleMNIST</h4><pre><code>cd samples/sampleMNIST
 ls 
 Makefile  sampleMNIST.cpp
 make -j8
@@ -720,12 +739,30 @@ Output:
 7: 
 8: 
 9: 
+</code></pre><h2 id="sample-int8"><a href="#sample-int8" class="headerlink" title="sample_int8"></a>sample_int8</h2><pre><code>./sample_int8 mnist
+
+FP32 run:400 batches of size 100 starting at 100
+........................................
+Top1: 0.9904, Top5: 1
+Processing 40000 images averaged 0.00332707 ms/image and 0.332707 ms/batch.
+
+FP16 run:400 batches of size 100 starting at 100
+Engine could not be created at this precision
+
+INT8 run:400 batches of size 100 starting at 100
+........................................
+Top1: 0.9909, Top5: 1
+Processing 40000 images averaged 0.00215323 ms/image and 0.215323 ms/batch.
 </code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-developer-guide/index.html" target="_blank" rel="noopener">TensorRT developer guide</a></li>
 <li><a href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-developer-guide/index.htm" target="_blank" rel="noopener">TensorRT install guide</a></li>
+<li><a href="https://devblogs.nvidia.com/speed-up-inference-tensorrt/" target="_blank" rel="noopener">speed-up-inference-tensorrt</a></li>
+<li><a href="https://devblogs.nvidia.com/large-scale-object-detection-tensorrt/" target="_blank" rel="noopener">large-scale-object-detection-tensorrt</a></li>
+<li><a href="https://devblogs.nvidia.com/int8-inference-autonomous-vehicles-tensorrt/" target="_blank" rel="noopener">int8-inference-autonomous-vehicles-tensorrt</a></li>
 </ul>
 <h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>20180907: created.</li>
+<li>20181119: add tensorrt-5.0.</li>
 </ul>
 
       
@@ -864,7 +901,7 @@ Output:
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">126</span>
+                  <span class="site-state-item-count">141</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -875,7 +912,7 @@ Output:
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -886,7 +923,7 @@ Output:
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">111</span>
+                  <span class="site-state-item-count">115</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -936,7 +973,7 @@ Output:
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TensorRT-support-matrix"><span class="nav-number">1.1.</span> <span class="nav-text">TensorRT support matrix</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install"><span class="nav-number">1.2.</span> <span class="nav-text">install</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#download-and-install"><span class="nav-number">1.2.1.</span> <span class="nav-text">download and install</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#add-lib-to-path"><span class="nav-number">1.2.2.</span> <span class="nav-text">add lib to path</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python-package"><span class="nav-number">1.2.3.</span> <span class="nav-text">python package</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uff-package"><span class="nav-number">1.2.4.</span> <span class="nav-text">uff package</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#folder-structure"><span class="nav-number">1.3.</span> <span class="nav-text">folder structure</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#include"><span class="nav-number">1.3.1.</span> <span class="nav-text">include</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lib"><span class="nav-number">1.4.</span> <span class="nav-text">lib</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bin"><span class="nav-number">1.5.</span> <span class="nav-text">bin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sampleMNIST"><span class="nav-number">1.6.</span> <span class="nav-text">sampleMNIST</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Sample"><span class="nav-number">2.</span> <span class="nav-text">Sample</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sample-mnist"><span class="nav-number">2.1.</span> <span class="nav-text">sample_mnist</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sample-onnx-mnist"><span class="nav-number">2.2.</span> <span class="nav-text">sample_onnx_mnist</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sample-uff-mnist"><span class="nav-number">2.3.</span> <span class="nav-text">sample_uff_mnist</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sample-mnist-api"><span class="nav-number">2.4.</span> <span class="nav-text">sample_mnist_api</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TensorRT-support-matrix"><span class="nav-number">1.1.</span> <span class="nav-text">TensorRT support matrix</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install"><span class="nav-number">1.2.</span> <span class="nav-text">install</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#download-and-install"><span class="nav-number">1.2.1.</span> <span class="nav-text">download and install</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#add-lib-to-path"><span class="nav-number">1.2.2.</span> <span class="nav-text">add lib to path</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python-package"><span class="nav-number">1.2.3.</span> <span class="nav-text">python package</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uff-package"><span class="nav-number">1.2.4.</span> <span class="nav-text">uff package</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#folder-structure"><span class="nav-number">1.3.</span> <span class="nav-text">folder structure</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#include"><span class="nav-number">1.3.1.</span> <span class="nav-text">include</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lib"><span class="nav-number">1.3.2.</span> <span class="nav-text">lib</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bin"><span class="nav-number">1.3.3.</span> <span class="nav-text">bin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sample"><span class="nav-number">1.3.4.</span> <span class="nav-text">sample</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#compile-all"><span class="nav-number">1.3.4.1.</span> <span class="nav-text">compile all</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#compile-sampleMNIST"><span class="nav-number">1.3.4.2.</span> <span class="nav-text">compile sampleMNIST</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Sample"><span class="nav-number">2.</span> <span class="nav-text">Sample</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sample-mnist"><span class="nav-number">2.1.</span> <span class="nav-text">sample_mnist</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sample-onnx-mnist"><span class="nav-number">2.2.</span> <span class="nav-text">sample_onnx_mnist</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sample-uff-mnist"><span class="nav-number">2.3.</span> <span class="nav-text">sample_uff_mnist</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sample-mnist-api"><span class="nav-number">2.4.</span> <span class="nav-text">sample_mnist_api</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sample-int8"><span class="nav-number">2.5.</span> <span class="nav-text">sample_int8</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
