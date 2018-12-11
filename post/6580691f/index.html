@@ -99,7 +99,7 @@
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201807/635233-20180716195328292-1498836513.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201807/635233-20180716195739586-1774251249.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180803150304223-2059141141.jpg">
-<meta property="og:updated_time" content="2018-10-11T03:05:43.590Z">
+<meta property="og:updated_time" content="2018-12-11T09:58:24.054Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Compile and use opencv with CUDA support on windows 10">
 <meta name="twitter:description" content="Compile and use opencv with CUDA(GPU) support on windows 10">
@@ -355,8 +355,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-10-11T11:05:43+08:00">
-                2018-10-11
+              <time title="Post modified" itemprop="dateModified" datetime="2018-12-11T17:58:24+08:00">
+                2018-12-11
               </time>
             
           </span>
@@ -403,7 +403,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  2,778
+                  2,752
                 </span>
               
 
@@ -419,7 +419,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  17
+                  16
                 </span>
               
             </div>
@@ -502,14 +502,13 @@
 <h3 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">find_package(OpenCV REQUIRED COMPONENTS core highgui imgproc features2d calib3d </span><br><span class="line">	cudaarithm cudabgsegm cudafilters cudaimgproc cudawarping cudafeatures2d # for cuda-enabled</span><br><span class="line">) #</span><br><span class="line">MESSAGE( [Main] &quot; OpenCV_INCLUDE_DIRS = $&#123;OpenCV_INCLUDE_DIRS&#125;&quot;)</span><br><span class="line">MESSAGE( [Main] &quot; OpenCV_LIBS = $&#123;OpenCV_LIBS&#125;&quot;)</span><br></pre></td></tr></table></figure>
 <h3 id="demo-cpp"><a href="#demo-cpp" class="headerlink" title="demo.cpp"></a>demo.cpp</h3><p>In the sample below an image is loaded from local file, next it is uploaded to GPU, thresholded, downloaded and displayed.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;opencv2/cudaarithm.hpp&gt;</span><br><span class="line">#include &lt;opencv2/cudabgsegm.hpp&gt;</span><br><span class="line">#include &lt;opencv2/cudafilters.hpp&gt;</span><br><span class="line">#include &lt;opencv2/cudaimgproc.hpp&gt;</span><br><span class="line">#include &lt;opencv2/cudawarping.hpp&gt;</span><br><span class="line">#include &lt;opencv2/cudafeatures2d.hpp&gt;</span><br><span class="line"></span><br><span class="line">int test_opencv_gpu()</span><br><span class="line">		&#123;</span><br><span class="line">			try</span><br><span class="line">			&#123;</span><br><span class="line">				cv::Mat src_host = cv::imread(&quot;file.png&quot;, CV_LOAD_IMAGE_GRAYSCALE);</span><br><span class="line">				cv::cuda::GpuMat dst, src;</span><br><span class="line">				src.upload(src_host);</span><br><span class="line"></span><br><span class="line">				cv::cuda::threshold(src, dst, 128.0, 255.0, CV_THRESH_BINARY);</span><br><span class="line"></span><br><span class="line">				cv::Mat result_host;</span><br><span class="line">				dst.download(result_host);</span><br><span class="line"></span><br><span class="line">				cv::imshow(&quot;Result&quot;, result_host);</span><br><span class="line">				cv::waitKey();</span><br><span class="line">			&#125;</span><br><span class="line">			catch (const cv::Exception&amp; ex)</span><br><span class="line">			&#123;</span><br><span class="line">				std::cout &lt;&lt; &quot;Error: &quot; &lt;&lt; ex.what() &lt;&lt; std::endl;</span><br><span class="line">			&#125;</span><br><span class="line">			return 0;</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="cpu-vs-gpu-time-cost"><a href="#cpu-vs-gpu-time-cost" class="headerlink" title="cpu vs gpu time cost"></a>cpu vs gpu time cost</h2><pre><code>https://blog.csdn.net/m0_37857300/article/details/79039214
-对于分辨率不特别大的图片间的ORB特征匹配，CPU运算得比GPU版的快（由于图像上传到GPU消耗了时间）
+<h2 id="cpu-vs-gpu-time-cost"><a href="#cpu-vs-gpu-time-cost" class="headerlink" title="cpu vs gpu time cost"></a>cpu vs gpu time cost</h2><p> <a href="https://blog.csdn.net/m0_37857300/article/details/79039214" target="_blank" rel="noopener">time cost</a></p>
+<pre><code>对于分辨率不特别大的图片间的ORB特征匹配，CPU运算得比GPU版的快（由于图像上传到GPU消耗了时间）
 但对于分辨率较大的图片，或者GPU比CPU好的机器（比如Nvidia Jetson系列），GPU版的ORB算法比CPU版的程序更高效。
 </code></pre><h3 id="problems"><a href="#problems" class="headerlink" title="problems"></a>problems</h3><pre><code>(1) 使用cuda版本的opencv caffe网络的第一次创建非常耗时，后面的网络创建则非常快。
-(2) opencv的gpu代码比cpu代码慢，初次启动多耗费20s左右。(事实是由于编译的caffe和GPU计算力不匹配导致的)
-https://stackoverflow.com/questions/12074281/why-opencv-gpu-code-is-slower-than-cpu/16038287#16038287
-https://www.zhihu.com/question/28449000/answer/55287980
-</code></pre><h3 id="reasons"><a href="#reasons" class="headerlink" title="reasons:"></a>reasons:</h3><pre><code>  `Your problem is that CUDA needs to initialize! And it will generally takes between serveral seconds`
+(2) opencv的gpu代码比cpu代码慢，初次启动多耗费20s左右~~。(事实是由于编译的caffe和GPU计算力不匹配导致的)
+</code></pre><p><a href="https://stackoverflow.com/questions/12074281/why-opencv-gpu-code-is-slower-than-cpu/16038287#16038287" target="_blank" rel="noopener">ref1</a> and <a href="https://www.zhihu.com/question/28449000/answer/55287980" target="_blank" rel="noopener">ref2</a></p>
+<h3 id="reasons"><a href="#reasons" class="headerlink" title="reasons:"></a>reasons:</h3><pre><code>  `Your problem is that CUDA needs to initialize! And it will generally takes between serveral seconds`
 
   Why first function call is slow?
   That is because of initialization overheads. On first GPU function call `Cuda Runtime API` is initialized implicitly.
@@ -525,7 +524,7 @@ The following calls will be faster.
 <p><code>im2col.cu  Check failed: error == cudaSuccess (8 vs. 0) invalid device function</code></p>
 <pre><code>gtx 1060   sm_61
 gtx 970m   sm_52
-</code></pre><p>im2col 是caffe的源文件，表明gtx 970m的计算能力不支持可执行文件的运行。</p>
+</code></pre><p>im2col 是caffe的源文件，表明<code>gtx 970m</code>的计算能力不支持可执行文件的运行。</p>
 <h3 id="reasons-1"><a href="#reasons-1" class="headerlink" title="reasons"></a>reasons</h3><p>see <a href="https://stackoverflow.com/questions/17599189/what-is-the-purpose-of-using-multiple-arch-flags-in-nvidias-nvcc-compiler/17599585#17599585" target="_blank" rel="noopener">what-is-the-purpose-of-using-multiple-arch-flags-in-nvidias-nvcc-compiler</a></p>
 <blockquote>
 <p>Roughly speaking, the code compilation flow goes like this:</p>
@@ -701,7 +700,7 @@ Failed to initialize NVML: Unknown error
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">145</span>
+                  <span class="site-state-item-count">149</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -712,7 +711,7 @@ Failed to initialize NVML: Unknown error
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-count">47</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -723,7 +722,7 @@ Failed to initialize NVML: Unknown error
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">117</span>
+                  <span class="site-state-item-count">120</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
