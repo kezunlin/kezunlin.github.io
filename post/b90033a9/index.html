@@ -93,7 +93,7 @@
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180822092144550-1991113026.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180822092148096-1441323229.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180807151218024-1073147705.png">
-<meta property="og:updated_time" content="2018-11-28T02:55:43.701Z">
+<meta property="og:updated_time" content="2018-12-12T03:30:17.906Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Install and Configure Caffe on ubuntu 16.04">
 <meta name="twitter:description" content="Install and Configure Caffe on ubuntu 16.04">
@@ -349,8 +349,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-11-28T10:55:43+08:00">
-                2018-11-28
+              <time title="Post modified" itemprop="dateModified" datetime="2018-12-12T11:30:17+08:00">
+                2018-12-12
               </time>
             
           </span>
@@ -408,7 +408,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1,626
+                  1,754
                 </span>
               
 
@@ -424,7 +424,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  10
+                  11
                 </span>
               
             </div>
@@ -823,6 +823,15 @@ python
 &gt;&gt;&gt;import caffe 
 </code></pre><h3 id="upgrade-net"><a href="#upgrade-net" class="headerlink" title="upgrade net"></a>upgrade net</h3><pre><code>./tools/upgrade_net_proto_text  old.prototxt new.prototxt
 ./tools/upgrade_net_proto_binary  old.caffemodel new.caffemodel
+</code></pre><h2 id="caffe-example"><a href="#caffe-example" class="headerlink" title="caffe example"></a>caffe example</h2><h3 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">find_package(OpenCV REQUIRED)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">set(Caffe_DIR &quot;/home/kezunlin/program/caffe-wy/build/install/share/Caffe&quot;)  # caffe-wy caffe</span><br><span class="line"></span><br><span class="line"># for CaffeConfig.cmake/ caffe-config.cmake</span><br><span class="line">find_package(Caffe)</span><br><span class="line"># offical caffe  : There is no Caffe_INCLUDE_DIRS and Caffe_DEFINITIONS</span><br><span class="line"># refinedet caffe: OK.</span><br><span class="line"></span><br><span class="line">add_definitions($&#123;Caffe_DEFINITIONS&#125;)</span><br><span class="line"></span><br><span class="line">MESSAGE( [Main] &quot; Caffe_INCLUDE_DIRS = $&#123;Caffe_INCLUDE_DIRS&#125;&quot;)</span><br><span class="line">MESSAGE( [Main] &quot; Caffe_DEFINITIONS = $&#123;Caffe_DEFINITIONS&#125;&quot;)</span><br><span class="line">MESSAGE( [Main] &quot; Caffe_LIBRARIES = $&#123;Caffe_LIBRARIES&#125;&quot;) # caffe</span><br><span class="line">MESSAGE( [Main] &quot; Caffe_CPU_ONLY = $&#123;Caffe_CPU_ONLY&#125;&quot;)</span><br><span class="line">MESSAGE( [Main] &quot; Caffe_HAVE_CUDA = $&#123;Caffe_HAVE_CUDA&#125;&quot;)</span><br><span class="line">MESSAGE( [Main] &quot; Caffe_HAVE_CUDNN = $&#123;Caffe_HAVE_CUDNN&#125;&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">include_directories($&#123;Caffe_INCLUDE_DIRS&#125;)</span><br><span class="line"></span><br><span class="line">target_link_libraries(demo </span><br><span class="line">    $&#123;OpenCV_LIBS&#125;</span><br><span class="line">    $&#123;Caffe_LIBRARIES&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="run"><a href="#run" class="headerlink" title="run"></a>run</h3><pre><code>ldd demo
+</code></pre><p>if error occurs:</p>
+<pre><code>libcaffe.so.1.0.0 =&gt; not found
+</code></pre><p>fix </p>
+<pre><code>vim .bashrc
+
+# for caffe
+export LD_LIBRARY_PATH=/home/kezunlin/program/caffe-wy/build/install/lib:$LD_LIBRARY_PATH
 </code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="http://caffe.berkeleyvision.org/install_apt.html" target="_blank" rel="noopener">caffe offical</a> </li>
 <li>[setting-up-ubuntu-16-04-cuda-gpu-for-deep-learning-with-python](<a href="https://www.pyimagesearch.com/2017/09/27/setting-up-ubuntu-16-04-cuda-gpu-for-deep-learning-with-python/" target="_blank" rel="noopener">https://www.pyimagesearch.com/2017/09/27/setting-up-ubuntu-16-04-cuda-gpu-for-deep-learning-with-python/</a></li>
@@ -966,7 +975,7 @@ python
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">149</span>
+                  <span class="site-state-item-count">150</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -988,7 +997,7 @@ python
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">120</span>
+                  <span class="site-state-item-count">121</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -1038,7 +1047,7 @@ python
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Install-CUDA-cudnn"><span class="nav-number">1.</span> <span class="nav-text">Install CUDA + cudnn</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#install-opencv"><span class="nav-number">2.</span> <span class="nav-text">install opencv</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#install-caffe"><span class="nav-number">3.</span> <span class="nav-text">install caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#clone-repo"><span class="nav-number">3.1.</span> <span class="nav-text">clone repo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#update-repo"><span class="nav-number">3.2.</span> <span class="nav-text">update repo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#configure"><span class="nav-number">3.3.</span> <span class="nav-text">configure</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#edit-Makefile"><span class="nav-number">3.3.1.</span> <span class="nav-text">edit Makefile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-gcc-error"><span class="nav-number">3.3.2.</span> <span class="nav-text">fix gcc error</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-gflags-error"><span class="nav-number">3.3.3.</span> <span class="nav-text">fix gflags error</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">3.4.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install"><span class="nav-number">3.5.</span> <span class="nav-text">install</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-python-caffe"><span class="nav-number">3.5.1.</span> <span class="nav-text">fix python caffe</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python-draw-net"><span class="nav-number">3.6.</span> <span class="nav-text">python draw net</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#test-caffe"><span class="nav-number">3.7.</span> <span class="nav-text">test caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#train-net"><span class="nav-number">3.7.1.</span> <span class="nav-text">train net</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python-caffe"><span class="nav-number">3.7.2.</span> <span class="nav-text">python caffe</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#upgrade-net"><span class="nav-number">3.7.3.</span> <span class="nav-text">upgrade net</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Install-CUDA-cudnn"><span class="nav-number">1.</span> <span class="nav-text">Install CUDA + cudnn</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#install-opencv"><span class="nav-number">2.</span> <span class="nav-text">install opencv</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#install-caffe"><span class="nav-number">3.</span> <span class="nav-text">install caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#clone-repo"><span class="nav-number">3.1.</span> <span class="nav-text">clone repo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#update-repo"><span class="nav-number">3.2.</span> <span class="nav-text">update repo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#configure"><span class="nav-number">3.3.</span> <span class="nav-text">configure</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#edit-Makefile"><span class="nav-number">3.3.1.</span> <span class="nav-text">edit Makefile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-gcc-error"><span class="nav-number">3.3.2.</span> <span class="nav-text">fix gcc error</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-gflags-error"><span class="nav-number">3.3.3.</span> <span class="nav-text">fix gflags error</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">3.4.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install"><span class="nav-number">3.5.</span> <span class="nav-text">install</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-python-caffe"><span class="nav-number">3.5.1.</span> <span class="nav-text">fix python caffe</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python-draw-net"><span class="nav-number">3.6.</span> <span class="nav-text">python draw net</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#test-caffe"><span class="nav-number">3.7.</span> <span class="nav-text">test caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#train-net"><span class="nav-number">3.7.1.</span> <span class="nav-text">train net</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python-caffe"><span class="nav-number">3.7.2.</span> <span class="nav-text">python caffe</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#upgrade-net"><span class="nav-number">3.7.3.</span> <span class="nav-text">upgrade net</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#caffe-example"><span class="nav-number">3.8.</span> <span class="nav-text">caffe example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">3.8.1.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#run"><span class="nav-number">3.8.2.</span> <span class="nav-text">run</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>

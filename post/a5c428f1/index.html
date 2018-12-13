@@ -90,7 +90,7 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="compile darknet on windows 10">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-12-11T08:44:09.688Z">
+<meta property="og:updated_time" content="2018-12-11T18:09:36.893Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="compile darknet on windows 10">
 <meta name="twitter:description" content="compile darknet on windows 10">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-12-11T16:44:09+08:00">
-                2018-12-11
+              <time title="Post modified" itemprop="dateModified" datetime="2018-12-12T02:09:36+08:00">
+                2018-12-12
               </time>
             
           </span>
@@ -393,7 +393,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  275
+                  402
                 </span>
               
 
@@ -409,7 +409,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  2
+                  3
                 </span>
               
             </div>
@@ -446,7 +446,7 @@
 <li>opencv: <a href="http://sourceforge.net/projects/opencvlibrary/files/opencv-win/3.3.0/opencv-3.3.0.exe/download" target="_blank" rel="noopener">opencv-3.3.0-vc14.exe</a></li>
 </ul>
 <blockquote>
-<p>Install Cuda after VS 2015. otherwise errors occur. (don’t know why)</p>
+<p>Tips:<br>Install Cuda after VS 2015. otherwise errors occur. (don’t know why)</p>
 </blockquote>
 <p>commands</p>
 <pre><code>git clone https://github.com/AlexeyAB/darknet.git
@@ -462,27 +462,44 @@
 <li>replace <code>compute_30,sm_30;</code> with <code>compute_61,sm_61;</code></li>
 </ul>
 <h2 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h2><p>open <code>build/darknet/darknet.sln</code> with <code>VS 2015</code></p>
-<p>include path:</p>
-<ul>
-<li>C:\opencv330\opencv\build\include</li>
-<li>....\3rdparty\include</li>
-<li>$(CUDA_PATH)\include</li>
-</ul>
-<p>library path:</p>
-<ul>
-<li>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\lib\x64</li>
-<li>$(CUDA_PATH)\lib\$(PlatformName)  </li>
-<li>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\lib\x64</li>
-</ul>
-<p>linker input:</p>
-<ul>
-<li>....\3rdparty\lib\x64\pthreadVC2.lib;cublas.lib;curand.lib;cudart.lib;</li>
-</ul>
-<p>build with <code>x64 Release</code>.</p>
+<p>include path</p>
+<pre><code>C:\opencv330\opencv\build\include
+..\..\3rdparty\include
+$(CUDA_PATH)\include
+</code></pre><p>library path</p>
+<pre><code>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\lib\x64
+$(CUDA_PATH)\lib\$(PlatformName)  
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\lib\x64
+</code></pre><p>linker input</p>
+<pre><code>..\..\3rdparty\lib\x64\pthreadVC2.lib;cublas.lib;curand.lib;cudart.lib;
+</code></pre><p>build with <code>x64 Release</code>.</p>
 <h2 id="run"><a href="#run" class="headerlink" title="run"></a>run</h2><h3 id="darknet-exe"><a href="#darknet-exe" class="headerlink" title="darknet.exe"></a>darknet.exe</h3><pre><code>./darknet.exe detector test data/coco.data yolov3.cfg yolov3.weights -i 0 -thresh 0.25 dog.jpg -ext_output
 </code></pre><h3 id="darknet-py"><a href="#darknet-py" class="headerlink" title="darknet.py"></a>darknet.py</h3><p>compile <code>yolo_cpp_dll.sln</code> and generate <code>yolo_cpp_dll.dll</code> for python usage.</p>
 <pre><code>python darknet.py
-</code></pre><h1 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h1><p>for linux and windows.<br>see <a href="https://gist.github.com/kezunlin/01adb3c752072f36954ad1bb4f935c14" target="_blank" rel="noopener">yolo.py</a></p>
+</code></pre><h1 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h1><h2 id="yolo-py"><a href="#yolo-py" class="headerlink" title="yolo.py"></a>yolo.py</h2><p>for linux and windows.<br>see <a href="https://gist.github.com/kezunlin/01adb3c752072f36954ad1bb4f935c14" target="_blank" rel="noopener">yolo.py</a></p>
+<h2 id="yolo-cpp-dll"><a href="#yolo-cpp-dll" class="headerlink" title="yolo_cpp_dll"></a>yolo_cpp_dll</h2><p>System Path</p>
+<pre><code>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\libnvvp
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\jre\bin
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\jre\bin\plugin2
+</code></pre><p>cuda80+cudnn6 </p>
+<ul>
+<li>cuda_8.0.61_win10.exe: <code>cublas64_80.dll,curand64_80.dll,cudart64_80.dll</code></li>
+<li>cudnn-8.0-windows10-x64-v6.0.zip: <code>cudnn64_6.dll</code></li>
+</ul>
+<p>cuda90+cudnn7</p>
+<ul>
+<li>cuda_9.0.176_win10.exe: <code>cublas64_90.dll,curand64_90.dll,cudart64_90.dll</code></li>
+<li>cudnn-9.0-windows10-x64-v7.1.zip: <code>cudnn64_7.dll</code></li>
+</ul>
+<p>yolo dll</p>
+<ul>
+<li>cuda80_yolo_cpp_dll: <code>pthreadvc2.dll, cublas64_80.dll,curand64_80.dll,cudart64_80.dll,cudnn64_6.dll</code></li>
+<li>cuda90_yolo_cpp_dll: <code>pthreadvc2.dll, cublas64_90.dll,curand64_90.dll,cudart64_90.dll,cudnn64_7.dll</code><blockquote>
+<p>Tips: use <code>Dependency Walker</code> to list dlls.</p>
+</blockquote>
+</li>
+</ul>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://github.com/pjreddie/darknet" target="_blank" rel="noopener">pjreddie darknet yolo</a></li>
 <li><a href="https://pjreddie.com/darknet/install/" target="_blank" rel="noopener">darknet install</a></li>
@@ -628,7 +645,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">149</span>
+                  <span class="site-state-item-count">150</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -650,7 +667,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">120</span>
+                  <span class="site-state-item-count">121</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -700,7 +717,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#requirements"><span class="nav-number">1.1.</span> <span class="nav-text">requirements</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#config"><span class="nav-number">1.2.</span> <span class="nav-text">config</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">1.3.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#run"><span class="nav-number">1.4.</span> <span class="nav-text">run</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#darknet-exe"><span class="nav-number">1.4.1.</span> <span class="nav-text">darknet.exe</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#darknet-py"><span class="nav-number">1.4.2.</span> <span class="nav-text">darknet.py</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Code"><span class="nav-number">2.</span> <span class="nav-text">Code</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#requirements"><span class="nav-number">1.1.</span> <span class="nav-text">requirements</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#config"><span class="nav-number">1.2.</span> <span class="nav-text">config</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">1.3.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#run"><span class="nav-number">1.4.</span> <span class="nav-text">run</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#darknet-exe"><span class="nav-number">1.4.1.</span> <span class="nav-text">darknet.exe</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#darknet-py"><span class="nav-number">1.4.2.</span> <span class="nav-text">darknet.py</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Code"><span class="nav-number">2.</span> <span class="nav-text">Code</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#yolo-py"><span class="nav-number">2.1.</span> <span class="nav-text">yolo.py</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#yolo-cpp-dll"><span class="nav-number">2.2.</span> <span class="nav-text">yolo_cpp_dll</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
