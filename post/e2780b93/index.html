@@ -90,7 +90,7 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="Tutorial to Install and Configure ROS Kinetic on Ubuntu 16.04.">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-01-18T04:40:47.084Z">
+<meta property="og:updated_time" content="2018-12-17T01:20:37.129Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Install and Configure ROS Kinetic on Ubuntu 16.04">
 <meta name="twitter:description" content="Tutorial to Install and Configure ROS Kinetic on Ubuntu 16.04.">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-01-18T12:40:47+08:00">
-                2018-01-18
+              <time title="Post modified" itemprop="dateModified" datetime="2018-12-17T09:20:37+08:00">
+                2018-12-17
               </time>
             
           </span>
@@ -393,7 +393,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  857
+                  909
                 </span>
               
 
@@ -409,7 +409,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  5
+                  6
                 </span>
               
             </div>
@@ -433,7 +433,8 @@
         <p>Tutorial to Install and Configure ROS Kinetic on Ubuntu 16.04.<br><a id="more"></a></p>
 <pre><code>ROS release       ROS version          Ubuntu version
 2016.3         ROS Kinetic Kame    Ubuntu 16.04(Xenial)/Ubuntu 15.10
-</code></pre><h1 id="Install-Guide"><a href="#Install-Guide" class="headerlink" title="Install Guide"></a>Install Guide</h1><h2 id="Notice"><a href="#Notice" class="headerlink" title="Notice"></a>Notice</h2><h3 id="tinghua-source"><a href="#tinghua-source" class="headerlink" title="tinghua source"></a>tinghua source</h3><pre><code>http://mirrors.tuna.tsinghua.edu.cn/ubuntu xenial
+</code></pre><h1 id="Install-Guide"><a href="#Install-Guide" class="headerlink" title="Install Guide"></a>Install Guide</h1><h2 id="quick-commands"><a href="#quick-commands" class="headerlink" title="quick commands"></a>quick commands</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">sudo sh -c &apos;. /etc/lsb-release &amp;&amp; echo &quot;deb [arch=amd64] http://mirrors.ustc.edu.cn/ros/ubuntu/ $DISTRIB_CODENAME main&quot; &gt; /etc/apt/sources.list.d/ros-latest.list&apos;</span><br><span class="line"></span><br><span class="line">sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116</span><br><span class="line"></span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install ros-kinetic-desktop-full</span><br><span class="line"></span><br><span class="line">sudo apt-get install python-rosinstall python-rosinstall-generator python-wstool build-essential</span><br><span class="line"></span><br><span class="line">sudo rosdep init</span><br><span class="line">rosdep update</span><br><span class="line"></span><br><span class="line">echo &quot;source /opt/ros/kinetic/setup.bash&quot; &gt;&gt; ~/.bashrc</span><br><span class="line">source ~/.bashrc</span><br><span class="line"></span><br><span class="line"># test</span><br><span class="line">roscore</span><br></pre></td></tr></table></figure>
+<h2 id="Notice"><a href="#Notice" class="headerlink" title="Notice"></a>Notice</h2><h3 id="tinghua-source"><a href="#tinghua-source" class="headerlink" title="tinghua source"></a>tinghua source</h3><pre><code>http://mirrors.tuna.tsinghua.edu.cn/ubuntu xenial
 </code></pre><h3 id="update-source"><a href="#update-source" class="headerlink" title="update source"></a>update source</h3><pre><code>sudo apt-get update
 </code></pre><p>if we encouter errors when update source, we need to fix.</p>
 <p>e.g remove sougou source to fix errors.</p>
@@ -443,25 +444,24 @@
 
 rm ./sources.list.d/sogoupinyin.list
 </code></pre><h2 id="Configure-ros-source"><a href="#Configure-ros-source" class="headerlink" title="Configure ros source"></a>Configure ros source</h2><h3 id="ros-offical-NOT-RECOMMEND"><a href="#ros-offical-NOT-RECOMMEND" class="headerlink" title="ros offical(NOT RECOMMEND)"></a>ros offical(NOT RECOMMEND)</h3><pre><code>sudo sh -c &apos;echo &quot;deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main&quot; &gt; /etc/apt/sources.list.d/ros-latest.list&apos;
-</code></pre><p>NOT RECOMMEND，when <code>apt-get update</code>, error will occur:</p>
-<pre><code>Hash Sum mismatch
-</code></pre><h3 id="ros-china-RECOMMEND"><a href="#ros-china-RECOMMEND" class="headerlink" title="ros china(RECOMMEND)"></a>ros china(RECOMMEND)</h3><pre><code>sudo sh -c &apos;. /etc/lsb-release &amp;&amp; echo &quot;deb [arch=amd64] http://mirrors.ustc.edu.cn/ros/ubuntu/ $DISTRIB_CODENAME main&quot; &gt; /etc/apt/sources.list.d/ros-latest.list&apos;
-</code></pre><p><code>cat ros-latest.list</code> output:</p>
+</code></pre><p>NOT RECOMMEND，when <code>apt-get update</code>, error will occur <code>Hash Sum mismatch</code></p>
+<h3 id="ros-china-RECOMMEND"><a href="#ros-china-RECOMMEND" class="headerlink" title="ros china(RECOMMEND)"></a>ros china(RECOMMEND)</h3><pre><code>sudo sh -c &apos;. /etc/lsb-release &amp;&amp; echo &quot;deb [arch=amd64] http://mirrors.ustc.edu.cn/ros/ubuntu/ $DISTRIB_CODENAME main&quot; &gt; /etc/apt/sources.list.d/ros-latest.list&apos;
+sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116
+</code></pre><blockquote>
+<p>ros-latest.list</p>
+</blockquote>
 <pre><code>deb [arch=amd64] http://mirrors.ustc.edu.cn/ros/ubuntu/ xenial main
-</code></pre><h2 id="Set-up-keys"><a href="#Set-up-keys" class="headerlink" title="Set up keys"></a>Set up keys</h2><pre><code>sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116
-</code></pre><h2 id="Install-ros"><a href="#Install-ros" class="headerlink" title="Install ros"></a>Install ros</h2><h3 id="Desktop-Full-Recommended"><a href="#Desktop-Full-Recommended" class="headerlink" title="Desktop-Full (Recommended)"></a>Desktop-Full (Recommended)</h3><p>ROS, rqt, rviz, robot-generic libraries, 2D/3D simulators, navigation and 2D/3D perception</p>
+</code></pre><h2 id="Install-ros"><a href="#Install-ros" class="headerlink" title="Install ros"></a>Install ros</h2><p>ROS, rqt, rviz, robot-generic libraries, 2D/3D simulators, navigation and 2D/3D perception</p>
 <pre><code>sudo apt-get update
 sudo apt-get install ros-kinetic-desktop-full
-</code></pre><h3 id="Desktop-Install"><a href="#Desktop-Install" class="headerlink" title="Desktop Install"></a>Desktop Install</h3><p>ROS, rqt, rviz, and robot-generic libraries</p>
-<pre><code>sudo apt-get install ros-kinetic-desktop
-</code></pre><h3 id="ROS-Base"><a href="#ROS-Base" class="headerlink" title="ROS-Base"></a>ROS-Base</h3><p>(Bare Bones) ROS package, build, and communication libraries. No GUI tools.</p>
-<pre><code>sudo apt-get install ros-kinetic-ros-base
-</code></pre><h3 id="Individual-Package"><a href="#Individual-Package" class="headerlink" title="Individual Package"></a>Individual Package</h3><p> You can also install a specific ROS package (replace underscores with dashes of the package name):</p>
-<pre><code>sudo apt-get install ros-kinetic-&lt;PACKAGE&gt;
-</code></pre><p>e.g.</p>
-<pre><code>sudo apt-get install ros-kinetic-slam-gmapping
-</code></pre><h3 id="find-ros-package"><a href="#find-ros-package" class="headerlink" title="find ros package"></a>find ros package</h3><p>To find available packages, use:</p>
-<pre><code>apt-cache search ros-kinetic
+
+#sudo apt-get install ros-kinetic-desktop
+#sudo apt-get install ros-kinetic-ros-base
+
+#sudo apt-get install ros-kinetic-&lt;PACKAGE&gt;
+#sudo apt-get install ros-kinetic-slam-gmapping
+
+#apt-cache search ros-kinetic
 </code></pre><h2 id="Initialize-rosdep"><a href="#Initialize-rosdep" class="headerlink" title="Initialize rosdep"></a>Initialize rosdep</h2><p>Before you can use ROS, you will need to initialize rosdep. rosdep enables you to easily install system dependencies for source you want to compile and is required to run some core components in ROS.</p>
 <pre><code>sudo rosdep init
 rosdep update
@@ -482,8 +482,6 @@ Add distro &quot;lunar&quot;
 updated cache in /home/kezunlin/.ros/rosdep/sources.cache
 </code></pre><h2 id="Environment-setup"><a href="#Environment-setup" class="headerlink" title="Environment setup"></a>Environment setup</h2><pre><code>echo &quot;source /opt/ros/kinetic/setup.bash&quot; &gt;&gt; ~/.bashrc
 source ~/.bashrc
-</code></pre><p>If you just want to change the environment of your current shell, instead of the above you can type:</p>
-<pre><code>source /opt/ros/kinetic/setup.bash
 </code></pre><h3 id="check-ROS"><a href="#check-ROS" class="headerlink" title="check  ROS"></a>check  ROS</h3><pre><code>env | grep ROS
 export | grep ROS
 declare -x ROSLISP_PACKAGE_DIRECTORIES=&quot;&quot;
@@ -494,24 +492,44 @@ declare -x ROS_PACKAGE_PATH=&quot;/opt/ros/kinetic/share&quot;
 declare -x ROS_ROOT=&quot;/opt/ros/kinetic/share/ros&quot;
 </code></pre><h2 id="Dependencies-for-building-packages"><a href="#Dependencies-for-building-packages" class="headerlink" title="Dependencies for building packages"></a>Dependencies for building packages</h2><pre><code>sudo apt-get install python-rosinstall python-rosinstall-generator python-wstool build-essential
 </code></pre><h2 id="Test-install"><a href="#Test-install" class="headerlink" title="Test install"></a>Test install</h2><pre><code>roscore
-</code></pre><h2 id="Full-bash-scripts"><a href="#Full-bash-scripts" class="headerlink" title="Full bash scripts"></a>Full bash scripts</h2><pre><code>sudo sh -c &apos;. /etc/lsb-release &amp;&amp; echo &quot;deb [arch=amd64] http://mirrors.ustc.edu.cn/ros/ubuntu/ $DISTRIB_CODENAME main&quot; &gt; /etc/apt/sources.list.d/ros-latest.list&apos;
+</code></pre><p>output </p>
+<pre><code>... logging to /home/kezunlin/.ros/log/b777db6c-ff85-11e8-93c2-80fa5b47928a/roslaunch-ke-17139.log
+Checking log directory for disk usage. This may take awhile.
+Press Ctrl-C to interrupt
+Done checking log file disk usage. Usage is &lt;1GB.
 
-sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116
+started roslaunch server http://ke:36319/
+ros_comm version 1.12.14
 
-sudo apt-get update
-sudo apt-get install ros-kinetic-desktop-full
 
-sudo rosdep init
-rosdep update
+SUMMARY
+========
 
-echo &quot;source /opt/ros/kinetic/setup.bash&quot; &gt;&gt; ~/.bashrc
-source ~/.bashrc
+PARAMETERS
+ * /rosdistro: kinetic
+ * /rosversion: 1.12.14
 
-sudo apt-get install python-rosinstall python-rosinstall-generator python-wstool build-essential
+NODES
+
+auto-starting new master
+process[master]: started with pid [17162]
+ROS_MASTER_URI=http://ke:11311/
+
+setting /run_id to b777db6c-ff85-11e8-93c2-80fa5b47928a
+process[rosout-1]: started with pid [17175]
+started core service [/rosout]
+^C[rosout-1] killing on exit
+[master] killing on exit
+shutting down processing monitor...
+... shutting down processing monitor complete
+done
 </code></pre><h1 id="Create-Workspace"><a href="#Create-Workspace" class="headerlink" title="Create Workspace"></a>Create Workspace</h1><h2 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h2><p>Let’s create and build a catkin workspace:</p>
 <pre><code>mkdir -p ~/catkin_ws/src
 cd ~/catkin_ws/
 catkin_make
+
+ls .
+build dist src
 </code></pre><p><code>tree src</code> folder</p>
 <pre><code>src/
 └── CMakeLists.txt -&gt; /opt/ros/kinetic/share/catkin/cmake/toplevel.cmake
@@ -694,7 +712,7 @@ ROS_ETC_DIR=/opt/ros/kinetic/etc/ros
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">150</span>
+                  <span class="site-state-item-count">152</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -716,7 +734,7 @@ ROS_ETC_DIR=/opt/ros/kinetic/etc/ros
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">121</span>
+                  <span class="site-state-item-count">122</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -766,7 +784,7 @@ ROS_ETC_DIR=/opt/ros/kinetic/etc/ros
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Install-Guide"><span class="nav-number">1.</span> <span class="nav-text">Install Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Notice"><span class="nav-number">1.1.</span> <span class="nav-text">Notice</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tinghua-source"><span class="nav-number">1.1.1.</span> <span class="nav-text">tinghua source</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#update-source"><span class="nav-number">1.1.2.</span> <span class="nav-text">update source</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Configure-ros-source"><span class="nav-number">1.2.</span> <span class="nav-text">Configure ros source</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ros-offical-NOT-RECOMMEND"><span class="nav-number">1.2.1.</span> <span class="nav-text">ros offical(NOT RECOMMEND)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ros-china-RECOMMEND"><span class="nav-number">1.2.2.</span> <span class="nav-text">ros china(RECOMMEND)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Set-up-keys"><span class="nav-number">1.3.</span> <span class="nav-text">Set up keys</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Install-ros"><span class="nav-number">1.4.</span> <span class="nav-text">Install ros</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Desktop-Full-Recommended"><span class="nav-number">1.4.1.</span> <span class="nav-text">Desktop-Full (Recommended)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Desktop-Install"><span class="nav-number">1.4.2.</span> <span class="nav-text">Desktop Install</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ROS-Base"><span class="nav-number">1.4.3.</span> <span class="nav-text">ROS-Base</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Individual-Package"><span class="nav-number">1.4.4.</span> <span class="nav-text">Individual Package</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#find-ros-package"><span class="nav-number">1.4.5.</span> <span class="nav-text">find ros package</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Initialize-rosdep"><span class="nav-number">1.5.</span> <span class="nav-text">Initialize rosdep</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Environment-setup"><span class="nav-number">1.6.</span> <span class="nav-text">Environment setup</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#check-ROS"><span class="nav-number">1.6.1.</span> <span class="nav-text">check  ROS</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dependencies-for-building-packages"><span class="nav-number">1.7.</span> <span class="nav-text">Dependencies for building packages</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Test-install"><span class="nav-number">1.8.</span> <span class="nav-text">Test install</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Full-bash-scripts"><span class="nav-number">1.9.</span> <span class="nav-text">Full bash scripts</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Create-Workspace"><span class="nav-number">2.</span> <span class="nav-text">Create Workspace</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Create"><span class="nav-number">2.1.</span> <span class="nav-text">Create</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#source-devel-setup"><span class="nav-number">2.2.</span> <span class="nav-text">source devel setup</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Install-Guide"><span class="nav-number">1.</span> <span class="nav-text">Install Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#quick-commands"><span class="nav-number">1.1.</span> <span class="nav-text">quick commands</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Notice"><span class="nav-number">1.2.</span> <span class="nav-text">Notice</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tinghua-source"><span class="nav-number">1.2.1.</span> <span class="nav-text">tinghua source</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#update-source"><span class="nav-number">1.2.2.</span> <span class="nav-text">update source</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Configure-ros-source"><span class="nav-number">1.3.</span> <span class="nav-text">Configure ros source</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ros-offical-NOT-RECOMMEND"><span class="nav-number">1.3.1.</span> <span class="nav-text">ros offical(NOT RECOMMEND)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ros-china-RECOMMEND"><span class="nav-number">1.3.2.</span> <span class="nav-text">ros china(RECOMMEND)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Install-ros"><span class="nav-number">1.4.</span> <span class="nav-text">Install ros</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Initialize-rosdep"><span class="nav-number">1.5.</span> <span class="nav-text">Initialize rosdep</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Environment-setup"><span class="nav-number">1.6.</span> <span class="nav-text">Environment setup</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#check-ROS"><span class="nav-number">1.6.1.</span> <span class="nav-text">check  ROS</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dependencies-for-building-packages"><span class="nav-number">1.7.</span> <span class="nav-text">Dependencies for building packages</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Test-install"><span class="nav-number">1.8.</span> <span class="nav-text">Test install</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Create-Workspace"><span class="nav-number">2.</span> <span class="nav-text">Create Workspace</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Create"><span class="nav-number">2.1.</span> <span class="nav-text">Create</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#source-devel-setup"><span class="nav-number">2.2.</span> <span class="nav-text">source devel setup</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
