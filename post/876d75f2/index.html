@@ -90,7 +90,7 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="compile protobuf-cpp on windows 10">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-10-29T01:49:01.909Z">
+<meta property="og:updated_time" content="2018-12-19T01:14:13.759Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="compile protobuf-cpp on windows 10">
 <meta name="twitter:description" content="compile protobuf-cpp on windows 10">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-10-29T09:49:01+08:00">
-                2018-10-29
+              <time title="Post modified" itemprop="dateModified" datetime="2018-12-19T09:14:13+08:00">
+                2018-12-19
               </time>
             
           </span>
@@ -393,7 +393,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  159
+                  220
                 </span>
               
 
@@ -431,15 +431,19 @@
 
       
         <p>compile protobuf-cpp on windows 10<br><a id="more"></a></p>
-<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h2><pre><code>git clone https://github.com/protocolbuffers/protobuf.git     
+<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><ul>
+<li><a href="http://kezunlin.me/post/d60ff6fe/">Part 1: compile protobuf-cpp on ubuntu 16.04</a></li>
+<li><strong><a href="http://kezunlin.me/post/876d75f2/">Part 2: compile protobuf-cpp on windows 10</a></strong></li>
+</ul>
+<h2 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h2><pre><code>git clone https://github.com/protocolbuffers/protobuf.git     
 cd protobuf
 git submodule update --init --recursive
 # third_party/benchmark third_party/googletest
 
-cd cmake
-mkdir build &amp;&amp; cd build &amp;&amp; cmake-gui ..
-
-CMAKE_INSTALL_PREFIX C:/Program Files/protobuf
+cd cmake &amp;&amp; mkdir build &amp;&amp; cd build &amp;&amp; cmake-gui ..
+</code></pre><p>with options</p>
+<pre><code>CMAKE_INSTALL_PREFIX C:/Program Files/protobuf
+protobuf_BUILD_SHARED_LIBS ON
 </code></pre><p>Static Linking vs DLL</p>
 <blockquote>
 <p><code>Static linking</code> is now the default for the Protocol Buffer libraries. Due to issues with Win32’s use of a separate heap for each DLL, as well as binary compatibility issues between different versions of MSVC’s STL library, it is recommended that you use static linkage only.<br>However, it is possible to build libprotobuf and libprotoc as DLLs if you really want. To do this, do the following:</p>
@@ -449,7 +453,11 @@ CMAKE_INSTALL_PREFIX C:/Program Files/protobuf
 <li>Follow the same steps as described in the above section.</li>
 <li>When compiling your project, make sure to <code>#define PROTOBUF_USE_DLLS</code>.</li>
 </ul>
-<p>compile and install to <code>C:/Program Files/protobuf</code> with static libraries.</p>
+<p>compile <code>ALL_BUILD</code> with <code>VS 2015</code> and install to <code>C:/Program Files/protobuf</code> with dynamic libraries.</p>
+<h2 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h2><pre><code>protoc --cpp_out=. ./point_cloud.proto 
+protoc --java_out=./java/ ./proto/helloworld.proto
+protoc --go_out=./go/ ./proto/helloworld.proto
+</code></pre><h2 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">find_package(Protobuf REQUIRED)</span><br><span class="line">add_definitions( -DPROTOBUF_USE_DLLS ) </span><br><span class="line">MESSAGE( [Main] &quot; PROTOBUF_INCLUDE_DIRS = $&#123;PROTOBUF_INCLUDE_DIRS&#125;&quot;)   </span><br><span class="line">MESSAGE( [Main] &quot; PROTOBUF_LIBRARIES = $&#123;PROTOBUF_LIBRARIES&#125;&quot;)</span><br></pre></td></tr></table></figure>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://github.com/protocolbuffers/protobuf/blob/master/cmake/README.md" target="_blank" rel="noopener">protobuf on windows</a></li>
 </ul>
@@ -593,7 +601,7 @@ CMAKE_INSTALL_PREFIX C:/Program Files/protobuf
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">152</span>
+                  <span class="site-state-item-count">153</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -665,7 +673,7 @@ CMAKE_INSTALL_PREFIX C:/Program Files/protobuf
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">1.1.</span> <span class="nav-text">compile</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">1.1.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#usage"><span class="nav-number">1.2.</span> <span class="nav-text">usage</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">1.3.</span> <span class="nav-text">CMakeLists.txt</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
