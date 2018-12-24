@@ -90,7 +90,7 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="compile protobuf-cpp on ubuntu 16.04">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-12-19T01:13:59.312Z">
+<meta property="og:updated_time" content="2018-12-21T07:08:19.112Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="compile protobuf-cpp on ubuntu 16.04">
 <meta name="twitter:description" content="compile protobuf-cpp on ubuntu 16.04">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-12-19T09:13:59+08:00">
-                2018-12-19
+              <time title="Post modified" itemprop="dateModified" datetime="2018-12-21T15:08:19+08:00">
+                2018-12-21
               </time>
             
           </span>
@@ -393,7 +393,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  304
+                  670
                 </span>
               
 
@@ -409,7 +409,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  2
+                  4
                 </span>
               
             </div>
@@ -435,22 +435,48 @@
 <li><strong><a href="http://kezunlin.me/post/d60ff6fe/">Part 1: compile protobuf-cpp on ubuntu 16.04</a></strong></li>
 <li><a href="http://kezunlin.me/post/876d75f2/">Part 2: compile protobuf-cpp on windows 10</a></li>
 </ul>
-<h2 id="remove-protobuf"><a href="#remove-protobuf" class="headerlink" title="remove protobuf"></a>remove protobuf</h2><p>remove exist <code>protobuf 2.6.1</code></p>
+<h2 id="remove"><a href="#remove" class="headerlink" title="remove"></a>remove</h2><p>remove exist <code>protobuf 2.6.1</code></p>
 <pre><code>protoc --version
 2.6.1
 
 sudo apt-get remove libprotobuf-dev
-</code></pre><h2 id="install-protobuf"><a href="#install-protobuf" class="headerlink" title="install protobuf"></a>install protobuf</h2><p>install <code>protobuf 3.4.0</code></p>
+</code></pre><h2 id="compile-1"><a href="#compile-1" class="headerlink" title="compile (1)"></a>compile (1)</h2><p>install <code>protobuf 3.4.0</code></p>
 <pre><code>wget --no-check-certificate https://mirror.sobukus.de/files/src/protobuf/protobuf-cpp-3.4.0.tar.gz 
 
 tar -xvf protobuf-cpp-3.4.0.tar.gz
 cd protobuf-3.4.0 
-./configure 
+./configure --disable-shared CXXFLAGS=&quot;-fPIC&quot;
 make -j8 
 sudo make install
 sudo ldconfig
 
 sudo make uninstall
+</code></pre><blockquote>
+<p>tips: we compile static library with <code>--disable-shared CXXFLAGS=&quot;-fPIC&quot;</code>. 编译动态库dll/so的时候，如果依赖static library(比如profobuf)，那么static library编译的时候需要加上-fPIC,否则动态库编译出错。</p>
+</blockquote>
+<p>otherwise, error occurs </p>
+<pre><code>Linking CXX shared library ../../../../bin/libcommon.so
+/usr/bin/ld: /usr/local/lib/libprotobuf.a(common.o): relocation R_X86_64_32S against `.rodata&apos; can not be used when makinga shared object; recompile with -fPIC
+/usr/local/lib/libprotobuf.a: error adding symbols: Bad value
+</code></pre><p>install path</p>
+<ul>
+<li>header: <code>/usr/local/include/google/protobuf</code></li>
+<li>lib: <code>/usr/local/lib</code></li>
+<li>executable: <code>/usr/local/bin</code></li>
+</ul>
+<p>static libs</p>
+<pre><code>ll /usr/local/lib/libproto
+libprotobuf.a        libprotobuf-lite.a   libprotoc.a          
+libprotobuf.la       libprotobuf-lite.la  libprotoc.la  
+</code></pre><blockquote>
+<p>By default, <code>make install&#39; will install all the files in</code>/usr/local/bin’, <code>/usr/local/lib&#39; etc.  You can specify
+an installation prefix other than</code>/usr/local’ using <code>--prefix&#39;,
+for instance</code>–prefix=$HOME’.</p>
+</blockquote>
+<pre><code>./configure -h
+
+--enable-shared[=PKGS]  build shared libraries [default=yes]
+--enable-static[=PKGS]  build static libraries [default=yes]
 </code></pre><h2 id="test"><a href="#test" class="headerlink" title="test"></a>test</h2><pre><code>which protoc
 /usr/local/bin/protoc
 
@@ -460,15 +486,19 @@ libprotoc 3.4.0
 <p>tips install openmpi</p>
 </blockquote>
 <pre><code>sudo apt-get install -y  libiomp-dev libopenmpi-dev 
-</code></pre><h2 id="compile-from-source"><a href="#compile-from-source" class="headerlink" title="compile from source"></a>compile from source</h2><pre><code>git clone https://github.com/protocolbuffers/protobuf.git     
+</code></pre><h2 id="compile-2"><a href="#compile-2" class="headerlink" title="compile (2)"></a>compile (2)</h2><pre><code>git clone https://github.com/protocolbuffers/protobuf.git     
 cd protobuf
 git submodule update --init --recursive
 # third_party/benchmark third_party/googletest
 
-cd cmake &amp;&amp; mkdir build &amp;&amp; cd build &amp;&amp; cmake-gui ..
+cd cmake &amp;&amp; mkdir build &amp;&amp; cd build
+
+cmake-gui ..
+#cmake CMAKE_CXX_FLGAS=&quot;-fPIC&quot; ..
 </code></pre><p>with options</p>
-<pre><code>CMAKE_INSTALL_PREFIX C:/Program Files/protobuf
-protobuf_BUILD_SHARED_LIBS ON
+<pre><code>CMAKE_INSTALL_PREFIX /usr/local
+protobuf_BUILD_SHARED_LIBS OFF
+CMAKE_CXX_FLAGS -fPIC
 </code></pre><p>Static Linking vs DLL</p>
 <blockquote>
 <p><code>Static linking</code> is now the default for the Protocol Buffer libraries. Due to issues with Win32’s use of a separate heap for each DLL, as well as binary compatibility issues between different versions of MSVC’s STL library, it is recommended that you use static linkage only.<br>However, it is possible to build libprotobuf and libprotoc as DLLs if you really want. To do this, do the following:</p>
@@ -478,12 +508,33 @@ protobuf_BUILD_SHARED_LIBS ON
 <li>Follow the same steps as described in the above section.</li>
 <li>When compiling your project, make sure to <code>#define PROTOBUF_USE_DLLS</code>.</li>
 </ul>
-<h2 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h2><pre><code>protoc --cpp_out=. ./point_cloud.proto 
+<h2 id="multiple-protoc"><a href="#multiple-protoc" class="headerlink" title="multiple protoc"></a>multiple protoc</h2><pre><code>whereis protoc 
+protoc: /usr/bin/protoc  # 2.6.0
+/usr/local/bin/protoc    # 3.6.1
+/usr/share/man/man1/protoc.1.gz
+</code></pre><h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><h2 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h2><pre><code>protoc --cpp_out=. ./point_cloud.proto 
 protoc --java_out=./java/ ./proto/helloworld.proto
 protoc --go_out=./go/ ./proto/helloworld.proto
-</code></pre><h2 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">find_package(Protobuf REQUIRED)</span><br><span class="line">add_definitions( -DPROTOBUF_USE_DLLS )  # KEY STEPS</span><br><span class="line">MESSAGE( [Main] &quot; PROTOBUF_INCLUDE_DIRS = $&#123;PROTOBUF_INCLUDE_DIRS&#125;&quot;)   </span><br><span class="line">MESSAGE( [Main] &quot; PROTOBUF_LIBRARIES = $&#123;PROTOBUF_LIBRARIES&#125;&quot;)</span><br></pre></td></tr></table></figure>
+</code></pre><h2 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">find_package(Protobuf REQUIRED)</span><br><span class="line">#add_definitions( -DPROTOBUF_USE_DLLS )  # KEY STEPS</span><br><span class="line">MESSAGE( [Main] &quot; PROTOBUF_INCLUDE_DIRS = $&#123;PROTOBUF_INCLUDE_DIRS&#125;&quot;)   </span><br><span class="line">MESSAGE( [Main] &quot; PROTOBUF_LIBRARIES = $&#123;PROTOBUF_LIBRARIES&#125;&quot;)</span><br></pre></td></tr></table></figure>
+<h2 id="error"><a href="#error" class="headerlink" title="error"></a>error</h2><pre><code>./node_perception 
+
+[libprotobuf ERROR google/protobuf/descriptor_database.cc:58] File already exists in database: adapter_config.proto
+[libprotobuf FATAL google/protobuf/descriptor.cc:1315] CHECK failed: generated_database_-&gt;Add(encoded_file_descriptor, size): 
+terminate called after throwing an instance of &apos;google::protobuf::FatalException&apos;
+  what():  CHECK failed: generated_database_-&gt;Add(encoded_file_descriptor, size): 
+Aborted (core dumped)
+</code></pre><p>reasons</p>
+<pre><code>The problem happens when you have multiple compiled copies of the same .pb.cc file sharing a single copy of libprotobuf.so. 
+
+`common`模块编译了`adapter_config.pb.cc`,`node_perception`依赖于`common`，同时也要编译`adapter_config.pb.cc`。运行`node_perception`就会报错。
+</code></pre><p>solutions</p>
+<pre><code>同一份`adapter_config.pb.cc`只编译到`node_perception`等executable,不要编译到所依赖的`common`模块。
+</code></pre><blockquote>
+<p>common和node_perception使用static或者dynamic的protobuf，都会遇到同样的问题。</p>
+</blockquote>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://github.com/protocolbuffers/protobuf/blob/master/cmake/README.md" target="_blank" rel="noopener">protobuf on windows</a></li>
+<li><a href="https://stackoverflow.com/questions/37051635/several-shared-object-using-same-proto-leading-the-the-error-file-already-exist" target="_blank" rel="noopener">several-shared-object-using-same-proto</a></li>
 </ul>
 <h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>20181219: created.</li>
@@ -693,7 +744,7 @@ protoc --go_out=./go/ ./proto/helloworld.proto
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#remove-protobuf"><span class="nav-number">1.1.</span> <span class="nav-text">remove protobuf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-protobuf"><span class="nav-number">1.2.</span> <span class="nav-text">install protobuf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#test"><span class="nav-number">1.3.</span> <span class="nav-text">test</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile-from-source"><span class="nav-number">1.4.</span> <span class="nav-text">compile from source</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#usage"><span class="nav-number">1.5.</span> <span class="nav-text">usage</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">1.6.</span> <span class="nav-text">CMakeLists.txt</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#remove"><span class="nav-number">1.1.</span> <span class="nav-text">remove</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile-1"><span class="nav-number">1.2.</span> <span class="nav-text">compile (1)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#test"><span class="nav-number">1.3.</span> <span class="nav-text">test</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile-2"><span class="nav-number">1.4.</span> <span class="nav-text">compile (2)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#multiple-protoc"><span class="nav-number">1.5.</span> <span class="nav-text">multiple protoc</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Example"><span class="nav-number">2.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#usage"><span class="nav-number">2.1.</span> <span class="nav-text">usage</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">2.2.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#error"><span class="nav-number">2.3.</span> <span class="nav-text">error</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>

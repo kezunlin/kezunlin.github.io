@@ -90,10 +90,8 @@
 <meta property="og:description" content="Install and Configure Caffe on ubuntu 16.04">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201809/635233-20180912154818552-851608997.png">
-<meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180822092144550-1991113026.png">
-<meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180822092148096-1441323229.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180807151218024-1073147705.png">
-<meta property="og:updated_time" content="2018-12-12T03:30:17.906Z">
+<meta property="og:updated_time" content="2018-12-21T07:41:28.021Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Install and Configure Caffe on ubuntu 16.04">
 <meta name="twitter:description" content="Install and Configure Caffe on ubuntu 16.04">
@@ -349,8 +347,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-12-12T11:30:17+08:00">
-                2018-12-12
+              <time title="Post modified" itemprop="dateModified" datetime="2018-12-21T15:41:28+08:00">
+                2018-12-21
               </time>
             
           </span>
@@ -408,7 +406,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1,754
+                  1,052
                 </span>
               
 
@@ -424,7 +422,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  11
+                  6
                 </span>
               
             </div>
@@ -455,138 +453,37 @@
 <li>NVIDIA driver 396.54</li>
 <li><del>CUDA 8.0 + cudnn 6.0.21</del></li>
 <li>CUDA 9.0 +cudnn 7.1.4</li>
-<li>opencv 3.1.0—&gt;3.3.0</li>
+<li>opencv 3.1.0 —&gt;3.3.0</li>
 <li>python 2.7</li>
+<li>protobuf 2.6.1 (3.6.1 from source)</li>
 <li>caffe  latest</li>
 </ul>
-<h1 id="Install-CUDA-cudnn"><a href="#Install-CUDA-cudnn" class="headerlink" title="Install CUDA + cudnn"></a>Install CUDA + cudnn</h1><p>see <a href="http://kezunlin.me/post/3f33896b/">install and configure cuda 9.2 with cudnn 7.1 on ubuntu 16.04</a></p>
+<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="install-CUDA-cudnn"><a href="#install-CUDA-cudnn" class="headerlink" title="install CUDA + cudnn"></a>install CUDA + cudnn</h2><p>see <a href="http://kezunlin.me/post/3f33896b/">install and configure cuda 9.2 with cudnn 7.1 on ubuntu 16.04</a></p>
 <blockquote>
 <p>tips: we need to recompile caffe with cudnn 7.1</p>
 </blockquote>
 <p>before we compile caffe, move <code>caffe/python/caffe/selective_search_ijcv_with_python</code> folder outside caffe source folder, otherwise error occurs.</p>
 <p><img src="https://images2018.cnblogs.com/blog/635233/201809/635233-20180912154818552-851608997.png" alt="recompile caffe with cudnn"></p>
-<h1 id="install-opencv"><a href="#install-opencv" class="headerlink" title="install opencv"></a>install opencv</h1><p> see <a href="http://kezunlin.me/post/15f5c3e8/">compile opencv on ubuntu 16.04</a></p>
-<pre><code>opencv_version 
+<h2 id="install-protobuf"><a href="#install-protobuf" class="headerlink" title="install protobuf"></a>install protobuf</h2><pre><code>sudo apt-get -y install libprotobuf-dev
+
+which protoc 
+/usr/bin/protoc
+
+protoc --version
+libprotoc 2.6.1
+</code></pre><h2 id="install-opencv"><a href="#install-opencv" class="headerlink" title="install opencv"></a>install opencv</h2><p> see <a href="http://kezunlin.me/post/15f5c3e8/">compile opencv on ubuntu 16.04</a></p>
+<pre><code> which opencv_version
+/usr/local/bin/opencv_version
+
+opencv_version 
 3.3.0
-</code></pre><h1 id="install-caffe"><a href="#install-caffe" class="headerlink" title="install caffe"></a>install caffe</h1><h2 id="clone-repo"><a href="#clone-repo" class="headerlink" title="clone repo"></a>clone repo</h2><pre><code>git clone https://github.com/BVLC/caffe.git 
+</code></pre><h2 id="compile-caffe"><a href="#compile-caffe" class="headerlink" title="compile caffe"></a>compile caffe</h2><h3 id="clone-repo"><a href="#clone-repo" class="headerlink" title="clone repo"></a>clone repo</h3><pre><code>git clone https://github.com/BVLC/caffe.git 
 cd caffe
-</code></pre><h2 id="update-repo"><a href="#update-repo" class="headerlink" title="update repo"></a>update repo</h2><p>update at 20180822.</p>
+</code></pre><h3 id="update-repo"><a href="#update-repo" class="headerlink" title="update repo"></a>update repo</h3><p>update at 20180822.</p>
 <p>if you change your local Makefile and <code>git pull origin master</code> merge conflict, solution</p>
 <pre><code>git checkout HEAD Makefile
 git pull origin master
-</code></pre><p>output </p>
-<pre><code>From https://github.com/BVLC/caffe
- * branch            master     -&gt; FETCH_HEAD
-Updating 86d451e..99bd997
-Fast-forward
- .github/ISSUE_TEMPLATE.md                            |  37 +++--
- CMakeLists.txt                                       |   3 +
- CONTRIBUTING.md                                      |  56 +++++++-
- Makefile                                             |  18 ++-
- Makefile.config.example                              |   3 +
- README.md                                            |   2 +-
- cmake/ConfigGen.cmake                                |  12 ++
- cmake/Cuda.cmake                                     |   8 +-
- cmake/Dependencies.cmake                             |   8 ++
- cmake/Misc.cmake                                     |   5 +-
- cmake/Modules/FindMKL.cmake                          |   2 +-
- cmake/ProtoBuf.cmake                                 |   2 +-
- cmake/Summary.cmake                                  |   2 +
- docs/development.md                                  |   2 +-
- docs/install_apt.md                                  |   7 +-
- docs/installation.md                                 |   8 +-
- docs/tutorial/interfaces.md                          |   2 +-
- docs/tutorial/layers.md                              |   3 +-
- docs/tutorial/layers/clip.md                         |  20 +++
- examples/web_demo/readme.md                          |   2 +-
- include/caffe/filler.hpp                             |  24 ++--
- include/caffe/layers/accuracy_layer.hpp              |   4 +
- include/caffe/layers/clip_layer.hpp                  |  75 ++++++++++
- include/caffe/layers/cudnn_deconv_layer.hpp          |  68 +++++++++
- include/caffe/layers/euclidean_loss_layer.hpp        |   2 +-
- include/caffe/layers/infogain_loss_layer.hpp         |  21 +--
- include/caffe/layers/pooling_layer.hpp               |   1 +
- include/caffe/layers/swish_layer.hpp                 |  96 +++++++++++++
- include/caffe/net.hpp                                |   6 +-
- include/caffe/sgd_solvers.hpp                        |   5 +-
- include/caffe/solver.hpp                             |   7 +-
- include/caffe/syncedmem.hpp                          |   4 +-
- include/caffe/util/cudnn.hpp                         |   6 +
- include/caffe/util/hdf5.hpp                          |   2 +
- include/caffe/util/signal_handler.h                  |   2 +-
- python/caffe/_caffe.cpp                              |  30 ++--
- python/caffe/classifier.py                           |   4 +-
- python/caffe/detector.py                             |   2 +-
- python/caffe/draw.py                                 | 144 ++++++++++++++-----
- python/caffe/io.py                                   |  16 ++-
- python/caffe/test/test_net.py                        |  50 +++----
- python/caffe/test/test_solver.py                     |  11 ++
- python/draw_net.py                                   |   6 +-
- python/train.py                                      |   2 +-
- scripts/travis/install-deps.sh                       |   2 +-
- src/caffe/layer_factory.cpp                          |  42 ++++++
- src/caffe/layers/accuracy_layer.cpp                  |  35 +++--
- src/caffe/layers/accuracy_layer.cu                   | 148 +++++++++++++++++++
- src/caffe/layers/base_conv_layer.cpp                 |   4 +-
- src/caffe/layers/clip_layer.cpp                      |  51 +++++++
- src/caffe/layers/clip_layer.cu                       |  67 +++++++++
- src/caffe/layers/cudnn_deconv_layer.cpp              | 327 ++++++++++++++++++++++++++++++++++++++++++
- src/caffe/layers/cudnn_deconv_layer.cu               | 138 ++++++++++++++++++
- src/caffe/layers/deconv_layer.cpp                    |   1 -
- src/caffe/layers/embed_layer.cu                      |   5 +
- src/caffe/layers/hdf5_data_layer.cpp                 |   2 +
- src/caffe/layers/hdf5_data_layer.cu                  |   2 +
- src/caffe/layers/hdf5_output_layer.cpp               |   2 +
- src/caffe/layers/hdf5_output_layer.cu                |   2 +
- src/caffe/layers/inner_product_layer.cpp             |   2 +-
- src/caffe/layers/pooling_layer.cpp                   |  23 ++-
- src/caffe/layers/recurrent_layer.cpp                 |   5 +-
- src/caffe/layers/sigmoid_cross_entropy_loss_layer.cu |   9 +-
- src/caffe/layers/slice_layer.cpp                     |   4 +-
- src/caffe/layers/softmax_loss_layer.cu               |   8 +-
- src/caffe/layers/swish_layer.cpp                     |  68 +++++++++
- src/caffe/layers/swish_layer.cu                      |  54 +++++++
- src/caffe/net.cpp                                    |  21 ++-
- src/caffe/proto/caffe.proto                          |  43 +++++-
- src/caffe/solver.cpp                                 |  31 +++-
- src/caffe/solvers/sgd_solver.cpp                     |  23 +++
- src/caffe/test/test_accuracy_layer.cpp               | 360 +++++++++++++++++++++++++---------------------
- src/caffe/test/test_deconvolution_layer.cpp          | 265 ++++++++++++++++++++++++++++++++++
- src/caffe/test/test_filler.cpp                       | 458 +++++++++++++++++++++++++++++++++++++++++++++++++----------
- src/caffe/test/test_hdf5_output_layer.cpp            |   2 +
- src/caffe/test/test_hdf5data_layer.cpp               |   2 +
- src/caffe/test/test_neuron_layer.cpp                 | 140 ++++++++++++++++++
- src/caffe/test/test_syncedmem.cpp                    |   4 +-
- src/caffe/test/test_upgrade_proto.cpp                |   4 +
- src/caffe/util/hdf5.cpp                              |   2 +
- src/caffe/util/io.cpp                                |   2 +-
- src/caffe/util/signal_handler.cpp                    |   2 +-
- src/caffe/util/upgrade_proto.cpp                     |  21 +++
- tools/caffe.cpp                                      |  23 +--
- tools/convert_imageset.cpp                           |   2 +-
- tools/device_query.cpp                               |   7 -
- tools/finetune_net.cpp                               |   7 -
- tools/net_speed_benchmark.cpp                        |   7 -
- tools/test_net.cpp                                   |   7 -
- tools/train_net.cpp                                  |   7 -
- 90 files changed, 2736 insertions(+), 495 deletions(-)
- create mode 100644 docs/tutorial/layers/clip.md
- create mode 100644 include/caffe/layers/clip_layer.hpp
- create mode 100644 include/caffe/layers/cudnn_deconv_layer.hpp
- create mode 100644 include/caffe/layers/swish_layer.hpp
- create mode 100644 src/caffe/layers/accuracy_layer.cu
- create mode 100644 src/caffe/layers/clip_layer.cpp
- create mode 100644 src/caffe/layers/clip_layer.cu
- create mode 100644 src/caffe/layers/cudnn_deconv_layer.cpp
- create mode 100644 src/caffe/layers/cudnn_deconv_layer.cu
- create mode 100644 src/caffe/layers/swish_layer.cpp
- create mode 100644 src/caffe/layers/swish_layer.cu
- delete mode 100644 tools/device_query.cpp
- delete mode 100644 tools/finetune_net.cpp
- delete mode 100644 tools/net_speed_benchmark.cpp
- delete mode 100644 tools/test_net.cpp
- delete mode 100644 tools/train_net.cpp
-</code></pre><h2 id="configure"><a href="#configure" class="headerlink" title="configure"></a>configure</h2><pre><code>cd build &amp;&amp; cmake-gui ..
+</code></pre><h3 id="configure"><a href="#configure" class="headerlink" title="configure"></a>configure</h3><pre><code>mkdir build &amp;&amp; cd build &amp;&amp; cmake-gui ..
 </code></pre><p>cmake-gui options</p>
 <pre><code>USE_CUDNN True
 USE_OPENCV True
@@ -594,21 +491,37 @@ WITH_PYTHON_LAYER True
 BLAS atlas
 
 CMAKE_INSTALL_PREFIX /home/kezunlin/program/caffe/build/install
-</code></pre><ul>
-<li>CUDA<br><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180822092144550-1991113026.png" alt="png"></li>
-<li>CUDNN<br><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180822092148096-1441323229.png" alt="png"></li>
-</ul>
-<p>configure output </p>
-<pre><code>NVIDIA CUDA:
+</code></pre><p>configure output </p>
+<pre><code>Dependencies:
+  BLAS              :   Yes (Atlas)
+  Boost             :   Yes (ver. 1.66)
+  glog              :   Yes
+  gflags            :   Yes
+  protobuf          :   Yes (ver. 2.6.1)
+  lmdb              :   Yes (ver. 0.9.17)
+  LevelDB           :   Yes (ver. 1.18)
+  Snappy            :   Yes (ver. 1.1.3)
+  OpenCV            :   Yes (ver. 3.1.0)
+  CUDA              :   Yes (ver. 9.2)
+
+NVIDIA CUDA:
   Target GPU(s)     :   Auto
   GPU arch(s)       :   sm_61
-  cuDNN             :   Yes (ver. 6.0.21)
-</code></pre><h3 id="edit-Makefile"><a href="#edit-Makefile" class="headerlink" title="edit Makefile"></a><del>edit Makefile</del></h3><p>vim <code>Makefile</code></p>
-<pre><code>#增加hdf5的include和lib路径
-INCLUDE_DIRS += /usr/include/hdf5/serial
-LIBRARY_DIRS += /usr/lib/x86_64-linux-gnu/hdf5/serial
+  cuDNN             :   Yes (ver. 7.1.4)
 
-LIBRARIES += glog gflags protobuf boost_system boost_filesystem m hdf5_hl hdf5
+Python:
+  Interpreter       :   /usr/bin/python2.7 (ver. 2.7.12)
+  Libraries         :   /usr/lib/x86_64-linux-gnu/libpython2.7.so (ver 2.7.12)
+  NumPy             :   /usr/lib/python2.7/dist-packages/numpy/core/include (ver 1.11.0)
+
+Documentaion:
+  Doxygen           :   /usr/bin/doxygen (1.8.11)
+  config_file       :   /home/kezunlin/program/caffe/.Doxyfile
+
+Install:
+  Install path      :   /home/kezunlin/program/caffe-wy/build/install
+
+Configuring done
 </code></pre><h3 id="fix-gcc-error"><a href="#fix-gcc-error" class="headerlink" title="fix gcc error"></a>fix gcc error</h3><p>vim <code>/usr/local/cuda/include/host_config.h</code></p>
 <pre><code># 将其中的第115行注释掉：
 #error-- unsupported GNU version! gcc versions later than 4.9 are not supported!
@@ -622,176 +535,29 @@ LIBRARIES += glog gflags protobuf boost_system boost_filesystem m hdf5_hl hdf5
 <pre><code>// #ifndef GFLAGS_GFLAGS_H_
 namespace gflags = google;
 // #endif  // GFLAGS_GFLAGS_H_
-</code></pre><h2 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h2><pre><code>make clean
-make -j8 &amp;&amp; make pycaffe
-</code></pre><h2 id="install"><a href="#install" class="headerlink" title="install"></a>install</h2><pre><code>make install
+</code></pre><h3 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h3><pre><code>make clean
+make -j8 
+make pycaffe
+</code></pre><p>output</p>
+<pre><code>[  1%] Running C++/Python protocol buffer compiler on /home/kezunlin/program/caffe-wy/src/caffe/proto/caffe.proto
+Scanning dependencies of target caffeproto
+[  1%] Building CXX object src/caffe/CMakeFiles/caffeproto.dir/__/__/include/caffe/proto/caffe.pb.cc.o
+[  1%] Linking CXX static library ../../lib/libcaffeproto.a
+[  1%] Built target caffeproto
+</code></pre><blockquote>
+<p><code>libcaffeproto.a</code>　static library</p>
+</blockquote>
+<h3 id="install"><a href="#install" class="headerlink" title="install"></a>install</h3><pre><code>make install
 
-ls install
+ls build/install
 bin  include  lib  python  share
-</code></pre><p>output </p>
-<pre><code>tree build/install
-.
-├── bin
-│   ├── caffe
-│   ├── classification
-│   ├── compute_image_mean
-│   ├── convert_cifar_data
-│   ├── convert_imageset
-│   ├── convert_mnist_data
-│   ├── convert_mnist_siamese_data
-│   ├── extract_features
-│   ├── upgrade_net_proto_binary
-│   ├── upgrade_net_proto_text
-│   └── upgrade_solver_proto_text
-├── include
-│   └── caffe
-│       ├── blob.hpp
-│       ├── caffe.hpp
-│       ├── common.hpp
-│       ├── data_transformer.hpp
-│       ├── filler.hpp
-│       ├── internal_thread.hpp
-│       ├── layer_factory.hpp
-│       ├── layer.hpp
-│       ├── layers
-│       │   ├── absval_layer.hpp
-│       │   ├── accuracy_layer.hpp
-│       │   ├── argmax_layer.hpp
-│       │   ├── base_conv_layer.hpp
-│       │   ├── base_data_layer.hpp
-│       │   ├── batch_norm_layer.hpp
-│       │   ├── batch_reindex_layer.hpp
-│       │   ├── bias_layer.hpp
-│       │   ├── bnll_layer.hpp
-│       │   ├── clip_layer.hpp
-│       │   ├── concat_layer.hpp
-│       │   ├── contrastive_loss_layer.hpp
-│       │   ├── conv_layer.hpp
-│       │   ├── crop_layer.hpp
-│       │   ├── cudnn_conv_layer.hpp
-│       │   ├── cudnn_deconv_layer.hpp
-│       │   ├── cudnn_lcn_layer.hpp
-│       │   ├── cudnn_lrn_layer.hpp
-│       │   ├── cudnn_pooling_layer.hpp
-│       │   ├── cudnn_relu_layer.hpp
-│       │   ├── cudnn_sigmoid_layer.hpp
-│       │   ├── cudnn_softmax_layer.hpp
-│       │   ├── cudnn_tanh_layer.hpp
-│       │   ├── data_layer.hpp
-│       │   ├── deconv_layer.hpp
-│       │   ├── dropout_layer.hpp
-│       │   ├── dummy_data_layer.hpp
-│       │   ├── eltwise_layer.hpp
-│       │   ├── elu_layer.hpp
-│       │   ├── embed_layer.hpp
-│       │   ├── euclidean_loss_layer.hpp
-│       │   ├── exp_layer.hpp
-│       │   ├── filter_layer.hpp
-│       │   ├── flatten_layer.hpp
-│       │   ├── hdf5_data_layer.hpp
-│       │   ├── hdf5_output_layer.hpp
-│       │   ├── hinge_loss_layer.hpp
-│       │   ├── im2col_layer.hpp
-│       │   ├── image_data_layer.hpp
-│       │   ├── infogain_loss_layer.hpp
-│       │   ├── inner_product_layer.hpp
-│       │   ├── input_layer.hpp
-│       │   ├── log_layer.hpp
-│       │   ├── loss_layer.hpp
-│       │   ├── lrn_layer.hpp
-│       │   ├── lstm_layer.hpp
-│       │   ├── memory_data_layer.hpp
-│       │   ├── multinomial_logistic_loss_layer.hpp
-│       │   ├── mvn_layer.hpp
-│       │   ├── neuron_layer.hpp
-│       │   ├── parameter_layer.hpp
-│       │   ├── pooling_layer.hpp
-│       │   ├── power_layer.hpp
-│       │   ├── prelu_layer.hpp
-│       │   ├── python_layer.hpp
-│       │   ├── recurrent_layer.hpp
-│       │   ├── reduction_layer.hpp
-│       │   ├── relu_layer.hpp
-│       │   ├── reshape_layer.hpp
-│       │   ├── rnn_layer.hpp
-│       │   ├── scale_layer.hpp
-│       │   ├── sigmoid_cross_entropy_loss_layer.hpp
-│       │   ├── sigmoid_layer.hpp
-│       │   ├── silence_layer.hpp
-│       │   ├── slice_layer.hpp
-│       │   ├── softmax_layer.hpp
-│       │   ├── softmax_loss_layer.hpp
-│       │   ├── split_layer.hpp
-│       │   ├── spp_layer.hpp
-│       │   ├── swish_layer.hpp
-│       │   ├── tanh_layer.hpp
-│       │   ├── threshold_layer.hpp
-│       │   ├── tile_layer.hpp
-│       │   └── window_data_layer.hpp
-│       ├── net.hpp
-│       ├── parallel.hpp
-│       ├── proto
-│       │   └── caffe.pb.h
-│       ├── sgd_solvers.hpp
-│       ├── solver_factory.hpp
-│       ├── solver.hpp
-│       ├── syncedmem.hpp
-│       ├── test
-│       │   ├── test_caffe_main.hpp
-│       │   └── test_gradient_check_util.hpp
-│       └── util
-│           ├── benchmark.hpp
-│           ├── blocking_queue.hpp
-│           ├── cudnn.hpp
-│           ├── db.hpp
-│           ├── db_leveldb.hpp
-│           ├── db_lmdb.hpp
-│           ├── device_alternate.hpp
-│           ├── format.hpp
-│           ├── gpu_util.cuh
-│           ├── hdf5.hpp
-│           ├── im2col.hpp
-│           ├── insert_splits.hpp
-│           ├── io.hpp
-│           ├── math_functions.hpp
-│           ├── mkl_alternate.hpp
-│           ├── nccl.hpp
-│           ├── rng.hpp
-│           ├── signal_handler.h
-│           └── upgrade_proto.hpp
-├── lib
-│   ├── libcaffeproto.a
-│   ├── libcaffe.so -&gt; libcaffe.so.1.0.0
-│   └── libcaffe.so.1.0.0
-├── python
-│   ├── caffe
-│   │   ├── _caffe.so
-│   │   ├── classifier.py
-│   │   ├── coord_map.py
-│   │   ├── detector.py
-│   │   ├── draw.py
-│   │   ├── imagenet
-│   │   │   └── ilsvrc_2012_mean.npy
-│   │   ├── __init__.py
-│   │   ├── io.py
-│   │   ├── net_spec.py
-│   │   ├── proto
-│   │   │   ├── caffe_pb2.py
-│   │   │   └── __init__.py
-│   │   └── pycaffe.py
-│   ├── classify.py
-│   ├── detect.py
-│   ├── draw_net.py
-│   ├── requirements.txt
-│   └── train.py
-└── share
-    └── Caffe
-        ├── CaffeConfig.cmake
-        ├── CaffeTargets.cmake
-        └── CaffeTargets-release.cmake
+</code></pre><blockquote>
+<p>will install to <code>build/install</code> folder</p>
+</blockquote>
+<pre><code>ls build/install/lib
 
-14 directories, 144 files
-</code></pre><h3 id="fix-python-caffe"><a href="#fix-python-caffe" class="headerlink" title="fix python caffe"></a>fix python caffe</h3><p>fix ipython 6.1 version conflict</p>
+libcaffeproto.a  libcaffe.so  libcaffe.so.1.0.0
+</code></pre><h1 id="Play-with-Caffe"><a href="#Play-with-Caffe" class="headerlink" title="Play with Caffe"></a>Play with Caffe</h1><h2 id="python-caffe"><a href="#python-caffe" class="headerlink" title="python caffe"></a>python caffe</h2><h3 id="fix-python-caffe"><a href="#fix-python-caffe" class="headerlink" title="fix python caffe"></a>fix python caffe</h3><p>fix ipython 6.1 version conflict</p>
 <p>vim <code>caffe/python/requirements.txt</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ipython&gt;=3.0.0</span><br><span class="line">====&gt;</span><br><span class="line">ipython==5.4.1</span><br></pre></td></tr></table></figure>
 <p>reinstall ipython</p>
@@ -800,13 +566,23 @@ bin  include  lib  python  share
 cd caffe/python
 python
 &gt;&gt;&gt;import caffe 
-</code></pre><h2 id="python-draw-net"><a href="#python-draw-net" class="headerlink" title="python draw net"></a>python draw net</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install graphviz</span><br><span class="line">sudo pip install theano=0.9</span><br><span class="line"></span><br><span class="line"># for theano d3viz</span><br><span class="line">sudo pip install pydot==1.1.0</span><br><span class="line">sudo pip install pydot-ng</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># other usefull tools</span><br><span class="line">sudo pip install jupyter</span><br><span class="line">sudo pip install seaborn</span><br></pre></td></tr></table></figure>
-<blockquote>
+</code></pre><h3 id="python-draw-net"><a href="#python-draw-net" class="headerlink" title="python draw net"></a>python draw net</h3><pre><code>sudo apt-get install graphviz
+sudo pip install theano=0.9
+
+# for theano d3viz
+sudo pip install pydot==1.1.0
+sudo pip install pydot-ng
+
+
+# other usefull tools
+sudo pip install jupyter
+sudo pip install seaborn
+</code></pre><blockquote>
 <p>需要安装graphviz, otherwise we get ERROR:”dot” not found in path<br>需要指定安装1.1.0版本的pydot，是因为最新版（截止2016.8最新版本号是1.2.x）中 find_graphviz函数是deprecated的，使用时会报错</p>
 </blockquote>
 <p>draw net<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd $CAFFE_HOME</span><br><span class="line">./python/draw_net.py ./examples/mnist/lenet.prototxt ./examples/mnist/lenet.png</span><br><span class="line"></span><br><span class="line">eog ./examples/mnist/lenet.png</span><br></pre></td></tr></table></figure></p>
 <p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180807151218024-1073147705.png" alt="lenet"></p>
-<h2 id="test-caffe"><a href="#test-caffe" class="headerlink" title="test caffe"></a>test caffe</h2><h3 id="train-net"><a href="#train-net" class="headerlink" title="train net"></a>train net</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd caffe </span><br><span class="line">./examples/mnist/train_lenet.sh</span><br></pre></td></tr></table></figure>
+<h2 id="cpp-caffe"><a href="#cpp-caffe" class="headerlink" title="cpp caffe"></a>cpp caffe</h2><h3 id="train-net"><a href="#train-net" class="headerlink" title="train net"></a>train net</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd caffe </span><br><span class="line">./examples/mnist/train_lenet.sh</span><br></pre></td></tr></table></figure>
 <pre><code>cat ./examples/mnist/train_lenet.sh 
 
 ./build/tools/caffe train --solver=examples/mnist/lenet_solver.prototxt $@
@@ -818,13 +594,16 @@ I0912 15:57:28.893678 14094 solver.cpp:414]     Test net output #0: accuracy = 0
 I0912 15:57:28.893707 14094 solver.cpp:414]     Test net output #1: loss = 0.0276084 (* 1 = 0.0276084 loss)
 I0912 15:57:28.893714 14094 solver.cpp:332] Optimization Done.
 I0912 15:57:28.893719 14094 caffe.cpp:250] Optimization Done.
-</code></pre><h3 id="python-caffe"><a href="#python-caffe" class="headerlink" title="python caffe"></a>python caffe</h3><pre><code>cd caffe/python
-python
-&gt;&gt;&gt;import caffe 
+</code></pre><blockquote>
+<p>tips, for <code>caffe-wf</code>, errors because no imdb data.</p>
+</blockquote>
+<pre><code>I0417 13:28:17.764714 35030 layer_factory.hpp:77] Creating layer mnist
+F0417 13:28:17.765067 35030 db_lmdb.hpp:15] Check failed: mdb_status == 0 (2 vs. 0) No such file or directory
+--------------------- 
 </code></pre><h3 id="upgrade-net"><a href="#upgrade-net" class="headerlink" title="upgrade net"></a>upgrade net</h3><pre><code>./tools/upgrade_net_proto_text  old.prototxt new.prototxt
 ./tools/upgrade_net_proto_binary  old.caffemodel new.caffemodel
-</code></pre><h2 id="caffe-example"><a href="#caffe-example" class="headerlink" title="caffe example"></a>caffe example</h2><h3 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">find_package(OpenCV REQUIRED)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">set(Caffe_DIR &quot;/home/kezunlin/program/caffe-wy/build/install/share/Caffe&quot;)  # caffe-wy caffe</span><br><span class="line"></span><br><span class="line"># for CaffeConfig.cmake/ caffe-config.cmake</span><br><span class="line">find_package(Caffe)</span><br><span class="line"># offical caffe  : There is no Caffe_INCLUDE_DIRS and Caffe_DEFINITIONS</span><br><span class="line"># refinedet caffe: OK.</span><br><span class="line"></span><br><span class="line">add_definitions($&#123;Caffe_DEFINITIONS&#125;)</span><br><span class="line"></span><br><span class="line">MESSAGE( [Main] &quot; Caffe_INCLUDE_DIRS = $&#123;Caffe_INCLUDE_DIRS&#125;&quot;)</span><br><span class="line">MESSAGE( [Main] &quot; Caffe_DEFINITIONS = $&#123;Caffe_DEFINITIONS&#125;&quot;)</span><br><span class="line">MESSAGE( [Main] &quot; Caffe_LIBRARIES = $&#123;Caffe_LIBRARIES&#125;&quot;) # caffe</span><br><span class="line">MESSAGE( [Main] &quot; Caffe_CPU_ONLY = $&#123;Caffe_CPU_ONLY&#125;&quot;)</span><br><span class="line">MESSAGE( [Main] &quot; Caffe_HAVE_CUDA = $&#123;Caffe_HAVE_CUDA&#125;&quot;)</span><br><span class="line">MESSAGE( [Main] &quot; Caffe_HAVE_CUDNN = $&#123;Caffe_HAVE_CUDNN&#125;&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">include_directories($&#123;Caffe_INCLUDE_DIRS&#125;)</span><br><span class="line"></span><br><span class="line">target_link_libraries(demo </span><br><span class="line">    $&#123;OpenCV_LIBS&#125;</span><br><span class="line">    $&#123;Caffe_LIBRARIES&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<h3 id="run"><a href="#run" class="headerlink" title="run"></a>run</h3><pre><code>ldd demo
+</code></pre><h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><h2 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">find_package(OpenCV REQUIRED)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span>(Caffe_DIR <span class="string">"/home/kezunlin/program/caffe-wy/build/install/share/Caffe"</span>)  <span class="comment"># caffe-wy caffe</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># for CaffeConfig.cmake/ caffe-config.cmake</span></span><br><span class="line">find_package(Caffe)</span><br><span class="line"><span class="comment"># offical caffe  : There is no Caffe_INCLUDE_DIRS and Caffe_DEFINITIONS</span></span><br><span class="line"><span class="comment"># refinedet caffe: OK.</span></span><br><span class="line"></span><br><span class="line">add_definitions(<span class="variable">$&#123;Caffe_DEFINITIONS&#125;</span>)</span><br><span class="line"></span><br><span class="line">MESSAGE( [Main] <span class="string">" Caffe_INCLUDE_DIRS = <span class="variable">$&#123;Caffe_INCLUDE_DIRS&#125;</span>"</span>)</span><br><span class="line">MESSAGE( [Main] <span class="string">" Caffe_DEFINITIONS = <span class="variable">$&#123;Caffe_DEFINITIONS&#125;</span>"</span>)</span><br><span class="line">MESSAGE( [Main] <span class="string">" Caffe_LIBRARIES = <span class="variable">$&#123;Caffe_LIBRARIES&#125;</span>"</span>) <span class="comment"># caffe</span></span><br><span class="line">MESSAGE( [Main] <span class="string">" Caffe_CPU_ONLY = <span class="variable">$&#123;Caffe_CPU_ONLY&#125;</span>"</span>)</span><br><span class="line">MESSAGE( [Main] <span class="string">" Caffe_HAVE_CUDA = <span class="variable">$&#123;Caffe_HAVE_CUDA&#125;</span>"</span>)</span><br><span class="line">MESSAGE( [Main] <span class="string">" Caffe_HAVE_CUDNN = <span class="variable">$&#123;Caffe_HAVE_CUDNN&#125;</span>"</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">include_directories(<span class="variable">$&#123;Caffe_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line">target_link_libraries(demo </span><br><span class="line">    <span class="variable">$&#123;OpenCV_LIBS&#125;</span></span><br><span class="line">    <span class="variable">$&#123;Caffe_LIBRARIES&#125;</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h2 id="run"><a href="#run" class="headerlink" title="run"></a>run</h2><pre><code>ldd demo
 </code></pre><p>if error occurs:</p>
 <pre><code>libcaffe.so.1.0.0 =&gt; not found
 </code></pre><p>fix </p>
@@ -1047,7 +826,7 @@ export LD_LIBRARY_PATH=/home/kezunlin/program/caffe-wy/build/install/lib:$LD_LIB
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Install-CUDA-cudnn"><span class="nav-number">1.</span> <span class="nav-text">Install CUDA + cudnn</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#install-opencv"><span class="nav-number">2.</span> <span class="nav-text">install opencv</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#install-caffe"><span class="nav-number">3.</span> <span class="nav-text">install caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#clone-repo"><span class="nav-number">3.1.</span> <span class="nav-text">clone repo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#update-repo"><span class="nav-number">3.2.</span> <span class="nav-text">update repo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#configure"><span class="nav-number">3.3.</span> <span class="nav-text">configure</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#edit-Makefile"><span class="nav-number">3.3.1.</span> <span class="nav-text">edit Makefile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-gcc-error"><span class="nav-number">3.3.2.</span> <span class="nav-text">fix gcc error</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-gflags-error"><span class="nav-number">3.3.3.</span> <span class="nav-text">fix gflags error</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">3.4.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install"><span class="nav-number">3.5.</span> <span class="nav-text">install</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-python-caffe"><span class="nav-number">3.5.1.</span> <span class="nav-text">fix python caffe</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python-draw-net"><span class="nav-number">3.6.</span> <span class="nav-text">python draw net</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#test-caffe"><span class="nav-number">3.7.</span> <span class="nav-text">test caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#train-net"><span class="nav-number">3.7.1.</span> <span class="nav-text">train net</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python-caffe"><span class="nav-number">3.7.2.</span> <span class="nav-text">python caffe</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#upgrade-net"><span class="nav-number">3.7.3.</span> <span class="nav-text">upgrade net</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#caffe-example"><span class="nav-number">3.8.</span> <span class="nav-text">caffe example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">3.8.1.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#run"><span class="nav-number">3.8.2.</span> <span class="nav-text">run</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install-CUDA-cudnn"><span class="nav-number">1.1.</span> <span class="nav-text">install CUDA + cudnn</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-protobuf"><span class="nav-number">1.2.</span> <span class="nav-text">install protobuf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-opencv"><span class="nav-number">1.3.</span> <span class="nav-text">install opencv</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile-caffe"><span class="nav-number">1.4.</span> <span class="nav-text">compile caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#clone-repo"><span class="nav-number">1.4.1.</span> <span class="nav-text">clone repo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#update-repo"><span class="nav-number">1.4.2.</span> <span class="nav-text">update repo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#configure"><span class="nav-number">1.4.3.</span> <span class="nav-text">configure</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-gcc-error"><span class="nav-number">1.4.4.</span> <span class="nav-text">fix gcc error</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-gflags-error"><span class="nav-number">1.4.5.</span> <span class="nav-text">fix gflags error</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#compile"><span class="nav-number">1.4.6.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install"><span class="nav-number">1.4.7.</span> <span class="nav-text">install</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Play-with-Caffe"><span class="nav-number">2.</span> <span class="nav-text">Play with Caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#python-caffe"><span class="nav-number">2.1.</span> <span class="nav-text">python caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-python-caffe"><span class="nav-number">2.1.1.</span> <span class="nav-text">fix python caffe</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python-draw-net"><span class="nav-number">2.1.2.</span> <span class="nav-text">python draw net</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cpp-caffe"><span class="nav-number">2.2.</span> <span class="nav-text">cpp caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#train-net"><span class="nav-number">2.2.1.</span> <span class="nav-text">train net</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#upgrade-net"><span class="nav-number">2.2.2.</span> <span class="nav-text">upgrade net</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Example"><span class="nav-number">3.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">3.1.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#run"><span class="nav-number">3.2.</span> <span class="nav-text">run</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
