@@ -91,7 +91,7 @@
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201809/635233-20180912154818552-851608997.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180807151218024-1073147705.png">
-<meta property="og:updated_time" content="2018-12-21T07:41:28.021Z">
+<meta property="og:updated_time" content="2018-12-24T08:20:41.923Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Install and Configure Caffe on ubuntu 16.04">
 <meta name="twitter:description" content="Install and Configure Caffe on ubuntu 16.04">
@@ -347,8 +347,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-12-21T15:41:28+08:00">
-                2018-12-21
+              <time title="Post modified" itemprop="dateModified" datetime="2018-12-24T16:20:41+08:00">
+                2018-12-24
               </time>
             
           </span>
@@ -406,7 +406,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1,052
+                  1,282
                 </span>
               
 
@@ -422,7 +422,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  6
+                  8
                 </span>
               
             </div>
@@ -452,26 +452,31 @@
 <ul>
 <li>NVIDIA driver 396.54</li>
 <li><del>CUDA 8.0 + cudnn 6.0.21</del></li>
-<li>CUDA 9.0 +cudnn 7.1.4</li>
+<li>CUDA 9.2 +cudnn 7.1.4</li>
 <li>opencv 3.1.0 —&gt;3.3.0</li>
 <li>python 2.7</li>
-<li>protobuf 2.6.1 (3.6.1 from source)</li>
+<li>protobuf 3.6.1 （static）</li>
 <li>caffe  latest</li>
 </ul>
+<blockquote>
+<p>默认的protobuf,2.6.1测试通过。<br>此处，使用最新的3.6.1 也可以，编译caffe需要加上<code>-std=c++11</code></p>
+</blockquote>
 <h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="install-CUDA-cudnn"><a href="#install-CUDA-cudnn" class="headerlink" title="install CUDA + cudnn"></a>install CUDA + cudnn</h2><p>see <a href="http://kezunlin.me/post/3f33896b/">install and configure cuda 9.2 with cudnn 7.1 on ubuntu 16.04</a></p>
 <blockquote>
 <p>tips: we need to recompile caffe with cudnn 7.1</p>
 </blockquote>
 <p>before we compile caffe, move <code>caffe/python/caffe/selective_search_ijcv_with_python</code> folder outside caffe source folder, otherwise error occurs.</p>
 <p><img src="https://images2018.cnblogs.com/blog/635233/201809/635233-20180912154818552-851608997.png" alt="recompile caffe with cudnn"></p>
-<h2 id="install-protobuf"><a href="#install-protobuf" class="headerlink" title="install protobuf"></a>install protobuf</h2><pre><code>sudo apt-get -y install libprotobuf-dev
-
-which protoc 
-/usr/bin/protoc
+<h2 id="install-protobuf"><a href="#install-protobuf" class="headerlink" title="install protobuf"></a>install protobuf</h2><p>see <a href="http://kezunlin.me/post/d60ff6fe/">Part 1: compile protobuf-cpp on ubuntu 16.04</a></p>
+<pre><code>which protoc 
+/usr/local/bin/protoc
 
 protoc --version
-libprotoc 2.6.1
-</code></pre><h2 id="install-opencv"><a href="#install-opencv" class="headerlink" title="install opencv"></a>install opencv</h2><p> see <a href="http://kezunlin.me/post/15f5c3e8/">compile opencv on ubuntu 16.04</a></p>
+libprotoc 3.6.1
+</code></pre><blockquote>
+<p>caffe使用static的libprotoc 3.6.1</p>
+</blockquote>
+<h2 id="install-opencv"><a href="#install-opencv" class="headerlink" title="install opencv"></a>install opencv</h2><p> see <a href="http://kezunlin.me/post/15f5c3e8/">compile opencv on ubuntu 16.04</a></p>
 <pre><code> which opencv_version
 /usr/local/bin/opencv_version
 
@@ -485,19 +490,25 @@ cd caffe
 git pull origin master
 </code></pre><h3 id="configure"><a href="#configure" class="headerlink" title="configure"></a>configure</h3><pre><code>mkdir build &amp;&amp; cd build &amp;&amp; cmake-gui ..
 </code></pre><p>cmake-gui options</p>
-<pre><code>USE_CUDNN True
-USE_OPENCV True
-WITH_PYTHON_LAYER True
+<pre><code>USE_CUDNN ON
+USE_OPENCV ON
+Build_python ON
+Build_python_layer ON
+
 BLAS atlas
+CMAKE_CXX_FLGAS -std=c++11
 
 CMAKE_INSTALL_PREFIX /home/kezunlin/program/caffe/build/install
-</code></pre><p>configure output </p>
+</code></pre><blockquote>
+<p>使用<code>-std=c++11</code></p>
+</blockquote>
+<p>configure output </p>
 <pre><code>Dependencies:
   BLAS              :   Yes (Atlas)
   Boost             :   Yes (ver. 1.66)
   glog              :   Yes
   gflags            :   Yes
-  protobuf          :   Yes (ver. 2.6.1)
+  protobuf          :   Yes (ver. 3.6.1)
   lmdb              :   Yes (ver. 0.9.17)
   LevelDB           :   Yes (ver. 1.18)
   Snappy            :   Yes (ver. 1.1.3)
@@ -522,6 +533,18 @@ Install:
   Install path      :   /home/kezunlin/program/caffe-wy/build/install
 
 Configuring done
+</code></pre><p>use <code>-std=c++11</code>, otherwise errors occur</p>
+<pre><code>make -j8
+[  1%] Running C++/Python protocol buffer compiler on /home/kezunlin/program/caffe-wy/src/caffe/proto/caffe.proto
+Scanning dependencies of target caffeproto
+[  1%] Building CXX object src/caffe/CMakeFiles/caffeproto.dir/__/__/include/caffe/proto/caffe.pb.cc.o
+In file included from /usr/include/c++/5/mutex:35:0,
+                 from /usr/local/include/google/protobuf/stubs/mutex.h:33,
+                 from /usr/local/include/google/protobuf/stubs/common.h:52,
+                 from /home/kezunlin/program/caffe-wy/build/include/caffe/proto/caffe.pb.h:9,
+                 from /home/kezunlin/program/caffe-wy/build/include/caffe/proto/caffe.pb.cc:4:
+/usr/include/c++/5/bits/c++0x_warning.h:32:2: error: #error This file requires compiler and library support for the ISO C++ 2011 standard. This support must be enabled with the -std=c++11 or -std=gnu++11 compiler options.
+ #error This file requires compiler and library support \
 </code></pre><h3 id="fix-gcc-error"><a href="#fix-gcc-error" class="headerlink" title="fix gcc error"></a>fix gcc error</h3><p>vim <code>/usr/local/cuda/include/host_config.h</code></p>
 <pre><code># 将其中的第115行注释掉：
 #error-- unsupported GNU version! gcc versions later than 4.9 are not supported!
@@ -557,7 +580,11 @@ bin  include  lib  python  share
 <pre><code>ls build/install/lib
 
 libcaffeproto.a  libcaffe.so  libcaffe.so.1.0.0
-</code></pre><h1 id="Play-with-Caffe"><a href="#Play-with-Caffe" class="headerlink" title="Play with Caffe"></a>Play with Caffe</h1><h2 id="python-caffe"><a href="#python-caffe" class="headerlink" title="python caffe"></a>python caffe</h2><h3 id="fix-python-caffe"><a href="#fix-python-caffe" class="headerlink" title="fix python caffe"></a>fix python caffe</h3><p>fix ipython 6.1 version conflict</p>
+</code></pre><h3 id="advanced"><a href="#advanced" class="headerlink" title="advanced"></a>advanced</h3><p>INTERFACE_INCLUDE_DIRECTORIES<br>INTERFACE_LINK_LIBRARIES</p>
+<blockquote>
+<p>Target “caffe” has an INTERFACE_LINK_LIBRARIES property which differs from   its LINK_INTERFACE_LIBRARIES properties.</p>
+</blockquote>
+<h1 id="Play-with-Caffe"><a href="#Play-with-Caffe" class="headerlink" title="Play with Caffe"></a>Play with Caffe</h1><h2 id="python-caffe"><a href="#python-caffe" class="headerlink" title="python caffe"></a>python caffe</h2><h3 id="fix-python-caffe"><a href="#fix-python-caffe" class="headerlink" title="fix python caffe"></a>fix python caffe</h3><p>fix ipython 6.1 version conflict</p>
 <p>vim <code>caffe/python/requirements.txt</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ipython&gt;=3.0.0</span><br><span class="line">====&gt;</span><br><span class="line">ipython==5.4.1</span><br></pre></td></tr></table></figure>
 <p>reinstall ipython</p>
@@ -582,7 +609,7 @@ sudo pip install seaborn
 </blockquote>
 <p>draw net<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd $CAFFE_HOME</span><br><span class="line">./python/draw_net.py ./examples/mnist/lenet.prototxt ./examples/mnist/lenet.png</span><br><span class="line"></span><br><span class="line">eog ./examples/mnist/lenet.png</span><br></pre></td></tr></table></figure></p>
 <p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180807151218024-1073147705.png" alt="lenet"></p>
-<h2 id="cpp-caffe"><a href="#cpp-caffe" class="headerlink" title="cpp caffe"></a>cpp caffe</h2><h3 id="train-net"><a href="#train-net" class="headerlink" title="train net"></a>train net</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd caffe </span><br><span class="line">./examples/mnist/train_lenet.sh</span><br></pre></td></tr></table></figure>
+<h2 id="cpp-caffe"><a href="#cpp-caffe" class="headerlink" title="cpp caffe"></a>cpp caffe</h2><h3 id="train-net"><a href="#train-net" class="headerlink" title="train net"></a>train net</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd caffe</span><br><span class="line">./examples/mnist/create_mnist.sh</span><br><span class="line">./examples/mnist/train_lenet.sh</span><br></pre></td></tr></table></figure>
 <pre><code>cat ./examples/mnist/train_lenet.sh 
 
 ./build/tools/caffe train --solver=examples/mnist/lenet_solver.prototxt $@
@@ -754,7 +781,7 @@ export LD_LIBRARY_PATH=/home/kezunlin/program/caffe-wy/build/install/lib:$LD_LIB
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">153</span>
+                  <span class="site-state-item-count">154</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -776,7 +803,7 @@ export LD_LIBRARY_PATH=/home/kezunlin/program/caffe-wy/build/install/lib:$LD_LIB
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">122</span>
+                  <span class="site-state-item-count">123</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -826,7 +853,7 @@ export LD_LIBRARY_PATH=/home/kezunlin/program/caffe-wy/build/install/lib:$LD_LIB
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install-CUDA-cudnn"><span class="nav-number">1.1.</span> <span class="nav-text">install CUDA + cudnn</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-protobuf"><span class="nav-number">1.2.</span> <span class="nav-text">install protobuf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-opencv"><span class="nav-number">1.3.</span> <span class="nav-text">install opencv</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile-caffe"><span class="nav-number">1.4.</span> <span class="nav-text">compile caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#clone-repo"><span class="nav-number">1.4.1.</span> <span class="nav-text">clone repo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#update-repo"><span class="nav-number">1.4.2.</span> <span class="nav-text">update repo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#configure"><span class="nav-number">1.4.3.</span> <span class="nav-text">configure</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-gcc-error"><span class="nav-number">1.4.4.</span> <span class="nav-text">fix gcc error</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-gflags-error"><span class="nav-number">1.4.5.</span> <span class="nav-text">fix gflags error</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#compile"><span class="nav-number">1.4.6.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install"><span class="nav-number">1.4.7.</span> <span class="nav-text">install</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Play-with-Caffe"><span class="nav-number">2.</span> <span class="nav-text">Play with Caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#python-caffe"><span class="nav-number">2.1.</span> <span class="nav-text">python caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-python-caffe"><span class="nav-number">2.1.1.</span> <span class="nav-text">fix python caffe</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python-draw-net"><span class="nav-number">2.1.2.</span> <span class="nav-text">python draw net</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cpp-caffe"><span class="nav-number">2.2.</span> <span class="nav-text">cpp caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#train-net"><span class="nav-number">2.2.1.</span> <span class="nav-text">train net</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#upgrade-net"><span class="nav-number">2.2.2.</span> <span class="nav-text">upgrade net</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Example"><span class="nav-number">3.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">3.1.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#run"><span class="nav-number">3.2.</span> <span class="nav-text">run</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install-CUDA-cudnn"><span class="nav-number">1.1.</span> <span class="nav-text">install CUDA + cudnn</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-protobuf"><span class="nav-number">1.2.</span> <span class="nav-text">install protobuf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-opencv"><span class="nav-number">1.3.</span> <span class="nav-text">install opencv</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile-caffe"><span class="nav-number">1.4.</span> <span class="nav-text">compile caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#clone-repo"><span class="nav-number">1.4.1.</span> <span class="nav-text">clone repo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#update-repo"><span class="nav-number">1.4.2.</span> <span class="nav-text">update repo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#configure"><span class="nav-number">1.4.3.</span> <span class="nav-text">configure</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-gcc-error"><span class="nav-number">1.4.4.</span> <span class="nav-text">fix gcc error</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-gflags-error"><span class="nav-number">1.4.5.</span> <span class="nav-text">fix gflags error</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#compile"><span class="nav-number">1.4.6.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install"><span class="nav-number">1.4.7.</span> <span class="nav-text">install</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#advanced"><span class="nav-number">1.4.8.</span> <span class="nav-text">advanced</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Play-with-Caffe"><span class="nav-number">2.</span> <span class="nav-text">Play with Caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#python-caffe"><span class="nav-number">2.1.</span> <span class="nav-text">python caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-python-caffe"><span class="nav-number">2.1.1.</span> <span class="nav-text">fix python caffe</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python-draw-net"><span class="nav-number">2.1.2.</span> <span class="nav-text">python draw net</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cpp-caffe"><span class="nav-number">2.2.</span> <span class="nav-text">cpp caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#train-net"><span class="nav-number">2.2.1.</span> <span class="nav-text">train net</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#upgrade-net"><span class="nav-number">2.2.2.</span> <span class="nav-text">upgrade net</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Example"><span class="nav-number">3.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">3.1.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#run"><span class="nav-number">3.2.</span> <span class="nav-text">run</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
