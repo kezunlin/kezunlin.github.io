@@ -69,7 +69,7 @@
 
 
 
-  <meta name="keywords" content="cmake," />
+  <meta name="keywords" content="gtest," />
 
 
 
@@ -82,18 +82,18 @@
 
 
 
-<meta name="description" content="guide to compile gtest from source on Ubuntu">
-<meta name="keywords" content="cmake">
+<meta name="description" content="compile gtest on ubuntu 16.04">
+<meta name="keywords" content="gtest">
 <meta property="og:type" content="article">
-<meta property="og:title" content="guide to compile gtest from source on Ubuntu">
+<meta property="og:title" content="compile gtest on ubuntu 16.04">
 <meta property="og:url" content="http://kezunlin.me/post/4a1427cf/index.html">
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
-<meta property="og:description" content="guide to compile gtest from source on Ubuntu">
+<meta property="og:description" content="compile gtest on ubuntu 16.04">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-03-01T12:13:50.725Z">
+<meta property="og:updated_time" content="2018-12-29T01:04:21.720Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="guide to compile gtest from source on Ubuntu">
-<meta name="twitter:description" content="guide to compile gtest from source on Ubuntu">
+<meta name="twitter:title" content="compile gtest on ubuntu 16.04">
+<meta name="twitter:description" content="compile gtest on ubuntu 16.04">
 
 
 
@@ -129,7 +129,7 @@
 
 
 
-  <title>guide to compile gtest from source on Ubuntu | KeZunLin's Blog</title>
+  <title>compile gtest on ubuntu 16.04 | KeZunLin's Blog</title>
   
 
 
@@ -317,7 +317,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">guide to compile gtest from source on Ubuntu</h2>
+          <h2 class="post-title" itemprop="name headline">compile gtest on ubuntu 16.04</h2>
         
 
         <div class="post-meta">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-03-01T20:13:50+08:00">
-                2018-03-01
+              <time title="Post modified" itemprop="dateModified" datetime="2018-12-29T09:04:21+08:00">
+                2018-12-29
               </time>
             
           </span>
@@ -364,8 +364,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/gtest/" itemprop="url" rel="index">
-                    <span itemprop="name">gtest</span>
+                  <a href="/categories/library/" itemprop="url" rel="index">
+                    <span itemprop="name">library</span>
                   </a>
                 </span>
 
@@ -393,7 +393,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  749
+                  573
                 </span>
               
 
@@ -409,7 +409,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  5
+                  4
                 </span>
               
             </div>
@@ -430,71 +430,42 @@
       
 
       
-        <p>guide to compile gtest from source on Ubuntu<br><a id="more"></a></p>
-<h1 id="Part-1-static-library"><a href="#Part-1-static-library" class="headerlink" title="Part 1: static library"></a>Part 1: static library</h1><ul>
+        <p>compile gtest on ubuntu 16.04<br><a id="more"></a></p>
+<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><ul>
+<li><strong><a href="http://kezunlin.me/post/4a1427cf/">compile gtest on ubuntu 16.04</a></strong></li>
+<li><a href="http://kezunlin.me/post/aca50ff8/">compile gtest on windows 10</a></li>
+</ul>
+<h2 id="apt-get"><a href="#apt-get" class="headerlink" title="apt-get"></a><del>apt-get</del></h2><pre><code>sudo apt-get install libgtest-dev
+cd /usr/src/gtest # only source files
+</code></pre><h2 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h2><pre><code>git clone https://github.com/google/googletest.git
+wget https://github.com/google/googletest/archive/release-1.8.0.tar.gz
+
+cd googletest
+mkdir build 
+cd build
+cmake-gui ..
+make -j8 
+sudo make install 
+</code></pre><p>options:</p>
+<pre><code>BUILD_SHARED_LIBS=ON
+</code></pre><blockquote>
+<p>install to <code>/usr/local/</code></p>
+</blockquote>
+<ul>
 <li>for static library, we use <code>libgtest.a</code></li>
 <li>for shared library, use use <code>ligbtest.so</code>.</li>
 </ul>
-<h2 id="compile-gtest"><a href="#compile-gtest" class="headerlink" title="compile gtest"></a>compile gtest</h2><p>download gtest</p>
-<pre><code>wget https://github.com/google/googletest/archive/release-1.8.0.tar.gz
-</code></pre><p><del>or by apt-get</del></p>
-<pre><code>#sudo apt-get install libgtest-dev
-#cd /usr/src/gtest
-</code></pre><p>compile </p>
-<pre><code>mkdir build 
-cd build
-sudo cmake-gui ..
-sudo make -j8 
-sudo make install 
-</code></pre><h2 id="install-to-usr-lib"><a href="#install-to-usr-lib" class="headerlink" title="install to /usr/lib"></a><del>install to /usr/lib</del></h2><pre><code># copy or symlink libgtest.a and libgtest_main.a to your /usr/lib folder
-sudo cp *.a /usr/lib 
-
-sudo ls /usr/lib/libgtest*
-
-libgtest.a libgtest_main.a 
-</code></pre><h2 id="gtest-demo"><a href="#gtest-demo" class="headerlink" title="gtest demo"></a>gtest demo</h2><h3 id="whattotest-cpp"><a href="#whattotest-cpp" class="headerlink" title="whattotest.cpp"></a>whattotest.cpp</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;math.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">squareRoot</span><span class="params">(<span class="keyword">const</span> <span class="keyword">double</span> a)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">double</span> b = <span class="built_in">sqrt</span>(a);</span><br><span class="line">    <span class="keyword">if</span>(b != b) &#123; <span class="comment">// nan check</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1.0</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">sqrt</span>(a);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="gtest-config-cmake"><a href="#gtest-config-cmake" class="headerlink" title="gtest-config.cmake"></a>gtest-config.cmake</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># - Try to find GTEST</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># The following variables are optionally searched for defaults</span></span><br><span class="line"><span class="comment">#  GTEST_ROOT_DIR:            Base directory where all GTEST components are found</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># The following are set after configuration is done:</span></span><br><span class="line"><span class="comment">#  GTEST_FOUND</span></span><br><span class="line"><span class="comment">#  GTEST_INCLUDE_DIRS</span></span><br><span class="line"><span class="comment">#  GTEST_LIBRARIES</span></span><br><span class="line"><span class="comment">#  GTEST_LIBRARYRARY_DIRS</span></span><br><span class="line"></span><br><span class="line">include(FindPackageHandleStandardArgs)</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span>(GTEST_ROOT_DIR <span class="string">""</span> CACHE PATH <span class="string">"Folder contains Google gtest"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(WIN32)</span><br><span class="line">    find_path(GTEST_INCLUDE_DIR gtest/gtest.h</span><br><span class="line">        PATHS <span class="variable">$&#123;GTEST_ROOT_DIR&#125;</span>)</span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line">    find_path(GTEST_INCLUDE_DIR gtest/gtest.h</span><br><span class="line">        PATHS <span class="variable">$&#123;GTEST_ROOT_DIR&#125;</span>)</span><br><span class="line">endif()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(MSVC)</span><br><span class="line">    find_library(GTEST_LIBRARY_RELEASE gtest</span><br><span class="line">        PATHS <span class="variable">$&#123;GTEST_ROOT_DIR&#125;</span></span><br><span class="line">        PATH_SUFFIXES Release)</span><br><span class="line">    find_library(GTEST_MAIN_LIBRARY_RELEASE gtest_main</span><br><span class="line">        PATHS <span class="variable">$&#123;GTEST_ROOT_DIR&#125;</span></span><br><span class="line">        PATH_SUFFIXES Release)</span><br><span class="line"></span><br><span class="line">    find_library(GTEST_LIBRARY_DEBUG gtest</span><br><span class="line">        PATHS <span class="variable">$&#123;GTEST_ROOT_DIR&#125;</span></span><br><span class="line">        PATH_SUFFIXES Debug)</span><br><span class="line">    find_library(GTEST_MAIN_LIBRARY_DEBUG gtest_main</span><br><span class="line">        PATHS <span class="variable">$&#123;GTEST_ROOT_DIR&#125;</span></span><br><span class="line">        PATH_SUFFIXES Debug)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">set</span>(GTEST_LIBRARY optimized <span class="variable">$&#123;GTEST_LIBRARY_RELEASE&#125;</span> <span class="variable">$&#123;GTEST_MAIN_LIBRARY_RELEASE&#125;</span> debug <span class="variable">$&#123;GTEST_LIBRARY_DEBUG&#125;</span> <span class="variable">$&#123;GTEST_MAIN_LIBRARY_DEBUG&#125;</span>)</span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line">    find_library(GTEST_LIBRARY gtest</span><br><span class="line">        PATHS <span class="variable">$&#123;GTEST_ROOT_DIR&#125;</span></span><br><span class="line">        PATH_SUFFIXES lib lib64)</span><br><span class="line"></span><br><span class="line">    find_library(GTEST_MAIN_LIBRARY gtest_main</span><br><span class="line">        PATHS <span class="variable">$&#123;GTEST_ROOT_DIR&#125;</span></span><br><span class="line">        PATH_SUFFIXES lib lib64)</span><br><span class="line">endif()</span><br><span class="line"></span><br><span class="line">find_package_handle_standard_args(GTEST DEFAULT_MSG GTEST_INCLUDE_DIR GTEST_LIBRARY GTEST_MAIN_LIBRARY)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(GTEST_FOUND)</span><br><span class="line">  <span class="built_in">set</span>(GTEST_INCLUDE_DIRS <span class="variable">$&#123;GTEST_INCLUDE_DIR&#125;</span>)</span><br><span class="line">  <span class="built_in">set</span>(GTEST_LIBRARIES <span class="variable">$&#123;GTEST_LIBRARY&#125;</span> <span class="variable">$&#123;GTEST_MAIN_LIBRARY&#125;</span>)</span><br><span class="line">  message(STATUS <span class="string">"Found gtest    (include: <span class="variable">$&#123;GTEST_INCLUDE_DIRS&#125;</span>, library: <span class="variable">$&#123;GTEST_LIBRARIES&#125;</span>)"</span>)</span><br><span class="line">  mark_as_advanced(GTEST_ROOT_DIR GTEST_LIBRARY_RELEASE GTEST_LIBRARY_DEBUG</span><br><span class="line">                                GTEST_MAIN_LIBRARY_RELEASE GTEST_MAIN_LIBRARY_DEBUG</span><br><span class="line">                                 GTEST_LIBRARY GTEST_MAIN_LIBRARY GTEST_INCLUDE_DIR)</span><br><span class="line">endif()</span><br></pre></td></tr></table></figure>
+<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><h2 id="code"><a href="#code" class="headerlink" title="code"></a>code</h2><h3 id="whattotest-cpp"><a href="#whattotest-cpp" class="headerlink" title="whattotest.cpp"></a>whattotest.cpp</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;math.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">squareRoot</span><span class="params">(<span class="keyword">const</span> <span class="keyword">double</span> a)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">double</span> b = <span class="built_in">sqrt</span>(a);</span><br><span class="line">    <span class="keyword">if</span>(b != b) &#123; <span class="comment">// nan check</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1.0</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">sqrt</span>(a);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="tests-cpp"><a href="#tests-cpp" class="headerlink" title="tests.cpp"></a>tests.cpp</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"whattotest.cpp"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;gtest/gtest.h&gt;</span></span></span><br><span class="line"> </span><br><span class="line">TEST(SquareRootTest, PositiveNos) &#123; </span><br><span class="line">    ASSERT_EQ(<span class="number">6</span>, squareRoot(<span class="number">36.0</span>));</span><br><span class="line">    ASSERT_EQ(<span class="number">18.0</span>, squareRoot(<span class="number">324.0</span>));</span><br><span class="line">    ASSERT_EQ(<span class="number">25.4</span>, squareRoot(<span class="number">645.16</span>));</span><br><span class="line">    ASSERT_EQ(<span class="number">0</span>, squareRoot(<span class="number">0.0</span>));</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">TEST(SquareRootTest, NegativeNos) &#123;</span><br><span class="line">    ASSERT_EQ(<span class="number">-1.0</span>, squareRoot(<span class="number">-15.0</span>));</span><br><span class="line">    ASSERT_EQ(<span class="number">-1.0</span>, squareRoot(<span class="number">-0.2</span>));</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span> </span>&#123;</span><br><span class="line">    testing::InitGoogleTest(&amp;argc, argv);</span><br><span class="line">    <span class="keyword">return</span> RUN_ALL_TESTS();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 2.6)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(MSVC) </span><br><span class="line">	SET(GTEST_ROOT <span class="string">"C:/Program Files/gtest"</span>)</span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line">	<span class="comment"># BOOST_THREAD_LIBRARY  /usr/lib/x86_64-linux-gnu/libpthread.so</span></span><br><span class="line">	MESSAGE( [Main] <span class="string">" BOOST_THREAD_LIBRARY = <span class="variable">$&#123;BOOST_THREAD_LIBRARY&#125;</span>"</span>)</span><br><span class="line">endif(MSVC)</span><br><span class="line"></span><br><span class="line">find_package(GTest REQUIRED) <span class="comment"># GTest 1.8.0</span></span><br><span class="line">include_directories(<span class="variable">$&#123;GTEST_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Link runTests with what we want to test and the GTest and pthread library</span></span><br><span class="line">add_executable(runTests tests.cpp)</span><br><span class="line">target_link_libraries(runTests <span class="variable">$&#123;GTEST_LIBRARIES&#125;</span> <span class="variable">$&#123;BOOST_THREAD_LIBRARY&#125;</span>)</span><br><span class="line"><span class="comment">#target_link_libraries(runTests gtest pthread)</span></span><br></pre></td></tr></table></figure>
-<p><code>${GTEST_LIBRARIES}</code> will be found: <code>/usr/lib/libgtest.a</code>.</p>
-<h3 id="run-gtest-demo"><a href="#run-gtest-demo" class="headerlink" title="run gtest demo"></a>run gtest demo</h3><pre><code>cmake CMakeLists.txt
-make
-./runTests
-</code></pre><h1 id="Part-2-shared-library"><a href="#Part-2-shared-library" class="headerlink" title="Part 2: shared library"></a>Part 2: shared library</h1><h2 id="compile-gtest-1"><a href="#compile-gtest-1" class="headerlink" title="compile gtest"></a>compile gtest</h2><p>with option <code>-DBUILD_SHARED_LIBS=ON</code></p>
-<pre><code>sudo mkdir build 
-cd build
-sudo cmake -DBUILD_SHARED_LIBS=ON ..
-sudo make -j8
-sudo make install
-</code></pre><h2 id="install-to-usr-lib-1"><a href="#install-to-usr-lib-1" class="headerlink" title="install to /usr/lib"></a><del>install to /usr/lib</del></h2><pre><code># copy libgtest.so and libgtest_main.so to your /usr/lib folder
-sudo cp *.so /usr/lib
-</code></pre><h2 id="ldconfig"><a href="#ldconfig" class="headerlink" title="ldconfig"></a><del>ldconfig</del></h2><p>Update the cache of the linker and check if the GNU Linker knows the libs</p>
-<pre><code>cat /etc/ld.so.conf
-include /etc/ld.so.conf.d/*.conf
-</code></pre><p>add gtest path <code>/usr/lib</code> to <code>/etc/ld.so.conf.d/gtest.conf</code> </p>
-<pre><code>cat /etc/ld.so.conf.d/gtest.conf
-/usr/lib
-</code></pre><p>update linker</p>
-<pre><code>$ sudo ldconfig
-
-$ sudo ldconfig -v | grep gtest
-
-libgtest_main.so -&gt; libgtest_main.so
-libgtest.so -&gt; libgtest.so
-</code></pre><p>OK. </p>
-<h2 id="link"><a href="#link" class="headerlink" title="link"></a>link</h2><p>use <code>-lgtest</code> as linker flag and optionally, if you did not write your own test mainroutine, the explicit <code>-lgtest_main</code> flag.</p>
+<h2 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 2.6)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(MSVC) </span><br><span class="line">	SET(GTEST_ROOT <span class="string">"C:/Program Files/gtest"</span>)</span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line">	<span class="comment"># BOOST_THREAD_LIBRARY  /usr/lib/x86_64-linux-gnu/libpthread.so</span></span><br><span class="line">	MESSAGE( [Main] <span class="string">" BOOST_THREAD_LIBRARY = <span class="variable">$&#123;BOOST_THREAD_LIBRARY&#125;</span>"</span>)</span><br><span class="line">endif(MSVC)</span><br><span class="line"></span><br><span class="line">find_package(GTest REQUIRED) <span class="comment"># GTest 1.8.0</span></span><br><span class="line">include_directories(<span class="variable">$&#123;GTEST_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Link runTests with what we want to test and the GTest and pthread library</span></span><br><span class="line">add_executable(runTests tests.cpp)</span><br><span class="line">target_link_libraries(runTests <span class="variable">$&#123;GTEST_LIBRARIES&#125;</span> <span class="variable">$&#123;BOOST_THREAD_LIBRARY&#125;</span>)</span><br><span class="line"><span class="comment">#target_link_libraries(runTests gtest pthread)</span></span><br></pre></td></tr></table></figure>
+<h2 id="compile-1"><a href="#compile-1" class="headerlink" title="compile"></a>compile</h2><pre><code>mkdir build &amp;&amp; cd build &amp;&amp; cmake-gui ..
+make -j8
+</code></pre><h3 id="run"><a href="#run" class="headerlink" title="run"></a>run</h3><pre><code>./runTests
+</code></pre><h2 id="link-optional"><a href="#link-optional" class="headerlink" title="link (optional)"></a>link (optional)</h2><p>use <code>-lgtest</code> as linker flag and optionally, if you did not write your own test mainroutine, the explicit <code>-lgtest_main</code> flag.</p>
 <p>gtest use pthread, so we need <code>-lpthread</code> as well.</p>
 <pre><code>-lgtest -lgtest_main -lpthread
-</code></pre><h1 id="Part3-Rewrite-part1-part2"><a href="#Part3-Rewrite-part1-part2" class="headerlink" title="Part3: Rewrite part1+part2"></a>Part3: Rewrite part1+part2</h1><h2 id="compile-and-install"><a href="#compile-and-install" class="headerlink" title="compile and install"></a>compile and install</h2><pre><code>git clone https://github.com/google/googletest.git
-
-cd googletest
-sudo mkdir build 
-cd build
-sudo cmake-gui ..
-sudo make -j8 
-sudo make install 
-</code></pre><h2 id="gtest-config-cmake"><a href="#gtest-config-cmake" class="headerlink" title="gtest-config.cmake"></a>gtest-config.cmake</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># - Try to find GTEST</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># The following variables are optionally searched for defaults</span></span><br><span class="line"><span class="comment">#  GTEST_ROOT_DIR:            Base directory where all GTEST components are found</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># The following are set after configuration is done:</span></span><br><span class="line"><span class="comment">#  GTEST_FOUND</span></span><br><span class="line"><span class="comment">#  GTEST_INCLUDE_DIRS</span></span><br><span class="line"><span class="comment">#  GTEST_LIBRARIES</span></span><br><span class="line"><span class="comment">#  GTEST_LIBRARYRARY_DIRS</span></span><br><span class="line"></span><br><span class="line">include(FindPackageHandleStandardArgs)</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span>(GTEST_ROOT_DIR <span class="string">""</span> CACHE PATH <span class="string">"Folder contains Google gtest"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(WIN32)</span><br><span class="line">    find_path(GTEST_INCLUDE_DIR gtest/gtest.h</span><br><span class="line">        PATHS <span class="variable">$&#123;GTEST_ROOT_DIR&#125;</span>)</span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line">    find_path(GTEST_INCLUDE_DIR gtest/gtest.h</span><br><span class="line">        PATHS <span class="variable">$&#123;GTEST_ROOT_DIR&#125;</span>)</span><br><span class="line">endif()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(MSVC)</span><br><span class="line">    find_library(GTEST_LIBRARY_RELEASE gtest</span><br><span class="line">        PATHS <span class="variable">$&#123;GTEST_ROOT_DIR&#125;</span></span><br><span class="line">        PATH_SUFFIXES Release)</span><br><span class="line">    find_library(GTEST_MAIN_LIBRARY_RELEASE gtest_main</span><br><span class="line">        PATHS <span class="variable">$&#123;GTEST_ROOT_DIR&#125;</span></span><br><span class="line">        PATH_SUFFIXES Release)</span><br><span class="line"></span><br><span class="line">    find_library(GTEST_LIBRARY_DEBUG gtest</span><br><span class="line">        PATHS <span class="variable">$&#123;GTEST_ROOT_DIR&#125;</span></span><br><span class="line">        PATH_SUFFIXES Debug)</span><br><span class="line">    find_library(GTEST_MAIN_LIBRARY_DEBUG gtest_main</span><br><span class="line">        PATHS <span class="variable">$&#123;GTEST_ROOT_DIR&#125;</span></span><br><span class="line">        PATH_SUFFIXES Debug)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">set</span>(GTEST_LIBRARY optimized <span class="variable">$&#123;GTEST_LIBRARY_RELEASE&#125;</span> <span class="variable">$&#123;GTEST_MAIN_LIBRARY_RELEASE&#125;</span> debug <span class="variable">$&#123;GTEST_LIBRARY_DEBUG&#125;</span> <span class="variable">$&#123;GTEST_MAIN_LIBRARY_DEBUG&#125;</span>)</span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line">    find_library(GTEST_LIBRARY gtest</span><br><span class="line">        PATHS <span class="variable">$&#123;GTEST_ROOT_DIR&#125;</span></span><br><span class="line">        PATH_SUFFIXES lib lib64)</span><br><span class="line"></span><br><span class="line">    find_library(GTEST_MAIN_LIBRARY gtest_main</span><br><span class="line">        PATHS <span class="variable">$&#123;GTEST_ROOT_DIR&#125;</span></span><br><span class="line">        PATH_SUFFIXES lib lib64)</span><br><span class="line">endif()</span><br><span class="line"></span><br><span class="line">find_package_handle_standard_args(GTEST DEFAULT_MSG GTEST_INCLUDE_DIR GTEST_LIBRARY GTEST_MAIN_LIBRARY)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(GTEST_FOUND)</span><br><span class="line">  <span class="built_in">set</span>(GTEST_INCLUDE_DIRS <span class="variable">$&#123;GTEST_INCLUDE_DIR&#125;</span>)</span><br><span class="line">  <span class="built_in">set</span>(GTEST_LIBRARIES <span class="variable">$&#123;GTEST_LIBRARY&#125;</span> <span class="variable">$&#123;GTEST_MAIN_LIBRARY&#125;</span>)</span><br><span class="line">  message(STATUS <span class="string">"Found gtest    (include: <span class="variable">$&#123;GTEST_INCLUDE_DIRS&#125;</span>, library: <span class="variable">$&#123;GTEST_LIBRARIES&#125;</span>)"</span>)</span><br><span class="line">  mark_as_advanced(GTEST_ROOT_DIR GTEST_LIBRARY_RELEASE GTEST_LIBRARY_DEBUG</span><br><span class="line">                                GTEST_MAIN_LIBRARY_RELEASE GTEST_MAIN_LIBRARY_DEBUG</span><br><span class="line">                                 GTEST_LIBRARY GTEST_MAIN_LIBRARY GTEST_INCLUDE_DIR)</span><br><span class="line">endif()</span><br></pre></td></tr></table></figure>
-<h2 id="CMakeLists-txt-1"><a href="#CMakeLists-txt-1" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">find_package(GTEST REQUIRED)</span><br><span class="line"></span><br><span class="line">include_directories(<span class="variable">$&#123;GTEST_INCLUDE_DIRS&#125;</span>)</span><br><span class="line">target_link_libraries (demo  <span class="variable">$&#123;GTEST__LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://www.eriksmistad.no/getting-started-with-google-test-on-ubuntu/" target="_blank" rel="noopener">getting-started-with-google-test-on-ubuntu</a></li>
 <li><a href="https://github.com/google/googletest.git" target="_blank" rel="noopener">googletest repo</a></li>
 <li><a href="https://github.com/bast/gtest-demo" target="_blank" rel="noopener">gtest-demo</a></li>
@@ -525,7 +496,7 @@ sudo make install
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="http://kezunlin.me/post/4a1427cf/" title="guide to compile gtest from source on Ubuntu">http://kezunlin.me/post/4a1427cf/</a>
+    <a href="http://kezunlin.me/post/4a1427cf/" title="compile gtest on ubuntu 16.04">http://kezunlin.me/post/4a1427cf/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -540,7 +511,7 @@ sudo make install
       
         <div class="post-tags">
           
-            <a href="/tags/cmake/" rel="tag"># cmake</a>
+            <a href="/tags/gtest/" rel="tag"># gtest</a>
           
         </div>
       
@@ -642,7 +613,7 @@ sudo make install
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">154</span>
+                  <span class="site-state-item-count">150</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -664,7 +635,7 @@ sudo make install
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">123</span>
+                  <span class="site-state-item-count">122</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -714,7 +685,7 @@ sudo make install
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Part-1-static-library"><span class="nav-number">1.</span> <span class="nav-text">Part 1: static library</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#compile-gtest"><span class="nav-number">1.1.</span> <span class="nav-text">compile gtest</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-to-usr-lib"><span class="nav-number">1.2.</span> <span class="nav-text">install to /usr/lib</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gtest-demo"><span class="nav-number">1.3.</span> <span class="nav-text">gtest demo</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#whattotest-cpp"><span class="nav-number">1.3.1.</span> <span class="nav-text">whattotest.cpp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tests-cpp"><span class="nav-number">1.3.2.</span> <span class="nav-text">tests.cpp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">1.3.3.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#run-gtest-demo"><span class="nav-number">1.3.4.</span> <span class="nav-text">run gtest demo</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Part-2-shared-library"><span class="nav-number">2.</span> <span class="nav-text">Part 2: shared library</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#compile-gtest-1"><span class="nav-number">2.1.</span> <span class="nav-text">compile gtest</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-to-usr-lib-1"><span class="nav-number">2.2.</span> <span class="nav-text">install to /usr/lib</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ldconfig"><span class="nav-number">2.3.</span> <span class="nav-text">ldconfig</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#link"><span class="nav-number">2.4.</span> <span class="nav-text">link</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Part3-Rewrite-part1-part2"><span class="nav-number">3.</span> <span class="nav-text">Part3: Rewrite part1+part2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#compile-and-install"><span class="nav-number">3.1.</span> <span class="nav-text">compile and install</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gtest-config-cmake"><span class="nav-number">3.2.</span> <span class="nav-text">gtest-config.cmake</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMakeLists-txt-1"><span class="nav-number">3.3.</span> <span class="nav-text">CMakeLists.txt</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#apt-get"><span class="nav-number">1.1.</span> <span class="nav-text">apt-get</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">1.2.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gtest-config-cmake"><span class="nav-number">1.3.</span> <span class="nav-text">gtest-config.cmake</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Example"><span class="nav-number">2.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#code"><span class="nav-number">2.1.</span> <span class="nav-text">code</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#whattotest-cpp"><span class="nav-number">2.1.1.</span> <span class="nav-text">whattotest.cpp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tests-cpp"><span class="nav-number">2.1.2.</span> <span class="nav-text">tests.cpp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">2.2.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile-1"><span class="nav-number">2.3.</span> <span class="nav-text">compile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#run"><span class="nav-number">2.3.1.</span> <span class="nav-text">run</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#link-optional"><span class="nav-number">2.4.</span> <span class="nav-text">link (optional)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
