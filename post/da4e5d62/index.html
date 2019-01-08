@@ -90,7 +90,7 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="extern c">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-12-26T01:10:09.064Z">
+<meta property="og:updated_time" content="2019-01-08T07:55:55.334Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="extern c ">
 <meta name="twitter:description" content="extern c">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-12-26T09:10:09+08:00">
-                2018-12-26
+              <time title="Post modified" itemprop="dateModified" datetime="2019-01-08T15:55:55+08:00">
+                2019-01-08
               </time>
             
           </span>
@@ -393,7 +393,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  17
+                  1,391
                 </span>
               
 
@@ -409,7 +409,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  1
+                  8
                 </span>
               
             </div>
@@ -431,9 +431,176 @@
 
       
         <p>extern c<br><a id="more"></a></p>
-<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a href="http://www.cnblogs.com/HappyXie/archive/2011/01/07/1929369.html" target="_blank" rel="noopener">#ifdef __cplusplus extern “C” { #endif”的定义</a></li>
+<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="extern-c"><a href="#extern-c" class="headerlink" title="extern c"></a>extern c</h2><p>相比C语言，C++支持函数重载、类、模版等各种特性，如果C++的符号修饰仍按照C那样直接使用对应名称，虽然可读性很好，却不可避免的会出现各种错乱，于是C++符号修饰别名(mangled name)被设计出来， 用来解决上述问题，然而修饰规则取决于编译器实现，没有统一标准，比如gcc、msvc就各有一套，但好在都提供了相应接口进行解析(demangle)，这里有个网站<a href="http://demangler.com/" target="_blank" rel="noopener">demangler</a>可以在线解析</p>
+<blockquote>
+<p>c++ function: managled names<br>c function: unmangled names<br><code>extern c</code>告诉c++编译器将<code>f_int,f_float</code>视为c函数，使用 unmangled names(修饰名称)</p>
+</blockquote>
+<h2 id="managled-unmangled-names"><a href="#managled-unmangled-names" class="headerlink" title="managled/unmangled names"></a>managled/unmangled names</h2><p>a.cpp<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">g</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">ef</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">eg</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Prevent g and eg from being optimized away. */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">h</span><span class="params">()</span> </span>&#123; g(); eg(); &#125;</span><br></pre></td></tr></table></figure></p>
+<p>Compile with GCC 4.8 Linux ELF output:</p>
+<pre><code>g++ -c a.cpp
+</code></pre><p>Decompile the symbol table:</p>
+<pre><code>readelf -s a.o
+</code></pre><p>output </p>
+<pre><code>Num:    Value          Size Type    Bind   Vis      Ndx Name
+  8: 0000000000000000     6 FUNC    GLOBAL DEFAULT    1 _Z1fv
+  9: 0000000000000006     6 FUNC    GLOBAL DEFAULT    1 ef
+ 10: 000000000000000c    16 FUNC    GLOBAL DEFAULT    1 _Z1hv
+ 11: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND _Z1gv
+ 12: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND eg
+</code></pre><blockquote>
+<p>managled names: <code>_Z1fv,_Z1hv,_Z1gv</code> for <code>f,g,h</code><br>unmangled names: <code>ef,eg</code></p>
+</blockquote>
+<p>unmanagle them </p>
+<pre><code>c++filt _Z1fv
+f()
+
+c++filt _Z1hv
+h()
+
+c++filt _Z1gv
+g()
+</code></pre><h2 id="extern-C中错误用法"><a href="#extern-C中错误用法" class="headerlink" title="extern C中错误用法"></a>extern C中错误用法</h2><p>It becomes obvious that any C++ feature that requires name mangling will not work inside extern C:</p>
+<p>error.cpp<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span> &#123;</span><br><span class="line">    <span class="comment">// Overloading.</span></span><br><span class="line">    <span class="comment">// error: declaration of C function ‘void f(int)’ conflicts with</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> i)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Templates.</span></span><br><span class="line">    <span class="comment">// error: template with C linkage</span></span><br><span class="line">    <span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">C</span>&gt; <span class="title">void</span> <span class="title">f</span>(<span class="title">C</span> <span class="title">i</span>) &#123;</span> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>compile and generate errors</p>
+<pre><code>g++ -c error.cpp 
+error.cpp:5:17: error: conflicting declaration of C function ‘void f(int)’
+     void f(int i);
+                 ^
+error.cpp:4:10: note: previous declaration ‘void f()’
+     void f();
+          ^
+error.cpp:9:5: error: template with C linkage
+     template &lt;class C&gt; void f(C i) { }
+     ^
+</code></pre><p>So you will need <code>extern &quot;C&quot;</code> both when calling:</p>
+<ul>
+<li>C from C++: tell <code>g++</code> to expect unmangled symbols produced by <code>gcc</code></li>
+<li>C++ from C: tell <code>gcc</code> to use unmangled symbols produced by <code>g++</code></li>
+</ul>
+<h2 id="cpp中使用c方法"><a href="#cpp中使用c方法" class="headerlink" title="cpp中使用c方法"></a>cpp中使用c方法</h2><h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><p>main.cpp<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cassert&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"c.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    assert(f() == <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>c.h<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> C_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> C_H</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* This ifdef allows the header to be used from both C and C++. */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span> &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">f</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure></p>
+<p>c.c<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"c.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">f</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123; <span class="keyword">return</span> <span class="number">1</span>; &#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="OK"><a href="#OK" class="headerlink" title="OK"></a>OK</h3><p>compile main.cpp</p>
+<pre><code>g++ -c -o main.o -std=c++98 main.cpp
+
+readelf -s main.o
+10: 0000000000000000    46 FUNC    GLOBAL DEFAULT    1 main
+11: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND f
+12: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __assert_fail
+</code></pre><blockquote>
+<p>使用c++编译器，extern c告诉c++编译器<code>f</code>是一个c函数，使用unmanagled name <code>f</code></p>
+</blockquote>
+<p>compile c.c</p>
+<pre><code>gcc -c -o c.o -std=c89 c.c
+
+readelf -s c.o 
+8: 0000000000000000    11 FUNC    GLOBAL DEFAULT    1 f
+</code></pre><blockquote>
+<p>使用c编译器，对于c函数生成unmanagled name <code>f</code></p>
+</blockquote>
+<p>link main.o and c.o</p>
+<pre><code>g++ -o main.out main.o c.o
+./main.out
+</code></pre><blockquote>
+<p>OK.</p>
+</blockquote>
+<h3 id="Error"><a href="#Error" class="headerlink" title="Error"></a>Error</h3><p>Without <code>extern &quot;C&quot;</code> the link fails with:</p>
+<pre><code>main.cpp:6: undefined reference to `f()&apos;
+</code></pre><p>compile main.cpp</p>
+<pre><code>g++ -c -o main.o -std=c++98 main.cpp
+
+readelf -s main.o
+10: 0000000000000000    46 FUNC    GLOBAL DEFAULT    1 main
+11: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND _Z1fv
+12: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __assert_fail
+</code></pre><blockquote>
+<p>因为没有extern c，所以g++编译器将f看做是c++函数，使用managled name <code>_Z1fv</code></p>
+</blockquote>
+<p>compile c.c</p>
+<pre><code>gcc -c -o c.o -std=c89 c.c
+
+readelf -s c.o 
+8: 0000000000000000    11 FUNC    GLOBAL DEFAULT    1 f
+</code></pre><blockquote>
+<p>使用c编译器，对于c函数生成unmanagled name <code>f</code></p>
+</blockquote>
+<p>link main.o and c.o</p>
+<pre><code>g++ -o main.out main.o c.o
+
+main.o: In function `main&apos;:
+main.cpp:(.text+0x5): undefined reference to `f()&apos;
+collect2: error: ld returned 1 exit status
+</code></pre><blockquote>
+<p>link失败，因为c++编译器需要managled name <code>_Z1fv</code>，然而c编译器生成了unmanagled name <code>f</code></p>
+</blockquote>
+<h2 id="c中使用cpp方法"><a href="#c中使用cpp方法" class="headerlink" title="c中使用cpp方法"></a>c中使用cpp方法</h2><h3 id="code-1"><a href="#code-1" class="headerlink" title="code"></a>code</h3><p>main.c<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;assert.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"cpp.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    assert(f_int(<span class="number">1</span>) == <span class="number">2</span>);</span><br><span class="line">    assert(f_float(<span class="number">1.0</span>) == <span class="number">3</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>cpp.h<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> CPP_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> CPP_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></span><br><span class="line"><span class="comment">// C cannot see these overloaded prototypes, or else it would get confused.</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> i)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">f</span><span class="params">(<span class="keyword">float</span> i)</span></span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span> &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">f_int</span><span class="params">(<span class="keyword">int</span> i)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">f_float</span><span class="params">(<span class="keyword">float</span> i)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure></p>
+<p>cpp.cpp<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"cpp.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> i + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">f</span><span class="params">(<span class="keyword">float</span> i)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> i + <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">f_int</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> f(i);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">f_float</span><span class="params">(<span class="keyword">float</span> i)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> f(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="OK-1"><a href="#OK-1" class="headerlink" title="OK"></a>OK</h3><p>compile main.c</p>
+<pre><code>gcc -c -o main.o -std=c89 -Wextra main.c
+
+readelf -s main.o
+10: 0000000000000000    94 FUNC    GLOBAL DEFAULT    1 main
+11: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND f_int
+12: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __assert_fail
+13: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND f_float
+</code></pre><blockquote>
+<p>使用c编译器，将<code>f_int,f_float</code>视作c函数，使用unmanagled name <code>f_int,f_float</code></p>
+</blockquote>
+<p>compile cpp.cpp</p>
+<pre><code>g++ -c -o cpp.o -std=c++98 cpp.cpp
+
+readelf -s cpp.o
+ 9: 0000000000000000    15 FUNC    GLOBAL DEFAULT    1 _Z1fi
+10: 000000000000000f    32 FUNC    GLOBAL DEFAULT    1 _Z1ff
+11: 000000000000002f    23 FUNC    GLOBAL DEFAULT    1 f_int
+12: 0000000000000046    31 FUNC    GLOBAL DEFAULT    1 f_float
+</code></pre><blockquote>
+<p>使用c++编译器，<code>extern c</code>告诉c++编译器将<code>f_int,f_float</code>视作c函数，使用unmanagled name <code>f_int,f_float</code></p>
+</blockquote>
+<p>link main.o and cpp.o</p>
+<pre><code>g++ -o main.out main.o cpp.o
+./main.out
+</code></pre><blockquote>
+<p>OK.</p>
+</blockquote>
+<h3 id="Error-1"><a href="#Error-1" class="headerlink" title="Error"></a>Error</h3><p>Without extern “C” it fails with:</p>
+<pre><code>main.c:6: undefined reference to `f_int&apos;
+main.c:7: undefined reference to `f_float&apos;
+</code></pre><p>compile main.c</p>
+<pre><code>gcc -c -o main.o -std=c89 -Wextra main.c
+
+readelf -s main.o
+10: 0000000000000000    94 FUNC    GLOBAL DEFAULT    1 main
+11: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND f_int
+12: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __assert_fail
+13: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND f_float
+</code></pre><blockquote>
+<p>使用c编译器，将<code>f_int,f_float</code>视作c函数，使用unmanagled name <code>f_int,f_float</code></p>
+</blockquote>
+<p>compile cpp.cpp</p>
+<pre><code>g++ -c -o cpp.o -std=c++98 cpp.cpp
+
+readelf -s cpp.o
+ 9: 0000000000000000    15 FUNC    GLOBAL DEFAULT    1 _Z1fi
+10: 000000000000000f    32 FUNC    GLOBAL DEFAULT    1 _Z1ff
+11: 000000000000002f    23 FUNC    GLOBAL DEFAULT    1 _Z5f_inti
+12: 0000000000000046    31 FUNC    GLOBAL DEFAULT    1 _Z5f_floatf
+</code></pre><blockquote>
+<p>使用c++编译器，因为没有<code>extern c</code>，c++编译器将<code>f_int,f_float</code>视作c++函数，使用managled name <code>_Z5f_inti,_Z5f_floatf</code></p>
+</blockquote>
+<p>link main.o and cpp.o</p>
+<pre><code>g++ -o main.out main.o cpp.o
+</code></pre><blockquote>
+<p>link失败，因为c编译器需要unmanagled name <code>f_int,f_float</code>，然而c++编译器生成了managled name <code>_Z5f_inti,_Z5f_floatf</code></p>
+</blockquote>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="https://stackoverflow.com/questions/1041866/what-is-the-effect-of-extern-c-in-c" target="_blank" rel="noopener">extern c</a></li>
+<li><a href="https://github.com/cirosantilli/cpp-cheat/tree/bf5f48628d0b01ba6a3fcea6f1162b28539654c9/cpp-from-c" target="_blank" rel="noopener">cpp-from-c</a></li>
+<li><a href="https://github.com/cirosantilli/cpp-cheat/tree/bf5f48628d0b01ba6a3fcea6f1162b28539654c9/c-from-cpp" target="_blank" rel="noopener">c-from-cpp</a></li>
+<li><a href="http://www.cnblogs.com/HappyXie/archive/2011/01/07/1929369.html" target="_blank" rel="noopener">#ifdef cplusplus extern C { #endif的定义</a></li>
 <li><a href="https://www.cnblogs.com/nx520zj/p/5920782.html" target="_blank" rel="noopener">extern “C”</a></li>
+<li><a href="https://blog.csdn.net/rrrfff/article/details/7228704" target="_blank" rel="noopener">managled name</a></li>
 </ul>
 <h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>20181226: created.</li>
@@ -495,6 +662,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/b8792f9f/" rel="prev" title="use pcap on ubuntu 16.04">
+                use pcap on ubuntu 16.04 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -571,7 +742,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">150</span>
+                  <span class="site-state-item-count">151</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -582,7 +753,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -593,7 +764,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">118</span>
+                  <span class="site-state-item-count">128</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -643,7 +814,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#extern-c"><span class="nav-number">1.1.</span> <span class="nav-text">extern c</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#managled-unmangled-names"><span class="nav-number">1.2.</span> <span class="nav-text">managled/unmangled names</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extern-C中错误用法"><span class="nav-number">1.3.</span> <span class="nav-text">extern C中错误用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cpp中使用c方法"><span class="nav-number">1.4.</span> <span class="nav-text">cpp中使用c方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#code"><span class="nav-number">1.4.1.</span> <span class="nav-text">code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OK"><span class="nav-number">1.4.2.</span> <span class="nav-text">OK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Error"><span class="nav-number">1.4.3.</span> <span class="nav-text">Error</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c中使用cpp方法"><span class="nav-number">1.5.</span> <span class="nav-text">c中使用cpp方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#code-1"><span class="nav-number">1.5.1.</span> <span class="nav-text">code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OK-1"><span class="nav-number">1.5.2.</span> <span class="nav-text">OK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Error-1"><span class="nav-number">1.5.3.</span> <span class="nav-text">Error</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
@@ -670,7 +841,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

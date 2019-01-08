@@ -91,7 +91,7 @@
 <meta property="og:description" content="compile caffe-yolov3 on ubuntu 16.04">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://img2018.cnblogs.com/blog/635233/201812/635233-20181211172011480-60199252.png">
-<meta property="og:updated_time" content="2018-12-11T09:33:27.432Z">
+<meta property="og:updated_time" content="2019-01-03T09:29:48.033Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="compile caffe-yolov3 on ubuntu 16.04">
 <meta name="twitter:description" content="compile caffe-yolov3 on ubuntu 16.04">
@@ -347,8 +347,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-12-11T17:33:27+08:00">
-                2018-12-11
+              <time title="Post modified" itemprop="dateModified" datetime="2019-01-03T17:29:48+08:00">
+                2019-01-03
               </time>
             
           </span>
@@ -395,7 +395,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  454
+                  463
                 </span>
               
 
@@ -448,34 +448,40 @@
 <li>opencv: 3.3.0 </li>
 <li>caffe: latest</li>
 </ul>
-<h2 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h2><pre><code>git clone https://github.com/ChenYingpeng/caffe-yolov3.git
+<h2 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h2><pre><code>git clone https://github.com/kezunlin/caffe-yolov3.git
 cd caffe-yolov3
 mkdir build &amp;&amp; cd build &amp;&amp; cmake-gui ..
 </code></pre><blockquote>
-<p>tips: edit CMakeLists.txt for <code>caffe</code>.</p>
+<p>tips: edit CMakeLists.txt for <code>caffe</code>.<br>see <a href="https://github.com/kezunlin/caffe-yolov3/blob/master/CMakeLists.txt" target="_blank" rel="noopener">CMakeLists.txt</a></p>
 </blockquote>
 <h2 id="make"><a href="#make" class="headerlink" title="make"></a>make</h2><pre><code>make -j8
 make install
 
-tree x86_64/
-x86_64/
+tree install
+install
 ├── bin
-│   ├── detectnet
+│   ├── demo
 │   ├── dog.jpg
-│   └── networks -&gt; /home/kezunlin/git/caffe-yolov3-master/data/networks
+│   └── libcaffeyolo.so
 ├── include
-│   ├── activations.h
-│   ├── blas.h
-│   ├── box.h
-│   ├── cuda.h
-│   ├── image.h
-│   └── yolo_layer.h
-└── lib
-    └── libsysDetectSpeed.so
+│   └── caffeyolo
+│       ├── activations.h
+│       ├── blas.h
+│       ├── box.h
+│       ├── cuda.h
+│       ├── image.h
+│       └── yolo_layer.h
+├── lib
+│   └── libcaffeyolo.so
+└── share
+    └── cmake
+        └── caffeyolo
+            ├── caffeyolo-config.cmake
+            └── caffeyolo-config-noconfig.cmake
 
-3 directories, 10 files
-</code></pre><h2 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h2><pre><code>cd x86_64/bin
-./detectnet
+7 directories, 12 files
+</code></pre><h2 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h2><pre><code>cd install/bin
+./demo
 </code></pre><p>output </p>
 <pre><code>num_inputs is 1
 num_outputs is 3
@@ -511,7 +517,8 @@ detectnet-camera:  this concludes the test of the video device.
 </ul>
 <h2 id="python-code"><a href="#python-code" class="headerlink" title="python code"></a>python code</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">### Input: the model&apos;s output dict</span><br><span class="line">### Output: list of tuples in ((cx1, cy1), (cx2, cy2), cls, prob)</span><br><span class="line">def rects_prepare(output, inp_dim=416, num_classes=80):</span><br><span class="line">    prediction = None</span><br><span class="line">    # transform prediction coordinates to correspond to pixel location</span><br><span class="line">    for key, value in output.items():</span><br><span class="line">        # anchor sizes are borrowed from YOLOv3 config file</span><br><span class="line">        if key == &apos;layer82-conv&apos;: </span><br><span class="line">            anchors = [(116, 90), (156, 198), (373, 326)] </span><br><span class="line">        elif key == &apos;layer94-conv&apos;:</span><br><span class="line">            anchors = [(30, 61), (62, 45), (59, 119)]</span><br><span class="line">        elif key == &apos;layer106-conv&apos;: </span><br><span class="line">            anchors = [(10, 13), (16, 30), (33, 23)]</span><br></pre></td></tr></table></figure>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a href="https://github.com/ChenYingpeng/caffe-yolov3" target="_blank" rel="noopener">caffe-yolov3</a></li>
+<li><a href="https://github.com/ChenYingpeng/caffe-yolov3" target="_blank" rel="noopener">ChenYingpengcaffe-yolov3</a></li>
+<li><a href="https://github.com/kezunlin/caffe-yolov3" target="_blank" rel="noopener">my version</a></li>
 </ul>
 <h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>20181211: created.</li>
@@ -653,7 +660,7 @@ detectnet-camera:  this concludes the test of the video device.
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">150</span>
+                  <span class="site-state-item-count">151</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -664,7 +671,7 @@ detectnet-camera:  this concludes the test of the video device.
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -675,7 +682,7 @@ detectnet-camera:  this concludes the test of the video device.
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">118</span>
+                  <span class="site-state-item-count">128</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -752,7 +759,7 @@ detectnet-camera:  this concludes the test of the video device.
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

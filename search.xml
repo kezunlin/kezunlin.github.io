@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[use pcap on ubuntu 16.04]]></title>
+    <url>%2Fpost%2Fb8792f9f%2F</url>
+    <content type="text"><![CDATA[use pcap on ubuntu 16.04 Guide pcap: 1.7.4 installsudo apt-get -y install libpcap-dev locate pcap.so /usr/lib/x86_64-linux-gnu/libpcap.so /usr/lib/x86_64-linux-gnu/libpcap.so.0.8 /usr/lib/x86_64-linux-gnu/libpcap.so.1.7.4 locate pcap.h /usr/include/pcap.h /usr/include/pcap/pcap.h pcap-config.cmake1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374# - Try to find libpcap include dirs and libraries## Usage of this module as follows:## find_package(PCAP)## Variables used by this module, they can change the default behaviour and need# to be set before calling find_package:## PCAP_ROOT_DIR Set this variable to the root installation of# libpcap if the module has problems finding the# proper installation path.## Variables defined by this module:## PCAP_FOUND System has libpcap, include and library dirs found# PCAP_INCLUDE_DIR The libpcap include directories.# PCAP_LIBRARY The libpcap library (possibly includes a thread# library e.g. required by pf_ring's libpcap)# HAVE_PF_RING If a found version of libpcap supports PF_RINGfind_path(PCAP_ROOT_DIR NAMES include/pcap.h)find_path(PCAP_INCLUDE_DIR NAMES pcap.h HINTS $&#123;PCAP_ROOT_DIR&#125;/include)find_library(PCAP_LIBRARY NAMES pcap HINTS $&#123;PCAP_ROOT_DIR&#125;/lib)include(FindPackageHandleStandardArgs)find_package_handle_standard_args(PCAP DEFAULT_MSG PCAP_LIBRARY PCAP_INCLUDE_DIR)include(CheckCSourceCompiles)set(CMAKE_REQUIRED_LIBRARIES $&#123;PCAP_LIBRARY&#125;)check_c_source_compiles("int main() &#123; return 0; &#125;" PCAP_LINKS_SOLO)set(CMAKE_REQUIRED_LIBRARIES)# check if linking against libpcap also needs to link against a thread libraryif (NOT PCAP_LINKS_SOLO) find_package(Threads) if (THREADS_FOUND) set(CMAKE_REQUIRED_LIBRARIES $&#123;PCAP_LIBRARY&#125; $&#123;CMAKE_THREAD_LIBS_INIT&#125;) check_c_source_compiles("int main() &#123; return 0; &#125;" PCAP_NEEDS_THREADS) set(CMAKE_REQUIRED_LIBRARIES) endif () if (THREADS_FOUND AND PCAP_NEEDS_THREADS) set(_tmp $&#123;PCAP_LIBRARY&#125; $&#123;CMAKE_THREAD_LIBS_INIT&#125;) list(REMOVE_DUPLICATES _tmp) set(PCAP_LIBRARY $&#123;_tmp&#125; CACHE STRING "Libraries needed to link against libpcap" FORCE) else () message(FATAL_ERROR "Couldn't determine how to link against libpcap") endif ()endif ()include(CheckFunctionExists)set(CMAKE_REQUIRED_LIBRARIES $&#123;PCAP_LIBRARY&#125;)check_function_exists(pcap_get_pfring_id HAVE_PF_RING)set(CMAKE_REQUIRED_LIBRARIES)mark_as_advanced( PCAP_ROOT_DIR PCAP_INCLUDE_DIR PCAP_LIBRARY) CMakeLists.txt123456find_package(PCAP REQUIRED) MESSAGE( [Main] &quot; PCAP_INCLUDE_DIR = $&#123;PCAP_INCLUDE_DIR&#125;&quot;)MESSAGE( [Main] &quot; PCAP_LIBRARY = $&#123;PCAP_LIBRARY&#125;&quot;)#[Main] PCAP_INCLUDE_DIR = /usr/include#[Main] PCAP_LIBRARY = /usr/lib/x86_64-linux-gnu/libpcap.so Reference FindPCAP.cmake History 20181229: created.]]></content>
+      <categories>
+        <category>pcl</category>
+      </categories>
+      <tags>
+        <tag>pcap</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[extern c]]></title>
     <url>%2Fpost%2Fda4e5d62%2F</url>
-    <content type="text"><![CDATA[extern c GuideReference #ifdef __cplusplus extern “C” { #endif”的定义 extern “C” History 20181226: created.]]></content>
+    <content type="text"><![CDATA[extern c Guideextern c相比C语言，C++支持函数重载、类、模版等各种特性，如果C++的符号修饰仍按照C那样直接使用对应名称，虽然可读性很好，却不可避免的会出现各种错乱，于是C++符号修饰别名(mangled name)被设计出来， 用来解决上述问题，然而修饰规则取决于编译器实现，没有统一标准，比如gcc、msvc就各有一套，但好在都提供了相应接口进行解析(demangle)，这里有个网站demangler可以在线解析 c++ function: managled namesc function: unmangled namesextern c告诉c++编译器将f_int,f_float视为c函数，使用 unmangled names(修饰名称) managled/unmangled namesa.cpp12345678910void f() &#123;&#125;void g();extern "C" &#123; void ef() &#123;&#125; void eg();&#125;/* Prevent g and eg from being optimized away. */void h() &#123; g(); eg(); &#125; Compile with GCC 4.8 Linux ELF output: g++ -c a.cpp Decompile the symbol table: readelf -s a.o output Num: Value Size Type Bind Vis Ndx Name 8: 0000000000000000 6 FUNC GLOBAL DEFAULT 1 _Z1fv 9: 0000000000000006 6 FUNC GLOBAL DEFAULT 1 ef 10: 000000000000000c 16 FUNC GLOBAL DEFAULT 1 _Z1hv 11: 0000000000000000 0 NOTYPE GLOBAL DEFAULT UND _Z1gv 12: 0000000000000000 0 NOTYPE GLOBAL DEFAULT UND eg managled names: _Z1fv,_Z1hv,_Z1gv for f,g,hunmangled names: ef,eg unmanagle them c++filt _Z1fv f() c++filt _Z1hv h() c++filt _Z1gv g() extern C中错误用法It becomes obvious that any C++ feature that requires name mangling will not work inside extern C: error.cpp12345678910extern "C" &#123; // Overloading. // error: declaration of C function ‘void f(int)’ conflicts with void f(); void f(int i); // Templates. // error: template with C linkage template &lt;class C&gt; void f(C i) &#123; &#125;&#125; compile and generate errors g++ -c error.cpp error.cpp:5:17: error: conflicting declaration of C function ‘void f(int)’ void f(int i); ^ error.cpp:4:10: note: previous declaration ‘void f()’ void f(); ^ error.cpp:9:5: error: template with C linkage template &lt;class C&gt; void f(C i) { } ^ So you will need extern &quot;C&quot; both when calling: C from C++: tell g++ to expect unmangled symbols produced by gcc C++ from C: tell gcc to use unmangled symbols produced by g++ cpp中使用c方法codemain.cpp1234567#include &lt;cassert&gt;#include "c.h"int main() &#123; assert(f() == 1);&#125; c.h123456789101112131415#ifndef C_H#define C_H/* This ifdef allows the header to be used from both C and C++. */#ifdef __cplusplusextern "C" &#123;#endifint f();#ifdef __cplusplus&#125;#endif#endif c.c123#include "c.h"int f(void) &#123; return 1; &#125; OKcompile main.cpp g++ -c -o main.o -std=c++98 main.cpp readelf -s main.o 10: 0000000000000000 46 FUNC GLOBAL DEFAULT 1 main 11: 0000000000000000 0 NOTYPE GLOBAL DEFAULT UND f 12: 0000000000000000 0 NOTYPE GLOBAL DEFAULT UND __assert_fail 使用c++编译器，extern c告诉c++编译器f是一个c函数，使用unmanagled name f compile c.c gcc -c -o c.o -std=c89 c.c readelf -s c.o 8: 0000000000000000 11 FUNC GLOBAL DEFAULT 1 f 使用c编译器，对于c函数生成unmanagled name f link main.o and c.o g++ -o main.out main.o c.o ./main.out OK. ErrorWithout extern &quot;C&quot; the link fails with: main.cpp:6: undefined reference to `f()&apos; compile main.cpp g++ -c -o main.o -std=c++98 main.cpp readelf -s main.o 10: 0000000000000000 46 FUNC GLOBAL DEFAULT 1 main 11: 0000000000000000 0 NOTYPE GLOBAL DEFAULT UND _Z1fv 12: 0000000000000000 0 NOTYPE GLOBAL DEFAULT UND __assert_fail 因为没有extern c，所以g++编译器将f看做是c++函数，使用managled name _Z1fv compile c.c gcc -c -o c.o -std=c89 c.c readelf -s c.o 8: 0000000000000000 11 FUNC GLOBAL DEFAULT 1 f 使用c编译器，对于c函数生成unmanagled name f link main.o and c.o g++ -o main.out main.o c.o main.o: In function `main&apos;: main.cpp:(.text+0x5): undefined reference to `f()&apos; collect2: error: ld returned 1 exit status link失败，因为c++编译器需要managled name _Z1fv，然而c编译器生成了unmanagled name f c中使用cpp方法codemain.c123456789#include &lt;assert.h&gt;#include "cpp.h"int main(void) &#123; assert(f_int(1) == 2); assert(f_float(1.0) == 3); return 0;&#125; cpp.h123456789101112131415161718#ifndef CPP_H#define CPP_H#ifdef __cplusplus// C cannot see these overloaded prototypes, or else it would get confused.int f(int i);int f(float i);extern "C" &#123;#endifint f_int(int i);int f_float(float i);#ifdef __cplusplus&#125;#endif#endif cpp.cpp1234567891011121314151617#include "cpp.h"int f(int i) &#123; return i + 1;&#125;int f(float i) &#123; return i + 2;&#125;int f_int(int i) &#123; return f(i);&#125;int f_float(float i) &#123; return f(i);&#125; OKcompile main.c gcc -c -o main.o -std=c89 -Wextra main.c readelf -s main.o 10: 0000000000000000 94 FUNC GLOBAL DEFAULT 1 main 11: 0000000000000000 0 NOTYPE GLOBAL DEFAULT UND f_int 12: 0000000000000000 0 NOTYPE GLOBAL DEFAULT UND __assert_fail 13: 0000000000000000 0 NOTYPE GLOBAL DEFAULT UND f_float 使用c编译器，将f_int,f_float视作c函数，使用unmanagled name f_int,f_float compile cpp.cpp g++ -c -o cpp.o -std=c++98 cpp.cpp readelf -s cpp.o 9: 0000000000000000 15 FUNC GLOBAL DEFAULT 1 _Z1fi 10: 000000000000000f 32 FUNC GLOBAL DEFAULT 1 _Z1ff 11: 000000000000002f 23 FUNC GLOBAL DEFAULT 1 f_int 12: 0000000000000046 31 FUNC GLOBAL DEFAULT 1 f_float 使用c++编译器，extern c告诉c++编译器将f_int,f_float视作c函数，使用unmanagled name f_int,f_float link main.o and cpp.o g++ -o main.out main.o cpp.o ./main.out OK. ErrorWithout extern “C” it fails with: main.c:6: undefined reference to `f_int&apos; main.c:7: undefined reference to `f_float&apos; compile main.c gcc -c -o main.o -std=c89 -Wextra main.c readelf -s main.o 10: 0000000000000000 94 FUNC GLOBAL DEFAULT 1 main 11: 0000000000000000 0 NOTYPE GLOBAL DEFAULT UND f_int 12: 0000000000000000 0 NOTYPE GLOBAL DEFAULT UND __assert_fail 13: 0000000000000000 0 NOTYPE GLOBAL DEFAULT UND f_float 使用c编译器，将f_int,f_float视作c函数，使用unmanagled name f_int,f_float compile cpp.cpp g++ -c -o cpp.o -std=c++98 cpp.cpp readelf -s cpp.o 9: 0000000000000000 15 FUNC GLOBAL DEFAULT 1 _Z1fi 10: 000000000000000f 32 FUNC GLOBAL DEFAULT 1 _Z1ff 11: 000000000000002f 23 FUNC GLOBAL DEFAULT 1 _Z5f_inti 12: 0000000000000046 31 FUNC GLOBAL DEFAULT 1 _Z5f_floatf 使用c++编译器，因为没有extern c，c++编译器将f_int,f_float视作c++函数，使用managled name _Z5f_inti,_Z5f_floatf link main.o and cpp.o g++ -o main.out main.o cpp.o link失败，因为c编译器需要unmanagled name f_int,f_float，然而c++编译器生成了managled name _Z5f_inti,_Z5f_floatf Reference extern c cpp-from-c c-from-cpp #ifdef cplusplus extern C { #endif的定义 extern “C” managled name History 20181226: created.]]></content>
       <categories>
         <category>cpp</category>
       </categories>
@@ -55,7 +66,7 @@
   <entry>
     <title><![CDATA[compile caffe-yolov3 on ubuntu 16.04]]></title>
     <url>%2Fpost%2Fcfeb28a4%2F</url>
-    <content type="text"><![CDATA[compile caffe-yolov3 on ubuntu 16.04 Guide Part 1: compile darknet on ubuntu 16.04 Part 2: compile darknet on windows 10 Part 3: compile caffe-yolov3 on ubuntu 16.04 caffe-yolov3 is based on caffe with UpsampleLayer and darknet. requirementsmy system requirements (same as caffe on ubuntu 16.04) ubuntu 16.04 GeForce 1060 (6G) sm_61 cuda: 9.2 cudnn: 7.1.4 opencv: 3.3.0 caffe: latest compilegit clone https://github.com/ChenYingpeng/caffe-yolov3.git cd caffe-yolov3 mkdir build &amp;&amp; cd build &amp;&amp; cmake-gui .. tips: edit CMakeLists.txt for caffe. makemake -j8 make install tree x86_64/ x86_64/ ├── bin │ ├── detectnet │ ├── dog.jpg │ └── networks -&gt; /home/kezunlin/git/caffe-yolov3-master/data/networks ├── include │ ├── activations.h │ ├── blas.h │ ├── box.h │ ├── cuda.h │ ├── image.h │ └── yolo_layer.h └── lib └── libsysDetectSpeed.so 3 directories, 10 files democd x86_64/bin ./detectnet output num_inputs is 1 num_outputs is 3 I1211 17:13:30.259755 10384 detectnet.cpp:74] Input data layer channels is 3 I1211 17:13:30.259785 10384 detectnet.cpp:75] Input data layer width is 416 I1211 17:13:30.259806 10384 detectnet.cpp:76] Input data layer height is 416 output blob1 shape c= 255, h = 13, w = 13 output blob2 shape c= 255, h = 26, w = 26 output blob3 shape c= 255, h = 52, w = 52 object-detection: finished processing data operation (392)ms object-detection: finished processing yolov3 network (135)ms 16: 99% x = 0.288428,y = 0.660513,w = 0.243282,h = 0.543122 left = 128,right = 314,top = 224,bot = 536 7: 93% x = 0.756588,y = 0.222789,w = 0.280549,h = 0.147772 left = 473,right = 688,top = 85,bot = 170 1: 99% x = 0.473371,y = 0.483899,w = 0.517509,h = 0.575438 left = 164,right = 562,top = 112,bot = 444 detectnet-camera: video device has been un-initialized. detectnet-camera: this concludes the test of the video device. image Netinput &amp;&amp; outputinput: data 1,3,416,416 output layer82-conv 1,255,13,13 layer94-conv 1,255,26,26 layer106-conv 1,255,52,52 python code12345678910111213### Input: the model&apos;s output dict### Output: list of tuples in ((cx1, cy1), (cx2, cy2), cls, prob)def rects_prepare(output, inp_dim=416, num_classes=80): prediction = None # transform prediction coordinates to correspond to pixel location for key, value in output.items(): # anchor sizes are borrowed from YOLOv3 config file if key == &apos;layer82-conv&apos;: anchors = [(116, 90), (156, 198), (373, 326)] elif key == &apos;layer94-conv&apos;: anchors = [(30, 61), (62, 45), (59, 119)] elif key == &apos;layer106-conv&apos;: anchors = [(10, 13), (16, 30), (33, 23)] Reference caffe-yolov3 History 20181211: created.]]></content>
+    <content type="text"><![CDATA[compile caffe-yolov3 on ubuntu 16.04 Guide Part 1: compile darknet on ubuntu 16.04 Part 2: compile darknet on windows 10 Part 3: compile caffe-yolov3 on ubuntu 16.04 caffe-yolov3 is based on caffe with UpsampleLayer and darknet. requirementsmy system requirements (same as caffe on ubuntu 16.04) ubuntu 16.04 GeForce 1060 (6G) sm_61 cuda: 9.2 cudnn: 7.1.4 opencv: 3.3.0 caffe: latest compilegit clone https://github.com/kezunlin/caffe-yolov3.git cd caffe-yolov3 mkdir build &amp;&amp; cd build &amp;&amp; cmake-gui .. tips: edit CMakeLists.txt for caffe.see CMakeLists.txt makemake -j8 make install tree install install ├── bin │ ├── demo │ ├── dog.jpg │ └── libcaffeyolo.so ├── include │ └── caffeyolo │ ├── activations.h │ ├── blas.h │ ├── box.h │ ├── cuda.h │ ├── image.h │ └── yolo_layer.h ├── lib │ └── libcaffeyolo.so └── share └── cmake └── caffeyolo ├── caffeyolo-config.cmake └── caffeyolo-config-noconfig.cmake 7 directories, 12 files democd install/bin ./demo output num_inputs is 1 num_outputs is 3 I1211 17:13:30.259755 10384 detectnet.cpp:74] Input data layer channels is 3 I1211 17:13:30.259785 10384 detectnet.cpp:75] Input data layer width is 416 I1211 17:13:30.259806 10384 detectnet.cpp:76] Input data layer height is 416 output blob1 shape c= 255, h = 13, w = 13 output blob2 shape c= 255, h = 26, w = 26 output blob3 shape c= 255, h = 52, w = 52 object-detection: finished processing data operation (392)ms object-detection: finished processing yolov3 network (135)ms 16: 99% x = 0.288428,y = 0.660513,w = 0.243282,h = 0.543122 left = 128,right = 314,top = 224,bot = 536 7: 93% x = 0.756588,y = 0.222789,w = 0.280549,h = 0.147772 left = 473,right = 688,top = 85,bot = 170 1: 99% x = 0.473371,y = 0.483899,w = 0.517509,h = 0.575438 left = 164,right = 562,top = 112,bot = 444 detectnet-camera: video device has been un-initialized. detectnet-camera: this concludes the test of the video device. image Netinput &amp;&amp; outputinput: data 1,3,416,416 output layer82-conv 1,255,13,13 layer94-conv 1,255,26,26 layer106-conv 1,255,52,52 python code12345678910111213### Input: the model&apos;s output dict### Output: list of tuples in ((cx1, cy1), (cx2, cy2), cls, prob)def rects_prepare(output, inp_dim=416, num_classes=80): prediction = None # transform prediction coordinates to correspond to pixel location for key, value in output.items(): # anchor sizes are borrowed from YOLOv3 config file if key == &apos;layer82-conv&apos;: anchors = [(116, 90), (156, 198), (373, 326)] elif key == &apos;layer94-conv&apos;: anchors = [(30, 61), (62, 45), (59, 119)] elif key == &apos;layer106-conv&apos;: anchors = [(10, 13), (16, 30), (33, 23)] Reference ChenYingpengcaffe-yolov3 my version History 20181211: created.]]></content>
       <categories>
         <category>yolo</category>
       </categories>
@@ -226,19 +237,19 @@
       </categories>
   </entry>
   <entry>
-    <title><![CDATA[ssd]]></title>
-    <url>%2Fpost%2Fe73b806f%2F</url>
-    <content type="text"><![CDATA[ssd GuideReference SSD History created.]]></content>
-      <categories>
-        <category>ssd</category>
-      </categories>
-  </entry>
-  <entry>
     <title><![CDATA[yolo v3]]></title>
     <url>%2Fpost%2Fdc417396%2F</url>
     <content type="text"><![CDATA[yolo v3 GuideReferenceHistory created.]]></content>
       <categories>
         <category>yolo</category>
+      </categories>
+  </entry>
+  <entry>
+    <title><![CDATA[ssd]]></title>
+    <url>%2Fpost%2Fe73b806f%2F</url>
+    <content type="text"><![CDATA[ssd GuideReference SSD History created.]]></content>
+      <categories>
+        <category>ssd</category>
       </categories>
   </entry>
   <entry>
@@ -1158,9 +1169,9 @@
         <category>cmake</category>
       </categories>
       <tags>
-        <tag>qt</tag>
         <tag>vtk</tag>
         <tag>boost</tag>
+        <tag>qt</tag>
         <tag>poco</tag>
         <tag>glog</tag>
         <tag>find_package</tag>
@@ -1188,8 +1199,8 @@
         <category>boost</category>
       </categories>
       <tags>
-        <tag>glog</tag>
         <tag>log</tag>
+        <tag>glog</tag>
         <tag>log4cpp</tag>
       </tags>
   </entry>
@@ -1239,11 +1250,11 @@
       </categories>
       <tags>
         <tag>boost</tag>
-        <tag>poco</tag>
         <tag>serialize</tag>
         <tag>deserialize</tag>
         <tag>stringstream</tag>
         <tag>SocketStream</tag>
+        <tag>poco</tag>
       </tags>
   </entry>
   <entry>
@@ -1346,9 +1357,9 @@
         <category>pcl</category>
       </categories>
       <tags>
-        <tag>qt</tag>
         <tag>vtk</tag>
         <tag>windows</tag>
+        <tag>qt</tag>
         <tag>vs2015</tag>
       </tags>
   </entry>
@@ -1503,8 +1514,8 @@
         <category>pcl</category>
       </categories>
       <tags>
-        <tag>qt</tag>
         <tag>vtk</tag>
+        <tag>qt</tag>
       </tags>
   </entry>
   <entry>
