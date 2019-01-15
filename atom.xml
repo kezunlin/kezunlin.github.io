@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://kezunlin.me/"/>
-  <updated>2018-12-29T09:05:22.435Z</updated>
+  <updated>2019-01-15T08:14:12.221Z</updated>
   <id>http://kezunlin.me/</id>
   
   <author>
@@ -15,6 +15,92 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>const vs non-const</title>
+    <link href="http://kezunlin.me/post/23b14b43/"/>
+    <id>http://kezunlin.me/post/23b14b43/</id>
+    <published>2019-01-15T08:09:00.000Z</published>
+    <updated>2019-01-15T08:14:12.221Z</updated>
+    
+    <content type="html"><![CDATA[<p>const vs non-const<br><a id="more"></a></p><h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><p>Use const whenever possible.</p><ul><li><p>将某些东西声明为const可以帮助编译器侦测出错误的用法。const可以被施加于任何作用域内的对象、函数参数、函数返回类型、成员函数本体。</p></li><li><p>当const和non-const成员函数有实质等价的实现时，令non-const版本去调用const版本可以避免代码重复。反之则不可。</p></li></ul><p>##<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TextBlock</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">...</span><br><span class="line">    <span class="comment">//const：和原先一样</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span>&amp; <span class="keyword">operator</span>[] (<span class="built_in">std</span>::<span class="keyword">size_t</span> position) <span class="keyword">const</span> </span><br><span class="line">    &#123; </span><br><span class="line">        ...</span><br><span class="line">        ...</span><br><span class="line">        ...</span><br><span class="line">        <span class="keyword">return</span> text[position]; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//non-const：发生区别，直接调用了const op[]</span></span><br><span class="line">    <span class="keyword">char</span>&amp; <span class="keyword">operator</span>[] (<span class="built_in">std</span>::<span class="keyword">size_t</span> position)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span>   <span class="comment">//直接return</span></span><br><span class="line">            <span class="keyword">const_cast</span>&lt;<span class="keyword">char</span>&amp;&gt;(  <span class="comment">//(3)将op[]返回值的const移除</span></span><br><span class="line">                <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> TextBlock&amp;&gt;(*<span class="keyword">this</span>)    <span class="comment">//(1)为*this加上const</span></span><br><span class="line">                    [position]    <span class="comment">//(2)调用const op[]</span></span><br><span class="line">                );</span><br><span class="line">            &#125;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p><p>两次转型:</p><ul><li>第一次，用来为<em>this添加 const，将</em>this从其原始类型TextBlock&amp; 转换为const TextBlock&amp;，使得接下来调用operator[]是可以条用const的版本，使用<code>static_cast</code>。</li><li>第二次，则是从const operator[]的返回值中移除const，利用<code>const_cast</code>来完成。</li></ul><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul><li><a href="https://blog.csdn.net/lym940928/article/details/80842953" target="_blank" rel="noopener">尽可能使用const</a></li></ul><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul><li>20190115:  created.</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;const vs non-const&lt;br&gt;
+    
+    </summary>
+    
+      <category term="cpp" scheme="http://kezunlin.me/categories/cpp/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>opendrive tutorial</title>
+    <link href="http://kezunlin.me/post/48d0ac2/"/>
+    <id>http://kezunlin.me/post/48d0ac2/</id>
+    <published>2019-01-15T07:03:00.000Z</published>
+    <updated>2019-01-15T07:19:11.481Z</updated>
+    
+    <content type="html"><![CDATA[<p>opendrive tutorial<br><a id="more"></a></p><h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h2><p>features</p><ul><li>xml</li><li>.xodr</li></ul><p>version </p><ul><li>v0.7 2005</li><li>v1.1 2007-04-11</li><li>v1.2 2008-01-06</li><li>v1.3 2010-08-07</li><li>v1.4 2015-11-04</li></ul><h2 id="viewer"><a href="#viewer" class="headerlink" title="viewer"></a>viewer</h2><pre><code>wget http://www.opendrive.org/tools/odrViewer64.zipwget http://www.opendrive.org/tools/CulDeSac.xodr</code></pre><h2 id="apollo-opendrive"><a href="#apollo-opendrive" class="headerlink" title="apollo opendrive"></a>apollo opendrive</h2><p>The <code>Apollo OpenDrive Format</code> has modified and extended the standard <code>OpenDrive specification</code>, so if necessary, you can email us，or you can leave your email address，we will send the the Apollo OpenDrive specification to you.</p><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul><li><a href="http://www.opendrive.org/download.html" target="_blank" rel="noopener">opendrive</a></li><li><a href="https://en.wikipedia.org/wiki/OpenDRIVE_(specification" target="_blank" rel="noopener">OpenDRIVE_(specification)</a>)</li><li><a href="https://github.com/ApolloAuto/apollo/issues/603" target="_blank" rel="noopener">Apollo HDMap</a></li></ul><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul><li>20190115: created.</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;opendrive tutorial&lt;br&gt;
+    
+    </summary>
+    
+      <category term="autodrive" scheme="http://kezunlin.me/categories/autodrive/"/>
+    
+    
+      <category term="OpenDRIVE" scheme="http://kezunlin.me/tags/OpenDRIVE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>baidu apollo guide</title>
+    <link href="http://kezunlin.me/post/a64926e8/"/>
+    <id>http://kezunlin.me/post/a64926e8/</id>
+    <published>2019-01-09T07:58:00.000Z</published>
+    <updated>2019-01-15T07:39:29.738Z</updated>
+    
+    <content type="html"><![CDATA[<p>baidu apollo guide<br><a id="more"></a></p><h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="intro"><a href="#intro" class="headerlink" title="intro"></a>intro</h2><ul><li>去中心化</li></ul><p>ROS 在安全性上的一个不足是 ROS 需要有一个节点作为主服务器，用于建立各节点之间的通信连接。这一机制使得ROS节点的容错性增强，各模块的隔离程度增高，但也带来了单点失效（single-point failure）的风险。由于 ROS 本身缺乏针对这种状况的异常恢复机制，当服务器宕机时，整个系统会崩溃。这种情况如果发生在自动驾驶行驶过程中，无疑会造成车毁人忙的后果。针对于此，Apollo 采用了FAST RTPS (real-time Publish/Subscribe）来实现去中心化。</p><ul><li>共享内存</li></ul><p>ROS节点之间的通信是通过 socket 完成的，在进行数据广播的时候，底层使用的是多个点对点的传送。这种方式速度比较缓慢，且使用了较多的资源。Apollo 使用共享内存的方式对其进行改进，加快了通信速率，减少了CPU损耗。</p><ul><li>支持Protobuf</li></ul><p>Apollo 将 google 的 Protobuf 与 ROS 深度集成，用于提高数据的版本兼容性。其优势在于当模块接口升级以后，通讯的数据也可以相互兼容。另一个好处是宝贵的自动驾驶的历史数据在模块升级后也可以一直被使用。</p><h2 id="modules"><a href="#modules" class="headerlink" title="modules"></a>modules</h2><pre><code>git clone https://github.com/ApolloAuto/apollo.git</code></pre><p>Apollo源码主要是c++实现的，也有少量python，主要程序在<code>apollo/modules</code>目录中</p><p>其中每个模块的作用如下：</p><ul><li>apollo/modules/calibration ： 校准模块，使用前必须对系统进行校准和标定，包括激光雷达与摄像头、毫米波雷达与摄像头等。所谓校准就是要对齐激光雷达、摄像头以及毫米波雷达获得的信息，我们知道激光雷达可以获得详细的3D信息，但是不能获得颜色信息，摄像头可以获得颜色信息，但是无法获得深度等3D信息，毫米波雷达不能获得颜色信息，但是可以获得3D信息，三者获得的信息对齐后，就可以同时获得实际环境中的3D信息和颜色信息。</li></ul><p><img src="http://aliyunzixunbucket.oss-cn-beijing.aliyuncs.com/csdn/273d4d4b-0514-49e9-be27-a0c6f224f525" alt="camera+lidar"></p><p><img src="http://aliyunzixunbucket.oss-cn-beijing.aliyuncs.com/csdn/3876d155-5bce-40a4-9632-d201bb34b528" alt="lidar+radar"></p><ul><li>apollo/modules/canbus：汽车can总线控制模块。接收控制指令，同时给控制模块control发送车身状态信息。</li><li>apollo/modules/common：公共源码模块。包括如日志，工厂模式的实现，日志系统，监控模块，数学算法等。</li><li>apollo/modules/control：控制模块。基于决策规划的输出路径及车身的状态使用不同的控制算法来输出控制命令，如转向刹车，控制等。</li><li>apollo/modules/data：数据模块。收集、存储、处理收集到的各种数据的。</li><li>apollo/modules/dreamview：可视化模块。查看规划的轨迹及实时的转向刹车油门信息</li><li>apollo/modules/drivers：驱动模块。各种传感器驱动。</li><li>apollo/modules/e2e：end to end，端到端强化学习。所谓e2e指的是由传感器的输入，直接决定车的行为，例如油门，刹车，方向等。也就是机器学习的算法直接学习人类司机的驾驶行为。这部分在代码中需要另外下载，学习的数据主要来源于传感器的原始数据，包括图像、激光雷达、雷达等。end-to-end输入以图像为主。 输出是车辆的控制决策指令，如方向盘角度、加速、刹车。 连接输入输出的是深度神经网络，即通过神经网络直接生成车辆控制指令对车辆进行横向控制和纵向控制，中间没有人工参与的逻辑程序。横向控制，主要是指通过方向盘控制车身横向移动，即方向盘角度。纵向控制，是指通过油门和刹车控制车身纵向的移动，即加速、刹车等。横向模型的输出没有采用方向盘角度，而是使用要行驶的曲率（即拐弯半径的倒数)。</li><li>apollo/modules/elo：利用高精地图的自定位模块。这部分的代码也是另外下载。前向的摄像头会采集车道数据以实现更精确的定位，输出的位置信息包括车辆的x y z坐标，还有就是在百度高精度地图中的ID。</li><li>apollo/modules/localization：定位模块。输入GPS和IMU信息输出自车定位信息</li><li>apollo/modules/map：高精地图模块。输出结构化地图信息，如车道线，十字路口等。</li><li>apollo/modules/monitor：监控模块。监控硬件状态，同时把状态发给交互界面。</li><li>apollo/modules/perception：感知模块。输入激光点云，高精地图，变换坐标，输出3D障碍物包括速度大小和方向。</li><li>apollo/modules/planning：局部决策规划模块。</li><li>apollo/modules/prediction：预测模块。输出感知的障碍物信息及自定位信息输出障碍物未来的轨迹。</li><li>apollo/modules/routing：全局规划模块。输入包括地图信息各起点终点地址，输出一个全局的导航信息。</li><li>apollo/modules/third_party_perception：第三方感知模块。</li><li>apollo/modules/tools：通用监控与可视化模块。</li></ul><blockquote><p>感知模块也只是使用了激光雷达，没有和camera或者雷达做融合，也没有单独使用到camera和雷达。</p></blockquote><h3 id="AdapterManager"><a href="#AdapterManager" class="headerlink" title="AdapterManager"></a>AdapterManager</h3><ul><li><a href="https://blog.csdn.net/davidhopper/article/details/79183557" target="_blank" rel="noopener">AdapterManager解析</a></li></ul><h3 id="perception"><a href="#perception" class="headerlink" title="perception"></a>perception</h3><ul><li><a href="https://blog.csdn.net/qq_33801763/article/details/79092240" target="_blank" rel="noopener">百度Apollo(二)：障碍物感知模块</a></li><li><a href="https://github.com/ApolloAuto/apollo/blob/master/docs/specs/3d_obstacle_perception_cn.md" target="_blank" rel="noopener">3d_obstacle_perception</a></li></ul><h2 id="workflow"><a href="#workflow" class="headerlink" title="workflow"></a>workflow</h2><p><img src="https://img-blog.csdn.net/20180416100106333?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0Rpbm5lckhvd2U=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="workflow"></p><p>在实时系统中一个任务的调度方式通常可大致分为两类：时间驱动(timer-triggered) 和 事件驱动(event-triggered)。</p><h2 id="coordinate"><a href="#coordinate" class="headerlink" title="coordinate"></a>coordinate</h2><ul><li><a href="https://github.com/ApolloAuto/apollo/blob/master/docs/specs/coordination_cn.md" target="_blank" rel="noopener">coordination_cn</a></li></ul><h2 id="lidar-calibration"><a href="#lidar-calibration" class="headerlink" title="lidar calibration"></a>lidar calibration</h2><ul><li><a href="https://github.com/ApolloAuto/apollo/blob/master/docs/specs/lidar_calibration_cn.pdf" target="_blank" rel="noopener">lidar_calibration_cn</a></li></ul><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul><li><a href="https://github.com/ApolloAuto/apollo" target="_blank" rel="noopener">baidu apollo</a></li><li><strong><a href="https://apolloauto.github.io/doxygen/apollo/namespaces.html" target="_blank" rel="noopener">apollo doxygen</a></strong></li><li><a href="https://blog.csdn.net/DinnerHowe/article/details/79936038" target="_blank" rel="noopener">apollo简介</a></li><li><a href="https://blog.csdn.net/dinnerhowe/article/details/79957589" target="_blank" rel="noopener">apollo源码解析</a></li><li><a href="https://yq.aliyun.com/ziliao/303177" target="_blank" rel="noopener">apollo 2.0源码解析</a></li><li><strong><a href="https://zhuanlan.zhihu.com/p/28708170" target="_blank" rel="noopener">Apollo 1.0 源码分析</a></strong></li><li><strong><a href="https://www.zhihu.com/people/is_yuanji/posts" target="_blank" rel="noopener">Apollo 2.0 框架及源码分析</a></strong></li><li><a href="https://blog.csdn.net/davidhopper/article/details/79183557" target="_blank" rel="noopener">AdapterManager解析</a></li></ul><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul><li>created.</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;baidu apollo guide&lt;br&gt;
+    
+    </summary>
+    
+      <category term="autodrive" scheme="http://kezunlin.me/categories/autodrive/"/>
+    
+    
+      <category term="apollo" scheme="http://kezunlin.me/tags/apollo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>zsh for linux</title>
+    <link href="http://kezunlin.me/post/779b45d6/"/>
+    <id>http://kezunlin.me/post/779b45d6/</id>
+    <published>2019-01-09T02:44:00.000Z</published>
+    <updated>2019-01-09T03:36:12.041Z</updated>
+    
+    <content type="html"><![CDATA[<p>zsh for linux<br><a id="more"></a></p><h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="install"><a href="#install" class="headerlink" title="install"></a>install</h2><pre><code>sudo apt-get -y install zshcat /etc/shells# /etc/shells: valid login shells/bin/sh/bin/dash/bin/bash/bin/rbash/usr/bin/tmux/bin/zsh/usr/bin/zshchsh -s /usr/bin/zsh</code></pre><p>reboot system</p><pre><code>echo $SHELL /usr/bin/zsh</code></pre><h2 id="install-2-better"><a href="#install-2-better" class="headerlink" title="install 2(better)"></a>install 2(better)</h2><pre><code>sh -c &quot;$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)&quot;</code></pre><h2 id="config"><a href="#config" class="headerlink" title="config"></a>config</h2><h3 id="themes"><a href="#themes" class="headerlink" title="themes"></a>themes</h3><pre><code>git clone https://github.com/fcamblor/oh-my-zsh-agnoster-fcamblor.git cd oh-my-zsh-agnoster-fcamblor./install </code></pre><h3 id="zshrc"><a href="#zshrc" class="headerlink" title=".zshrc"></a>.zshrc</h3><pre><code>vim .zshrcZSH_THEME=&quot;agnoster&quot; # ys avit agnoster</code></pre><blockquote><p>use <code>avit</code>.</p></blockquote><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul><li><a href="https://ohmyz.sh/" target="_blank" rel="noopener">omyzsh</a></li><li><a href="https://www.jianshu.com/p/d194d29e488c?open_source=weibo_search" target="_blank" rel="noopener">zsh</a></li></ul><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul><li>20190109: created.</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;zsh for linux&lt;br&gt;
+    
+    </summary>
+    
+      <category term="ubuntu" scheme="http://kezunlin.me/categories/ubuntu/"/>
+    
+    
+      <category term="zsh" scheme="http://kezunlin.me/tags/zsh/"/>
+    
+  </entry>
   
   <entry>
     <title>use pcap on ubuntu 16.04</title>
@@ -355,90 +441,6 @@
     
       <category term="docker" scheme="http://kezunlin.me/categories/docker/"/>
     
-    
-  </entry>
-  
-  <entry>
-    <title>cmake error solution</title>
-    <link href="http://kezunlin.me/post/85230b59/"/>
-    <id>http://kezunlin.me/post/85230b59/</id>
-    <published>2018-12-02T18:49:00.000Z</published>
-    <updated>2018-12-02T18:51:38.868Z</updated>
-    
-    <content type="html"><![CDATA[<p>cmake error solution<br><a id="more"></a></p><h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="PIC-error"><a href="#PIC-error" class="headerlink" title="PIC error"></a>PIC error</h2><pre><code>#/usr/bin/ld: /usr/local/lib/libdlib.a(test_for_odr_violations.cpp.o): relocation R_X86_64_32 against `.bss&apos; can not be used when making a shared object; recompile with -fPIC#/usr/local/lib/libdlib.a: error adding symbols: Bad value#collect2: error: ld returned 1 exit status</code></pre><h3 id="solution"><a href="#solution" class="headerlink" title="solution"></a>solution</h3><pre><code>set(CMAKE_BUILD_TYPE &quot;Release&quot;) # release</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul><li>20181203: created.</li></ul>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;cmake error solution&lt;br&gt;
-    
-    </summary>
-    
-      <category term="cmake" scheme="http://kezunlin.me/categories/cmake/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>linux command ref</title>
-    <link href="http://kezunlin.me/post/c5e67530/"/>
-    <id>http://kezunlin.me/post/c5e67530/</id>
-    <published>2018-11-30T09:44:00.000Z</published>
-    <updated>2018-12-07T09:32:32.633Z</updated>
-    
-    <content type="html"><![CDATA[<p>linux command ref<br><a id="more"></a></p><h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="ln"><a href="#ln" class="headerlink" title="ln"></a>ln</h2><pre><code>ln -s src destln -s $(pwd)/yolo /home/kezunlin/program/darknet/kzl-yolo</code></pre><blockquote><p>tips: use absolute path to link folder</p></blockquote><h2 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h2><pre><code>grep UpsampleParameter . -r --include *.h grep UpsampleParameter . -r --include *.proto./src/caffe/proto/caffe.proto:  optional UpsampleParameter upsample_param = 150;./src/caffe/proto/caffe.proto:message UpsampleParameter {</code></pre><h2 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h2><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul><li>20181130: created.</li></ul>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;linux command ref&lt;br&gt;
-    
-    </summary>
-    
-      <category term="linux" scheme="http://kezunlin.me/categories/linux/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>compile dlib on ubuntu 16.04</title>
-    <link href="http://kezunlin.me/post/c6ead512/"/>
-    <id>http://kezunlin.me/post/c6ead512/</id>
-    <published>2018-11-27T09:33:00.000Z</published>
-    <updated>2018-11-30T07:17:43.496Z</updated>
-    
-    <content type="html"><![CDATA[<p>compile dlib on ubuntu 16.04<br><a id="more"></a></p><h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><ul><li><a href="http://kezunlin.me/post/654a6d04/">Part 1: compile dlib on windows 10</a></li><li><strong><a href="http://kezunlin.me/post/c6ead512/">Part 2: compile dlib on ubuntu 16.04</a></strong></li></ul><h2 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h2><pre><code>git clone https://github.com/davisking/dlib.gitcd dlib &amp;&amp; mkdir build &amp;&amp; cd build cmake-gui ..</code></pre><p>with options </p><pre><code>CMAKE_INSTALL_PREFIX /usr/localCUDA 9.2 + cuDNN 7.1.4</code></pre><p>generate</p><pre><code>Found CUDA: /usr/local/cuda (found suitable version &quot;9.2&quot;, minimum required is &quot;7.5&quot;) Looking for cuDNN install...Found cuDNN: /usr/local/cuda/lib64/libcudnn.soBuilding a CUDA test project to see if your compiler is compatible with CUDA...Checking if you have the right version of cuDNN installed.Enabling CUDA support for dlib.  DLIB WILL USE CUDAC++11 activated.</code></pre><h2 id="make-and-install"><a href="#make-and-install" class="headerlink" title="make and install"></a>make and install</h2><pre><code>make -j8 sudo make install</code></pre><p>output </p><pre><code>[100%] Linking CXX static library libdlib.a[100%] Built target dlib</code></pre><blockquote><p>generate static library <code>libdlib.a</code> </p></blockquote><h2 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">find_package(dlib REQUIRED)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(MSVC)</span><br><span class="line"><span class="built_in">set</span>(dlib_LIBRARIES <span class="string">"C:/Program Files/dlib/lib/dlib.lib"</span>) <span class="comment"># replace dlib::dlib</span></span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line">endif(MSVC)</span><br><span class="line"><span class="comment"># $&#123;dlib_INCLUDE_DIRS&#125; and $&#123;dlib_LIBRARIES&#125; are deprecated, simply use target_link_libraries(your_app dlib::dlib)</span></span><br><span class="line">MESSAGE( [Main] <span class="string">" dlib_INCLUDE_DIRS = <span class="variable">$&#123;dlib_INCLUDE_DIRS&#125;</span>"</span>) </span><br><span class="line">MESSAGE( [Main] <span class="string">" dlib_LIBRARIES = <span class="variable">$&#123;dlib_LIBRARIES&#125;</span>"</span>)   </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">add_executable(demo demo.cpp)</span><br><span class="line"><span class="comment">#target_link_libraries(demo $&#123;dlib_LIBRARIES&#125;)</span></span><br><span class="line">target_link_libraries(demo dlib::dlib)</span><br></pre></td></tr></table></figure><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul><li>20181127: created.</li></ul>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;compile dlib on ubuntu 16.04&lt;br&gt;
-    
-    </summary>
-    
-      <category term="dlib" scheme="http://kezunlin.me/categories/dlib/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Interfacing C++ and Python with pybind11 on ubuntu 16.04</title>
-    <link href="http://kezunlin.me/post/a41adc1/"/>
-    <id>http://kezunlin.me/post/a41adc1/</id>
-    <published>2018-11-27T09:02:00.000Z</published>
-    <updated>2018-11-28T02:55:43.706Z</updated>
-    
-    <content type="html"><![CDATA[<p>install pybind11 on ubuntu 16.04<br><a id="more"></a></p><h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><ul><li><a href="http://kezunlin.me/post/8b9c051d/">Part 1: Interfacing C++ and Python with pybind11 on windows 10</a></li><li><strong><a href="http://kezunlin.me/post/a41adc1/">Part 2: Interfacing C++ and Python with pybind11 on ubuntu 16.04</a></strong></li></ul><p>requirements:</p><ul><li>pybind11 v2.3.dev0</li><li>python 3.5</li></ul><h2 id="install-pytest"><a href="#install-pytest" class="headerlink" title="install pytest"></a>install pytest</h2><pre><code>pip3 install pytest </code></pre><h2 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h2><pre><code>git clone https://github.com/pybind/pybind11.gitcd pybind11mkdir buildcd buildcmake-gui ..</code></pre><p>with options</p><pre><code>PYBIND11_CPP_STANDARD /std:c++11 # default c++14PYTHON_EXECUTABLE /usr/bin/python3.5CMAKE_INSTALL_PREFIX /usr/local</code></pre><h2 id="install"><a href="#install" class="headerlink" title="install"></a>install</h2><p>make and install </p><pre><code>make -j8sudo make install</code></pre><blockquote><p>install to <code>/usr/local/include/pybind11</code> with only <code>include</code> and <code>/usr/local/share/cmake/pybind11</code></p></blockquote><p>output </p><pre><code>Install the project...-- Install configuration: &quot;MinSizeRel&quot;-- Installing: /usr/local/include/pybind11-- Installing: /usr/local/include/pybind11/chrono.h-- Installing: /usr/local/include/pybind11/eigen.h-- Installing: /usr/local/include/pybind11/stl.h-- Installing: /usr/local/include/pybind11/complex.h-- Installing: /usr/local/include/pybind11/detail-- Installing: /usr/local/include/pybind11/detail/internals.h-- Installing: /usr/local/include/pybind11/detail/common.h-- Installing: /usr/local/include/pybind11/detail/descr.h-- Installing: /usr/local/include/pybind11/detail/init.h-- Installing: /usr/local/include/pybind11/detail/class.h-- Installing: /usr/local/include/pybind11/detail/typeid.h-- Installing: /usr/local/include/pybind11/common.h-- Installing: /usr/local/include/pybind11/iostream.h-- Installing: /usr/local/include/pybind11/buffer_info.h-- Installing: /usr/local/include/pybind11/attr.h-- Installing: /usr/local/include/pybind11/numpy.h-- Installing: /usr/local/include/pybind11/pybind11.h-- Installing: /usr/local/include/pybind11/operators.h-- Installing: /usr/local/include/pybind11/options.h-- Installing: /usr/local/include/pybind11/cast.h-- Installing: /usr/local/include/pybind11/eval.h-- Installing: /usr/local/include/pybind11/embed.h-- Installing: /usr/local/include/pybind11/pytypes.h-- Installing: /usr/local/include/pybind11/functional.h-- Installing: /usr/local/include/pybind11/stl_bind.h-- Installing: /usr/local/share/cmake/pybind11/pybind11Config.cmake-- Installing: /usr/local/share/cmake/pybind11/pybind11ConfigVersion.cmake-- Installing: /usr/local/share/cmake/pybind11/FindPythonLibsNew.cmake-- Installing: /usr/local/share/cmake/pybind11/pybind11Tools.cmake-- Installing: /usr/local/share/cmake/pybind11/pybind11Targets.cmake</code></pre><h1 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h1><h2 id="pybind11"><a href="#pybind11" class="headerlink" title="pybind11"></a>pybind11</h2><h3 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">find_package(pybind11 CONFIG REQUIRED)</span><br><span class="line">include_directories($&#123;pybind11_INCLUDE_DIRS&#125;)</span><br><span class="line"></span><br><span class="line">MESSAGE( [MAIN] &quot;Found pybind11 v$&#123;pybind11_VERSION&#125;: $&#123;pybind11_INCLUDE_DIRS&#125;&quot;)</span><br><span class="line">MESSAGE( [Main] &quot; pybind11_INCLUDE_DIRS = $&#123;pybind11_INCLUDE_DIRS&#125;&quot;)</span><br><span class="line">MESSAGE( [Main] &quot; pybind11_LIBRARIES = $&#123;pybind11_LIBRARIES&#125;&quot;)</span><br><span class="line"></span><br><span class="line">add_library(examplelib </span><br><span class="line">$&#123;HEADER_FILES&#125;</span><br><span class="line">$&#123;SOURCE_FILES&#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">target_link_libraries (examplelib  </span><br><span class="line">pybind11::module</span><br><span class="line">$&#123;xxx_LIBRARIES&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure><h2 id="embed"><a href="#embed" class="headerlink" title="embed"></a>embed</h2><h3 id="CMakeLists-txt-1"><a href="#CMakeLists-txt-1" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">find_package(pybind11 CONFIG REQUIRED)</span><br><span class="line">include_directories($&#123;pybind11_INCLUDE_DIRS&#125;)</span><br><span class="line"></span><br><span class="line">MESSAGE( [MAIN] &quot;Found pybind11 v$&#123;pybind11_VERSION&#125;: $&#123;pybind11_INCLUDE_DIRS&#125;&quot;)</span><br><span class="line">MESSAGE( [Main] &quot; pybind11_INCLUDE_DIRS = $&#123;pybind11_INCLUDE_DIRS&#125;&quot;)</span><br><span class="line">MESSAGE( [Main] &quot; pybind11_LIBRARIES = $&#123;pybind11_LIBRARIES&#125;&quot;)</span><br><span class="line"></span><br><span class="line">add_executable(cpp_use_python cpp_use_python.cpp)</span><br><span class="line">target_link_libraries(cpp_use_python PRIVATE pybind11::embed)</span><br></pre></td></tr></table></figure><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul><li>20181127: created.</li></ul>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;install pybind11 on ubuntu 16.04&lt;br&gt;
-    
-    </summary>
-    
-      <category term="cpp" scheme="http://kezunlin.me/categories/cpp/"/>
-    
-      <category term="python" scheme="http://kezunlin.me/categories/cpp/python/"/>
-    
-    
-      <category term="pybind11" scheme="http://kezunlin.me/tags/pybind11/"/>
     
   </entry>
   

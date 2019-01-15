@@ -1,6 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[const vs non-const]]></title>
+    <url>%2Fpost%2F23b14b43%2F</url>
+    <content type="text"><![CDATA[const vs non-const GuideUse const whenever possible. 将某些东西声明为const可以帮助编译器侦测出错误的用法。const可以被施加于任何作用域内的对象、函数参数、函数返回类型、成员函数本体。 当const和non-const成员函数有实质等价的实现时，令non-const版本去调用const版本可以避免代码重复。反之则不可。 ##1234567891011121314151617181920212223class TextBlock &#123;public:... //const：和原先一样 const char&amp; operator[] (std::size_t position) const &#123; ... ... ... return text[position]; &#125; //non-const：发生区别，直接调用了const op[] char&amp; operator[] (std::size_t position) &#123; return //直接return const_cast&lt;char&amp;&gt;( //(3)将op[]返回值的const移除 static_cast&lt;const TextBlock&amp;&gt;(*this) //(1)为*this加上const [position] //(2)调用const op[] ); &#125; ... &#125; 两次转型: 第一次，用来为this添加 const，将this从其原始类型TextBlock&amp; 转换为const TextBlock&amp;，使得接下来调用operator[]是可以条用const的版本，使用static_cast。 第二次，则是从const operator[]的返回值中移除const，利用const_cast来完成。 Reference 尽可能使用const History 20190115: created.]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+  </entry>
+  <entry>
+    <title><![CDATA[opendrive tutorial]]></title>
+    <url>%2Fpost%2F48d0ac2%2F</url>
+    <content type="text"><![CDATA[opendrive tutorial Guideintroductionfeatures xml .xodr version v0.7 2005 v1.1 2007-04-11 v1.2 2008-01-06 v1.3 2010-08-07 v1.4 2015-11-04 viewerwget http://www.opendrive.org/tools/odrViewer64.zip wget http://www.opendrive.org/tools/CulDeSac.xodr apollo opendriveThe Apollo OpenDrive Format has modified and extended the standard OpenDrive specification, so if necessary, you can email us，or you can leave your email address，we will send the the Apollo OpenDrive specification to you. Reference opendrive OpenDRIVE_(specification)) Apollo HDMap History 20190115: created.]]></content>
+      <categories>
+        <category>autodrive</category>
+      </categories>
+      <tags>
+        <tag>OpenDRIVE</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[baidu apollo guide]]></title>
+    <url>%2Fpost%2Fa64926e8%2F</url>
+    <content type="text"><![CDATA[baidu apollo guide Guideintro 去中心化 ROS 在安全性上的一个不足是 ROS 需要有一个节点作为主服务器，用于建立各节点之间的通信连接。这一机制使得ROS节点的容错性增强，各模块的隔离程度增高，但也带来了单点失效（single-point failure）的风险。由于 ROS 本身缺乏针对这种状况的异常恢复机制，当服务器宕机时，整个系统会崩溃。这种情况如果发生在自动驾驶行驶过程中，无疑会造成车毁人忙的后果。针对于此，Apollo 采用了FAST RTPS (real-time Publish/Subscribe）来实现去中心化。 共享内存 ROS节点之间的通信是通过 socket 完成的，在进行数据广播的时候，底层使用的是多个点对点的传送。这种方式速度比较缓慢，且使用了较多的资源。Apollo 使用共享内存的方式对其进行改进，加快了通信速率，减少了CPU损耗。 支持Protobuf Apollo 将 google 的 Protobuf 与 ROS 深度集成，用于提高数据的版本兼容性。其优势在于当模块接口升级以后，通讯的数据也可以相互兼容。另一个好处是宝贵的自动驾驶的历史数据在模块升级后也可以一直被使用。 modulesgit clone https://github.com/ApolloAuto/apollo.git Apollo源码主要是c++实现的，也有少量python，主要程序在apollo/modules目录中 其中每个模块的作用如下： apollo/modules/calibration ： 校准模块，使用前必须对系统进行校准和标定，包括激光雷达与摄像头、毫米波雷达与摄像头等。所谓校准就是要对齐激光雷达、摄像头以及毫米波雷达获得的信息，我们知道激光雷达可以获得详细的3D信息，但是不能获得颜色信息，摄像头可以获得颜色信息，但是无法获得深度等3D信息，毫米波雷达不能获得颜色信息，但是可以获得3D信息，三者获得的信息对齐后，就可以同时获得实际环境中的3D信息和颜色信息。 apollo/modules/canbus：汽车can总线控制模块。接收控制指令，同时给控制模块control发送车身状态信息。 apollo/modules/common：公共源码模块。包括如日志，工厂模式的实现，日志系统，监控模块，数学算法等。 apollo/modules/control：控制模块。基于决策规划的输出路径及车身的状态使用不同的控制算法来输出控制命令，如转向刹车，控制等。 apollo/modules/data：数据模块。收集、存储、处理收集到的各种数据的。 apollo/modules/dreamview：可视化模块。查看规划的轨迹及实时的转向刹车油门信息 apollo/modules/drivers：驱动模块。各种传感器驱动。 apollo/modules/e2e：end to end，端到端强化学习。所谓e2e指的是由传感器的输入，直接决定车的行为，例如油门，刹车，方向等。也就是机器学习的算法直接学习人类司机的驾驶行为。这部分在代码中需要另外下载，学习的数据主要来源于传感器的原始数据，包括图像、激光雷达、雷达等。end-to-end输入以图像为主。 输出是车辆的控制决策指令，如方向盘角度、加速、刹车。 连接输入输出的是深度神经网络，即通过神经网络直接生成车辆控制指令对车辆进行横向控制和纵向控制，中间没有人工参与的逻辑程序。横向控制，主要是指通过方向盘控制车身横向移动，即方向盘角度。纵向控制，是指通过油门和刹车控制车身纵向的移动，即加速、刹车等。横向模型的输出没有采用方向盘角度，而是使用要行驶的曲率（即拐弯半径的倒数)。 apollo/modules/elo：利用高精地图的自定位模块。这部分的代码也是另外下载。前向的摄像头会采集车道数据以实现更精确的定位，输出的位置信息包括车辆的x y z坐标，还有就是在百度高精度地图中的ID。 apollo/modules/localization：定位模块。输入GPS和IMU信息输出自车定位信息 apollo/modules/map：高精地图模块。输出结构化地图信息，如车道线，十字路口等。 apollo/modules/monitor：监控模块。监控硬件状态，同时把状态发给交互界面。 apollo/modules/perception：感知模块。输入激光点云，高精地图，变换坐标，输出3D障碍物包括速度大小和方向。 apollo/modules/planning：局部决策规划模块。 apollo/modules/prediction：预测模块。输出感知的障碍物信息及自定位信息输出障碍物未来的轨迹。 apollo/modules/routing：全局规划模块。输入包括地图信息各起点终点地址，输出一个全局的导航信息。 apollo/modules/third_party_perception：第三方感知模块。 apollo/modules/tools：通用监控与可视化模块。 感知模块也只是使用了激光雷达，没有和camera或者雷达做融合，也没有单独使用到camera和雷达。 AdapterManager AdapterManager解析 perception 百度Apollo(二)：障碍物感知模块 3d_obstacle_perception workflow 在实时系统中一个任务的调度方式通常可大致分为两类：时间驱动(timer-triggered) 和 事件驱动(event-triggered)。 coordinate coordination_cn lidar calibration lidar_calibration_cn Reference baidu apollo apollo doxygen apollo简介 apollo源码解析 apollo 2.0源码解析 Apollo 1.0 源码分析 Apollo 2.0 框架及源码分析 AdapterManager解析 History created.]]></content>
+      <categories>
+        <category>autodrive</category>
+      </categories>
+      <tags>
+        <tag>apollo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[zsh for linux]]></title>
+    <url>%2Fpost%2F779b45d6%2F</url>
+    <content type="text"><![CDATA[zsh for linux Guideinstallsudo apt-get -y install zsh cat /etc/shells # /etc/shells: valid login shells /bin/sh /bin/dash /bin/bash /bin/rbash /usr/bin/tmux /bin/zsh /usr/bin/zsh chsh -s /usr/bin/zsh reboot system echo $SHELL /usr/bin/zsh install 2(better)sh -c &quot;$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)&quot; configthemesgit clone https://github.com/fcamblor/oh-my-zsh-agnoster-fcamblor.git cd oh-my-zsh-agnoster-fcamblor ./install .zshrcvim .zshrc ZSH_THEME=&quot;agnoster&quot; # ys avit agnoster use avit. Reference omyzsh zsh History 20190109: created.]]></content>
+      <categories>
+        <category>ubuntu</category>
+      </categories>
+      <tags>
+        <tag>zsh</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[use pcap on ubuntu 16.04]]></title>
     <url>%2Fpost%2Fb8792f9f%2F</url>
     <content type="text"><![CDATA[use pcap on ubuntu 16.04 Guide pcap: 1.7.4 installsudo apt-get -y install libpcap-dev locate pcap.so /usr/lib/x86_64-linux-gnu/libpcap.so /usr/lib/x86_64-linux-gnu/libpcap.so.0.8 /usr/lib/x86_64-linux-gnu/libpcap.so.1.7.4 locate pcap.h /usr/include/pcap.h /usr/include/pcap/pcap.h pcap-config.cmake1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374# - Try to find libpcap include dirs and libraries## Usage of this module as follows:## find_package(PCAP)## Variables used by this module, they can change the default behaviour and need# to be set before calling find_package:## PCAP_ROOT_DIR Set this variable to the root installation of# libpcap if the module has problems finding the# proper installation path.## Variables defined by this module:## PCAP_FOUND System has libpcap, include and library dirs found# PCAP_INCLUDE_DIR The libpcap include directories.# PCAP_LIBRARY The libpcap library (possibly includes a thread# library e.g. required by pf_ring's libpcap)# HAVE_PF_RING If a found version of libpcap supports PF_RINGfind_path(PCAP_ROOT_DIR NAMES include/pcap.h)find_path(PCAP_INCLUDE_DIR NAMES pcap.h HINTS $&#123;PCAP_ROOT_DIR&#125;/include)find_library(PCAP_LIBRARY NAMES pcap HINTS $&#123;PCAP_ROOT_DIR&#125;/lib)include(FindPackageHandleStandardArgs)find_package_handle_standard_args(PCAP DEFAULT_MSG PCAP_LIBRARY PCAP_INCLUDE_DIR)include(CheckCSourceCompiles)set(CMAKE_REQUIRED_LIBRARIES $&#123;PCAP_LIBRARY&#125;)check_c_source_compiles("int main() &#123; return 0; &#125;" PCAP_LINKS_SOLO)set(CMAKE_REQUIRED_LIBRARIES)# check if linking against libpcap also needs to link against a thread libraryif (NOT PCAP_LINKS_SOLO) find_package(Threads) if (THREADS_FOUND) set(CMAKE_REQUIRED_LIBRARIES $&#123;PCAP_LIBRARY&#125; $&#123;CMAKE_THREAD_LIBS_INIT&#125;) check_c_source_compiles("int main() &#123; return 0; &#125;" PCAP_NEEDS_THREADS) set(CMAKE_REQUIRED_LIBRARIES) endif () if (THREADS_FOUND AND PCAP_NEEDS_THREADS) set(_tmp $&#123;PCAP_LIBRARY&#125; $&#123;CMAKE_THREAD_LIBS_INIT&#125;) list(REMOVE_DUPLICATES _tmp) set(PCAP_LIBRARY $&#123;_tmp&#125; CACHE STRING "Libraries needed to link against libpcap" FORCE) else () message(FATAL_ERROR "Couldn't determine how to link against libpcap") endif ()endif ()include(CheckFunctionExists)set(CMAKE_REQUIRED_LIBRARIES $&#123;PCAP_LIBRARY&#125;)check_function_exists(pcap_get_pfring_id HAVE_PF_RING)set(CMAKE_REQUIRED_LIBRARIES)mark_as_advanced( PCAP_ROOT_DIR PCAP_INCLUDE_DIR PCAP_LIBRARY) CMakeLists.txt123456find_package(PCAP REQUIRED) MESSAGE( [Main] &quot; PCAP_INCLUDE_DIR = $&#123;PCAP_INCLUDE_DIR&#125;&quot;)MESSAGE( [Main] &quot; PCAP_LIBRARY = $&#123;PCAP_LIBRARY&#125;&quot;)#[Main] PCAP_INCLUDE_DIR = /usr/include#[Main] PCAP_LIBRARY = /usr/lib/x86_64-linux-gnu/libpcap.so Reference FindPCAP.cmake History 20181229: created.]]></content>
@@ -1169,9 +1210,9 @@
         <category>cmake</category>
       </categories>
       <tags>
+        <tag>qt</tag>
         <tag>vtk</tag>
         <tag>boost</tag>
-        <tag>qt</tag>
         <tag>poco</tag>
         <tag>glog</tag>
         <tag>find_package</tag>
@@ -1199,8 +1240,8 @@
         <category>boost</category>
       </categories>
       <tags>
-        <tag>log</tag>
         <tag>glog</tag>
+        <tag>log</tag>
         <tag>log4cpp</tag>
       </tags>
   </entry>
@@ -1250,11 +1291,11 @@
       </categories>
       <tags>
         <tag>boost</tag>
+        <tag>poco</tag>
         <tag>serialize</tag>
         <tag>deserialize</tag>
         <tag>stringstream</tag>
         <tag>SocketStream</tag>
-        <tag>poco</tag>
       </tags>
   </entry>
   <entry>
@@ -1357,9 +1398,9 @@
         <category>pcl</category>
       </categories>
       <tags>
+        <tag>qt</tag>
         <tag>vtk</tag>
         <tag>windows</tag>
-        <tag>qt</tag>
         <tag>vs2015</tag>
       </tags>
   </entry>
@@ -1514,8 +1555,8 @@
         <category>pcl</category>
       </categories>
       <tags>
-        <tag>vtk</tag>
         <tag>qt</tag>
+        <tag>vtk</tag>
       </tags>
   </entry>
   <entry>
