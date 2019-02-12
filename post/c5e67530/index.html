@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="linux command ref">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-01-28T08:59:26.687Z">
+<meta property="og:updated_time" content="2019-02-12T02:12:22.538Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux command ref">
 <meta name="twitter:description" content="linux command ref">
@@ -344,8 +344,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-01-28T16:59:26+08:00">
-                2019-01-28
+              <time title="Post modified" itemprop="dateModified" datetime="2019-02-12T10:12:22+08:00">
+                2019-02-12
               </time>
             
           </span>
@@ -392,7 +392,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  204
+                  528
                 </span>
               
 
@@ -408,7 +408,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  1
+                  3
                 </span>
               
             </div>
@@ -461,7 +461,60 @@ grep UpsampleParameter . -r --include *.proto
 /lib/x86_64-linux-gnu/liblzma.so.5
 /usr/lib/x86_64-linux-gnu/libjbig.so.0
 </code></pre><h3 id="for-not-found"><a href="#for-not-found" class="headerlink" title="for not found"></a>for not found</h3><pre><code>ldd test_opencv | awk &apos;NF==1 {file=$1} /not found/ { print file, $1 }&apos;
-</code></pre><h2 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h2><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
+</code></pre><h2 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h2><h1 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h1><h2 id="check-cpu"><a href="#check-cpu" class="headerlink" title="check cpu"></a>check cpu</h2><pre><code>cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c 
+      8  Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz
+
+
+cat /proc/cpuinfo | grep physical | uniq -c 
+      1 physical id    : 0
+      1 address sizes    : 39 bits physical, 48 bits virtual
+      1 physical id    : 0
+      1 address sizes    : 39 bits physical, 48 bits virtual
+      1 physical id    : 0
+      1 address sizes    : 39 bits physical, 48 bits virtual
+      1 physical id    : 0
+      1 address sizes    : 39 bits physical, 48 bits virtual
+      1 physical id    : 0
+      1 address sizes    : 39 bits physical, 48 bits virtual
+      1 physical id    : 0
+      1 address sizes    : 39 bits physical, 48 bits virtual
+      1 physical id    : 0
+      1 address sizes    : 39 bits physical, 48 bits virtual
+      1 physical id    : 0
+      1 address sizes    : 39 bits physical, 48 bits virtual
+</code></pre><h2 id="check-gpu"><a href="#check-gpu" class="headerlink" title="check gpu"></a>check gpu</h2><pre><code>lspci | grep -i vga
+  00:02.0 VGA compatible controller: Intel Corporation Device 591b (rev 04)
+  01:00.0 VGA compatible controller: NVIDIA Corporation Device 1c20 (rev a1)
+
+
+lspci -v -s 01:00.0
+01:00.0 VGA compatible controller: NVIDIA Corporation Device 1c20 (rev a1) (prog-if 00 [VGA controller])
+    Subsystem: CLEVO/KAPOK Computer Device 65a1
+    Flags: bus master, fast devsel, latency 0, IRQ 130
+    Memory at db000000 (32-bit, non-prefetchable) [size=16M]
+    Memory at 90000000 (64-bit, prefetchable) [size=256M]
+    Memory at a0000000 (64-bit, prefetchable) [size=32M]
+    I/O ports at e000 [size=128]
+    [virtual] Expansion ROM at dc000000 [disabled] [size=512K]
+    Capabilities: &lt;access denied&gt;
+    Kernel driver in use: nvidia
+    Kernel modules: nvidiafb, nouveau, nvidia_396, nvidia_396_drm
+
+nvidia-smi
+Tue Feb 12 10:09:14 2019       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 396.54                 Driver Version: 396.54                    |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|===============================+======================+======================|
+|   0  GeForce GTX 1060    Off  | 00000000:01:00.0 Off |                  N/A |
+| N/A   56C    P8     8W /  N/A |    601MiB /  6078MiB |      3%      Default |
++-------------------------------+----------------------+----------------------+
+
+
+watch -n 1 nvidia-smi
+</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>20181130: created.</li>
 </ul>
 
@@ -667,7 +720,7 @@ grep UpsampleParameter . -r --include *.proto
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ln"><span class="nav-number">1.1.</span> <span class="nav-text">ln</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#grep"><span class="nav-number">1.2.</span> <span class="nav-text">grep</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ldd"><span class="nav-number">1.3.</span> <span class="nav-text">ldd</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#for-so"><span class="nav-number">1.3.1.</span> <span class="nav-text">for so</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#for-not-found"><span class="nav-number">1.3.2.</span> <span class="nav-text">for not found</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#awk"><span class="nav-number">1.4.</span> <span class="nav-text">awk</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ln"><span class="nav-number">1.1.</span> <span class="nav-text">ln</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#grep"><span class="nav-number">1.2.</span> <span class="nav-text">grep</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ldd"><span class="nav-number">1.3.</span> <span class="nav-text">ldd</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#for-so"><span class="nav-number">1.3.1.</span> <span class="nav-text">for so</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#for-not-found"><span class="nav-number">1.3.2.</span> <span class="nav-text">for not found</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#awk"><span class="nav-number">1.4.</span> <span class="nav-text">awk</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Tips"><span class="nav-number">2.</span> <span class="nav-text">Tips</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#check-cpu"><span class="nav-number">2.1.</span> <span class="nav-text">check cpu</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#check-gpu"><span class="nav-number">2.2.</span> <span class="nav-text">check gpu</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
