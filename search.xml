@@ -149,7 +149,7 @@
   <entry>
     <title><![CDATA[pyinstaller tutorial on windows 10]]></title>
     <url>%2Fpost%2Fda9d93d6%2F</url>
-    <content type="text"><![CDATA[pyinstaller tutorial on windows 10 Guideinstallpip3 install pywin32 pyinstaller pip3 install –upgrade setuptools pyinstall -F demo.py error pyinstaller AttributeError: &apos;str&apos; object has no attribute &apos;items&apos; solution: pip3 install --upgrade setuptools usagepyinstaller -h params: General Options -y, --noconfirm Replace output directory (default: SPECPATH/dist/SPECNAME) without asking for confirmation --upx-dir UPX_DIR Path to UPX utility (default: search the execution path) --clean Clean PyInstaller cache and remove temporary files before building. --log-level LEVEL Amount of detail in build-time console messages. LEVEL may be one of TRACE, DEBUG, INFO, WARN, ERROR, CRITICAL (default: INFO). What to generate -D, --onedir Create a one-folder bundle containing an executable (default) -F, --onefile Create a one-file bundled executable. What to bundle, where to search --add-data &lt;SRC;DEST or SRC:DEST&gt; This option can be used multiple times. --add-binary &lt;SRC;DEST or SRC:DEST&gt; This option can be used multiple times. -p DIR, --paths DIR A path to search for imports (like using PYTHONPATH). Multiple paths are allowed, separated by ‘:’, or use this option multiple times --hidden-import MODULENAME, --hiddenimport MODULENAME Name an import not visible in the code of the script(s). This option can be used multiple times. Windows and Mac OS X specific options -c, --console, --nowindowed Open a console window for standard i/o (default) -w, --windowed, --noconsole Windows and Mac OS X: do not provide a console window for standard i/o Exampleuse pydpath related source code sys.path.append(&apos;./sdk/watrixdog/&apos;) import watrixdog # watrixdog.pyd pyinstaller commands pyinstaller -y -D --path=&quot;sdk/watrixdog&quot; demo.py # pyinstaller -y -D --add-binary &apos;./sdk/watrixdog/watrixdog.pyd;.&apos; --add-binary &apos;./sdk/watrixdog/dog_windows_x64.dll;.&apos; demo.py generate build and dist folder, plus demo.spec output 78 INFO: Extending PYTHONPATH with paths [&apos;E:\\git\\anjian\\anjian_v1&apos;, &apos;E:\\git\\anjian\\anjian_v1\\sdk\\watrixdog&apos;, &apos;E:\\git\\anjian\\anjian_v1&apos;] demo.spec123456789101112131415161718192021222324252627282930313233343536# -*- mode: python -*-block_cipher = Nonea = Analysis(['demo.py'], pathex=['sdk/watrixdog', 'E:\\git\\anjian\\anjian_v1'], binaries=[], datas=[], hiddenimports=[], hookspath=[], runtime_hooks=[], excludes=[], win_no_prefer_redirects=False, win_private_assemblies=False, cipher=block_cipher, noarchive=False)pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)exe = EXE(pyz, a.scripts, [], exclude_binaries=True, name='demo', debug=False, bootloader_ignore_signals=False, strip=False, upx=True, console=True )coll = COLLECT(exe, a.binaries, a.zipfiles, a.datas, strip=False, upx=True, name='demo') view build/demo/xref-demo.html Tips:if we use pyinstaller -y -D demo.py don’t include --path=&quot;sdk/watrixdog&quot;, package will be missing, and error occur when we run executable. run executable cd dist/demo ./demo.exe # OK all related dlls have been copied to dist/demo/ folder, eg. cublas64_80.dll,curand64_80.dll,cudart64_80.dll,cudnn64_6.dll use ctype DLLspath related source code sys.path.append(&apos;./sdk/watrixdog/&apos;) sys.path.append(&apos;./sdk/yolo/&apos;) import watrixdog # watrixdog.pyd import yolo # yolo.py cuda80_yolo.dll cuda90_yolo.dll CDLL related source code lib = CDLL(&quot;./sdk/yolo/cuda80_yolo_cpp_dll.dll&quot;, RTLD_GLOBAL) pyinstaller commands pyinstaller -y -D --path=&quot;sdk/watrixdog;sdk/yolo&quot; demo.py warning 93 INFO: Extending PYTHONPATH with paths [&apos;E:\\git\\anjian\\anjian_v2&apos;, &apos;E:\\git\\anjian\\anjian_v2\\sdk\\watrixdog&apos;, &apos;E:\\git\\anjian\\anjian_v2\\sdk\\yolo&apos;, &apos;E:\\git\\anjian\\anjian_v2&apos;] ... WARNING: Ignoring ./sdk/yolo/cuda80_yolo_cpp_dll.dll imported from E:\git\anjian\anjian_v2\sdk\yolo\yolo.py - ctypes imports are only supported using bare filenames fix #lib = CDLL(&quot;./sdk/yolo/cuda80_yolo_cpp_dll.dll&quot;, RTLD_GLOBAL) lib = CDLL(&quot;cuda80_yolo_cpp_dll.dll&quot;, RTLD_GLOBAL) Tips: for CDLL, we must use bare filenames. see here now we run pyintaller again pyinstaller -y -D --path=&quot;sdk/watrixdog;sdk/yolo&quot; demo.py view build/demo/xref-demo.html watrixdog yolo run executable cd dist/demo ./demo.exe # OK all related dlls have been copied to dist/demo/ folder, eg. cublas64_80.dll,curand64_80.dll,cudart64_80.dll,cudnn64_6.dll + cuda80_yolo_cpp_dll.dll AdvancedRunning PyInstaller with Python optimizations Tips: be carefull with optimizations. PyInstaller can be run with Python optimization flags (-O or -OO) by executing it as a Python module, rather than using the pyinstaller command: python -O -m PyInstaller -y -D --path=&quot;sdk/watrixdog&quot; demo.py Or, by explicitly setting the PYTHONOPTIMIZE environment variable to a non-zero value: # Unix PYTHONOPTIMIZE=1 pyinstaller myscript.py # Windows set PYTHONOPTIMIZE=1 &amp;&amp; pyinstaller myscript.py only import what you needreplace import os with from os import path to reduce final executable size. Using UPXsee upx Encrypting Python BytecodeTo encrypt the Python bytecode modules stored in the bundle, pass the --key=key-string argument on the command line. For this to work, you must have the PyCrypto module installed. The key-string is a string of 16 characters which is used to encrypt each file of Python byte-code before it is stored in the archive inside the executable file. pip install pycrypto Other similar tools py2exe: pip install py2exe cx_freeze: pip install cx_freeze py2app: pip install py2app nuitka from here Reference pyinstaller usage pyinstaller add data binary pyinstaller feature notes History 20181213: created.]]></content>
+    <content type="text"><![CDATA[pyinstaller tutorial on windows 10 Guideinstallpip3 install pywin32 pyinstaller pip3 install --upgrade setuptools pyinstall -F demo.py error pyinstaller AttributeError: &apos;str&apos; object has no attribute &apos;items&apos; solution: pip3 install --upgrade setuptools usagepyinstaller -h params: General Options -y, --noconfirm Replace output directory (default: SPECPATH/dist/SPECNAME) without asking for confirmation --upx-dir UPX_DIR Path to UPX utility (default: search the execution path) --clean Clean PyInstaller cache and remove temporary files before building. --log-level LEVEL Amount of detail in build-time console messages. LEVEL may be one of TRACE, DEBUG, INFO, WARN, ERROR, CRITICAL (default: INFO). What to generate -D, --onedir Create a one-folder bundle containing an executable (default) -F, --onefile Create a one-file bundled executable. What to bundle, where to search --add-data &lt;SRC;DEST or SRC:DEST&gt; This option can be used multiple times. --add-binary &lt;SRC;DEST or SRC:DEST&gt; This option can be used multiple times. -p DIR, --paths DIR A path to search for imports (like using PYTHONPATH). Multiple paths are allowed, separated by ‘:’, or use this option multiple times --hidden-import MODULENAME, --hiddenimport MODULENAME Name an import not visible in the code of the script(s). This option can be used multiple times. Windows and Mac OS X specific options -c, --console, --nowindowed Open a console window for standard i/o (default) -w, --windowed, --noconsole Windows and Mac OS X: do not provide a console window for standard i/o Exampleuse pydpath related source code sys.path.append(&apos;./sdk/superdog/&apos;) import superdog # superdog.pyd pyinstaller commands pyinstaller -y -D --path=&quot;sdk/superdog&quot; demo.py # pyinstaller -y -D --add-binary &apos;./sdk/superdog/superdog.pyd;.&apos; --add-binary &apos;./sdk/superdog/dog_windows_x64.dll;.&apos; demo.py generate build and dist folder, plus demo.spec output 78 INFO: Extending PYTHONPATH with paths [&apos;E:\\git\\python\\helloworld&apos;, &apos;E:\\git\\python\\helloworld\\sdk\\superdog&apos;, &apos;E:\\git\\python\\helloworld&apos;] demo.spec123456789101112131415161718192021222324252627282930313233343536# -*- mode: python -*-block_cipher = Nonea = Analysis(['demo.py'], pathex=['sdk/superdog', 'E:\\git\\python\\helloworld'], binaries=[], datas=[], hiddenimports=[], hookspath=[], runtime_hooks=[], excludes=[], win_no_prefer_redirects=False, win_private_assemblies=False, cipher=block_cipher, noarchive=False)pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)exe = EXE(pyz, a.scripts, [], exclude_binaries=True, name='demo', debug=False, bootloader_ignore_signals=False, strip=False, upx=True, console=True )coll = COLLECT(exe, a.binaries, a.zipfiles, a.datas, strip=False, upx=True, name='demo') view build/demo/xref-demo.html superdog found. Tips:if we use pyinstaller -y -D demo.py don’t include --path=&quot;sdk/superdog&quot;, package will be missing, and error occur when we run executable. run executable cd dist/demo ./demo.exe # OK all related dlls have been copied to dist/demo/ folder, eg. cublas64_80.dll,curand64_80.dll,cudart64_80.dll,cudnn64_6.dll use ctype DLLspath related source code sys.path.append(&apos;./sdk/superdog/&apos;) sys.path.append(&apos;./sdk/detect/&apos;) import superdog # superdog.pyd import detect # detect.py cuda80_detect.dll cuda90_detect.dll CDLL related source code lib = CDLL(&quot;./sdk/detect/cuda80_detect_cpp_dll.dll&quot;, RTLD_GLOBAL) pyinstaller commands pyinstaller -y -D --path=&quot;sdk/superdog;sdk/detect&quot; demo.py warning 93 INFO: Extending PYTHONPATH with paths [&apos;E:\\git\\python\\helloworld&apos;, &apos;E:\\git\\python\\helloworld\\sdk\\superdog&apos;, &apos;E:\\git\\python\\helloworld\\sdk\\detect&apos;, &apos;E:\\git\\python\\helloworld&apos;] ... WARNING: Ignoring ./sdk/detect/cuda80_detect_cpp_dll.dll imported from E:\git\python\helloworld\sdk\detect\detect.py - ctypes imports are only supported using bare filenames fix #lib = CDLL(&quot;./sdk/detect/cuda80_detect_cpp_dll.dll&quot;, RTLD_GLOBAL) lib = CDLL(&quot;cuda80_detect_cpp_dll.dll&quot;, RTLD_GLOBAL) Tips: for CDLL, we must use bare filenames. see here now we run pyintaller again pyinstaller -y -D --path=&quot;sdk/superdog;sdk/detect&quot; demo.py view build/demo/xref-demo.html superdog and detect. run executable cd dist/demo ./demo.exe # OK all related dlls have been copied to dist/demo/ folder, eg. cublas64_80.dll,curand64_80.dll,cudart64_80.dll,cudnn64_6.dll + cuda80_detect_cpp_dll.dll Versionget versionpython grab_version.py &quot;/path/to/xxx.exe&quot; C:\Users\zunli\AppData\Local\Programs\Python\Python35\Lib\site-packages\PyInstaller\utils\cliutils\grab_version.py file_version_info.txt1234567891011121314151617181920212223242526272829303132333435363738394041# UTF-8## For more details about fixed file info &apos;ffi&apos; see:# http://msdn.microsoft.com/en-us/library/ms646997.aspxVSVersionInfo( ffi=FixedFileInfo( # filevers and prodvers should be always a tuple with four items: (1, 2, 3, 4) # Set not needed items to zero 0. filevers=(9, 0, 4, 23780), prodvers=(9, 0, 4, 23780), # Contains a bitmask that specifies the valid bits &apos;flags&apos;r mask=0x3f, # Contains a bitmask that specifies the Boolean attributes of the file. flags=0x0, # The operating system for which this file was designed. # 0x4 - NT and there is no need to change it. OS=0x40004, # The general type of file. # 0x1 - the file is an application. fileType=0x1, # The function of the file. # 0x0 - the function is not defined for this fileType subtype=0x0, # Creation date and time stamp. date=(0, 0) ), kids=[ StringFileInfo( [ StringTable( u&apos;080404b0&apos;, [StringStruct(u&apos;CompanyName&apos;, u&apos;Tencent&apos;), StringStruct(u&apos;FileDescription&apos;, u&apos;腾讯QQ&apos;), StringStruct(u&apos;FileVersion&apos;, u&apos;9.0.4.23780&apos;), StringStruct(u&apos;LegalCopyright&apos;, u&apos;Copyright (C) 1999-2018 Tencent. All Rights Reserved&apos;), StringStruct(u&apos;ProductName&apos;, u&apos;腾讯QQ&apos;), StringStruct(u&apos;ProductVersion&apos;, u&apos;9.0.4.23780&apos;)]) ]), VarFileInfo([VarStruct(u&apos;Translation&apos;, [2052, 1200])]) ]) set versionpython pyinstaller.py --version-file=file_version_info.txt --icon=ico.ico -y -D --path=&quot;sdk/superdog;sdk/detect&quot; demo.py AdvancedRunning PyInstaller with Python optimizations Tips: be carefull with optimizations. PyInstaller can be run with Python optimization flags (-O or -OO) by executing it as a Python module, rather than using the pyinstaller command: python -O -m PyInstaller -y -D --path=&quot;sdk/superdog&quot; demo.py Or, by explicitly setting the PYTHONOPTIMIZE environment variable to a non-zero value: # Unix PYTHONOPTIMIZE=1 pyinstaller myscript.py # Windows set PYTHONOPTIMIZE=1 &amp;&amp; pyinstaller myscript.py only import what you needreplace import os with from os import path to reduce final executable size. Using UPXsee upx Encrypting Python BytecodeTo encrypt the Python bytecode modules stored in the bundle, pass the --key=key-string argument on the command line. For this to work, you must have the PyCrypto module installed. The key-string is a string of 16 characters which is used to encrypt each file of Python byte-code before it is stored in the archive inside the executable file. pip install pycrypto Other similar tools py2exe: pip install py2exe cx_freeze: pip install cx_freeze py2app: pip install py2app nuitka from here Reference pyinstaller usage pyinstaller add data binary pyinstaller feature notes History 20181213: created.]]></content>
       <categories>
         <category>python</category>
       </categories>
@@ -1203,9 +1203,9 @@
         <category>library</category>
       </categories>
       <tags>
+        <tag>opengv</tag>
         <tag>llvm</tag>
         <tag>clang</tag>
-        <tag>opengv</tag>
       </tags>
   </entry>
   <entry>
@@ -1216,8 +1216,8 @@
         <category>library</category>
       </categories>
       <tags>
-        <tag>gflags</tag>
         <tag>glog</tag>
+        <tag>gflags</tag>
       </tags>
   </entry>
   <entry>
@@ -1263,8 +1263,8 @@
         <category>cmake</category>
       </categories>
       <tags>
-        <tag>qt</tag>
         <tag>vtk</tag>
+        <tag>qt</tag>
         <tag>boost</tag>
         <tag>poco</tag>
         <tag>glog</tag>
@@ -1280,9 +1280,9 @@
         <category>library</category>
       </categories>
       <tags>
+        <tag>glog</tag>
         <tag>cmake</tag>
         <tag>gflags</tag>
-        <tag>glog</tag>
       </tags>
   </entry>
   <entry>
@@ -1293,8 +1293,8 @@
         <category>boost</category>
       </categories>
       <tags>
-        <tag>glog</tag>
         <tag>log</tag>
+        <tag>glog</tag>
         <tag>log4cpp</tag>
       </tags>
   </entry>
@@ -1451,8 +1451,8 @@
         <category>pcl</category>
       </categories>
       <tags>
-        <tag>qt</tag>
         <tag>vtk</tag>
+        <tag>qt</tag>
         <tag>windows</tag>
         <tag>vs2015</tag>
       </tags>
@@ -1608,8 +1608,8 @@
         <category>pcl</category>
       </categories>
       <tags>
-        <tag>qt</tag>
         <tag>vtk</tag>
+        <tag>qt</tag>
       </tags>
   </entry>
   <entry>
