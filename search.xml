@@ -1,6 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[vim plugin]]></title>
+    <url>%2Fpost%2F34e2a097%2F</url>
+    <content type="text"><![CDATA[vim plugin Guidevim-pathogenmkdir -p ~/.vim/autoload ~/.vim/bundle curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim vim ~/.vimrc execute pathogen#infect() syntax on filetype plugin indent on how to auto install vim plugindownload plugin to ~/.vim/bundle, and auto reload by vim-pathogen cd ~/.vim/bundle git clone https://github.com/ervandew/supertab.git git clone https://github.com/plasticboy/vim-markdown.git pydictioncd ~/.vim/bundle git clone https://github.com/rkulla/pydiction.git vim ~/.vimrc filetype plugin on let g:pydiction_location = &apos;~/.vim/bundle/pydiction/complete-dict&apos; let g:pydiction_menu_height = 3 Reference Pydiction History 20190312: created.]]></content>
+      <categories>
+        <category>linux</category>
+        <category>vim</category>
+      </categories>
+  </entry>
+  <entry>
+    <title><![CDATA[linux bash tutorial]]></title>
+    <url>%2Fpost%2F84daa1ca%2F</url>
+    <content type="text"><![CDATA[linux bash tutorial Guide123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293#!/bin/bashcontent=$(sed -n '4p' 1.csv)echo $contentrow=`wc -l &lt; 2.csv`echo $rowi=0for id in `cat 2.csv`do if [ $id == $content ] then echo $id else echo 'not equal' ((i=i+1)) fidoneecho $i# arrayecho '---------------------------------------'arr=(Hello World)echo $&#123;arr[0]&#125;echo $&#123;arr[1]&#125;arr[0]="xxx"arr[1]="yyy"echo $&#123;arr[0]&#125;echo $&#123;arr[1]&#125;echo '---------------------------------------'# array2array=(one two three four [5]=five)echo "Array size: $&#123;#array[*]&#125;"echo "Array items:"for item in $&#123;array[*]&#125;do printf " %s\n" $itemdoneecho "Array indexes:"for index in $&#123;!array[*]&#125;do printf " %d\n" $indexdoneecho "Array items and indexes:"for index in $&#123;!array[*]&#125;do printf "%4d: %s\n" $index $&#123;array[$index]&#125;doneecho '---------------------------------------'# array3array=("first item" "second item" "third" "item")echo "Number of items in original array: $&#123;#array[*]&#125;"for ix in $&#123;!array[*]&#125;do printf " %s\n" "$&#123;array[$ix]&#125;"doneecho# "$&#123;arr[*]&#125;" returns all the items as a single word, whereas "$&#123;arr[@]&#125;" returns each item as a separate word.arr=($&#123;array[*]&#125;)echo "After unquoted expansion: $&#123;#arr[*]&#125;"for ix in $&#123;!arr[*]&#125;do printf " %s\n" "$&#123;arr[$ix]&#125;"doneechoarr=("$&#123;array[*]&#125;")echo "After * quoted expansion: $&#123;#arr[*]&#125;"for ix in $&#123;!arr[*]&#125;do printf " %s\n" "$&#123;arr[$ix]&#125;"doneechoarr=("$&#123;array[@]&#125;")echo "After @ quoted expansion: $&#123;#arr[*]&#125;"for ix in $&#123;!arr[*]&#125;do printf " %s\n" "$&#123;arr[$ix]&#125;"done ReferenceHistory 20190308: created.]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>bash</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[python ctypes use c dll]]></title>
+    <url>%2Fpost%2F41fe963e%2F</url>
+    <content type="text"><![CDATA[python ctypes use c dll Guidectypes intropython 与 c/c++ 交互，但实际上是 python 与 c 交互， 因为 python 本身只支持 C API。但是我们可以通过调整达到 python 与 c++ 工程协作的目的。 ctype usage1234# (1) get and set value for c_intfrom ctypes import *i = c_int(45)i.value 45 12i.value = 55i.value 55 123# (2) set and get value for c_char_Array_10 (c array)p = create_string_buffer(10)p &lt;ctypes.c_char_Array_10 at 0x7fe008061170&gt; 1p.raw &apos;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&apos; 12p.value = "Student"p.raw &apos;Student\x00\x00\x00&apos; 12p.value = "Big" # set 3 chars "Big" and 4-th char "\0"p.raw &apos;Big\x00ent\x00\x00\x00&apos; 1234# (3) get and set value by pointer i = c_int(999) pi = pointer(i) # pointer to c_intpi.contents c_int(999) 12pi.contents = c_int(1000)pi.contents c_int(1000) 12345678# (4) use structclass Point(Structure): _fields_ = [("x", c_int), ("y", c_int)] pt = Point(2,5)print(pt.x, pt.y)pt2 = Point(y=5) # x default value = 0print(pt2.x, pt2.y) (2, 5) (0, 5) 1234# (5.1) use c array c_int_Array_10INT_ARRAY_10 = c_int *10print(c_int)print(INT_ARRAY_10) &lt;class &apos;ctypes.c_int&apos;&gt; &lt;class &apos;__main__.c_int_Array_10&apos;&gt; 1234567i_array = INT_ARRAY_10() # by default all 0for i in range(10): i_array[i] = i for value in i_array: print(value) 0 1 2 3 4 5 6 7 8 9 1234# (5.2) use c array c_char_Array_10CHAR_ARRAY_10 = c_char * 10print(c_char)print(CHAR_ARRAY_10) &lt;class &apos;ctypes.c_char&apos;&gt; &lt;class &apos;ctypes.c_char_Array_10&apos;&gt; 123456789101112131415c_array = CHAR_ARRAY_10() # by default all 0for i in range(10): c_array[i] = "a" for value in c_array: print(value) # value and raw field for c_char_Array_10print(c_array.value)print(c_array.raw)c_array.value = "Student"print(c_array.value)print(c_array.raw) a a a a a a a a a a aaaaaaaaaa aaaaaaaaaa Student Student\00aa 12345678910111213141516171819# (6) pointer# byref(x [, offset]) ---&gt; get address of x `&amp;num` # pointer(x) ---&gt; create a pointer which points to x `int* p = &amp;num;`# POINTER(type) ---&gt; return a `new type` which points to type instance `Point*`a = Point(2,5)b = pointer(a)print(a)print(a.x, a.y)print("\n")print(b)print(b.contents) # aprint(b.contents.x, b.contents.y)c = POINTER(Point)(a)print("\n")print(c)print(c.contents) print(c.contents.x, c.contents.y) &lt;__main__.Point object at 0x7fe00805d3b0&gt; (2, 5) &lt;__main__.LP_Point object at 0x7fe00805d710&gt; &lt;__main__.Point object at 0x7fe00805d5f0&gt; (2, 5) &lt;__main__.LP_Point object at 0x7fe00805d5f0&gt; &lt;__main__.Point object at 0x7fe00805d440&gt; (2, 5) Examplec++/c codeapi.h12345678910111213141516171819202122232425262728293031323334353637383940414243444546#pragma once#include "algorithm_shared_export.h" #include &lt;iostream&gt;struct SHARED_EXPORT Point&#123; float x, y;&#125;;class SHARED_EXPORT MyClass&#123; public: MyClass(int id); int add(int a, int b); float addf(float a, float b); void print_point(Point* p); private: int id_;&#125;;#ifdef __cplusplusextern "C" &#123;#endif // pure C API (can not overload) SHARED_EXPORT int add(int a, int b); SHARED_EXPORT float addf(float a, float b); SHARED_EXPORT void print_point(Point* p); // warpper for c++ class MyClass* my; // init global class handle SHARED_EXPORT void wrapper_init_class(int id); SHARED_EXPORT void wrapper_free_class(); SHARED_EXPORT int wrapper_add(int a, int b); SHARED_EXPORT float wrapper_addf(float a, float b); SHARED_EXPORT void wrapper_print_point(Point* p); #ifdef __cplusplus &#125;#endif api.cpp12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182#include "api.h"// c++ class implMyClass::MyClass(int id) :id_(id)&#123;&#125;int MyClass::add(int a, int b)&#123; return a + b;&#125;float MyClass::addf(float a, float b)&#123; return a + b;&#125;void MyClass::print_point(Point* p)&#123; if (p) printf("position x %f y %f \n", p-&gt;x, p-&gt;y); printf("myclass id = %d \n", id_);&#125;#ifdef __cplusplusextern "C" &#123;#endif // pure C API impl int add(int a, int b) &#123; return a + b; &#125; float addf(float a, float b) &#123; return a + b; &#125; void print_point(Point* p) &#123; if (p) printf("position x %f y %f \n", p-&gt;x, p-&gt;y); &#125; // warpper for c++ class void wrapper_init_class(int id) &#123; my = new MyClass(id); &#125; void wrapper_free_class() &#123; if (my) &#123; delete my; &#125; &#125; int wrapper_add(int a, int b) &#123; return my-&gt;add(a,b); &#125; float wrapper_addf(float a, float b) &#123; return my-&gt;addf(a,b); &#125; void wrapper_print_point(Point* p) &#123; return my-&gt;print_point(p); &#125;#ifdef __cplusplus &#125;#endif python12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394from ctypes import *#==================================================# os.name "posix" for linux, "nt" for windowslib = CDLL("./libcapi.so", RTLD_GLOBAL)#==================================================""" // struct struct Point&#123; float x, y; &#125;; // pure C API SHARED_EXPORT int add(int a, int b); SHARED_EXPORT float addf(float a, float b); SHARED_EXPORT void print_point(Point* p); // warpper for c++ class MyClass* my; // init global class handle SHARED_EXPORT void wrapper_init_class(int id); SHARED_EXPORT void wrapper_free_class(); SHARED_EXPORT int wrapper_add(int a, int b); SHARED_EXPORT float wrapper_addf(float a, float b); SHARED_EXPORT void wrapper_print_point(Point* p);"""# structclass POINT(Structure): _fields_ = [("x", c_float), ("y", c_float)]# pure C APIlib.add.argtypes = [c_int, c_int]lib.add.restype = c_intlib.addf.argtypes = [c_float, c_float]lib.addf.restype = c_floatlib.print_point.argtypes = [POINTER(POINT)]lib.print_point.restype = None# warpper for c++ classlib.wrapper_init_class.argtypes = [c_int]lib.wrapper_init_class.restype = Nonelib.wrapper_free_class.argtypes = Nonelib.wrapper_free_class.restype = Nonelib.wrapper_add.argtypes = [c_int, c_int]lib.wrapper_add.restype = c_intlib.wrapper_addf.argtypes = [c_float, c_float]lib.wrapper_addf.restype = c_floatlib.wrapper_print_point.argtypes = [POINTER(POINT)]lib.wrapper_print_point.restype = Nonedef test_capi(): print("test_capi") print(lib.add(3,5)) # 8 print(lib.addf(3.3,5.5)) # 8.8 p = POINT(9.1,9.2) print(p) # POINT print(p.x, p.y) # 9.1,9.2 lib.print_point(byref(p)) # faster lib.print_point(pointer(p))def test_wrapper_capi(): print("test_wrapper_capi") # init class wrapper lib.wrapper_init_class(100) print(lib.wrapper_add(3,5)) # 8 print(lib.wrapper_addf(3.3,5.5)) # 8.8 p = POINT(9.1,9.2) print(p) # POINT print(p.x, p.y) # 9.1,9.2 lib.wrapper_print_point(byref(p)) # faster lib.wrapper_print_point(pointer(p)) # free class wrapper lib.wrapper_free_class()if __name__ == "__main__": test_capi() test_wrapper_capi() Boost-python extension numpy-opencv-converter pyboostcvconverter Reference ctypes usage ctypes tutorial python call c++ and executable History 20190308: created.]]></content>
+      <categories>
+        <category>cpp</category>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>ctypes</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[install pycharm for ubuntu 16.04]]></title>
+    <url>%2Fpost%2F593a3fb4%2F</url>
+    <content type="text"><![CDATA[install pycharm for ubuntu 16.04 Guideapt-get (slow)sudo add-apt-repository ppa:mystic-mirage/pycharm sudo apt update # no free sudo apt install pycharm # free sudo apt install pycharm-community # remove sudo apt remove pycharm pycharm-community &amp;&amp; sudo apt autoremove offical (faster)download from here start by sh pycharm.sh Reference install pycharm History 20190307: created.]]></content>
+      <categories>
+        <category>ubuntu</category>
+      </categories>
+      <tags>
+        <tag>pycharm</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[numpy table save and load with cpp]]></title>
     <url>%2Fpost%2Fb6e8d46e%2F</url>
     <content type="text"><![CDATA[numpy table save and load with cpp Guidepython12345678910111213import numpy as npimport cv2from array import arraytable = np.float32(np.zeros((4, 5, 2)))array_0 = np.array([-1.5,-1.5,-1.5,-1.5, -1.5])table[:,:,0] = np.array([array_0,array_0,array_0,array_0])array_1 = np.array([1.1,1.1,1.1,1.1,1.1])table[:,:,1] = np.array([array_1,array_1,array_1,array_1])table array([[[-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002]], [[-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002]], [[-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002]], [[-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002]]], dtype=float32) 123456789101112131415161718192021222324252627282930313233# imwrite/imread can only handle 8/16/24/32bit integral data, not floats# opencv image: hwc, bgr, value range = x: [-5,5], y= [10,45], z = 0; 255 floatdef save_table(table, row, col, filename): table_list = [] for i in range(row): for j in range(col): x = table[i][j][0] y = table[i][j][1] table_list.append(x) table_list.append(y) #print("table_list = ",table_list) output_file = open(filename, 'wb') float_array = array('f', table_list) # f,d float_array.tofile(output_file) output_file.close()def load_table(filename, row, col): input_file = open(filename, 'rb') float_array = array('f') # f,d float_array.fromstring(input_file.read()) channel = 2 # default 2 table = np.float32(np.zeros((row, col, 2))) for i in range(row): for j in range(col): table[i][j][0] = float_array[2*(i*col+j) +0] table[i][j][1] = float_array[2*(i*col+j) +1] return table 12345678row = 4 # heightcol = 5 # width# table size# double: （4*5*2）×8 = 320 bytes# float: （4*5*2）×4 = 160 bytessave_table(table, row, col, "table_f.bin")table2 = load_table("table_f.bin", row, col)table2 array([[[-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002]], [[-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002]], [[-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002]], [[-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002], [-1.5 , 1.10000002]]], dtype=float32) Tips, use d or f to store number as double or float table size double: （452）×8 = 320 bytes float: （452）×4 = 160 bytes c++12345678910111213141516171819std::string table_filepath = "./table_f.bin";std::ifstream ifs(table_filepath, std::ifstream::binary);int rows = 4;int cols = 5; // xyfor(int y=0; y&lt;rows; ++y)&#123; for(int x=0;x&lt;cols;++x) &#123; float distance_x; ifs.read(reinterpret_cast&lt;char*&gt;(&amp;distance_x), sizeof(float)); std::cout&lt;&lt; distance_x &lt;&lt; std::endl; float distance_y; ifs.read(reinterpret_cast&lt;char*&gt;(&amp;distance_y), sizeof(float)); std::cout&lt;&lt; distance_y &lt;&lt; std::endl; &#125;&#125;ifs.close(); Tips: read double ReferenceHistory 20190228: created.]]></content>
@@ -331,19 +374,19 @@
       </categories>
   </entry>
   <entry>
-    <title><![CDATA[yolo v3]]></title>
-    <url>%2Fpost%2Fdc417396%2F</url>
-    <content type="text"><![CDATA[yolo v3 GuideReferenceHistory created.]]></content>
-      <categories>
-        <category>yolo</category>
-      </categories>
-  </entry>
-  <entry>
     <title><![CDATA[ssd]]></title>
     <url>%2Fpost%2Fe73b806f%2F</url>
     <content type="text"><![CDATA[ssd GuideReference SSD History created.]]></content>
       <categories>
         <category>ssd</category>
+      </categories>
+  </entry>
+  <entry>
+    <title><![CDATA[yolo v3]]></title>
+    <url>%2Fpost%2Fdc417396%2F</url>
+    <content type="text"><![CDATA[yolo v3 GuideReferenceHistory created.]]></content>
+      <categories>
+        <category>yolo</category>
       </categories>
   </entry>
   <entry>
@@ -1203,9 +1246,9 @@
         <category>library</category>
       </categories>
       <tags>
-        <tag>opengv</tag>
         <tag>llvm</tag>
         <tag>clang</tag>
+        <tag>opengv</tag>
       </tags>
   </entry>
   <entry>
@@ -1216,8 +1259,8 @@
         <category>library</category>
       </categories>
       <tags>
-        <tag>glog</tag>
         <tag>gflags</tag>
+        <tag>glog</tag>
       </tags>
   </entry>
   <entry>
@@ -1263,8 +1306,8 @@
         <category>cmake</category>
       </categories>
       <tags>
-        <tag>vtk</tag>
         <tag>qt</tag>
+        <tag>vtk</tag>
         <tag>boost</tag>
         <tag>poco</tag>
         <tag>glog</tag>
@@ -1280,9 +1323,9 @@
         <category>library</category>
       </categories>
       <tags>
-        <tag>glog</tag>
         <tag>cmake</tag>
         <tag>gflags</tag>
+        <tag>glog</tag>
       </tags>
   </entry>
   <entry>
@@ -1293,8 +1336,8 @@
         <category>boost</category>
       </categories>
       <tags>
-        <tag>log</tag>
         <tag>glog</tag>
+        <tag>log</tag>
         <tag>log4cpp</tag>
       </tags>
   </entry>
@@ -1451,8 +1494,8 @@
         <category>pcl</category>
       </categories>
       <tags>
-        <tag>vtk</tag>
         <tag>qt</tag>
+        <tag>vtk</tag>
         <tag>windows</tag>
         <tag>vs2015</tag>
       </tags>
@@ -1608,8 +1651,8 @@
         <category>pcl</category>
       </categories>
       <tags>
-        <tag>vtk</tag>
         <tag>qt</tag>
+        <tag>vtk</tag>
       </tags>
   </entry>
   <entry>
