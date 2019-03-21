@@ -91,7 +91,7 @@
 <meta property="og:description" content="mean shift clustering">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://img2018.cnblogs.com/blog/635233/201903/635233-20190318151812145-279748581.png">
-<meta property="og:updated_time" content="2019-03-18T07:47:44.688Z">
+<meta property="og:updated_time" content="2019-03-21T06:54:12.104Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mean shift clustering">
 <meta name="twitter:description" content="mean shift clustering">
@@ -347,8 +347,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-03-18T15:47:44+08:00">
-                2019-03-18
+              <time title="Post modified" itemprop="dateModified" datetime="2019-03-21T14:54:12+08:00">
+                2019-03-21
               </time>
             
           </span>
@@ -366,8 +366,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index">
-                    <span itemprop="name">python</span>
+                  <a href="/categories/algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">algorithm</span>
                   </a>
                 </span>
 
@@ -395,7 +395,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  332
+                  1,067
                 </span>
               
 
@@ -411,7 +411,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  2
+                  7
                 </span>
               
             </div>
@@ -433,7 +433,7 @@
 
       
         <p>mean shift clustering<br><a id="more"></a></p>
-<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><h3 id="MeanShift-py"><a href="#MeanShift-py" class="headerlink" title="MeanShift_py"></a>MeanShift_py</h3><pre><code>git clone https://github.com/mattnedrich/MeanShift_py.git
+<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="MeanShift-py"><a href="#MeanShift-py" class="headerlink" title="MeanShift_py"></a>MeanShift_py</h2><h3 id="py"><a href="#py" class="headerlink" title="py"></a>py</h3><pre><code>git clone https://github.com/mattnedrich/MeanShift_py.git
 
 python mean_shift_runner.py 
 Original Point     Shifted Point  Cluster ID
@@ -442,9 +442,69 @@ Original Point     Shifted Point  Cluster ID
 ( 9.88, 9.91)  -&gt;  ( 8.63, 9.25)  cluster 0
 ( 7.85,10.43)  -&gt;  ( 8.63, 9.25)  cluster 0
 ( 8.53, 9.56)  -&gt;  ( 8.63, 9.25)  cluster 0
-</code></pre><h3 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> mean_shift <span class="keyword">as</span> ms</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">data = np.genfromtxt(<span class="string">'data.csv'</span>, delimiter=<span class="string">','</span>)</span><br><span class="line"></span><br><span class="line">print(<span class="string">"data.shape="</span>,data.shape)</span><br><span class="line">mean_shifter = ms.MeanShift()</span><br><span class="line">mean_shift_result = mean_shifter.cluster(data, kernel_bandwidth = <span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">original_points =  mean_shift_result.original_points</span><br><span class="line">shifted_points = mean_shift_result.shifted_points</span><br><span class="line">cluster_assignments = mean_shift_result.cluster_ids</span><br><span class="line"></span><br><span class="line">print(<span class="string">"original_points.shape="</span>,original_points.shape) <span class="comment"># (125, 2)</span></span><br><span class="line">print(original_points[:<span class="number">10</span>])</span><br><span class="line"></span><br><span class="line">print(<span class="string">"shifted_points.shape="</span>,shifted_points.shape) <span class="comment"># (125, 2)</span></span><br><span class="line">print(shifted_points[:<span class="number">10</span>])</span><br><span class="line"></span><br><span class="line">print(<span class="string">"cluster_assignments.shape="</span>,cluster_assignments.shape) <span class="comment"># (125,)</span></span><br><span class="line">print(cluster_assignments) <span class="comment"># [0,0,0,...1,1,1,...,2,2,2,...] 0,1,2 cluster ids</span></span><br><span class="line"></span><br><span class="line">x = original_points[:,<span class="number">0</span>]</span><br><span class="line">y = original_points[:,<span class="number">1</span>]</span><br><span class="line">Cluster = cluster_assignments</span><br><span class="line">centers = shifted_points <span class="comment"># 3 centers</span></span><br><span class="line"></span><br><span class="line">fig = plt.figure()</span><br><span class="line">ax = fig.add_subplot(<span class="number">111</span>)</span><br><span class="line">scatter = ax.scatter(x,y,c=Cluster,s=<span class="number">50</span>)</span><br><span class="line"><span class="keyword">for</span> i,j <span class="keyword">in</span> centers:</span><br><span class="line">    ax.scatter(i,j,s=<span class="number">50</span>,c=<span class="string">'red'</span>,marker=<span class="string">'+'</span>)</span><br><span class="line">ax.set_xlabel(<span class="string">'x'</span>)</span><br><span class="line">ax.set_ylabel(<span class="string">'y'</span>)</span><br><span class="line">plt.colorbar(scatter)</span><br><span class="line"></span><br><span class="line">fig.savefig(<span class="string">"mean_shift_result"</span>)</span><br><span class="line">plt.show()</span><br><span class="line">print(<span class="string">"OK"</span>)</span><br></pre></td></tr></table></figure>
-<p><img src="https://img2018.cnblogs.com/blog/635233/201903/635233-20190318151812145-279748581.png" alt="mean_shift_result"></p>
-<h2 id="Cpp"><a href="#Cpp" class="headerlink" title="Cpp"></a>Cpp</h2><h3 id="MeanShift-cpp"><a href="#MeanShift-cpp" class="headerlink" title="MeanShift_cpp"></a>MeanShift_cpp</h3><pre><code>git https://github.com/mattnedrich/MeanShift_cpp.git
+</code></pre><h3 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> mean_shift <span class="keyword">as</span> ms</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">data = np.genfromtxt(<span class="string">'data.csv'</span>, delimiter=<span class="string">','</span>)</span><br><span class="line"></span><br><span class="line">print(<span class="string">"data.shape="</span>,data.shape)</span><br><span class="line">mean_shifter = ms.MeanShift()</span><br><span class="line">mean_shift_result = mean_shifter.cluster(data, kernel_bandwidth = <span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">original_points =  mean_shift_result.original_points</span><br><span class="line">shifted_points = mean_shift_result.shifted_points</span><br><span class="line">cluster_ids = mean_shift_result.cluster_ids</span><br><span class="line"></span><br><span class="line">unique_centers = np.unique(shifted_points) <span class="comment"># ERROR</span></span><br><span class="line">unique_ids = np.unique(cluster_ids)</span><br><span class="line"></span><br><span class="line">print(<span class="string">"original_points.shape="</span>,original_points.shape) <span class="comment"># (125, 2)</span></span><br><span class="line">print(original_points[:<span class="number">10</span>])</span><br><span class="line"></span><br><span class="line">print(<span class="string">"shifted_points.shape="</span>,shifted_points.shape) <span class="comment"># (125, 2)</span></span><br><span class="line">print(shifted_points[:<span class="number">10</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#print("unique_centers.shape=",unique_centers.shape) # (125, 2)</span></span><br><span class="line"><span class="comment">#print(unique_centers)</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">"cluster_ids.shape="</span>,cluster_ids.shape) <span class="comment"># (125,)</span></span><br><span class="line">print(cluster_ids) <span class="comment"># [0,0,0,...1,1,1,...,2,2,2,...] 0,1,2 cluster ids</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">"unique_ids.shape="</span>,unique_ids.shape) <span class="comment"># (3,)</span></span><br><span class="line">print(unique_ids)  <span class="comment"># 0,1,2</span></span><br><span class="line"></span><br><span class="line">x = original_points[:,<span class="number">0</span>]</span><br><span class="line">y = original_points[:,<span class="number">1</span>]</span><br><span class="line">Cluster = cluster_ids</span><br><span class="line">centers = shifted_points <span class="comment"># 3 centers</span></span><br><span class="line"></span><br><span class="line">fig = plt.figure()</span><br><span class="line">ax = fig.add_subplot(<span class="number">111</span>)</span><br><span class="line">scatter = ax.scatter(x,y,c=Cluster,s=<span class="number">50</span>)</span><br><span class="line"><span class="keyword">for</span> i,j <span class="keyword">in</span> centers:</span><br><span class="line">    ax.scatter(i,j,s=<span class="number">50</span>,c=<span class="string">'red'</span>,marker=<span class="string">'+'</span>)</span><br><span class="line">ax.set_xlabel(<span class="string">'x'</span>)</span><br><span class="line">ax.set_ylabel(<span class="string">'y'</span>)</span><br><span class="line">plt.colorbar(scatter)</span><br><span class="line"></span><br><span class="line">fig.savefig(<span class="string">"mean_shift_result_py"</span>)</span><br><span class="line">plt.show()</span><br><span class="line">print(<span class="string">"OK"</span>)</span><br></pre></td></tr></table></figure>
+<p>result </p>
+<pre><code>(&apos;data.shape=&apos;, (125, 2))
+(&apos;original_points.shape=&apos;, (125, 2))
+[[ 10.91079039   8.38941202]
+ [  9.87500165   9.9092509 ]
+ [  7.8481223   10.4317483 ]
+ [  8.53412293   9.55908561]
+ [ 10.38316846   9.61879086]
+ [  8.11061595   9.77471761]
+ [ 10.02119468   9.53877962]
+ [  9.37705852   9.70853991]
+ [  7.67017034   9.60315231]
+ [ 10.94308287  11.76207349]]
+(&apos;shifted_points.shape=&apos;, (125, 2))
+[[ 8.63149568  9.25488818]
+ [ 8.63149538  9.25488785]
+ [ 8.63149572  9.25488823]
+ [ 8.63149569  9.25488819]
+ [ 8.63149547  9.25488795]
+ [ 8.63149558  9.25488807]
+ [ 8.63149577  9.25488828]
+ [ 8.63149548  9.25488796]
+ [ 8.63149318  9.25488546]
+ [ 8.63149537  9.25488785]]
+(&apos;cluster_ids.shape=&apos;, (125,))
+[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 1 2 2 2]
+(&apos;unique_ids.shape=&apos;, (3,))
+[0 1 2]
+</code></pre><p><img src="https://img2018.cnblogs.com/blog/635233/201903/635233-20190318151812145-279748581.png" alt="mean_shift_result"></p>
+<h2 id="sklearn-MeanShift"><a href="#sklearn-MeanShift" class="headerlink" title="sklearn MeanShift"></a>sklearn MeanShift</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> MeanShift</span><br><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> estimate_bandwidth</span><br><span class="line"></span><br><span class="line">data = np.genfromtxt(<span class="string">'data.csv'</span>, delimiter=<span class="string">','</span>)</span><br><span class="line"></span><br><span class="line">print(<span class="string">"data.shape="</span>,data.shape)</span><br><span class="line"></span><br><span class="line">bandwidth = estimate_bandwidth(data, quantile=<span class="number">0.2</span>, n_samples=data.shape[<span class="number">0</span>])</span><br><span class="line">print(<span class="string">"bandwidth="</span>,bandwidth) <span class="comment"># 3</span></span><br><span class="line">ms = MeanShift(bandwidth, bin_seeding=<span class="keyword">True</span>)</span><br><span class="line">ms.fit(data)</span><br><span class="line"></span><br><span class="line"><span class="comment"># get same results</span></span><br><span class="line">original_points = data</span><br><span class="line">shifted_points = ms.cluster_centers_</span><br><span class="line">cluster_ids = ms.labels_</span><br><span class="line"></span><br><span class="line">unique_centers = np.unique(shifted_points) </span><br><span class="line">unique_ids = np.unique(cluster_ids) </span><br><span class="line"></span><br><span class="line">print(<span class="string">"original_points.shape="</span>,original_points.shape) <span class="comment"># (125, 2)</span></span><br><span class="line">print(original_points[:<span class="number">10</span>])</span><br><span class="line"></span><br><span class="line">print(<span class="string">"shifted_points.shape="</span>,shifted_points.shape) <span class="comment"># (125, 2) ===&gt; (3,2)</span></span><br><span class="line">print(shifted_points[:<span class="number">10</span>])</span><br><span class="line"></span><br><span class="line">print(<span class="string">"unique_centers.shape="</span>,unique_centers.shape) <span class="comment"># (125, 2)</span></span><br><span class="line">print(unique_centers)</span><br><span class="line"></span><br><span class="line">print(<span class="string">"cluster_ids.shape="</span>,cluster_ids.shape) <span class="comment"># (125,)</span></span><br><span class="line">print(cluster_ids) <span class="comment"># [0,0,0,...1,1,1,...,2,2,2,...] 0,1,2 cluster ids</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">"unique_ids.shape="</span>,unique_ids.shape) <span class="comment"># (3,)</span></span><br><span class="line">print(unique_ids)  <span class="comment"># 0,1,2</span></span><br><span class="line"></span><br><span class="line">x = original_points[:,<span class="number">0</span>]</span><br><span class="line">y = original_points[:,<span class="number">1</span>]</span><br><span class="line">Cluster = cluster_ids</span><br><span class="line">centers = shifted_points <span class="comment"># 3 centers</span></span><br><span class="line"></span><br><span class="line">fig = plt.figure()</span><br><span class="line">ax = fig.add_subplot(<span class="number">111</span>)</span><br><span class="line">scatter = ax.scatter(x,y,c=Cluster,s=<span class="number">50</span>)</span><br><span class="line"><span class="keyword">for</span> i,j <span class="keyword">in</span> centers:</span><br><span class="line">    ax.scatter(i,j,s=<span class="number">50</span>,c=<span class="string">'red'</span>,marker=<span class="string">'+'</span>)</span><br><span class="line">ax.set_xlabel(<span class="string">'x'</span>)</span><br><span class="line">ax.set_ylabel(<span class="string">'y'</span>)</span><br><span class="line">plt.colorbar(scatter)</span><br><span class="line"></span><br><span class="line">fig.savefig(<span class="string">"mean_shift_result_sklearn"</span>)</span><br><span class="line">plt.show()</span><br><span class="line">print(<span class="string">"OK"</span>)</span><br></pre></td></tr></table></figure>
+<p>result </p>
+<pre><code>(&apos;data.shape=&apos;, (125, 2))
+(&apos;bandwidth=&apos;, 3.0723913798630176)
+(&apos;original_points.shape=&apos;, (125, 2))
+[[ 10.91079039   8.38941202]
+ [  9.87500165   9.9092509 ]
+ [  7.8481223   10.4317483 ]
+ [  8.53412293   9.55908561]
+ [ 10.38316846   9.61879086]
+ [  8.11061595   9.77471761]
+ [ 10.02119468   9.53877962]
+ [  9.37705852   9.70853991]
+ [  7.67017034   9.60315231]
+ [ 10.94308287  11.76207349]]
+(&apos;shifted_points.shape=&apos;, (3, 2))
+[[  4.79792283   3.01140269]
+ [  9.2548292   10.11312163]
+ [ -4.11368202   5.44826076]]
+(&apos;unique_centers.shape=&apos;, (6,))
+[ -4.11368202   3.01140269   4.79792283   5.44826076   9.2548292
+  10.11312163]
+(&apos;cluster_ids.shape=&apos;, (125,))
+[1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 0 2 2 2]
+(&apos;unique_ids.shape=&apos;, (3,))
+[0 1 2]
+</code></pre><h2 id="MeanShift-cpp"><a href="#MeanShift-cpp" class="headerlink" title="MeanShift_cpp"></a>MeanShift_cpp</h2><h3 id="cpp"><a href="#cpp" class="headerlink" title="cpp"></a>cpp</h3><pre><code>git https://github.com/mattnedrich/MeanShift_cpp.git
 
 cd MeanShfit_cpp 
 mkdir build &amp;&amp; cd build &amp;&amp; cmake .. &amp;&amp; make -j8
@@ -469,6 +529,7 @@ Cluster 0:
 <li><a href="https://github.com/mattnedrich/MeanShift_py" target="_blank" rel="noopener">MeanShift_py</a></li>
 <li><a href="https://github.com/mattnedrich/MeanShift_cpp" target="_blank" rel="noopener">MeanShift_cpp</a></li>
 <li><a href="https://blog.csdn.net/google19890102/article/details/51030884" target="_blank" rel="noopener">mean shift clustering intro</a></li>
+<li><a href="https://blog.csdn.net/lwx309025167/article/details/78434930" target="_blank" rel="noopener">opencv mean shift</a></li>
 </ul>
 <h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>20190318: created.</li>
@@ -610,7 +671,7 @@ Cluster 0:
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">169</span>
+                  <span class="site-state-item-count">170</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -621,7 +682,7 @@ Cluster 0:
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-count">50</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -632,7 +693,7 @@ Cluster 0:
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">134</span>
+                  <span class="site-state-item-count">139</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -682,7 +743,7 @@ Cluster 0:
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Python"><span class="nav-number">1.1.</span> <span class="nav-text">Python</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MeanShift-py"><span class="nav-number">1.1.1.</span> <span class="nav-text">MeanShift_py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#demo"><span class="nav-number">1.1.2.</span> <span class="nav-text">demo</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cpp"><span class="nav-number">1.2.</span> <span class="nav-text">Cpp</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MeanShift-cpp"><span class="nav-number">1.2.1.</span> <span class="nav-text">MeanShift_cpp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Visualization-for-linux"><span class="nav-number">1.2.2.</span> <span class="nav-text">Visualization for linux</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MeanShift-py"><span class="nav-number">1.1.</span> <span class="nav-text">MeanShift_py</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#py"><span class="nav-number">1.1.1.</span> <span class="nav-text">py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#demo"><span class="nav-number">1.1.2.</span> <span class="nav-text">demo</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sklearn-MeanShift"><span class="nav-number">1.2.</span> <span class="nav-text">sklearn MeanShift</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MeanShift-cpp"><span class="nav-number">1.3.</span> <span class="nav-text">MeanShift_cpp</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cpp"><span class="nav-number">1.3.1.</span> <span class="nav-text">cpp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Visualization-for-linux"><span class="nav-number">1.3.2.</span> <span class="nav-text">Visualization for linux</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
