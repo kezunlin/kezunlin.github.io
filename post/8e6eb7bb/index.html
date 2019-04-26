@@ -90,10 +90,12 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="xaiver guide">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-03-21T07:06:58.733Z">
+<meta property="og:image" content="https://img2018.cnblogs.com/blog/635233/201812/635233-20181211175146173-1373012531.png">
+<meta property="og:updated_time" content="2019-04-23T01:43:08.252Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="xaiver guide">
 <meta name="twitter:description" content="xaiver guide">
+<meta name="twitter:image" content="https://img2018.cnblogs.com/blog/635233/201812/635233-20181211175146173-1373012531.png">
 
 
 
@@ -345,8 +347,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-03-21T15:06:58+08:00">
-                2019-03-21
+              <time title="Post modified" itemprop="dateModified" datetime="2019-04-23T09:43:08+08:00">
+                2019-04-23
               </time>
             
           </span>
@@ -393,7 +395,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1,071
+                  1,339
                 </span>
               
 
@@ -409,7 +411,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  6
+                  7
                 </span>
               
             </div>
@@ -431,28 +433,10 @@
 
       
         <p>xaiver guide<br><a id="more"></a></p>
-<h1 id="Prepare"><a href="#Prepare" class="headerlink" title="Prepare"></a>Prepare</h1><h2 id="xaiver-device"><a href="#xaiver-device" class="headerlink" title="xaiver device"></a>xaiver device</h2><p>see <a href="https://blog.csdn.net/haoqimao_hard/article/details/83447597" target="_blank" rel="noopener">xaiver</a><br>开机： 按下power键（3个按键依次为power,force recovery和reset建），板子后面的一个指示灯亮，发白光。系统启动。</p>
-<blockquote>
-<p>xaiver磁盘只有28G,在编译的过程中可以增加移动硬盘，在移动硬盘上编译opencv,caffe,sdklite,trainpilot等代码,安装到xaiver系统。</p>
-</blockquote>
-<h2 id="check-system"><a href="#check-system" class="headerlink" title="check system"></a>check system</h2><ul>
-<li><p>for desktop ubuntu</p>
-<pre><code>uname -a 
-Linux ke 4.13.0-36-generic #40~16.04.1-Ubuntu SMP Fri Feb 16 23:25:58 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux
-</code></pre></li>
-<li><p>for xaiver</p>
-<pre><code>uname -a 
-Linux l4t 4.9.108-tegra #1 SMP PREEMPT Wed Oct 31 15:17:21 PDT 2018 aarch64 aarch64 aarch64 GNU/Linux
-</code></pre></li>
-</ul>
-<blockquote>
-<p>AArch64是ARMv8 架构的一种执行状态。<br>xaiver默认安装 ubuntu 18.04 版本号为<code>bionic</code>, ubuntu 16.04的版本号为<code>xenial</code></p>
-</blockquote>
-<h3 id="replace-sources-list"><a href="#replace-sources-list" class="headerlink" title="replace sources.list"></a><del>replace sources.list</del></h3><p><code>vim /etc/apt/sources.list</code><br>默认的ubuntu-ports源修改为<br><code>deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic</code></p>
-<h1 id="Install-amp-Compile"><a href="#Install-amp-Compile" class="headerlink" title="Install &amp; Compile"></a>Install &amp; Compile</h1><ul>
+<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><ul>
 <li>device: JETSON AGX XAVIER</li>
 <li>ubuntu 18.04 aarch64</li>
-<li>cmake: 3.10.2—&gt;3.12.2(手动升级)</li>
+<li>cmake: 3.10.2—&gt;3.13.3(手动升级)</li>
 <li>cmake-gui: 3.10.2</li>
 <li>nvidia driver: </li>
 <li>GPU arch(s): sm_72 </li>
@@ -460,19 +444,51 @@ Linux l4t 4.9.108-tegra #1 SMP PREEMPT Wed Oct 31 15:17:21 PDT 2018 aarch64 aarc
 <li>cudnn 7.3.1</li>
 <li>glog 0.35    (0.35)</li>
 <li>gflags 2.2.1 (2.2.1)</li>
-<li>gtest 1.8    ()</li>
+<li>gtest 1.8    (1.8)</li>
 <li>boost 1.66 (1.65.1)</li>
-<li>protobuf 3.6.1 (编译为static库)  (3.0.0)</li>
+<li>protobuf(编译为static库)  (3.6.1)</li>
 <li>opencv 3.4.0</li>
 </ul>
 <blockquote>
 <p>升级默认的<code>cmake 3.10.2</code>到最新版<code>3.13.3</code>解决<code>CUDA_cublas_device_LIBRARY</code>问题。<br><code>protobuf 3.0.0</code>会导致<code>trainpilot</code>编译出错，所以需要源码编译安装<code>protobuf 3.6.1</code>。</p>
 </blockquote>
+<h2 id="jetson-products"><a href="#jetson-products" class="headerlink" title="jetson products"></a>jetson products</h2><ul>
+<li>Jetson TX1   (fp32,fp16)</li>
+<li>Jetson TX2    (fp32,fp16)</li>
+<li>Jetson AGX Xavier (fp32,fp16,int8,dla)</li>
+<li>Jetson Nano (Jetbot)</li>
+</ul>
+<blockquote>
+<p>see <a href="https://developer.nvidia.com/cuda-gpus" target="_blank" rel="noopener">cuda-gpus</a></p>
+</blockquote>
+<h2 id="xaiver-device"><a href="#xaiver-device" class="headerlink" title="xaiver device"></a>xaiver device</h2><p>see <a href="https://blog.csdn.net/haoqimao_hard/article/details/83447597" target="_blank" rel="noopener">xaiver</a><br>开机： 按下power键（3个按键依次为power,force recovery和reset建），板子后面的一个指示灯亮，发白光。系统启动。</p>
+<blockquote>
+<p>xaiver磁盘只有28G,在编译的过程中可以增加移动硬盘，在移动硬盘上编译opencv,caffe,sdklite,trainpilot等代码,安装到xaiver系统。</p>
+</blockquote>
+<h2 id="check-system"><a href="#check-system" class="headerlink" title="check system"></a>check system</h2><ul>
+<li><p>for desktop ubuntu</p>
+<pre><code>uname -a 
+Linux ke 4.13.0-36-generic #40~16.04.1-Ubuntu SMP Fri Feb 16 23:25:58 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux
+
+uname -p
+x86_64
+</code></pre></li>
+<li><p>for xaiver</p>
+<pre><code>uname -a 
+Linux l4t 4.9.108-tegra #1 SMP PREEMPT Wed Oct 31 15:17:21 PDT 2018 aarch64 aarch64 aarch64 GNU/Linux
+
+uname -p
+aarch64
+</code></pre></li>
+</ul>
+<blockquote>
+<p>AArch64是ARMv8 架构的一种执行状态。<br>xaiver默认安装 ubuntu 18.04 版本号为<code>bionic</code>, ubuntu 16.04的版本号为<code>xenial</code></p>
+</blockquote>
 <h2 id="install-packages"><a href="#install-packages" class="headerlink" title="install packages"></a>install packages</h2><pre><code>sudo apt-get install build-essential
 sudo apt-get install libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
 sudo apt-get install python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
 
-sudo apt-get install git cmake  cmake-gui
+sudo apt-get install git cmake cmake-gui
 </code></pre><h3 id="cuda"><a href="#cuda" class="headerlink" title="cuda"></a>cuda</h3><pre><code>sudo apt-get install libleveldb-dev liblmdb-dev libsnappy-dev libhdf5-serial-dev 
 sudo apt-get install libopenblas-dev liblapack-dev libatlas-base-dev
 </code></pre><h2 id="upgrade-cmake"><a href="#upgrade-cmake" class="headerlink" title="upgrade cmake"></a>upgrade cmake</h2><p>remove</p>
@@ -486,7 +502,7 @@ sudo make install
 </code></pre><blockquote>
 <p><code>aarch64</code>架构默认安装到<code>/usr/local/lib</code>和<code>/usr/local/bin/cmake</code></p>
 </blockquote>
-<h2 id="gflags-amp-amp-glog"><a href="#gflags-amp-amp-glog" class="headerlink" title="gflags &amp;&amp; glog"></a>gflags &amp;&amp; glog</h2><pre><code>#wget https://github.com/schuhschuh/gflags/archive/v2.2.1.tar.gz
+<h1 id="Compile-Package"><a href="#Compile-Package" class="headerlink" title="Compile Package"></a>Compile Package</h1><h2 id="gflags-amp-amp-glog"><a href="#gflags-amp-amp-glog" class="headerlink" title="gflags &amp;&amp; glog"></a>gflags &amp;&amp; glog</h2><pre><code>#wget https://github.com/schuhschuh/gflags/archive/v2.2.1.tar.gz
 #wget https://github.com/google/glog/archive/v0.3.5.tar.gz
 
 sudo apt-get install libgflags-dev libgoogle-glog-dev 
@@ -572,8 +588,32 @@ cd bin
 </code></pre><h2 id="trainpilot"><a href="#trainpilot" class="headerlink" title="trainpilot"></a>trainpilot</h2><pre><code>cd trainpilot &amp;&amp; mkdir build &amp;&amp; cmake ..
 make -j8
 sudo make install
+</code></pre><h1 id="nvpmodel"><a href="#nvpmodel" class="headerlink" title="nvpmodel"></a>nvpmodel</h1><h2 id="TX2-nvpmodel"><a href="#TX2-nvpmodel" class="headerlink" title="TX2 nvpmodel"></a>TX2 nvpmodel</h2><p><a href="https://cloud.tencent.com/developer/article/1081166" target="_blank" rel="noopener">Jetson TX2 nvpmodel</a></p>
+<p>Jetson Tegra系统的应用涵盖越来越广，相应用户对性能和功耗的要求也呈现多样化。为此NVIDIA提供一种新的命令行工具，可以方便地让用户配置CPU状态，以最大限度地提高不同场景下的性能和能耗。</p>
+<p>Jetson TX2由一个GPU和一个CPU集群组成。 CPU集群由双核丹佛2处理器和四核ARM Cortex-A57组成，通过高性能互连架构连接。 拥有6个CPU核心和一个GPU，您可以不必自行运行所有性能/功耗来测试最佳的运行状态，因为NVIDIA的新的命令工具Nvpmodel，提供了5种模式。在Jetson TX2上。 下表列出了CPU内核的模式以及正在使用的CPU和GPU的最大频率。 </p>
+<p><img src="https://img2018.cnblogs.com/blog/635233/201812/635233-20181211175146173-1373012531.png" alt="6 cpu mode"></p>
+<ul>
+<li><p>check current cpu mode</p>
+<pre><code>cat /proc/cpuinfo
+sudo nvpmodel -q --verbose
+
+sudo nvpmodel -p --verbose  
+</code></pre></li>
+<li><p>set cpu mode</p>
+<pre><code># turn on all 6 cpus
+sudo nvpmodel -m 0
+</code></pre></li>
+</ul>
+<h2 id="jetson-clocks"><a href="#jetson-clocks" class="headerlink" title="jetson_clocks"></a>jetson_clocks</h2><p>see <a href="https://blog.csdn.net/xingdou520/article/details/84402638" target="_blank" rel="noopener">here</a></p>
+<pre><code>jetson_clocks.sh --help  
+sudo ~/jetson_clocks.sh --show # 查看当前System配置
+sudo ~/jetson_clocks.sh # 开启最大频率
+
+# Checking GPU/DLA utilization/stats 
+sudo ~/tegrastats
 </code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://stackoverflow.com/questions/21181231/server-certificate-verification-failed-cafile-etc-ssl-certs-ca-certificates-c" target="_blank" rel="noopener">server-certificate-verification-failed</a></li>
+<li><a href="https://developer.nvidia.com/cuda-gpus" target="_blank" rel="noopener">cuda-gpus</a></li>
 </ul>
 <h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>20190118: created.</li>
@@ -715,7 +755,7 @@ sudo make install
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">172</span>
+                  <span class="site-state-item-count">174</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -726,7 +766,7 @@ sudo make install
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-count">44</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -737,7 +777,7 @@ sudo make install
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">144</span>
+                  <span class="site-state-item-count">141</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -787,7 +827,7 @@ sudo make install
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Prepare"><span class="nav-number">1.</span> <span class="nav-text">Prepare</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#xaiver-device"><span class="nav-number">1.1.</span> <span class="nav-text">xaiver device</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#check-system"><span class="nav-number">1.2.</span> <span class="nav-text">check system</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#replace-sources-list"><span class="nav-number">1.2.1.</span> <span class="nav-text">replace sources.list</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Install-amp-Compile"><span class="nav-number">2.</span> <span class="nav-text">Install &amp; Compile</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install-packages"><span class="nav-number">2.1.</span> <span class="nav-text">install packages</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cuda"><span class="nav-number">2.1.1.</span> <span class="nav-text">cuda</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#upgrade-cmake"><span class="nav-number">2.2.</span> <span class="nav-text">upgrade cmake</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gflags-amp-amp-glog"><span class="nav-number">2.3.</span> <span class="nav-text">gflags &amp;&amp; glog</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gtest"><span class="nav-number">2.4.</span> <span class="nav-text">gtest</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#boost"><span class="nav-number">2.5.</span> <span class="nav-text">boost</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#protobuf"><span class="nav-number">2.6.</span> <span class="nav-text">protobuf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#opencv"><span class="nav-number">2.7.</span> <span class="nav-text">opencv</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ssl-error"><span class="nav-number">2.7.1.</span> <span class="nav-text">ssl error</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cmake-gui-display-error"><span class="nav-number">2.7.2.</span> <span class="nav-text">cmake-gui display error</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#clock"><span class="nav-number">2.7.3.</span> <span class="nav-text">clock</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#caffe"><span class="nav-number">2.8.</span> <span class="nav-text">caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#errors"><span class="nav-number">2.8.1.</span> <span class="nav-text">errors</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix"><span class="nav-number">2.8.2.</span> <span class="nav-text">fix</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sdklite"><span class="nav-number">2.9.</span> <span class="nav-text">sdklite</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trainpilot"><span class="nav-number">2.10.</span> <span class="nav-text">trainpilot</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#jetson-products"><span class="nav-number">1.1.</span> <span class="nav-text">jetson products</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xaiver-device"><span class="nav-number">1.2.</span> <span class="nav-text">xaiver device</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#check-system"><span class="nav-number">1.3.</span> <span class="nav-text">check system</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-packages"><span class="nav-number">1.4.</span> <span class="nav-text">install packages</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cuda"><span class="nav-number">1.4.1.</span> <span class="nav-text">cuda</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#upgrade-cmake"><span class="nav-number">1.5.</span> <span class="nav-text">upgrade cmake</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Compile-Package"><span class="nav-number">2.</span> <span class="nav-text">Compile Package</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#gflags-amp-amp-glog"><span class="nav-number">2.1.</span> <span class="nav-text">gflags &amp;&amp; glog</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gtest"><span class="nav-number">2.2.</span> <span class="nav-text">gtest</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#boost"><span class="nav-number">2.3.</span> <span class="nav-text">boost</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#protobuf"><span class="nav-number">2.4.</span> <span class="nav-text">protobuf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#opencv"><span class="nav-number">2.5.</span> <span class="nav-text">opencv</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ssl-error"><span class="nav-number">2.5.1.</span> <span class="nav-text">ssl error</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cmake-gui-display-error"><span class="nav-number">2.5.2.</span> <span class="nav-text">cmake-gui display error</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#clock"><span class="nav-number">2.5.3.</span> <span class="nav-text">clock</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#caffe"><span class="nav-number">2.6.</span> <span class="nav-text">caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#errors"><span class="nav-number">2.6.1.</span> <span class="nav-text">errors</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix"><span class="nav-number">2.6.2.</span> <span class="nav-text">fix</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sdklite"><span class="nav-number">2.7.</span> <span class="nav-text">sdklite</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trainpilot"><span class="nav-number">2.8.</span> <span class="nav-text">trainpilot</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nvpmodel"><span class="nav-number">3.</span> <span class="nav-text">nvpmodel</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TX2-nvpmodel"><span class="nav-number">3.1.</span> <span class="nav-text">TX2 nvpmodel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jetson-clocks"><span class="nav-number">3.2.</span> <span class="nav-text">jetson_clocks</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
