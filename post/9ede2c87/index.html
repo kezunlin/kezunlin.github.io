@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+<meta name="referrer" content="no-referrer" />
+<meta name="google-site-verification" content="WSpJFvfcmIPBX_iK8uPbmCHIy_0f1lvd7ZJpbyad2sA" />
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="KeZunLin, kezunlin, Hexo, NexT, c++, python, linux, ubuntu, mysql, deep learning, caffe, tensorflow, mxnet, keras, ros, pcl, opencv, vtk, qt, cmake, git, vim, google, github, stackoverflow" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="KeZunLin's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="cpp ref">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cpp ref">
+<meta property="og:url" content="http://kezunlin.me/post/9ede2c87/index.html">
+<meta property="og:site_name" content="KeZunLin&#39;s Blog">
+<meta property="og:description" content="cpp ref">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-05-17T09:17:29.152Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="cpp ref">
+<meta name="twitter:description" content="cpp ref">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://kezunlin.me/post/9ede2c87/"/>
+
+
+
+
+
+  <title>cpp ref | KeZunLin's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-111858944-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">KeZunLin's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Live and learn.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://kezunlin.me/post/9ede2c87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/kezunlin_avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="KeZunLin's Blog">
+      <img itemprop="logo" src="/images/kezunlin_logo.png" alt="logo" />
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">cpp ref</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-29T07:56:00+08:00">
+                2019-04-29
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2019-05-17T17:17:29+08:00">
+                2019-05-17
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index">
+                    <span itemprop="name">cpp</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  1,467
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>cpp ref<br><a id="more"></a></p>
+<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="sizeof-array"><a href="#sizeof-array" class="headerlink" title="sizeof(array)"></a>sizeof(array)</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">print_size1</span><span class="params">(<span class="keyword">int</span> a[], <span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;<span class="comment">// int add(int*, int)</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt; <span class="keyword">sizeof</span>(a) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; </span><br><span class="line">	<span class="comment">// we get sizeof(int*)</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">print_size2</span><span class="params">(<span class="keyword">int</span> *a, <span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;<span class="comment">// int add(int*, int)</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt; <span class="keyword">sizeof</span>(a) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">	<span class="comment">// we get sizeof(int*)</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> N_ELEMENTS(array) (sizeof(array)/sizeof((array)[0])) </span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test_array</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> a[<span class="number">5</span>] = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;;</span><br><span class="line">	<span class="keyword">int</span> n = N_ELEMENTS(a); </span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;<span class="string">"num  = "</span>&lt;&lt; n &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; <span class="comment">// 5</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt; <span class="keyword">sizeof</span>(<span class="keyword">int</span>) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; <span class="comment">// int size</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt; <span class="keyword">sizeof</span>(<span class="keyword">int</span>*) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; <span class="comment">// pointer size</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt; <span class="keyword">sizeof</span>(a) &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; <span class="comment">// 20</span></span><br><span class="line">	print_size1(a, <span class="number">5</span>);</span><br><span class="line">	print_size2(a, <span class="number">5</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>An array-type is implicitly converted into pointer type when you pass it in to a function.<br>int a[]作为函数参数，隐式的转换为int *a. </p>
+</blockquote>
+<p>编译会产生warning.</p>
+<pre><code>warning: ‘sizeof’ on array function parameter ‘a’ will return size of ‘int*’ [-Wsizeof-array-argument]
+  std::cout&lt;&lt; sizeof(a) &lt;&lt; std::endl; // pointer size
+</code></pre><h2 id="char-string"><a href="#char-string" class="headerlink" title="char* string"></a>char* string</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test_str1</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]</span></span><br><span class="line">    <span class="keyword">char</span>* str = <span class="string">"Hello"</span>;  <span class="comment">//Warning</span></span><br><span class="line">  </span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span>* str1 = <span class="string">"Hello"</span>; <span class="comment">// No warning </span></span><br><span class="line">  </span><br><span class="line">    <span class="comment">// trying to modify const string literal </span></span><br><span class="line">    <span class="comment">// gives Runtime error  </span></span><br><span class="line">	<span class="comment">// segmentation fault (core dumped)</span></span><br><span class="line">    <span class="comment">//str[1] = 'o'; </span></span><br><span class="line">  </span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; str &lt;&lt; <span class="built_in">endl</span>; </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Hello常量字符串，存放在静态数据区; 由于字符串常量无需改动，放在静态内存区会提高效率.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test_str2</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">char</span> str1[] = <span class="string">"abc"</span>;</span><br><span class="line">	<span class="keyword">char</span> str2[] = <span class="string">"abc"</span>;</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">char</span> str3[] = <span class="string">"abc"</span>;</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">char</span> str4[] = <span class="string">"abc"</span>;</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">char</span> *str5 = <span class="string">"abc"</span>;</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">char</span> *str6 = <span class="string">"abc"</span>;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; ( str1 == str2 ) &lt;&lt; <span class="built_in">endl</span>; <span class="comment">// 0</span></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; ( str3 == str4 ) &lt;&lt; <span class="built_in">endl</span>; <span class="comment">// 0</span></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; ( str5 == str6 ) &lt;&lt; <span class="built_in">endl</span>; <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line">	str1[<span class="number">1</span>] = <span class="string">'B'</span>; <span class="comment">// OK </span></span><br><span class="line">	<span class="comment">//str3[1] = 'B'; // Compiler ERROR</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">str1,str2,str3,str4是数组变量。它们有各自的内存空间；</span></span><br><span class="line"><span class="comment">而str5,str6是指针，它们指向同样的常量字符串。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">const</span> <span class="keyword">char</span>* <span class="title">return_str</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> 	<span class="keyword">const</span> <span class="keyword">char</span> *p=<span class="string">"abc"</span>;</span><br><span class="line"> 	<span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test_str3</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> 	<span class="keyword">const</span> <span class="keyword">char</span> *str=<span class="literal">NULL</span>; </span><br><span class="line"> 	str= return_str();</span><br><span class="line"> 	<span class="built_in">printf</span>(<span class="string">"%s\n"</span>, str); <span class="comment">// abc</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">由于"abc"是一个字符串常量，存放在静态数据区。把该字符串常量存放的静态数据区的首地址赋值给了指针。</span></span><br><span class="line"><span class="comment">所以return_str函数退出时，该字符串常量所在内存不会被回收。故可以通过指针顺利无误的訪问。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span>* <span class="title">return_str2</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> 	<span class="keyword">char</span> p[] =<span class="string">"abc"</span>;</span><br><span class="line"> 	<span class="keyword">return</span> p; <span class="comment">// warning: address of local variable ‘p’ returned [-Wreturn-local-addr]</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test_str4</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> 	<span class="keyword">char</span> *str=<span class="literal">NULL</span>; </span><br><span class="line"> 	str= return_str2();</span><br><span class="line"> 	<span class="built_in">printf</span>(<span class="string">"%s\n"</span>, str); <span class="comment">// null</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">"abc"是一个字符串常量，存放在静态数据区。</span></span><br><span class="line"><span class="comment">可是把一个字符串常量赋值给了一个局部变量(char []型数组)，该局部变量存放在栈中，该数组空间中也存储"abc"的一份拷贝。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">也就是说`char p[]="abc";`这条语句让"abc"这个字符串在内存中有两份拷贝，一份在动态分配的栈中，还有一份在静态存储区。</span></span><br><span class="line"><span class="comment">这是与前者return_str1最本质的差别，当return_str2函数退出时，栈要清空，局部变量的内存也被清空了。</span></span><br><span class="line"><span class="comment">所以这时的函数返回的是一个已被释放的内存地址。所以打印出来的是null。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span>* <span class="title">return_str3</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> 	<span class="keyword">static</span> <span class="keyword">char</span> p[]=<span class="string">"abc"</span>; <span class="comment">//p存放在静态存储区，内容为abc</span></span><br><span class="line"> 	<span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test_str5</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> 	<span class="keyword">char</span> *str=<span class="literal">NULL</span>; </span><br><span class="line"> 	str= return_str3();</span><br><span class="line"> 	<span class="built_in">printf</span>(<span class="string">"%s\n"</span>, str); <span class="comment">// abc</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">如果函数的返回值非要是一个局部变量的地址，那么该局部变量一定要申明为static类型。</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<p><a href="https://www.geeksforgeeks.org/char-vs-stdstring-vs-char-c/" target="_blank" rel="noopener">char*-vs-stdstring</a><br><a href="https://www.cnblogs.com/gavanwanggw/p/7246880.html" target="_blank" rel="noopener">const string</a></p>
+<h2 id="NULL-vs-nullptr"><a href="#NULL-vs-nullptr" class="headerlink" title="NULL vs nullptr"></a>NULL vs nullptr</h2><p><a href="https://www.geeksforgeeks.org/understanding-nullptr-c/" target="_blank" rel="noopener">nullptr</a><br>NULL  (void *)0 </p>
+<ul>
+<li>convert to integer</li>
+<li>pointer </li>
+</ul>
+<p>nullptr keyword</p>
+<ul>
+<li>pointer </li>
+<li>CAN NOT convert to integer</li>
+<li>nullptr is convertible to bool.</li>
+</ul>
+<h2 id="static"><a href="#static" class="headerlink" title="static"></a>static</h2><p>static: internal linkage<br>extern: external linkage</p>
+<h2 id="extern"><a href="#extern" class="headerlink" title="extern"></a>extern</h2><p><a href="https://www.geeksforgeeks.org/understanding-extern-keyword-in-c/" target="_blank" rel="noopener">extern</a></p>
+<blockquote>
+<p>extern is present by default with C functions.<br>Since the declaration can be done any number of times and definition can be done only once</p>
+</blockquote>
+<h2 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h2><p><a href="https://www.geeksforgeeks.org/understanding-volatile-qualifier-c-set-1-introduction/" target="_blank" rel="noopener">volatile</a><br><a href="http://www.cnblogs.com/yc_sunniwell/archive/2010/06/24/1764231.html" target="_blank" rel="noopener">volatile cnblogs</a></p>
+<blockquote>
+<p>volatile 异变的，告诉compiler这个值可能会在当前线程外部被改变，因此不要进行优化，每次都从ram地址读取，而不要从register读取缓存的副本。</p>
+</blockquote>
+<h2 id="Internal-Linkage-and-External-Linkage-in-C"><a href="#Internal-Linkage-and-External-Linkage-in-C" class="headerlink" title="Internal Linkage and External Linkage in C"></a>Internal Linkage and External Linkage in C</h2><p><a href="https://www.geeksforgeeks.org/internal-linkage-external-linkage-c/" target="_blank" rel="noopener">internal linkage and external linkage</a><br><a href="https://stackoverflow.com/questions/1358400/what-is-external-linkage-and-internal-linkage" target="_blank" rel="noopener">what-is-external-linkage-and-internal-linkage</a></p>
+<blockquote>
+<p>scope is a property handled by compiler, whereas linkage is a property handled by linker.<br>external linkage means the symbol (function or global variable) is accessible throughout your program and internal linkage means that it’s only accessible in one translation unit.<br>You can explicitly control the linkage of a symbol by using the extern and static keywords. If the linkage isn’t specified then the default linkage is extern for non-const symbols and static (internal) for const symbols.<br>The keyword static plays a double role. (1) When used in the definitions of global variables, it specifies internal linkage. (2) When used in the definitions of the local variables, it specifies that the lifetime of the variable is going to be the duration of the program instead of being the duration of the function.</p>
+</blockquote>
+<h2 id="constexpr"><a href="#constexpr" class="headerlink" title="constexpr"></a>constexpr</h2><p><a href="https://www.geeksforgeeks.org/understanding-constexper-specifier-in-c/" target="_blank" rel="noopener">constexper</a></p>
+<blockquote>
+<p>constexpr is a feature added in C++ 11. The main idea is performance improvement of programs by doing computations at compile time rather than run time.</p>
+</blockquote>
+<h3 id="constexpr-vs-inline-functions"><a href="#constexpr-vs-inline-functions" class="headerlink" title="constexpr vs inline functions"></a>constexpr vs inline functions</h3><blockquote>
+<p>Both are for performance improvements, inline functions are request to compiler to expand at compile time and save time of function call overheads. In inline functions, expressions are always evaluated at run time. constexpr is different, here expressions are evaluated at compile time.</p>
+</blockquote>
+<h2 id="vtable-and-vptr"><a href="#vtable-and-vptr" class="headerlink" title="vtable and vptr"></a>vtable and vptr</h2><p><a href="https://www.geeksforgeeks.org/virtual-functions-and-runtime-polymorphism-in-c-set-1-introduction/" target="_blank" rel="noopener">virtual-functions-and-runtime-polymorphism</a><br><a href="https://practice.geeksforgeeks.org/problems/what-are-vtable-and-vptr" target="_blank" rel="noopener">what-are-vtable-and-vptr</a><br><a href="https://www.geeksforgeeks.org/calling-virtual-methods-in-constructordestructor-in-cpp/" target="_blank" rel="noopener">calling-virtual-methods-in-constructordestructor-in-cpp</a></p>
+<blockquote>
+<p>It is highly recommended to avoid calling virtual methods from constructor/destructor.</p>
+</blockquote>
+<p><a href="https://www.cnblogs.com/hellogiser/p/virtual-function-table.html" target="_blank" rel="noopener">virtual-function-table</a><br><a href="https://www.cnblogs.com/hellogiser/p/class-memory-layout.html" target="_blank" rel="noopener">class-memory-layout</a></p>
+<h2 id="Virtual-Constructor"><a href="#Virtual-Constructor" class="headerlink" title="Virtual Constructor"></a>Virtual Constructor</h2><p><a href="https://www.geeksforgeeks.org/advanced-c-virtual-constructor/" target="_blank" rel="noopener">Virtual Constructor</a></p>
+<blockquote>
+<p>Virtual Constructor, NO<br>Can we make a class constructor virtual in C++ to create polymorphic objects? No. C++ being static typed (the purpose of RTTI is different) language, it is meaningless to the C++ compiler to create an object polymorphically. The compiler must be aware of the class type to create the object. In other words, what type of object to be created is a compile time decision from C++ compiler perspective. If we make constructor virtual, compiler flags an error.</p>
+</blockquote>
+<h2 id="Virtual-Destructor"><a href="#Virtual-Destructor" class="headerlink" title="Virtual Destructor"></a>Virtual Destructor</h2><p><a href="https://www.geeksforgeeks.org/virtual-destructor/" target="_blank" rel="noopener">Virtual Destructor</a></p>
+<blockquote>
+<p>Deleting a derived class object using a pointer to a base class that has a non-virtual destructor results in undefined behavior.</p>
+</blockquote>
+<h2 id="Advanced"><a href="#Advanced" class="headerlink" title="Advanced"></a>Advanced</h2><ul>
+<li><a href="https://www.geeksforgeeks.org/order-constructor-destructor-call-c/" target="_blank" rel="noopener">Order of Constructor/ Destructor Call in C++</a></li>
+<li><p><a href="https://www.geeksforgeeks.org/make-class-whose-objects-can-dynamically-allocated/" target="_blank" rel="noopener">How to make a C++ class whose objects can only be dynamically allocated?</a></p>
+</li>
+<li><p><a href="https://www.geeksforgeeks.org/possible-call-constructor-destructor-explicitly/" target="_blank" rel="noopener">Is it possible to call constructor and destructor explicitly?</a></p>
+<blockquote>
+<p>Yes, it is possible to call special member functions explicitly by programmer.<br>When the constructor is called explicitly the compiler creates a nameless temporary object and it is immediately destroyed.<br>we should never call destructor explicitly on local (automatic) object, because really bad results can be acquired by doing that.<br>Local objects are automatically destroyed by compiler when they go out of scope and this is the guarantee of C++ language.</p>
+</blockquote>
+</li>
+<li><p><a href="https://www.geeksforgeeks.org/output-of-c-program-set-18-3/" target="_blank" rel="noopener">Print 1 to 100 in C++, without loop and recursion</a></p>
+<blockquote>
+<p> Template Metaprogramming</p>
+</blockquote>
+</li>
+</ul>
+<p>thread </p>
+<ul>
+<li>pass by value by default</li>
+<li>pass by ref: <code>std::ref(variable)</code></li>
+</ul>
+<h1 id="Leetcode"><a href="#Leetcode" class="headerlink" title="Leetcode"></a>Leetcode</h1><p><a href="https://cxyxiaowu.com/articles/2019/04/04/1554346263604.html" target="_blank" rel="noopener">cxyxiaowu</a></p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="https://www.tutorialspoint.com/cplusplus/cpp_overloading.htm" target="_blank" rel="noopener">tutorialspoint full (easy)</a></li>
+<li><a href="https://www.geeksforgeeks.org/c-plus-plus/" target="_blank" rel="noopener">geeksforgeeks full (medium)</a></li>
+<li><a href="https://www.geeksforgeeks.org/multithreading-in-cpp/" target="_blank" rel="noopener">geeksforgeeks multithreading</a></li>
+<li><a href="https://en.cppreference.com/w/cpp/container/unordered_map" target="_blank" rel="noopener">cppreference</a></li>
+</ul>
+<h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
+<li>20190429: created.</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    kezunlin
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="http://kezunlin.me/post/9ede2c87/" title="cpp ref">http://kezunlin.me/post/9ede2c87/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/e1d9f990/" rel="next" title="cmake usage ref">
+                <i class="fa fa-chevron-left"></i> cmake usage ref
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/63b5dbef/" rel="prev" title="simplekml pykml tutorial">
+                simplekml pykml tutorial <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/kezunlin_avatar.jpg"
+                alt="kezunlin" />
+            
+              <p class="site-author-name" itemprop="name">kezunlin</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">179</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">144</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/kezunlin" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sizeof-array"><span class="nav-number">1.1.</span> <span class="nav-text">sizeof(array)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#char-string"><span class="nav-number">1.2.</span> <span class="nav-text">char* string</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NULL-vs-nullptr"><span class="nav-number">1.3.</span> <span class="nav-text">NULL vs nullptr</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#static"><span class="nav-number">1.4.</span> <span class="nav-text">static</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extern"><span class="nav-number">1.5.</span> <span class="nav-text">extern</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#volatile"><span class="nav-number">1.6.</span> <span class="nav-text">volatile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Internal-Linkage-and-External-Linkage-in-C"><span class="nav-number">1.7.</span> <span class="nav-text">Internal Linkage and External Linkage in C</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#constexpr"><span class="nav-number">1.8.</span> <span class="nav-text">constexpr</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#constexpr-vs-inline-functions"><span class="nav-number">1.8.1.</span> <span class="nav-text">constexpr vs inline functions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vtable-and-vptr"><span class="nav-number">1.9.</span> <span class="nav-text">vtable and vptr</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Virtual-Constructor"><span class="nav-number">1.10.</span> <span class="nav-text">Virtual Constructor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Virtual-Destructor"><span class="nav-number">1.11.</span> <span class="nav-text">Virtual Destructor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Advanced"><span class="nav-number">1.12.</span> <span class="nav-text">Advanced</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Leetcode"><span class="nav-number">2.</span> <span class="nav-text">Leetcode</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
