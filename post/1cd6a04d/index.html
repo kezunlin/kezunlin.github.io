@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="mplack tutorial on ubuntu 16.04">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-05-23T08:15:17.782Z">
+<meta property="og:updated_time" content="2019-06-03T08:47:54.694Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mplack tutorial on ubuntu 16.04">
 <meta name="twitter:description" content="mplack tutorial on ubuntu 16.04">
@@ -344,8 +344,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-05-23T16:15:17+08:00">
-                2019-05-23
+              <time title="Post modified" itemprop="dateModified" datetime="2019-06-03T16:47:54+08:00">
+                2019-06-03
               </time>
             
           </span>
@@ -370,7 +370,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  102
+                  520
                 </span>
               
 
@@ -386,7 +386,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  1
+                  3
                 </span>
               
             </div>
@@ -409,7 +409,7 @@
       
         <p>mplack tutorial on ubuntu 16.04<br><a id="more"></a></p>
 <h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><p>mlpack: a scalable C++ machine learning library </p>
-<h2 id="Dependencies"><a href="#Dependencies" class="headerlink" title="Dependencies"></a>Dependencies</h2><ul>
+<h2 id="dependencies"><a href="#dependencies" class="headerlink" title="dependencies"></a>dependencies</h2><ul>
 <li>Armadillo     &gt;= 6.500.0</li>
 <li>Boost</li>
 <li>CMake         &gt;= 3.3.2</li>
@@ -418,11 +418,42 @@
 <p>Armadillo: c++ linear algebra library based on <code>LAPACK</code> and <code>BLAS</code><br>If you are compiling Armadillo by hand, ensure that LAPACK and BLAS are enabled.</p>
 </blockquote>
 <p>see <a href="https://www.cnblogs.com/cslxiao/p/3512976.html" target="_blank" rel="noopener">OpenCV vs. Armadillo vs. Eigen on Linux</a></p>
+<pre><code>sudo apt-get install libarmadillo-dev
+</code></pre><h2 id="install"><a href="#install" class="headerlink" title="install"></a>install</h2><h3 id="apt-get"><a href="#apt-get" class="headerlink" title="apt-get"></a>apt-get</h3><pre><code>sudo apt-get install libmlpack-dev
+</code></pre><blockquote>
+<p>version: 2.0.1<br>by default <code>mlpack</code> will install to <code>/usr/include/mlpack</code> and <code>/usr/lib</code></p>
+</blockquote>
+<h3 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h3><pre><code>wget https://www.mlpack.org/files/mlpack-3.1.1.tar.gz
+git clone https://github.com/mlpack/mlpack.git
+mkdir build &amp;&amp; cd build &amp;&amp; cmake-gui ..
+make -j8
+sudo make install
+</code></pre><p>configure and output </p>
+<pre><code>...
+Found Armadillo: /usr/lib/libarmadillo.so (found suitable version &quot;6.500.5&quot;, minimum required is &quot;6.500.0&quot;) 
+Armadillo libraries: /usr/lib/libarmadillo.so
+...
+</code></pre><blockquote>
+<p>version: 3.1.1<br>by default <code>mlpack</code> will install to <code>/usr/local/include</code> and <code>/usr/local/lib/libmlpack.so.3.1</code></p>
+</blockquote>
+<h2 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h2><h3 id="mlpack-config-cmake"><a href="#mlpack-config-cmake" class="headerlink" title="mlpack-config.cmake"></a>mlpack-config.cmake</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#.rst:</span></span><br><span class="line"><span class="comment"># FindMLPACK</span></span><br><span class="line"><span class="comment"># -------------</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Find MLPACK</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Find the MLPACK C++ library</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Using MLPACK::</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#   find_package(MLPACK REQUIRED)</span></span><br><span class="line"><span class="comment">#   include_directories($&#123;MLPACK_INCLUDE_DIRS&#125;)</span></span><br><span class="line"><span class="comment">#   add_executable(foo foo.cc)</span></span><br><span class="line"><span class="comment">#   target_link_libraries(foo $&#123;MLPACK_LIBRARIES&#125;)</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># This module sets the following variables::</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#   MLPACK_FOUND - set to true if the library is found</span></span><br><span class="line"><span class="comment">#   MLPACK_INCLUDE_DIRS - list of required include directories</span></span><br><span class="line"><span class="comment">#   MLPACK_LIBRARIES - list of libraries to be linked</span></span><br><span class="line"><span class="comment">#   MLPACK_VERSION_MAJOR - major version number</span></span><br><span class="line"><span class="comment">#   MLPACK_VERSION_MINOR - minor version number</span></span><br><span class="line"><span class="comment">#   MLPACK_VERSION_PATCH - patch version number</span></span><br><span class="line"><span class="comment">#   MLPACK_VERSION_STRING - version number as a string (ex: "1.0.4")</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># UNIX paths are standard, no need to specify them.</span></span><br><span class="line">find_library(MLPACK_LIBRARY</span><br><span class="line">	NAMES mlpack</span><br><span class="line">	PATHS <span class="string">"<span class="variable">$ENV</span>&#123;ProgramFiles&#125;/mlpack/lib"</span>  <span class="string">"<span class="variable">$ENV</span>&#123;ProgramFiles&#125;/mlpack/lib64"</span> <span class="string">"<span class="variable">$ENV</span>&#123;ProgramFiles&#125;/mlpack"</span></span><br><span class="line">)</span><br><span class="line">find_path(MLPACK_INCLUDE_DIR</span><br><span class="line">	NAMES mlpack/core.hpp mlpack/prereqs.hpp</span><br><span class="line">	PATHS <span class="string">"<span class="variable">$ENV</span>&#123;ProgramFiles&#125;/mlpack"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(MLPACK_INCLUDE_DIR)</span><br><span class="line">	<span class="comment"># Read and parse mlpack version header file for version number</span></span><br><span class="line">	file(STRINGS <span class="string">"<span class="variable">$&#123;MLPACK_INCLUDE_DIR&#125;</span>/mlpack/core/util/version.hpp"</span> _mlpack_HEADER_CONTENTS REGEX <span class="string">"#define MLPACK_VERSION_[A-Z]+ "</span>)</span><br><span class="line">	string(REGEX REPLACE <span class="string">".*#define MLPACK_VERSION_MAJOR ([0-9]+).*"</span> <span class="string">"\\1"</span> MLPACK_VERSION_MAJOR <span class="string">"<span class="variable">$&#123;_mlpack_HEADER_CONTENTS&#125;</span>"</span>)</span><br><span class="line">	string(REGEX REPLACE <span class="string">".*#define MLPACK_VERSION_MINOR ([0-9]+).*"</span> <span class="string">"\\1"</span> MLPACK_VERSION_MINOR <span class="string">"<span class="variable">$&#123;_mlpack_HEADER_CONTENTS&#125;</span>"</span>)</span><br><span class="line">	string(REGEX REPLACE <span class="string">".*#define MLPACK_VERSION_PATCH ([0-9]+).*"</span> <span class="string">"\\1"</span> MLPACK_VERSION_PATCH <span class="string">"<span class="variable">$&#123;_mlpack_HEADER_CONTENTS&#125;</span>"</span>)</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">unset</span>(_mlpack_HEADER_CONTENTS)</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">set</span>(MLPACK_VERSION_STRING <span class="string">"<span class="variable">$&#123;MLPACK_VERSION_MAJOR&#125;</span>.<span class="variable">$&#123;MLPACK_VERSION_MINOR&#125;</span>.<span class="variable">$&#123;MLPACK_VERSION_PATCH&#125;</span>"</span>)</span><br><span class="line">endif()</span><br><span class="line"></span><br><span class="line">find_package_handle_standard_args(MLPACK</span><br><span class="line">	REQUIRED_VARS MLPACK_LIBRARY MLPACK_INCLUDE_DIR</span><br><span class="line">	VERSION_VAR MLPACK_VERSION_STRING</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(MLPACK_FOUND)</span><br><span class="line">	<span class="built_in">set</span>(MLPACK_INCLUDE_DIRS <span class="variable">$&#123;MLPACK_INCLUDE_DIR&#125;</span>)</span><br><span class="line">	<span class="built_in">set</span>(MLPACK_LIBRARIES <span class="variable">$&#123;MLPACK_LIBRARY&#125;</span>)</span><br><span class="line">endif()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Hide internal variables</span></span><br><span class="line">mark_as_advanced(</span><br><span class="line">	MLPACK_INCLUDE_DIR</span><br><span class="line">	MLPACK_LIBRARY</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>From <a href="https://github.com/mlpack/mlpack/issues/444" target="_blank" rel="noopener">here</a></p>
+</blockquote>
+<h3 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">find_package(MLPACK REQUIRED)</span><br><span class="line">MESSAGE( [Main] <span class="string">" MLPACK_INCLUDE_DIRS = <span class="variable">$&#123;MLPACK_INCLUDE_DIRS&#125;</span>"</span>) </span><br><span class="line">MESSAGE( [Main] <span class="string">" MLPACK_LIBRARIES = <span class="variable">$&#123;MLPACK_LIBRARIES&#125;</span>"</span>)  </span><br><span class="line"><span class="comment"># /usr/local/include</span></span><br><span class="line"><span class="comment"># /usr/local/lib/libmlpack.so</span></span><br></pre></td></tr></table></figure>
 <h2 id="mlpack-clustering"><a href="#mlpack-clustering" class="headerlink" title="mlpack clustering"></a>mlpack clustering</h2><blockquote>
 <p>see <a href="https://mlpack.org/doc/mlpack-3.1.0/cli_documentation.html" target="_blank" rel="noopener">mlpack clustering</a></p>
 </blockquote>
-<h3 id="kmeans"><a href="#kmeans" class="headerlink" title="kmeans"></a>kmeans</h3><h3 id="meanshift"><a href="#meanshift" class="headerlink" title="meanshift"></a>meanshift</h3><p><a href="https://mlpack.org/doc/mlpack-git/doxygen/classmlpack_1_1meanshift_1_1MeanShift.html" target="_blank" rel="noopener">mlpack_meanshift</a></p>
-<h3 id="dbscan"><a href="#dbscan" class="headerlink" title="dbscan"></a>dbscan</h3><h2 id="sklearn-clustering"><a href="#sklearn-clustering" class="headerlink" title="sklearn clustering"></a>sklearn clustering</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> MeanShift</span><br><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> DBSCAN</span><br><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br></pre></td></tr></table></figure>
+<h3 id="kmeans"><a href="#kmeans" class="headerlink" title="kmeans"></a>kmeans</h3><h3 id="meanshift"><a href="#meanshift" class="headerlink" title="meanshift"></a>meanshift</h3><ul>
+<li><p><a href="https://mlpack.org/doc/mlpack-git/doxygen/classmlpack_1_1meanshift_1_1MeanShift.html" target="_blank" rel="noopener">mlpack_meanshift doc</a></p>
+</li>
+<li><p><a href="https://github.com/mlpack/mlpack/blob/master/src/mlpack/tests/mean_shift_test.cpp" target="_blank" rel="noopener">mlpack mean shift test</a></p>
+</li>
+</ul>
+<h3 id="dbscan"><a href="#dbscan" class="headerlink" title="dbscan"></a>dbscan</h3><ul>
+<li><a href="https://github.com/mlpack/mlpack/blob/master/src/mlpack/tests/dbscan_test.cpp" target="_blank" rel="noopener">mlpack dbscan test</a></li>
+</ul>
+<h2 id="sklearn-clustering"><a href="#sklearn-clustering" class="headerlink" title="sklearn clustering"></a>sklearn clustering</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> MeanShift</span><br><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> DBSCAN</span><br><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>see <a href="https://scikit-learn.org/stable/modules/classes.html#module-sklearn.cluster" target="_blank" rel="noopener">sklearn clustering</a></p>
 </blockquote>
@@ -435,10 +466,12 @@
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://github.com/mlpack/mlpack" target="_blank" rel="noopener">mlpack</a></li>
 <li><a href="http://www.mlpack.org/doc/stable/cli_documentation.html#tutorials" target="_blank" rel="noopener">mlpack.org</a></li>
-<li><a href="">dlib</a></li>
+<li><a href="https://github.com/mlpack/mlpack/issues/444" target="_blank" rel="noopener">mlpack findpackage</a></li>
+<li><a href="https://github.com/mlpack/mlpack/blob/master/src/mlpack/tests/mean_shift_test.cpp" target="_blank" rel="noopener">mlpack mean shift</a></li>
+<li><a href="https://github.com/davisking/dlib" target="_blank" rel="noopener">dlib</a></li>
 </ul>
 <h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
-<li>created.</li>
+<li>20190520: created.</li>
 </ul>
 
       
@@ -482,8 +515,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/post/12766fe4/" rel="next" title="ml ref">
-                <i class="fa fa-chevron-left"></i> ml ref
+              <a href="/post/12766fe4/" rel="next" title="pratical machine learning with python">
+                <i class="fa fa-chevron-left"></i> pratical machine learning with python
               </a>
             
           </div>
@@ -571,7 +604,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">180</span>
+                  <span class="site-state-item-count">182</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -643,7 +676,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dependencies"><span class="nav-number">1.1.</span> <span class="nav-text">Dependencies</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mlpack-clustering"><span class="nav-number">1.2.</span> <span class="nav-text">mlpack clustering</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#kmeans"><span class="nav-number">1.2.1.</span> <span class="nav-text">kmeans</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#meanshift"><span class="nav-number">1.2.2.</span> <span class="nav-text">meanshift</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dbscan"><span class="nav-number">1.2.3.</span> <span class="nav-text">dbscan</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sklearn-clustering"><span class="nav-number">1.3.</span> <span class="nav-text">sklearn clustering</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#opencv-clustering"><span class="nav-number">1.4.</span> <span class="nav-text">opencv clustering</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dependencies"><span class="nav-number">1.1.</span> <span class="nav-text">dependencies</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install"><span class="nav-number">1.2.</span> <span class="nav-text">install</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#apt-get"><span class="nav-number">1.2.1.</span> <span class="nav-text">apt-get</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#compile"><span class="nav-number">1.2.2.</span> <span class="nav-text">compile</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#usage"><span class="nav-number">1.3.</span> <span class="nav-text">usage</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mlpack-config-cmake"><span class="nav-number">1.3.1.</span> <span class="nav-text">mlpack-config.cmake</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">1.3.2.</span> <span class="nav-text">CMakeLists.txt</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mlpack-clustering"><span class="nav-number">1.4.</span> <span class="nav-text">mlpack clustering</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#kmeans"><span class="nav-number">1.4.1.</span> <span class="nav-text">kmeans</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#meanshift"><span class="nav-number">1.4.2.</span> <span class="nav-text">meanshift</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dbscan"><span class="nav-number">1.4.3.</span> <span class="nav-text">dbscan</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sklearn-clustering"><span class="nav-number">1.5.</span> <span class="nav-text">sklearn clustering</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#opencv-clustering"><span class="nav-number">1.6.</span> <span class="nav-text">opencv clustering</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
