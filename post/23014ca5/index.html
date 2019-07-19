@@ -91,7 +91,7 @@
 <meta property="og:description" content="anaconda tutorial on ubuntu 16.04">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://img2018.cnblogs.com/blog/635233/201905/635233-20190524151917076-1965937414.png">
-<meta property="og:updated_time" content="2019-05-24T07:20:38.127Z">
+<meta property="og:updated_time" content="2019-07-17T06:43:16.633Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="anaconda tutorial on ubuntu 16.04">
 <meta name="twitter:description" content="anaconda tutorial on ubuntu 16.04">
@@ -347,8 +347,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-05-24T15:20:38+08:00">
-                2019-05-24
+              <time title="Post modified" itemprop="dateModified" datetime="2019-07-17T14:43:16+08:00">
+                2019-07-17
               </time>
             
           </span>
@@ -395,7 +395,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  551
+                  630
                 </span>
               
 
@@ -411,7 +411,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  3
+                  4
                 </span>
               
             </div>
@@ -491,7 +491,8 @@ conda 4.6.14
 #
 base                  *  /home/kezunlin/anaconda3
 snowflakes               /home/kezunlin/anaconda3/envs/snowflakes
-</code></pre><h2 id="Managing-Python"><a href="#Managing-Python" class="headerlink" title="Managing Python"></a>Managing Python</h2><p>When you create a new environment, conda installs the same Python version you used when you downloaded and installed Anaconda. If you want to use a different version of Python, for example <code>Python 3.5</code>, simply create a new environment and specify the version of Python that you want.</p>
+</code></pre><p><code>～/.conda/environments.txt</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/home/kezunlin/anaconda3</span><br><span class="line">/home/kezunlin/anaconda3/envs/snowflakes</span><br><span class="line">/home/kezunlin/anaconda3/envs/py35</span><br></pre></td></tr></table></figure></p>
+<h2 id="Managing-Python"><a href="#Managing-Python" class="headerlink" title="Managing Python"></a>Managing Python</h2><p>When you create a new environment, conda installs the same Python version you used when you downloaded and installed Anaconda. If you want to use a different version of Python, for example <code>Python 3.5</code>, simply create a new environment and specify the version of Python that you want.</p>
 <pre><code>conda create --name snakes python=3.5
 conda activate py35
 
@@ -527,7 +528,9 @@ beautifulsoup4                 4.7.1          py27_1  pkgs/main
 beautifulsoup4                 4.7.1          py36_1  pkgs/main           
 beautifulsoup4                 4.7.1          py37_1  pkgs/main      
 </code></pre><h3 id="install"><a href="#install" class="headerlink" title="install"></a>install</h3><pre><code>conda install beautifulsoup4
-</code></pre><h2 id="Jupyter-notebook"><a href="#Jupyter-notebook" class="headerlink" title="Jupyter notebook"></a>Jupyter notebook</h2><h3 id="install-jupyter"><a href="#install-jupyter" class="headerlink" title="install jupyter"></a>install jupyter</h3><pre><code>conda create -n py35 python=3.5
+</code></pre><h2 id="conda-config"><a href="#conda-config" class="headerlink" title="conda config"></a>conda config</h2><pre><code>conda config --set show_channel_urls yes
+conda config --show
+</code></pre><h1 id="Tools"><a href="#Tools" class="headerlink" title="Tools"></a>Tools</h1><h2 id="Jupyter-notebook"><a href="#Jupyter-notebook" class="headerlink" title="Jupyter notebook"></a>Jupyter notebook</h2><h3 id="install-jupyter"><a href="#install-jupyter" class="headerlink" title="install jupyter"></a>install jupyter</h3><pre><code>conda create -n py35 python=3.5
 conda activate py35
 conda install jupyter
 </code></pre><h3 id="install-kernel"><a href="#install-kernel" class="headerlink" title="install kernel"></a>install kernel</h3><pre><code>python -m ipykernel install --user --name=py35
@@ -538,6 +541,14 @@ Installed kernelspec py35 in /home/kezunlin/.local/share/jupyter/kernels/py35
 <h3 id="run-jupyter"><a href="#run-jupyter" class="headerlink" title="run jupyter"></a>run jupyter</h3><pre><code>jupyter notebook
 </code></pre><p>now we can see <code>py35</code> kernel appears.</p>
 <p><img src="https://img2018.cnblogs.com/blog/635233/201905/635233-20190524151917076-1965937414.png" alt="py35 kernel"></p>
+<h2 id="tensorflow-gpu-keras"><a href="#tensorflow-gpu-keras" class="headerlink" title="tensorflow-gpu/keras"></a>tensorflow-gpu/keras</h2><pre><code>conda activate py35
+conda install tensorflow-gpu keras
+</code></pre><p>test </p>
+<pre><code>&gt;&gt;&gt;import tensorflow as tf
+&gt;&gt;&gt;import keras as K
+Using TensorFlow backend.
+</code></pre><p>.keras/keras.json<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;epsilon&quot;: 1e-07, </span><br><span class="line">    &quot;floatx&quot;: &quot;float32&quot;, </span><br><span class="line">    &quot;image_data_format&quot;: &quot;channels_last&quot;, </span><br><span class="line">    &quot;backend&quot;: &quot;tensorflow&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="pytorch"><a href="#pytorch" class="headerlink" title="pytorch"></a>pytorch</h2><p>see <a href="http://kezunlin.me/post/54e7a3d8/#more">pytorch tutorial on ubuntu 16.04</a></p>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://conda.io/projects/conda/en/latest/user-guide/getting-started.html" target="_blank" rel="noopener">getting-started with conda</a></li>
 <li><a href="https://conda.io/projects/conda/en/latest/commands.html" target="_blank" rel="noopener">conda command ref</a></li>
@@ -682,7 +693,7 @@ Installed kernelspec py35 in /home/kezunlin/.local/share/jupyter/kernels/py35
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">182</span>
+                  <span class="site-state-item-count">185</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -693,7 +704,7 @@ Installed kernelspec py35 in /home/kezunlin/.local/share/jupyter/kernels/py35
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -704,7 +715,7 @@ Installed kernelspec py35 in /home/kezunlin/.local/share/jupyter/kernels/py35
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">145</span>
+                  <span class="site-state-item-count">148</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -754,7 +765,7 @@ Installed kernelspec py35 in /home/kezunlin/.local/share/jupyter/kernels/py35
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Install-Conda"><span class="nav-number">1.1.</span> <span class="nav-text">Install Conda</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Managing-Environments"><span class="nav-number">1.2.</span> <span class="nav-text">Managing Environments</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#create-new-env"><span class="nav-number">1.2.1.</span> <span class="nav-text">create new env</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#list-envs"><span class="nav-number">1.2.2.</span> <span class="nav-text">list envs</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Managing-Python"><span class="nav-number">1.3.</span> <span class="nav-text">Managing Python</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Managing-packages"><span class="nav-number">1.4.</span> <span class="nav-text">Managing packages</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#list-packages"><span class="nav-number">1.4.1.</span> <span class="nav-text">list packages</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#search"><span class="nav-number">1.4.2.</span> <span class="nav-text">search</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install"><span class="nav-number">1.4.3.</span> <span class="nav-text">install</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Jupyter-notebook"><span class="nav-number">1.5.</span> <span class="nav-text">Jupyter notebook</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#install-jupyter"><span class="nav-number">1.5.1.</span> <span class="nav-text">install jupyter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-kernel"><span class="nav-number">1.5.2.</span> <span class="nav-text">install kernel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#run-jupyter"><span class="nav-number">1.5.3.</span> <span class="nav-text">run jupyter</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Install-Conda"><span class="nav-number">1.1.</span> <span class="nav-text">Install Conda</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Managing-Environments"><span class="nav-number">1.2.</span> <span class="nav-text">Managing Environments</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#create-new-env"><span class="nav-number">1.2.1.</span> <span class="nav-text">create new env</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#list-envs"><span class="nav-number">1.2.2.</span> <span class="nav-text">list envs</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Managing-Python"><span class="nav-number">1.3.</span> <span class="nav-text">Managing Python</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Managing-packages"><span class="nav-number">1.4.</span> <span class="nav-text">Managing packages</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#list-packages"><span class="nav-number">1.4.1.</span> <span class="nav-text">list packages</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#search"><span class="nav-number">1.4.2.</span> <span class="nav-text">search</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install"><span class="nav-number">1.4.3.</span> <span class="nav-text">install</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#conda-config"><span class="nav-number">1.5.</span> <span class="nav-text">conda config</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Tools"><span class="nav-number">2.</span> <span class="nav-text">Tools</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Jupyter-notebook"><span class="nav-number">2.1.</span> <span class="nav-text">Jupyter notebook</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#install-jupyter"><span class="nav-number">2.1.1.</span> <span class="nav-text">install jupyter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-kernel"><span class="nav-number">2.1.2.</span> <span class="nav-text">install kernel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#run-jupyter"><span class="nav-number">2.1.3.</span> <span class="nav-text">run jupyter</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tensorflow-gpu-keras"><span class="nav-number">2.2.</span> <span class="nav-text">tensorflow-gpu/keras</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pytorch"><span class="nav-number">2.3.</span> <span class="nav-text">pytorch</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
