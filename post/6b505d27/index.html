@@ -90,7 +90,7 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="quick guide for dl4cv book">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-08-21T09:22:27.134Z">
+<meta property="og:updated_time" content="2019-09-24T05:08:04.689Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="quick guide for dl4cv book">
 <meta name="twitter:description" content="quick guide for dl4cv book">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-08-21T17:22:27+08:00">
-                2019-08-21
+              <time title="Post modified" itemprop="dateModified" datetime="2019-09-24T13:08:04+08:00">
+                2019-09-24
               </time>
             
           </span>
@@ -404,7 +404,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1,330
+                  1,859
                 </span>
               
 
@@ -420,7 +420,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  8
+                  12
                 </span>
               
             </div>
@@ -453,6 +453,9 @@
 <h3 id="commands"><a href="#commands" class="headerlink" title="commands"></a>commands</h3><p>view disk </p>
 <pre><code>du -d 1 -h
 df -h
+</code></pre><p>gpu and cpu usage </p>
+<pre><code>watch -n 1 nvidia-smi
+top 
 </code></pre><p>view files and count </p>
 <pre><code>wc -l data.csv
 
@@ -470,7 +473,10 @@ ls test | head
 </code></pre><p>link datasets</p>
 <pre><code># link 
 ln -s srt dest
-ln -s dl4cv/datasets/ datasets
+ln -s /data_1/kezunlin/datasets/ dl4cv/datasets
+</code></pre><p>scp </p>
+<pre><code>scp -r node17:~/dl4cv  ~/git/
+scp -r node17:~/.keras ~/
 </code></pre><p>tmux for background tasks</p>
 <pre><code>tmux new -s notebook
 tmux ls 
@@ -484,9 +490,9 @@ wget -c url
 # background donwload for large file
 wget -b -c url
 tail -f wget-log
-</code></pre><p>gpu and cpu usage </p>
-<pre><code>watch -n 1 nvidia-smi
-top 
+
+# kill background wget
+pkill -9 wget
 </code></pre><p><strong>tips about training large model</strong></p>
 <p>terminal 1:</p>
 <pre><code>tmux new -s train
@@ -498,26 +504,60 @@ time python train_alexnet.py
 
 tmux attach -t train
 </code></pre><p>and then close vscode, otherwise bash training process will exit when we close vscode.</p>
-<h3 id="cuda-driver-and-toolkits"><a href="#cuda-driver-and-toolkits" class="headerlink" title="cuda driver and toolkits"></a>cuda driver and toolkits</h3><p>see <a href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html" target="_blank" rel="noopener">cuda-toolkit for cuda driver version</a></p>
+<h2 id="cuda-driver-and-toolkits"><a href="#cuda-driver-and-toolkits" class="headerlink" title="cuda driver and toolkits"></a>cuda driver and toolkits</h2><p>see <a href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html" target="_blank" rel="noopener">cuda-toolkit for cuda driver version</a></p>
 <blockquote>
 <p>cudatookit version depends on cuda driver version.</p>
 </blockquote>
-<p>check cuda driver version </p>
+<h3 id="install-nvidia-drivers"><a href="#install-nvidia-drivers" class="headerlink" title="install nvidia-drivers"></a><del>install nvidia-drivers</del></h3><pre><code>sudo add-apt-repository ppa:graphics-drivers/ppa
+sudp apt-get update
+
+sudo apt-cache search nvidia-*
+# nvidia-384
+# nvidia-396
+sudo apt-get -y install nvidia-418
+
+# test 
+nvidia-smi
+Failed to initialize NVML: Driver/library version mismatch
+</code></pre><blockquote>
+<p>reboot to test again<br><a href="https://stackoverflow.com/questions/43022843/nvidia-nvml-driver-library-version-mismatch" target="_blank" rel="noopener">https://stackoverflow.com/questions/43022843/nvidia-nvml-driver-library-version-mismatch</a></p>
+</blockquote>
+<h3 id="install-cuda-toolkit-dirvers"><a href="#install-cuda-toolkit-dirvers" class="headerlink" title="install cuda-toolkit(dirvers)"></a>install cuda-toolkit(dirvers)</h3><p>remove all previous nvidia drivers</p>
+<pre><code>sudo apt-get -y pruge nvidia-*
+</code></pre><p>go to <a href="https://developer.nvidia.com/cuda-toolkit-archive" target="_blank" rel="noopener">here</a> and download <code>cuda_10.1</code></p>
+<pre><code>wget -b -c http://developer.download.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.243_418.87.00_linux.run
+sudo sh cuda_10.1.243_418.87.00_linux.run
+
+sudo ./cuda_10.1.243_418.87.00_linux.run
+
+vim .bashrc
+# for cuda and cudnn
+export PATH=/usr/local/cuda/bin:$PATH
+export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+</code></pre><p>check cuda driver version </p>
 <pre><code>&gt; cat /proc/driver/nvidia/version
-NVRM version: NVIDIA UNIX x86_64 Kernel Module  418.43  Tue Feb 19 01:12:11 CST 2019
+NVRM version: NVIDIA UNIX x86_64 Kernel Module  418.87.00  Thu Aug  8 15:35:46 CDT 2019
 GCC version:  gcc version 5.4.0 20160609 (Ubuntu 5.4.0-6ubuntu1~16.04.11) 
 
+
 &gt;nvidia-smi
-Wed Aug 21 17:15:12 2019       
+Tue Aug 27 17:36:35 2019       
 +-----------------------------------------------------------------------------+
-| NVIDIA-SMI 418.43       Driver Version: 418.43       CUDA Version: 10.1     |
+| NVIDIA-SMI 418.87.00    Driver Version: 418.87.00    CUDA Version: 10.1     |
 |-------------------------------+----------------------+----------------------+
+
 
 &gt; nvidia-smi -L
 GPU 0: Quadro RTX 8000 (UUID: GPU-acb01c1b-776d-cafb-ea35-430b3580d123)
 GPU 1: Quadro RTX 8000 (UUID: GPU-df7f0fb8-1541-c9ce-e0f8-e92bccabf0ef)
 GPU 2: Quadro RTX 8000 (UUID: GPU-67024023-20fd-a522-dcda-261063332731)
 GPU 3: Quadro RTX 8000 (UUID: GPU-7f9d6a27-01ec-4ae5-0370-f0c356327913)
+
+&gt; nvcc -V
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2019 NVIDIA Corporation
+Built on Sun_Jul_28_19:07:16_PDT_2019
+Cuda compilation tools, release 10.1, V10.1.243
 </code></pre><h2 id="install-conda"><a href="#install-conda" class="headerlink" title="install conda"></a>install conda</h2><pre><code>./Anaconda3-2019.03-Linux-x86_64.sh 
 [yes]
 [yes]
@@ -531,13 +571,16 @@ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/
 conda config --set show_channel_urls yes
 </code></pre><h2 id="install-libraries"><a href="#install-libraries" class="headerlink" title="install libraries"></a>install libraries</h2><p>conclusions:</p>
 <ul>
-<li>py37/keras: conda install -y tensorflow-gpu keras </li>
+<li>py37/keras: conda install -y tensorflow-gpu keras==2.2.5 </li>
 <li>py37/torch: conda install -y pytorch torchvision</li>
 <li>py36/mxnet: conda install -y mxnet</li>
 </ul>
+<blockquote>
+<p>keras 2.2.5 was released on 2019/8/23.<br>Add new Applications: ResNet101, ResNet152, ResNet50V2, ResNet101V2, ResNet152V2.</p>
+</blockquote>
 <p>common libraries </p>
-<pre><code>conda install -y scikit-learn pandas matplotlib pillow opencv
-pip install imutils progressbar pydot
+<pre><code>conda install -y scikit-learn scikit-image pandas matplotlib pillow opencv seaborn
+pip install imutils progressbar pydot pylint
 </code></pre><blockquote>
 <p><code>pip install imutils</code>  to avoid downgrade for tensorflow-gpu </p>
 </blockquote>
@@ -685,10 +728,6 @@ ls -lR animals/panda | grep &quot;.jpg&quot; | wc -l
 </code></pre><h2 id="kaggle-cats-vs-dogs"><a href="#kaggle-cats-vs-dogs" class="headerlink" title="kaggle cats vs dogs"></a>kaggle cats vs dogs</h2><ul>
 <li><a href="https://www.kaggle.com/c/dogs-vs-cats/data" target="_blank" rel="noopener">dogs-vs-cats</a></li>
 </ul>
-<p>solutions </p>
-<ul>
-<li><a href="https://github.com/ypwhs/dogs_vs_cats" target="_blank" rel="noopener">dogs_vs_cats</a></li>
-</ul>
 <h2 id="caltech101"><a href="#caltech101" class="headerlink" title="caltech101"></a>caltech101</h2><ul>
 <li><a href="http://www.vision.caltech.edu/Image_Datasets/Caltech101/101_ObjectCategories.tar.gz" target="_blank" rel="noopener">caltech101</a></li>
 </ul>
@@ -734,7 +773,12 @@ teamId  teamName                           submissionDate       score
 71949  orchid                             2014-02-01 23:52:30  0.97733  
 </code></pre><h2 id="set-default-competition"><a href="#set-default-competition" class="headerlink" title="set default competition"></a>set default competition</h2><pre><code>kaggle config set --name competition --value dogs-vs-cats
 - competition is now set to: dogs-vs-cats
-</code></pre><h2 id="submit"><a href="#submit" class="headerlink" title="submit"></a>submit</h2><pre><code>kaggle c submissions
+
+kaggle config set --name competition --value dogs-vs-cats-redux-kernels-edition
+</code></pre><blockquote>
+<p>dogs-vs-cats<br>dogs-vs-cats-redux-kernels-edition</p>
+</blockquote>
+<h2 id="submit"><a href="#submit" class="headerlink" title="submit"></a>submit</h2><pre><code>kaggle c submissions
 - Using competition: dogs-vs-cats
 - No submissions found
 
@@ -742,7 +786,53 @@ kaggle c submit -f ./submission.csv -m &quot;first submit&quot;
 </code></pre><blockquote>
 <p>competition has already ended, so can not submit.</p>
 </blockquote>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
+<h1 id="Nvidia-docker-and-containers"><a href="#Nvidia-docker-and-containers" class="headerlink" title="Nvidia-docker and containers"></a>Nvidia-docker and containers</h1><h2 id="install"><a href="#install" class="headerlink" title="install"></a>install</h2><pre><code>sudo apt-get -y install docker
+
+# Install nvidia-docker2 and reload the Docker daemon configuration
+sudo apt-get install -y nvidia-docker2
+sudo pkill -SIGHUP dockerd
+</code></pre><h2 id="restart-optional"><a href="#restart-optional" class="headerlink" title="restart (optional)"></a>restart (optional)</h2><p>cat /etc/docker/daemon.json<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;runtimes&quot;: &#123;</span><br><span class="line">        &quot;nvidia&quot;: &#123;</span><br><span class="line">            &quot;path&quot;: &quot;nvidia-container-runtime&quot;,</span><br><span class="line">            &quot;runtimeArgs&quot;: []</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<pre><code>sudo systemctl enable docker
+sudo systemctl start docker
+</code></pre><blockquote>
+<p>if errors occur:<br>Job for docker.service failed because the control process exited with error code.<br>See “systemctl status docker.service” and “journalctl -xe” for details.<br>check <code>/etc/docker/daemon.json</code></p>
+</blockquote>
+<h2 id="test-1"><a href="#test-1" class="headerlink" title="test"></a>test</h2><pre><code>sudo docker run --runtime=nvidia --rm nvidia/cuda:10.1-base nvidia-smi
+sudo nvidia-docker run --rm nvidia/cuda:10.1-base nvidia-smi
+
+Thu Aug 29 00:11:32 2019       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 418.87.00    Driver Version: 418.87.00    CUDA Version: 10.1     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|===============================+======================+======================|
+|   0  Quadro RTX 8000     Off  | 00000000:02:00.0 Off |                  Off |
+| 43%   67C    P2   136W / 260W |  46629MiB / 48571MiB |     17%      Default |
++-------------------------------+----------------------+----------------------+
+|   1  Quadro RTX 8000     Off  | 00000000:03:00.0 Off |                  Off |
+| 34%   54C    P0    74W / 260W |      0MiB / 48571MiB |      0%      Default |
++-------------------------------+----------------------+----------------------+
+|   2  Quadro RTX 8000     Off  | 00000000:82:00.0 Off |                  Off |
+| 34%   49C    P0    73W / 260W |      0MiB / 48571MiB |      0%      Default |
++-------------------------------+----------------------+----------------------+
+|   3  Quadro RTX 8000     Off  | 00000000:83:00.0 Off |                  Off |
+| 33%   50C    P0    73W / 260W |      0MiB / 48571MiB |      3%      Default |
++-------------------------------+----------------------+----------------------+
+
++-----------------------------------------------------------------------------+
+| Processes:                                                       GPU Memory |
+|  GPU       PID   Type   Process name                             Usage      |
+|=============================================================================|
++-----------------------------------------------------------------------------+
+</code></pre><blockquote>
+<p>add user to <code>docker</code> group, and no need to use <code>sudo docker xxx</code></p>
+</blockquote>
+<h2 id="command-refs"><a href="#command-refs" class="headerlink" title="command refs"></a>command refs</h2><pre><code>sudo nvidia-docker run --rm nvidia/cuda:10.1-base nvidia-smi
+sudo nvidia-docker -t -i --privileged nvidia/cuda bash
+
+sudo docker run -it --name kzl -v /home/kezunlin/workspace/:/home/kezunlin/workspace nvidia/cuda
+</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>20190821: created.</li>
 </ul>
 
@@ -882,7 +972,7 @@ kaggle c submit -f ./submission.csv -m &quot;first submit&quot;
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">198</span>
+                  <span class="site-state-item-count">199</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -954,7 +1044,7 @@ kaggle c submit -f ./submission.csv -m &quot;first submit&quot;
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Quick-Guide"><span class="nav-number">1.</span> <span class="nav-text">Quick Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#prepare"><span class="nav-number">1.1.</span> <span class="nav-text">prepare</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tools"><span class="nav-number">1.1.1.</span> <span class="nav-text">tools</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#commands"><span class="nav-number">1.1.2.</span> <span class="nav-text">commands</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cuda-driver-and-toolkits"><span class="nav-number">1.1.3.</span> <span class="nav-text">cuda driver and toolkits</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-conda"><span class="nav-number">1.2.</span> <span class="nav-text">install conda</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#config-channels"><span class="nav-number">1.3.</span> <span class="nav-text">config channels</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-libraries"><span class="nav-number">1.4.</span> <span class="nav-text">install libraries</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#py37"><span class="nav-number">1.4.1.</span> <span class="nav-text">py37</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#py36"><span class="nav-number">1.4.2.</span> <span class="nav-text">py36</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#details"><span class="nav-number">1.4.3.</span> <span class="nav-text">details</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TensorFlow-Object-Detection-API"><span class="nav-number">1.4.4.</span> <span class="nav-text">TensorFlow Object Detection API</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jupyter-notebook"><span class="nav-number">1.5.</span> <span class="nav-text">jupyter notebook</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#install-kernels"><span class="nav-number">1.5.1.</span> <span class="nav-text">install kernels</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#config-for-server"><span class="nav-number">1.5.2.</span> <span class="nav-text">config for server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#run-jupyter-on-background"><span class="nav-number">1.5.3.</span> <span class="nav-text">run jupyter on background</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#test"><span class="nav-number">1.6.</span> <span class="nav-text">test</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#py37-1"><span class="nav-number">1.6.1.</span> <span class="nav-text">py37</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#py36-1"><span class="nav-number">1.6.2.</span> <span class="nav-text">py36</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#train-demo"><span class="nav-number">1.7.</span> <span class="nav-text">train demo</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#export"><span class="nav-number">1.7.1.</span> <span class="nav-text">export</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#code"><span class="nav-number">1.7.2.</span> <span class="nav-text">code</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#keras-folder"><span class="nav-number">1.8.</span> <span class="nav-text">./keras folder</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Datasets"><span class="nav-number">2.</span> <span class="nav-text">Datasets</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mnist"><span class="nav-number">2.1.</span> <span class="nav-text">mnist</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cifar10"><span class="nav-number">2.2.</span> <span class="nav-text">cifar10</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#flowers-17"><span class="nav-number">2.3.</span> <span class="nav-text">flowers-17</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#animals"><span class="nav-number">2.4.</span> <span class="nav-text">animals</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kaggle-cats-vs-dogs"><span class="nav-number">2.5.</span> <span class="nav-text">kaggle cats vs dogs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#caltech101"><span class="nav-number">2.6.</span> <span class="nav-text">caltech101</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kaggle-API"><span class="nav-number">3.</span> <span class="nav-text">Kaggle API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install-and-config"><span class="nav-number">3.1.</span> <span class="nav-text">install and config</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#commands-overview"><span class="nav-number">3.2.</span> <span class="nav-text">commands overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#download-datasets"><span class="nav-number">3.3.</span> <span class="nav-text">download datasets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#show-leaderboard"><span class="nav-number">3.4.</span> <span class="nav-text">show leaderboard</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#set-default-competition"><span class="nav-number">3.5.</span> <span class="nav-text">set default competition</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#submit"><span class="nav-number">3.6.</span> <span class="nav-text">submit</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Quick-Guide"><span class="nav-number">1.</span> <span class="nav-text">Quick Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#prepare"><span class="nav-number">1.1.</span> <span class="nav-text">prepare</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tools"><span class="nav-number">1.1.1.</span> <span class="nav-text">tools</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#commands"><span class="nav-number">1.1.2.</span> <span class="nav-text">commands</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cuda-driver-and-toolkits"><span class="nav-number">1.2.</span> <span class="nav-text">cuda driver and toolkits</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#install-nvidia-drivers"><span class="nav-number">1.2.1.</span> <span class="nav-text">install nvidia-drivers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-cuda-toolkit-dirvers"><span class="nav-number">1.2.2.</span> <span class="nav-text">install cuda-toolkit(dirvers)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-conda"><span class="nav-number">1.3.</span> <span class="nav-text">install conda</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#config-channels"><span class="nav-number">1.4.</span> <span class="nav-text">config channels</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-libraries"><span class="nav-number">1.5.</span> <span class="nav-text">install libraries</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#py37"><span class="nav-number">1.5.1.</span> <span class="nav-text">py37</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#py36"><span class="nav-number">1.5.2.</span> <span class="nav-text">py36</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#details"><span class="nav-number">1.5.3.</span> <span class="nav-text">details</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TensorFlow-Object-Detection-API"><span class="nav-number">1.5.4.</span> <span class="nav-text">TensorFlow Object Detection API</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jupyter-notebook"><span class="nav-number">1.6.</span> <span class="nav-text">jupyter notebook</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#install-kernels"><span class="nav-number">1.6.1.</span> <span class="nav-text">install kernels</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#config-for-server"><span class="nav-number">1.6.2.</span> <span class="nav-text">config for server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#run-jupyter-on-background"><span class="nav-number">1.6.3.</span> <span class="nav-text">run jupyter on background</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#test"><span class="nav-number">1.7.</span> <span class="nav-text">test</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#py37-1"><span class="nav-number">1.7.1.</span> <span class="nav-text">py37</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#py36-1"><span class="nav-number">1.7.2.</span> <span class="nav-text">py36</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#train-demo"><span class="nav-number">1.8.</span> <span class="nav-text">train demo</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#export"><span class="nav-number">1.8.1.</span> <span class="nav-text">export</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#code"><span class="nav-number">1.8.2.</span> <span class="nav-text">code</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#keras-folder"><span class="nav-number">1.9.</span> <span class="nav-text">./keras folder</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Datasets"><span class="nav-number">2.</span> <span class="nav-text">Datasets</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mnist"><span class="nav-number">2.1.</span> <span class="nav-text">mnist</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cifar10"><span class="nav-number">2.2.</span> <span class="nav-text">cifar10</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#flowers-17"><span class="nav-number">2.3.</span> <span class="nav-text">flowers-17</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#animals"><span class="nav-number">2.4.</span> <span class="nav-text">animals</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kaggle-cats-vs-dogs"><span class="nav-number">2.5.</span> <span class="nav-text">kaggle cats vs dogs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#caltech101"><span class="nav-number">2.6.</span> <span class="nav-text">caltech101</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kaggle-API"><span class="nav-number">3.</span> <span class="nav-text">Kaggle API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install-and-config"><span class="nav-number">3.1.</span> <span class="nav-text">install and config</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#commands-overview"><span class="nav-number">3.2.</span> <span class="nav-text">commands overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#download-datasets"><span class="nav-number">3.3.</span> <span class="nav-text">download datasets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#show-leaderboard"><span class="nav-number">3.4.</span> <span class="nav-text">show leaderboard</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#set-default-competition"><span class="nav-number">3.5.</span> <span class="nav-text">set default competition</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#submit"><span class="nav-number">3.6.</span> <span class="nav-text">submit</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Nvidia-docker-and-containers"><span class="nav-number">4.</span> <span class="nav-text">Nvidia-docker and containers</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install"><span class="nav-number">4.1.</span> <span class="nav-text">install</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#restart-optional"><span class="nav-number">4.2.</span> <span class="nav-text">restart (optional)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#test-1"><span class="nav-number">4.3.</span> <span class="nav-text">test</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#command-refs"><span class="nav-number">4.4.</span> <span class="nav-text">command refs</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">6.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>

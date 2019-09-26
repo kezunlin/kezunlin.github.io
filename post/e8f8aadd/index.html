@@ -92,7 +92,7 @@
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://img2018.cnblogs.com/blog/635233/201811/635233-20181101092346394-624545348.png">
 <meta property="og:image" content="https://img2018.cnblogs.com/blog/635233/201811/635233-20181101092732467-1537995113.png">
-<meta property="og:updated_time" content="2019-03-21T07:05:40.772Z">
+<meta property="og:updated_time" content="2019-09-24T05:42:28.728Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="compile darknet on ubuntu 16.04">
 <meta name="twitter:description" content="compile darknet on ubuntu 16.04">
@@ -348,8 +348,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-03-21T15:05:40+08:00">
-                2019-03-21
+              <time title="Post modified" itemprop="dateModified" datetime="2019-09-24T13:42:28+08:00">
+                2019-09-24
               </time>
             
           </span>
@@ -407,7 +407,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  671
+                  727
                 </span>
               
 
@@ -423,7 +423,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  4
+                  5
                 </span>
               
             </div>
@@ -490,6 +490,20 @@ LIBSO=1
 </code></pre><p>now compile with </p>
 <pre><code>make -j8
 </code></pre><p> OK. now we have <code>darknet</code>, <code>darknet.so</code> and <code>uselib</code> which use <code>darknet.so</code></p>
+<h3 id="fix-error"><a href="#fix-error" class="headerlink" title="fix error"></a>fix error</h3><p>CUDNN error:</p>
+<pre><code>Try to load cfg: ./ped.cfg, weights: ./ped.weights, clear = 0 
+   layer   filters  size/strd(dil)      input                output
+   0 
+ cuDNN status Error in: file: ./src/convolutional_layer.c : () : line: 301 : build time: Sep 24 2019 - 10:28:26 
+cuDNN Error: CUDNN_STATUS_BAD_PARAM
+</code></pre><p>fix </p>
+<p>Makefile options:</p>
+<pre><code>CUDNN=0
+</code></pre><p>and compile again</p>
+<pre><code>make -j8
+</code></pre><blockquote>
+<p>see <a href="https://github.com/AlexeyAB/darknet/issues/2443" target="_blank" rel="noopener">here</a></p>
+</blockquote>
 <h2 id="pretrained-models"><a href="#pretrained-models" class="headerlink" title="pretrained models"></a>pretrained models</h2><p>dataset</p>
 <ul>
 <li>coco: 80 classes</li>
@@ -707,7 +721,7 @@ bicycle - obj_id = 1,  x = 117, y = 124, w = 451, h = 308, prob = 0.99
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">198</span>
+                  <span class="site-state-item-count">199</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -779,7 +793,7 @@ bicycle - obj_id = 1,  x = 117, y = 124, w = 451, h = 308, prob = 0.99
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#repo-intro"><span class="nav-number">1.1.</span> <span class="nav-text">repo intro</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">1.2.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pretrained-models"><span class="nav-number">1.3.</span> <span class="nav-text">pretrained models</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#demo"><span class="nav-number">1.4.</span> <span class="nav-text">demo</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#yolov2"><span class="nav-number">1.4.1.</span> <span class="nav-text">yolov2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yolov3"><span class="nav-number">1.4.2.</span> <span class="nav-text">yolov3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uselib"><span class="nav-number">1.4.3.</span> <span class="nav-text">uselib</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#darknet-py"><span class="nav-number">1.4.4.</span> <span class="nav-text">darknet.py</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#repo-intro"><span class="nav-number">1.1.</span> <span class="nav-text">repo intro</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">1.2.</span> <span class="nav-text">compile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-error"><span class="nav-number">1.2.1.</span> <span class="nav-text">fix error</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pretrained-models"><span class="nav-number">1.3.</span> <span class="nav-text">pretrained models</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#demo"><span class="nav-number">1.4.</span> <span class="nav-text">demo</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#yolov2"><span class="nav-number">1.4.1.</span> <span class="nav-text">yolov2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yolov3"><span class="nav-number">1.4.2.</span> <span class="nav-text">yolov3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uselib"><span class="nav-number">1.4.3.</span> <span class="nav-text">uselib</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#darknet-py"><span class="nav-number">1.4.4.</span> <span class="nav-text">darknet.py</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
