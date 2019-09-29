@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[python config pyyaml]]></title>
+    <url>%2Fpost%2F24fbab5%2F</url>
+    <content type="text"><![CDATA[python config pyyaml Guideinstallpip install pyyaml pip freeze &gt; requirements.txt usagecfg.yaml12345---# cfg.yamldebug: true # debug or not (default: false)input_dir: "./input/" # input dir output_dir: "./output/" # output dir code12345678910import yaml def load_cfg(cfg_path='./cfg.yaml'): cfg = None if os.path.exists(cfg_path): cfg = yaml.load(open(cfg_path)) input_dir = cfg.get("input_dir") else: print("&#123;&#125; not exist".format(cfg_path)) return cfg ReferenceHistory 20190927: created.]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>yaml</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[python class member vs instance member]]></title>
+    <url>%2Fpost%2Ff2522e33%2F</url>
+    <content type="text"><![CDATA[python class member vs instance member Guidecode123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051#!/usr/bin/python# -*- coding: UTF-8 -*-import timeclass Info(object): rects = [] # by ref (object): all instances has only 1 same copy. counter = 0 # by value: all instances has 1 different copy def __init__(self): self.new_rects = [] self.new_counter = 0def func(): it = Info() return itdef test1(): info = func() info.rects.extend([1,2,3,4,5]) info.counter += 1 info.new_rects.extend([1,2,3,4,5]) info.new_counter += 1 print("rect size", len(info.rects),len(info.new_rects)) print("counter", info.counter,info.new_counter) print("--------------------------") info2 = func() info2.rects.extend([1,2,3,4,5]) info2.counter += 1 info2.new_rects.extend([1,2,3,4,5]) info2.new_counter += 1 print("rect size", len(info2.rects),len(info2.new_rects)) print("counter", info2.counter,info2.new_counter) print("--------------------------") if __name__ == "__main__": test1()"""rect size 5 5counter 1 1--------------------------rect size 10 5counter 1 1--------------------------""" Reference is-python-callbyvalue-or-callbyreference-neither pythons-pass-by-object-reference-as-explained-by-philip-k-dick History 20190927: created.]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+  </entry>
+  <entry>
+    <title><![CDATA[pymongo tutorial]]></title>
+    <url>%2Fpost%2Fe88f04e5%2F</url>
+    <content type="text"><![CDATA[pymongo tutorial Guideversion mongo 2.6.10 mongo gui: robo3t-1.3.1 pymongo 3.9.0 MongoEngine 0.18.2 install mongodbsudo apt-get install -y mongodb mongo shellmongo --host mongodb0.example.com --port 27017 mongo --version MongoDB shell version: 2.6.10 see mongo shell &gt; mongo # display current db &gt;db test (default database) # switch or create db &gt; use gait &gt; db.help() &gt; show collections posts system.indexes &gt; db.posts.help() &gt; db.posts.find() help on db and collections &gt;db.dropDatabase() &gt;db.posts.drop() mongo guiRobomongo offically changed it’s name and released two different products Studio 3T and Robo 3T. Old robomongo is now called Robo 3T. Studio 3T is for professionals. wget https://download-test.robomongo.org/linux/robo3t-1.3.1-linux-x86_64-7419c406.tar.gz vim .bashrc export PATH=/home/kezunlin/program/robo3t/bin:$PATH allow mongodb to access from remote. vim /etc/mongodb.conf #bind_ip = 127.0.0.1 bind_ip = 0.0.0.0 by default, mongodb only allow to access from local. restart mongodb again &gt; sudo service mongodb status mongodb.service - An object/document-oriented database Loaded: loaded (/lib/systemd/system/mongodb.service; enabled; vendor preset: enabled) Active: active (running) since 四 2019-09-26 16:11:03 CST; 7s ago Docs: man:mongod(1) Main PID: 4917 (mongod) Tasks: 10 Memory: 3.0G CPU: 70ms CGroup: /system.slice/mongodb.service └─4917 /usr/bin/mongod --config /etc/mongodb.conf 9月 26 16:11:03 node17 systemd[1]: Started An object/document-oriented database. 9月 26 16:11:03 node17 mongod[4917]: warning: bind_ip of 0.0.0.0 is unnecessary; listens on all ips by default access from remote now robo3t python mongodbpip install pymongo pip install mongoengine One library that provides a higher abstraction on top of PyMongo is MongoEngine. MongoEngine is an object document mapper (ODM), which is roughly equivalent to a SQL-based object relational mapper (ORM). The abstraction provided by MongoEngine is class-based, so all of the models you create are classes. pymongo1234567891011121314151617181920212223242526272829303132333435363738394041424344454647def test_mongo_client(): from pymongo import MongoClient client = MongoClient('localhost', 27017) db = client['gait'] posts = db.posts post_data = &#123; 'title': 'Python and MongoDB', 'content': 'PyMongo is fun, you guys', 'author': 'Scott' &#125; result = posts.insert_one(post_data) print('One post: &#123;0&#125;'.format(result.inserted_id)) post_1 = &#123; 'title': 'Python and MongoDB', 'content': 'PyMongo is fun, you guys', 'author': 'Scott' &#125; post_2 = &#123; 'title': 'Virtual Environments', 'content': 'Use virtual environments, you guys', 'author': 'Scott' &#125; post_3 = &#123; 'title': 'Learning Python', 'content': 'Learn Python, it is easy', 'author': 'Bill' &#125; new_result = posts.insert_many([post_1, post_2, post_3]) print('Multiple posts: &#123;0&#125;'.format(new_result.inserted_ids)) # find one bills_post = posts.find_one(&#123;'author': 'Bill'&#125;) print(bills_post) # fine many scotts_posts = posts.find(&#123;'author': 'Scott'&#125;) print(scotts_posts) for post in scotts_posts: print(post) client.close() mongoengine12345678910111213141516171819202122232425262728293031323334from mongoengine import *def test_mongo_engine(): # define collection class Post(Document): title = StringField(required=True, max_length=200) content = StringField(required=True) author = StringField(required=True, max_length=50) published = DateTimeField(default=datetime.datetime.now) connect('gait', host='localhost', port=27017, alias="default" # must be `default` ) # mongoengine.connection.MongoEngineConnectionError: You have not defined a default connection post_1 = Post( title='Sample Post', content='Some engaging content', author='Scott' ) post_1.save() # This will perform an insert print(post_1.title) print(post_1.id) post_1.title = 'A Better Post Title' post_1.save() # This will perform an atomic edit on "title" print(post_1.title) print(post_1.id) disconnect(alias='default')test_mongo_engine() Reference mongodb tutorial getting-started-with-python-and-mongodb introduction-to-mongodb-and-python mongodb-orm-for-python mongoengine mongoengine tutorial robomongo History 20190926: created.]]></content>
+      <categories>
+        <category>mongodb</category>
+      </categories>
+  </entry>
+  <entry>
     <title><![CDATA[keras load model with custom optimizer]]></title>
     <url>%2Fpost%2Fe94764ea%2F</url>
     <content type="text"><![CDATA[keras load model with custom optimizer Guideerrorwhen load model with custom optimizer, eg RAdam() model = load_model(&quot;resnet50_radam_model.h5&quot;) output error ValueError: Unknown optimizer: RAdam solution1234567from keras_radam import RAdamfrom keras.utils import CustomObjectScopewith CustomObjectScope(&#123;&apos;RAdam&apos;: RAdam()&#125;): best_model_filepath = &quot;./checkpoint/best_model_efnb0.h5&quot; model = load_model(best_model_filepath) model.save_weights(&quot;./checkpoint/weights_efnb0.h5&quot;) ReferenceHistory 20190920: created.]]></content>
@@ -732,15 +759,6 @@
       </categories>
   </entry>
   <entry>
-    <title><![CDATA[ssd]]></title>
-    <url>%2Fpost%2Fe73b806f%2F</url>
-    <content type="text"><![CDATA[ssd GuideReference SSD History created.]]></content>
-      <categories>
-        <category>object detect</category>
-        <category>ssd</category>
-      </categories>
-  </entry>
-  <entry>
     <title><![CDATA[yolo v3]]></title>
     <url>%2Fpost%2Fdc417396%2F</url>
     <content type="text"><![CDATA[yolo v3 GuideReferenceHistory created.]]></content>
@@ -751,6 +769,15 @@
       <tags>
         <tag>yolov3</tag>
       </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[ssd]]></title>
+    <url>%2Fpost%2Fe73b806f%2F</url>
+    <content type="text"><![CDATA[ssd GuideReference SSD History created.]]></content>
+      <categories>
+        <category>object detect</category>
+        <category>ssd</category>
+      </categories>
   </entry>
   <entry>
     <title><![CDATA[yolo v2]]></title>
@@ -1671,8 +1698,8 @@
         <category>cmake</category>
       </categories>
       <tags>
-        <tag>vtk</tag>
         <tag>qt</tag>
+        <tag>vtk</tag>
         <tag>boost</tag>
         <tag>poco</tag>
         <tag>glog</tag>
@@ -1859,8 +1886,8 @@
         <category>pcl</category>
       </categories>
       <tags>
-        <tag>vtk</tag>
         <tag>qt</tag>
+        <tag>vtk</tag>
         <tag>windows</tag>
         <tag>vs2015</tag>
       </tags>
@@ -2017,8 +2044,8 @@
         <category>pcl</category>
       </categories>
       <tags>
-        <tag>vtk</tag>
         <tag>qt</tag>
+        <tag>vtk</tag>
       </tags>
   </entry>
   <entry>
