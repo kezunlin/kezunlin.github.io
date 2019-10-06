@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://kezunlin.me/"/>
-  <updated>2019-10-06T01:22:41.561Z</updated>
+  <updated>2019-10-06T06:36:13.863Z</updated>
   <id>http://kezunlin.me/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>opencv videocapture</title>
+    <link href="http://kezunlin.me/post/66242a23/"/>
+    <id>http://kezunlin.me/post/66242a23/</id>
+    <published>2019-10-06T06:32:00.000Z</published>
+    <updated>2019-10-06T06:36:13.863Z</updated>
+    
+    <content type="html"><![CDATA[<p>opencv videocapture<br><a id="more"></a></p><h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="VideoCapture"><a href="#VideoCapture" class="headerlink" title="VideoCapture"></a>VideoCapture</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">from</span> moviepy.editor <span class="keyword">import</span> VideoFileClip</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_video_info</span><span class="params">(video_path)</span>:</span></span><br><span class="line">    cap = cv2.VideoCapture(video_path)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> cap.isOpened():</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    </span><br><span class="line">    frame_number = cap.get(cv2.CAP_PROP_FRAME_COUNT)</span><br><span class="line">    h  = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))</span><br><span class="line">    w  = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))</span><br><span class="line">    fps = int(cap.get(cv2.CAP_PROP_FPS))</span><br><span class="line"></span><br><span class="line">    cap.release() <span class="comment"># release video capture</span></span><br><span class="line"></span><br><span class="line">    print(<span class="string">"fps = "</span>,fps)</span><br><span class="line">    print(<span class="string">"frame_number = "</span>,frame_number)</span><br><span class="line">    size = (w,h)</span><br><span class="line">    print(<span class="string">"size = "</span>,size)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># frame number MAY BE WRONG ! so video time may be also wrong!</span></span><br><span class="line">    duration = int(frame_number / fps)</span><br><span class="line">    print(<span class="string">"seconds="</span>,duration)</span><br><span class="line">    video_time = str(datetime.timedelta(seconds = duration))</span><br><span class="line">    print(<span class="string">"video_time="</span>,video_time)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">"-----------------------using VideoFileClip------------------"</span>)</span><br><span class="line">    clip = VideoFileClip(video_path)</span><br><span class="line">    duration = clip.duration</span><br><span class="line">    print(<span class="string">"video duration is "</span>+ str(duration) + <span class="string">" seconds"</span>)</span><br><span class="line">    video_time = str(datetime.timedelta(seconds = int(duration)))</span><br><span class="line">    print(<span class="string">"video_time="</span>,video_time)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">clip_video</span><span class="params">()</span>:</span></span><br><span class="line">    clip = VideoFileClip(<span class="string">"1.mp4"</span>)</span><br><span class="line">    starting_point = <span class="number">120</span>  <span class="comment"># start at second minute</span></span><br><span class="line">    end_point = <span class="number">420</span>  <span class="comment"># record for 300 seconds (120+300)</span></span><br><span class="line">    subclip = clip.subclip(starting_point, end_point)</span><br><span class="line">    subclip.write_videofile(<span class="string">"/path/to/new/video.mp4"</span>)</span><br></pre></td></tr></table></figure><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul><li><a href="https://www.tutorialexample.com/a-beginner-guide-to-python-get-video-duration-with-opencv-python-tutorial/" target="_blank" rel="noopener">a-beginner-guide-to-python-get-video-duration-with-opencv-python-tutorial</a></li><li><a href="https://www.learnopencv.com/read-write-and-display-a-video-using-opencv-cpp-python/" target="_blank" rel="noopener">read-write-and-display-a-video-using-opencv-cpp-python</a></li></ul><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul><li>20191006: created.</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;opencv videocapture&lt;br&gt;
+    
+    </summary>
+    
+      <category term="python" scheme="http://kezunlin.me/categories/python/"/>
+    
+      <category term="opencv" scheme="http://kezunlin.me/categories/python/opencv/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>cupy numpy on GPU</title>
@@ -403,30 +425,6 @@
     
       <category term="ref" scheme="http://kezunlin.me/categories/ref/"/>
     
-    
-  </entry>
-  
-  <entry>
-    <title>vscode for remote development using ssh on windows</title>
-    <link href="http://kezunlin.me/post/c93b6ba6/"/>
-    <id>http://kezunlin.me/post/c93b6ba6/</id>
-    <published>2019-07-30T20:19:00.000Z</published>
-    <updated>2019-07-31T05:20:17.120Z</updated>
-    
-    <content type="html"><![CDATA[<p>vscode for remote development using ssh on windows<br><a id="more"></a></p><h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="server"><a href="#server" class="headerlink" title="server"></a>server</h2><pre><code>sudo apt-get install openssh-server</code></pre><h2 id="local"><a href="#local" class="headerlink" title="local"></a>local</h2><ol><li>install ssh-client on local machine.</li><li>download <code>VSCodeUserSetup-x64-1.36.1.exe</code> from <a href="https://code.visualstudio.com/insiders/" target="_blank" rel="noopener">here</a> and install. </li><li>start vscode and install <code>Remote Development</code> extension.</li><li>ctrl+shift+p and enter <code>remote-ssh</code> and configure for ssh.</li></ol><p><code>~/.ssh/config</code> contents</p><pre><code>Host node08    HostName 192.168.100.08    User root Host node09    HostName 192.168.100.09    User root </code></pre><blockquote><p>use <code>ssh-keygen</code> instead of <code>username and password</code></p></blockquote><pre><code>copy local `~/.ssh/id_rsa.pub` to remote `~/.ssh/authorized_keys`</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul><li><a href="https://blog.csdn.net/weixin_40373708/article/details/90376258" target="_blank" rel="noopener">vscode ssh guide</a></li><li><a href="https://codepen.io/ginfuru/post/remote-editing-files-with-ssh" target="_blank" rel="noopener">remote-editing-files-with-ssh</a></li><li><a href="https://code.visualstudio.com/docs/remote/ssh" target="_blank" rel="noopener">vscode ssh</a></li></ul><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul><li>20190729: created.</li></ul>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;vscode for remote development using ssh on windows&lt;br&gt;
-    
-    </summary>
-    
-      <category term="cpp" scheme="http://kezunlin.me/categories/cpp/"/>
-    
-      <category term="tools" scheme="http://kezunlin.me/categories/cpp/tools/"/>
-    
-    
-      <category term="vscode" scheme="http://kezunlin.me/tags/vscode/"/>
     
   </entry>
   
