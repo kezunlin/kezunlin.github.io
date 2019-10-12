@@ -69,7 +69,7 @@
 
 
 
-  <meta name="keywords" content="profiler,macro," />
+  <meta name="keywords" content="macro,profiler," />
 
 
 
@@ -83,14 +83,14 @@
 
 
 <meta name="description" content="cpp macro like function">
-<meta name="keywords" content="profiler,macro">
+<meta name="keywords" content="macro,profiler">
 <meta property="og:type" content="article">
 <meta property="og:title" content="cpp macro like function">
 <meta property="og:url" content="http://kezunlin.me/post/65dc693d/index.html">
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="cpp macro like function">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-10-10T07:31:34.657Z">
+<meta property="og:updated_time" content="2019-10-11T02:06:12.224Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="cpp macro like function">
 <meta name="twitter:description" content="cpp macro like function">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-10-10T15:31:34+08:00">
-                2019-10-10
+              <time title="Post modified" itemprop="dateModified" datetime="2019-10-11T10:06:12+08:00">
+                2019-10-11
               </time>
             
           </span>
@@ -393,7 +393,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  133
+                  328
                 </span>
               
 
@@ -409,7 +409,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  1
+                  2
                 </span>
               
             </div>
@@ -431,11 +431,20 @@
 
       
         <p>cpp macro like function<br><a id="more"></a></p>
-<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="macro-function"><a href="#macro-function" class="headerlink" title="macro function"></a>macro function</h2><h3 id="define"><a href="#define" class="headerlink" title="define"></a>define</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#define SUM(a,b)  (a+b)</span><br><span class="line"></span><br><span class="line">#define MYDEBUG(...)   fprintf(stderr, __VA_ARGS__)</span><br></pre></td></tr></table></figure>
+<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="macro-expansions"><a href="#macro-expansions" class="headerlink" title="macro expansions"></a>macro expansions</h2><ul>
+<li>#name ===&gt;  quote as strings  “xxx”</li>
+<li>##name, name  ===&gt;  xxx</li>
+<li>a ## b ===&gt;  concatenate the preceding and following tokens.</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// #name ===&gt;  "xxx"</span></span><br><span class="line"><span class="comment">// name,  ##name ===&gt; xxx</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ##name ===&gt; concatenate  </span></span><br><span class="line"><span class="comment">// #name ===&gt;  quote as strings</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// a ## b ===&gt;  concatenate the preceding and following tokens.</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> QUOTE(name) #name</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> CONCAT(x,y) x##y   <span class="comment">// x ## y   space in ommited</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MACRO(name)  #name <span class="meta-string">"foo"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MACRO2(name) name <span class="meta-string">"foo"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MACRO3(name) ##name <span class="meta-string">"foo"</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> CAT(a, ...) a ## __VA_ARGS__</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IIF(c) CAT(IIF_, c)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IIF_0(t, ...) __VA_ARGS__</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IIF_1(t, ...) t</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">macro_demo</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	QUOTE(test); <span class="comment">// "test"</span></span><br><span class="line">	CONCAT(test, foo); <span class="comment">// testfoo</span></span><br><span class="line"></span><br><span class="line">	MACRO(test); <span class="comment">// "test" "foo"</span></span><br><span class="line">	MACRO2(test);<span class="comment">// test "foo"</span></span><br><span class="line">	MACRO3(test);<span class="comment">// test "foo"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="macro-function"><a href="#macro-function" class="headerlink" title="macro function"></a>macro function</h2><h3 id="define"><a href="#define" class="headerlink" title="define"></a>define</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#define SUM(a,b)  (a+b)</span><br><span class="line"></span><br><span class="line">#define MYDEBUG(...)   fprintf(stderr, ##__VA_ARGS__)</span><br></pre></td></tr></table></figure>
 <h3 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int c = SUM(1,2);</span><br><span class="line">MYDEBUG(&quot;%d,%d \n&quot;,1,2);     /*   Becomes fprintf(stderr,&quot;%d,%d \n&quot;,1,2);   */</span><br></pre></td></tr></table></figure>
-<h2 id="with-class-object"><a href="#with-class-object" class="headerlink" title="with class object"></a>with class object</h2><h3 id="define-1"><a href="#define-1" class="headerlink" title="define"></a>define</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">profiler</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	profiler(<span class="keyword">const</span> <span class="keyword">char</span>* func_name);</span><br><span class="line">	~profiler();</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">start</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	boost::posix_time::ptime pt1;</span><br><span class="line">	boost::posix_time::ptime pt2;</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">char</span> * m_func_name;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ONCE_PROFILER() profiler _profiler_instance##__LINE__(__FUNCTION__)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BEGIN_PROFILE(name) profiler _profiler_##name(#name)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> END_PROFILE(name)  _profiler_##name.stop()</span></span><br></pre></td></tr></table></figure>
-<h3 id="usage-1"><a href="#usage-1" class="headerlink" title="usage"></a>usage</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">void main()</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">	BEGIN_PROFILE(load_image);</span><br><span class="line"></span><br><span class="line">	// load images</span><br><span class="line">	// ...</span><br><span class="line">	</span><br><span class="line">	END_PROFILE(load_image); </span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
+<h2 id="with-class-object"><a href="#with-class-object" class="headerlink" title="with class object"></a>with class object</h2><h3 id="define-1"><a href="#define-1" class="headerlink" title="define"></a>define</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">profiler</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	profiler(<span class="keyword">const</span> <span class="keyword">char</span>* func_name, <span class="keyword">unsigned</span> <span class="keyword">int</span> times = <span class="number">1</span>);</span><br><span class="line">	~profiler();</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">start</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">stop</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	boost::posix_time::ptime pt1;</span><br><span class="line">	boost::posix_time::ptime pt2;</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">char</span> * m_func_name;</span><br><span class="line">	<span class="keyword">int</span> m_times = <span class="number">1</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ONCE_PROFILER() profiler _profiler_instance##__LINE__(__FUNCTION__)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BEGIN_PROFILE_ONE(name) profiler _profiler_##name(#name)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BEGIN_PROFILE_TIMES(name,times) profiler _profiler_##name(#name,times)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BEGIN_PROFILE(name,...) profiler _profiler_##name(#name, ##__VA_ARGS__)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> END_PROFILE(name)  _profiler_##name.stop()</span></span><br></pre></td></tr></table></figure>
+<h3 id="usage-1"><a href="#usage-1" class="headerlink" title="usage"></a>usage</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">void main()</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">BEGIN_PROFILE(LoadImage);</span><br><span class="line"></span><br><span class="line">	load_image();</span><br><span class="line">	</span><br><span class="line">END_PROFILE(LoadImage); </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">BEGIN_PROFILE_TIMES(ProcessImageTimes, 100);</span><br><span class="line">//BEGIN_PROFILE(ProcessImageTimes, 100);</span><br><span class="line">	for(int i=0; i&lt;100;i++)&#123;</span><br><span class="line">		process_image();</span><br><span class="line">	&#125;</span><br><span class="line">END_PROFILE(ProcessImageTimes);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="https://github.com/pfultz2/Cloak/wiki/C-Preprocessor-tricks,-tips,-and-idioms" target="_blank" rel="noopener">C-Preprocessor-tricks,-tips,-and-idioms</a></li>
+</ul>
+<h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>20191010: created.</li>
 </ul>
 
@@ -473,9 +482,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/profiler/" rel="tag"># profiler</a>
-          
             <a href="/tags/macro/" rel="tag"># macro</a>
+          
+            <a href="/tags/profiler/" rel="tag"># profiler</a>
           
         </div>
       
@@ -497,6 +506,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/a201e11b/" rel="prev" title="colorwheel for colored print and trace for cpp programs">
+                colorwheel for colored print and trace for cpp programs <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -573,7 +586,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">210</span>
+                  <span class="site-state-item-count">212</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -584,7 +597,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">54</span>
+                  <span class="site-state-item-count">55</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -595,7 +608,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">159</span>
+                  <span class="site-state-item-count">160</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -645,7 +658,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#macro-function"><span class="nav-number">1.1.</span> <span class="nav-text">macro function</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#define"><span class="nav-number">1.1.1.</span> <span class="nav-text">define</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#usage"><span class="nav-number">1.1.2.</span> <span class="nav-text">usage</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#with-class-object"><span class="nav-number">1.2.</span> <span class="nav-text">with class object</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#define-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">define</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#usage-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">usage</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#macro-expansions"><span class="nav-number">1.1.</span> <span class="nav-text">macro expansions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#macro-function"><span class="nav-number">1.2.</span> <span class="nav-text">macro function</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#define"><span class="nav-number">1.2.1.</span> <span class="nav-text">define</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#usage"><span class="nav-number">1.2.2.</span> <span class="nav-text">usage</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#with-class-object"><span class="nav-number">1.3.</span> <span class="nav-text">with class object</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#define-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">define</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#usage-1"><span class="nav-number">1.3.2.</span> <span class="nav-text">usage</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
