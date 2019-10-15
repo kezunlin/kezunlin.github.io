@@ -90,14 +90,10 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="Superdog tutorial on windows 10">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://img2018.cnblogs.com/blog/635233/201810/635233-20181022185205647-1543831633.png">
-<meta property="og:image" content="https://img2018.cnblogs.com/blog/635233/201810/635233-20181022185559471-1684041803.png">
-<meta property="og:image" content="https://img2018.cnblogs.com/blog/635233/201810/635233-20181022192002301-37393571.png">
-<meta property="og:updated_time" content="2019-03-15T09:04:34.512Z">
+<meta property="og:updated_time" content="2019-10-14T03:15:39.139Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Superdog tutorial on windows 10">
 <meta name="twitter:description" content="Superdog tutorial on windows 10">
-<meta name="twitter:image" content="https://img2018.cnblogs.com/blog/635233/201810/635233-20181022185205647-1543831633.png">
 
 
 
@@ -349,8 +345,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-03-15T17:04:34+08:00">
-                2019-03-15
+              <time title="Post modified" itemprop="dateModified" datetime="2019-10-14T11:15:39+08:00">
+                2019-10-14
               </time>
             
           </span>
@@ -397,7 +393,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  944
+                  955
                 </span>
               
 
@@ -413,7 +409,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  5
+                  6
                 </span>
               
             </div>
@@ -444,7 +440,10 @@
 <blockquote>
 <p>提示：写入特征之前，必须确保开发狗+超级狗都连接在电脑。</p>
 </blockquote>
-<p>（1）安装windows版本加密狗软件到<code>C:\Program Files (x86)\SafeNet\SuperDog\2.3\</code>。<br>（2）在线下载开发商代码。(会写入vendor_code到<code>C:\Program Files (x86)\SafeNet\SuperDog\2.3\VendorCodes\BYAUY.hvc</code>)<br><img src="https://img2018.cnblogs.com/blog/635233/201810/635233-20181022185205647-1543831633.png" alt="png"><br>（3）打开授权管理工具，添加特征。例如feature_id=101,然后编程到超级狗。<br><img src="https://img2018.cnblogs.com/blog/635233/201810/635233-20181022185559471-1684041803.png" alt="png"></p>
+<p>（1）安装windows版本加密狗软件到<code>C:\Program Files (x86)\SafeNet\SuperDog\2.3\</code>。<br>（2）在线下载开发商代码。<br>（3）打开授权管理工具，添加特征。例如feature_id=101,然后编程到超级狗。</p>
+<blockquote>
+<p>开发商代码会写入vendor_code到<code>C:\Program Files (x86)\SafeNet\SuperDog\2.3\VendorCodes\BYAUY.hvc</code></p>
+</blockquote>
 <h2 id="Superdog-sample"><a href="#Superdog-sample" class="headerlink" title="Superdog sample"></a>Superdog sample</h2><p>参见 <code>C:\Program Files (x86)\SafeNet\SuperDog\2.3\Samples\Licensing\C</code></p>
 <h2 id="Superdog-C-SDK"><a href="#Superdog-C-SDK" class="headerlink" title="Superdog C SDK"></a>Superdog C SDK</h2><p>从API中整理出C版本的SDK，供后面使用。</p>
 <pre><code>Mode                LastWriteTime         Length Name
@@ -463,8 +462,11 @@
 <h2 id="cmake-for-Python-version"><a href="#cmake-for-Python-version" class="headerlink" title="cmake for Python version"></a>cmake for Python version</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">find_package(SUPERDOG REQUIRED) # user-defined supderdog 2.3</span><br><span class="line">include_directories($&#123;SUPERDOG_INCLUDE_DIRS&#125;)</span><br><span class="line"></span><br><span class="line">find_package(pybind11 CONFIG REQUIRED)</span><br><span class="line">include_directories($&#123;pybind11_INCLUDE_DIRS&#125;)</span><br><span class="line"></span><br><span class="line">add_library($&#123;MYDOG_TARGET&#125; </span><br><span class="line">	$&#123;HEADER_FILES&#125;</span><br><span class="line">	$&#123;SOURCE_FILES&#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">target_link_libraries ($&#123;MYDOG_TARGET&#125;   </span><br><span class="line">	pybind11::module</span><br><span class="line">	$&#123;SUPERDOG_LIBRARIES&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 <p>rename <code>mydog.dll</code> to <code>mydog.pyd</code></p>
 <h2 id="test-pymydog"><a href="#test-pymydog" class="headerlink" title="test pymydog"></a>test pymydog</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> mydog</span><br><span class="line"></span><br><span class="line">feature_id = <span class="number">101</span></span><br><span class="line">vendor_code = <span class="string">"xxx"</span></span><br><span class="line"></span><br><span class="line">dog = mydog.MyDogApi(feature_id,vendor_code)</span><br><span class="line">print(dog.login())</span><br><span class="line">print(dog.logout())</span><br></pre></td></tr></table></figure>
-<p>with files<br><img src="https://img2018.cnblogs.com/blog/635233/201810/635233-20181022192002301-37393571.png" alt="png"></p>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
+<p>with files</p>
+<pre><code>dog_windows_x64_3150436.dll
+mydog.py
+mydog.pyd
+</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>20181022: created.</li>
 </ul>
 
@@ -606,7 +608,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">212</span>
+                  <span class="site-state-item-count">220</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -628,7 +630,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">160</span>
+                  <span class="site-state-item-count">171</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
