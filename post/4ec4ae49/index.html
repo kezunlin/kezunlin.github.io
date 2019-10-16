@@ -65,6 +65,12 @@
   
 
   
+    
+      
+    
+
+    
+  
 
   
 
@@ -79,7 +85,7 @@
   
     
     
-    <link href="//fonts.googleapis.com/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|16:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
   
 
 
@@ -482,8 +488,8 @@
 <h3 id="Foo-h"><a href="#Foo-h" class="headerlink" title="Foo.h"></a>Foo.h</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">template &lt;typename T&gt;</span><br><span class="line">struct Foo</span><br><span class="line">&#123;</span><br><span class="line">    void doSomething(T param);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">#include &quot;Foo.cpp&quot; // here</span><br></pre></td></tr></table></figure>
 <h3 id="Foo-cpp"><a href="#Foo-cpp" class="headerlink" title="Foo.cpp"></a>Foo.cpp</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">template &lt;typename T&gt;</span><br><span class="line">void Foo&lt;T&gt;::doSomething(T param)</span><br><span class="line">&#123;</span><br><span class="line">    //implementation</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="solutions-2"><a href="#solutions-2" class="headerlink" title="solutions 2"></a>solutions 2</h2><p>Another solution is to keep the implementation separated, and explicitly instantiate all the template instances you’ll need:</p>
-<h3 id="Foo-h-1"><a href="#Foo-h-1" class="headerlink" title="Foo.h"></a>Foo.h</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// no implementation</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="class"><span class="keyword">struct</span> <span class="title">Foo</span> &#123;</span> ... &#125;;</span><br></pre></td></tr></table></figure>
-<h3 id="Foo-cpp-1"><a href="#Foo-cpp-1" class="headerlink" title="Foo.cpp"></a>Foo.cpp</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"Foo.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// implementation of Foo's methods</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// explicit instantiations</span></span><br><span class="line"><span class="keyword">template</span> <span class="class"><span class="keyword">class</span> <span class="title">Foo</span>&lt;int&gt;;</span></span><br><span class="line"><span class="keyword">template</span> <span class="class"><span class="keyword">class</span> <span class="title">Foo</span>&lt;float&gt;;</span></span><br><span class="line"><span class="comment">// You will only be able to use Foo with int or float</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// template void TestClass::templateFunction&lt;int, int&gt;(int, int);</span></span><br></pre></td></tr></table></figure>
+<h3 id="Foo-h-1"><a href="#Foo-h-1" class="headerlink" title="Foo.h"></a>Foo.h</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// no implementation</span><br><span class="line">template &lt;typename T&gt; struct Foo &#123; ... &#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="Foo-cpp-1"><a href="#Foo-cpp-1" class="headerlink" title="Foo.cpp"></a>Foo.cpp</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;Foo.h&quot;</span><br><span class="line"></span><br><span class="line">// implementation of Foo&apos;s methods</span><br><span class="line"></span><br><span class="line">// explicit instantiations</span><br><span class="line">template class Foo&lt;int&gt;;</span><br><span class="line">template class Foo&lt;float&gt;;</span><br><span class="line">// You will only be able to use Foo with int or float</span><br><span class="line"></span><br><span class="line">// template void TestClass::templateFunction&lt;int, int&gt;(int, int);</span><br></pre></td></tr></table></figure>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://stackoverflow.com/questions/495021/why-can-templates-only-be-implemented-in-the-header-file" target="_blank" rel="noopener">why-can-templates-only-be-implemented-in-the-header-file</a></li>
 <li><a href="http://blog.ethanlim.net/2014/07/separate-c-template-headers-h-and.html" target="_blank" rel="noopener">separate-c-template-headers-h-and</a></li>
@@ -664,7 +670,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">54</span>
+                  <span class="site-state-item-count">58</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -675,7 +681,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">169</span>
+                  <span class="site-state-item-count">173</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
