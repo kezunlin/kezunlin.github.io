@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next gemini use-motion" lang="en">
+<html class="theme-next muse use-motion" lang="en">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -69,7 +69,7 @@
 
 
 
-  <meta name="keywords" content="KeZunLin, kezunlin, Hexo, NexT, c++, python, linux, ubuntu, mysql, deep learning, caffe, tensorflow, mxnet, keras, ros, pcl, opencv, vtk, qt, cmake, git, vim, google, github, stackoverflow" />
+  <meta name="keywords" content="KeZunLin, kezunlin, Hexo, NexT, c++, python, linux, ubuntu, mysql, deep learning, caffe, tensorflow, mxnet, keras, pytorch, computer vision, ros, pcl, opencv, vtk, qt, cmake, git, vim, google, github, stackoverflow" />
 
 
 
@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="linux command ref">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-04-09T09:05:55.511Z">
+<meta property="og:updated_time" content="2019-10-16T00:59:58.251Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux command ref">
 <meta name="twitter:description" content="linux command ref">
@@ -100,7 +100,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Gemini',
+    scheme: 'Muse',
     version: '5.1.3',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
     fancybox: true,
@@ -344,8 +344,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-04-09T17:05:55+08:00">
-                2019-04-09
+              <time title="Post modified" itemprop="dateModified" datetime="2019-10-16T08:59:58+08:00">
+                2019-10-16
               </time>
             
           </span>
@@ -392,7 +392,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  669
+                  782
                 </span>
               
 
@@ -408,7 +408,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  4
+                  5
                 </span>
               
             </div>
@@ -436,12 +436,37 @@ ln -s $(pwd)/yolo /home/kezunlin/program/darknet/kzl-yolo
 </code></pre><blockquote>
 <p>tips: use absolute path to link folder</p>
 </blockquote>
-<h2 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h2><pre><code>grep UpsampleParameter . -r --include *.h 
+<h2 id="sed"><a href="#sed" class="headerlink" title="sed"></a>sed</h2><p>case1</p>
+<pre><code>sed -i &quot;s/old/new/g&quot; 1.txt
+</code></pre><blockquote>
+<p>replace “old” with “new”</p>
+</blockquote>
+<p>case2 </p>
+<pre><code>sed -i &quot;s/http:\/\/kezunlin.me/https:\/\/kezunlin.me/g&quot; posts/post1.md
+</code></pre><blockquote>
+<p>replace “<a href="http://kezunlin.me">http://kezunlin.me</a>“ with “<a href="https://kezunlin.me">https://kezunlin.me</a>“</p>
+</blockquote>
+<h2 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h2><p>case1</p>
+<pre><code>grep UpsampleParameter . -r --include *.h 
 
 grep UpsampleParameter . -r --include *.proto
 ./src/caffe/proto/caffe.proto:  optional UpsampleParameter upsample_param = 150;
 ./src/caffe/proto/caffe.proto:message UpsampleParameter {
-</code></pre><h2 id="ldd"><a href="#ldd" class="headerlink" title="ldd"></a>ldd</h2><h3 id="for-so"><a href="#for-so" class="headerlink" title="for so"></a>for so</h3><pre><code>ldd test_opencv | awk &apos;/ =&gt; / { print $3 }&apos;
+</code></pre><p>case2</p>
+<pre><code>grep -r &quot;http://kezunlin.me&quot; posts/ 
+posts/post1.md:[here](http://kezunlin.me/post/book)
+posts/post2.md:-[here](http://kezunlin.me/post/book)
+posts/post2.md:- [img](http://kezunlin.me/post/book)
+</code></pre><p>case3</p>
+<pre><code>grep -rl &quot;http://kezunlin.me&quot; posts 
+posts/post1.md
+posts/post2.md
+</code></pre><p>case4</p>
+<pre><code>sed -i &quot;s/http:\/\/kezunlin.me/https:\/\/kezunlin.me/g&quot; `grep -rl &quot;http://kezunlin.me&quot; posts`  
+</code></pre><blockquote>
+<p>replace “<a href="http://kezunlin.me">http://kezunlin.me</a>“ with “<a href="https://kezunlin.me">https://kezunlin.me</a>“ in all posts files.</p>
+</blockquote>
+<h2 id="ldd"><a href="#ldd" class="headerlink" title="ldd"></a>ldd</h2><h3 id="for-so"><a href="#for-so" class="headerlink" title="for so"></a>for so</h3><pre><code>ldd test_opencv | awk &apos;/ =&gt; / { print $3 }&apos;
 (0x00007fff309d4000)
 /usr/local/lib/libopencv_imgcodecs.so.3.1
 /usr/local/lib/libopencv_core.so.3.1
@@ -681,7 +706,7 @@ watch --color -n1 gpustat -cpu
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">54</span>
+                  <span class="site-state-item-count">58</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -692,7 +717,7 @@ watch --color -n1 gpustat -cpu
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">169</span>
+                  <span class="site-state-item-count">173</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -742,7 +767,7 @@ watch --color -n1 gpustat -cpu
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ln"><span class="nav-number">1.1.</span> <span class="nav-text">ln</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#grep"><span class="nav-number">1.2.</span> <span class="nav-text">grep</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ldd"><span class="nav-number">1.3.</span> <span class="nav-text">ldd</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#for-so"><span class="nav-number">1.3.1.</span> <span class="nav-text">for so</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#for-not-found"><span class="nav-number">1.3.2.</span> <span class="nav-text">for not found</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#useful"><span class="nav-number">1.3.3.</span> <span class="nav-text">useful</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#awk"><span class="nav-number">1.4.</span> <span class="nav-text">awk</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Tips"><span class="nav-number">2.</span> <span class="nav-text">Tips</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#check-cpu"><span class="nav-number">2.1.</span> <span class="nav-text">check cpu</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#check-gpu"><span class="nav-number">2.2.</span> <span class="nav-text">check gpu</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ln"><span class="nav-number">1.1.</span> <span class="nav-text">ln</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sed"><span class="nav-number">1.2.</span> <span class="nav-text">sed</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#grep"><span class="nav-number">1.3.</span> <span class="nav-text">grep</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ldd"><span class="nav-number">1.4.</span> <span class="nav-text">ldd</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#for-so"><span class="nav-number">1.4.1.</span> <span class="nav-text">for so</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#for-not-found"><span class="nav-number">1.4.2.</span> <span class="nav-text">for not found</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#useful"><span class="nav-number">1.4.3.</span> <span class="nav-text">useful</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#awk"><span class="nav-number">1.5.</span> <span class="nav-text">awk</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Tips"><span class="nav-number">2.</span> <span class="nav-text">Tips</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#check-cpu"><span class="nav-number">2.1.</span> <span class="nav-text">check cpu</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#check-gpu"><span class="nav-number">2.2.</span> <span class="nav-text">check gpu</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
@@ -787,7 +812,7 @@ watch --color -n1 gpustat -cpu
 
 
 
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
 
 
 
@@ -880,13 +905,6 @@ watch --color -n1 gpustat -cpu
 
   
   
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
-
-
 
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>

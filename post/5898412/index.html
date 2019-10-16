@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next gemini use-motion" lang="en">
+<html class="theme-next muse use-motion" lang="en">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -90,7 +90,7 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="load model from file and stream for caffe and pytorch">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-10-14T03:04:48.942Z">
+<meta property="og:updated_time" content="2019-10-15T07:21:17.878Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="load model from file and stream for caffe and pytorch">
 <meta name="twitter:description" content="load model from file and stream for caffe and pytorch">
@@ -101,7 +101,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Gemini',
+    scheme: 'Muse',
     version: '5.1.3',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
     fancybox: true,
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-10-14T11:04:48+08:00">
-                2019-10-14
+              <time title="Post modified" itemprop="dateModified" datetime="2019-10-15T15:21:17+08:00">
+                2019-10-15
               </time>
             
           </span>
@@ -393,7 +393,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  133
+                  387
                 </span>
               
 
@@ -409,7 +409,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  1
+                  2
                 </span>
               
             </div>
@@ -432,12 +432,22 @@
       
         <p>load model from file and stream for caffe and pytorch<br><a id="more"></a></p>
 <h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="caffe"><a href="#caffe" class="headerlink" title="caffe"></a>caffe</h2><h3 id="load-from-file"><a href="#load-from-file" class="headerlink" title="load from file"></a>load from file</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> caffe::Phase phase = caffe::Phase::TEST;</span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span> proto_filepath = <span class="string">"yolov3.prototxt"</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span> weight_filepath = <span class="string">"yolov3.caffemodel"</span>;</span><br><span class="line">caffe::Net&lt;<span class="keyword">float</span>&gt; net = caffe::Net&lt;<span class="keyword">float</span>&gt;(proto_filepath, phase));</span><br><span class="line">net.CopyTrainedLayersFrom(weight_filepath);</span><br></pre></td></tr></table></figure>
-<h3 id="load-from-stream"><a href="#load-from-stream" class="headerlink" title="load from stream"></a>load from stream</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// no found yet.</span></span><br></pre></td></tr></table></figure>
+<h3 id="load-from-stream"><a href="#load-from-stream" class="headerlink" title="load from stream"></a>load from stream</h3><blockquote>
+<p>no caffe method to load directly from stream.<br>we can override <code>ReadProtoFromTextFile</code> and <code>ReadProtoFromBinaryFile</code> in <code>src/caffe/util/io.cpp</code>  to implement this fuction.</p>
+</blockquote>
+<p>Replace<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">ReadProtoFromTextFile</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* filename, Message* proto)</span> </span>&#123;</span><br><span class="line">    Encryption encryption;</span><br><span class="line">  <span class="keyword">int</span> fd = open(filename, O_RDONLY);</span><br><span class="line">  CHECK_NE(fd, <span class="number">-1</span>) &lt;&lt; <span class="string">"File not found: "</span> &lt;&lt; filename;</span><br><span class="line">  FileInputStream* input = <span class="keyword">new</span> FileInputStream(fd);</span><br><span class="line">  <span class="keyword">bool</span> success = google::protobuf::TextFormat::Parse(input, proto);</span><br><span class="line">  <span class="keyword">delete</span> input;</span><br><span class="line">  close(fd);</span><br><span class="line">  <span class="keyword">return</span> success;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">ReadProtoFromBinaryFile</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* filename, Message* proto)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> fd = open(filename, O_RDONLY);</span><br><span class="line">  CHECK_NE(fd, <span class="number">-1</span>) &lt;&lt; <span class="string">"File not found: "</span> &lt;&lt; filename;</span><br><span class="line">  ZeroCopyInputStream* raw_input = <span class="keyword">new</span> FileInputStream(fd);</span><br><span class="line">  CodedInputStream* coded_input = <span class="keyword">new</span> CodedInputStream(raw_input);</span><br><span class="line">  coded_input-&gt;SetTotalBytesLimit(kProtoReadBytesLimit, <span class="number">536870912</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">bool</span> success = proto-&gt;ParseFromCodedStream(coded_input);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">delete</span> coded_input;</span><br><span class="line">  <span class="keyword">delete</span> raw_input;</span><br><span class="line">  close(fd);</span><br><span class="line">  <span class="keyword">return</span> success;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>load from <code>demo.prototxt</code> and <code>demo.caffemodel</code></p>
+</blockquote>
+<p>with<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">ReadProtoFromTextFile</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, Message *proto)</span> </span>&#123;</span><br><span class="line">    Encryption encryption;</span><br><span class="line">    <span class="built_in">string</span> res = encryption.decryptTextFile(filename); <span class="comment">// demo.prototxt</span></span><br><span class="line">    <span class="function"><span class="built_in">istringstream</span> <span class="title">ss</span><span class="params">(res)</span></span>;</span><br><span class="line"></span><br><span class="line">    IstreamInputStream *input = <span class="keyword">new</span> IstreamInputStream(&amp;ss);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">bool</span> success = google::protobuf::TextFormat::Parse(input, proto);</span><br><span class="line">    <span class="keyword">delete</span> input;</span><br><span class="line">    <span class="keyword">return</span> success;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">ReadProtoFromBinaryFile</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, Message *proto)</span> </span>&#123;</span><br><span class="line">    Encryption encryption;</span><br><span class="line">    <span class="built_in">string</span> res = encryption.decryptModelFile(filename); <span class="comment">// demo.caffemodel</span></span><br><span class="line">    <span class="function"><span class="built_in">istringstream</span> <span class="title">ss</span><span class="params">(res)</span></span>;</span><br><span class="line">    </span><br><span class="line">    IstreamInputStream *input = <span class="keyword">new</span> IstreamInputStream(&amp;ss);</span><br><span class="line">    CodedInputStream *coded_input = <span class="keyword">new</span> CodedInputStream(input);</span><br><span class="line">    coded_input-&gt;SetTotalBytesLimit(kProtoReadBytesLimit, <span class="number">536870912</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">bool</span> success = proto-&gt;ParseFromCodedStream(coded_input);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">delete</span> coded_input;</span><br><span class="line">    <span class="keyword">delete</span> input;</span><br><span class="line">    <span class="keyword">return</span> success;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>load from <code>demo_encrypt.prototxt</code> and <code>demo_encrypt.caffemodel</code></p>
+</blockquote>
 <h2 id="pytorch"><a href="#pytorch" class="headerlink" title="pytorch"></a>pytorch</h2><ul>
 <li><code>torch::jit::script::Module load(const std::string&amp; filename,...);</code></li>
 <li><code>torch::jit::script::Module load(const std::istream&amp; in,...);</code></li>
 </ul>
-<h3 id="load-from-file-1"><a href="#load-from-file-1" class="headerlink" title="load from file"></a>load from file</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span> model_path = <span class="string">"model.libpt"</span>;</span><br><span class="line">torch::jit::script::Module net = torch::jit::load(<span class="keyword">this</span>-&gt;model_path);</span><br><span class="line">assert(net != <span class="literal">nullptr</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="load-from-file-1"><a href="#load-from-file-1" class="headerlink" title="load from file"></a>load from file</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span> model_path = <span class="string">"model.libpt"</span>;</span><br><span class="line">torch::jit::script::Module net = torch::jit::load(model_path);</span><br><span class="line">assert(net != <span class="literal">nullptr</span>);</span><br></pre></td></tr></table></figure>
 <h3 id="load-from-stream-1"><a href="#load-from-stream-1" class="headerlink" title="load from stream"></a>load from stream</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span> model_content = <span class="string">""</span>; <span class="comment">// read from file</span></span><br><span class="line"><span class="built_in">std</span>::<span class="function"><span class="built_in">istringstream</span> <span class="title">ss</span><span class="params">(model_content)</span></span>;</span><br><span class="line">torch::jit::script::Module net = torch::jit::load(ss);</span><br><span class="line">assert(net != <span class="literal">nullptr</span>);</span><br></pre></td></tr></table></figure>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>20191014: created.</li>
@@ -592,7 +602,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">54</span>
+                  <span class="site-state-item-count">58</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -603,7 +613,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">169</span>
+                  <span class="site-state-item-count">173</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -698,7 +708,7 @@
 
 
 
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
 
 
 
@@ -791,13 +801,6 @@
 
   
   
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
-
-
 
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>

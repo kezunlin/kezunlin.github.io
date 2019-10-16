@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next gemini use-motion" lang="en">
+<html class="theme-next muse use-motion" lang="en">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -69,7 +69,7 @@
 
 
 
-  <meta name="keywords" content="KeZunLin, kezunlin, Hexo, NexT, c++, python, linux, ubuntu, mysql, deep learning, caffe, tensorflow, mxnet, keras, ros, pcl, opencv, vtk, qt, cmake, git, vim, google, github, stackoverflow" />
+  <meta name="keywords" content="KeZunLin, kezunlin, Hexo, NexT, c++, python, linux, ubuntu, mysql, deep learning, caffe, tensorflow, mxnet, keras, pytorch, computer vision, ros, pcl, opencv, vtk, qt, cmake, git, vim, google, github, stackoverflow" />
 
 
 
@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="Example 3- A Real Example Logistic Regression with theano">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-08-09T06:45:20.206Z">
+<meta property="og:updated_time" content="2019-10-16T01:01:20.811Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Example 3- A Real Example Logistic Regression with theano">
 <meta name="twitter:description" content="Example 3- A Real Example Logistic Regression with theano">
@@ -100,7 +100,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Gemini',
+    scheme: 'Muse',
     version: '5.1.3',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
     fancybox: true,
@@ -344,8 +344,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-08-09T14:45:20+08:00">
-                2018-08-09
+              <time title="Post modified" itemprop="dateModified" datetime="2019-10-16T09:01:20+08:00">
+                2019-10-16
               </time>
             
           </span>
@@ -442,9 +442,9 @@
       
         <p>Example 3- A Real Example Logistic Regression with theano<br><a id="more"></a></p>
 <h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><ul>
-<li><a href="http://kezunlin.me/post/3bee8fac/#more">Example 1-theano linear regression with gradient descent</a></li>
-<li><a href="http://kezunlin.me/post/8d4707b6/#more">Example 2 - Linear Regression Example with Python and theano from MSDN</a></li>
-<li><a href="http://kezunlin.me/post/8ce3f979/#more"><strong>Example 3- A Real Example Logistic Regression with theano</strong></a></li>
+<li><a href="https://kezunlin.me/post/3bee8fac/#more">Example 1-theano linear regression with gradient descent</a></li>
+<li><a href="https://kezunlin.me/post/8d4707b6/#more">Example 2 - Linear Regression Example with Python and theano from MSDN</a></li>
+<li><a href="https://kezunlin.me/post/8ce3f979/#more"><strong>Example 3- A Real Example Logistic Regression with theano</strong></a></li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> theano</span><br><span class="line"><span class="keyword">import</span> theano.tensor <span class="keyword">as</span> T</span><br><span class="line">rng = numpy.random</span><br><span class="line"></span><br><span class="line">N = <span class="number">400</span>                                   <span class="comment"># training sample size</span></span><br><span class="line">feats = <span class="number">784</span>                               <span class="comment"># number of input variables</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># generate a dataset: D = (input_values, target_class)</span></span><br><span class="line">D = (rng.randn(N, feats), rng.randint(size=N, low=<span class="number">0</span>, high=<span class="number">2</span>))</span><br><span class="line"><span class="comment"># (400, 784) (400,)</span></span><br><span class="line">training_steps = <span class="number">10000</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Declare Theano symbolic variables</span></span><br><span class="line">x = T.dmatrix(<span class="string">"x"</span>) <span class="comment"># (400,784)</span></span><br><span class="line">y = T.dvector(<span class="string">"y"</span>) <span class="comment"># (400,)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># initialize the weight vector w randomly</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># this and the following bias variable b</span></span><br><span class="line"><span class="comment"># are shared so they keep their values</span></span><br><span class="line"><span class="comment"># between training iterations (updates)</span></span><br><span class="line">w = theano.shared(rng.randn(feats), name=<span class="string">"w"</span>) <span class="comment">#vector (784,)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># initialize the bias term</span></span><br><span class="line">b = theano.shared(<span class="number">0.</span>, name=<span class="string">"b"</span>) <span class="comment">#scalar ()</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">"Initial model:"</span>)</span><br><span class="line">print(w.get_value().shape)</span><br><span class="line">print(b.get_value().shape)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Construct Theano expression graph</span></span><br><span class="line">p_1 = <span class="number">1</span> / (<span class="number">1</span> + T.exp(-T.dot(x, w) - b))   <span class="comment"># Probability that target = 1        = vector(400,)</span></span><br><span class="line">prediction = p_1 &gt; <span class="number">0.5</span>                    <span class="comment"># The prediction thresholded         = vector(400,) of bool</span></span><br><span class="line">xent = -y * T.log(p_1) - (<span class="number">1</span>-y) * T.log(<span class="number">1</span>-p_1) <span class="comment"># Cross-entropy loss function    = vector(400,) of Cx for given x</span></span><br><span class="line">cost = xent.mean() + <span class="number">0.01</span> * (w ** <span class="number">2</span>).sum()<span class="comment"># The cost to minimize               = scalar   f(x,y,w,b)</span></span><br><span class="line">gw, gb = T.grad(cost, [w, b])             <span class="comment"># Compute the gradient of the cost</span></span><br><span class="line">                                          <span class="comment"># w.r.t weight vector w and</span></span><br><span class="line">                                          <span class="comment"># bias term b</span></span><br><span class="line">                                          <span class="comment"># (we shall return to this in a</span></span><br><span class="line">                                          <span class="comment"># following section of this tutorial)</span></span><br><span class="line"></span><br><span class="line">updates = [(w, w - <span class="number">0.1</span> * gw),(b, b - <span class="number">0.1</span> * gb)]                </span><br><span class="line"><span class="comment"># Compile</span></span><br><span class="line">train = theano.function(</span><br><span class="line">          inputs=[x,y],</span><br><span class="line">          outputs=[prediction, xent,cost],</span><br><span class="line">          updates= updates</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">predict = theano.function(inputs=[x], outputs=prediction)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Train</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(training_steps):</span><br><span class="line">    pred, xcent,cost_t = train(D[<span class="number">0</span>], D[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">prediction = predict(D[<span class="number">0</span>])  <span class="comment"># vector(400,) of bool</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#a = np.array([1,2,3,4])</span></span><br><span class="line"><span class="comment">#b = np.array([2,2,4,3])</span></span><br><span class="line"><span class="comment">#np.mean( np.equal(a,b) ) #[0,1,0,0] 0.25</span></span><br><span class="line"></span><br><span class="line">accuracy = <span class="number">100</span>* np.mean( np.equal(prediction,D[<span class="number">1</span>]) )</span><br><span class="line"></span><br><span class="line">print(<span class="string">"Final model:"</span>)</span><br><span class="line">print(w.get_value().shape)</span><br><span class="line">print(b.get_value().shape)</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">"\nCost = "</span>,cost_t</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Accuracy = "</span>, accuracy,<span class="string">"%"</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">"\ntarget values for D:"</span>)</span><br><span class="line"><span class="comment">#print(D[1])</span></span><br><span class="line">print(<span class="string">"prediction on D:"</span>)</span><br><span class="line"><span class="comment">#print(prediction)</span></span><br></pre></td></tr></table></figure>
 <pre><code>Initial model:
@@ -504,8 +504,8 @@ prediction on D:
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/post/3bee8fac/" rel="next" title="Example 1-theano linear regression with gradient descent">
-                <i class="fa fa-chevron-left"></i> Example 1-theano linear regression with gradient descent
+              <a href="/post/8d4707b6/" rel="next" title="Example 2 - Linear Regression Example with Python and theano from MSDN">
+                <i class="fa fa-chevron-left"></i> Example 2 - Linear Regression Example with Python and theano from MSDN
               </a>
             
           </div>
@@ -604,7 +604,7 @@ prediction on D:
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">54</span>
+                  <span class="site-state-item-count">58</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -615,7 +615,7 @@ prediction on D:
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">169</span>
+                  <span class="site-state-item-count">173</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -710,7 +710,7 @@ prediction on D:
 
 
 
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
 
 
 
@@ -803,13 +803,6 @@ prediction on D:
 
   
   
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
-
-
 
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
