@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="en">
+<html class="theme-next gemini use-motion" lang="en">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -43,6 +43,44 @@
   
   <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
 
 
 
@@ -85,7 +123,7 @@
 <meta name="description" content="radam">
 <meta property="og:type" content="article">
 <meta property="og:title" content="radam">
-<meta property="og:url" content="http://kezunlin.me/post/c691f02b/index.html">
+<meta property="og:url" content="https://kezunlin.me/post/c691f02b/index.html">
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="radam">
 <meta property="og:locale" content="en">
@@ -100,7 +138,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Gemini',
     version: '5.1.3',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
     fancybox: true,
@@ -122,7 +160,7 @@
 
 
 
-  <link rel="canonical" href="http://kezunlin.me/post/c691f02b/"/>
+  <link rel="canonical" href="https://kezunlin.me/post/c691f02b/"/>
 
 
 
@@ -298,7 +336,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://kezunlin.me/post/c691f02b/">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/post/c691f02b/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="kezunlin">
@@ -408,8 +446,8 @@
 
       
         <p>radam<br><a id="more"></a></p>
-<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import keras</span><br><span class="line">import numpy as np</span><br><span class="line">from keras_radam import RAdam</span><br><span class="line"></span><br><span class="line"># Build toy model with RAdam optimizer</span><br><span class="line">model = keras.models.Sequential()</span><br><span class="line">model.add(keras.layers.Dense(input_shape=(17,), units=3))</span><br><span class="line">model.compile(RAdam(), loss=&apos;mse&apos;)</span><br><span class="line"></span><br><span class="line"># Generate toy data</span><br><span class="line">x = np.random.standard_normal((4096 * 30, 17))</span><br><span class="line">w = np.random.standard_normal((17, 3))</span><br><span class="line">y = np.dot(x, w)</span><br><span class="line"></span><br><span class="line"># Fit</span><br><span class="line">model.fit(x, y, epochs=5)</span><br></pre></td></tr></table></figure>
-<h2 id="use-warmup"><a href="#use-warmup" class="headerlink" title="use warmup"></a>use warmup</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from keras_radam import RAdam</span><br><span class="line"></span><br><span class="line">RAdam(total_steps=10000, warmup_proportion=0.1, min_lr=1e-5)</span><br></pre></td></tr></table></figure>
+<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h2><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">import</span> keras</span><br><span class="line"><span class="built_in">import</span> numpy as np</span><br><span class="line">from keras_radam <span class="built_in">import</span> RAdam</span><br><span class="line"></span><br><span class="line"><span class="comment"># Build toy model with RAdam optimizer</span></span><br><span class="line"><span class="attr">model</span> = keras.models.Sequential()</span><br><span class="line">model.add(keras.layers.Dense(<span class="attr">input_shape=(17,),</span> <span class="attr">units=3))</span></span><br><span class="line">model.compile(RAdam(), <span class="attr">loss='mse')</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Generate toy data</span></span><br><span class="line"><span class="attr">x</span> = np.random.standard_normal((<span class="number">4096</span> * <span class="number">30</span>, <span class="number">17</span>))</span><br><span class="line"><span class="attr">w</span> = np.random.standard_normal((<span class="number">17</span>, <span class="number">3</span>))</span><br><span class="line"><span class="attr">y</span> = np.dot(x, w)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Fit</span></span><br><span class="line">model.fit(x, y, <span class="attr">epochs=5)</span></span><br></pre></td></tr></table></figure>
+<h2 id="use-warmup"><a href="#use-warmup" class="headerlink" title="use warmup"></a>use warmup</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> keras_radam import RAdam</span><br><span class="line"></span><br><span class="line">RAdam(<span class="attribute">total_steps</span>=10000, <span class="attribute">warmup_proportion</span>=0.1, <span class="attribute">min_lr</span>=1e-5)</span><br></pre></td></tr></table></figure>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://arxiv.org/abs/1908.03265" target="_blank" rel="noopener">On the Variance of the Adaptive Learning Rate and Beyond</a></li>
 <li><a href="https://github.com/LiyuanLucasLiu/RAdam" target="_blank" rel="noopener">RAdam official Pytorch Version</a></li>
@@ -428,6 +466,30 @@
     
 
     
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>赞赏</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpeg" alt="kezunlin WeChat Pay"/>
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
 
     
       <div>
@@ -438,7 +500,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="http://kezunlin.me/post/c691f02b/" title="radam">http://kezunlin.me/post/c691f02b/</a>
+    <a href="https://kezunlin.me/post/c691f02b/" title="radam">https://kezunlin.me/post/c691f02b/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -666,7 +728,7 @@
 
 
 
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
 
 
 
@@ -759,6 +821,13 @@
 
   
   
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
 
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
