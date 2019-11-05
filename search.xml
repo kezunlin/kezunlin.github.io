@@ -831,14 +831,6 @@
       </categories>
   </entry>
   <entry>
-    <title><![CDATA[tensorflow model format]]></title>
-    <url>%2Fpost%2Fb5ab8b0f%2F</url>
-    <content type="text"><![CDATA[tensorflow model format GuideReference tensorflow pb/pbtxt/checkpoint meta History 20181207: created.]]></content>
-      <categories>
-        <category>tensorflow</category>
-      </categories>
-  </entry>
-  <entry>
     <title><![CDATA[install doxygen on ubuntu 16.04]]></title>
     <url>%2Fpost%2F917a155d%2F</url>
     <content type="text"><![CDATA[install doxygen on ubuntu 16.04 Guidesudo apt-get install doxygen sudo apt-get install graphviz doxygen -g doxygen Doxyfile ReferenceHistory 20181204: created.]]></content>
@@ -1074,7 +1066,7 @@
   <entry>
     <title><![CDATA[python with-as statement]]></title>
     <url>%2Fpost%2F431550df%2F</url>
-    <content type="text"><![CDATA[python with-as statement Guidefile example读取文件处理传统写法,需要确保文件正常打开之后，即使出现异常，也能够正常关闭。写法不够优雅。 1234567891011121314try: file = open("./12.txt")except: print("can not open file") exit(1)try: data = file.read() # ... do somethingsexcept: print("exception")finally: print("OK. close file") file.close() with语句时用于对try except finally 的优化，让代码更加美观。同时确保即使执行异常，finally中的语句也可以执行。 with-as 重写12with open("./1.txt") as file: data = file.read() with-as 原理基本思想是with所求值的对象必须有一个__enter__()方法，一个__exit__()方法。 原理：1.with后面的语句被求值后返回对象A;2.调用对象A的__enter__()方法将返回值赋给as后面的变量B；3.执行with后面的代码块;4.当with后面的代码块全部被执行完之后（或者由于抛出异常没有正常习执行完毕），最终都会调用A对象的__exit__()方法进行清理工作。 12345678910111213class Sample: def __enter__(self): print "In __enter__()" return "Foo" def __exit__(self, type, value, trace): print "In __exit__()" def get_sample(): return Sample() with get_sample() as s: print "sample:", s output In __enter__() sample: Foo In __exit__() steps: 执行with后面的语句get_sample()返回对象sample 执行sample对象的__enter__()方法，返回string类型的”Foo”赋值给as后面的s变量 执行代码块，打印变量”sample”的值为 “Foo” 代码块执行完毕，调用sample对象的__exit__()方法进行清理工作 with 处理异常with除了可以进行清理工作之外，真正强大之处是可以处理异常。Sample类的__exit__方法有三个参数：val, type 和 trace。 这些参数在异常处理中相当有用。 123456789101112131415class Sample: def __enter__(self): return self def __exit__(self, type, value, trace): print "type:", type print "value:", value print "trace:", trace def do_something(self): bar = 1/0 return bar + 10 with Sample() as sample: sample.do_something() output type: &lt;type &apos;exceptions.ZeroDivisionError&apos;&gt; value: integer division or modulo by zero trace: &lt;traceback object at 0x0000000004A5AA08&gt; ZeroDivisionErrorTraceback (most recent call last) &lt;ipython-input-9-282d3906c5ac&gt; in &lt;module&gt;() 13 14 with Sample() as sample: ---&gt; 15 sample.do_something() &lt;ipython-input-9-282d3906c5ac&gt; in do_something(self) 9 10 def do_something(self): ---&gt; 11 bar = 1/0 12 return bar + 10 13 ZeroDivisionError: integer division or modulo by zero 在执行代码块sample.do_something()的时候由于异常抛出，与之关联的type，value和stack trace传给__exit__()方法，因此抛出的ZeroDivisionError异常被打印出来了。 file 对象python中的file对象已经实现了__enter__()和__exit__()方法 1file = open("./1.txt") 1file.__enter__() &lt;open file &apos;./1.txt&apos;, mode &apos;r&apos; at 0x00000000049FF030&gt; 1file.read(1) &apos;&apos; 1file.__exit__() 1file.read(1) ValueErrorTraceback (most recent call last) &lt;ipython-input-19-d0e1662399bb&gt; in &lt;module&gt;() ----&gt; 1 file.read(1) ValueError: I/O operation on closed file Reference python with as的用法 History 20181023: created.]]></content>
+    <content type="text"><![CDATA[python with-as statement Guidefile example读取文件处理传统写法,需要确保文件正常打开之后，即使出现异常，也能够正常关闭。写法不够优雅。 1234567891011121314try: file = open("./12.txt")except: print("can not open file") exit(1)try: data = file.read() # ... do somethingsexcept: print("exception")finally: print("OK. close file") file.close() with语句时用于对try except finally 的优化，让代码更加美观。同时确保即使执行异常，finally中的语句也可以执行。 with-as 重写12with open("./1.txt") as file: data = file.read() with-as 原理基本思想是with所求值的对象必须有一个__enter__()方法，一个__exit__()方法。 原理：1.with后面的语句被求值后返回对象A;2.调用对象A的__enter__()方法将返回值赋给as后面的变量B；3.执行with后面的代码块;4.当with后面的代码块全部被执行完之后（或者由于抛出异常没有正常习执行完毕），最终都会调用A对象的__exit__()方法进行清理工作。 12345678910111213class Sample: def __enter__(self): print "In __enter__()" return "Foo" def __exit__(self, type, value, trace): print "In __exit__()" def get_sample(): return Sample() with get_sample() as s: print "sample:", s output In __enter__() sample: Foo In __exit__() steps: 执行with后面的语句get_sample()返回对象sample 执行sample对象的__enter__()方法，返回string类型的”Foo”赋值给as后面的s变量 执行代码块，打印变量”sample”的值为 “Foo” 代码块执行完毕，调用sample对象的__exit__()方法进行清理工作 with 处理异常with除了可以进行清理工作之外，真正强大之处是可以处理异常。Sample类的__exit__方法有三个参数：val, type 和 trace。 这些参数在异常处理中相当有用。 123456789101112131415class Sample: def __enter__(self): return self def __exit__(self, type, value, trace): print "type:", type print "value:", value print "trace:", trace def do_something(self): bar = 1/0 return bar + 10 with Sample() as sample: sample.do_something() output type: &lt;type &apos;exceptions.ZeroDivisionError&apos;&gt; value: integer division or modulo by zero trace: &lt;traceback object at 0x0000000004A5AA08&gt; ZeroDivisionErrorTraceback (most recent call last) &lt;ipython-input-9-282d3906c5ac&gt; in &lt;module&gt;() 13 14 with Sample() as sample: ---&gt; 15 sample.do_something() &lt;ipython-input-9-282d3906c5ac&gt; in do_something(self) 9 10 def do_something(self): ---&gt; 11 bar = 1/0 12 return bar + 10 13 ZeroDivisionError: integer division or modulo by zero 在执行代码块sample.do_something()的时候由于异常抛出，与之关联的type，value和stack trace传给__exit__()方法，因此抛出的ZeroDivisionError异常被打印出来了。 file 对象python中的file对象已经实现了__enter__()和__exit__()方法 1file = open("./1.txt") 1file.__enter__() &lt;open file &apos;./1.txt&apos;, mode &apos;r&apos; at 0x00000000049FF030&gt; 1file.read(1) 1file.__exit__() 1file.read(1) ValueErrorTraceback (most recent call last) &lt;ipython-input-19-d0e1662399bb&gt; in &lt;module&gt;() ----&gt; 1 file.read(1) ValueError: I/O operation on closed file Reference python with as的用法 History 20181023: created.]]></content>
       <categories>
         <category>python</category>
       </categories>
@@ -1883,9 +1875,9 @@
         <category>mysql</category>
       </categories>
       <tags>
-        <tag>boost</tag>
         <tag>datetime</tag>
         <tag>fsp</tag>
+        <tag>boost</tag>
       </tags>
   </entry>
   <entry>
@@ -2048,8 +2040,8 @@
         <category>cpp</category>
       </categories>
       <tags>
-        <tag>boost</tag>
         <tag>datetime</tag>
+        <tag>boost</tag>
       </tags>
   </entry>
   <entry>
