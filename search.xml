@@ -141,8 +141,8 @@
         <category>cpp</category>
       </categories>
       <tags>
-        <tag>macro</tag>
         <tag>profiler</tag>
+        <tag>macro</tag>
       </tags>
   </entry>
   <entry>
@@ -1528,7 +1528,7 @@
   <entry>
     <title><![CDATA[boost thread pool example]]></title>
     <url>%2Fpost%2Ff241bd30%2F</url>
-    <content type="text"><![CDATA[boost thread pool example Guide123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123#include &lt;iostream&gt; //std::cout std::endl#include &lt;thread&gt; //std::thread#include &lt;future&gt; //std::future std::promise#include &lt;utility&gt; //std::ref#include &lt;chrono&gt; //std::chrono::seconds#include &lt;boost/thread.hpp&gt;#include &lt;boost/bind.hpp&gt;#include &lt;boost/asio.hpp&gt;/*https://segmentfault.com/a/1190000006691692http://progsch.net/wordpress/?p=71https://stackoverflow.com/questions/17156541/why-do-we-need-to-use-boostasioio-servicework*/class ThreadPool &#123;public: explicit ThreadPool(size_t size) : work_(io_service_) &#123; for (size_t i = 0; i &lt; size; ++i) &#123; workers_.create_thread( boost::bind(&amp;boost::asio::io_service::run, &amp;io_service_)); &#125; &#125; ~ThreadPool() &#123; std::cout &lt;&lt; "~ThreadPool" &lt;&lt; std::endl; io_service_.stop(); // stop before join_all workers_.join_all(); &#125; // Add new work item to the pool. template&lt;class F&gt; void Enqueue(F f) &#123; io_service_.post(f); //sync, return immediately &#125;private: boost::thread_group workers_; boost::asio::io_service io_service_; boost::asio::io_service::work work_;&#125;;boost::mutex io_mutex;void count(int id)&#123; for (int i = 0; i &lt; 10; i++) &#123; boost::mutex::scoped_lock lock(io_mutex); std::cout &lt;&lt; id &lt;&lt; ":" &lt;&lt; i &lt;&lt; std::endl; &#125;&#125;void test_thread()&#123; boost::thread thrd1(boost::bind(&amp;count, 1)); boost::thread thrd2(boost::bind(&amp;count, 2)); thrd1.join(); thrd2.join();&#125;void print(int i)&#123; boost::mutex::scoped_lock lock(io_mutex); std::cout &lt;&lt; "print() #" &lt;&lt; boost::this_thread::get_id() &lt;&lt; std::endl; std::cout &lt;&lt; "hello " &lt;&lt; i &lt;&lt; std::endl; boost::this_thread::sleep(boost::posix_time::seconds(1)); std::cout &lt;&lt; "world " &lt;&lt; i &lt;&lt; std::endl;&#125;void test_thread_pool()&#123; // Create a thread pool of 4 worker threads. ThreadPool pool(4); // Queue a bunch of work items. for (int i = 0; i &lt; 8; ++i) &#123; pool.Enqueue(boost::bind(&amp;print, i)); &#125;&#125;/*https://www.cnblogs.com/pluviophile/p/cpp11-future.htmlhttp://thispointer.com/c11-multithreading-part-8-stdfuture-stdpromise-and-returning-values-from-thread/std::future std::promise*/void do_task(std::promise&lt;int&gt; &amp;promiseObj) &#123; boost::mutex::scoped_lock lock(io_mutex); std::cout &lt;&lt; "Inside thread: " &lt;&lt; std::this_thread::get_id() &lt;&lt; std::endl; std::cout &lt;&lt; "Inside thread: sleep 2 seconds... " &lt;&lt; std::endl; std::this_thread::sleep_for(std::chrono::seconds(2)); promiseObj.set_value(35);&#125;void test_future()&#123; std::promise&lt;int&gt; promiseObj; std::future&lt;int&gt; futureObj = promiseObj.get_future(); std::cout &lt;&lt; "create thread..." &lt;&lt; std::endl; std::thread th(do_task, std::ref(promiseObj)); std::cout &lt;&lt; "futureObj.get() block main thread." &lt;&lt; std::endl; std::cout &lt;&lt; futureObj.get() &lt;&lt; std::endl; th.join(); std::cout &lt;&lt; "after join" &lt;&lt; std::endl;&#125;/*std::bindbind预先绑定的参数需要传具体的变量或值进去，对于预先绑定的参数，是pass-by-value的；[使用std::ref()可以pass by reference]对于不事先绑定的参数，需要传std::placeholders进去，从_1开始，依次递增。placeholder是pass-by-reference的；*/int main(int argc, char* argv[])&#123; //test_thread(); //test_thread_pool(); test_future(); return 0;&#125; Reference boost thread pool example History 20180523: created.]]></content>
+    <content type="text"><![CDATA[boost thread pool example Guideboost thread pool example with cpp code 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118#include &lt;iostream&gt; //std::cout std::endl#include &lt;thread&gt; //std::thread#include &lt;future&gt; //std::future std::promise#include &lt;utility&gt; //std::ref#include &lt;chrono&gt; //std::chrono::seconds#include &lt;boost/thread.hpp&gt;#include &lt;boost/bind.hpp&gt;#include &lt;boost/asio.hpp&gt;class ThreadPool &#123;public: explicit ThreadPool(size_t size) : work_(io_service_) &#123; for (size_t i = 0; i &lt; size; ++i) &#123; workers_.create_thread( boost::bind(&amp;boost::asio::io_service::run, &amp;io_service_)); &#125; &#125; ~ThreadPool() &#123; std::cout &lt;&lt; "~ThreadPool" &lt;&lt; std::endl; io_service_.stop(); // stop before join_all workers_.join_all(); &#125; // Add new work item to the pool. template&lt;class F&gt; void Enqueue(F f) &#123; io_service_.post(f); //sync, return immediately &#125;private: boost::thread_group workers_; boost::asio::io_service io_service_; boost::asio::io_service::work work_;&#125;;boost::mutex io_mutex;void count(int id)&#123; for (int i = 0; i &lt; 10; i++) &#123; boost::mutex::scoped_lock lock(io_mutex); std::cout &lt;&lt; id &lt;&lt; ":" &lt;&lt; i &lt;&lt; std::endl; &#125;&#125;void test_thread()&#123; boost::thread thrd1(boost::bind(&amp;count, 1)); boost::thread thrd2(boost::bind(&amp;count, 2)); thrd1.join(); thrd2.join();&#125;void print(int i)&#123; boost::mutex::scoped_lock lock(io_mutex); std::cout &lt;&lt; "print() #" &lt;&lt; boost::this_thread::get_id() &lt;&lt; std::endl; std::cout &lt;&lt; "hello " &lt;&lt; i &lt;&lt; std::endl; boost::this_thread::sleep(boost::posix_time::seconds(1)); std::cout &lt;&lt; "world " &lt;&lt; i &lt;&lt; std::endl;&#125;void test_thread_pool()&#123; // Create a thread pool of 4 worker threads. ThreadPool pool(4); // Queue a bunch of work items. for (int i = 0; i &lt; 8; ++i) &#123; pool.Enqueue(boost::bind(&amp;print, i)); &#125;&#125;/*https://www.cnblogs.com/pluviophile/p/cpp11-future.htmlhttp://thispointer.com/c11-multithreading-part-8-stdfuture-stdpromise-and-returning-values-from-thread/std::future std::promise*/void do_task(std::promise&lt;int&gt; &amp;promiseObj) &#123; boost::mutex::scoped_lock lock(io_mutex); std::cout &lt;&lt; "Inside thread: " &lt;&lt; std::this_thread::get_id() &lt;&lt; std::endl; std::cout &lt;&lt; "Inside thread: sleep 2 seconds... " &lt;&lt; std::endl; std::this_thread::sleep_for(std::chrono::seconds(2)); promiseObj.set_value(35);&#125;void test_future()&#123; std::promise&lt;int&gt; promiseObj; std::future&lt;int&gt; futureObj = promiseObj.get_future(); std::cout &lt;&lt; "create thread..." &lt;&lt; std::endl; std::thread th(do_task, std::ref(promiseObj)); std::cout &lt;&lt; "futureObj.get() block main thread." &lt;&lt; std::endl; std::cout &lt;&lt; futureObj.get() &lt;&lt; std::endl; th.join(); std::cout &lt;&lt; "after join" &lt;&lt; std::endl;&#125;/*std::bindbind预先绑定的参数需要传具体的变量或值进去，对于预先绑定的参数，是pass-by-value的；[使用std::ref()可以pass by reference]对于不事先绑定的参数，需要传std::placeholders进去，从_1开始，依次递增。placeholder是pass-by-reference的；*/int main(int argc, char* argv[])&#123; //test_thread(); //test_thread_pool(); test_future(); return 0;&#125; Reference boost thread pool example History 20180523: created.]]></content>
       <categories>
         <category>boost</category>
         <category>thread</category>
@@ -1793,8 +1793,8 @@
         <category>library</category>
       </categories>
       <tags>
-        <tag>libjpeg</tag>
         <tag>libjpeg-turbo</tag>
+        <tag>libjpeg</tag>
       </tags>
   </entry>
   <entry>
@@ -1875,9 +1875,9 @@
         <category>mysql</category>
       </categories>
       <tags>
+        <tag>boost</tag>
         <tag>datetime</tag>
         <tag>fsp</tag>
-        <tag>boost</tag>
       </tags>
   </entry>
   <entry>
@@ -2040,8 +2040,8 @@
         <category>cpp</category>
       </categories>
       <tags>
-        <tag>datetime</tag>
         <tag>boost</tag>
+        <tag>datetime</tag>
       </tags>
   </entry>
   <entry>
