@@ -462,7 +462,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  115
+                  117
                 </span>
               
 
@@ -501,7 +501,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
       
         <p>fix pcl min,max conflict with windows.h macro<br><a id="more"></a></p>
 <h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="error"><a href="#error" class="headerlink" title="error"></a>error</h2><blockquote>
-<p>C:\Boost\include\boost-1_64\boost\asio\detail\socket_types.hpp(37):#   include <windows.h><br>we use boost which includes <code>&lt;windows.h&gt;</code> and import macro <code>min/max</code>.<br>in pcl, <code>std::numeric_limits&lt;int&gt;::max</code> conflict with <code>min/max</code>.</windows.h></p>
+<p>C:\Boost\include\boost-1_64\boost\asio\detail\socket_types.hpp(37):#   include &lt;windows.h&gt;<br>we use boost which includes <code>&lt;windows.h&gt;</code> and import macro <code>min/max</code>.<br>in pcl, <code>std::numeric_limits&lt;int&gt;::max</code> conflict with <code>min/max</code>.</p>
 </blockquote>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> PointT&gt; <span class="keyword">static</span> <span class="built_in">std</span>::<span class="built_in">string</span></span><br><span class="line">generateHeader (<span class="keyword">const</span> pcl::PointCloud&lt;PointT&gt; &amp;cloud,</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> nr_points = <span class="built_in">std</span>::numeric_limits&lt;<span class="keyword">int</span>&gt;::max());</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> m = <span class="built_in">std</span>::numeric_limits&lt;<span class="keyword">float</span>&gt;::max();</span><br></pre></td></tr></table></figure>
 <h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// method(1): put this befor pcl headers</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">undef</span> max</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">undef</span> min </span></span><br><span class="line"></span><br><span class="line"><span class="comment">// method(2):</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NOMINMAX</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// pcl headers</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pcl/point_cloud.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pcl/point_types.h&gt;</span></span></span><br></pre></td></tr></table></figure>
@@ -672,7 +672,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-count">54</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -683,7 +683,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">180</span>
+                  <span class="site-state-item-count">144</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
