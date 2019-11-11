@@ -132,18 +132,18 @@
 
 
 
-<meta name="description" content="guide to build qt library and use in another project">
+<meta name="description" content="how to build and use user-defined qt library">
 <meta name="keywords" content="qt">
 <meta property="og:type" content="article">
-<meta property="og:title" content="guide to build qt library and use in another project">
+<meta property="og:title" content="how to build and use user-defined qt library">
 <meta property="og:url" content="https://kezunlin.me/post/cf628dd8/index.html">
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
-<meta property="og:description" content="guide to build qt library and use in another project">
+<meta property="og:description" content="how to build and use user-defined qt library">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-03-15T09:05:27.869Z">
+<meta property="og:updated_time" content="2019-11-11T07:07:25.197Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="guide to build qt library and use in another project">
-<meta name="twitter:description" content="guide to build qt library and use in another project">
+<meta name="twitter:title" content="how to build and use user-defined qt library">
+<meta name="twitter:description" content="how to build and use user-defined qt library">
 
 
 
@@ -201,7 +201,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 
 
 
-  <title>guide to build qt library and use in another project | KeZunLin's Blog</title>
+  <title>how to build and use user-defined qt library | KeZunLin's Blog</title>
   
 
 
@@ -387,7 +387,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 
         
         
-          <h2 class="post-title" itemprop="name headline">guide to build qt library and use in another project</h2>
+          <h2 class="post-title" itemprop="name headline">how to build and use user-defined qt library</h2>
         
 
         <div class="post-meta">
@@ -415,8 +415,8 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-03-15T17:05:27+08:00">
-                2019-03-15
+              <time title="Post modified" itemprop="dateModified" datetime="2019-11-11T15:07:25+08:00">
+                2019-11-11
               </time>
             
           </span>
@@ -468,7 +468,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  374
+                  403
                 </span>
               
 
@@ -505,7 +505,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
       
 
       
-        <p>guide to build qt library and use in another project<br><a id="more"></a></p>
+        <p>how to build and use user-defined qt library<br><a id="more"></a></p>
 <h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="build-qt-library"><a href="#build-qt-library" class="headerlink" title="build qt library"></a>build qt library</h2><h3 id="QObject-class"><a href="#QObject-class" class="headerlink" title="QObject class"></a>QObject class</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span>  <span class="title">SHARED_EXPORT</span> <span class="title">CameraGrabber</span> :</span> <span class="keyword">public</span> QObject</span><br><span class="line">&#123;</span><br><span class="line">	Q_OBJECT</span><br><span class="line">		signals :</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">sendFrameTrash</span><span class="params">(<span class="keyword">int</span> nCameraID, <span class="keyword">int</span> nTotalTrashFrame)</span></span>;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">explicit</span> <span class="title">CameraGrabber</span><span class="params">(QObject *parent = <span class="number">0</span>)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span>(CMAKE_INCLUDE_CURRENT_DIR ON)</span><br><span class="line"><span class="built_in">set</span>(CMAKE_AUTOMOC ON)  <span class="comment"># for qt SLOTS</span></span><br><span class="line"></span><br><span class="line">add_library(<span class="variable">$&#123;CAMERA_GRABBER_TARGET&#125;</span></span><br><span class="line">    CaptureProcess.h</span><br><span class="line">    CaptureProcess.cpp</span><br><span class="line">    FindGrabber.h </span><br><span class="line">    FindGrabber.cpp</span><br><span class="line">    CameraGrabber.h</span><br><span class="line">    CameraGrabber.cpp</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">qt5_use_modules(<span class="variable">$&#123;CAMERA_GRABBER_TARGET&#125;</span> Core)</span><br><span class="line"></span><br><span class="line">target_link_libraries (<span class="variable">$&#123;CAMERA_GRABBER_TARGET&#125;</span> </span><br><span class="line">    <span class="variable">$&#123;CONGIF_TARGET&#125;</span></span><br><span class="line">    <span class="variable">$&#123;SAPERA_LIBRARIES&#125;</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 <p>build and get <code>CameraGrabber.h</code>,<code>CameraGrabber.lib</code>,<code>CameraGrabber.dll</code> and <code>mocs_compilation.cpp</code>.</p>
@@ -516,6 +516,11 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 <pre><code>error LNK2001: 无法解析的外部符号 &quot;public: static struct QMetaObject const staticMetaObject
 </code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>20180409: created.</li>
+</ul>
+<h1 id="Copyright"><a href="#Copyright" class="headerlink" title="Copyright"></a>Copyright</h1><ul>
+<li>Post author: <a href="https://kezunlin.me">kezunlin</a></li>
+<li>Post link: <a href="https://kezunlin.me/post/cf628dd8/">https://kezunlin.me/post/cf628dd8/</a></li>
+<li>Copyright Notice: All articles in this blog are licensed under CC BY-NC-SA 3.0 unless stating additionally.</li>
 </ul>
 
       
@@ -561,7 +566,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="https://kezunlin.me/post/cf628dd8/" title="guide to build qt library and use in another project">https://kezunlin.me/post/cf628dd8/</a>
+    <a href="https://kezunlin.me/post/cf628dd8/" title="how to build and use user-defined qt library">https://kezunlin.me/post/cf628dd8/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -782,7 +787,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#build-qt-library"><span class="nav-number">1.1.</span> <span class="nav-text">build qt library</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#QObject-class"><span class="nav-number">1.1.1.</span> <span class="nav-text">QObject class</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">1.1.2.</span> <span class="nav-text">CMakeLists.txt</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#use-qt-library-in-MainWindow"><span class="nav-number">1.2.</span> <span class="nav-text">use qt library in MainWindow</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MainWindow-h"><span class="nav-number">1.2.1.</span> <span class="nav-text">MainWindow.h</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MainWindow-cpp"><span class="nav-number">1.2.2.</span> <span class="nav-text">MainWindow.cpp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt-1"><span class="nav-number">1.2.3.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tips"><span class="nav-number">1.2.4.</span> <span class="nav-text">tips</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#build-qt-library"><span class="nav-number">1.1.</span> <span class="nav-text">build qt library</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#QObject-class"><span class="nav-number">1.1.1.</span> <span class="nav-text">QObject class</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">1.1.2.</span> <span class="nav-text">CMakeLists.txt</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#use-qt-library-in-MainWindow"><span class="nav-number">1.2.</span> <span class="nav-text">use qt library in MainWindow</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MainWindow-h"><span class="nav-number">1.2.1.</span> <span class="nav-text">MainWindow.h</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MainWindow-cpp"><span class="nav-number">1.2.2.</span> <span class="nav-text">MainWindow.cpp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt-1"><span class="nav-number">1.2.3.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tips"><span class="nav-number">1.2.4.</span> <span class="nav-text">tips</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Copyright"><span class="nav-number">4.</span> <span class="nav-text">Copyright</span></a></li></ol></div>
             
 
           </div>
