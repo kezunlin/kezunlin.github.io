@@ -140,7 +140,7 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="compile gtest on windows 10">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-11-11T07:55:36.773Z">
+<meta property="og:updated_time" content="2019-11-12T06:18:09.721Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="compile gtest on windows 10">
 <meta name="twitter:description" content="compile gtest on windows 10">
@@ -415,8 +415,8 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-11-11T15:55:36+08:00">
-                2019-11-11
+              <time title="Post modified" itemprop="dateModified" datetime="2019-11-12T14:18:09+08:00">
+                2019-11-12
               </time>
             
           </span>
@@ -468,7 +468,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  150
+                  151
                 </span>
               
 
@@ -506,11 +506,11 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 
       
         <p>compile gtest on windows 10<br><a id="more"></a></p>
-<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><ul>
+<h1 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h1><ul>
 <li><a href="https://kezunlin.me/post/4a1427cf/">compile gtest on ubuntu 16.04</a></li>
 <li><strong><a href="https://kezunlin.me/post/aca50ff8/">compile gtest on windows 10</a></strong></li>
 </ul>
-<h2 id="download"><a href="#download" class="headerlink" title="download"></a>download</h2><pre><code>wget https://github.com/google/googletest/archive/release-1.8.0.zip 
+<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="download"><a href="#download" class="headerlink" title="download"></a>download</h2><pre><code>wget https://github.com/google/googletest/archive/release-1.8.0.zip 
 </code></pre><h2 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h2><pre><code>mkdir build 
 cd build
 sudo cmake-gui ..
@@ -518,7 +518,7 @@ sudo cmake-gui ..
 <pre><code>BUILD_SHARED_LIBS ON
 CMAKE_CONFIGURATION_TYPES Release
 </code></pre><p>compile and install gtest to <code>C:\Program Files\gtest</code>.</p>
-<h2 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(MSVC) </span><br><span class="line">	SET(GTEST_ROOT <span class="string">"C:/Program Files/gtest"</span>)</span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line">	<span class="comment"># BOOST_THREAD_LIBRARY  /usr/lib/x86_64-linux-gnu/libpthread.so</span></span><br><span class="line">	MESSAGE( [Main] <span class="string">" BOOST_THREAD_LIBRARY = <span class="variable">$&#123;BOOST_THREAD_LIBRARY&#125;</span>"</span>)</span><br><span class="line">endif(MSVC)</span><br><span class="line"></span><br><span class="line">find_package(GTest REQUIRED) <span class="comment"># GTest 1.8.0</span></span><br><span class="line"></span><br><span class="line">find_package(GTest REQUIRED) <span class="comment"># GTest 1.8.0</span></span><br><span class="line">include_directories(<span class="variable">$&#123;GTEST_INCLUDE_DIRS&#125;</span>)</span><br><span class="line">target_link_libraries(demo <span class="variable">$&#123;GTEST_LIBRARIES&#125;</span> <span class="variable">$&#123;BOOST_THREAD_LIBRARY&#125;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h2><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(MSVC) </span><br><span class="line">	<span class="keyword">SET</span>(GTEST_ROOT <span class="string">"C:/Program Files/gtest"</span>)</span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line">	<span class="comment"># BOOST_THREAD_LIBRARY  /usr/lib/x86_64-linux-gnu/libpthread.so</span></span><br><span class="line">	<span class="keyword">MESSAGE</span>( [Main] <span class="string">" BOOST_THREAD_LIBRARY = $&#123;BOOST_THREAD_LIBRARY&#125;"</span>)</span><br><span class="line"><span class="keyword">endif</span>(MSVC)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(GTest REQUIRED) <span class="comment"># GTest 1.8.0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(GTest REQUIRED) <span class="comment"># GTest 1.8.0</span></span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;GTEST_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"><span class="keyword">target_link_libraries</span>(demo <span class="variable">$&#123;GTEST_LIBRARIES&#125;</span> <span class="variable">$&#123;BOOST_THREAD_LIBRARY&#125;</span>)</span><br></pre></td></tr></table></figure>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://kezunlin.me/post/4a1427cf/">compile gtest on ubuntu 16.04</a></li>
 </ul>
@@ -795,7 +795,7 @@ CMAKE_CONFIGURATION_TYPES Release
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#download"><span class="nav-number">1.1.</span> <span class="nav-text">download</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">1.2.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">1.3.</span> <span class="nav-text">CMakeLists.txt</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Copyright"><span class="nav-number">4.</span> <span class="nav-text">Copyright</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Series"><span class="nav-number">1.</span> <span class="nav-text">Series</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">2.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#download"><span class="nav-number">2.1.</span> <span class="nav-text">download</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">2.2.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">2.3.</span> <span class="nav-text">CMakeLists.txt</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Copyright"><span class="nav-number">5.</span> <span class="nav-text">Copyright</span></a></li></ol></div>
             
 
           </div>

@@ -140,7 +140,7 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="compile opencv on ubuntu 16.04">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-10-16T01:01:20.922Z">
+<meta property="og:updated_time" content="2019-11-12T08:16:47.069Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="compile opencv on ubuntu 16.04">
 <meta name="twitter:description" content="compile opencv on ubuntu 16.04">
@@ -415,8 +415,8 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-10-16T09:01:20+08:00">
-                2019-10-16
+              <time title="Post modified" itemprop="dateModified" datetime="2019-11-12T16:16:47+08:00">
+                2019-11-12
               </time>
             
           </span>
@@ -468,7 +468,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  349
+                  359
                 </span>
               
 
@@ -506,16 +506,16 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 
       
         <p>compile opencv on ubuntu 16.04<br><a id="more"></a></p>
-<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><ul>
+<h1 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h1><ul>
 <li><strong><a href="https://kezunlin.me/post/15f5c3e8/">Part 1: compile opencv on ubuntu 16.04</a></strong></li>
 <li><a href="https://kezunlin.me/post/6580691f/">Part 2: compile opencv with CUDA support on windows 10</a></li>
 <li><a href="https://kezunlin.me/post/61d55ab4/">Part 3: opencv mat for loop</a></li>
 <li><a href="https://kezunlin.me/post/7a6ba82e/">Part 4: speed up opencv image processing with openmp</a></li>
 </ul>
-<p>requirements:</p>
+<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><p>requirements:</p>
 <ul>
 <li>ubuntu: 16.04</li>
-<li>opencv: 3.1.0 —&gt;3.3.0</li>
+<li>opencv: 3.3.0</li>
 </ul>
 <h2 id="install-dependencies"><a href="#install-dependencies" class="headerlink" title="install dependencies"></a>install dependencies</h2><pre><code>sudo apt-get install build-essential
 sudo apt-get install cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
@@ -534,10 +534,8 @@ sudo make -j8
 
 # install to /usr/local/bin
 sudo make install
-</code></pre><h2 id="ldconfig"><a href="#ldconfig" class="headerlink" title="ldconfig"></a><del>ldconfig</del></h2><pre><code>sudo /bin/bash -c &apos;echo &quot;/usr/local/lib&quot; &gt; /etc/ld.so.conf.d/opencv.conf&apos;
-sudo ldconfig
 </code></pre><h2 id="check-version"><a href="#check-version" class="headerlink" title="check version"></a>check version</h2><pre><code>opencv_version
-3.1.0
+3.3.0
 </code></pre><h2 id="python-cv2"><a href="#python-cv2" class="headerlink" title="python cv2"></a>python cv2</h2><pre><code>python
 &gt;&gt;&gt; import cv2
 &gt;&gt;&gt; cv2.__version__
@@ -547,7 +545,7 @@ pip install opencv-contrib-python
 python
 &gt;import cv2
 &gt;cv2.__version__
-&apos;3.4.2&apos;
+&apos;3.3.0&apos;
 </code></pre><blockquote>
 <p>for virtualenv, see <a href="https://kezunlin.me/post/f07cae6a/">python virtualenv tutorial</a></p>
 </blockquote>
@@ -555,7 +553,7 @@ python
 cmake .
 make
 </code></pre><h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/core.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/imgproc.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/highgui.hpp&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Mat image = imread(<span class="string">"../image/cat.jpg"</span>,<span class="number">0</span>);</span><br><span class="line">    imshow(<span class="string">"image"</span>,image);</span><br><span class="line">    waitKey(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 2.8.8)</span><br><span class="line"></span><br><span class="line">project(demo)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Find includes in corresponding build directories</span></span><br><span class="line"><span class="built_in">set</span>(CMAKE_INCLUDE_CURRENT_DIR ON)</span><br><span class="line"></span><br><span class="line">find_package(OpenCV REQUIRED COMPONENTS core highgui imgproc features2d calib3d) </span><br><span class="line">include_directories(<span class="variable">$&#123;OpenCV_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line">message( [opencv] <span class="variable">$&#123;OpenCV_INCLUDE_DIRS&#125;</span> )</span><br><span class="line">message( [opencv] <span class="variable">$&#123;$&#123;OpenCV_LIBS&#125;</span>&#125; )</span><br><span class="line">message( [opencv] <span class="variable">$&#123;$&#123;OpenCV_LIBRARIES&#125;</span>&#125; )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">add_executable(<span class="variable">$&#123;PROJECT_NAME&#125;</span> </span><br><span class="line">    demo.cpp</span><br><span class="line">)</span><br><span class="line">target_link_libraries(<span class="variable">$&#123;PROJECT_NAME&#125;</span> <span class="variable">$&#123;OpenCV_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h2><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">2.8</span>.<span class="number">8</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">project</span>(demo)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Find includes in corresponding build directories</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_INCLUDE_CURRENT_DIR <span class="keyword">ON</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(OpenCV REQUIRED COMPONENTS core highgui imgproc features2d calib3d) </span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;OpenCV_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">message</span>( [opencv] <span class="variable">$&#123;OpenCV_INCLUDE_DIRS&#125;</span> )</span><br><span class="line"><span class="keyword">message</span>( [opencv] <span class="variable">$&#123;$&#123;OpenCV_LIBS&#125;</span>&#125; )</span><br><span class="line"><span class="keyword">message</span>( [opencv] <span class="variable">$&#123;$&#123;OpenCV_LIBRARIES&#125;</span>&#125; )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">add_executable</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span> </span><br><span class="line">    demo.cpp</span><br><span class="line">)</span><br><span class="line"><span class="keyword">target_link_libraries</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span> <span class="variable">$&#123;OpenCV_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://kezunlin.me/post/6580691f/">Guide to compile and use opencv with CUDA support on windows 10</a></li>
 <li><a href="https://stackoverflow.com/questions/9842127/using-a-mask-with-an-adaptive-threshold" target="_blank" rel="noopener">opencv with openmp</a></li>
@@ -563,6 +561,11 @@ make
 </ul>
 <h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>20180919:  created.</li>
+</ul>
+<h1 id="Copyright"><a href="#Copyright" class="headerlink" title="Copyright"></a>Copyright</h1><ul>
+<li>Post author: <a href="https://kezunlin.me">kezunlin</a></li>
+<li>Post link: <a href="https://kezunlin.me/post/15f5c3e8/">https://kezunlin.me/post/15f5c3e8/</a></li>
+<li>Copyright Notice: All articles in this blog are licensed under CC BY-NC-SA 3.0 unless stating additionally.</li>
 </ul>
 
       
@@ -829,7 +832,7 @@ make
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install-dependencies"><span class="nav-number">1.1.</span> <span class="nav-text">install dependencies</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">1.2.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ldconfig"><span class="nav-number">1.3.</span> <span class="nav-text">ldconfig</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#check-version"><span class="nav-number">1.4.</span> <span class="nav-text">check version</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python-cv2"><span class="nav-number">1.5.</span> <span class="nav-text">python cv2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pip-install-opencv"><span class="nav-number">1.6.</span> <span class="nav-text">pip install opencv</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#opencv-samples"><span class="nav-number">1.7.</span> <span class="nav-text">opencv samples</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Example"><span class="nav-number">2.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Code"><span class="nav-number">2.1.</span> <span class="nav-text">Code</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">2.2.</span> <span class="nav-text">CMakeLists.txt</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Series"><span class="nav-number">1.</span> <span class="nav-text">Series</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">2.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install-dependencies"><span class="nav-number">2.1.</span> <span class="nav-text">install dependencies</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">2.2.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#check-version"><span class="nav-number">2.3.</span> <span class="nav-text">check version</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python-cv2"><span class="nav-number">2.4.</span> <span class="nav-text">python cv2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pip-install-opencv"><span class="nav-number">2.5.</span> <span class="nav-text">pip install opencv</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#opencv-samples"><span class="nav-number">2.6.</span> <span class="nav-text">opencv samples</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Example"><span class="nav-number">3.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Code"><span class="nav-number">3.1.</span> <span class="nav-text">Code</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">3.2.</span> <span class="nav-text">CMakeLists.txt</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Copyright"><span class="nav-number">6.</span> <span class="nav-text">Copyright</span></a></li></ol></div>
             
 
           </div>
