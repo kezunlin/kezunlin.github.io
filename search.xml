@@ -1,6 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>python convert image to and from base64 string</title>
+    <url>/post/9282a9ab/</url>
+    <content><![CDATA[<p>python convert image to and from base64 string<br><a id="more"></a></p>
+<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="image-to-from-base64-string"><a href="#image-to-from-base64-string" class="headerlink" title="image to/from base64 string"></a>image to/from base64 string</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_base64_str_from_file</span><span class="params">(filepath)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> open(filepath, <span class="string">"rb"</span>) <span class="keyword">as</span> f:</span><br><span class="line">        bytes_content = f.read() <span class="comment"># bytes</span></span><br><span class="line">        bytes_64 = base64.b64encode(bytes_content)</span><br><span class="line">    <span class="keyword">return</span> bytes_64.decode(<span class="string">'utf-8'</span>) <span class="comment"># bytes---&gt;str  (remove `b`)</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">save_base64_str_to_file</span><span class="params">(str_base64, to_file)</span>:</span></span><br><span class="line">    bytes_64 = str_base64.encode(<span class="string">'utf-8'</span>) <span class="comment"># str---&gt; bytes (add `b`)</span></span><br><span class="line">    bytes_content = base64.decodebytes(bytes_64) <span class="comment"># bytes</span></span><br><span class="line">    <span class="keyword">with</span> open(to_file, <span class="string">"wb"</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(bytes_content)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_base64</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># image to/from base64</span></span><br><span class="line">    image_path = <span class="string">"images/1.jpg"</span></span><br><span class="line">    str_base64 = get_base64_str_from_file(image_path)</span><br><span class="line">    save_base64_str_to_file(str_base64, <span class="string">"images/2.jpg"</span>)</span><br><span class="line">    print(<span class="string">"OK"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    test_base64()</span><br></pre></td></tr></table></figure>
+<p>output </p>
+<pre><code>OK
+</code></pre><h2 id="normal-string-to-from-base64-string"><a href="#normal-string-to-from-base64-string" class="headerlink" title="normal string to/from base64 string"></a>normal string to/from base64 string</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">str_to_base64</span><span class="params">(normal_str)</span>:</span></span><br><span class="line">    bytes_str = normal_str.encode(<span class="string">'utf-8'</span>) <span class="comment"># str ===&gt; bytes</span></span><br><span class="line">    bytes_64 = base64.b64encode(bytes_str) <span class="comment"># bytes ===&gt; bytes</span></span><br><span class="line">    <span class="keyword">return</span> bytes_64.decode(<span class="string">'utf-8'</span>) <span class="comment"># bytes ===&gt; str</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">base64_to_str</span><span class="params">(base64_str)</span>:</span></span><br><span class="line">    bytes_64 = base64_str.encode(<span class="string">'utf-8'</span>) <span class="comment"># str ===&gt; bytes</span></span><br><span class="line">    bytes_content = base64.decodebytes(bytes_64) <span class="comment"># bytes ===&gt; bytes</span></span><br><span class="line">    <span class="keyword">return</span> bytes_content.decode(<span class="string">'utf-8'</span>) <span class="comment"># bytes ===&gt; str</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_base64</span><span class="params">()</span>:</span></span><br><span class="line">    normal_str = <span class="string">"Hello World !"</span></span><br><span class="line">    str_base64 = str_to_base64(normal_str)</span><br><span class="line">    normal_str2 = base64_to_str(str_base64)</span><br><span class="line">    print(<span class="string">"normal_str = "</span>,normal_str)</span><br><span class="line">    print(<span class="string">"str_base64 = "</span>,str_base64)</span><br><span class="line">    print(<span class="string">"normal_str2 = "</span>,normal_str2)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    test_base64()</span><br></pre></td></tr></table></figure>
+<p>output </p>
+<pre><code>normal_str =  Hello World !
+str_base64 =  SGVsbG8gV29ybGQgIQ==
+normal_str2 =  Hello World !
+</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
+<li>2019/11/12: created.</li>
+</ul>
+<h1 id="Copyright"><a href="#Copyright" class="headerlink" title="Copyright"></a>Copyright</h1><ul>
+<li>Post author: <a href="https://kezunlin.me">kezunlin</a></li>
+<li>Post link: <a href="https://kezunlin.me/post/9282a9ab/">https://kezunlin.me/post/9282a9ab/</a></li>
+<li>Copyright Notice: All articles in this blog are licensed under CC BY-NC-SA 3.0 unless stating additionally.</li>
+</ul>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>base64</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>use article publisher artipub to publish your article to multiple platforms</title>
     <url>/post/bf6232fa/</url>
     <content><![CDATA[<p>use article publisher <code>artipub</code> to publish your article to multiple platforms<br><a id="more"></a></p>
@@ -3969,7 +3997,7 @@ python test_1_send_images.py
     <title>cmake usage ref</title>
     <url>/post/e1d9f990/</url>
     <content><![CDATA[<p>cmake usage ref<br><a id="more"></a></p>
-<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="execute-process"><a href="#execute-process" class="headerlink" title="execute_process"></a>execute_process</h2><p>CMakeLists.txt<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">execute_process(</span><br><span class="line">    COMMAND bash <span class="string">"-c"</span> <span class="string">"echo -n hello | sed 's/hello/world/;'"</span> </span><br><span class="line">    OUTPUT_VARIABLE VARIABLE</span><br><span class="line">)</span><br><span class="line">MESSAGE( [Main] <span class="string">" VARIABLE = <span class="variable">$&#123;VARIABLE&#125;</span>"</span>) <span class="comment"># world</span></span><br><span class="line"></span><br><span class="line">execute_process(</span><br><span class="line">    COMMAND bash <span class="string">"-c"</span> <span class="string">"echo -n <span class="variable">$(uname -p)</span>"</span> </span><br><span class="line">    OUTPUT_VARIABLE ARCH</span><br><span class="line">)</span><br><span class="line">MESSAGE( [Main] <span class="string">" ARCH = <span class="variable">$&#123;ARCH&#125;</span>"</span>) <span class="comment"># aarch64 x86_64</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># glib   header only</span></span><br><span class="line"><span class="built_in">set</span>(GLIB_INCLUDE_DIRS <span class="string">"/usr/include/glib-2.0/"</span>) <span class="comment"># glib.h </span></span><br><span class="line"><span class="built_in">set</span>(GLIBCONFIG_INCLUDE_DIRS <span class="string">"/usr/lib/<span class="variable">$&#123;ARCH&#125;</span>-linux-gnu/glib-2.0/include/"</span>) <span class="comment"># glibconfig.h </span></span><br><span class="line">MESSAGE( [Main] <span class="string">" GLIB_INCLUDE_DIRS = <span class="variable">$&#123;GLIB_INCLUDE_DIRS&#125;</span>"</span>)</span><br><span class="line">MESSAGE( [Main] <span class="string">" GLIBCONFIG_INCLUDE_DIRS = <span class="variable">$&#123;GLIBCONFIG_INCLUDE_DIRS&#125;</span>"</span>)</span><br></pre></td></tr></table></figure></p>
+<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="execute-process"><a href="#execute-process" class="headerlink" title="execute_process"></a>execute_process</h2><p>CMakeLists.txt<br><figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">execute_process</span>(</span><br><span class="line">    <span class="keyword">COMMAND</span> bash <span class="string">"-c"</span> <span class="string">"echo -n hello | sed 's/hello/world/;'"</span> </span><br><span class="line">    OUTPUT_VARIABLE VARIABLE</span><br><span class="line">)</span><br><span class="line"><span class="keyword">MESSAGE</span>( [Main] <span class="string">" VARIABLE = $&#123;VARIABLE&#125;"</span>) <span class="comment"># world</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">execute_process</span>(</span><br><span class="line">    <span class="keyword">COMMAND</span> bash <span class="string">"-c"</span> <span class="string">"echo -n $(uname -p)"</span> </span><br><span class="line">    OUTPUT_VARIABLE ARCH</span><br><span class="line">)</span><br><span class="line"><span class="keyword">MESSAGE</span>( [Main] <span class="string">" ARCH = $&#123;ARCH&#125;"</span>) <span class="comment"># aarch64 x86_64</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># glib   header only</span></span><br><span class="line"><span class="keyword">set</span>(GLIB_INCLUDE_DIRS <span class="string">"/usr/include/glib-2.0/"</span>) <span class="comment"># glib.h </span></span><br><span class="line"><span class="keyword">set</span>(GLIBCONFIG_INCLUDE_DIRS <span class="string">"/usr/lib/$&#123;ARCH&#125;-linux-gnu/glib-2.0/include/"</span>) <span class="comment"># glibconfig.h </span></span><br><span class="line"><span class="keyword">MESSAGE</span>( [Main] <span class="string">" GLIB_INCLUDE_DIRS = $&#123;GLIB_INCLUDE_DIRS&#125;"</span>)</span><br><span class="line"><span class="keyword">MESSAGE</span>( [Main] <span class="string">" GLIBCONFIG_INCLUDE_DIRS = $&#123;GLIBCONFIG_INCLUDE_DIRS&#125;"</span>)</span><br></pre></td></tr></table></figure></p>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://stackoverflow.com/questions/35689501/cmakes-execute-process-and-arbitrary-shell-scripts" target="_blank" rel="noopener">cmakes-execute-process-and-arbitrary-shell-scripts</a></li>
 </ul>
@@ -3978,8 +4006,11 @@ python test_1_send_images.py
 </ul>
 ]]></content>
       <categories>
-        <category>cmake</category>
+        <category>cpp</category>
       </categories>
+      <tags>
+        <tag>cmake</tag>
+      </tags>
   </entry>
   <entry>
     <title>cpp11 push_back and emplace_back</title>
@@ -6595,8 +6626,11 @@ drwxrwxr-x  5 kezunlin kezunlin 4096 8月   7 11:19 vs/
 </ul>
 ]]></content>
       <categories>
-        <category>cmake</category>
+        <category>cpp</category>
       </categories>
+      <tags>
+        <tag>cmake</tag>
+      </tags>
   </entry>
   <entry>
     <title>linux command ref</title>
@@ -13420,8 +13454,11 @@ cmake --version
 </ul>
 ]]></content>
       <categories>
-        <category>cmake</category>
+        <category>cpp</category>
       </categories>
+      <tags>
+        <tag>cmake</tag>
+      </tags>
   </entry>
   <entry>
     <title>tutorials on deep learning for image classification</title>
@@ -15286,16 +15323,10 @@ wget https://pocoproject.org/releases/poco-1.8.1/poco-1.8.1.tar.gz
 </ul>
 ]]></content>
       <categories>
-        <category>cmake</category>
+        <category>cpp</category>
       </categories>
       <tags>
-        <tag>qt</tag>
-        <tag>vtk</tag>
-        <tag>boost</tag>
-        <tag>poco</tag>
-        <tag>glog</tag>
-        <tag>find_package</tag>
-        <tag>pcl</tag>
+        <tag>cmake</tag>
       </tags>
   </entry>
   <entry>
@@ -15975,19 +16006,22 @@ ios_extended_string    2014-09-08T17:51:04.777668  ===&gt; from_iso_extended_str
 <h2 id="cmake-default-package"><a href="#cmake-default-package" class="headerlink" title="cmake default package"></a>cmake default package</h2><h3 id="FindXXX-cmake"><a href="#FindXXX-cmake" class="headerlink" title="FindXXX.cmake"></a>FindXXX.cmake</h3><p>use <code>find_package</code> to find default package with name <code>XXX</code></p>
 <p>and cmake file <code>C:\Program Files\CMake\share\cmake-3.10\Modules\FindXXX.cmake</code> </p>
 <p>use <code>${XXX_INCLUDE_DIRS}</code> in include, and <code>${XXX_LIBRARIES}</code> in libraries </p>
-<h3 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">find_package(GTest REQUIRED)</span><br><span class="line">include_directories(<span class="variable">$&#123;GTEST_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line">find_package(Boost 1.5.8 REQUIRED COMPONENTS date_time system filesystem)</span><br><span class="line">include_directories(<span class="variable">$&#123;Boost_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line">target_link_libraries(demo <span class="variable">$&#123;GTEST_LIBRARIES&#125;</span> <span class="variable">$&#123;Boost_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h3><figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">find_package</span>(GTest REQUIRED)</span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;GTEST_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(Boost <span class="number">1.5</span>.<span class="number">8</span> REQUIRED COMPONENTS date_time system filesystem)</span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;Boost_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">target_link_libraries</span>(demo <span class="variable">$&#123;GTEST_LIBRARIES&#125;</span> <span class="variable">$&#123;Boost_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
 <h2 id="user-define-package"><a href="#user-define-package" class="headerlink" title="user-define package"></a>user-define package</h2><h3 id="xxx-config-cmake"><a href="#xxx-config-cmake" class="headerlink" title="xxx-config.cmake"></a>xxx-config.cmake</h3><p>both names are ok.</p>
 <ul>
 <li>xxx-config.cmake</li>
 <li>XXXConfig.cmake, e.g.  OpenCVConfig.cmake</li>
 </ul>
-<p>mysqlcppconn-config.cmake<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Name: &lt;Name&gt;Config.cmake  or &lt;lower name&gt;-config.cmake</span></span><br><span class="line"><span class="comment"># mysqlcppconn-config.cmake or MYSQLCPPCONNConfig.cmake  </span></span><br><span class="line"><span class="comment"># similar to OpenCVConfig.cmake   </span></span><br><span class="line"><span class="comment"># or use FindBoost.cmake </span></span><br><span class="line"><span class="comment"># MYSQLCPPCONN_DIR = E:/git/car/share/cmake-3.10/Modules</span></span><br><span class="line"><span class="comment"># find_package workflow: http://blog.csdn.net/bytxl/article/details/50637277</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Tips for MYSQLCPPCONN_ROOT_DIR</span></span><br><span class="line"><span class="comment"># use "C:/Program Files/MySQL/Connector.C++ 1.1", otherwise cmake-gui can not auto find include and library</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span>(MYSQLCPPCONN_FOUND TRUE) <span class="comment"># auto </span></span><br><span class="line"><span class="built_in">set</span>(MYSQLCPPCONN_ROOT_DIR <span class="string">"C:/Program Files/MySQL/Connector.C++ 1.1"</span>)</span><br><span class="line"></span><br><span class="line">find_path(MYSQLCPPCONN_INCLUDE_DIR NAMES cppconn/driver.h PATHS <span class="string">"<span class="variable">$&#123;MYSQLCPPCONN_ROOT_DIR&#125;</span>/include"</span>) </span><br><span class="line">mark_as_advanced(MYSQLCPPCONN_INCLUDE_DIR) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line">find_library(MYSQLCPPCONN_LIBRARY NAMES mysqlcppconn.lib PATHS <span class="string">"<span class="variable">$&#123;MYSQLCPPCONN_ROOT_DIR&#125;</span>/lib/opt"</span>) </span><br><span class="line">mark_as_advanced(MYSQLCPPCONN_LIBRARY) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># use xxx_INCLUDE_DIRS and xxx_LIBRARIES in CMakeLists.txt</span></span><br><span class="line"><span class="built_in">set</span>(MYSQLCPPCONN_INCLUDE_DIRS <span class="variable">$&#123;MYSQLCPPCONN_INCLUDE_DIR&#125;</span> )</span><br><span class="line"><span class="built_in">set</span>(MYSQLCPPCONN_LIBRARIES <span class="variable">$&#123;MYSQLCPPCONN_LIBRARY&#125;</span> )</span><br><span class="line"></span><br><span class="line"><span class="comment"># cmake entry will be saved to build/CMakeCache.txt </span></span><br><span class="line"></span><br><span class="line">message( <span class="string">"mysqlcppconn-config.cmake "</span> <span class="variable">$&#123;MYSQLCPPCONN_ROOT_DIR&#125;</span>)</span><br></pre></td></tr></table></figure></p>
-<p>halcon-config.cmake<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># halcon-config.cmake or HALCONConfig.cmake  </span></span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span>(HALCON_FOUND TRUE) <span class="comment"># auto </span></span><br><span class="line"><span class="built_in">set</span>(HALCON_ROOT_DIR E:/git/car/windows/lib/halcon)</span><br><span class="line"></span><br><span class="line">find_path(HALCON_INCLUDE_DIR NAMES halconcpp/HalconCpp.h PATHS <span class="string">"<span class="variable">$&#123;HALCON_ROOT_DIR&#125;</span>/include"</span>) </span><br><span class="line">mark_as_advanced(HALCON_INCLUDE_DIR) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line">find_library(HALCON_LIBRARY NAMES halconcpp.lib PATHS <span class="string">"<span class="variable">$&#123;HALCON_ROOT_DIR&#125;</span>/lib/x64-win64"</span>) </span><br><span class="line">mark_as_advanced(HALCON_LIBRARY) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># use xxx_INCLUDE_DIRS and xxx_LIBRARIES in CMakeLists.txt</span></span><br><span class="line"><span class="built_in">set</span>(HALCON_INCLUDE_DIRS <span class="variable">$&#123;HALCON_INCLUDE_DIR&#125;</span> )</span><br><span class="line"><span class="built_in">set</span>(HALCON_LIBRARIES <span class="variable">$&#123;HALCON_LIBRARY&#125;</span> )</span><br><span class="line"></span><br><span class="line">message( <span class="string">"halcon-config.cmake "</span> <span class="variable">$&#123;HALCON_ROOT_DIR&#125;</span>)</span><br></pre></td></tr></table></figure></p>
-<h3 id="usage-1"><a href="#usage-1" class="headerlink" title="usage"></a>usage</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">find_package(HALCON REQUIRED) <span class="comment"># user-defined</span></span><br><span class="line">include_directories(<span class="variable">$&#123;HALCON_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line">find_package(MYSQLCPPCONN REQUIRED) <span class="comment"># user-defined</span></span><br><span class="line">include_directories(<span class="variable">$&#123;MYSQLCPPCONN_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line">target_link_libraries(demo <span class="variable">$&#123;HALCON_LIBRARIES&#125;</span> <span class="variable">$&#123;MYSQLCPPCONN_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
+<p>mysqlcppconn-config.cmake<br><figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Name: &lt;Name&gt;Config.cmake  or &lt;lower name&gt;-config.cmake</span></span><br><span class="line"><span class="comment"># mysqlcppconn-config.cmake or MYSQLCPPCONNConfig.cmake  </span></span><br><span class="line"><span class="comment"># similar to OpenCVConfig.cmake   </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Tips for MYSQLCPPCONN_ROOT_DIR</span></span><br><span class="line"><span class="comment"># use "C:/Program Files/MySQL/Connector.C++ 1.1", otherwise cmake-gui can not auto find include and library</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(MYSQLCPPCONN_FOUND <span class="keyword">TRUE</span>) <span class="comment"># auto </span></span><br><span class="line"><span class="keyword">set</span>(MYSQLCPPCONN_ROOT_DIR <span class="string">"C:/Program Files/MySQL/Connector.C++ 1.1"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_path</span>(MYSQLCPPCONN_INCLUDE_DIR NAMES cppconn/driver.h PATHS <span class="string">"$&#123;MYSQLCPPCONN_ROOT_DIR&#125;/include"</span>) </span><br><span class="line"><span class="keyword">mark_as_advanced</span>(MYSQLCPPCONN_INCLUDE_DIR) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">find_library</span>(MYSQLCPPCONN_LIBRARY NAMES mysqlcppconn.lib PATHS <span class="string">"$&#123;MYSQLCPPCONN_ROOT_DIR&#125;/lib/opt"</span>) </span><br><span class="line"><span class="keyword">mark_as_advanced</span>(MYSQLCPPCONN_LIBRARY) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># use xxx_INCLUDE_DIRS and xxx_LIBRARIES in CMakeLists.txt</span></span><br><span class="line"><span class="keyword">set</span>(MYSQLCPPCONN_INCLUDE_DIRS <span class="variable">$&#123;MYSQLCPPCONN_INCLUDE_DIR&#125;</span> )</span><br><span class="line"><span class="keyword">set</span>(MYSQLCPPCONN_LIBRARIES <span class="variable">$&#123;MYSQLCPPCONN_LIBRARY&#125;</span> )</span><br><span class="line"></span><br><span class="line"><span class="comment"># cmake entry will be saved to build/CMakeCache.txt </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">message</span>( <span class="string">"mysqlcppconn-config.cmake "</span> <span class="variable">$&#123;MYSQLCPPCONN_ROOT_DIR&#125;</span>)</span><br></pre></td></tr></table></figure></p>
+<p>halcon-config.cmake<br><figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># halcon-config.cmake or HALCONConfig.cmake  </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(HALCON_FOUND <span class="keyword">TRUE</span>) <span class="comment"># auto </span></span><br><span class="line"><span class="keyword">set</span>(HALCON_ROOT_DIR E:/git/car/windows/lib/halcon)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_path</span>(HALCON_INCLUDE_DIR NAMES halconcpp/HalconCpp.h PATHS <span class="string">"$&#123;HALCON_ROOT_DIR&#125;/include"</span>) </span><br><span class="line"><span class="keyword">mark_as_advanced</span>(HALCON_INCLUDE_DIR) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">find_library</span>(HALCON_LIBRARY NAMES halconcpp.lib PATHS <span class="string">"$&#123;HALCON_ROOT_DIR&#125;/lib/x64-win64"</span>) </span><br><span class="line"><span class="keyword">mark_as_advanced</span>(HALCON_LIBRARY) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># use xxx_INCLUDE_DIRS and xxx_LIBRARIES in CMakeLists.txt</span></span><br><span class="line"><span class="keyword">set</span>(HALCON_INCLUDE_DIRS <span class="variable">$&#123;HALCON_INCLUDE_DIR&#125;</span> )</span><br><span class="line"><span class="keyword">set</span>(HALCON_LIBRARIES <span class="variable">$&#123;HALCON_LIBRARY&#125;</span> )</span><br><span class="line"></span><br><span class="line"><span class="keyword">message</span>( <span class="string">"halcon-config.cmake "</span> <span class="variable">$&#123;HALCON_ROOT_DIR&#125;</span>)</span><br></pre></td></tr></table></figure></p>
+<h3 id="usage-1"><a href="#usage-1" class="headerlink" title="usage"></a>usage</h3><figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">find_package</span>(HALCON REQUIRED) <span class="comment"># user-defined</span></span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;HALCON_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(MYSQLCPPCONN REQUIRED) <span class="comment"># user-defined</span></span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;MYSQLCPPCONN_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">target_link_libraries</span>(demo <span class="variable">$&#123;HALCON_LIBRARIES&#125;</span> <span class="variable">$&#123;MYSQLCPPCONN_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
 <h3 id="cmake-gui-entry"><a href="#cmake-gui-entry" class="headerlink" title="cmake-gui entry"></a>cmake-gui entry</h3><p>start cmake-gui, and at first,we should set </p>
 <ul>
 <li><code>HALCON_DIR</code> = <code>E:/git/car/share/cmake-3.10/Modules</code> </li>
-<li><code>MYSQLCPPCONN_DIR</code> = <code>E:/git/car/share/cmake-3.10/Modules</code><br>then configure</li>
+<li><code>MYSQLCPPCONN_DIR</code> = <code>E:/git/car/share/cmake-3.10/Modules</code></li>
+</ul>
+<p>then configure</p>
+<ul>
 <li><code>HALCON_INCLUDE_DIR</code> and <code>HALCON_LIBRARY</code> will be found.</li>
 <li><code>MYSQLCPPCONN_INCLUDE_DIR</code> and <code>MYSQLCPPCONN_LIBRARY</code> will be found.</li>
 </ul>
@@ -16000,8 +16034,11 @@ ios_extended_string    2014-09-08T17:51:04.777668  ===&gt; from_iso_extended_str
 </ul>
 ]]></content>
       <categories>
-        <category>cmake</category>
+        <category>cpp</category>
       </categories>
+      <tags>
+        <tag>cmake</tag>
+      </tags>
   </entry>
   <entry>
     <title>awsome tools for windows</title>
@@ -16751,8 +16788,11 @@ target_link_libraries( lib3 lib1 lib2 )
 </ul>
 ]]></content>
       <categories>
-        <category>cmake</category>
+        <category>cpp</category>
       </categories>
+      <tags>
+        <tag>cmake</tag>
+      </tags>
   </entry>
   <entry>
     <title>compile gtest on ubuntu 16.04</title>

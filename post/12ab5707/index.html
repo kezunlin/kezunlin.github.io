@@ -119,7 +119,7 @@
 
 
 
-  <meta name="keywords" content="KeZunLin, kezunlin, c++, python, linux, ubuntu, deep learning, caffe, tensorflow, mxnet, keras, pytorch, computer vision, kaggle, opencv, cmake, git, vim, github, google, stackoverflow">
+  <meta name="keywords" content="cmake,">
 
 
 
@@ -133,6 +133,7 @@
 
 
 <meta name="description" content="cmake with user defined entry">
+<meta name="keywords" content="cmake">
 <meta property="og:type" content="article">
 <meta property="og:title" content="cmake with user defined entry">
 <meta property="og:url" content="https://kezunlin.me/post/12ab5707/index.html">
@@ -140,7 +141,7 @@
 <meta property="og:description" content="cmake with user defined entry">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://images2017.cnblogs.com/blog/635233/201801/635233-20180122172154084-46926416.png">
-<meta property="og:updated_time" content="2018-03-01T09:49:36.871Z">
+<meta property="og:updated_time" content="2019-11-12T02:18:49.345Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="cmake with user defined entry">
 <meta name="twitter:description" content="cmake with user defined entry">
@@ -416,8 +417,8 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-03-01T17:49:36+08:00">
-                2018-03-01
+              <time title="Post modified" itemprop="dateModified" datetime="2019-11-12T10:18:49+08:00">
+                2019-11-12
               </time>
             
           </span>
@@ -435,8 +436,8 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/cmake/" itemprop="url" rel="index">
-                    <span itemprop="name">cmake</span>
+                  <a href="/categories/cpp/" itemprop="url" rel="index">
+                    <span itemprop="name">cpp</span>
                   </a>
                 </span>
 
@@ -469,7 +470,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  429
+                  403
                 </span>
               
 
@@ -514,19 +515,22 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 <h2 id="cmake-default-package"><a href="#cmake-default-package" class="headerlink" title="cmake default package"></a>cmake default package</h2><h3 id="FindXXX-cmake"><a href="#FindXXX-cmake" class="headerlink" title="FindXXX.cmake"></a>FindXXX.cmake</h3><p>use <code>find_package</code> to find default package with name <code>XXX</code></p>
 <p>and cmake file <code>C:\Program Files\CMake\share\cmake-3.10\Modules\FindXXX.cmake</code> </p>
 <p>use <code>${XXX_INCLUDE_DIRS}</code> in include, and <code>${XXX_LIBRARIES}</code> in libraries </p>
-<h3 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">find_package(GTest REQUIRED)</span><br><span class="line">include_directories(<span class="variable">$&#123;GTEST_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line">find_package(Boost 1.5.8 REQUIRED COMPONENTS date_time system filesystem)</span><br><span class="line">include_directories(<span class="variable">$&#123;Boost_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line">target_link_libraries(demo <span class="variable">$&#123;GTEST_LIBRARIES&#125;</span> <span class="variable">$&#123;Boost_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">find_package</span>(GTest REQUIRED)</span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;GTEST_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(Boost <span class="number">1.5</span>.<span class="number">8</span> REQUIRED COMPONENTS date_time system filesystem)</span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;Boost_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">target_link_libraries</span>(demo <span class="variable">$&#123;GTEST_LIBRARIES&#125;</span> <span class="variable">$&#123;Boost_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
 <h2 id="user-define-package"><a href="#user-define-package" class="headerlink" title="user-define package"></a>user-define package</h2><h3 id="xxx-config-cmake"><a href="#xxx-config-cmake" class="headerlink" title="xxx-config.cmake"></a>xxx-config.cmake</h3><p>both names are ok.</p>
 <ul>
 <li>xxx-config.cmake</li>
 <li>XXXConfig.cmake, e.g.  OpenCVConfig.cmake</li>
 </ul>
-<p>mysqlcppconn-config.cmake<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Name: &lt;Name&gt;Config.cmake  or &lt;lower name&gt;-config.cmake</span></span><br><span class="line"><span class="comment"># mysqlcppconn-config.cmake or MYSQLCPPCONNConfig.cmake  </span></span><br><span class="line"><span class="comment"># similar to OpenCVConfig.cmake   </span></span><br><span class="line"><span class="comment"># or use FindBoost.cmake </span></span><br><span class="line"><span class="comment"># MYSQLCPPCONN_DIR = E:/git/car/share/cmake-3.10/Modules</span></span><br><span class="line"><span class="comment"># find_package workflow: http://blog.csdn.net/bytxl/article/details/50637277</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Tips for MYSQLCPPCONN_ROOT_DIR</span></span><br><span class="line"><span class="comment"># use "C:/Program Files/MySQL/Connector.C++ 1.1", otherwise cmake-gui can not auto find include and library</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span>(MYSQLCPPCONN_FOUND TRUE) <span class="comment"># auto </span></span><br><span class="line"><span class="built_in">set</span>(MYSQLCPPCONN_ROOT_DIR <span class="string">"C:/Program Files/MySQL/Connector.C++ 1.1"</span>)</span><br><span class="line"></span><br><span class="line">find_path(MYSQLCPPCONN_INCLUDE_DIR NAMES cppconn/driver.h PATHS <span class="string">"<span class="variable">$&#123;MYSQLCPPCONN_ROOT_DIR&#125;</span>/include"</span>) </span><br><span class="line">mark_as_advanced(MYSQLCPPCONN_INCLUDE_DIR) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line">find_library(MYSQLCPPCONN_LIBRARY NAMES mysqlcppconn.lib PATHS <span class="string">"<span class="variable">$&#123;MYSQLCPPCONN_ROOT_DIR&#125;</span>/lib/opt"</span>) </span><br><span class="line">mark_as_advanced(MYSQLCPPCONN_LIBRARY) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># use xxx_INCLUDE_DIRS and xxx_LIBRARIES in CMakeLists.txt</span></span><br><span class="line"><span class="built_in">set</span>(MYSQLCPPCONN_INCLUDE_DIRS <span class="variable">$&#123;MYSQLCPPCONN_INCLUDE_DIR&#125;</span> )</span><br><span class="line"><span class="built_in">set</span>(MYSQLCPPCONN_LIBRARIES <span class="variable">$&#123;MYSQLCPPCONN_LIBRARY&#125;</span> )</span><br><span class="line"></span><br><span class="line"><span class="comment"># cmake entry will be saved to build/CMakeCache.txt </span></span><br><span class="line"></span><br><span class="line">message( <span class="string">"mysqlcppconn-config.cmake "</span> <span class="variable">$&#123;MYSQLCPPCONN_ROOT_DIR&#125;</span>)</span><br></pre></td></tr></table></figure></p>
-<p>halcon-config.cmake<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># halcon-config.cmake or HALCONConfig.cmake  </span></span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span>(HALCON_FOUND TRUE) <span class="comment"># auto </span></span><br><span class="line"><span class="built_in">set</span>(HALCON_ROOT_DIR E:/git/car/windows/lib/halcon)</span><br><span class="line"></span><br><span class="line">find_path(HALCON_INCLUDE_DIR NAMES halconcpp/HalconCpp.h PATHS <span class="string">"<span class="variable">$&#123;HALCON_ROOT_DIR&#125;</span>/include"</span>) </span><br><span class="line">mark_as_advanced(HALCON_INCLUDE_DIR) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line">find_library(HALCON_LIBRARY NAMES halconcpp.lib PATHS <span class="string">"<span class="variable">$&#123;HALCON_ROOT_DIR&#125;</span>/lib/x64-win64"</span>) </span><br><span class="line">mark_as_advanced(HALCON_LIBRARY) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># use xxx_INCLUDE_DIRS and xxx_LIBRARIES in CMakeLists.txt</span></span><br><span class="line"><span class="built_in">set</span>(HALCON_INCLUDE_DIRS <span class="variable">$&#123;HALCON_INCLUDE_DIR&#125;</span> )</span><br><span class="line"><span class="built_in">set</span>(HALCON_LIBRARIES <span class="variable">$&#123;HALCON_LIBRARY&#125;</span> )</span><br><span class="line"></span><br><span class="line">message( <span class="string">"halcon-config.cmake "</span> <span class="variable">$&#123;HALCON_ROOT_DIR&#125;</span>)</span><br></pre></td></tr></table></figure></p>
-<h3 id="usage-1"><a href="#usage-1" class="headerlink" title="usage"></a>usage</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">find_package(HALCON REQUIRED) <span class="comment"># user-defined</span></span><br><span class="line">include_directories(<span class="variable">$&#123;HALCON_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line">find_package(MYSQLCPPCONN REQUIRED) <span class="comment"># user-defined</span></span><br><span class="line">include_directories(<span class="variable">$&#123;MYSQLCPPCONN_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line">target_link_libraries(demo <span class="variable">$&#123;HALCON_LIBRARIES&#125;</span> <span class="variable">$&#123;MYSQLCPPCONN_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
+<p>mysqlcppconn-config.cmake<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Name: &lt;Name&gt;Config.cmake  or &lt;lower name&gt;-config.cmake</span></span><br><span class="line"><span class="comment"># mysqlcppconn-config.cmake or MYSQLCPPCONNConfig.cmake  </span></span><br><span class="line"><span class="comment"># similar to OpenCVConfig.cmake   </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Tips for MYSQLCPPCONN_ROOT_DIR</span></span><br><span class="line"><span class="comment"># use "C:/Program Files/MySQL/Connector.C++ 1.1", otherwise cmake-gui can not auto find include and library</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(MYSQLCPPCONN_FOUND <span class="keyword">TRUE</span>) <span class="comment"># auto </span></span><br><span class="line"><span class="keyword">set</span>(MYSQLCPPCONN_ROOT_DIR <span class="string">"C:/Program Files/MySQL/Connector.C++ 1.1"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_path</span>(MYSQLCPPCONN_INCLUDE_DIR NAMES cppconn/driver.h PATHS <span class="string">"$&#123;MYSQLCPPCONN_ROOT_DIR&#125;/include"</span>) </span><br><span class="line"><span class="keyword">mark_as_advanced</span>(MYSQLCPPCONN_INCLUDE_DIR) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">find_library</span>(MYSQLCPPCONN_LIBRARY NAMES mysqlcppconn.lib PATHS <span class="string">"$&#123;MYSQLCPPCONN_ROOT_DIR&#125;/lib/opt"</span>) </span><br><span class="line"><span class="keyword">mark_as_advanced</span>(MYSQLCPPCONN_LIBRARY) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># use xxx_INCLUDE_DIRS and xxx_LIBRARIES in CMakeLists.txt</span></span><br><span class="line"><span class="keyword">set</span>(MYSQLCPPCONN_INCLUDE_DIRS <span class="variable">$&#123;MYSQLCPPCONN_INCLUDE_DIR&#125;</span> )</span><br><span class="line"><span class="keyword">set</span>(MYSQLCPPCONN_LIBRARIES <span class="variable">$&#123;MYSQLCPPCONN_LIBRARY&#125;</span> )</span><br><span class="line"></span><br><span class="line"><span class="comment"># cmake entry will be saved to build/CMakeCache.txt </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">message</span>( <span class="string">"mysqlcppconn-config.cmake "</span> <span class="variable">$&#123;MYSQLCPPCONN_ROOT_DIR&#125;</span>)</span><br></pre></td></tr></table></figure></p>
+<p>halcon-config.cmake<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># halcon-config.cmake or HALCONConfig.cmake  </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(HALCON_FOUND <span class="keyword">TRUE</span>) <span class="comment"># auto </span></span><br><span class="line"><span class="keyword">set</span>(HALCON_ROOT_DIR E:/git/car/windows/lib/halcon)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_path</span>(HALCON_INCLUDE_DIR NAMES halconcpp/HalconCpp.h PATHS <span class="string">"$&#123;HALCON_ROOT_DIR&#125;/include"</span>) </span><br><span class="line"><span class="keyword">mark_as_advanced</span>(HALCON_INCLUDE_DIR) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">find_library</span>(HALCON_LIBRARY NAMES halconcpp.lib PATHS <span class="string">"$&#123;HALCON_ROOT_DIR&#125;/lib/x64-win64"</span>) </span><br><span class="line"><span class="keyword">mark_as_advanced</span>(HALCON_LIBRARY) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># use xxx_INCLUDE_DIRS and xxx_LIBRARIES in CMakeLists.txt</span></span><br><span class="line"><span class="keyword">set</span>(HALCON_INCLUDE_DIRS <span class="variable">$&#123;HALCON_INCLUDE_DIR&#125;</span> )</span><br><span class="line"><span class="keyword">set</span>(HALCON_LIBRARIES <span class="variable">$&#123;HALCON_LIBRARY&#125;</span> )</span><br><span class="line"></span><br><span class="line"><span class="keyword">message</span>( <span class="string">"halcon-config.cmake "</span> <span class="variable">$&#123;HALCON_ROOT_DIR&#125;</span>)</span><br></pre></td></tr></table></figure></p>
+<h3 id="usage-1"><a href="#usage-1" class="headerlink" title="usage"></a>usage</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">find_package</span>(HALCON REQUIRED) <span class="comment"># user-defined</span></span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;HALCON_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(MYSQLCPPCONN REQUIRED) <span class="comment"># user-defined</span></span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;MYSQLCPPCONN_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">target_link_libraries</span>(demo <span class="variable">$&#123;HALCON_LIBRARIES&#125;</span> <span class="variable">$&#123;MYSQLCPPCONN_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
 <h3 id="cmake-gui-entry"><a href="#cmake-gui-entry" class="headerlink" title="cmake-gui entry"></a>cmake-gui entry</h3><p>start cmake-gui, and at first,we should set </p>
 <ul>
 <li><code>HALCON_DIR</code> = <code>E:/git/car/share/cmake-3.10/Modules</code> </li>
-<li><code>MYSQLCPPCONN_DIR</code> = <code>E:/git/car/share/cmake-3.10/Modules</code><br>then configure</li>
+<li><code>MYSQLCPPCONN_DIR</code> = <code>E:/git/car/share/cmake-3.10/Modules</code></li>
+</ul>
+<p>then configure</p>
+<ul>
 <li><code>HALCON_INCLUDE_DIR</code> and <code>HALCON_LIBRARY</code> will be found.</li>
 <li><code>MYSQLCPPCONN_INCLUDE_DIR</code> and <code>MYSQLCPPCONN_LIBRARY</code> will be found.</li>
 </ul>
@@ -593,6 +597,12 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/cmake/" rel="tag"># cmake</a>
+          
+        </div>
       
 
     
@@ -724,7 +734,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">211</span>
+                  <span class="site-state-item-count">212</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -735,7 +745,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-count">45</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -746,7 +756,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">145</span>
+                  <span class="site-state-item-count">144</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
