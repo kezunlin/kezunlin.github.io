@@ -140,7 +140,7 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="compile glog and glags on ubuntu 16.04">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-11-08T09:39:30.507Z">
+<meta property="og:updated_time" content="2019-11-12T05:14:35.212Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="compile glog and glags on ubuntu 16.04">
 <meta name="twitter:description" content="compile glog and glags on ubuntu 16.04">
@@ -415,8 +415,8 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-11-08T17:39:30+08:00">
-                2019-11-08
+              <time title="Post modified" itemprop="dateModified" datetime="2019-11-12T13:14:35+08:00">
+                2019-11-12
               </time>
             
           </span>
@@ -468,7 +468,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  693
+                  727
                 </span>
               
 
@@ -484,7 +484,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  4
+                  5
                 </span>
               
             </div>
@@ -506,11 +506,11 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 
       
         <p>compile glog and glags on ubuntu 16.04<br><a id="more"></a></p>
-<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><ul>
+<h1 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h1><ul>
 <li><a href="https://kezunlin.me/post/bb64e398/">compile glog and glags on windows</a></li>
 <li><strong><a href="https://kezunlin.me/post/977f5125/">compile glog and glags on ubuntu 16.04</a></strong></li>
 </ul>
-<h2 id="version"><a href="#version" class="headerlink" title="version"></a>version</h2><pre><code>wget https://github.com/schuhschuh/gflags/archive/v2.2.1.tar.gz
+<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="version"><a href="#version" class="headerlink" title="version"></a>version</h2><pre><code>wget https://github.com/schuhschuh/gflags/archive/v2.2.1.tar.gz
 wget https://github.com/google/glog/archive/v0.3.5.tar.gz
 </code></pre><h2 id="gflags"><a href="#gflags" class="headerlink" title="gflags"></a>gflags</h2><pre><code>cd gflags
 mkdir build
@@ -548,10 +548,15 @@ sudo make install
 <h1 id="Example-Code"><a href="#Example-Code" class="headerlink" title="Example Code"></a>Example Code</h1><h2 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 2.6)</span><br><span class="line"></span><br><span class="line">project(glog_proj)</span><br><span class="line"> </span><br><span class="line"><span class="comment"># Locate GTest</span></span><br><span class="line">find_package(GTest REQUIRED)</span><br><span class="line">include_directories(<span class="variable">$&#123;GTEST_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line">find_package(GFLAGS REQUIRED) </span><br><span class="line">include_directories(<span class="variable">$&#123;GFLAGS_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line">find_package(GLOG REQUIRED) </span><br><span class="line">include_directories(<span class="variable">$&#123;GLOG_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># for windows</span></span><br><span class="line"><span class="comment">#add_definitions( -DGLOG_NO_ABBREVIATED_SEVERITIES ) </span></span><br><span class="line"></span><br><span class="line">MESSAGE( [Main] <span class="string">" GFLAGS_FOUND = <span class="variable">$&#123;GFLAGS_FOUND&#125;</span>"</span>)</span><br><span class="line">MESSAGE( [Main] <span class="string">" GFLAGS_INCLUDE_DIRS = <span class="variable">$&#123;GFLAGS_INCLUDE_DIRS&#125;</span>"</span>)</span><br><span class="line">MESSAGE( [Main] <span class="string">" GFLAGS_LIBRARIES = <span class="variable">$&#123;GFLAGS_LIBRARIES&#125;</span>"</span>)</span><br><span class="line"></span><br><span class="line">MESSAGE( [Main] <span class="string">" GLOG_FOUND = <span class="variable">$&#123;GLOG_FOUND&#125;</span>"</span>)</span><br><span class="line">MESSAGE( [Main] <span class="string">" GLOG_INCLUDE_DIRS = <span class="variable">$&#123;GLOG_INCLUDE_DIRS&#125;</span>"</span>)</span><br><span class="line">MESSAGE( [Main] <span class="string">" GLOG_LIBRARIES = <span class="variable">$&#123;GLOG_LIBRARIES&#125;</span>"</span>)</span><br><span class="line"></span><br><span class="line">add_executable(demo glog_main.cpp)</span><br><span class="line">target_link_libraries (demo  <span class="variable">$&#123;GLOG_LIBRARIES&#125;</span> <span class="variable">$&#123;GFLAGS_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
 <h2 id="main-cpp"><a href="#main-cpp" class="headerlink" title="main.cpp"></a>main.cpp</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;gflags/gflags.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;glog/logging.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	FLAGS_logtostderr = true;  </span></span><br><span class="line"><span class="comment">	FLAGS_alsologtostderr = true;  </span></span><br><span class="line"><span class="comment">	FLAGS_colorlogtostderr = true;  </span></span><br><span class="line"><span class="comment">	FLAGS_log_prefix = true;  </span></span><br><span class="line"><span class="comment">	</span></span><br><span class="line"><span class="comment">	FLAGS_logbufsecs = 0;  //0 means realtime</span></span><br><span class="line"><span class="comment">	FLAGS_max_log_size = 10;  // MB</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	google::InitGoogleLogging(argv[<span class="number">0</span>]); <span class="comment">// init google logging</span></span><br><span class="line">	google::SetLogDestination(google::GLOG_FATAL, <span class="string">"../log/log_fatal_"</span>); </span><br><span class="line">	google::SetLogDestination(google::GLOG_ERROR, <span class="string">"../log/log_error_"</span>); </span><br><span class="line">	google::SetLogDestination(google::GLOG_WARNING, <span class="string">"../log/log_warning_"</span>);</span><br><span class="line">	google::SetLogDestination(google::GLOG_INFO, <span class="string">"../log/log_info_"</span>); </span><br><span class="line"></span><br><span class="line">	LOG(INFO) &lt;&lt; <span class="string">"Hello GLOG"</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a href="http://blog.csdn.net/10km/article/details/72967656" target="_blank" rel="noopener">glog find package</a></li>
+<li><a href="https://kezunlin.me/post/977f5125/">compile glog and glags on windows</a></li>
 </ul>
 <h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>20180223: created.</li>
+</ul>
+<h1 id="Copyright"><a href="#Copyright" class="headerlink" title="Copyright"></a>Copyright</h1><ul>
+<li>Post author: <a href="https://kezunlin.me">kezunlin</a></li>
+<li>Post link: <a href="https://kezunlin.me/post/977f5125/">https://kezunlin.me/post/977f5125/</a></li>
+<li>Copyright Notice: All articles in this blog are licensed under CC BY-NC-SA 3.0 unless stating additionally.</li>
 </ul>
 
       
@@ -820,7 +825,7 @@ sudo make install
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#version"><span class="nav-number">1.1.</span> <span class="nav-text">version</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gflags"><span class="nav-number">1.2.</span> <span class="nav-text">gflags</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gflags-config-cmake"><span class="nav-number">1.2.1.</span> <span class="nav-text">gflags-config.cmake</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#glog"><span class="nav-number">1.3.</span> <span class="nav-text">glog</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#glog-config-cmake"><span class="nav-number">1.3.1.</span> <span class="nav-text">glog-config.cmake</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Example-Code"><span class="nav-number">2.</span> <span class="nav-text">Example Code</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">2.1.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#main-cpp"><span class="nav-number">2.2.</span> <span class="nav-text">main.cpp</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Series"><span class="nav-number">1.</span> <span class="nav-text">Series</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">2.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#version"><span class="nav-number">2.1.</span> <span class="nav-text">version</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gflags"><span class="nav-number">2.2.</span> <span class="nav-text">gflags</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gflags-config-cmake"><span class="nav-number">2.2.1.</span> <span class="nav-text">gflags-config.cmake</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#glog"><span class="nav-number">2.3.</span> <span class="nav-text">glog</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#glog-config-cmake"><span class="nav-number">2.3.1.</span> <span class="nav-text">glog-config.cmake</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Example-Code"><span class="nav-number">3.</span> <span class="nav-text">Example Code</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">3.1.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#main-cpp"><span class="nav-number">3.2.</span> <span class="nav-text">main.cpp</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Copyright"><span class="nav-number">6.</span> <span class="nav-text">Copyright</span></a></li></ol></div>
             
 
           </div>
