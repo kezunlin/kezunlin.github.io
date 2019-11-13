@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+<meta name="referrer" content="no-referrer">
+
+<meta name="google-site-verification" content="WSpJFvfcmIPBX_iK8uPbmCHIy_0f1lvd7ZJpbyad2sA">
+<meta name="baidu-site-verification" content="9tyEi4Fq0J">
+<meta name="360-site-verification" content="202e7cd2d29c6b138e4b78d9e9b62d43">
+<meta name="sogou_site_verification" content="euHq4j1Rpe">
+
+<script data-ad-client="ca-pub-5653382914441020" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|16:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="rcnn,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="KeZunLin's Blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="rcnn tutorial">
+<meta name="keywords" content="rcnn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="a quick guide to rcnn">
+<meta property="og:url" content="https://kezunlin.me/post/66241a6b/index.html">
+<meta property="og:site_name" content="KeZunLin&#39;s Blog">
+<meta property="og:description" content="rcnn tutorial">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180822101918577-1947950229.png">
+<meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180822102036279-1691824045.jpg">
+<meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180822101930740-496243953.png">
+<meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816101220026-1212221400.png">
+<meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816101222714-1713668340.png">
+<meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816101225186-628963131.png">
+<meta property="og:updated_time" content="2019-11-13T02:41:21.328Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="a quick guide to rcnn">
+<meta name="twitter:description" content="rcnn tutorial">
+<meta name="twitter:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180822101918577-1947950229.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://kezunlin.me/post/66241a6b/">
+
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+<script>
+(function(){
+var src = "https://jspassport.ssl.qhimg.com/11.0.1.js?d182b3f28525f2db83acfaaf6e696dba";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+
+  <title>a quick guide to rcnn | KeZunLin's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-111858944-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">KeZunLin's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Live and Learn.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/post/66241a6b/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/kezunlin_avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="KeZunLin's Blog">
+      <img itemprop="logo" src="/images/kezunlin_avatar.jpg" alt="logo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">a quick guide to rcnn</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-16T10:11:00+08:00">
+                2018-08-16
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2019-11-13T10:41:21+08:00">
+                2019-11-13
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/caffe/" itemprop="url" rel="index">
+                    <span itemprop="name">caffe</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/caffe/tutorials/" itemprop="url" rel="index">
+                    <span itemprop="name">tutorials</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-eye"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>Reads
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  2,424
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  15
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+        
+
+        <p>rcnn tutorial<br><a id="more"></a></p>
+<h1 id="R-CNN"><a href="#R-CNN" class="headerlink" title="R-CNN"></a>R-CNN</h1><h2 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h2><p><a href="https://github.com/rbgirshick/rcnn" target="_blank" rel="noopener">R-CNN</a> is a state-of-the-art detector that classifies region proposals by a finetuned Caffe model. For the full details of the R-CNN system and model, refer to its project site and the paper:</p>
+<blockquote>
+<p><em>Rich feature hierarchies for accurate object detection and semantic segmentation</em>. Ross Girshick, Jeff Donahue, Trevor Darrell, Jitendra Malik. CVPR 2014. <a href="http://arxiv.org/abs/1311.2524" target="_blank" rel="noopener">Arxiv 2013</a>.</p>
+</blockquote>
+<p>In this example, we do detection by a pure Caffe edition of the R-CNN model for ImageNet. The R-CNN detector outputs class scores for the 200 detection classes of ILSVRC13. Keep in mind that these are raw one vs. all SVM scores, so they are not probabilistically calibrated or exactly comparable across classes. Note that this off-the-shelf model is simply for convenience, and is not the full R-CNN model.</p>
+<p>Let’s run detection on an image of a bicyclist riding a fish bike in the desert (from the ImageNet challenge—no joke).</p>
+<h2 id="selective-search"><a href="#selective-search" class="headerlink" title="selective search"></a>selective search</h2><p>First, we’ll need region proposals and the Caffe R-CNN ImageNet model:</p>
+<blockquote>
+<p><a href="http://koen.me/research/selectivesearch/" target="_blank" rel="noopener">Selective Search</a> is the region proposer used by R-CNN. The <a href="https://github.com/sergeyk/selective_search_ijcv_with_python" target="_blank" rel="noopener">selective_search_ijcv_with_python</a> Python module takes care of extracting proposals through the selective search MATLAB implementation. </p>
+</blockquote>
+<h3 id="clone-repo"><a href="#clone-repo" class="headerlink" title="clone repo"></a>clone repo</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="variable">$CAFFE_ROOT</span>/caffe/python</span><br><span class="line">git <span class="built_in">clone</span> https://github.com/sergeyk/selective_search_ijcv_with_python.git`</span><br><span class="line">pip install tables</span><br></pre></td></tr></table></figure>
+<h3 id="install-matlab"><a href="#install-matlab" class="headerlink" title="install matlab"></a>install matlab</h3><p>Install <code>matlab</code> and run <code>demo.m</code> file to compile functions</p>
+<p>see <a href="https://kezunlin.me/post/deab4886/">here</a></p>
+<p><strong>Notice: Restart computer for Solving Errors</strong>: </p>
+<pre><code>OSError: [Errno 2] No such file or directory
+</code></pre><h3 id="compile-matlab-functions"><a href="#compile-matlab-functions" class="headerlink" title="compile matlab functions"></a>compile matlab functions</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> caffe/python/caffe/selective_search_ijcv_with_python</span><br><span class="line"><span class="built_in">which</span> matlab</span><br><span class="line"><span class="comment">#/opt/MATLAB/R2016b/bin/matlab</span></span><br><span class="line"></span><br><span class="line">matlab demo.m</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>run demo in matlab<br><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180822101918577-1947950229.png" alt="png"></p>
+</li>
+<li><p>origin image<br><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180822102036279-1691824045.jpg" alt="png"></p>
+</li>
+<li><p>region results<br><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180822101930740-496243953.png" alt="png"></p>
+</li>
+</ul>
+<h2 id="detect-regions"><a href="#detect-regions" class="headerlink" title="detect regions"></a>detect regions</h2><p>Run scripts to get the Caffe R-CNN ImageNet model.</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.<span class="regexp">/scripts/</span>download_model_binary.py models<span class="regexp">/bvlc_reference_rcnn_ilsvrc13</span></span><br></pre></td></tr></table></figure>
+<p>With that done, we’ll call the bundled <code>detect.py</code> to generate the region proposals and run the network. For an explanation of the arguments, do <code>./detect.py --help</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd caffe/examples/</span><br><span class="line">mkdir -p _temp</span><br><span class="line">echo `pwd`/images/fish-bike.jpg &gt; _temp/det_input.txt</span><br><span class="line">../python/detect.py --crop_mode=selective_search --pretrained_model=../models/bvlc_reference_rcnn_ilsvrc13/bvlc_reference_rcnn_ilsvrc13.caffemodel --model_def=../models/bvlc_reference_rcnn_ilsvrc13/deploy.prototxt --gpu --raw_scale=<span class="number">255</span> _temp/det_input.txt _temp/det_output.h5</span><br></pre></td></tr></table></figure>
+<pre><code>...
+I1129 15:02:22.498908  3483 net.cpp:242] This network produces output fc-rcnn
+I1129 15:02:22.498919  3483 net.cpp:255] Network initialization done.
+I1129 15:02:22.577332  3483 upgrade_proto.cpp:53] Attempting to upgrade input file specified using deprecated V1LayerParameter: ../models/bvlc_reference_rcnn_ilsvrc13/bvlc_reference_rcnn_ilsvrc13.caffemodel
+I1129 15:02:22.685262  3483 upgrade_proto.cpp:61] Successfully upgraded file specified using deprecated V1LayerParameter
+I1129 15:02:22.685796  3483 upgrade_proto.cpp:67] Attempting to upgrade input file specified using deprecated input fields: ../models/bvlc_reference_rcnn_ilsvrc13/bvlc_reference_rcnn_ilsvrc13.caffemodel
+I1129 15:02:22.685804  3483 upgrade_proto.cpp:70] Successfully upgraded file specified using deprecated input fields.
+W1129 15:02:22.685809  3483 upgrade_proto.cpp:72] Note that future Caffe releases will only support input layers and not input fields.
+Loading input...
+selective_search_rcnn({&apos;/home/kezunlin/program/caffe/examples/images/fish-bike.jpg&apos;}, &apos;/tmp/tmpkOe6J0.mat&apos;)
+/home/kezunlin/program/caffe/python/caffe/detector.py:140: VisibleDeprecationWarning: using a non-integer number instead of an integer will result in an error in the future
+  crop = im[window[0]:window[2], window[1]:window[3]]
+/home/kezunlin/program/caffe/python/caffe/detector.py:174: VisibleDeprecationWarning: using a non-integer number instead of an integer will result in an error in the future
+  context_crop = im[box[0]:box[2], box[1]:box[3]]
+/usr/local/lib/python2.7/dist-packages/skimage/transform/_warps.py:84: UserWarning: The default mode, &apos;constant&apos;, will be changed to &apos;reflect&apos; in skimage 0.15.
+  warn(&quot;The default mode, &apos;constant&apos;, will be changed to &apos;reflect&apos; in &quot;
+/home/kezunlin/program/caffe/python/caffe/detector.py:177: VisibleDeprecationWarning: using a non-integer number instead of an integer will result in an error in the future
+  crop[pad_y:(pad_y + crop_h), pad_x:(pad_x + crop_w)] = context_crop
+Processed 1565 windows in 15.899 s.
+/usr/local/lib/python2.7/dist-packages/pandas/core/generic.py:1299: PerformanceWarning: 
+your performance may suffer as PyTables will pickle object types that it cannot
+map directly to c-types [inferred_type-&gt;mixed,key-&gt;block1_values] [items-&gt;[&apos;prediction&apos;]]
+
+  return pytables.to_hdf(path_or_buf, key, self, **kwargs)
+Saved to _temp/det_output.h5 in 0.082 s.
+</code></pre><p>This run was in GPU mode. For CPU mode detection, call <code>detect.py</code> without the <code>--gpu</code> argument.</p>
+<h2 id="process-regions"><a href="#process-regions" class="headerlink" title="process regions"></a>process regions</h2><p>Running this outputs a DataFrame with the filenames, selected windows, and their detection scores to an HDF5 file.<br>(We only ran on one image, so the filenames will all be the same.)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">%matplotlib inline</span><br><span class="line"></span><br><span class="line">df = pd.read_hdf(<span class="string">'_temp/det_output.h5'</span>, <span class="string">'df'</span>)</span><br><span class="line">print(df.shape)</span><br><span class="line">row = df.iloc[<span class="number">0</span>] <span class="comment"># prediction(200,), bbox as input image</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">'row '</span>,row.shape</span><br><span class="line"><span class="keyword">print</span> <span class="string">'prediction '</span>,row[<span class="number">0</span>].shape</span><br><span class="line"><span class="keyword">print</span> type(row)  <span class="comment"># class 'pandas.core.series.Series</span></span><br><span class="line"><span class="keyword">print</span> row</span><br></pre></td></tr></table></figure>
+<pre><code>(1565, 5)
+row  (5,)
+prediction  (200,)
+&lt;class &apos;pandas.core.series.Series&apos;&gt;
+prediction    [-2.60202, -2.87814, -3.0061, -2.77251, -2.077...
+ymin                                                    152.958
+xmin                                                    159.692
+ymax                                                    261.702
+xmax                                                    340.586
+Name: /home/kezunlin/program/caffe/examples/images/fish-bike.jpg, dtype: object
+</code></pre><p>1570 regions were proposed with the R-CNN configuration of selective search. The number of proposals will vary from image to image based on its contents and size – selective search isn’t scale invariant.</p>
+<p>In general, <code>detect.py</code> is most efficient when running on a lot of images: it first extracts window proposals for all of them, batches the windows for efficient GPU processing, and then outputs the results.<br>Simply list an image per line in the <code>images_file</code>, and it will process all of them.</p>
+<p>Although this guide gives an example of R-CNN ImageNet detection, <code>detect.py</code> is clever enough to adapt to different Caffe models’ input dimensions, batch size, and output categories. You can switch the model definition and pretrained model as desired. Refer to <code>python detect.py --help</code> for the parameters to describe your data set. There’s no need for hardcoding.</p>
+<p>Anyway, let’s now load the ILSVRC13 detection class names and make a DataFrame of the predictions. Note you’ll need the auxiliary ilsvrc2012 data fetched by <code>data/ilsvrc12/get_ilsvrc12_aux.sh</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">%matplotlib inline</span><br><span class="line"></span><br><span class="line"><span class="comment">#n01443537 goldfish</span></span><br><span class="line"><span class="comment">#n03445777 golf ball</span></span><br><span class="line"><span class="comment">#...</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'../data/ilsvrc12/det_synset_words.txt'</span>) <span class="keyword">as</span> f: <span class="comment"># 200 classes from 1000 imagenet classes</span></span><br><span class="line">    labels_df = pd.DataFrame([</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">'synset_id'</span>: l.strip().split(<span class="string">' '</span>)[<span class="number">0</span>],</span><br><span class="line">            <span class="string">'name'</span>: <span class="string">' '</span>.join(l.strip().split(<span class="string">' '</span>)[<span class="number">1</span>:]).split(<span class="string">','</span>)[<span class="number">0</span>]</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> l <span class="keyword">in</span> f.readlines()</span><br><span class="line">    ])</span><br><span class="line">labels_df.sort_values(by=<span class="string">'synset_id'</span>) <span class="comment"># from a... to z</span></span><br><span class="line"><span class="keyword">print</span> labels_df.shape <span class="comment"># (200, 2)</span></span><br><span class="line"><span class="keyword">print</span> labels_df.head(<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>(200, 2)
+        name  synset_id
+0  accordion  n02672831
+1   airplane  n02691156
+2        ant  n02219486
+3   antelope  n02419796
+4      apple  n07739125
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#print type(df.prediction) # &lt;class 'pandas.core.series.Series'&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> df.prediction.values.shape <span class="comment"># numpy.ndarray (1565,)</span></span><br><span class="line"><span class="keyword">print</span> df.prediction.values[<span class="number">0</span>].shape <span class="comment"># numpy.ndarray (200,)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> np.vstack(df.prediction.values).shape <span class="comment"># (1565, 200)</span></span><br><span class="line"></span><br><span class="line">predictions_df = pd.DataFrame(np.vstack(df.prediction.values), columns=labels_df[<span class="string">'name'</span>])</span><br><span class="line"><span class="comment">#print predictions_df.values.shape # (1565, 200)</span></span><br><span class="line">print(predictions_df.iloc[:<span class="number">5</span>,:<span class="number">7</span>])</span><br></pre></td></tr></table></figure>
+<pre><code>(1565,)
+(200,)
+(1565, 200)
+name  accordion  airplane       ant  antelope     apple  armadillo  artichoke
+0     -2.602018 -2.878137 -3.006104 -2.772514 -2.077227  -2.590448  -2.414262
+1     -2.997767 -3.312270 -2.878942 -3.434367 -2.227469  -2.492260  -2.383878
+2     -2.476110 -3.145484 -2.377191 -2.684406 -2.289587  -2.428077  -2.390187
+3     -2.362699 -2.784188 -1.981096 -2.664146 -2.207042  -2.299127  -2.181105
+4     -2.929469 -2.323617 -2.755007 -3.165601 -2.188648  -2.486410  -2.505435
+</code></pre><p>Let’s look at the activations.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">plt.gray()</span><br><span class="line">plt.matshow(predictions_df.values) <span class="comment"># (1565, 200)</span></span><br><span class="line">plt.xlabel(<span class="string">'Classes'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'Windows'</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816101220026-1212221400.png" alt="png"></p>
+<p>Now let’s take max across all windows and plot the top classes.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">max_s = predictions_df.max(<span class="number">0</span>)</span><br><span class="line">max_s = max_s.sort_values(ascending=<span class="literal">False</span>)</span><br><span class="line">print(max_s[:<span class="number">10</span>])</span><br></pre></td></tr></table></figure>
+<pre><code>name
+person          1.839882
+bicycle         0.855625
+unicycle        0.085192
+motorcycle      0.003604
+turtle         -0.030388
+banjo          -0.114999
+electric fan   -0.220595
+cart           -0.225192
+lizard         -0.365949
+helmet         -0.477555
+dtype: float32
+</code></pre><p>The top detections are in fact a person and bicycle.<br>Picking good localizations is a work in progress; we pick the top-scoring person and bicycle detections.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">i = predictions_df[<span class="string">'person'</span>].argmax() <span class="comment"># 70  rect</span></span><br><span class="line">j = predictions_df[<span class="string">'bicycle'</span>].argmax()<span class="comment"># 262 rect</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Show top predictions for top detection.</span></span><br><span class="line">f = pd.Series(df[<span class="string">'prediction'</span>].iloc[i], index=labels_df[<span class="string">'name'</span>]) <span class="comment"># (200,)</span></span><br><span class="line"><span class="comment">#print f.head(5)</span></span><br><span class="line"><span class="comment">#print </span></span><br><span class="line">print(<span class="string">'Top detection:'</span>)</span><br><span class="line">print(f.sort_values(ascending=<span class="literal">False</span>)[:<span class="number">5</span>])</span><br><span class="line">print(<span class="string">''</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Show top predictions for second-best detection.</span></span><br><span class="line">f = pd.Series(df[<span class="string">'prediction'</span>].iloc[j], index=labels_df[<span class="string">'name'</span>]) <span class="comment"># (200,)</span></span><br><span class="line">print(<span class="string">'Second-best detection:'</span>)</span><br><span class="line">print(f.sort_values(ascending=<span class="literal">False</span>)[:<span class="number">5</span>])</span><br></pre></td></tr></table></figure>
+<pre><code>Top detection:
+name
+person             1.839882
+swimming trunks   -1.157806
+turtle            -1.168884
+tie               -1.217267
+rubber eraser     -1.246662
+dtype: float32
+
+Second-best detection:
+name
+bicycle     0.855625
+unicycle   -0.334367
+scorpion   -0.824552
+lobster    -0.965544
+lamp       -1.076224
+dtype: float32
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Find, print, and display the top detections: person and bicycle.</span></span><br><span class="line">i = predictions_df[<span class="string">'person'</span>].argmax()</span><br><span class="line">j = predictions_df[<span class="string">'bicycle'</span>].argmax()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Show top predictions for top detection.</span></span><br><span class="line">f = pd.Series(df[<span class="string">'prediction'</span>].iloc[i], index=labels_df[<span class="string">'name'</span>])</span><br><span class="line">print(<span class="string">'Top detection:'</span>)</span><br><span class="line">print(f.sort_values(ascending=<span class="literal">False</span>)[:<span class="number">5</span>])</span><br><span class="line">print(<span class="string">''</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Show top predictions for second-best detection.</span></span><br><span class="line">f = pd.Series(df[<span class="string">'prediction'</span>].iloc[j], index=labels_df[<span class="string">'name'</span>])</span><br><span class="line">print(<span class="string">'Second-best detection:'</span>)</span><br><span class="line">print(f.sort_values(ascending=<span class="literal">False</span>)[:<span class="number">5</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># Show top detection in red, second-best top detection in blue.</span></span><br><span class="line">im = plt.imread(<span class="string">'images/fish-bike.jpg'</span>)</span><br><span class="line">plt.imshow(im)</span><br><span class="line">currentAxis = plt.gca()</span><br><span class="line"></span><br><span class="line">det = df.iloc[i]</span><br><span class="line">coords = (det[<span class="string">'xmin'</span>], det[<span class="string">'ymin'</span>]), det[<span class="string">'xmax'</span>] - det[<span class="string">'xmin'</span>], det[<span class="string">'ymax'</span>] - det[<span class="string">'ymin'</span>]</span><br><span class="line"><span class="keyword">print</span> coords <span class="comment"># ((207.792, 7.6959999999999997), 134.71799999999999, 155.88200000000001)</span></span><br><span class="line">currentAxis.add_patch(plt.Rectangle(*coords, fill=<span class="literal">False</span>, edgecolor=<span class="string">'r'</span>, linewidth=<span class="number">5</span>))</span><br><span class="line"></span><br><span class="line">det = df.iloc[j]</span><br><span class="line">coords = (det[<span class="string">'xmin'</span>], det[<span class="string">'ymin'</span>]), det[<span class="string">'xmax'</span>] - det[<span class="string">'xmin'</span>], det[<span class="string">'ymax'</span>] - det[<span class="string">'ymin'</span>]</span><br><span class="line"><span class="keyword">print</span> coords <span class="comment"># ((108.706, 184.70400000000001), 284.78999999999996, 127.98399999999998)</span></span><br><span class="line">currentAxis.add_patch(plt.Rectangle(*coords, fill=<span class="literal">False</span>, edgecolor=<span class="string">'b'</span>, linewidth=<span class="number">5</span>))</span><br></pre></td></tr></table></figure>
+<pre><code>Top detection:
+name
+person             1.839882
+swimming trunks   -1.157806
+turtle            -1.168884
+tie               -1.217267
+rubber eraser     -1.246662
+dtype: float32
+
+Second-best detection:
+name
+bicycle     0.855625
+unicycle   -0.334367
+scorpion   -0.824552
+lobster    -0.965544
+lamp       -1.076224
+dtype: float32
+((207.792, 7.6959999999999997), 134.71799999999999, 155.88200000000001)
+((108.706, 184.70400000000001), 284.78999999999996, 127.98399999999998)
+</code></pre><p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816101222714-1713668340.png" alt="png"></p>
+<p>That’s cool. Let’s take all ‘bicycle’ detections and NMS them to get rid of overlapping windows.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">nms_detections</span><span class="params">(dets, overlap=<span class="number">0.3</span>)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Non-maximum suppression: Greedily select high-scoring detections and</span></span><br><span class="line"><span class="string">    skip detections that are significantly covered by a previously</span></span><br><span class="line"><span class="string">    selected detection.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    This version is translated from Matlab code by Tomasz Malisiewicz,</span></span><br><span class="line"><span class="string">    who sped up Pedro Felzenszwalb's code.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Parameters</span></span><br><span class="line"><span class="string">    ----------</span></span><br><span class="line"><span class="string">    dets: ndarray</span></span><br><span class="line"><span class="string">        each row is ['xmin', 'ymin', 'xmax', 'ymax', 'score']</span></span><br><span class="line"><span class="string">    overlap: float</span></span><br><span class="line"><span class="string">        minimum overlap ratio (0.3 default)  &gt;iou,then drop rect</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Output</span></span><br><span class="line"><span class="string">    ------</span></span><br><span class="line"><span class="string">    dets: ndarray</span></span><br><span class="line"><span class="string">        remaining after suppression.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    x1 = dets[:, <span class="number">0</span>]</span><br><span class="line">    y1 = dets[:, <span class="number">1</span>]</span><br><span class="line">    x2 = dets[:, <span class="number">2</span>]</span><br><span class="line">    y2 = dets[:, <span class="number">3</span>]</span><br><span class="line">    ind = np.argsort(dets[:, <span class="number">4</span>]) <span class="comment"># current ind set (min---&gt;max)</span></span><br><span class="line"></span><br><span class="line">    w = x2 - x1</span><br><span class="line">    h = y2 - y1</span><br><span class="line">    area = (w * h).astype(float)</span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    dets</span></span><br><span class="line"><span class="string">    pick = []</span></span><br><span class="line"><span class="string">    ind = [a,b,c,d,e,f]</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    while not ind.empty:</span></span><br><span class="line"><span class="string">        f, pick=[f],    ind=[a,b,c,d,e], o=[0.1,0.2,0.5,0.9,0.2],keep_ind=[0,1,4],ind=[a,b,e]</span></span><br><span class="line"><span class="string">        e, pick=[f,e],  ind=[a,b],       o=[0.4,0.1],keep_ind=[1],ind=[b]</span></span><br><span class="line"><span class="string">        b, pick=[f,e,b],ind=[],          o=[],       keep_ind=[], ind=[]</span></span><br><span class="line"><span class="string">    return dets[pick]</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    pick = [] <span class="comment"># pick index</span></span><br><span class="line">    <span class="keyword">while</span> len(ind) &gt; <span class="number">0</span>:</span><br><span class="line">        i = ind[<span class="number">-1</span>] <span class="comment"># choose last best index</span></span><br><span class="line">        pick.append(i)</span><br><span class="line">        ind = ind[:<span class="number">-1</span>] <span class="comment"># remove last one</span></span><br><span class="line"></span><br><span class="line">        xx1 = np.maximum(x1[i], x1[ind])</span><br><span class="line">        yy1 = np.maximum(y1[i], y1[ind])</span><br><span class="line">        xx2 = np.minimum(x2[i], x2[ind])</span><br><span class="line">        yy2 = np.minimum(y2[i], y2[ind])</span><br><span class="line"></span><br><span class="line">        w = np.maximum(<span class="number">0.</span>, xx2 - xx1)</span><br><span class="line">        h = np.maximum(<span class="number">0.</span>, yy2 - yy1)</span><br><span class="line"></span><br><span class="line">        wh = w * h</span><br><span class="line">        o = wh / (area[i] + area[ind] - wh) <span class="comment"># [0.1,0.2,0.5,0.9,0.2]</span></span><br><span class="line"></span><br><span class="line">        keep_ind = np.nonzero(o &lt;= overlap)[<span class="number">0</span>] <span class="comment"># (array([0, 1, 4]),) ===&gt;[0 1 4]</span></span><br><span class="line">        ind = ind[keep_ind]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> dets[pick, :]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">scores = predictions_df[<span class="string">'bicycle'</span>] <span class="comment"># (1565,)</span></span><br><span class="line">windows = df[[<span class="string">'xmin'</span>, <span class="string">'ymin'</span>, <span class="string">'xmax'</span>, <span class="string">'ymax'</span>]].values <span class="comment"># (1565, 4)</span></span><br><span class="line">dets = np.hstack((windows, scores[:, np.newaxis])) <span class="comment"># (1565, 4) (1565,1)===&gt;(1565,5) xmin,ymin,xmax,ymax,score</span></span><br><span class="line">nms_dets = nms_detections(dets,<span class="number">0.3</span>)</span><br><span class="line"><span class="keyword">print</span> dets.shape <span class="comment"># (1565, 5)</span></span><br><span class="line"><span class="keyword">print</span> nms_dets.shape <span class="comment"># (181, 5)</span></span><br></pre></td></tr></table></figure>
+<pre><code>(1565, 5)
+(181, 5)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">print</span> nms_dets[:<span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+<pre><code>[[ 108.706       184.704       393.496       312.688         0.85562503]
+ [   0.           14.43        397.344       323.27         -0.73134482]
+ [ 131.794       202.982       249.196       290.562        -1.26836455]]
+</code></pre><p>Show top 3 NMS’d detections for ‘bicycle’ in the image and note the gap between the top scoring box (red) and the remaining boxes.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">plt.imshow(im)</span><br><span class="line">currentAxis = plt.gca()</span><br><span class="line">colors = [<span class="string">'r'</span>, <span class="string">'b'</span>, <span class="string">'y'</span>]</span><br><span class="line"><span class="keyword">for</span> c, det <span class="keyword">in</span> zip(colors, nms_dets[:<span class="number">3</span>]):</span><br><span class="line">    currentAxis.add_patch(</span><br><span class="line">        plt.Rectangle((det[<span class="number">0</span>], det[<span class="number">1</span>]), det[<span class="number">2</span>]-det[<span class="number">0</span>], det[<span class="number">3</span>]-det[<span class="number">1</span>],</span><br><span class="line">        fill=<span class="literal">False</span>, edgecolor=c, linewidth=<span class="number">5</span>)</span><br><span class="line">    )</span><br><span class="line"><span class="keyword">print</span> <span class="string">'scores:'</span>, nms_dets[:<span class="number">3</span>, <span class="number">4</span>]</span><br></pre></td></tr></table></figure>
+<pre><code>scores: [ 0.85562503 -0.73134482 -1.26836455]
+</code></pre><p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816101225186-628963131.png" alt="png"></p>
+<p>This was an easy instance for bicycle as it was in the class’s training set. However, the person result is a true detection since this was not in the set for that class.</p>
+<p>You should try out detection on an image of your own next!</p>
+<p>(Remove the temp directory to clean up, and we’re done.)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!rm -rf _temp</span><br></pre></td></tr></table></figure>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="http://demo.vislab.berkeleyvision.org/" target="_blank" rel="noopener">demo</a></li>
+<li><a href="https://github.com/BVLC/caffe" target="_blank" rel="noopener">caffe git</a></li>
+</ul>
+<h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
+<li>20180816: created.</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpeg" alt="kezunlin WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    kezunlin
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="https://kezunlin.me/post/66241a6b/" title="a quick guide to rcnn">https://kezunlin.me/post/66241a6b/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/rcnn/" rel="tag"># rcnn</a>
+          
+        </div>
+
+        
+          <div>
+          <br>
+          <div class="recommended_posts">
+    
+    
+    <h1>Recommended Posts </h1>
+    <ul>
+        
+            <li><a href="https://kezunlin.me/post/62811272/">matplot RGB vs opencv BGR vs caffe images</a></li>
+        
+            <li><a href="https://kezunlin.me/post/deab4886/">Guide for Install Matlab for Linux</a></li>
+        
+            <li><a href="https://kezunlin.me/post/168bc2b4/">Multilabel classification on PASCAL using python data-layers</a></li>
+        
+            <li><a href="https://kezunlin.me/post/9ab374d4/">Net Surgery</a></li>
+        
+            <li><a href="https://kezunlin.me/post/3ae35270/">Fine-tuning a Pretrained Network for Style Recognition</a></li>
+        
+    </ul>
+     
+</div> 
+
+          </div>
+        
+
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/168bc2b4/" rel="next" title="Multilabel classification on PASCAL using python data-layers">
+                <i class="fa fa-chevron-left"></i> Multilabel classification on PASCAL using python data-layers
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/deab4886/" rel="prev" title="Guide for Install Matlab for Linux">
+                Guide for Install Matlab for Linux <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="gitalk-container">
+      </div>
+    </div>
+     
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/kezunlin_avatar.jpg" alt="kezunlin">
+            
+              <p class="site-author-name" itemprop="name">kezunlin</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">205</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">198</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/kezunlin" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:zunlin1234@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i></a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#R-CNN"><span class="nav-number">1.</span> <span class="nav-text">R-CNN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#introduction"><span class="nav-number">1.1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#selective-search"><span class="nav-number">1.2.</span> <span class="nav-text">selective search</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#clone-repo"><span class="nav-number">1.2.1.</span> <span class="nav-text">clone repo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-matlab"><span class="nav-number">1.2.2.</span> <span class="nav-text">install matlab</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#compile-matlab-functions"><span class="nav-number">1.2.3.</span> <span class="nav-text">compile matlab functions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#detect-regions"><span class="nav-number">1.3.</span> <span class="nav-text">detect regions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#process-regions"><span class="nav-number">1.4.</span> <span class="nav-text">process regions</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+      
+      
+      
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      Visitors
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      Total Visits
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+<div id="cnzz_id">
+ <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1278202133'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1278202133%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));</script>
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '4d1e3d463455e6bc7eba',
+          clientSecret: '4af023d85b66c4161a83b3f9297036e84c9ba57f',
+          repo: 'gitalk',
+          owner: 'kezunlin',
+          admin: ['kezunlin'],
+          id: md5(location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')           
+       </script>
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.3"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.3"></script>
+
+
+  
+
+</body>
+</html>
