@@ -138,7 +138,7 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="compile baidu anakin on windows 10">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-11-13T02:41:21.742Z">
+<meta property="og:updated_time" content="2019-11-13T06:29:55.190Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="compile baidu anakin on windows 10">
 <meta name="twitter:description" content="compile baidu anakin on windows 10">
@@ -413,7 +413,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-11-13T10:41:21+08:00">
+              <time title="Post modified" itemprop="dateModified" datetime="2019-11-13T14:29:55+08:00">
                 2019-11-13
               </time>
             
@@ -479,7 +479,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  250
+                  148
                 </span>
               
 
@@ -495,7 +495,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  2
+                  1
                 </span>
               
             </div>
@@ -517,11 +517,11 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 
       
         <p>compile baidu anakin on windows 10<br><a id="more"></a></p>
-<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><ul>
+<h1 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h1><ul>
 <li><a href="https://kezunlin.me/post/c04efbf/">Part 1: compile baidu anakin on ubuntu 16.04</a></li>
 <li><strong><a href="https://kezunlin.me/post/9b6567b2/">Part 2: compile baidu anakin on windows 10</a></strong></li>
 </ul>
-<h2 id="requirements"><a href="#requirements" class="headerlink" title="requirements"></a>requirements</h2><ul>
+<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="requirements"><a href="#requirements" class="headerlink" title="requirements"></a>requirements</h2><ul>
 <li>windows 10</li>
 <li>vs 2015</li>
 <li>cmake 3.2.2</li>
@@ -542,36 +542,9 @@ USE_GPU_PLACE ON
 USE_OPENMP OFF
 USE_OPENCV ON
 </code></pre><p>generate <code>Anakin.sln</code> and compile with <code>VS 2015</code> with <code>x64 Release</code> mode.</p>
-<h2 id="error-fixs"><a href="#error-fixs" class="headerlink" title="error fixs"></a>error fixs</h2><p>we get 101 errors. now fix them.</p>
-<ul>
-<li>no <code>unistd.h</code></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#ifndef _UNISTD_H</span><br><span class="line">#define _UNISTD_H    1</span><br><span class="line"></span><br><span class="line">//#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;io.h&gt;</span><br><span class="line">#include &lt;process.h&gt; /* for getpid() and the exec..() family */</span><br><span class="line">//#include &lt;direct.h&gt; /* for _getcwd() and _chdir() */</span><br><span class="line"></span><br><span class="line">#endif /* unistd.h  */</span><br></pre></td></tr></table></figure>
-<p>copy <code>unistd.h</code> to <code>C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt</code></p>
-<ul>
-<li><p>__thread gcc</p>
-<pre><code>static __thread  ErrContext* pthreadErrCtPtr;
-</code></pre></li>
-</ul>
-<p>fix </p>
-<pre><code>#define __thread
-</code></pre><ul>
-<li><h1 id="warning"><a href="#warning" class="headerlink" title="warning"></a>warning</h1><pre><code># warning There is no way to retrieve the host name(not support os windows).
-</code></pre></li>
-</ul>
-<p>fix: change to <code>#pragma warning</code></p>
-<pre><code>#pragma warning There is no way to retrieve the host name(not support os windows).
-</code></pre><ul>
-<li>signal.h </li>
-</ul>
-<p>missing signals </p>
-<p>fix</p>
-<pre><code>#define SIGBUS 7
-#define SIGPIPE 13
-</code></pre><ul>
-<li>error localtime_r</li>
-</ul>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
+<h2 id="error-fixs"><a href="#error-fixs" class="headerlink" title="error fixs"></a>error fixs</h2><p>we get 101 errors, hard to fix.<br>todo in the future.</p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a href="https://kezunlin.me/post/c04efbf/">Part 1: compile baidu anakin on ubuntu 16.04</a></p>
+<h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>20181107: created.</li>
 </ul>
 
@@ -650,11 +623,11 @@ USE_OPENCV ON
         
             <li><a href="https://kezunlin.me/post/c385fcf5/">install apache httpd server 2.2 on windows 10</a></li>
         
-            <li><a href="https://kezunlin.me/post/b2310ca0/">tensorflow mnist tutorial</a></li>
-        
             <li><a href="https://kezunlin.me/post/ddec790c/">cd path not take effect in shell</a></li>
         
             <li><a href="https://kezunlin.me/post/a5c428f1/">compile darknet on windows 10</a></li>
+        
+            <li><a href="https://kezunlin.me/post/8a012fb9/">linux program address space and nm command tutorial</a></li>
         
     </ul>
      
@@ -680,8 +653,8 @@ USE_OPENCV ON
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/post/b2310ca0/" rel="next" title="tensorflow mnist tutorial">
-                <i class="fa fa-chevron-left"></i> tensorflow mnist tutorial
+              <a href="/post/ddec790c/" rel="next" title="cd path not take effect in shell">
+                <i class="fa fa-chevron-left"></i> cd path not take effect in shell
               </a>
             
           </div>
@@ -777,7 +750,7 @@ USE_OPENCV ON
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">211</span>
+                  <span class="site-state-item-count">205</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -799,7 +772,7 @@ USE_OPENCV ON
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">144</span>
+                  <span class="site-state-item-count">190</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -855,7 +828,7 @@ USE_OPENCV ON
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#requirements"><span class="nav-number">1.1.</span> <span class="nav-text">requirements</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#protobuf"><span class="nav-number">1.2.</span> <span class="nav-text">protobuf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">1.3.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#error-fixs"><span class="nav-number">1.4.</span> <span class="nav-text">error fixs</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#warning"><span class="nav-number">2.</span> <span class="nav-text">warning</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Series"><span class="nav-number">1.</span> <span class="nav-text">Series</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">2.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#requirements"><span class="nav-number">2.1.</span> <span class="nav-text">requirements</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#protobuf"><span class="nav-number">2.2.</span> <span class="nav-text">protobuf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile"><span class="nav-number">2.3.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#error-fixs"><span class="nav-number">2.4.</span> <span class="nav-text">error fixs</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>

@@ -117,7 +117,7 @@
 
 
 
-  <meta name="keywords" content="mysqlcppconn,time_t,">
+  <meta name="keywords" content="mysqlcppconn,mysql,">
 
 
 
@@ -131,14 +131,14 @@
 
 
 <meta name="description" content="Guide to store time_t with mysql cpp connector in c++.">
-<meta name="keywords" content="mysqlcppconn,time_t">
+<meta name="keywords" content="mysqlcppconn,mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="guide to store time_t with mysql cpp connector in c++">
 <meta property="og:url" content="https://kezunlin.me/post/52a71f5d/index.html">
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="Guide to store time_t with mysql cpp connector in c++.">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-11-13T02:41:20.274Z">
+<meta property="og:updated_time" content="2019-11-13T05:56:53.416Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="guide to store time_t with mysql cpp connector in c++">
 <meta name="twitter:description" content="Guide to store time_t with mysql cpp connector in c++.">
@@ -413,7 +413,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-11-13T10:41:20+08:00">
+              <time title="Post modified" itemprop="dateModified" datetime="2019-11-13T13:56:53+08:00">
                 2019-11-13
               </time>
             
@@ -468,7 +468,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  127
+                  138
                 </span>
               
 
@@ -510,17 +510,19 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
         `id`  int(11) NOT NULL AUTO_INCREMENT,\
         `camera_id`  tinyint(4) UNSIGNED NOT NULL,\
         `create_time`  datetime NOT NULL)
-</code></pre><p>camera.CreateTime of type in c++.</p>
-<pre><code>time_t CreateTime;
-</code></pre><blockquote>
+</code></pre><p>camera.CreateTime of type in c++.<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">time_t</span> CreateTime;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
 <p>time_t can at most contain seconds, if we want to get millisecond or microsecond, we can use boost.date_time.<br>see ref: <a href="https://kezunlin.me/post/107cbcbb/">using boost.date_time to get time in millisecond microsecond level</a></p>
 </blockquote>
 <p>in sql, we use <code>FROM_UNIXTIME</code> and <code>UNIX_TIMESTAMP</code> to insert and select <code>time_t</code> value.</p>
 <h2 id="insert"><a href="#insert" class="headerlink" title="insert"></a>insert</h2><h3 id="sql"><a href="#sql" class="headerlink" title="sql"></a>sql</h3><pre><code>INSERT INTO camera(camera_id,create_time) VALUES ( ?,FROM_UNIXTIME(?) );
-</code></pre><h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><pre><code>pstmt-&gt;setUInt64(2, camera.CreateTime); // unix_ts(integer) ===&gt;mysql_ts(string)
-</code></pre><h2 id="select"><a href="#select" class="headerlink" title="select"></a>select</h2><h3 id="sql-1"><a href="#sql-1" class="headerlink" title="sql"></a>sql</h3><pre><code>SELECT id,camera_id,UNIX_TIMESTAMP(create_time) as unix_ts FROM camera;
-</code></pre><h3 id="code-1"><a href="#code-1" class="headerlink" title="code"></a>code</h3><pre><code>camera.CreateTime = res-&gt;getUInt64(&quot;unix_ts&quot;);
-</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
+</code></pre><h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pstmt-&gt;setUInt64(<span class="number">2</span>, camera.CreateTime); <span class="comment">// unix_ts(integer) ===&gt;mysql_ts(string)</span></span><br></pre></td></tr></table></figure>
+<h2 id="select"><a href="#select" class="headerlink" title="select"></a>select</h2><h3 id="sql-1"><a href="#sql-1" class="headerlink" title="sql"></a>sql</h3><pre><code>SELECT id,camera_id,UNIX_TIMESTAMP(create_time) as unix_ts FROM camera;
+</code></pre><h3 id="code-1"><a href="#code-1" class="headerlink" title="code"></a>code</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">camera.CreateTime = res-&gt;getUInt64(<span class="string">"unix_ts"</span>);</span><br></pre></td></tr></table></figure>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="https://kezunlin.me/post/d0fb133a/">instal mysql cpp connector on ubuntu 16.04</a></li>
+</ul>
+<h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
 <li>20180122: created.</li>
 </ul>
 
@@ -584,7 +586,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
           
             <a href="/tags/mysqlcppconn/" rel="tag"># mysqlcppconn</a>
           
-            <a href="/tags/time-t/" rel="tag"># time_t</a>
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
           
         </div>
       
@@ -728,7 +730,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">211</span>
+                  <span class="site-state-item-count">205</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -750,7 +752,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">144</span>
+                  <span class="site-state-item-count">190</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

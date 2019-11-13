@@ -117,7 +117,7 @@
 
 
 
-  <meta name="keywords" content="KeZunLin, kezunlin, c++, python, linux, ubuntu, deep learning, caffe, tensorflow, mxnet, keras, pytorch, computer vision, kaggle, opencv, cmake, git, vim, github, google, stackoverflow">
+  <meta name="keywords" content="radam,">
 
 
 
@@ -130,17 +130,18 @@
 
 
 
-<meta name="description" content="radam">
+<meta name="description" content="python keras RAdam tutorial">
+<meta name="keywords" content="radam">
 <meta property="og:type" content="article">
-<meta property="og:title" content="radam">
+<meta property="og:title" content="python keras RAdam tutorial">
 <meta property="og:url" content="https://kezunlin.me/post/c691f02b/index.html">
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
-<meta property="og:description" content="radam">
+<meta property="og:description" content="python keras RAdam tutorial">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-11-13T02:41:22.584Z">
+<meta property="og:updated_time" content="2019-11-13T07:03:53.075Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="radam">
-<meta name="twitter:description" content="radam">
+<meta name="twitter:title" content="python keras RAdam tutorial">
+<meta name="twitter:description" content="python keras RAdam tutorial">
 
 
 
@@ -198,7 +199,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 
 
 
-  <title>radam | KeZunLin's Blog</title>
+  <title>python keras RAdam tutorial | KeZunLin's Blog</title>
   
 
 
@@ -384,7 +385,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 
         
         
-          <h2 class="post-title" itemprop="name headline">radam</h2>
+          <h2 class="post-title" itemprop="name headline">python keras RAdam tutorial</h2>
         
 
         <div class="post-meta">
@@ -396,7 +397,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-12T13:04:36+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-12T13:04:00+08:00">
                 2019-09-12
               </time>
             
@@ -412,12 +413,34 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-11-13T10:41:22+08:00">
+              <time title="Post modified" itemprop="dateModified" datetime="2019-11-13T15:03:53+08:00">
                 2019-11-13
               </time>
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/keras/" itemprop="url" rel="index">
+                    <span itemprop="name">keras</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -445,7 +468,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  122
+                  126
                 </span>
               
 
@@ -482,16 +505,16 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
       
 
       
-        <p>radam<br><a id="more"></a></p>
-<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h2><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">import</span> keras</span><br><span class="line"><span class="built_in">import</span> numpy as np</span><br><span class="line">from keras_radam <span class="built_in">import</span> RAdam</span><br><span class="line"></span><br><span class="line"><span class="comment"># Build toy model with RAdam optimizer</span></span><br><span class="line"><span class="attr">model</span> = keras.models.Sequential()</span><br><span class="line">model.add(keras.layers.Dense(<span class="attr">input_shape=(17,),</span> <span class="attr">units=3))</span></span><br><span class="line">model.compile(RAdam(), <span class="attr">loss='mse')</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Generate toy data</span></span><br><span class="line"><span class="attr">x</span> = np.random.standard_normal((<span class="number">4096</span> * <span class="number">30</span>, <span class="number">17</span>))</span><br><span class="line"><span class="attr">w</span> = np.random.standard_normal((<span class="number">17</span>, <span class="number">3</span>))</span><br><span class="line"><span class="attr">y</span> = np.dot(x, w)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Fit</span></span><br><span class="line">model.fit(x, y, <span class="attr">epochs=5)</span></span><br></pre></td></tr></table></figure>
-<h2 id="use-warmup"><a href="#use-warmup" class="headerlink" title="use warmup"></a>use warmup</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> keras_radam import RAdam</span><br><span class="line"></span><br><span class="line">RAdam(<span class="attribute">total_steps</span>=10000, <span class="attribute">warmup_proportion</span>=0.1, <span class="attribute">min_lr</span>=1e-5)</span><br></pre></td></tr></table></figure>
+        <p>python keras RAdam tutorial<br><a id="more"></a></p>
+<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> keras</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> keras_radam <span class="keyword">import</span> RAdam</span><br><span class="line"></span><br><span class="line"><span class="comment"># Build toy model with RAdam optimizer</span></span><br><span class="line">model = keras.models.Sequential()</span><br><span class="line">model.add(keras.layers.Dense(input_shape=(<span class="number">17</span>,), units=<span class="number">3</span>))</span><br><span class="line">model.compile(RAdam(), loss=<span class="string">'mse'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Generate toy data</span></span><br><span class="line">x = np.random.standard_normal((<span class="number">4096</span> * <span class="number">30</span>, <span class="number">17</span>))</span><br><span class="line">w = np.random.standard_normal((<span class="number">17</span>, <span class="number">3</span>))</span><br><span class="line">y = np.dot(x, w)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Fit</span></span><br><span class="line">model.fit(x, y, epochs=<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="use-warmup"><a href="#use-warmup" class="headerlink" title="use warmup"></a>use warmup</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> keras_radam <span class="keyword">import</span> RAdam</span><br><span class="line"></span><br><span class="line">RAdam(total_steps=<span class="number">10000</span>, warmup_proportion=<span class="number">0.1</span>, min_lr=<span class="number">1e-5</span>)</span><br></pre></td></tr></table></figure>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://arxiv.org/abs/1908.03265" target="_blank" rel="noopener">On the Variance of the Adaptive Learning Rate and Beyond</a></li>
 <li><a href="https://github.com/LiyuanLucasLiu/RAdam" target="_blank" rel="noopener">RAdam official Pytorch Version</a></li>
 <li><a href="https://github.com/CyberZHG/keras-radam" target="_blank" rel="noopener">https://github.com/CyberZHG/keras-radam</a></li>
 </ul>
 <h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
-<li>created.</li>
+<li>20190912: created.</li>
 </ul>
 
       
@@ -537,7 +560,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="https://kezunlin.me/post/c691f02b/" title="radam">https://kezunlin.me/post/c691f02b/</a>
+    <a href="https://kezunlin.me/post/c691f02b/" title="python keras RAdam tutorial">https://kezunlin.me/post/c691f02b/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -550,6 +573,12 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/radam/" rel="tag"># radam</a>
+          
+        </div>
+      
 
     
       <div>
@@ -559,13 +588,13 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="https://kezunlin.me/post/9f24ebb5/">csharp key press event</a></li>
+            <li><a href="https://kezunlin.me/post/9f24ebb5/">csharp key press event tutorial</a></li>
         
             <li><a href="https://kezunlin.me/post/63392b1e/">csharp app.config</a></li>
         
-            <li><a href="https://kezunlin.me/post/88fbc049/">efficientnet</a></li>
+            <li><a href="https://kezunlin.me/post/88fbc049/">keras efficientnet introduction</a></li>
         
-            <li><a href="https://kezunlin.me/post/22391aa3/">c# json serialize using json.net</a></li>
+            <li><a href="https://kezunlin.me/post/22391aa3/">c# json serialize and deserialize using json.net JsonConvert</a></li>
         
             <li><a href="https://kezunlin.me/post/8db507ff/">keras data augmentation</a></li>
         
@@ -593,8 +622,8 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/post/88fbc049/" rel="next" title="efficientnet">
-                <i class="fa fa-chevron-left"></i> efficientnet
+              <a href="/post/88fbc049/" rel="next" title="keras efficientnet introduction">
+                <i class="fa fa-chevron-left"></i> keras efficientnet introduction
               </a>
             
           </div>
@@ -690,7 +719,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">211</span>
+                  <span class="site-state-item-count">205</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -712,7 +741,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">144</span>
+                  <span class="site-state-item-count">190</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

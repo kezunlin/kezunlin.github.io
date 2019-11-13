@@ -117,7 +117,7 @@
 
 
 
-  <meta name="keywords" content="datetime,fsp,boost,">
+  <meta name="keywords" content="mysql,datetime,boost,sql,">
 
 
 
@@ -131,14 +131,14 @@
 
 
 <meta name="description" content="guide to store fractional seconds in mysql with boost and c++.">
-<meta name="keywords" content="datetime,fsp,boost">
+<meta name="keywords" content="mysql,datetime,boost,sql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="guide to store fractional seconds in mysql with boost and c++">
 <meta property="og:url" content="https://kezunlin.me/post/60df7e87/index.html">
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="guide to store fractional seconds in mysql with boost and c++.">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-11-13T02:41:20.268Z">
+<meta property="og:updated_time" content="2019-11-13T05:58:32.133Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="guide to store fractional seconds in mysql with boost and c++">
 <meta name="twitter:description" content="guide to store fractional seconds in mysql with boost and c++.">
@@ -413,7 +413,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-11-13T10:41:20+08:00">
+              <time title="Post modified" itemprop="dateModified" datetime="2019-11-13T13:58:32+08:00">
                 2019-11-13
               </time>
             
@@ -468,7 +468,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  606
+                  612
                 </span>
               
 
@@ -560,11 +560,8 @@ mysql&gt; select now(6);
 #std::string to_iso_extended_string(ptime): YYYY-MM-DDTHH:MM:SS,fffffffff  2014-09-08T17:51:04.77766
 
 INSERT INTO fractest VALUES (&apos;2014-09-08T17:51:04.777668&apos;);
-</code></pre><p>code </p>
-<pre><code># 2014-09-08T17:51:04.777668
-std::string iso_extended_string = boost::posix_time::to_iso_extended_string(camera.CreateTime);
-pstmt-&gt;setString(1, iso_string);
-</code></pre><h3 id="select"><a href="#select" class="headerlink" title="select"></a>select</h3><blockquote>
+</code></pre><p>code<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># <span class="number">2014</span><span class="number">-09</span><span class="number">-08</span>T17:<span class="number">51</span>:<span class="number">04.777668</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span> iso_extended_string = boost::posix_time::to_iso_extended_string(camera.CreateTime);</span><br><span class="line">pstmt-&gt;setString(<span class="number">1</span>, iso_string);</span><br></pre></td></tr></table></figure></p>
+<h3 id="select"><a href="#select" class="headerlink" title="select"></a>select</h3><blockquote>
 <p>we need to select datetime as string, because we must keep fsp,we use <code>concat(&quot;&quot;,create_time) as create_time</code> to get string time <code>2014-09-08 17:51:04.777668</code>, and then process with c++ to get boost ptime.</p>
 </blockquote>
 <p>sql </p>
@@ -573,11 +570,8 @@ pstmt-&gt;setString(1, iso_string);
 # (2) DATE_FORMAT(create_time,&apos;%Y-%m-%d %h:%m:%s&apos;) AS create_time  [we can not have fsp]
 
 select id, create_time,concat(&quot;&quot;,create_time) as create_time from camera where id = 1;
-</code></pre><p>code </p>
-<pre><code>std::string mysql_string = res-&gt;getString(&quot;create_time&quot;);
-// 2014-09-08 17:51:04.777668 ===&gt; 2014-09-08T17:51:04.777668
-camera.CreateTime = Util::from_mysql_string(mysql_string);
-</code></pre><h3 id="different-datetime-string"><a href="#different-datetime-string" class="headerlink" title="different datetime string"></a>different datetime string</h3><pre><code>filename_string 20180118_111501_208797 
+</code></pre><p>code<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span> mysql_string = res-&gt;getString(<span class="string">"create_time"</span>);</span><br><span class="line"><span class="comment">// 2014-09-08 17:51:04.777668 ===&gt; 2014-09-08T17:51:04.777668</span></span><br><span class="line">camera.CreateTime = Util::from_mysql_string(mysql_string);</span><br></pre></td></tr></table></figure></p>
+<h3 id="different-datetime-string"><a href="#different-datetime-string" class="headerlink" title="different datetime string"></a>different datetime string</h3><pre><code>filename_string 20180118_111501_208797 
 iso_string      20180118T111501.208797  ===&gt; from_iso_string
 
 mysql_string           2014-09-08 17:51:04.777668
@@ -650,11 +644,13 @@ ios_extended_string    2014-09-08T17:51:04.777668  ===&gt; from_iso_extended_str
       
         <div class="post-tags">
           
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
+          
             <a href="/tags/datetime/" rel="tag"># datetime</a>
           
-            <a href="/tags/fsp/" rel="tag"># fsp</a>
-          
             <a href="/tags/boost/" rel="tag"># boost</a>
+          
+            <a href="/tags/sql/" rel="tag"># sql</a>
           
         </div>
       
@@ -798,7 +794,7 @@ ios_extended_string    2014-09-08T17:51:04.777668  ===&gt; from_iso_extended_str
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">211</span>
+                  <span class="site-state-item-count">205</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -820,7 +816,7 @@ ios_extended_string    2014-09-08T17:51:04.777668  ===&gt; from_iso_extended_str
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">144</span>
+                  <span class="site-state-item-count">190</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

@@ -130,18 +130,18 @@
 
 
 
-<meta name="description" content="shared_ptr to array">
+<meta name="description" content="c++ shared_ptr point to an array">
 <meta name="keywords" content="shared_ptr">
 <meta property="og:type" content="article">
-<meta property="og:title" content="shared_ptr to array">
+<meta property="og:title" content="5 methods for c++ shared_ptr point to an array">
 <meta property="og:url" content="https://kezunlin.me/post/b82753fc/index.html">
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
-<meta property="og:description" content="shared_ptr to array">
+<meta property="og:description" content="c++ shared_ptr point to an array">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-11-13T02:41:22.708Z">
+<meta property="og:updated_time" content="2019-11-13T07:21:15.228Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="shared_ptr to array">
-<meta name="twitter:description" content="shared_ptr to array">
+<meta name="twitter:title" content="5 methods for c++ shared_ptr point to an array">
+<meta name="twitter:description" content="c++ shared_ptr point to an array">
 
 
 
@@ -199,7 +199,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 
 
 
-  <title>shared_ptr to array | KeZunLin's Blog</title>
+  <title>5 methods for c++ shared_ptr point to an array | KeZunLin's Blog</title>
   
 
 
@@ -385,7 +385,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 
         
         
-          <h2 class="post-title" itemprop="name headline">shared_ptr to array</h2>
+          <h2 class="post-title" itemprop="name headline">5 methods for c++ shared_ptr point to an array</h2>
         
 
         <div class="post-meta">
@@ -413,7 +413,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-11-13T10:41:22+08:00">
+              <time title="Post modified" itemprop="dateModified" datetime="2019-11-13T15:21:15+08:00">
                 2019-11-13
               </time>
             
@@ -468,7 +468,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  279
+                  282
                 </span>
               
 
@@ -505,7 +505,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
       
 
       
-        <p>shared_ptr to array<br><a id="more"></a></p>
+        <p>c++ shared_ptr point to an array<br><a id="more"></a></p>
 <h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="shared-ptr"><a href="#shared-ptr" class="headerlink" title="shared_ptr"></a>shared_ptr</h2><p>Prior to <code>C++17</code>, <code>shared_ptr</code> could not be used to manage dynamically allocated arrays. By default, <code>shared_ptr</code> will call <code>delete</code> on the managed object when no more references remain to it. However, when you allocate using <code>new[]</code> you need to call <code>delete[]</code>, and not <code>delete</code>, to free the resource.</p>
 <p>In order to correctly use <code>shared_ptr</code> with an array, you must supply a custom deleter.</p>
 <h3 id="code-example"><a href="#code-example" class="headerlink" title="code example"></a>code example</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//OK, pointer to int 999</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; sp(<span class="keyword">new</span> <span class="keyword">int</span>(<span class="number">999</span>)); </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">typename</span> T &gt;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">array_deleter</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">operator</span> <span class="params">()</span><span class="params">( T <span class="keyword">const</span> * p)</span></span></span><br><span class="line"><span class="function">  </span>&#123; </span><br><span class="line">    <span class="keyword">delete</span>[] p; </span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// pointer to int array, </span></span><br><span class="line"><span class="comment">// (1) provide array deleter</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; sp(<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>], array_deleter&lt;<span class="keyword">int</span>&gt;()); </span><br><span class="line"></span><br><span class="line"><span class="comment">// (2) or lambda expression </span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; sp(<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>], [](<span class="keyword">int</span> *p) &#123; <span class="keyword">delete</span>[] p; &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// (3) or use default_delete</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; sp(<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>], <span class="built_in">std</span>::default_delete&lt;<span class="keyword">int</span>[]&gt;());</span><br><span class="line"></span><br><span class="line"><span class="comment">// (4) or we can use unique_ptr</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;<span class="keyword">int</span>[]&gt; up(<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>]); <span class="comment">// this will correctly call delete[]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// (5) or we use vector&lt;int&gt;, no need to provide deleter </span></span><br><span class="line"><span class="keyword">typedef</span> <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="keyword">int_array_t</span>;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&lt;<span class="keyword">int_array_t</span>&gt; sp(<span class="keyword">new</span> <span class="keyword">int_array_t</span>(<span class="number">10</span>));</span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">memcpy</span>(sp.get()-&gt;data(), arr, size);</span><br></pre></td></tr></table></figure>
@@ -563,7 +563,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="https://kezunlin.me/post/b82753fc/" title="shared_ptr to array">https://kezunlin.me/post/b82753fc/</a>
+    <a href="https://kezunlin.me/post/b82753fc/" title="5 methods for c++ shared_ptr point to an array">https://kezunlin.me/post/b82753fc/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -593,11 +593,11 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
         
             <li><a href="https://kezunlin.me/post/5898412/">load model from file and stream for caffe and pytorch</a></li>
         
-            <li><a href="https://kezunlin.me/post/4ec4ae49/">template class implemention for cpp</a></li>
+            <li><a href="https://kezunlin.me/post/4ec4ae49/">how to implement a template class with c++</a></li>
         
-            <li><a href="https://kezunlin.me/post/f33ba73e/">sort a simple online and realtime tracking of multiple objects in video</a></li>
+            <li><a href="https://kezunlin.me/post/f33ba73e/">SORT-a simple online and realtime tracking of multiple objects in video</a></li>
         
-            <li><a href="https://kezunlin.me/post/f3c3eb8/">nlohmann json for modern cpp</a></li>
+            <li><a href="https://kezunlin.me/post/f3c3eb8/">tutorial to use nlohmann json for serializing data with modern cpp</a></li>
         
             <li><a href="https://kezunlin.me/post/cabccf5c/">concurrent queue or blocking queue implemented in cpp</a></li>
         
@@ -625,8 +625,8 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/post/f33ba73e/" rel="next" title="sort a simple online and realtime tracking of multiple objects in video">
-                <i class="fa fa-chevron-left"></i> sort a simple online and realtime tracking of multiple objects in video
+              <a href="/post/f33ba73e/" rel="next" title="SORT-a simple online and realtime tracking of multiple objects in video">
+                <i class="fa fa-chevron-left"></i> SORT-a simple online and realtime tracking of multiple objects in video
               </a>
             
           </div>
@@ -635,8 +635,8 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/post/4ec4ae49/" rel="prev" title="template class implemention for cpp">
-                template class implemention for cpp <i class="fa fa-chevron-right"></i>
+              <a href="/post/4ec4ae49/" rel="prev" title="how to implement a template class with c++">
+                how to implement a template class with c++ <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -722,7 +722,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">211</span>
+                  <span class="site-state-item-count">205</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -744,7 +744,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">144</span>
+                  <span class="site-state-item-count">190</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

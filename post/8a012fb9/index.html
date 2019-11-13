@@ -117,7 +117,7 @@
 
 
 
-  <meta name="keywords" content="KeZunLin, kezunlin, c++, python, linux, ubuntu, deep learning, caffe, tensorflow, mxnet, keras, pytorch, computer vision, kaggle, opencv, cmake, git, vim, github, google, stackoverflow">
+  <meta name="keywords" content="address space,">
 
 
 
@@ -130,17 +130,18 @@
 
 
 
-<meta name="description" content="linux nm command">
+<meta name="description" content="linux program address space and nm command tutorial">
+<meta name="keywords" content="address space">
 <meta property="og:type" content="article">
-<meta property="og:title" content="linux nm command">
+<meta property="og:title" content="linux program address space and nm command tutorial">
 <meta property="og:url" content="https://kezunlin.me/post/8a012fb9/index.html">
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
-<meta property="og:description" content="linux nm command">
+<meta property="og:description" content="linux program address space and nm command tutorial">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-11-13T02:41:21.717Z">
+<meta property="og:updated_time" content="2019-11-13T06:27:21.307Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="linux nm command">
-<meta name="twitter:description" content="linux nm command">
+<meta name="twitter:title" content="linux program address space and nm command tutorial">
+<meta name="twitter:description" content="linux program address space and nm command tutorial">
 
 
 
@@ -198,7 +199,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 
 
 
-  <title>linux nm command | KeZunLin's Blog</title>
+  <title>linux program address space and nm command tutorial | KeZunLin's Blog</title>
   
 
 
@@ -384,7 +385,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 
         
         
-          <h2 class="post-title" itemprop="name headline">linux nm command</h2>
+          <h2 class="post-title" itemprop="name headline">linux program address space and nm command tutorial</h2>
         
 
         <div class="post-meta">
@@ -412,7 +413,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-11-13T10:41:21+08:00">
+              <time title="Post modified" itemprop="dateModified" datetime="2019-11-13T14:27:21+08:00">
                 2019-11-13
               </time>
             
@@ -467,7 +468,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  944
+                  949
                 </span>
               
 
@@ -504,7 +505,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
       
 
       
-        <p>linux nm command<br><a id="more"></a></p>
+        <p>linux program address space and nm command tutorial<br><a id="more"></a></p>
 <h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="Linux-Unix-Address-Space"><a href="#Linux-Unix-Address-Space" class="headerlink" title="Linux/Unix Address Space"></a>Linux/Unix Address Space</h2><table>
 <thead>
 <tr>
@@ -581,7 +582,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 </code></pre><p>a.out加载到内存中的大小为2191 bytes.</p>
 <h3 id="rodata"><a href="#rodata" class="headerlink" title="rodata"></a>rodata</h3><p>(1) const修饰的global放在.rodata, const修饰的local例外，没有放入常量区。<br>(３)对于global/local字符串常量，编译器会去掉重复的常量，让程序的每个字符串常量只有一份，放在.rodata。（数组内容为字符串的除外）</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> num = <span class="number">100</span>; <span class="comment">// .rodata </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> *str = <span class="string">"123456789"</span>; <span class="comment">// 123456789 ===&gt;.rodata LC0</span></span><br><span class="line"><span class="keyword">char</span> *str1 = <span class="string">"helloworld"</span>; <span class="comment">// helloworld===&gt;.rodata LC1</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">　 <span class="keyword">const</span> <span class="keyword">int</span> local_num = <span class="number">99</span>; <span class="comment">// 没有放入.rodata</span></span><br><span class="line">  <span class="keyword">char</span>* a = <span class="string">"helloworld"</span>;  <span class="comment">// helloworld===&gt;.rodata LC1</span></span><br><span class="line">  <span class="keyword">char</span> b[<span class="number">10</span>] = <span class="string">"helloworld"</span>;<span class="comment">// helloworld　没有放入.rodata</span></span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;  </span><br><span class="line">  </span><br><span class="line">int add(int x, int y)  </span><br><span class="line">&#123;  </span><br><span class="line">    return x + y;  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line">int aaa,bbb;  // auto zero-intialized(.bss)</span><br><span class="line">int ccc000 = 0; // auto zero-initialized(.bss)</span><br><span class="line">int ccc111 = 1;  // initialized(.data)</span><br><span class="line"></span><br><span class="line">char *str1 = &quot;123&quot;; // str1---&gt;.data   123---&gt;.rodata A</span><br><span class="line">char *str2 = &quot;xyz&quot;; //  str2---&gt;.data   xyz---&gt;.rodata B</span><br><span class="line">char str3[] = &quot;abc&quot;; // str3---&gt;.data  </span><br><span class="line">char *str4; // .bss</span><br><span class="line"></span><br><span class="line">static int hhh; // .bss</span><br><span class="line">static int iii00 = 0; // .bss</span><br><span class="line">static int iii99 = 99; // .data</span><br><span class="line"></span><br><span class="line">const int NUM99 = 99; // .rodata</span><br><span class="line">const int NUM00 = 0; // .rodata</span><br><span class="line">  </span><br><span class="line">int main()  </span><br><span class="line">&#123;  </span><br><span class="line">    static int jjj; // .bss</span><br><span class="line">    static int kkk=1; // .data</span><br><span class="line"></span><br><span class="line">    const int local_const00 = 0; // </span><br><span class="line">    const int local_const99 = 99; // </span><br><span class="line"></span><br><span class="line">    char *str5 = &quot;xyz&quot;; // str5===&gt; stack,  xyz===&gt; .rodata B</span><br><span class="line">    char str6[] = &quot;abc&quot;; // str6---&gt;stack,  abc ===&gt; stack</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    int local = 2;  // stack</span><br><span class="line">    int *local_new = new int(5); // heap</span><br><span class="line">    delete local_new;</span><br><span class="line">    return 0;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Example-code"><a href="#Example-code" class="headerlink" title="Example code"></a>Example code</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;  </span><br><span class="line">  </span><br><span class="line">int add(int x, int y)  </span><br><span class="line">&#123;  </span><br><span class="line">    return x + y;  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line">int aaa,bbb;  // auto zero-intialized(.bss)</span><br><span class="line">int ccc000 = 0; // auto zero-initialized(.bss)</span><br><span class="line">int ccc111 = 1;  // initialized(.data)</span><br><span class="line"></span><br><span class="line">char *str1 = &quot;123&quot;; // str1---&gt;.data   123---&gt;.rodata A</span><br><span class="line">char *str2 = &quot;xyz&quot;; //  str2---&gt;.data   xyz---&gt;.rodata B</span><br><span class="line">char str3[] = &quot;abc&quot;; // str3---&gt;.data  </span><br><span class="line">char *str4; // .bss</span><br><span class="line"></span><br><span class="line">static int hhh; // .bss</span><br><span class="line">static int iii00 = 0; // .bss</span><br><span class="line">static int iii99 = 99; // .data</span><br><span class="line"></span><br><span class="line">const int NUM99 = 99; // .rodata</span><br><span class="line">const int NUM00 = 0; // .rodata</span><br><span class="line">  </span><br><span class="line">int main()  </span><br><span class="line">&#123;  </span><br><span class="line">    static int jjj; // .bss</span><br><span class="line">    static int kkk=1; // .data</span><br><span class="line"></span><br><span class="line">    const int local_const00 = 0; // </span><br><span class="line">    const int local_const99 = 99; // </span><br><span class="line"></span><br><span class="line">    char *str5 = &quot;xyz&quot;; // str5===&gt; stack,  xyz===&gt; .rodata B</span><br><span class="line">    char str6[] = &quot;abc&quot;; // str6---&gt;stack,  abc ===&gt; stack</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    int local = 2;  // stack</span><br><span class="line">    int *local_new = new int(5); // heap</span><br><span class="line">    delete local_new;</span><br><span class="line">    return 0;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>output </p>
 <pre><code>g++ hello.cpp
 nm a.out
@@ -696,7 +697,7 @@ readelf -s a.out
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="https://kezunlin.me/post/8a012fb9/" title="linux nm command">https://kezunlin.me/post/8a012fb9/</a>
+    <a href="https://kezunlin.me/post/8a012fb9/" title="linux program address space and nm command tutorial">https://kezunlin.me/post/8a012fb9/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -708,6 +709,12 @@ readelf -s a.out
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/address-space/" rel="tag"># address space</a>
+          
+        </div>
       
 
     
@@ -849,7 +856,7 @@ readelf -s a.out
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">211</span>
+                  <span class="site-state-item-count">205</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -871,7 +878,7 @@ readelf -s a.out
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">144</span>
+                  <span class="site-state-item-count">190</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -927,7 +934,7 @@ readelf -s a.out
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-Unix-Address-Space"><span class="nav-number">1.1.</span> <span class="nav-text">Linux/Unix Address Space</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#program-memory-area"><span class="nav-number">1.1.1.</span> <span class="nav-text">program memory area</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#address-space-segment"><span class="nav-number">1.1.2.</span> <span class="nav-text">address space segment</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#executable-file-section"><span class="nav-number">1.1.3.</span> <span class="nav-text">executable file section</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rodata"><span class="nav-number">1.1.4.</span> <span class="nav-text">rodata</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例"><span class="nav-number">1.2.</span> <span class="nav-text">示例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-Unix-Address-Space"><span class="nav-number">1.1.</span> <span class="nav-text">Linux/Unix Address Space</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#program-memory-area"><span class="nav-number">1.1.1.</span> <span class="nav-text">program memory area</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#address-space-segment"><span class="nav-number">1.1.2.</span> <span class="nav-text">address space segment</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#executable-file-section"><span class="nav-number">1.1.3.</span> <span class="nav-text">executable file section</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rodata"><span class="nav-number">1.1.4.</span> <span class="nav-text">rodata</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-code"><span class="nav-number">1.2.</span> <span class="nav-text">Example code</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
             
 
           </div>
