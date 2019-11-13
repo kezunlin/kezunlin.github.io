@@ -509,6 +509,14 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
       
         
         
+          <div>
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+          </div>
+        
 
         <p>cpp11 push_back and emplace_back<br><a id="more"></a></p>
 <h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="case1"><a href="#case1" class="headerlink" title="case1"></a>case1</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  A (<span class="keyword">int</span> x_arg) : x (x_arg) &#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"A (x_arg)\n"</span>; &#125;</span><br><span class="line">  A () &#123; x = <span class="number">0</span>; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"A ()\n"</span>; &#125;</span><br><span class="line">  A (<span class="keyword">const</span> A &amp;rhs) <span class="keyword">noexcept</span> &#123; x = rhs.x; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"A (A &amp;)\n"</span>; &#125;</span><br><span class="line">  A (A &amp;&amp;rhs) <span class="keyword">noexcept</span> &#123; x = rhs.x; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"A (A &amp;&amp;)\n"</span>; &#125;</span><br><span class="line">  ~A() &#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"~A ()\n"</span>; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="keyword">int</span> x;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test_emplace_back_1</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// For emplace_back constructor A (int x_arg) will be called.</span></span><br><span class="line">	<span class="comment">// And for push_back A (int x_arg) is called first and </span></span><br><span class="line">	<span class="comment">// move A (A &amp;&amp;rhs) is called afterwards</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;A&gt; a;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"call emplace_back:\n"</span>;</span><br><span class="line">    a.emplace_back(<span class="number">0</span>); </span><br><span class="line">	<span class="comment">// (1) direct object creation inside vector</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;A&gt; a;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"call push_back:\n"</span>;</span><br><span class="line">    a.push_back(<span class="number">1</span>);</span><br><span class="line">	<span class="comment">// (1) create temp object and </span></span><br><span class="line">	<span class="comment">// (2) then move copy to vector and </span></span><br><span class="line">	<span class="comment">// (3) free temp object</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">call emplace_back:</span></span><br><span class="line"><span class="comment">A (x_arg)</span></span><br><span class="line"><span class="comment">~A ()</span></span><br><span class="line"><span class="comment">call push_back:</span></span><br><span class="line"><span class="comment">A (x_arg)</span></span><br><span class="line"><span class="comment">A (A &amp;&amp;)</span></span><br><span class="line"><span class="comment">~A ()</span></span><br><span class="line"><span class="comment">~A ()</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
@@ -733,7 +741,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-count">45</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -744,7 +752,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">198</span>
+                  <span class="site-state-item-count">190</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -819,6 +827,14 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 
       
       
+          <div>
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+          </div>
+        
       
     </div>
   </aside>
