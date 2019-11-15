@@ -3,11 +3,24 @@
   <entry>
     <title>python convert image to and from base64 string</title>
     <url>/post/9282a9ab/</url>
-    <content><![CDATA[<!-- build time:Fri Nov 15 2019 10:56:30 GMT+0800 (CST) --><p>python convert image to and from base64 string<br><a id="more"></a></p><h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="image-to-from-base64-string"><a href="#image-to-from-base64-string" class="headerlink" title="image to/from base64 string"></a>image to/from base64 string</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_base64_str_from_file</span><span class="params">(filepath)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> open(filepath, <span class="string">"rb"</span>) <span class="keyword">as</span> f:</span><br><span class="line">        bytes_content = f.read() <span class="comment"># bytes</span></span><br><span class="line">        bytes_64 = base64.b64encode(bytes_content)</span><br><span class="line">    <span class="keyword">return</span> bytes_64.decode(<span class="string">'utf-8'</span>) <span class="comment"># bytes---&gt;str  (remove `b`)</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">save_base64_str_to_file</span><span class="params">(str_base64, to_file)</span>:</span></span><br><span class="line">    bytes_64 = str_base64.encode(<span class="string">'utf-8'</span>) <span class="comment"># str---&gt; bytes (add `b`)</span></span><br><span class="line">    bytes_content = base64.decodebytes(bytes_64) <span class="comment"># bytes</span></span><br><span class="line">    <span class="keyword">with</span> open(to_file, <span class="string">"wb"</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(bytes_content)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_base64</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># image to/from base64</span></span><br><span class="line">    image_path = <span class="string">"images/1.jpg"</span></span><br><span class="line">    str_base64 = get_base64_str_from_file(image_path)</span><br><span class="line">    save_base64_str_to_file(str_base64, <span class="string">"images/2.jpg"</span>)</span><br><span class="line">    print(<span class="string">"OK"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    test_base64()</span><br></pre></td></tr></table></figure><p>output</p><pre><code>OK
-</code></pre><h2 id="normal-string-to-from-base64-string"><a href="#normal-string-to-from-base64-string" class="headerlink" title="normal string to/from base64 string"></a>normal string to/from base64 string</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">str_to_base64</span><span class="params">(normal_str)</span>:</span></span><br><span class="line">    bytes_str = normal_str.encode(<span class="string">'utf-8'</span>) <span class="comment"># str ===&gt; bytes</span></span><br><span class="line">    bytes_64 = base64.b64encode(bytes_str) <span class="comment"># bytes ===&gt; bytes</span></span><br><span class="line">    <span class="keyword">return</span> bytes_64.decode(<span class="string">'utf-8'</span>) <span class="comment"># bytes ===&gt; str</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">base64_to_str</span><span class="params">(base64_str)</span>:</span></span><br><span class="line">    bytes_64 = base64_str.encode(<span class="string">'utf-8'</span>) <span class="comment"># str ===&gt; bytes</span></span><br><span class="line">    bytes_content = base64.decodebytes(bytes_64) <span class="comment"># bytes ===&gt; bytes</span></span><br><span class="line">    <span class="keyword">return</span> bytes_content.decode(<span class="string">'utf-8'</span>) <span class="comment"># bytes ===&gt; str</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_base64</span><span class="params">()</span>:</span></span><br><span class="line">    normal_str = <span class="string">"Hello World !"</span></span><br><span class="line">    str_base64 = str_to_base64(normal_str)</span><br><span class="line">    normal_str2 = base64_to_str(str_base64)</span><br><span class="line">    print(<span class="string">"normal_str = "</span>,normal_str)</span><br><span class="line">    print(<span class="string">"str_base64 = "</span>,str_base64)</span><br><span class="line">    print(<span class="string">"normal_str2 = "</span>,normal_str2)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    test_base64()</span><br></pre></td></tr></table></figure><p>output</p><pre><code>normal_str =  Hello World !
+    <content><![CDATA[<p>python convert image to and from base64 string<br><a id="more"></a></p>
+<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="image-to-from-base64-string"><a href="#image-to-from-base64-string" class="headerlink" title="image to/from base64 string"></a>image to/from base64 string</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_base64_str_from_file</span><span class="params">(filepath)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> open(filepath, <span class="string">"rb"</span>) <span class="keyword">as</span> f:</span><br><span class="line">        bytes_content = f.read() <span class="comment"># bytes</span></span><br><span class="line">        bytes_64 = base64.b64encode(bytes_content)</span><br><span class="line">    <span class="keyword">return</span> bytes_64.decode(<span class="string">'utf-8'</span>) <span class="comment"># bytes---&gt;str  (remove `b`)</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">save_base64_str_to_file</span><span class="params">(str_base64, to_file)</span>:</span></span><br><span class="line">    bytes_64 = str_base64.encode(<span class="string">'utf-8'</span>) <span class="comment"># str---&gt; bytes (add `b`)</span></span><br><span class="line">    bytes_content = base64.decodebytes(bytes_64) <span class="comment"># bytes</span></span><br><span class="line">    <span class="keyword">with</span> open(to_file, <span class="string">"wb"</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(bytes_content)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_base64</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># image to/from base64</span></span><br><span class="line">    image_path = <span class="string">"images/1.jpg"</span></span><br><span class="line">    str_base64 = get_base64_str_from_file(image_path)</span><br><span class="line">    save_base64_str_to_file(str_base64, <span class="string">"images/2.jpg"</span>)</span><br><span class="line">    print(<span class="string">"OK"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    test_base64()</span><br></pre></td></tr></table></figure>
+<p>output </p>
+<pre><code>OK
+</code></pre><h2 id="normal-string-to-from-base64-string"><a href="#normal-string-to-from-base64-string" class="headerlink" title="normal string to/from base64 string"></a>normal string to/from base64 string</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">str_to_base64</span><span class="params">(normal_str)</span>:</span></span><br><span class="line">    bytes_str = normal_str.encode(<span class="string">'utf-8'</span>) <span class="comment"># str ===&gt; bytes</span></span><br><span class="line">    bytes_64 = base64.b64encode(bytes_str) <span class="comment"># bytes ===&gt; bytes</span></span><br><span class="line">    <span class="keyword">return</span> bytes_64.decode(<span class="string">'utf-8'</span>) <span class="comment"># bytes ===&gt; str</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">base64_to_str</span><span class="params">(base64_str)</span>:</span></span><br><span class="line">    bytes_64 = base64_str.encode(<span class="string">'utf-8'</span>) <span class="comment"># str ===&gt; bytes</span></span><br><span class="line">    bytes_content = base64.decodebytes(bytes_64) <span class="comment"># bytes ===&gt; bytes</span></span><br><span class="line">    <span class="keyword">return</span> bytes_content.decode(<span class="string">'utf-8'</span>) <span class="comment"># bytes ===&gt; str</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_base64</span><span class="params">()</span>:</span></span><br><span class="line">    normal_str = <span class="string">"Hello World !"</span></span><br><span class="line">    str_base64 = str_to_base64(normal_str)</span><br><span class="line">    normal_str2 = base64_to_str(str_base64)</span><br><span class="line">    print(<span class="string">"normal_str = "</span>,normal_str)</span><br><span class="line">    print(<span class="string">"str_base64 = "</span>,str_base64)</span><br><span class="line">    print(<span class="string">"normal_str2 = "</span>,normal_str2)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    test_base64()</span><br></pre></td></tr></table></figure>
+<p>output </p>
+<pre><code>normal_str =  Hello World !
 str_base64 =  SGVsbG8gV29ybGQgIQ==
 normal_str2 =  Hello World !
-</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul><li>2019/11/12: created.</li></ul><h1 id="Copyright"><a href="#Copyright" class="headerlink" title="Copyright"></a>Copyright</h1><ul><li>Post author: <a href="https://kezunlin.me">kezunlin</a></li><li>Post link: <a href="https://kezunlin.me/post/9282a9ab/">https://kezunlin.me/post/9282a9ab/</a></li><li>Copyright Notice: All articles in this blog are licensed under CC BY-NC-SA 3.0 unless stating additionally.</li></ul><!-- rebuild by neat -->]]></content>
+</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
+<li>2019/11/12: created.</li>
+</ul>
+<h1 id="Copyright"><a href="#Copyright" class="headerlink" title="Copyright"></a>Copyright</h1><ul>
+<li>Post author: <a href="https://kezunlin.me">kezunlin</a></li>
+<li>Post link: <a href="https://kezunlin.me/post/9282a9ab/">https://kezunlin.me/post/9282a9ab/</a></li>
+<li>Copyright Notice: All articles in this blog are licensed under CC BY-NC-SA 3.0 unless stating additionally.</li>
+</ul>
+]]></content>
       <categories>
         <category>python</category>
       </categories>
@@ -13580,32 +13593,6 @@ prediction on D:
       </tags>
   </entry>
   <entry>
-    <title>Example 2 - Linear Regression Example with Python and theano from MSDN</title>
-    <url>/post/8d4707b6/</url>
-    <content><![CDATA[<p>Example 2 - Linear Regression Example with Python and theano from MSDN<br><a id="more"></a></p>
-<h1 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h1><ul>
-<li><a href="https://kezunlin.me/post/3bee8fac/#more">Example 1-theano linear regression with gradient descent</a></li>
-<li><a href="https://kezunlin.me/post/8d4707b6/#more"><strong>Example 2 - Linear Regression Example with Python and theano from MSDN</strong></a></li>
-<li><a href="https://kezunlin.me/post/8ce3f979/#more">Example 3- A Real Example Logistic Regression with theano</a></li>
-</ul>
-<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="code-example"><a href="#code-example" class="headerlink" title="code example"></a>code example</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># https://blogs.msdn.microsoft.com/lukassteindl/2015/12/13/linear-regression-example-with-python-and-theano/</span></span><br><span class="line"><span class="comment"># http://jakevdp.github.io/blog/2013/05/12/embedding-matplotlib-animations/</span></span><br><span class="line"></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">在Python Notebook中无法展现动画，只能展示静态的图像。</span></span><br><span class="line"><span class="string">The problem is that so far the integration of IPython with matplotlib is entirely static, </span></span><br><span class="line"><span class="string">while animations are by their nature dynamic.</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt </span><br><span class="line"><span class="keyword">import</span> matplotlib.animation <span class="keyword">as</span> animation </span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> style </span><br><span class="line"><span class="keyword">import</span> theano </span><br><span class="line"><span class="keyword">from</span> theano <span class="keyword">import</span> tensor <span class="keyword">as</span> T </span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">style.use(<span class="string">'fivethirtyeight'</span>) </span><br><span class="line">fig = plt.figure() </span><br><span class="line">ax1 = fig.add_subplot(<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">trX = np.linspace(<span class="number">-1</span>,<span class="number">1</span>,<span class="number">101</span>)  <span class="comment"># (101,)</span></span><br><span class="line">trY = <span class="number">2</span> * trX + np.random.randn(*trX.shape) * <span class="number">0.33</span>   <span class="comment"># (101,)</span></span><br><span class="line"></span><br><span class="line">X = T.scalar() </span><br><span class="line">Y = T.scalar()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">model</span> <span class="params">(X,w)</span>:</span> </span><br><span class="line">    <span class="keyword">return</span> X * w</span><br><span class="line"></span><br><span class="line">w = theano.shared(np.asarray(<span class="number">0.</span>, dtype=theano.config.floatX)) <span class="comment">#scalar</span></span><br><span class="line">y = model(X,w)</span><br><span class="line"></span><br><span class="line">cost = T.mean(T.sqr(y-Y)) </span><br><span class="line">gradient = T.grad(cost=cost, wrt = w) </span><br><span class="line">updates = [[w,w-gradient * <span class="number">0.001</span>]]</span><br><span class="line"></span><br><span class="line"><span class="comment">#train = theano.function(inputs=[X,Y], outputs=cost, updates = updates, allow_input_downcast= True)</span></span><br><span class="line">train = theano.function(inputs=[X,Y], outputs=cost, updates = updates)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>): </span><br><span class="line">        <span class="keyword">for</span> x,y <span class="keyword">in</span> zip (trX,trY): </span><br><span class="line">            train(x,y) </span><br><span class="line">            <span class="keyword">print</span> (w.eval()) </span><br><span class="line">            </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">animate</span><span class="params">(i)</span>:</span> </span><br><span class="line">    <span class="comment"># i: iteration of animate</span></span><br><span class="line">    <span class="comment">#print i</span></span><br><span class="line">    ax1.clear() </span><br><span class="line">    plt.scatter(trX, trY,  label=<span class="string">'Gradient Descent on GPU'</span>, </span><br><span class="line">                    alpha=<span class="number">0.3</span>, edgecolors=<span class="string">'none'</span>) </span><br><span class="line">    plt.legend() </span><br><span class="line">    plt.grid(<span class="literal">True</span>) </span><br><span class="line">    <span class="keyword">for</span> x,y <span class="keyword">in</span> zip (trX,trY): </span><br><span class="line">        train(x,y) </span><br><span class="line">        <span class="comment">#print (w.eval()) </span></span><br><span class="line">       </span><br><span class="line">    xs = [<span class="number">-1</span>,<span class="number">1</span>] </span><br><span class="line">    ys = [<span class="number">-1</span>*w.eval(),w.eval()] </span><br><span class="line">    ax1.plot(xs,ys) </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show_animate</span><span class="params">()</span>:</span></span><br><span class="line">    ani = animation.FuncAnimation(fig, animate, interval = <span class="number">250</span>)</span><br><span class="line">    plt.show() </span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment">#run()</span></span><br><span class="line">    show_animate()</span><br><span class="line"></span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a href="https://blogs.msdn.microsoft.com/lukassteindl/2015/12/13/linear-regression-example-with-python-and-theano/" target="_blank" rel="noopener">linear-regression-example-with-python-and-theano</a></li>
-<li><a href="http://jakevdp.github.io/blog/2013/05/12/embedding-matplotlib-animations/" target="_blank" rel="noopener">embedding-matplotlib-animations</a></li>
-</ul>
-<h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
-<li>20180807: created.</li>
-</ul>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>theano</category>
-      </categories>
-      <tags>
-        <tag>theano</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Example 1-theano linear regression with gradient descent</title>
     <url>/post/3bee8fac/</url>
     <content><![CDATA[<p>Example 1-theano linear regression with gradient descent<br><a id="more"></a></p>
@@ -13644,6 +13631,32 @@ b value :  [ 0.08896923]
       <tags>
         <tag>theano</tag>
         <tag>sgd</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Example 2 - Linear Regression Example with Python and theano from MSDN</title>
+    <url>/post/8d4707b6/</url>
+    <content><![CDATA[<p>Example 2 - Linear Regression Example with Python and theano from MSDN<br><a id="more"></a></p>
+<h1 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h1><ul>
+<li><a href="https://kezunlin.me/post/3bee8fac/#more">Example 1-theano linear regression with gradient descent</a></li>
+<li><a href="https://kezunlin.me/post/8d4707b6/#more"><strong>Example 2 - Linear Regression Example with Python and theano from MSDN</strong></a></li>
+<li><a href="https://kezunlin.me/post/8ce3f979/#more">Example 3- A Real Example Logistic Regression with theano</a></li>
+</ul>
+<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="code-example"><a href="#code-example" class="headerlink" title="code example"></a>code example</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># https://blogs.msdn.microsoft.com/lukassteindl/2015/12/13/linear-regression-example-with-python-and-theano/</span></span><br><span class="line"><span class="comment"># http://jakevdp.github.io/blog/2013/05/12/embedding-matplotlib-animations/</span></span><br><span class="line"></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">在Python Notebook中无法展现动画，只能展示静态的图像。</span></span><br><span class="line"><span class="string">The problem is that so far the integration of IPython with matplotlib is entirely static, </span></span><br><span class="line"><span class="string">while animations are by their nature dynamic.</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt </span><br><span class="line"><span class="keyword">import</span> matplotlib.animation <span class="keyword">as</span> animation </span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> style </span><br><span class="line"><span class="keyword">import</span> theano </span><br><span class="line"><span class="keyword">from</span> theano <span class="keyword">import</span> tensor <span class="keyword">as</span> T </span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">style.use(<span class="string">'fivethirtyeight'</span>) </span><br><span class="line">fig = plt.figure() </span><br><span class="line">ax1 = fig.add_subplot(<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">trX = np.linspace(<span class="number">-1</span>,<span class="number">1</span>,<span class="number">101</span>)  <span class="comment"># (101,)</span></span><br><span class="line">trY = <span class="number">2</span> * trX + np.random.randn(*trX.shape) * <span class="number">0.33</span>   <span class="comment"># (101,)</span></span><br><span class="line"></span><br><span class="line">X = T.scalar() </span><br><span class="line">Y = T.scalar()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">model</span> <span class="params">(X,w)</span>:</span> </span><br><span class="line">    <span class="keyword">return</span> X * w</span><br><span class="line"></span><br><span class="line">w = theano.shared(np.asarray(<span class="number">0.</span>, dtype=theano.config.floatX)) <span class="comment">#scalar</span></span><br><span class="line">y = model(X,w)</span><br><span class="line"></span><br><span class="line">cost = T.mean(T.sqr(y-Y)) </span><br><span class="line">gradient = T.grad(cost=cost, wrt = w) </span><br><span class="line">updates = [[w,w-gradient * <span class="number">0.001</span>]]</span><br><span class="line"></span><br><span class="line"><span class="comment">#train = theano.function(inputs=[X,Y], outputs=cost, updates = updates, allow_input_downcast= True)</span></span><br><span class="line">train = theano.function(inputs=[X,Y], outputs=cost, updates = updates)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>): </span><br><span class="line">        <span class="keyword">for</span> x,y <span class="keyword">in</span> zip (trX,trY): </span><br><span class="line">            train(x,y) </span><br><span class="line">            <span class="keyword">print</span> (w.eval()) </span><br><span class="line">            </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">animate</span><span class="params">(i)</span>:</span> </span><br><span class="line">    <span class="comment"># i: iteration of animate</span></span><br><span class="line">    <span class="comment">#print i</span></span><br><span class="line">    ax1.clear() </span><br><span class="line">    plt.scatter(trX, trY,  label=<span class="string">'Gradient Descent on GPU'</span>, </span><br><span class="line">                    alpha=<span class="number">0.3</span>, edgecolors=<span class="string">'none'</span>) </span><br><span class="line">    plt.legend() </span><br><span class="line">    plt.grid(<span class="literal">True</span>) </span><br><span class="line">    <span class="keyword">for</span> x,y <span class="keyword">in</span> zip (trX,trY): </span><br><span class="line">        train(x,y) </span><br><span class="line">        <span class="comment">#print (w.eval()) </span></span><br><span class="line">       </span><br><span class="line">    xs = [<span class="number">-1</span>,<span class="number">1</span>] </span><br><span class="line">    ys = [<span class="number">-1</span>*w.eval(),w.eval()] </span><br><span class="line">    ax1.plot(xs,ys) </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show_animate</span><span class="params">()</span>:</span></span><br><span class="line">    ani = animation.FuncAnimation(fig, animate, interval = <span class="number">250</span>)</span><br><span class="line">    plt.show() </span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment">#run()</span></span><br><span class="line">    show_animate()</span><br><span class="line"></span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="https://blogs.msdn.microsoft.com/lukassteindl/2015/12/13/linear-regression-example-with-python-and-theano/" target="_blank" rel="noopener">linear-regression-example-with-python-and-theano</a></li>
+<li><a href="http://jakevdp.github.io/blog/2013/05/12/embedding-matplotlib-animations/" target="_blank" rel="noopener">embedding-matplotlib-animations</a></li>
+</ul>
+<h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
+<li>20180807: created.</li>
+</ul>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>theano</category>
+      </categories>
+      <tags>
+        <tag>theano</tag>
       </tags>
   </entry>
   <entry>
@@ -14822,8 +14835,8 @@ sudo cp libjpegturbo-config.cmake /usr/local/lib/cmake/libjpegturbo/
         <category>cpp</category>
       </categories>
       <tags>
-        <tag>libjpeg-turbo</tag>
         <tag>libjpeg</tag>
+        <tag>libjpeg-turbo</tag>
       </tags>
   </entry>
   <entry>
@@ -15441,8 +15454,8 @@ NASM = C:/Program Files/NASM/nasm.exe
         <category>cpp</category>
       </categories>
       <tags>
-        <tag>libjpeg-turbo</tag>
         <tag>libjpeg</tag>
+        <tag>libjpeg-turbo</tag>
       </tags>
   </entry>
   <entry>
@@ -15859,8 +15872,8 @@ ios_extended_string    2014-09-08T17:51:04.777668  ===&gt; from_iso_extended_str
       </categories>
       <tags>
         <tag>mysql</tag>
-        <tag>boost</tag>
         <tag>datetime</tag>
+        <tag>boost</tag>
         <tag>sql</tag>
       </tags>
   </entry>
@@ -16547,8 +16560,8 @@ cnpm update --save
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>npm</tag>
         <tag>hexo</tag>
+        <tag>npm</tag>
         <tag>node</tag>
       </tags>
   </entry>
@@ -16904,8 +16917,8 @@ p7 from String2Ptime(p6): 20180118_152047_815419
         <category>cpp</category>
       </categories>
       <tags>
-        <tag>boost</tag>
         <tag>datetime</tag>
+        <tag>boost</tag>
       </tags>
   </entry>
   <entry>
@@ -17660,8 +17673,8 @@ ROS_ETC_DIR=/opt/ros/kinetic/etc/ros
         <category>ros</category>
       </categories>
       <tags>
-        <tag>ubuntu</tag>
         <tag>ros</tag>
+        <tag>ubuntu</tag>
       </tags>
   </entry>
   <entry>
@@ -18121,10 +18134,10 @@ cnpm install --save
         <category>hexo</category>
       </categories>
       <tags>
+        <tag>hexo</tag>
+        <tag>ubuntu</tag>
         <tag>nodejs</tag>
         <tag>npm</tag>
-        <tag>ubuntu</tag>
-        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
