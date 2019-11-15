@@ -1,23 +1,584 @@
-<!-- build time:Fri Nov 15 2019 11:11:27 GMT+0800 (CST) --><!DOCTYPE html><html class="theme-next gemini" lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#222"><meta name="referrer" content="no-referrer"><meta name="google-site-verification" content="WSpJFvfcmIPBX_iK8uPbmCHIy_0f1lvd7ZJpbyad2sA"><meta name="yandex-verification" content="808eb057eb8396cc"><meta name="baidu-site-verification" content="9tyEi4Fq0J"><meta name="360-site-verification" content="202e7cd2d29c6b138e4b78d9e9b62d43"><meta name="sogou_site_verification" content="euHq4j1Rpe"><script data-ad-client="ca-pub-5653382914441020" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"><link href="//fonts.googleapis.com/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|16:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css"><link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css"><link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3"><link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222"><meta name="keywords" content="tensorflow,"><link rel="alternate" href="/atom.xml" title="KeZunLin's Blog" type="application/atom+xml"><meta name="description" content="tensorflow introduction"><meta name="keywords" content="tensorflow"><meta property="og:type" content="article"><meta property="og:title" content="tensorflow introduction"><meta property="og:url" content="https://kezunlin.me/post/3670803a/index.html"><meta property="og:site_name" content="KeZunLin&#39;s Blog"><meta property="og:description" content="tensorflow introduction"><meta property="og:locale" content="en"><meta property="og:updated_time" content="2019-11-13T06:24:46.437Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="tensorflow introduction"><meta name="twitter:description" content="tensorflow introduction"><script type="text/javascript" id="hexo.configurations">var NexT=window.NexT||{},CONFIG={root:"/",scheme:"Gemini",version:"5.1.3",sidebar:{position:"left",display:"post",offset:12,b2t:!0,scrollpercent:!0,onmobile:!1},fancybox:!0,tabs:!0,motion:{enable:!1,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},duoshuo:{userId:"0",author:"Author"},algolia:{applicationID:"",apiKey:"",indexName:"",hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}}}</script><link rel="canonical" href="https://kezunlin.me/post/3670803a/"><script>!function(){var t=document.createElement("script"),s=window.location.protocol.split(":")[0];"https"===s?t.src="https://zz.bdstatic.com/linksubmit/push.js":t.src="http://push.zhanzhang.baidu.com/push.js";var e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(t,e)}()</script><script>!function(){var s="https://jspassport.ssl.qhimg.com/11.0.1.js?d182b3f28525f2db83acfaaf6e696dba";document.write('<script src="'+s+'" id="sozz"><\/script>')}()</script><title>tensorflow introduction | KeZunLin's Blog</title><script>!function(e,t,a,n,c,o,s){e.GoogleAnalyticsObject=c,e[c]=e[c]||function(){(e[c].q=e[c].q||[]).push(arguments)},e[c].l=1*new Date,o=t.createElement(a),s=t.getElementsByTagName(a)[0],o.async=1,o.src=n,s.parentNode.insertBefore(o,s)}(window,document,"script","https://www.google-analytics.com/analytics.js","ga"),ga("create","UA-111858944-1","auto"),ga("send","pageview")</script></head><body itemscope itemtype="http://schema.org/WebPage" lang="en"><div class="container sidebar-position-left page-post-detail"><div class="headband"></div><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-wrapper"><div class="site-meta"><div class="custom-logo-site-title"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span> <span class="site-title">KeZunLin's Blog</span> <span class="logo-line-after"><i></i></span></a></div><h1 class="site-subtitle" itemprop="description">Live and Learn.</h1></div><div class="site-nav-toggle"><button><span class="btn-bar"></span> <span class="btn-bar"></span> <span class="btn-bar"></span></button></div></div><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i><br>Home</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i><br>Archives</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i><br>Categories</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i><br>Tags</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="menu-item-icon fa fa-fw fa-link"></i><br>Friends</a></li><li class="menu-item menu-item-search"><a href="javascript:;" class="popup-trigger"><i class="menu-item-icon fa fa-search fa-fw"></i><br>Search</a></li></ul><div class="site-search"><div class="popup search-popup local-search-popup"><div class="local-search-header clearfix"><span class="search-icon"><i class="fa fa-search"></i> </span><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span><div class="local-search-input-wrapper"><input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input"></div></div><div id="local-search-result"></div></div></div></nav></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><div id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="https://kezunlin.me/post/3670803a/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="kezunlin"><meta itemprop="description" content><meta itemprop="image" content="/images/kezunlin_avatar.jpg"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="KeZunLin's Blog"><img itemprop="logo" src="/images/kezunlin_avatar.jpg" alt="logo"></span><header class="post-header"><h2 class="post-title" itemprop="name headline">tensorflow introduction</h2><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i> </span><span class="post-meta-item-text">Posted on</span> <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-26T18:32:00+08:00">2018-10-26 </time><span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-calendar-check-o"></i> </span><span class="post-meta-item-text">Post modified&#58;</span> <time title="Post modified" itemprop="dateModified" datetime="2019-11-13T14:24:46+08:00">2019-11-13 </time></span><span class="post-category"><span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-folder-o"></i> </span><span class="post-meta-item-text">In</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/tensorflow/" itemprop="url" rel="index"><span itemprop="name">tensorflow</span></a></span></span><div class="post-wordcount"><span class="post-meta-item-icon"><i class="fa fa-file-word-o"></i> </span><span class="post-meta-item-text">Words count in article&#58;</span> <span title="Words count in article">1,595 </span><span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i> </span><span class="post-meta-item-text">Reading time &asymp;</span> <span title="Reading time">10</span></div></div></header><div class="post-body" itemprop="articleBody"><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div><p>tensorflow introduction<br><a id="more"></a></p><h1 id="Set-up"><a href="#Set-up" class="headerlink" title="Set up"></a>Set up</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> absolute_import</span><br><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> division</span><br><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_function</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br></pre></td></tr></table></figure><h1 id="Tensor-Values"><a href="#Tensor-Values" class="headerlink" title="Tensor Values"></a>Tensor Values</h1><p><code>tensor</code>, <code>rank</code>, <code>shape</code>, <code>value</code></p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">3.</span> <span class="comment"># a rank 0 tensor; a scalar with shape [],</span></span><br><span class="line"></span><br><span class="line">[<span class="number">1.</span>, <span class="number">2.</span>, <span class="number">3.</span>] <span class="comment"># a rank 1 tensor; a vector with shape [3]</span></span><br><span class="line"></span><br><span class="line">[[<span class="number">1.</span>, <span class="number">2.</span>, <span class="number">3.</span>], </span><br><span class="line"> [<span class="number">4.</span>, <span class="number">5.</span>, <span class="number">6.</span>]] <span class="comment"># a rank 2 tensor; a matrix with shape [2, 3]</span></span><br><span class="line"></span><br><span class="line">[</span><br><span class="line">    [[<span class="number">1.</span>, <span class="number">2.</span>, <span class="number">3.</span>]], </span><br><span class="line">     [[<span class="number">7.</span>, <span class="number">8.</span>, <span class="number">9.</span>]]</span><br><span class="line">] <span class="comment"># a rank 3 tensor with shape [2, 1, 3]</span></span><br></pre></td></tr></table></figure><pre><code>[[[1.0, 2.0, 3.0]], [[7.0, 8.0, 9.0]]]
-</code></pre><h1 id="TensorFlow-Core-Walkthrough"><a href="#TensorFlow-Core-Walkthrough" class="headerlink" title="TensorFlow Core Walkthrough"></a>TensorFlow Core Walkthrough</h1><p>You might think of TensorFlow Core programs as consisting of two discrete sections:</p><ul><li>Building the computational graph (a <code>tf.Graph</code>).</li><li>Running the computational graph (using a <code>tf.Session</code>).</li></ul><h2 id="Graph"><a href="#Graph" class="headerlink" title="Graph"></a>Graph</h2><p>A <code>computational graph</code> is a series of TensorFlow operations arranged into a graph. The graph is composed of two types of objects.</p><ul><li><code>tf.Operation</code> (or “ops”): The nodes of the graph. Operations describe calculations that consume and produce tensors.</li><li><code>tf.Tensor</code>: The edges in the graph. These represent the values that will flow through the graph. Most TensorFlow functions return tf.Tensors.</li></ul><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># tf.Tensors do not have values</span></span><br><span class="line"></span><br><span class="line">a = tf.constant(<span class="number">3.0</span>, dtype=tf.float32)</span><br><span class="line">b = tf.constant(<span class="number">4.0</span>) <span class="comment"># also tf.float32 implicitly</span></span><br><span class="line">total = a + b</span><br><span class="line">print(a)</span><br><span class="line">print(b)</span><br><span class="line">print(total)</span><br></pre></td></tr></table></figure><pre><code>Tensor(&quot;Const_4:0&quot;, shape=(), dtype=float32)
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+<meta name="referrer" content="no-referrer">
+
+<meta name="google-site-verification" content="WSpJFvfcmIPBX_iK8uPbmCHIy_0f1lvd7ZJpbyad2sA">
+<meta name="yandex-verification" content="808eb057eb8396cc">
+
+<meta name="baidu-site-verification" content="9tyEi4Fq0J">
+<meta name="360-site-verification" content="202e7cd2d29c6b138e4b78d9e9b62d43">
+<meta name="sogou_site_verification" content="euHq4j1Rpe">
+
+<script data-ad-client="ca-pub-5653382914441020" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|16:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="tensorflow,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="KeZunLin's Blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="tensorflow introduction">
+<meta name="keywords" content="tensorflow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tensorflow introduction">
+<meta property="og:url" content="https://kezunlin.me/post/3670803a/index.html">
+<meta property="og:site_name" content="KeZunLin&#39;s Blog">
+<meta property="og:description" content="tensorflow introduction">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-11-13T06:24:46.437Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="tensorflow introduction">
+<meta name="twitter:description" content="tensorflow introduction">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://kezunlin.me/post/3670803a/">
+
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+<script>
+(function(){
+var src = "https://jspassport.ssl.qhimg.com/11.0.1.js?d182b3f28525f2db83acfaaf6e696dba";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+
+  <title>tensorflow introduction | KeZunLin's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-111858944-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">KeZunLin's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Live and Learn.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-link"></i> <br>
+            
+            Friends
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/post/3670803a/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/kezunlin_avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="KeZunLin's Blog">
+      <img itemprop="logo" src="/images/kezunlin_avatar.jpg" alt="logo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">tensorflow introduction</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-26T18:32:00+08:00">
+                2018-10-26
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2019-11-13T14:24:46+08:00">
+                2019-11-13
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tensorflow/" itemprop="url" rel="index">
+                    <span itemprop="name">tensorflow</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  1,595
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  10
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+        
+          <div>
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+          </div>
+        
+
+        <p>tensorflow introduction<br><a id="more"></a></p>
+<h1 id="Set-up"><a href="#Set-up" class="headerlink" title="Set up"></a>Set up</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> absolute_import</span><br><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> division</span><br><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_function</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br></pre></td></tr></table></figure>
+<h1 id="Tensor-Values"><a href="#Tensor-Values" class="headerlink" title="Tensor Values"></a>Tensor Values</h1><p> <code>tensor</code>, <code>rank</code>, <code>shape</code>, <code>value</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">3.</span> <span class="comment"># a rank 0 tensor; a scalar with shape [],</span></span><br><span class="line"></span><br><span class="line">[<span class="number">1.</span>, <span class="number">2.</span>, <span class="number">3.</span>] <span class="comment"># a rank 1 tensor; a vector with shape [3]</span></span><br><span class="line"></span><br><span class="line">[[<span class="number">1.</span>, <span class="number">2.</span>, <span class="number">3.</span>], </span><br><span class="line"> [<span class="number">4.</span>, <span class="number">5.</span>, <span class="number">6.</span>]] <span class="comment"># a rank 2 tensor; a matrix with shape [2, 3]</span></span><br><span class="line"></span><br><span class="line">[</span><br><span class="line">    [[<span class="number">1.</span>, <span class="number">2.</span>, <span class="number">3.</span>]], </span><br><span class="line">     [[<span class="number">7.</span>, <span class="number">8.</span>, <span class="number">9.</span>]]</span><br><span class="line">] <span class="comment"># a rank 3 tensor with shape [2, 1, 3]</span></span><br></pre></td></tr></table></figure>
+<pre><code>[[[1.0, 2.0, 3.0]], [[7.0, 8.0, 9.0]]]
+</code></pre><h1 id="TensorFlow-Core-Walkthrough"><a href="#TensorFlow-Core-Walkthrough" class="headerlink" title="TensorFlow Core Walkthrough"></a>TensorFlow Core Walkthrough</h1><p>You might think of TensorFlow Core programs as consisting of two discrete sections:</p>
+<ul>
+<li>Building the computational graph (a <code>tf.Graph</code>).</li>
+<li>Running the computational graph (using a <code>tf.Session</code>).</li>
+</ul>
+<h2 id="Graph"><a href="#Graph" class="headerlink" title="Graph"></a>Graph</h2><p>A <code>computational graph</code> is a series of TensorFlow operations arranged into a graph. The graph is composed of two types of objects.</p>
+<ul>
+<li><code>tf.Operation</code> (or “ops”): The nodes of the graph. Operations describe calculations that consume and produce tensors.</li>
+<li><code>tf.Tensor</code>: The edges in the graph. These represent the values that will flow through the graph. Most TensorFlow functions return tf.Tensors.</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># tf.Tensors do not have values</span></span><br><span class="line"></span><br><span class="line">a = tf.constant(<span class="number">3.0</span>, dtype=tf.float32)</span><br><span class="line">b = tf.constant(<span class="number">4.0</span>) <span class="comment"># also tf.float32 implicitly</span></span><br><span class="line">total = a + b</span><br><span class="line">print(a)</span><br><span class="line">print(b)</span><br><span class="line">print(total)</span><br></pre></td></tr></table></figure>
+<pre><code>Tensor(&quot;Const_4:0&quot;, shape=(), dtype=float32)
 Tensor(&quot;Const_5:0&quot;, shape=(), dtype=float32)
 Tensor(&quot;add_2:0&quot;, shape=(), dtype=float32)
-</code></pre><h3 id="TensorBoard"><a href="#TensorBoard" class="headerlink" title="TensorBoard"></a>TensorBoard</h3><p>visualizing a computation graph.</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">writer = tf.summary.FileWriter(<span class="string">'.'</span>)</span><br><span class="line">writer.add_graph(tf.get_default_graph()) <span class="comment"># events.out.tfevents.&#123;timestamp&#125;.&#123;hostname&#125;</span></span><br></pre></td></tr></table></figure><p>Now, in a new terminal, launch TensorBoard with the following shell command:</p><pre><code>tensorboard --logdir .
-</code></pre><p>then access <code>http://localhost:6006/#graphs</code></p><h2 id="Session"><a href="#Session" class="headerlink" title="Session"></a>Session</h2><p>To evaluate tensors, instantiate a <code>tf.Session</code> object, informally known as a <code>session</code>. A session encapsulates the state of the TensorFlow runtime, and runs TensorFlow operations. If a <code>tf.Graph</code> is like a <code>.py</code> file, a <code>tf.Session</code> is like the <code>python executable</code>.</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sess = tf.Session()</span><br><span class="line">print(sess.run(total))</span><br></pre></td></tr></table></figure><pre><code>7.0
-</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(sess.run(&#123;<span class="string">'ab'</span>:(a, b), <span class="string">'total'</span>:total&#125;))</span><br></pre></td></tr></table></figure><pre><code>{&apos;total&apos;: 7.0, &apos;ab&apos;: (3.0, 4.0)}
-</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 第一次，第二次run的vec结果都不一样；第三次先生成vec，然后得到out1和out2</span></span><br><span class="line">vec = tf.random_uniform(shape=(<span class="number">3</span>,))</span><br><span class="line">out1 = vec + <span class="number">1</span></span><br><span class="line">out2 = vec + <span class="number">2</span></span><br><span class="line">print(sess.run(vec))</span><br><span class="line">print(sess.run(vec))</span><br><span class="line">print(sess.run((out1, out2)))</span><br></pre></td></tr></table></figure><pre><code>[0.3936273  0.7793083  0.46128905]
+</code></pre><h3 id="TensorBoard"><a href="#TensorBoard" class="headerlink" title="TensorBoard"></a>TensorBoard</h3><p>visualizing a computation graph.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">writer = tf.summary.FileWriter(<span class="string">'.'</span>)</span><br><span class="line">writer.add_graph(tf.get_default_graph()) <span class="comment"># events.out.tfevents.&#123;timestamp&#125;.&#123;hostname&#125;</span></span><br></pre></td></tr></table></figure>
+<p>Now, in a new terminal, launch TensorBoard with the following shell command:</p>
+<pre><code>tensorboard --logdir .
+</code></pre><p>then access <code>http://localhost:6006/#graphs</code></p>
+<h2 id="Session"><a href="#Session" class="headerlink" title="Session"></a>Session</h2><p>To evaluate tensors, instantiate a <code>tf.Session</code> object, informally known as a <code>session</code>. A session encapsulates the state of the TensorFlow runtime, and runs TensorFlow operations. If a <code>tf.Graph</code> is like a <code>.py</code> file, a <code>tf.Session</code> is like the <code>python executable</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sess = tf.Session()</span><br><span class="line">print(sess.run(total))</span><br></pre></td></tr></table></figure>
+<pre><code>7.0
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(sess.run(&#123;<span class="string">'ab'</span>:(a, b), <span class="string">'total'</span>:total&#125;))</span><br></pre></td></tr></table></figure>
+<pre><code>{&apos;total&apos;: 7.0, &apos;ab&apos;: (3.0, 4.0)}
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 第一次，第二次run的vec结果都不一样；第三次先生成vec，然后得到out1和out2</span></span><br><span class="line">vec = tf.random_uniform(shape=(<span class="number">3</span>,))</span><br><span class="line">out1 = vec + <span class="number">1</span></span><br><span class="line">out2 = vec + <span class="number">2</span></span><br><span class="line">print(sess.run(vec))</span><br><span class="line">print(sess.run(vec))</span><br><span class="line">print(sess.run((out1, out2)))</span><br></pre></td></tr></table></figure>
+<pre><code>[0.3936273  0.7793083  0.46128905]
 [0.9422312  0.03195083 0.4434662 ]
 (array([1.9042395, 1.5705729, 1.4484392], dtype=float32), array([2.9042397, 2.5705729, 2.4484391], dtype=float32))
-</code></pre><h2 id="Feeding"><a href="#Feeding" class="headerlink" title="Feeding"></a>Feeding</h2><p>A <code>placeholder</code> is a promise to provide a value later, like a function argument.</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">x = tf.placeholder(tf.float32)</span><br><span class="line">y = tf.placeholder(tf.float32)</span><br><span class="line">z = x + y</span><br><span class="line">print(x)</span><br><span class="line">print(y)</span><br><span class="line">print(z)</span><br></pre></td></tr></table></figure><pre><code>Tensor(&quot;Placeholder_2:0&quot;, dtype=float32)
+</code></pre><h2 id="Feeding"><a href="#Feeding" class="headerlink" title="Feeding"></a>Feeding</h2><p> A <code>placeholder</code> is a promise to provide a value later, like a function argument.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">x = tf.placeholder(tf.float32)</span><br><span class="line">y = tf.placeholder(tf.float32)</span><br><span class="line">z = x + y</span><br><span class="line">print(x)</span><br><span class="line">print(y)</span><br><span class="line">print(z)</span><br></pre></td></tr></table></figure>
+<pre><code>Tensor(&quot;Placeholder_2:0&quot;, dtype=float32)
 Tensor(&quot;Placeholder_3:0&quot;, dtype=float32)
 Tensor(&quot;add_6:0&quot;, dtype=float32)
-</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(sess.run(z, feed_dict=&#123;x: <span class="number">3</span>, y: <span class="number">4.5</span>&#125;))</span><br><span class="line">print(sess.run(z, feed_dict=&#123;x: [<span class="number">1</span>, <span class="number">3</span>], y: [<span class="number">2</span>, <span class="number">4</span>]&#125;))</span><br></pre></td></tr></table></figure><pre><code>7.5
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(sess.run(z, feed_dict=&#123;x: <span class="number">3</span>, y: <span class="number">4.5</span>&#125;))</span><br><span class="line">print(sess.run(z, feed_dict=&#123;x: [<span class="number">1</span>, <span class="number">3</span>], y: [<span class="number">2</span>, <span class="number">4</span>]&#125;))</span><br></pre></td></tr></table></figure>
+<pre><code>7.5
 [3. 7.]
-</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># placeholders throw an error if no value is fed to them.</span></span><br><span class="line"><span class="comment"># print(sess.run(z))</span></span><br></pre></td></tr></table></figure><h1 id="Datasets"><a href="#Datasets" class="headerlink" title="Datasets"></a>Datasets</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">my_data = [</span><br><span class="line">    [<span class="number">0</span>, <span class="number">1</span>,],</span><br><span class="line">    [<span class="number">2</span>, <span class="number">3</span>,],</span><br><span class="line">    [<span class="number">4</span>, <span class="number">5</span>,],</span><br><span class="line">    [<span class="number">6</span>, <span class="number">7</span>,],</span><br><span class="line">]</span><br><span class="line">slices = tf.data.Dataset.from_tensor_slices(my_data)</span><br><span class="line">next_item = slices.make_one_shot_iterator().get_next()</span><br></pre></td></tr></table></figure><p>Reaching the end of the data stream causes <code>Dataset</code> to throw an <code>tf.errors.OutOfRangeError</code>. For example, the following code reads the <code>next_item</code> until there is no more data to read:</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">  <span class="keyword">try</span>:</span><br><span class="line">    print(sess.run(next_item))</span><br><span class="line">  <span class="keyword">except</span> tf.errors.OutOfRangeError:</span><br><span class="line">    <span class="keyword">break</span></span><br></pre></td></tr></table></figure><pre><code>[0 1]
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># placeholders throw an error if no value is fed to them.</span></span><br><span class="line"><span class="comment"># print(sess.run(z))</span></span><br></pre></td></tr></table></figure>
+<h1 id="Datasets"><a href="#Datasets" class="headerlink" title="Datasets"></a>Datasets</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">my_data = [</span><br><span class="line">    [<span class="number">0</span>, <span class="number">1</span>,],</span><br><span class="line">    [<span class="number">2</span>, <span class="number">3</span>,],</span><br><span class="line">    [<span class="number">4</span>, <span class="number">5</span>,],</span><br><span class="line">    [<span class="number">6</span>, <span class="number">7</span>,],</span><br><span class="line">]</span><br><span class="line">slices = tf.data.Dataset.from_tensor_slices(my_data)</span><br><span class="line">next_item = slices.make_one_shot_iterator().get_next()</span><br></pre></td></tr></table></figure>
+<p>Reaching the end of the data stream causes <code>Dataset</code> to throw an <code>tf.errors.OutOfRangeError</code>. For example, the following code reads the <code>next_item</code> until there is no more data to read:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">  <span class="keyword">try</span>:</span><br><span class="line">    print(sess.run(next_item))</span><br><span class="line">  <span class="keyword">except</span> tf.errors.OutOfRangeError:</span><br><span class="line">    <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+<pre><code>[0 1]
 [2 3]
 [4 5]
 [6 7]
-</code></pre><p>If the <code>Dataset</code> depends on stateful operations you may need to initialize the iterator before using it, as shown below:</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">r = tf.random_normal([<span class="number">10</span>,<span class="number">3</span>])</span><br><span class="line">dataset = tf.data.Dataset.from_tensor_slices(r)</span><br><span class="line">iterator = dataset.make_initializable_iterator()</span><br><span class="line">next_row = iterator.get_next()</span><br><span class="line"></span><br><span class="line">sess.run(iterator.initializer) <span class="comment"># initialize iterator</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">  <span class="keyword">try</span>:</span><br><span class="line">    print(sess.run(next_row))</span><br><span class="line">  <span class="keyword">except</span> tf.errors.OutOfRangeError:</span><br><span class="line">    <span class="keyword">break</span></span><br></pre></td></tr></table></figure><pre><code>[-0.27240568  0.41916385  0.8312674 ]
+</code></pre><p>If the <code>Dataset</code> depends on stateful operations you may need to initialize the iterator before using it, as shown below:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">r = tf.random_normal([<span class="number">10</span>,<span class="number">3</span>])</span><br><span class="line">dataset = tf.data.Dataset.from_tensor_slices(r)</span><br><span class="line">iterator = dataset.make_initializable_iterator()</span><br><span class="line">next_row = iterator.get_next()</span><br><span class="line"></span><br><span class="line">sess.run(iterator.initializer) <span class="comment"># initialize iterator</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">  <span class="keyword">try</span>:</span><br><span class="line">    print(sess.run(next_row))</span><br><span class="line">  <span class="keyword">except</span> tf.errors.OutOfRangeError:</span><br><span class="line">    <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+<pre><code>[-0.27240568  0.41916385  0.8312674 ]
 [-0.37411043  0.39321673  0.44852588]
 [-2.502281   -0.35216704 -0.42525485]
 [ 0.16175386  0.4726008  -0.02786499]
@@ -27,23 +588,42 @@ Tensor(&quot;add_6:0&quot;, dtype=float32)
 [-0.80196303 -1.100821    2.44067   ]
 [0.79778594 0.34206432 1.0677754 ]
 [ 0.47419003 -0.7259666   0.8751686 ]
-</code></pre><h1 id="Layers"><a href="#Layers" class="headerlink" title="Layers"></a>Layers</h1><h2 id="Creating-Layers"><a href="#Creating-Layers" class="headerlink" title="Creating Layers"></a>Creating Layers</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x = tf.placeholder(tf.float32, shape=[<span class="literal">None</span>, <span class="number">3</span>])</span><br><span class="line">linear_model = tf.layers.Dense(units=<span class="number">1</span>) <span class="comment"># Layer</span></span><br><span class="line">y = linear_model(x)</span><br></pre></td></tr></table></figure><h2 id="Initializing-Layers"><a href="#Initializing-Layers" class="headerlink" title="Initializing Layers"></a>Initializing Layers</h2><p>The layer contains variables that must be initialized before they can be used.</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">init = tf.global_variables_initializer()</span><br><span class="line">sess.run(init)</span><br></pre></td></tr></table></figure><h2 id="Executing-Layers"><a href="#Executing-Layers" class="headerlink" title="Executing Layers"></a>Executing Layers</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(sess.run(y, &#123;x: [[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],[<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]]&#125;))</span><br></pre></td></tr></table></figure><pre><code>[[ 4.5850883]
+</code></pre><h1 id="Layers"><a href="#Layers" class="headerlink" title="Layers"></a>Layers</h1><h2 id="Creating-Layers"><a href="#Creating-Layers" class="headerlink" title="Creating Layers"></a>Creating Layers</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x = tf.placeholder(tf.float32, shape=[<span class="literal">None</span>, <span class="number">3</span>])</span><br><span class="line">linear_model = tf.layers.Dense(units=<span class="number">1</span>) <span class="comment"># Layer</span></span><br><span class="line">y = linear_model(x)</span><br></pre></td></tr></table></figure>
+<h2 id="Initializing-Layers"><a href="#Initializing-Layers" class="headerlink" title="Initializing Layers"></a>Initializing Layers</h2><p>The layer contains variables that must be initialized before they can be used. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">init = tf.global_variables_initializer()</span><br><span class="line">sess.run(init)</span><br></pre></td></tr></table></figure>
+<h2 id="Executing-Layers"><a href="#Executing-Layers" class="headerlink" title="Executing Layers"></a>Executing Layers</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(sess.run(y, &#123;x: [[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],[<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]]&#125;))</span><br></pre></td></tr></table></figure>
+<pre><code>[[ 4.5850883]
  [10.428741 ]]
-</code></pre><h2 id="Layer-Function-shortcuts"><a href="#Layer-Function-shortcuts" class="headerlink" title="Layer Function shortcuts"></a>Layer Function shortcuts</h2><p>For each layer class (like <code>tf.layers.Dense</code>) TensorFlow also supplies a shortcut function (like <code>tf.layers.dense</code>).</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">x = tf.placeholder(tf.float32, shape=[<span class="literal">None</span>, <span class="number">3</span>])</span><br><span class="line">y = tf.layers.dense(x, units=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">init = tf.global_variables_initializer()</span><br><span class="line">sess.run(init)</span><br><span class="line"></span><br><span class="line">print(sess.run(y, &#123;x: [[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]]&#125;))</span><br></pre></td></tr></table></figure><pre><code>[[2.4798913]
+</code></pre><h2 id="Layer-Function-shortcuts"><a href="#Layer-Function-shortcuts" class="headerlink" title="Layer Function shortcuts"></a>Layer Function shortcuts</h2><p>For each layer class (like <code>tf.layers.Dense</code>) TensorFlow also supplies a shortcut function (like <code>tf.layers.dense</code>). </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">x = tf.placeholder(tf.float32, shape=[<span class="literal">None</span>, <span class="number">3</span>])</span><br><span class="line">y = tf.layers.dense(x, units=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">init = tf.global_variables_initializer()</span><br><span class="line">sess.run(init)</span><br><span class="line"></span><br><span class="line">print(sess.run(y, &#123;x: [[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]]&#125;))</span><br></pre></td></tr></table></figure>
+<pre><code>[[2.4798913]
  [6.7798343]]
-</code></pre><h1 id="Feature-columns"><a href="#Feature-columns" class="headerlink" title="Feature columns"></a>Feature columns</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">features = &#123;</span><br><span class="line">    <span class="string">'sales'</span> : [[<span class="number">5</span>], [<span class="number">10</span>], [<span class="number">8</span>], [<span class="number">9</span>]],</span><br><span class="line">    <span class="string">'department'</span>: [<span class="string">'sports'</span>, <span class="string">'sports'</span>, <span class="string">'gardening'</span>, <span class="string">'gardening'</span>]&#125;</span><br><span class="line"></span><br><span class="line">department_column = tf.feature_column.categorical_column_with_vocabulary_list(</span><br><span class="line">        <span class="string">'department'</span>, [<span class="string">'sports'</span>, <span class="string">'gardening'</span>])</span><br><span class="line">department_column = tf.feature_column.indicator_column(department_column)</span><br><span class="line">print(department_column)</span><br><span class="line"></span><br><span class="line">columns = [</span><br><span class="line">    tf.feature_column.numeric_column(<span class="string">'sales'</span>),</span><br><span class="line">    department_column</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">inputs = tf.feature_column.input_layer(features, columns)</span><br><span class="line">print(inputs)</span><br></pre></td></tr></table></figure><pre><code>_IndicatorColumn(categorical_column=_VocabularyListCategoricalColumn(key=&apos;department&apos;, vocabulary_list=(&apos;sports&apos;, &apos;gardening&apos;), dtype=tf.string, default_value=-1, num_oov_buckets=0))
+</code></pre><h1 id="Feature-columns"><a href="#Feature-columns" class="headerlink" title="Feature columns"></a>Feature columns</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">features = &#123;</span><br><span class="line">    <span class="string">'sales'</span> : [[<span class="number">5</span>], [<span class="number">10</span>], [<span class="number">8</span>], [<span class="number">9</span>]],</span><br><span class="line">    <span class="string">'department'</span>: [<span class="string">'sports'</span>, <span class="string">'sports'</span>, <span class="string">'gardening'</span>, <span class="string">'gardening'</span>]&#125;</span><br><span class="line"></span><br><span class="line">department_column = tf.feature_column.categorical_column_with_vocabulary_list(</span><br><span class="line">        <span class="string">'department'</span>, [<span class="string">'sports'</span>, <span class="string">'gardening'</span>])</span><br><span class="line">department_column = tf.feature_column.indicator_column(department_column)</span><br><span class="line">print(department_column)</span><br><span class="line"></span><br><span class="line">columns = [</span><br><span class="line">    tf.feature_column.numeric_column(<span class="string">'sales'</span>),</span><br><span class="line">    department_column</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">inputs = tf.feature_column.input_layer(features, columns)</span><br><span class="line">print(inputs)</span><br></pre></td></tr></table></figure>
+<pre><code>_IndicatorColumn(categorical_column=_VocabularyListCategoricalColumn(key=&apos;department&apos;, vocabulary_list=(&apos;sports&apos;, &apos;gardening&apos;), dtype=tf.string, default_value=-1, num_oov_buckets=0))
 Tensor(&quot;input_layer/concat:0&quot;, shape=(4, 3), dtype=float32)
-</code></pre><p>Running the inputs tensor will parse the features into a batch of vectors.</p><p>Feature columns can have internal state, like layers, so they often need to be initialized. Categorical columns use <code>tf.contrib.lookup</code> internally and these require a separate initialization op, <code>tf.tables_initializer</code>.</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var_init = tf.global_variables_initializer()</span><br><span class="line">table_init = tf.tables_initializer()</span><br><span class="line">sess = tf.Session()</span><br><span class="line">sess.run((var_init, table_init))</span><br></pre></td></tr></table></figure><pre><code>(None, None)
-</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(sess.run(inputs))</span><br></pre></td></tr></table></figure><pre><code>[[ 1.  0.  5.]
+</code></pre><p>Running the inputs tensor will parse the features into a batch of vectors.</p>
+<p>Feature columns can have internal state, like layers, so they often need to be initialized. Categorical columns use <code>tf.contrib.lookup</code> internally and these require a separate initialization op, <code>tf.tables_initializer</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var_init = tf.global_variables_initializer()</span><br><span class="line">table_init = tf.tables_initializer()</span><br><span class="line">sess = tf.Session()</span><br><span class="line">sess.run((var_init, table_init))</span><br></pre></td></tr></table></figure>
+<pre><code>(None, None)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(sess.run(inputs))</span><br></pre></td></tr></table></figure>
+<pre><code>[[ 1.  0.  5.]
  [ 1.  0. 10.]
  [ 0.  1.  8.]
  [ 0.  1.  9.]]
-</code></pre><h1 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h1><h2 id="Define-the-data"><a href="#Define-the-data" class="headerlink" title="Define the data"></a>Define the data</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = tf.constant([[<span class="number">1</span>], [<span class="number">2</span>], [<span class="number">3</span>], [<span class="number">4</span>]], dtype=tf.float32)</span><br><span class="line">y_true = tf.constant([[<span class="number">0</span>], [<span class="number">-1</span>], [<span class="number">-2</span>], [<span class="number">-3</span>]], dtype=tf.float32)</span><br></pre></td></tr></table></figure><h2 id="Define-the-model"><a href="#Define-the-model" class="headerlink" title="Define the model"></a>Define the model</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">linear_model = tf.layers.Dense(units=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">y_pred = linear_model(x)</span><br></pre></td></tr></table></figure><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sess = tf.Session()</span><br><span class="line">init = tf.global_variables_initializer()</span><br><span class="line">sess.run(init)</span><br><span class="line"></span><br><span class="line"><span class="comment"># The model hasn't yet been trained, so the four "predicted" values aren't very good. </span></span><br><span class="line"><span class="comment"># Here's what we got; your own output will almost certainly differ:</span></span><br><span class="line">print(sess.run(y_pred))</span><br></pre></td></tr></table></figure><pre><code>[[0.5062338]
+</code></pre><h1 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h1><h2 id="Define-the-data"><a href="#Define-the-data" class="headerlink" title="Define the data"></a>Define the data</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = tf.constant([[<span class="number">1</span>], [<span class="number">2</span>], [<span class="number">3</span>], [<span class="number">4</span>]], dtype=tf.float32)</span><br><span class="line">y_true = tf.constant([[<span class="number">0</span>], [<span class="number">-1</span>], [<span class="number">-2</span>], [<span class="number">-3</span>]], dtype=tf.float32)</span><br></pre></td></tr></table></figure>
+<h2 id="Define-the-model"><a href="#Define-the-model" class="headerlink" title="Define the model"></a>Define the model</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">linear_model = tf.layers.Dense(units=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">y_pred = linear_model(x)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sess = tf.Session()</span><br><span class="line">init = tf.global_variables_initializer()</span><br><span class="line">sess.run(init)</span><br><span class="line"></span><br><span class="line"><span class="comment"># The model hasn't yet been trained, so the four "predicted" values aren't very good. </span></span><br><span class="line"><span class="comment"># Here's what we got; your own output will almost certainly differ:</span></span><br><span class="line">print(sess.run(y_pred))</span><br></pre></td></tr></table></figure>
+<pre><code>[[0.5062338]
  [1.0124676]
  [1.5187014]
  [2.0249352]]
-</code></pre><h2 id="Loss"><a href="#Loss" class="headerlink" title="Loss"></a>Loss</h2><p>To optimize a model, you first need to define the loss. We’ll use the mean square error (<code>MSE</code>), a standard loss for regression problems.</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">loss = tf.losses.mean_squared_error(labels=y_true, predictions=y_pred)</span><br><span class="line"></span><br><span class="line">print(sess.run(loss))</span><br></pre></td></tr></table></figure><pre><code>10.484383
-</code></pre><h2 id="Training-1"><a href="#Training-1" class="headerlink" title="Training"></a>Training</h2><p>TensorFlow provides optimizers implementing standard optimization algorithms. These are implemented as sub-classes of <code>tf.train.Optimizer</code>. They incrementally change each variable in order to minimize the loss. The simplest optimization algorithm is gradient descent, implemented by <code>tf.train.GradientDescentOptimizer</code>.</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">optimizer = tf.train.GradientDescentOptimizer(<span class="number">0.01</span>)</span><br><span class="line">train = optimizer.minimize(loss) <span class="comment"># training operation</span></span><br></pre></td></tr></table></figure><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">  _, loss_value = sess.run((train, loss))</span><br><span class="line">  print(loss_value)</span><br></pre></td></tr></table></figure><pre><code>10.484383
+</code></pre><h2 id="Loss"><a href="#Loss" class="headerlink" title="Loss"></a>Loss</h2><p>To optimize a model, you first need to define the loss. We’ll use the mean square error (<code>MSE</code>), a standard loss for regression problems.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">loss = tf.losses.mean_squared_error(labels=y_true, predictions=y_pred)</span><br><span class="line"></span><br><span class="line">print(sess.run(loss))</span><br></pre></td></tr></table></figure>
+<pre><code>10.484383
+</code></pre><h2 id="Training-1"><a href="#Training-1" class="headerlink" title="Training"></a>Training</h2><p>TensorFlow provides optimizers implementing standard optimization algorithms. These are implemented as sub-classes of <code>tf.train.Optimizer</code>. They incrementally change each variable in order to minimize the loss. The simplest optimization algorithm is gradient descent, implemented by <code>tf.train.GradientDescentOptimizer</code>. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">optimizer = tf.train.GradientDescentOptimizer(<span class="number">0.01</span>)</span><br><span class="line">train = optimizer.minimize(loss) <span class="comment"># training operation</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">  _, loss_value = sess.run((train, loss))</span><br><span class="line">  print(loss_value)</span><br></pre></td></tr></table></figure>
+<pre><code>10.484383
 7.366995
 5.2033534
 3.7015016
@@ -143,12 +723,894 @@ Tensor(&quot;input_layer/concat:0&quot;, shape=(4, 3), dtype=float32)
 0.17152235
 0.17049682
 0.16947745
-</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(sess.run(y_pred))</span><br></pre></td></tr></table></figure><pre><code>[[-0.66274  ]
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(sess.run(y_pred))</span><br></pre></td></tr></table></figure>
+<pre><code>[[-0.66274  ]
  [-1.3211429]
  [-1.9795457]
  [-2.6379485]]
-</code></pre><h2 id="Complete-program"><a href="#Complete-program" class="headerlink" title="Complete program"></a>Complete program</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">x = tf.constant([[<span class="number">1</span>], [<span class="number">2</span>], [<span class="number">3</span>], [<span class="number">4</span>]], dtype=tf.float32)</span><br><span class="line">y_true = tf.constant([[<span class="number">0</span>], [<span class="number">-1</span>], [<span class="number">-2</span>], [<span class="number">-3</span>]], dtype=tf.float32)</span><br><span class="line"></span><br><span class="line">linear_model = tf.layers.Dense(units=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">y_pred = linear_model(x)</span><br><span class="line">loss = tf.losses.mean_squared_error(labels=y_true, predictions=y_pred)</span><br><span class="line"></span><br><span class="line">optimizer = tf.train.GradientDescentOptimizer(<span class="number">0.01</span>)</span><br><span class="line">train = optimizer.minimize(loss)</span><br><span class="line"></span><br><span class="line">init = tf.global_variables_initializer()</span><br><span class="line"></span><br><span class="line">sess = tf.Session()</span><br><span class="line">sess.run(init)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">  _, loss_value = sess.run((train, loss))</span><br><span class="line">  <span class="comment">#print(loss_value)</span></span><br><span class="line"></span><br><span class="line">print(sess.run(y_pred))</span><br></pre></td></tr></table></figure><pre><code>[[-0.5594496]
+</code></pre><h2 id="Complete-program"><a href="#Complete-program" class="headerlink" title="Complete program"></a>Complete program</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">x = tf.constant([[<span class="number">1</span>], [<span class="number">2</span>], [<span class="number">3</span>], [<span class="number">4</span>]], dtype=tf.float32)</span><br><span class="line">y_true = tf.constant([[<span class="number">0</span>], [<span class="number">-1</span>], [<span class="number">-2</span>], [<span class="number">-3</span>]], dtype=tf.float32)</span><br><span class="line"></span><br><span class="line">linear_model = tf.layers.Dense(units=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">y_pred = linear_model(x)</span><br><span class="line">loss = tf.losses.mean_squared_error(labels=y_true, predictions=y_pred)</span><br><span class="line"></span><br><span class="line">optimizer = tf.train.GradientDescentOptimizer(<span class="number">0.01</span>)</span><br><span class="line">train = optimizer.minimize(loss)</span><br><span class="line"></span><br><span class="line">init = tf.global_variables_initializer()</span><br><span class="line"></span><br><span class="line">sess = tf.Session()</span><br><span class="line">sess.run(init)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">  _, loss_value = sess.run((train, loss))</span><br><span class="line">  <span class="comment">#print(loss_value)</span></span><br><span class="line"></span><br><span class="line">print(sess.run(y_pred))</span><br></pre></td></tr></table></figure>
+<pre><code>[[-0.5594496]
  [-1.2710916]
  [-1.9827336]
  [-2.6943758]]
-</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul><li><a href="https://tensorflow.google.cn/guide/low_level_intro" target="_blank" rel="noopener">intro</a></li></ul><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul><li>20181026: created.</li></ul></div><div><div style="padding:10px 0;margin:20px auto;width:90%;text-align:center"><div>坚持技术分享，您的支持将鼓励我继续创作！</div><button id="rewardButton" disable="enable" onclick='var e=document.getElementById("QR");"none"===e.style.display?e.style.display="block":e.style.display="none"'><span>Donate</span></button><div id="QR" style="display:none"><div id="wechat" style="display:inline-block"><img id="wechat_qr" src="/images/wechatpay.jpeg" alt="kezunlin WeChat Pay"><p>WeChat Pay</p></div></div></div></div><div><ul class="post-copyright"><li class="post-copyright-author"><strong>Post author:</strong> kezunlin</li><li class="post-copyright-link"><strong>Post link:</strong> <a href="https://kezunlin.me/post/3670803a/" title="tensorflow introduction">https://kezunlin.me/post/3670803a/</a></li><li class="post-copyright-license"><strong>Copyright Notice: </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.</li></ul></div><footer class="post-footer"><div class="post-tags"><a href="/tags/tensorflow/" rel="tag"># tensorflow</a></div><div><br><div class="recommended_posts"><h1>Recommended Posts</h1><ul><li><a href="https://kezunlin.me/post/8b2d002b/">python iterator and generator</a></li><li><a href="https://kezunlin.me/post/876d75f2/">compile protobuf-cpp on windows 10</a></li><li><a href="https://kezunlin.me/post/431550df/">python with-as statement</a></li><li><a href="https://kezunlin.me/post/40e625a8/">Superdog tutorial on windows 10</a></li><li><a href="https://kezunlin.me/post/dcffb1c7/">compile cryptopp 7.0 on windows 10</a></li></ul></div></div><div class="post-nav"><div class="post-nav-next post-nav-item"><a href="/post/431550df/" rel="next" title="python with-as statement"><i class="fa fa-chevron-left"></i> python with-as statement</a></div><span class="post-nav-divider"></span><div class="post-nav-prev post-nav-item"><a href="/post/876d75f2/" rel="prev" title="compile protobuf-cpp on windows 10">compile protobuf-cpp on windows 10 <i class="fa fa-chevron-right"></i></a></div></div></footer></div></article><div class="post-spread"></div></div></div><div class="comments" id="comments"><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div><div id="gitalk-container"></div></div></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span> <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span> <span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">Table of Contents</li><li class="sidebar-nav-overview" data-target="site-overview-wrap">Overview</li></ul><section class="site-overview-wrap sidebar-panel"><div class="site-overview"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"><img class="site-author-image" itemprop="image" src="/images/kezunlin_avatar.jpg" alt="kezunlin"><p class="site-author-name" itemprop="name">kezunlin</p><p class="site-description motion-element" itemprop="description"></p></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"><a href="/archives/"><span class="site-state-item-count">205</span> <span class="site-state-item-name">posts</span></a></div><div class="site-state-item site-state-categories"><a href="/categories/index.html"><span class="site-state-item-count">45</span> <span class="site-state-item-name">categories</span></a></div><div class="site-state-item site-state-tags"><a href="/tags/index.html"><span class="site-state-item-count">190</span> <span class="site-state-item-name">tags</span></a></div></nav><div class="feed-link motion-element"><a href="/atom.xml" rel="alternate"><i class="fa fa-rss"></i> RSS</a></div><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/kezunlin" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i></a> </span><span class="links-of-author-item"><a href="mailto:zunlin1234@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i></a></span></div></div></section><section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active"><div class="post-toc"><div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Set-up"><span class="nav-number">1.</span> <span class="nav-text">Set up</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Tensor-Values"><span class="nav-number">2.</span> <span class="nav-text">Tensor Values</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TensorFlow-Core-Walkthrough"><span class="nav-number">3.</span> <span class="nav-text">TensorFlow Core Walkthrough</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Graph"><span class="nav-number">3.1.</span> <span class="nav-text">Graph</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TensorBoard"><span class="nav-number">3.1.1.</span> <span class="nav-text">TensorBoard</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Session"><span class="nav-number">3.2.</span> <span class="nav-text">Session</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Feeding"><span class="nav-number">3.3.</span> <span class="nav-text">Feeding</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Datasets"><span class="nav-number">4.</span> <span class="nav-text">Datasets</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Layers"><span class="nav-number">5.</span> <span class="nav-text">Layers</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Creating-Layers"><span class="nav-number">5.1.</span> <span class="nav-text">Creating Layers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Initializing-Layers"><span class="nav-number">5.2.</span> <span class="nav-text">Initializing Layers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Executing-Layers"><span class="nav-number">5.3.</span> <span class="nav-text">Executing Layers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Layer-Function-shortcuts"><span class="nav-number">5.4.</span> <span class="nav-text">Layer Function shortcuts</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Feature-columns"><span class="nav-number">6.</span> <span class="nav-text">Feature columns</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Training"><span class="nav-number">7.</span> <span class="nav-text">Training</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Define-the-data"><span class="nav-number">7.1.</span> <span class="nav-text">Define the data</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Define-the-model"><span class="nav-number">7.2.</span> <span class="nav-text">Define the model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Loss"><span class="nav-number">7.3.</span> <span class="nav-text">Loss</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Training-1"><span class="nav-number">7.4.</span> <span class="nav-text">Training</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Complete-program"><span class="nav-number">7.5.</span> <span class="nav-text">Complete program</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">8.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">9.</span> <span class="nav-text">History</span></a></li></ol></div></div></section><div class="back-to-top"><i class="fa fa-arrow-up"></i> <span id="scrollpercent"><span>0</span>%</span></div><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7570408610" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div></div></aside></div></main><footer id="footer" class="footer"><div class="footer-inner"><div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span> <span class="with-love"><i class="fa fa-user"></i> </span><span class="author" itemprop="copyrightHolder">kezunlin</span></div><div id="cnzz_id"><script type="text/javascript">var cnzz_protocol="https:"==document.location.protocol?"https://":"http://";document.write(unescape("%3Cspan id='cnzz_stat_icon_1278202133'%3E%3C/span%3E%3Cscript src='"+cnzz_protocol+"s4.cnzz.com/z_stat.php%3Fid%3D1278202133%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"))</script></div></div></footer></div><script type="text/javascript">"[object Function]"!==Object.prototype.toString.call(window.Promise)&&(window.Promise=null)</script><script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script><script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script><script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script><script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script><script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script><script src="https://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.min.js"></script><script type="text/javascript">var gitalk=new Gitalk({clientID:"4d1e3d463455e6bc7eba",clientSecret:"4af023d85b66c4161a83b3f9297036e84c9ba57f",repo:"gitalk",owner:"kezunlin",admin:["kezunlin"],id:md5(location.pathname),distractionFreeMode:"true"});gitalk.render("gitalk-container")</script><script type="text/javascript">function proceedsearch(){$("body").append('<div class="search-popup-overlay local-search-pop-overlay"></div>').css("overflow","hidden"),$(".search-popup-overlay").click(onPopupClose),$(".popup").toggle();var t=$("#local-search-input");t.attr("autocapitalize","none"),t.attr("autocorrect","off"),t.focus()}var isfetched=!1,isXml=!0,search_path="search.xml";0===search_path.length?search_path="search.xml":/json$/i.test(search_path)&&(isXml=!1);var path="/"+search_path,onPopupClose=function(t){$(".popup").hide(),$("#local-search-input").val(""),$(".search-result-list").remove(),$("#no-result").remove(),$(".local-search-pop-overlay").remove(),$("body").css("overflow","")},searchFunc=function(t,e,o){"use strict";$("body").append('<div class="search-popup-overlay local-search-pop-overlay"><div id="search-loading-icon"><i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i></div></div>').css("overflow","hidden"),$("#search-loading-icon").css("margin","20% auto 0 auto").css("text-align","center"),$.ajax({url:t,dataType:isXml?"xml":"json",async:!0,success:function(t){isfetched=!0,$(".popup").detach().appendTo(".header-inner");var n=isXml?$("entry",t).map(function(){return{title:$("title",this).text(),content:$("content",this).text(),url:$("url",this).text()}}).get():t,r=document.getElementById(e),s=document.getElementById(o),a=function(){var t=r.value.trim().toLowerCase(),e=t.split(/[\s\-]+/);e.length>1&&e.push(t);var o=[];if(t.length>0&&n.forEach(function(n){function r(e,o,n,r){for(var s=r[r.length-1],a=s.position,i=s.word,l=[],h=0;a+i.length<=n&&0!=r.length;){i===t&&h++,l.push({position:a,length:i.length});var p=a+i.length;for(r.pop();0!=r.length&&(s=r[r.length-1],a=s.position,i=s.word,p>a);)r.pop()}return c+=h,{hits:l,start:o,end:n,searchTextCount:h}}function s(t,e){var o="",n=e.start;return e.hits.forEach(function(e){o+=t.substring(n,e.position);var r=e.position+e.length;o+='<b class="search-keyword">'+t.substring(e.position,r)+"</b>",n=r}),o+=t.substring(n,e.end)}var a=!1,i=0,c=0,l=n.title.trim(),h=l.toLowerCase(),p=n.content.trim().replace(/<[^>]+>/g,""),u=p.toLowerCase(),f=decodeURIComponent(n.url),d=[],g=[];if(""!=l&&(e.forEach(function(t){function e(t,e,o){var n=t.length;if(0===n)return[];var r=0,s=[],a=[];for(o||(e=e.toLowerCase(),t=t.toLowerCase());(s=e.indexOf(t,r))>-1;)a.push({position:s,word:t}),r=s+n;return a}d=d.concat(e(t,h,!1)),g=g.concat(e(t,u,!1))}),(d.length>0||g.length>0)&&(a=!0,i=d.length+g.length)),a){[d,g].forEach(function(t){t.sort(function(t,e){return e.position!==t.position?e.position-t.position:t.word.length-e.word.length})});var v=[];0!=d.length&&v.push(r(l,0,l.length,d));for(var $=[];0!=g.length;){var C=g[g.length-1],m=C.position,x=C.word,w=m-20,y=m+80;w<0&&(w=0),y<m+x.length&&(y=m+x.length),y>p.length&&(y=p.length),$.push(r(p,w,y,g))}$.sort(function(t,e){return t.searchTextCount!==e.searchTextCount?e.searchTextCount-t.searchTextCount:t.hits.length!==e.hits.length?e.hits.length-t.hits.length:t.start-e.start});var T=parseInt("1");T>=0&&($=$.slice(0,T));var b="";b+=0!=v.length?"<li><a href='"+f+"' class='search-result-title'>"+s(l,v[0])+"</a>":"<li><a href='"+f+"' class='search-result-title'>"+l+"</a>",$.forEach(function(t){b+="<a href='"+f+'\'><p class="search-result">'+s(p,t)+"...</p></a>"}),b+="</li>",o.push({item:b,searchTextCount:c,hitCount:i,id:o.length})}}),1===e.length&&""===e[0])s.innerHTML='<div id="no-result"><i class="fa fa-search fa-5x" /></div>';else if(0===o.length)s.innerHTML='<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>';else{o.sort(function(t,e){return t.searchTextCount!==e.searchTextCount?e.searchTextCount-t.searchTextCount:t.hitCount!==e.hitCount?e.hitCount-t.hitCount:e.id-t.id});var a='<ul class="search-result-list">';o.forEach(function(t){a+=t.item}),a+="</ul>",s.innerHTML=a}};r.addEventListener("input",a),$(".local-search-pop-overlay").remove(),$("body").css("overflow",""),proceedsearch()}})};$(".popup-trigger").click(function(t){t.stopPropagation(),isfetched===!1?searchFunc(path,"local-search-input","local-search-result"):proceedsearch()}),$(".popup-btn-close").click(onPopupClose),$(".popup").click(function(t){t.stopPropagation()}),$(document).on("keyup",function(t){var e=27===t.which&&$(".search-popup").is(":visible");e&&onPopupClose()})</script><script>!function(){var t=document.createElement("script"),s=window.location.protocol.split(":")[0];"https"===s?t.src="https://zz.bdstatic.com/linksubmit/push.js":t.src="http://push.zhanzhang.baidu.com/push.js";var e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(t,e)}()</script><script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.3"></script>{!-- by kzl copy --}<script type="text/javascript" src="/lib/zclip/clipboard.min.js"></script>//此函数用于创建复制按钮 function createCopyBtns() { var $codeArea = $("figure table"); //查看页面是否具有代码区域，没有代码块则不创建 复制按钮 if ($codeArea.length > 0) { //复制成功后将要干的事情 function changeToSuccess(item) { $imgOK = $("#copyBtn").find("#imgSuccess"); if ($imgOK.css("display") == "none") { $imgOK.css({ opacity: 0, display: "block" }); $imgOK.animate({ opacity: 1 }, 1000); setTimeout(function() { $imgOK.animate({ opacity: 0 }, 2000); }, 2000); setTimeout(function() { $imgOK.css("display", "none"); }, 4000); }; }; //创建 全局复制按钮，仅有一组。包含：复制按钮，复制成功响应按钮 //值得注意的是：1.按钮默认隐藏，2.位置使用绝对位置 position: absolute; (position: fixed 也可以，需要修改代码) $(".post-body").before('<div id="copyBtn" style="opacity:0;position:absolute;top:0;display:none;line-height:1;font-size:1.5em"><span id="imgCopy"><i class="fa fa-paste fa-fw"></i></span><span id="imgSuccess" style="display:none"><i class="fa fa-check-circle fa-fw" aria-hidden="true"></i></span>'); //创建 复制 插件，绑定单机时间到 指定元素，支持JQuery var clipboard = new Clipboard('#copyBtn', { target: function() { //返回需要复制的元素内容 return document.querySelector("[copyFlag]"); }, isSupported: function() { //支持复制内容 return document.querySelector("[copyFlag]"); } }); //复制成功事件绑定 clipboard.on('success', function(e) { //清除内容被选择状态 e.clearSelection(); changeToSuccess(e); }); //复制失败绑定事件 clipboard.on('error', function(e) { console.error('Action:', e.action); console.error('Trigger:', e.trigger); }); //鼠标 在复制按钮上滑动和离开后渐变显示/隐藏效果 $("#copyBtn").hover( function() { $(this).stop(); $(this).css("opacity", 1); }, function() { $(this).animate({ opacity: 0 }, 2000); } ); } } //感应鼠标是否在代码区 $("figure").hover( function() { //-------鼠标活动在代码块内 //移除之前含有复制标志代码块的 copyFlag $("[copyFlag]").removeAttr("copyFlag"); //在新的（当前鼠标所在代码区）代码块插入标志：copyFlag $(this).find(".code").attr("copyFlag", 1); //获取复制按钮 $copyBtn = $("#copyBtn"); if ($copyBtn.lenght != 0) { //获取到按钮的前提下进行一下操作 //停止按钮动画效果 //设置为 显示状态 //修改 复制按钮 位置到 当前代码块开始部位 //设置代码块 左侧位置 $copyBtn.stop(); $copyBtn.css("opacity", 0.8); $copyBtn.css("display", "block"); $copyBtn.css("top", parseInt($copyBtn.css("top")) + $(this).offset().top - $copyBtn.offset().top + 3); $copyBtn.css("left", -$copyBtn.width() - 3); } }, function() { //-------鼠标离开代码块 //设置复制按钮可见度 2秒内到 0 $("#copyBtn").animate({ opacity: 0 }, 2000); } ); //页面载入完成后，创建复制按钮 $(document).ready(function() { createCopyBtns(); });</div></body></html><!-- rebuild by neat -->
+</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="https://tensorflow.google.cn/guide/low_level_intro" target="_blank" rel="noopener">intro</a></li>
+</ul>
+<h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
+<li>20181026: created.</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpeg" alt="kezunlin WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    kezunlin
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="https://kezunlin.me/post/3670803a/" title="tensorflow introduction">https://kezunlin.me/post/3670803a/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/tensorflow/" rel="tag"># tensorflow</a>
+          
+        </div>
+
+        
+          <div>
+          <br>
+          <div class="recommended_posts">
+    
+    
+    <h1>Recommended Posts </h1>
+    <ul>
+        
+            <li><a href="https://kezunlin.me/post/8b2d002b/">python iterator and generator</a></li>
+        
+            <li><a href="https://kezunlin.me/post/876d75f2/">compile protobuf-cpp on windows 10</a></li>
+        
+            <li><a href="https://kezunlin.me/post/431550df/">python with-as statement</a></li>
+        
+            <li><a href="https://kezunlin.me/post/40e625a8/">Superdog tutorial on windows 10</a></li>
+        
+            <li><a href="https://kezunlin.me/post/dcffb1c7/">compile cryptopp 7.0 on windows 10</a></li>
+        
+    </ul>
+     
+</div> 
+
+          </div>
+        
+
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/431550df/" rel="next" title="python with-as statement">
+                <i class="fa fa-chevron-left"></i> python with-as statement
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/876d75f2/" rel="prev" title="compile protobuf-cpp on windows 10">
+                compile protobuf-cpp on windows 10 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+      
+        <div>
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+        </div>
+      
+
+      <div id="gitalk-container">
+      </div>
+    </div>
+     
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/kezunlin_avatar.jpg" alt="kezunlin">
+            
+              <p class="site-author-name" itemprop="name">kezunlin</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">205</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">190</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/kezunlin" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i></a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:zunlin1234@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i></a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Set-up"><span class="nav-number">1.</span> <span class="nav-text">Set up</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Tensor-Values"><span class="nav-number">2.</span> <span class="nav-text">Tensor Values</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TensorFlow-Core-Walkthrough"><span class="nav-number">3.</span> <span class="nav-text">TensorFlow Core Walkthrough</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Graph"><span class="nav-number">3.1.</span> <span class="nav-text">Graph</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TensorBoard"><span class="nav-number">3.1.1.</span> <span class="nav-text">TensorBoard</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Session"><span class="nav-number">3.2.</span> <span class="nav-text">Session</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Feeding"><span class="nav-number">3.3.</span> <span class="nav-text">Feeding</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Datasets"><span class="nav-number">4.</span> <span class="nav-text">Datasets</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Layers"><span class="nav-number">5.</span> <span class="nav-text">Layers</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Creating-Layers"><span class="nav-number">5.1.</span> <span class="nav-text">Creating Layers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Initializing-Layers"><span class="nav-number">5.2.</span> <span class="nav-text">Initializing Layers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Executing-Layers"><span class="nav-number">5.3.</span> <span class="nav-text">Executing Layers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Layer-Function-shortcuts"><span class="nav-number">5.4.</span> <span class="nav-text">Layer Function shortcuts</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Feature-columns"><span class="nav-number">6.</span> <span class="nav-text">Feature columns</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Training"><span class="nav-number">7.</span> <span class="nav-text">Training</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Define-the-data"><span class="nav-number">7.1.</span> <span class="nav-text">Define the data</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Define-the-model"><span class="nav-number">7.2.</span> <span class="nav-text">Define the model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Loss"><span class="nav-number">7.3.</span> <span class="nav-text">Loss</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Training-1"><span class="nav-number">7.4.</span> <span class="nav-text">Training</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Complete-program"><span class="nav-number">7.5.</span> <span class="nav-text">Complete program</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">8.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">9.</span> <span class="nav-text">History</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+      
+      
+          <div>
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl display ad -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7570408610" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+          </div>
+      
+
+      
+      
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+<div id="cnzz_id">
+ <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1278202133'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1278202133%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '4d1e3d463455e6bc7eba',
+          clientSecret: '4af023d85b66c4161a83b3f9297036e84c9ba57f',
+          repo: 'gitalk',
+          owner: 'kezunlin',
+          admin: ['kezunlin'],
+          id: md5(location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')           
+       </script>
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.3"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.3"></script>
+
+
+  
+
+  <script type="text/javascript" src="/lib/zclip/clipboard.min.js"></script>	
+<script type="text/javascript" src="/lib/zclip/clipboard-use.js"></script>	
+
+</body>
+</html>
