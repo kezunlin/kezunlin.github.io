@@ -527,21 +527,6 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 
       
 
-       
-        
-          <div>
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- kzl in-article ad -->
-<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-
-
-          </div>
-        
-
         <p>opencv image flip and rotate<br><a id="more"></a></p>
 <h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="flip"><a href="#flip" class="headerlink" title="flip"></a>flip</h2><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import cv2</span><br><span class="line">image = cv2.imread(<span class="string">"demo.jpg"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Flipped Horizontally 水平翻转</span></span><br><span class="line">h_flip = cv2.flip(image, 1)</span><br><span class="line">cv2.imwrite(<span class="string">"demo-h.jpg"</span>, h_flip)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Flipped Vertically 垂直翻转</span></span><br><span class="line">v_flip = cv2.flip(image, 0)</span><br><span class="line">cv2.imwrite(<span class="string">"demo-v.jpg"</span>, v_flip)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Flipped Horizontally &amp; Vertically 水平垂直翻转</span></span><br><span class="line">hv_flip = cv2.flip(image, -1)</span><br><span class="line">cv2.imwrite(<span class="string">"demo-hv.jpg"</span>, hv_flip)</span><br></pre></td></tr></table></figure>
 <h2 id="rotate"><a href="#rotate" class="headerlink" title="rotate"></a>rotate</h2><figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">def rotate_anti_90(<span class="built_in">image</span>):</span><br><span class="line">    <span class="built_in">image</span> = cv2.<span class="built_in">transpose</span>(<span class="built_in">image</span>)</span><br><span class="line">    <span class="built_in">image</span> = cv2.flip(<span class="built_in">image</span>, <span class="number">0</span>)</span><br><span class="line">    <span class="built_in">return</span> <span class="built_in">image</span></span><br><span class="line"></span><br><span class="line">def rotate_anti_180(<span class="built_in">image</span>):</span><br><span class="line">    <span class="built_in">image</span> = cv2.flip(<span class="built_in">image</span>, <span class="number">0</span>)</span><br><span class="line">    <span class="built_in">image</span> = cv2.flip(<span class="built_in">image</span>, <span class="number">1</span>)</span><br><span class="line">    <span class="built_in">return</span> <span class="built_in">image</span></span><br><span class="line"></span><br><span class="line">def rotate_anti_270(<span class="built_in">image</span>):</span><br><span class="line">    <span class="built_in">image</span> = cv2.<span class="built_in">transpose</span>(<span class="built_in">image</span>)</span><br><span class="line">    <span class="built_in">image</span> = cv2.flip(<span class="built_in">image</span>, <span class="number">1</span>)</span><br><span class="line">    <span class="built_in">return</span> <span class="built_in">image</span></span><br><span class="line"></span><br><span class="line">def rotate(<span class="built_in">image</span>, angle, <span class="built_in">center</span>=None, <span class="built_in">scale</span>=<span class="number">1.0</span>):</span><br><span class="line">    # rotate by angle</span><br><span class="line">    (h, w) = <span class="built_in">image</span>.shape[:<span class="number">2</span>] # hwc</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">center</span> <span class="built_in">is</span> None:</span><br><span class="line">        <span class="built_in">center</span> = (w / <span class="number">2</span>., h / <span class="number">2</span>.)</span><br><span class="line"></span><br><span class="line">    M = cv2.getRotationMatrix2D(<span class="built_in">center</span>, angle, <span class="built_in">scale</span>)</span><br><span class="line"></span><br><span class="line">    rotated = cv2.warpAffine(<span class="built_in">image</span>, M, (w, h))</span><br><span class="line">    <span class="built_in">return</span> rotated</span><br></pre></td></tr></table></figure>
@@ -567,7 +552,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 
           </div>
         
-        
+
       
     </div>
 

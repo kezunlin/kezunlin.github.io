@@ -537,21 +537,6 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 
       
 
-       
-        
-          <div>
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- kzl in-article ad -->
-<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-
-
-          </div>
-        
-
         <p>python code snippet to get video info with opencv videocapture<br><a id="more"></a></p>
 <h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="code-example"><a href="#code-example" class="headerlink" title="code example"></a>code example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">from</span> moviepy.editor <span class="keyword">import</span> VideoFileClip</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_video_info</span><span class="params">(video_path)</span>:</span></span><br><span class="line">    cap = cv2.VideoCapture(video_path)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> cap.isOpened():</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    </span><br><span class="line">    frame_number = cap.get(cv2.CAP_PROP_FRAME_COUNT)</span><br><span class="line">    h  = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))</span><br><span class="line">    w  = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))</span><br><span class="line">    fps = int(cap.get(cv2.CAP_PROP_FPS))</span><br><span class="line"></span><br><span class="line">    cap.release() <span class="comment"># release video capture</span></span><br><span class="line"></span><br><span class="line">    print(<span class="string">"fps = "</span>,fps)</span><br><span class="line">    print(<span class="string">"frame_number = "</span>,frame_number)</span><br><span class="line">    size = (w,h)</span><br><span class="line">    print(<span class="string">"size = "</span>,size)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># frame number MAY BE WRONG ! so video time may be also wrong!</span></span><br><span class="line">    duration = int(frame_number / fps)</span><br><span class="line">    print(<span class="string">"seconds="</span>,duration)</span><br><span class="line">    video_time = str(datetime.timedelta(seconds = duration))</span><br><span class="line">    print(<span class="string">"video_time="</span>,video_time)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">"-----------------------using VideoFileClip------------------"</span>)</span><br><span class="line">    clip = VideoFileClip(video_path)</span><br><span class="line">    duration = clip.duration</span><br><span class="line">    print(<span class="string">"video duration is "</span>+ str(duration) + <span class="string">" seconds"</span>)</span><br><span class="line">    video_time = str(datetime.timedelta(seconds = int(duration)))</span><br><span class="line">    print(<span class="string">"video_time="</span>,video_time)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">clip_video</span><span class="params">()</span>:</span></span><br><span class="line">    clip = VideoFileClip(<span class="string">"1.mp4"</span>)</span><br><span class="line">    starting_point = <span class="number">120</span>  <span class="comment"># start at second minute</span></span><br><span class="line">    end_point = <span class="number">420</span>  <span class="comment"># record for 300 seconds (120+300)</span></span><br><span class="line">    subclip = clip.subclip(starting_point, end_point)</span><br><span class="line">    subclip.write_videofile(<span class="string">"/path/to/new/video.mp4"</span>)</span><br></pre></td></tr></table></figure>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
@@ -577,7 +562,7 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 
           </div>
         
-        
+
       
     </div>
 
