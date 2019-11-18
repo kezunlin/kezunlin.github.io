@@ -14263,32 +14263,6 @@ prediction on D:
       </tags>
   </entry>
   <entry>
-    <title>Example 2 - Linear Regression Example with Python and theano from MSDN</title>
-    <url>/post/8d4707b6/</url>
-    <content><![CDATA[<p>Example 2 - Linear Regression Example with Python and theano from MSDN<br><a id="more"></a></p>
-<h1 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h1><ul>
-<li><a href="https://kezunlin.me/post/3bee8fac/#more">Example 1-theano linear regression with gradient descent</a></li>
-<li><a href="https://kezunlin.me/post/8d4707b6/#more"><strong>Example 2 - Linear Regression Example with Python and theano from MSDN</strong></a></li>
-<li><a href="https://kezunlin.me/post/8ce3f979/#more">Example 3- A Real Example Logistic Regression with theano</a></li>
-</ul>
-<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="code-example"><a href="#code-example" class="headerlink" title="code example"></a>code example</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># https://blogs.msdn.microsoft.com/lukassteindl/2015/12/13/linear-regression-example-with-python-and-theano/</span></span><br><span class="line"><span class="comment"># http://jakevdp.github.io/blog/2013/05/12/embedding-matplotlib-animations/</span></span><br><span class="line"></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">在Python Notebook中无法展现动画，只能展示静态的图像。</span></span><br><span class="line"><span class="string">The problem is that so far the integration of IPython with matplotlib is entirely static, </span></span><br><span class="line"><span class="string">while animations are by their nature dynamic.</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt </span><br><span class="line"><span class="keyword">import</span> matplotlib.animation <span class="keyword">as</span> animation </span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> style </span><br><span class="line"><span class="keyword">import</span> theano </span><br><span class="line"><span class="keyword">from</span> theano <span class="keyword">import</span> tensor <span class="keyword">as</span> T </span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">style.use(<span class="string">'fivethirtyeight'</span>) </span><br><span class="line">fig = plt.figure() </span><br><span class="line">ax1 = fig.add_subplot(<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">trX = np.linspace(<span class="number">-1</span>,<span class="number">1</span>,<span class="number">101</span>)  <span class="comment"># (101,)</span></span><br><span class="line">trY = <span class="number">2</span> * trX + np.random.randn(*trX.shape) * <span class="number">0.33</span>   <span class="comment"># (101,)</span></span><br><span class="line"></span><br><span class="line">X = T.scalar() </span><br><span class="line">Y = T.scalar()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">model</span> <span class="params">(X,w)</span>:</span> </span><br><span class="line">    <span class="keyword">return</span> X * w</span><br><span class="line"></span><br><span class="line">w = theano.shared(np.asarray(<span class="number">0.</span>, dtype=theano.config.floatX)) <span class="comment">#scalar</span></span><br><span class="line">y = model(X,w)</span><br><span class="line"></span><br><span class="line">cost = T.mean(T.sqr(y-Y)) </span><br><span class="line">gradient = T.grad(cost=cost, wrt = w) </span><br><span class="line">updates = [[w,w-gradient * <span class="number">0.001</span>]]</span><br><span class="line"></span><br><span class="line"><span class="comment">#train = theano.function(inputs=[X,Y], outputs=cost, updates = updates, allow_input_downcast= True)</span></span><br><span class="line">train = theano.function(inputs=[X,Y], outputs=cost, updates = updates)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>): </span><br><span class="line">        <span class="keyword">for</span> x,y <span class="keyword">in</span> zip (trX,trY): </span><br><span class="line">            train(x,y) </span><br><span class="line">            <span class="keyword">print</span> (w.eval()) </span><br><span class="line">            </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">animate</span><span class="params">(i)</span>:</span> </span><br><span class="line">    <span class="comment"># i: iteration of animate</span></span><br><span class="line">    <span class="comment">#print i</span></span><br><span class="line">    ax1.clear() </span><br><span class="line">    plt.scatter(trX, trY,  label=<span class="string">'Gradient Descent on GPU'</span>, </span><br><span class="line">                    alpha=<span class="number">0.3</span>, edgecolors=<span class="string">'none'</span>) </span><br><span class="line">    plt.legend() </span><br><span class="line">    plt.grid(<span class="literal">True</span>) </span><br><span class="line">    <span class="keyword">for</span> x,y <span class="keyword">in</span> zip (trX,trY): </span><br><span class="line">        train(x,y) </span><br><span class="line">        <span class="comment">#print (w.eval()) </span></span><br><span class="line">       </span><br><span class="line">    xs = [<span class="number">-1</span>,<span class="number">1</span>] </span><br><span class="line">    ys = [<span class="number">-1</span>*w.eval(),w.eval()] </span><br><span class="line">    ax1.plot(xs,ys) </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show_animate</span><span class="params">()</span>:</span></span><br><span class="line">    ani = animation.FuncAnimation(fig, animate, interval = <span class="number">250</span>)</span><br><span class="line">    plt.show() </span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment">#run()</span></span><br><span class="line">    show_animate()</span><br><span class="line"></span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a href="https://blogs.msdn.microsoft.com/lukassteindl/2015/12/13/linear-regression-example-with-python-and-theano/" target="_blank" rel="noopener">linear-regression-example-with-python-and-theano</a></li>
-<li><a href="http://jakevdp.github.io/blog/2013/05/12/embedding-matplotlib-animations/" target="_blank" rel="noopener">embedding-matplotlib-animations</a></li>
-</ul>
-<h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
-<li>20180807: created.</li>
-</ul>
-]]></content>
-      <categories>
-        <category>python</category>
-        <category>theano</category>
-      </categories>
-      <tags>
-        <tag>theano</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Example 1-theano linear regression with gradient descent</title>
     <url>/post/3bee8fac/</url>
     <content><![CDATA[<p>Example 1-theano linear regression with gradient descent<br><a id="more"></a></p>
@@ -14327,6 +14301,32 @@ b value :  [ 0.08896923]
       <tags>
         <tag>theano</tag>
         <tag>sgd</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Example 2 - Linear Regression Example with Python and theano from MSDN</title>
+    <url>/post/8d4707b6/</url>
+    <content><![CDATA[<p>Example 2 - Linear Regression Example with Python and theano from MSDN<br><a id="more"></a></p>
+<h1 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h1><ul>
+<li><a href="https://kezunlin.me/post/3bee8fac/#more">Example 1-theano linear regression with gradient descent</a></li>
+<li><a href="https://kezunlin.me/post/8d4707b6/#more"><strong>Example 2 - Linear Regression Example with Python and theano from MSDN</strong></a></li>
+<li><a href="https://kezunlin.me/post/8ce3f979/#more">Example 3- A Real Example Logistic Regression with theano</a></li>
+</ul>
+<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="code-example"><a href="#code-example" class="headerlink" title="code example"></a>code example</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># https://blogs.msdn.microsoft.com/lukassteindl/2015/12/13/linear-regression-example-with-python-and-theano/</span></span><br><span class="line"><span class="comment"># http://jakevdp.github.io/blog/2013/05/12/embedding-matplotlib-animations/</span></span><br><span class="line"></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">在Python Notebook中无法展现动画，只能展示静态的图像。</span></span><br><span class="line"><span class="string">The problem is that so far the integration of IPython with matplotlib is entirely static, </span></span><br><span class="line"><span class="string">while animations are by their nature dynamic.</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt </span><br><span class="line"><span class="keyword">import</span> matplotlib.animation <span class="keyword">as</span> animation </span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> style </span><br><span class="line"><span class="keyword">import</span> theano </span><br><span class="line"><span class="keyword">from</span> theano <span class="keyword">import</span> tensor <span class="keyword">as</span> T </span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">style.use(<span class="string">'fivethirtyeight'</span>) </span><br><span class="line">fig = plt.figure() </span><br><span class="line">ax1 = fig.add_subplot(<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">trX = np.linspace(<span class="number">-1</span>,<span class="number">1</span>,<span class="number">101</span>)  <span class="comment"># (101,)</span></span><br><span class="line">trY = <span class="number">2</span> * trX + np.random.randn(*trX.shape) * <span class="number">0.33</span>   <span class="comment"># (101,)</span></span><br><span class="line"></span><br><span class="line">X = T.scalar() </span><br><span class="line">Y = T.scalar()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">model</span> <span class="params">(X,w)</span>:</span> </span><br><span class="line">    <span class="keyword">return</span> X * w</span><br><span class="line"></span><br><span class="line">w = theano.shared(np.asarray(<span class="number">0.</span>, dtype=theano.config.floatX)) <span class="comment">#scalar</span></span><br><span class="line">y = model(X,w)</span><br><span class="line"></span><br><span class="line">cost = T.mean(T.sqr(y-Y)) </span><br><span class="line">gradient = T.grad(cost=cost, wrt = w) </span><br><span class="line">updates = [[w,w-gradient * <span class="number">0.001</span>]]</span><br><span class="line"></span><br><span class="line"><span class="comment">#train = theano.function(inputs=[X,Y], outputs=cost, updates = updates, allow_input_downcast= True)</span></span><br><span class="line">train = theano.function(inputs=[X,Y], outputs=cost, updates = updates)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>): </span><br><span class="line">        <span class="keyword">for</span> x,y <span class="keyword">in</span> zip (trX,trY): </span><br><span class="line">            train(x,y) </span><br><span class="line">            <span class="keyword">print</span> (w.eval()) </span><br><span class="line">            </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">animate</span><span class="params">(i)</span>:</span> </span><br><span class="line">    <span class="comment"># i: iteration of animate</span></span><br><span class="line">    <span class="comment">#print i</span></span><br><span class="line">    ax1.clear() </span><br><span class="line">    plt.scatter(trX, trY,  label=<span class="string">'Gradient Descent on GPU'</span>, </span><br><span class="line">                    alpha=<span class="number">0.3</span>, edgecolors=<span class="string">'none'</span>) </span><br><span class="line">    plt.legend() </span><br><span class="line">    plt.grid(<span class="literal">True</span>) </span><br><span class="line">    <span class="keyword">for</span> x,y <span class="keyword">in</span> zip (trX,trY): </span><br><span class="line">        train(x,y) </span><br><span class="line">        <span class="comment">#print (w.eval()) </span></span><br><span class="line">       </span><br><span class="line">    xs = [<span class="number">-1</span>,<span class="number">1</span>] </span><br><span class="line">    ys = [<span class="number">-1</span>*w.eval(),w.eval()] </span><br><span class="line">    ax1.plot(xs,ys) </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show_animate</span><span class="params">()</span>:</span></span><br><span class="line">    ani = animation.FuncAnimation(fig, animate, interval = <span class="number">250</span>)</span><br><span class="line">    plt.show() </span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment">#run()</span></span><br><span class="line">    show_animate()</span><br><span class="line"></span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="https://blogs.msdn.microsoft.com/lukassteindl/2015/12/13/linear-regression-example-with-python-and-theano/" target="_blank" rel="noopener">linear-regression-example-with-python-and-theano</a></li>
+<li><a href="http://jakevdp.github.io/blog/2013/05/12/embedding-matplotlib-animations/" target="_blank" rel="noopener">embedding-matplotlib-animations</a></li>
+</ul>
+<h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
+<li>20180807: created.</li>
+</ul>
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>theano</category>
+      </categories>
+      <tags>
+        <tag>theano</tag>
       </tags>
   </entry>
   <entry>
@@ -16720,8 +16720,8 @@ ios_extended_string    2014-09-08T17:51:04.777668  ===&gt; from_iso_extended_str
       </categories>
       <tags>
         <tag>mysql</tag>
-        <tag>datetime</tag>
         <tag>boost</tag>
+        <tag>datetime</tag>
         <tag>sql</tag>
       </tags>
   </entry>
@@ -17282,8 +17282,8 @@ DATA ascii
       </categories>
       <tags>
         <tag>qt</tag>
-        <tag>vtk</tag>
         <tag>pcl</tag>
+        <tag>vtk</tag>
       </tags>
   </entry>
   <entry>
@@ -17444,8 +17444,8 @@ cnpm update --save
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>npm</tag>
+        <tag>hexo</tag>
         <tag>node</tag>
       </tags>
   </entry>
@@ -17821,8 +17821,8 @@ p7 from String2Ptime(p6): 20180118_152047_815419
         <category>cpp</category>
       </categories>
       <tags>
-        <tag>datetime</tag>
         <tag>boost</tag>
+        <tag>datetime</tag>
       </tags>
   </entry>
   <entry>
@@ -17993,8 +17993,8 @@ bin/
       </categories>
       <tags>
         <tag>qt</tag>
-        <tag>vtk</tag>
         <tag>pcl</tag>
+        <tag>vtk</tag>
       </tags>
   </entry>
   <entry>
@@ -18087,8 +18087,8 @@ make -j8
       </categories>
       <tags>
         <tag>qt</tag>
-        <tag>vtk</tag>
         <tag>pcl</tag>
+        <tag>vtk</tag>
       </tags>
   </entry>
   <entry>
@@ -18390,8 +18390,8 @@ make
       </categories>
       <tags>
         <tag>qt</tag>
-        <tag>pcl</tag>
         <tag>qtcreator</tag>
+        <tag>pcl</tag>
       </tags>
   </entry>
   <entry>
@@ -19017,6 +19017,7 @@ Page Rules| 2 rules for Always use HTTPS
 <p>error fix: <a href="https://github.com/imsun/gitment/issues/188" target="_blank" rel="noopener">https://github.com/imsun/gitment/issues/188</a></p>
 </blockquote>
 <h2 id="gitalk-for-comment"><a href="#gitalk-for-comment" class="headerlink" title="gitalk for comment"></a>gitalk for comment</h2><p>see <a href="https://introspelliam.github.io/2018/07/09/hexo/NexT%E4%B8%BB%E9%A2%98%E4%B8%AD%E9%9B%86%E6%88%90gitalk%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" target="_blank" rel="noopener">gitalk for hexo next</a></p>
+<h2 id="valine"><a href="#valine" class="headerlink" title="valine"></a>valine</h2><p>skip now.</p>
 <h2 id="hexo-neat"><a href="#hexo-neat" class="headerlink" title="hexo-neat"></a>hexo-neat</h2><pre><code>npm install hexo-neat --save
 </code></pre><p>edit <code>blog\_config.yml</code><br><figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># hexo-neat</span></span><br><span class="line"><span class="attr">neat_enable:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="attr">neat_html:</span></span><br><span class="line">    <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">exclude:</span></span><br><span class="line">  </span><br><span class="line"><span class="attr">neat_css:</span></span><br><span class="line">    <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">exclude:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">'*.min.css'</span></span><br><span class="line"></span><br><span class="line"><span class="attr">neat_js:</span></span><br><span class="line">    <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">mangle:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">output:</span></span><br><span class="line">    <span class="attr">compress:</span></span><br><span class="line">    <span class="attr">exclude:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">'*.min.js'</span></span><br></pre></td></tr></table></figure></p>
 <h2 id="copy-code"><a href="#copy-code" class="headerlink" title="copy code"></a>copy code</h2><p>see <a href="https://leafjame.github.io/posts/2114475547.html" target="_blank" rel="noopener">hexo-copy</a></p>
@@ -19025,15 +19026,22 @@ Page Rules| 2 rules for Always use HTTPS
 <h2 id="pin-top-post"><a href="#pin-top-post" class="headerlink" title="pin top post"></a>pin top post</h2><pre><code>cnpm install hexo-generator-index-pin-top --save 
 </code></pre><p>and edit _posts/your-post.md<br><figure class="highlight md"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: hexo blog</span><br><span class="line">top: 1</span><br><span class="line">tags:</span><br><span class="line"><span class="bullet"> - </span>hexo</span><br><span class="line">categories:</span><br><span class="line"><span class="bullet"> - </span>blog</span><br><span class="line">---</span><br></pre></td></tr></table></figure></p>
 <p>see <a href="http://www.netcan666.com/2015/11/22/%E8%A7%A3%E5%86%B3Hexo%E7%BD%AE%E9%A1%B6%E9%97%AE%E9%A2%98/" target="_blank" rel="noopener">here</a></p>
+<h2 id="get-alexa-rank"><a href="#get-alexa-rank" class="headerlink" title="get alexa rank"></a>get alexa rank</h2><p>access <code>http://data.alexa.com/data?cli=10&amp;dat=snbamz&amp;url=kezunlin.me</code></p>
+<p>output<br><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment"> Need more Alexa data?  Find our APIs here: https://aws.amazon.com/alexa/ </span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ALEXA</span> <span class="attr">VER</span>=<span class="string">"0.9"</span> <span class="attr">URL</span>=<span class="string">"kezunlin.me/"</span> <span class="attr">HOME</span>=<span class="string">"0"</span> <span class="attr">AID</span>=<span class="string">"="</span> <span class="attr">IDN</span>=<span class="string">"kezunlin.me/"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">RLS</span> <span class="attr">PREFIX</span>=<span class="string">"http://"</span> <span class="attr">more</span>=<span class="string">"0"</span>&gt;</span> <span class="tag">&lt;/<span class="name">RLS</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">SD</span> <span class="attr">TITLE</span>=<span class="string">"A"</span> <span class="attr">FLAGS</span>=<span class="string">""</span> <span class="attr">HOST</span>=<span class="string">"kezunlin.me"</span>&gt;</span> <span class="tag">&lt;/<span class="name">SD</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">SD</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">POPULARITY</span> <span class="attr">URL</span>=<span class="string">"kezunlin.me/"</span> <span class="attr">TEXT</span>=<span class="string">"4070983"</span> <span class="attr">SOURCE</span>=<span class="string">"panel"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">REACH</span> <span class="attr">RANK</span>=<span class="string">"3600610"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">RANK</span> <span class="attr">DELTA</span>=<span class="string">"+1226051"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">SD</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ALEXA</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>kezunlin.me alexa rank is 4070983.</p>
+</blockquote>
 <h2 id="customize-hexo"><a href="#customize-hexo" class="headerlink" title="customize hexo"></a>customize hexo</h2><ul>
 <li><a href="https://bestzuo.cn/posts/1689445187.html" target="_blank" rel="noopener">bestzuo </a></li>
 <li><a href="https://leafjame.github.io/posts/507826828.html" target="_blank" rel="noopener">leafjame</a></li>
 <li><a href="https://inspurer.github.io/2018/11/11/hexo-next%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96/" target="_blank" rel="noopener">customize</a></li>
 </ul>
-<h2 id="share"><a href="#share" class="headerlink" title="share"></a>share</h2><h3 id="jiathis"><a href="#jiathis" class="headerlink" title="jiathis"></a>jiathis</h3><p>register jiathis and get <code>uid</code></p>
+<h2 id="share"><a href="#share" class="headerlink" title="share"></a>share</h2><h3 id="jiathis-baidushare"><a href="#jiathis-baidushare" class="headerlink" title="jiathis/baidushare"></a>jiathis/baidushare</h3><blockquote>
 <p><code>jiathis</code> and <code>baidushare</code> do not support <code>https</code></p>
-<h3 id="baidushare-RE"><a href="#baidushare-RE" class="headerlink" title="baidushare (RE)"></a>baidushare (RE)</h3><p>fix to support https</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> blog</span><br><span class="line">git <span class="built_in">clone</span> https://github.com/hrwhisper/baiduShare.git</span><br><span class="line">mv baiduShare <span class="built_in">source</span></span><br><span class="line"><span class="comment">#rm -rf baiduShare</span></span><br><span class="line"><span class="comment"># make sure we can access localhost:4000/baiduShare/static/api/js/share.js</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># edit baidushare.swig</span></span><br><span class="line">grep -r <span class="string">'bdimg.share.baidu.com'</span> .</span><br><span class="line">vim ./themes/next/layout/_partials/share/baidushare.swig</span><br><span class="line"></span><br><span class="line"><span class="comment"># change //bdimg.share.baidu.com/ to /baiduShare</span></span><br><span class="line">&lt;script&gt;</span><br><span class="line">with(document)0[(getElementsByTagName(<span class="string">'head'</span>)[0]||body).appendChild(createElement(<span class="string">'script'</span>)).src=<span class="string">'/baiduShare/static/api/js/share.js?cdnversion='</span>+~(-new Date()/36e5)];</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># there exists a bug in share.js</span></span><br><span class="line">hexo generate</span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="shareJS"><a href="#shareJS" class="headerlink" title="shareJS"></a>shareJS</h3><blockquote>
+<p>see <a href="https://leafjame.github.io/posts/2114475547.html" target="_blank" rel="noopener">here</a></p>
+</blockquote>
 <h2 id="hexo-all-minifier-not"><a href="#hexo-all-minifier-not" class="headerlink" title="hexo-all-minifier (not)"></a>hexo-all-minifier (not)</h2><pre><code>npm install hexo-all-minifier --save
 </code></pre><p>edit <code>blog\_config.yml</code><br><figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">all_minifier:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure></p>
 <p>Tips: not enable minifier currently because not stable.</p>
@@ -19075,7 +19083,20 @@ ERROR Local hexo not found in /home/kezunlin/git/blog
 <pre><code>cd blog
 rm node_modules
 cnpm install --save
-</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+</code></pre><h1 id="Seo"><a href="#Seo" class="headerlink" title="Seo"></a>Seo</h1><h2 id="tools"><a href="#tools" class="headerlink" title="tools"></a>tools</h2><ul>
+<li><a href="https://www.alexa.com/siteinfo/kezunlin.me" target="_blank" rel="noopener">alexa</a></li>
+<li><a href="https://alexa.chinaz.com/kezunlin.me" target="_blank" rel="noopener">chinaz</a></li>
+<li><a href="https://www.opace.co.uk" target="_blank" rel="noopener">opace SEO</a></li>
+</ul>
+<blockquote>
+<p>very good ref <a href="https://bawodu.com/plagiarized-site-case-study/" target="_blank" rel="noopener">here</a></p>
+</blockquote>
+<h2 id="experiements"><a href="#experiements" class="headerlink" title="experiements"></a>experiements</h2><ul>
+<li>Global Site Tag</li>
+<li>Sitelinks Search Box</li>
+<li>Google Tag Manager</li>
+</ul>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="http://theme-next.iissnan.com/third-party-services.html#disqus" target="_blank" rel="noopener">third party services</a></li>
 <li><a href="https://imsun.net/posts/gitment-introduction/#more" target="_blank" rel="noopener">gitment</a></li>
 <li><a href="https://rainylog.com/post/hexo-post-image-manage/" target="_blank" rel="noopener">hexo image manage</a></li>
@@ -19122,10 +19143,10 @@ cnpm install --save
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>nodejs</tag>
         <tag>npm</tag>
         <tag>ubuntu</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
