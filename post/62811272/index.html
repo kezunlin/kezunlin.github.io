@@ -147,7 +147,7 @@
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102832577-885538468.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102837178-881579112.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102840423-899986139.png">
-<meta property="og:updated_time" content="2019-11-13T02:41:21.215Z">
+<meta property="og:updated_time" content="2019-11-18T05:27:27.915Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="matplot RGB vs opencv BGR vs caffe images">
 <meta name="twitter:description" content="matplot RGB vs opencv BGR vs caffe images">
@@ -447,8 +447,8 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-11-13T10:41:21+08:00">
-                2019-11-13
+              <time title="Post modified" itemprop="dateModified" datetime="2019-11-18T13:27:27+08:00">
+                2019-11-18
               </time>
             
           </span>
@@ -647,7 +647,16 @@ transform image:  (3, 227, 227) float32
  [-53.89373398 -55.67879486 -55.4278717  -55.22265625 -53.47174454]
  [-50.98455811 -51.3506012  -54.06866074 -52.09104156 -52.94168854]
  [-49.92769241 -49.85874176 -52.08575439 -52.50840759 -51.3900528 ]]
-</code></pre><h3 id="cv2-imread"><a href="#cv2-imread" class="headerlink" title="cv2.imread"></a>cv2.imread</h3><p><code>caffe.io.Transformer</code>: </p>
+</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+<h3 id="cv2-imread"><a href="#cv2-imread" class="headerlink" title="cv2.imread"></a>cv2.imread</h3><p><code>caffe.io.Transformer</code>: </p>
 <ul>
 <li>input image: cv2.imread: (h,w,c),BGR,[0,255],float32 </li>
 <li>transformed image: (c,h,w), BGR order,[0,255] float32</li>
@@ -798,7 +807,17 @@ float32
   [ -52.9677667   -57.58105356  -60.35937327  -54.0859327   -57.90722805]
   [ -40.21874401  -44.71093136  -47.46874738  -47.2783168   -44.5722692 ]
   [ -40.7499935   -45.12499514  -47.99999687  -47.99999687  -47.98437211]]]
-</code></pre><h3 id="cv2-imread-1"><a href="#cv2-imread-1" class="headerlink" title="cv2.imread"></a>cv2.imread</h3><h4 id="transformer-1"><a href="#transformer-1" class="headerlink" title="transformer"></a>transformer</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cv2.imread: transformer  + python code</span></span><br><span class="line">data_shape = [<span class="number">1</span>,<span class="number">3</span>,<span class="number">512</span>,<span class="number">512</span>]</span><br><span class="line"></span><br><span class="line">transformer = caffe.io.Transformer(&#123;<span class="string">'data'</span>:data_shape&#125;) <span class="comment"># resize</span></span><br><span class="line">transformer.set_transpose(<span class="string">'data'</span>, (<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>)) <span class="comment"># hwc ===&gt; chw</span></span><br><span class="line"><span class="comment">#transformer.set_channel_swap('data', (2, 1, 0))  # rgb===&gt;bgr</span></span><br><span class="line"><span class="comment">#transformer.set_raw_scale('data', 255)  # [0-1]===&gt; [0,255]</span></span><br><span class="line">transformer.set_mean(<span class="string">'data'</span>, np.array([<span class="number">104</span>, <span class="number">117</span>, <span class="number">123</span>]))  <span class="comment"># bgr mean pixel</span></span><br><span class="line"></span><br><span class="line">image_file = <span class="string">"./images/1.png"</span></span><br><span class="line">print(<span class="string">"image_file="</span>, image_file)</span><br><span class="line">image = cv2.imread(image_file) <span class="comment"># hwc, bgr, 0-255</span></span><br><span class="line">print(<span class="string">"image.shape="</span>, image.shape)</span><br><span class="line"></span><br><span class="line">transformed_image = transformer.preprocess(<span class="string">'data'</span>, image) <span class="comment">#</span></span><br><span class="line">print(<span class="string">"transformed_image.shape="</span>, transformed_image.shape) <span class="comment"># 3,512,512</span></span><br><span class="line">b,g,r = transformed_image </span><br><span class="line">print(b.shape) <span class="comment"># 512,512</span></span><br><span class="line">print(g.shape)</span><br><span class="line">print(r.shape)</span><br><span class="line"></span><br><span class="line">print(<span class="string">""</span>)</span><br><span class="line">print(transformed_image[:,:<span class="number">5</span>,:<span class="number">5</span>])</span><br></pre></td></tr></table></figure>
+</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+<h3 id="cv2-imread-1"><a href="#cv2-imread-1" class="headerlink" title="cv2.imread"></a>cv2.imread</h3><h4 id="transformer-1"><a href="#transformer-1" class="headerlink" title="transformer"></a>transformer</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cv2.imread: transformer  + python code</span></span><br><span class="line">data_shape = [<span class="number">1</span>,<span class="number">3</span>,<span class="number">512</span>,<span class="number">512</span>]</span><br><span class="line"></span><br><span class="line">transformer = caffe.io.Transformer(&#123;<span class="string">'data'</span>:data_shape&#125;) <span class="comment"># resize</span></span><br><span class="line">transformer.set_transpose(<span class="string">'data'</span>, (<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>)) <span class="comment"># hwc ===&gt; chw</span></span><br><span class="line"><span class="comment">#transformer.set_channel_swap('data', (2, 1, 0))  # rgb===&gt;bgr</span></span><br><span class="line"><span class="comment">#transformer.set_raw_scale('data', 255)  # [0-1]===&gt; [0,255]</span></span><br><span class="line">transformer.set_mean(<span class="string">'data'</span>, np.array([<span class="number">104</span>, <span class="number">117</span>, <span class="number">123</span>]))  <span class="comment"># bgr mean pixel</span></span><br><span class="line"></span><br><span class="line">image_file = <span class="string">"./images/1.png"</span></span><br><span class="line">print(<span class="string">"image_file="</span>, image_file)</span><br><span class="line">image = cv2.imread(image_file) <span class="comment"># hwc, bgr, 0-255</span></span><br><span class="line">print(<span class="string">"image.shape="</span>, image.shape)</span><br><span class="line"></span><br><span class="line">transformed_image = transformer.preprocess(<span class="string">'data'</span>, image) <span class="comment">#</span></span><br><span class="line">print(<span class="string">"transformed_image.shape="</span>, transformed_image.shape) <span class="comment"># 3,512,512</span></span><br><span class="line">b,g,r = transformed_image </span><br><span class="line">print(b.shape) <span class="comment"># 512,512</span></span><br><span class="line">print(g.shape)</span><br><span class="line">print(r.shape)</span><br><span class="line"></span><br><span class="line">print(<span class="string">""</span>)</span><br><span class="line">print(transformed_image[:,:<span class="number">5</span>,:<span class="number">5</span>])</span><br></pre></td></tr></table></figure>
 <p>output </p>
 <pre><code>(&apos;image_file=&apos;, &apos;./images/1.png&apos;)
 (&apos;image.shape=&apos;, (1080, 1920, 3))

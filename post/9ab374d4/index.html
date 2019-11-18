@@ -143,7 +143,7 @@
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816095057441-58520598.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816095102256-537112316.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816095105836-233219882.png">
-<meta property="og:updated_time" content="2019-11-13T02:41:21.285Z">
+<meta property="og:updated_time" content="2019-11-18T05:25:26.798Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Net Surgery">
 <meta name="twitter:description" content="Net Surgery">
@@ -443,8 +443,8 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-11-13T10:41:21+08:00">
-                2019-11-13
+              <time title="Post modified" itemprop="dateModified" datetime="2019-11-18T13:25:26+08:00">
+                2019-11-18
               </time>
             
           </span>
@@ -580,6 +580,14 @@ conv (3, 1, 5, 5)
 -3.67843 3.77647
 </code></pre><p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816095102256-537112316.png" alt="png"></p>
 <p>With net surgery, parameters can be transplanted across nets, regularized by custom per-parameter operations, and transformed according to your schemes.</p>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
 <h2 id="Casting-a-Classifier-into-a-Fully-Convolutional-Network"><a href="#Casting-a-Classifier-into-a-Fully-Convolutional-Network" class="headerlink" title="Casting a Classifier into a Fully Convolutional Network"></a>Casting a Classifier into a Fully Convolutional Network</h2><p>Let’s take the standard Caffe Reference ImageNet model “CaffeNet” and transform it into a fully convolutional net for efficient, dense inference on large inputs. This model generates a classification map that covers a given input size instead of a single classification. In particular a 8 $\times$ 8 classification map on a 451 $\times$ 451 input gives 64x the output in only 3x the time. The computation exploits a natural efficiency of convolutional network (convnet) structure by amortizing the computation of overlapping receptive fields.</p>
 <p>To do so we translate the <code>InnerProduct</code> matrix multiplication layers of CaffeNet into <code>Convolutional</code> layers. This is the only change: the other layer types are agnostic to spatial size. Convolution is translation-invariant, activations are elementwise operations, and so on. The <code>fc6</code> inner product when carried out as convolution by <code>fc6-conv</code> turns into a 6 $\times$ 6 filter with stride 1 on <code>pool5</code>. Back in image space this gives a classification for each 227 $\times$ 227 box with stride 32 in pixels. Remember the equation for output map / receptive field size, output = (input - kernel_size) / stride + 1, and work out the indexing details for a clear understanding.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!diff net_surgery/bvlc_caffenet_full_conv.prototxt ../models/bvlc_reference_caffenet/deploy.prototxt</span><br></pre></td></tr></table></figure>

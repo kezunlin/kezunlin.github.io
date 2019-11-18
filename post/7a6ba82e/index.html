@@ -141,7 +141,7 @@
 <meta property="og:description" content="speed up opencv image processing with openmp">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://img2018.cnblogs.com/blog/635233/201810/635233-20181031153435506-1474472980.png">
-<meta property="og:updated_time" content="2019-11-13T02:41:22.341Z">
+<meta property="og:updated_time" content="2019-11-18T05:43:19.621Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="speed up opencv image processing with openmp">
 <meta name="twitter:description" content="speed up opencv image processing with openmp">
@@ -441,8 +441,8 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-11-13T10:41:22+08:00">
-                2019-11-13
+              <time title="Post modified" itemprop="dateModified" datetime="2019-11-18T13:43:19+08:00">
+                2019-11-18
               </time>
             
           </span>
@@ -614,6 +614,15 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 </code></pre><blockquote>
 <p><code>omp_get_num_threads</code>, <code>omp_get_thread_num</code></p>
 </blockquote>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
 <h1 id="OpenMP-Introduction"><a href="#OpenMP-Introduction" class="headerlink" title="OpenMP Introduction"></a>OpenMP Introduction</h1><ul>
 <li><a href="https://zhuanlan.zhihu.com/p/51173703" target="_blank" rel="noopener">openmp</a></li>
 </ul>
@@ -723,6 +732,15 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 </code></pre><blockquote>
 <p><code>omp_get_num_procs</code> return <code>8</code>.</p>
 </blockquote>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
 <h1 id="OpenMP-Example"><a href="#OpenMP-Example" class="headerlink" title="OpenMP Example"></a>OpenMP Example</h1><h2 id="omp-get-num-threads"><a href="#omp-get-num-threads" class="headerlink" title="omp_get_num_threads"></a>omp_get_num_threads</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test0</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"I am Thread %d,  omp_get_num_threads = %d, omp_get_num_procs = %d\n"</span>, </span><br><span class="line">		omp_get_thread_num(), </span><br><span class="line">		omp_get_num_threads(),</span><br><span class="line">		omp_get_num_procs()</span><br><span class="line">	);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">I am Thread 0,  omp_get_num_threads = 1, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
 <h2 id="parallel"><a href="#parallel" class="headerlink" title="parallel"></a>parallel</h2><h3 id="case1"><a href="#case1" class="headerlink" title="case1"></a>case1</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// `parallel`，用在一个代码段之前，表示这段代码block将被多个线程并行执行</span></span><br><span class="line">	<span class="comment">// if not set `omp_set_num_threads`, by default use `omp_get_num_procs`, eg 8</span></span><br><span class="line">	<span class="comment">//omp_set_num_threads(4); // 设置线程数，一般设置的线程数不超过CPU核心数</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"Hello, I am Thread %d,  omp_get_num_threads = %d, omp_get_num_procs = %d\n"</span>, </span><br><span class="line">			omp_get_thread_num(), </span><br><span class="line">			omp_get_num_threads(),</span><br><span class="line">			omp_get_num_procs()</span><br><span class="line">		);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Hello, I am Thread 3,  omp_get_num_threads = 8, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">Hello, I am Thread 7,  omp_get_num_threads = 8, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">Hello, I am Thread 1,  omp_get_num_threads = 8, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">Hello, I am Thread 6,  omp_get_num_threads = 8, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">Hello, I am Thread 5,  omp_get_num_threads = 8, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">Hello, I am Thread 4,  omp_get_num_threads = 8, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">Hello, I am Thread 2,  omp_get_num_threads = 8, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">Hello, I am Thread 0,  omp_get_num_threads = 8, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
 <h3 id="case2"><a href="#case2" class="headerlink" title="case2"></a>case2</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test1_2</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// `parallel`，用在一个代码段之前，表示这段代码block将被多个线程并行执行</span></span><br><span class="line">	omp_set_num_threads(<span class="number">4</span>); <span class="comment">// 设置线程数，一般设置的线程数不超过CPU核心数</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"Hello, I am Thread %d,  omp_get_num_threads = %d, omp_get_num_procs = %d\n"</span>, </span><br><span class="line">			omp_get_thread_num(), </span><br><span class="line">			omp_get_num_threads(),</span><br><span class="line">			omp_get_num_procs()</span><br><span class="line">		);</span><br><span class="line">		<span class="comment">//std::cout &lt;&lt; "Hello" &lt;&lt; ", I am Thread " &lt;&lt; omp_get_thread_num() &lt;&lt; std::endl; // 0,1,2,3</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"># use `cout`</span></span><br><span class="line"><span class="comment">HelloHello, I am Thread Hello, I am Thread , I am Thread Hello, I am Thread 2</span></span><br><span class="line"><span class="comment">1</span></span><br><span class="line"><span class="comment">3</span></span><br><span class="line"><span class="comment">0</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* use `printf`</span></span><br><span class="line"><span class="comment">Hello, I am Thread 0,  omp_get_num_threads = 4, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">Hello, I am Thread 3,  omp_get_num_threads = 4, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">Hello, I am Thread 1,  omp_get_num_threads = 4, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">Hello, I am Thread 2,  omp_get_num_threads = 4, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
@@ -779,7 +797,17 @@ Main Thread = 0, cost = 2031 ms
 </code></pre><h3 id="schedule-static-1"><a href="#schedule-static-1" class="headerlink" title="schedule(static,1)"></a>schedule(static,1)</h3><pre><code>Number of primes numbers: 5761455./demo_openmp  111.13s user 0.00s system 399% cpu 27.799 total
 </code></pre><h3 id="schedule-dynamic-1"><a href="#schedule-dynamic-1" class="headerlink" title="schedule(dynamic,1)"></a>schedule(dynamic,1)</h3><pre><code>Number of primes numbers: 5761455./demo_openmp  167.22s user 0.02s system 791% cpu 21.135 total
 </code></pre><h3 id="schedule-dynamic-200"><a href="#schedule-dynamic-200" class="headerlink" title="schedule(dynamic,200)"></a>schedule(dynamic,200)</h3><pre><code>Number of primes numbers: 5761455./demo_openmp  165.96s user 0.02s system 791% cpu 20.981 total
-</code></pre><h1 id="OpenCV-with-OpenMP"><a href="#OpenCV-with-OpenMP" class="headerlink" title="OpenCV with OpenMP"></a>OpenCV with OpenMP</h1><p>see <a href="http://answers.opencv.org/question/103701/how-opencv-use-openmp-thread-to-get-performance/" target="_blank" rel="noopener">how-opencv-use-openmp-thread-to-get-performance</a></p>
+</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+<h1 id="OpenCV-with-OpenMP"><a href="#OpenCV-with-OpenMP" class="headerlink" title="OpenCV with OpenMP"></a>OpenCV with OpenMP</h1><p>see <a href="http://answers.opencv.org/question/103701/how-opencv-use-openmp-thread-to-get-performance/" target="_blank" rel="noopener">how-opencv-use-openmp-thread-to-get-performance</a></p>
 <p>3 type OpenCV implementation</p>
 <ul>
 <li>sequential implementation: default (slowest)</li>

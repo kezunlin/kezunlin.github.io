@@ -140,7 +140,7 @@
 <meta property="og:site_name" content="KeZunLin&#39;s Blog">
 <meta property="og:description" content="serialize and deserialize a class in cpp with boost">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-11-13T02:41:20.364Z">
+<meta property="og:updated_time" content="2019-11-18T05:09:05.312Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="serialize and deserialize a class in cpp with boost">
 <meta name="twitter:description" content="serialize and deserialize a class in cpp with boost">
@@ -439,8 +439,8 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-11-13T10:41:20+08:00">
-                2019-11-13
+              <time title="Post modified" itemprop="dateModified" datetime="2019-11-18T13:09:05+08:00">
+                2019-11-18
               </time>
             
           </span>
@@ -539,6 +539,16 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="keyword">int</span> height;</span><br><span class="line">   <span class="keyword">int</span> width;</span><br><span class="line">   <span class="built_in">std</span>::<span class="built_in">string</span> name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::ostream&amp; MyClass::serialize(<span class="built_in">std</span>::ostream &amp;out) <span class="keyword">const</span> &#123;</span><br><span class="line">    out &lt;&lt; height;</span><br><span class="line">    out &lt;&lt; <span class="string">','</span> <span class="comment">//number seperator</span></span><br><span class="line">    out &lt;&lt; width;</span><br><span class="line">    out &lt;&lt; <span class="string">','</span> <span class="comment">//number seperator</span></span><br><span class="line">    out &lt;&lt; name.size(); <span class="comment">//serialize size of string</span></span><br><span class="line">    out &lt;&lt; <span class="string">','</span> <span class="comment">//number seperator</span></span><br><span class="line">    out &lt;&lt; name; <span class="comment">//serialize characters of string</span></span><br><span class="line">    <span class="keyword">return</span> out;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">std</span>::istream&amp; MyClass::deserialize(<span class="built_in">std</span>::istream &amp;in) &#123;</span><br><span class="line">    <span class="keyword">if</span> (in) &#123;</span><br><span class="line">        <span class="keyword">int</span> len=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">char</span> comma;</span><br><span class="line">        in &gt;&gt; height;</span><br><span class="line">        in &gt;&gt; comma; <span class="comment">//read in the seperator</span></span><br><span class="line">        in &gt;&gt; width;</span><br><span class="line">        in &gt;&gt; comma; <span class="comment">//read in the seperator</span></span><br><span class="line">        in &gt;&gt; len;  <span class="comment">//deserialize size of string</span></span><br><span class="line">        in &gt;&gt; comma; <span class="comment">//read in the seperator</span></span><br><span class="line">        <span class="keyword">if</span> (in &amp;&amp; len) &#123;</span><br><span class="line">            <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt; tmp(len);</span><br><span class="line">            in.read(tmp.data() , len); <span class="comment">//deserialize characters of string</span></span><br><span class="line">            name.assign(tmp.data(), len);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> in;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>overload for <code>operator&lt;&lt;</code> and <code>operator&gt;&gt;</code></p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::ostream&amp; <span class="keyword">operator</span>&lt;&lt;(<span class="built_in">std</span>::ostream&amp; out, <span class="keyword">const</span> MyClass &amp;obj)</span><br><span class="line">&#123;</span><br><span class="line">    obj.serialize(out); </span><br><span class="line">    <span class="keyword">return</span> out;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::istream&amp; <span class="keyword">operator</span>&gt;&gt;(<span class="built_in">std</span>::istream&amp; in, MyClass &amp;obj)</span><br><span class="line">&#123;</span><br><span class="line">    obj.deserialize(in); </span><br><span class="line">    <span class="keyword">return</span> in;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
 <h2 id="with-boost-serialization"><a href="#with-boost-serialization" class="headerlink" title="with boost serialization"></a>with boost serialization</h2><p>archive file format</p>
 <ul>
 <li>text: text_iarchive,text_oarchive <code>field</code></li>
@@ -554,6 +564,16 @@ document.write('<script src="' + src + '" id="sozz"><\/script>');
 <p>2 reasons to use <code>std::string</code>:</p>
 <p><code>std::string</code> can be used for both <code>text</code> and <code>arbitrary binary data</code>.</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Example 1</span></span><br><span class="line"><span class="comment">//Plain text:</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span> s1;</span><br><span class="line">s1 = <span class="string">"abc"</span>;</span><br><span class="line">s1.c_str();</span><br><span class="line"></span><br><span class="line"><span class="comment">//Example 2</span></span><br><span class="line"><span class="comment">//Arbitrary binary data:</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span> s2;</span><br><span class="line">s2.append(<span class="string">"a\0b\0b\0"</span>, <span class="number">6</span>);</span><br><span class="line">s2.data();</span><br></pre></td></tr></table></figure>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
 <h2 id="boost-archive-style"><a href="#boost-archive-style" class="headerlink" title="boost archive style"></a>boost archive style</h2><h3 id="intrusive"><a href="#intrusive" class="headerlink" title="intrusive"></a>intrusive</h3><ul>
 <li><code>private template&lt;class Archive&gt;
   void serialize(Archive&amp; archive, const unsigned int version)</code></li>
