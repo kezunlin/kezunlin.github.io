@@ -1,438 +1,11 @@
-<!DOCTYPE HTML>
-<html lang="en">
-
-
-<head><meta name="generator" content="Hexo 3.9.0">
-    <meta charset="utf-8">
-    <meta name="keywords" content="speed up opencv image processing with openmp, C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog">
-    <meta name="description" content="Series
+<!-- build time:Thu Dec 05 2019 16:31:01 GMT+0800 (CST) --><!DOCTYPE HTML><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta name="keywords" content="speed up opencv image processing with openmp, C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog"><meta name="description" content="Series
 Part 1: compile opencv on ubuntu 16.04
 Part 2: compile opencv with CUDA support on windows 10
-Part 3: opencv mat ">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="renderer" content="webkit|ie-stand|ie-comp">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>speed up opencv image processing with openmp | C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog</title>
-    <link rel="icon" type="image/jpeg" href="/favicon.jpg">
-
-    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
-    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="/css/my.css">
-    
-    <script src="/libs/jquery/jquery.min.js"></script>
-    
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
-
-
-<body>
-    <header class="navbar-fixed">
-    <nav id="headNav" class="bg-color nav-transparent">
-        <div id="navContainer" class="nav-wrapper container">
-            <div class="brand-logo">
-                <a href="/" class="waves-effect waves-light">
-                    
-                    <img src="/medias/logo.jpg" class="logo-img" alt="LOGO">
-                    
-                    <span class="logo-span">KeZunLin</span>
-                </a>
-            </div>
-            
-
-<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
-<ul class="right nav-menu">
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/" class="waves-effect waves-light">
-      
-      <i class="fas fa-home" style="zoom: 0.6;"></i>
-      
-      <span>Index</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/tags" class="waves-effect waves-light">
-      
-      <i class="fas fa-tags" style="zoom: 0.6;"></i>
-      
-      <span>Tags</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/categories" class="waves-effect waves-light">
-      
-      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
-      
-      <span>Categories</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/archives" class="waves-effect waves-light">
-      
-      <i class="fas fa-archive" style="zoom: 0.6;"></i>
-      
-      <span>Archives</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/about" class="waves-effect waves-light">
-      
-      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
-      
-      <span>About</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/friends" class="waves-effect waves-light">
-      
-      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
-      
-      <span>Friends</span>
-    </a>
-    
-  </li>
-  
-  <li>
-    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
-      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
-    </a>
-  </li>
-</ul>
-
-<div id="mobile-nav" class="side-nav sidenav">
-
-    <div class="mobile-head bg-color">
-        
-        <img src="/medias/logo.jpg" class="logo-img circle responsive-img">
-        
-        <div class="logo-name">KeZunLin</div>
-        <div class="logo-desc">
-            
-            OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle.
-            
-        </div>
-    </div>
-
-    
-
-    <ul class="menu-list mobile-menu-list">
-        
-        <li class="m-nav-item">
-	  
-		<a href="/" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-home"></i>
-			
-			Index
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/tags" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-tags"></i>
-			
-			Tags
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/categories" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-bookmark"></i>
-			
-			Categories
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/archives" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-archive"></i>
-			
-			Archives
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/about" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-user-circle"></i>
-			
-			About
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/friends" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-address-book"></i>
-			
-			Friends
-		</a>
-          
-        </li>
-        
-        
-    </ul>
-</div>
-
-        </div>
-
-        
-    </nav>
-
-</header>
-
-    
-
-
-
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/14.jpg')">
-    <div class="container" style="right: 0px;left: 0px;">
-        <div class="row">
-            <div class="col s12 m12 l12">
-                <div class="brand">
-                    <div class="description center-align post-title">
-                        speed up opencv image processing with openmp
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-<main class="post-container content">
-
-    
-    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
-<style>
-    #articleContent h1::before,
-    #articleContent h2::before,
-    #articleContent h3::before,
-    #articleContent h4::before,
-    #articleContent h5::before,
-    #articleContent h6::before {
-        display: block;
-        content: " ";
-        height: 100px;
-        margin-top: -100px;
-        visibility: hidden;
-    }
-
-    #articleContent :focus {
-        outline: none;
-    }
-
-    .toc-fixed {
-        position: fixed;
-        top: 64px;
-    }
-
-    .toc-widget {
-        padding-left: 20px;
-    }
-
-    .toc-widget .toc-title {
-        margin: 35px 0 15px 0;
-        padding-left: 17px;
-        font-size: 1.5rem;
-        font-weight: bold;
-        line-height: 1.5rem;
-    }
-
-    .toc-widget ol {
-        padding: 0;
-        list-style: none;
-    }
-
-    #toc-content ol {
-        padding-left: 10px;
-    }
-
-    #toc-content ol li {
-        padding-left: 10px;
-    }
-
-    #toc-content .toc-link:hover {
-        color: #42b983;
-        font-weight: 700;
-        text-decoration: underline;
-    }
-
-    #toc-content .toc-link::before {
-        background-color: transparent;
-        max-height: 25px;
-    }
-
-    #toc-content .is-active-link {
-        color: #42b983;
-    }
-
-    #toc-content .is-active-link::before {
-        background-color: #42b983;
-    }
-
-    #floating-toc-btn {
-        position: fixed;
-        right: 15px;
-        bottom: 76px;
-        padding-top: 15px;
-        margin-bottom: 0;
-        z-index: 998;
-    }
-
-    #floating-toc-btn .btn-floating {
-        width: 48px;
-        height: 48px;
-    }
-
-    #floating-toc-btn .btn-floating i {
-        line-height: 48px;
-        font-size: 1.4rem;
-    }
-</style>
-<div class="row">
-    <div id="main-content" class="col s12 m12 l9">
-        <!-- 文章内容详情 -->
-<div id="artDetail">
-    <div class="card">
-        <div class="card-content article-info">
-            <div class="row tag-cate">
-                <div class="col s7">
-                    
-                    <div class="article-tag">
-                        
-                            <a href="/tags/opencv/">
-                                <span class="chip bg-color">opencv</span>
-                            </a>
-                        
-                            <a href="/tags/openmp/">
-                                <span class="chip bg-color">openmp</span>
-                            </a>
-                        
-                    </div>
-                    
-                </div>
-                <div class="col s5 right-align">
-                    
-                    <div class="post-cate">
-                        <i class="fas fa-bookmark fa-fw icon-category"></i>
-                        
-                            <a href="/categories/cpp/" class="post-category">
-                                cpp
-                            </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-
-            <div class="post-info">
-                
-                <div class="post-date info-break-policy">
-                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2019-04-03
-                </div>
-                
-
-                
-
-                
-                <div class="info-break-policy">
-                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    5,530
-                </div>
-                
-
-                
-                <div class="info-break-policy">
-                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
-                    30 Min
-                </div>
-                
-				
-                
-                    <div id="busuanzi_container_page_pv" class="info-break-policy">
-                        <i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp;
-                        <span id="busuanzi_value_page_pv"></span>
-                    </div>
-				
-            </div>
-            
-        </div>
-        <hr class="clearfix">
-
-        <div class="card-content article-card-content">
-            <!-- hack -->
-            <!-- Google AdSense -->
-
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <!-- kzl in-article ad -->
-     <ins class="adsbygoogle"
-          style="display:block; text-align:center;"
-          data-ad-layout="in-article"
-          data-ad-format="fluid"
-          data-ad-client="ca-pub-5653382914441020"
-          data-ad-slot="7925631830"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-
-
-            <div id="articleContent">
-                <h2 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h2><ul>
-<li><a href="https://kezunlin.me/post/15f5c3e8/">Part 1: compile opencv on ubuntu 16.04</a></li>
-<li><a href="https://kezunlin.me/post/6580691f/">Part 2: compile opencv with CUDA support on windows 10</a></li>
-<li><a href="https://kezunlin.me/post/61d55ab4/">Part 3: opencv mat for loop</a></li>
-<li><strong><a href="https://kezunlin.me/post/7a6ba82e/">Part 4: speed up opencv image processing with openmp</a></strong></li>
-</ul>
-<h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="config"><a href="#config" class="headerlink" title="config"></a>config</h3><ul>
-<li>linux/window:  cmake with <code>CXX_FLAGS=-fopenmp</code></li>
-<li>window VS: VS also support openmp, <code>C/C++| Language | /openmp</code></li>
-</ul>
-<h3 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h3><pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;omp.h></span></span>
+Part 3: opencv mat "><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><meta name="renderer" content="webkit|ie-stand|ie-comp"><meta name="mobile-web-app-capable" content="yes"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><title>speed up opencv image processing with openmp | C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog</title><link rel="icon" type="image/jpeg" href="/favicon.jpg"><link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css"><link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css"><link rel="stylesheet" type="text/css" href="/libs/aos/aos.css"><link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css"><link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css"><link rel="stylesheet" type="text/css" href="/css/matery.css"><link rel="stylesheet" type="text/css" href="/css/my.css"><script src="/libs/jquery/jquery.min.js"></script><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head><body><header class="navbar-fixed"><nav id="headNav" class="bg-color nav-transparent"><div id="navContainer" class="nav-wrapper container"><div class="brand-logo"><a href="/" class="waves-effect waves-light"><img src="/medias/logo.jpg" class="logo-img" alt="LOGO"> <span class="logo-span">KeZunLin</span></a></div><a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a><ul class="right nav-menu"><li class="hide-on-med-and-down nav-item"><a href="/" class="waves-effect waves-light"><i class="fas fa-home" style="zoom:.6"></i> <span>Index</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/tags" class="waves-effect waves-light"><i class="fas fa-tags" style="zoom:.6"></i> <span>Tags</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/categories" class="waves-effect waves-light"><i class="fas fa-bookmark" style="zoom:.6"></i> <span>Categories</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/archives" class="waves-effect waves-light"><i class="fas fa-archive" style="zoom:.6"></i> <span>Archives</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/about" class="waves-effect waves-light"><i class="fas fa-user-circle" style="zoom:.6"></i> <span>About</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/friends" class="waves-effect waves-light"><i class="fas fa-address-book" style="zoom:.6"></i> <span>Friends</span></a></li><li><a href="#searchModal" class="modal-trigger waves-effect waves-light"><i id="searchIcon" class="fas fa-search" title="Search" style="zoom:.85"></i></a></li></ul><div id="mobile-nav" class="side-nav sidenav"><div class="mobile-head bg-color"><img src="/medias/logo.jpg" class="logo-img circle responsive-img"><div class="logo-name">KeZunLin</div><div class="logo-desc">OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle.</div></div><ul class="menu-list mobile-menu-list"><li class="m-nav-item"><a href="/" class="waves-effect waves-light"><i class="fa-fw fas fa-home"></i> Index</a></li><li class="m-nav-item"><a href="/tags" class="waves-effect waves-light"><i class="fa-fw fas fa-tags"></i> Tags</a></li><li class="m-nav-item"><a href="/categories" class="waves-effect waves-light"><i class="fa-fw fas fa-bookmark"></i> Categories</a></li><li class="m-nav-item"><a href="/archives" class="waves-effect waves-light"><i class="fa-fw fas fa-archive"></i> Archives</a></li><li class="m-nav-item"><a href="/about" class="waves-effect waves-light"><i class="fa-fw fas fa-user-circle"></i> About</a></li><li class="m-nav-item"><a href="/friends" class="waves-effect waves-light"><i class="fa-fw fas fa-address-book"></i> Friends</a></li></ul></div></div></nav></header><div class="bg-cover pd-header post-cover" style="background-image:url(/medias/featureimages/14.jpg)"><div class="container" style="right:0;left:0"><div class="row"><div class="col s12 m12 l12"><div class="brand"><div class="description center-align post-title">speed up opencv image processing with openmp</div></div></div></div></div></div><main class="post-container content"><link rel="stylesheet" href="/libs/tocbot/tocbot.css"><style>#articleContent h1::before,#articleContent h2::before,#articleContent h3::before,#articleContent h4::before,#articleContent h5::before,#articleContent h6::before{display:block;content:" ";height:100px;margin-top:-100px;visibility:hidden}#articleContent :focus{outline:0}.toc-fixed{position:fixed;top:64px}.toc-widget{padding-left:20px}.toc-widget .toc-title{margin:35px 0 15px 0;padding-left:17px;font-size:1.5rem;font-weight:700;line-height:1.5rem}.toc-widget ol{padding:0;list-style:none}#toc-content ol{padding-left:10px}#toc-content ol li{padding-left:10px}#toc-content .toc-link:hover{color:#42b983;font-weight:700;text-decoration:underline}#toc-content .toc-link::before{background-color:transparent;max-height:25px}#toc-content .is-active-link{color:#42b983}#toc-content .is-active-link::before{background-color:#42b983}#floating-toc-btn{position:fixed;right:15px;bottom:76px;padding-top:15px;margin-bottom:0;z-index:998}#floating-toc-btn .btn-floating{width:48px;height:48px}#floating-toc-btn .btn-floating i{line-height:48px;font-size:1.4rem}</style><div class="row"><div id="main-content" class="col s12 m12 l9"><div id="artDetail"><div class="card"><div class="card-content article-info"><div class="row tag-cate"><div class="col s7"><div class="article-tag"><a href="/tags/opencv/"><span class="chip bg-color">opencv</span> </a><a href="/tags/openmp/"><span class="chip bg-color">openmp</span></a></div></div><div class="col s5 right-align"><div class="post-cate"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/cpp/" class="post-category">cpp</a></div></div></div><div class="post-info"><div class="post-date info-break-policy"><i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp; 2019-04-03</div><div class="info-break-policy"><i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp; 5,530</div><div class="info-break-policy"><i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp; 30 Min</div><div id="busuanzi_container_page_pv" class="info-break-policy"><i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp; <span id="busuanzi_value_page_pv"></span></div></div></div><hr class="clearfix"><div class="card-content article-card-content"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><div id="articleContent"><h2 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h2><ul><li><a href="https://kezunlin.me/post/15f5c3e8/">Part 1: compile opencv on ubuntu 16.04</a></li><li><a href="https://kezunlin.me/post/6580691f/">Part 2: compile opencv with CUDA support on windows 10</a></li><li><a href="https://kezunlin.me/post/61d55ab4/">Part 3: opencv mat for loop</a></li><li><strong><a href="https://kezunlin.me/post/7a6ba82e/">Part 4: speed up opencv image processing with openmp</a></strong></li></ul><h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="config"><a href="#config" class="headerlink" title="config"></a>config</h3><ul><li>linux/window: cmake with <code>CXX_FLAGS=-fopenmp</code></li><li>window VS: VS also support openmp, <code>C/C++| Language | /openmp</code></li></ul><h3 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h3><pre class="language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;omp.h></span></span>
 
 <span class="token macro property">#<span class="token directive keyword">pragma</span> omp parallel for</span>
     <span class="token keyword">for</span> loop <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-</code></pre>
-<h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+</code></pre><h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><pre class="language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
 <span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;omp.h></span></span>
 
 <span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
@@ -459,9 +32,7 @@ i = 2, I am Thread 1
 i = 3, I am Thread 1
 */</span>
 
-</code></pre>
-<h3 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h3><p>use <code>CXX_FLAGS=-fopenmp</code> in CMakeLists.txt</p>
-<pre class=" language-cmake"><code class="language-cmake">cmake_minimum_required(VERSION 3.0.0)
+</code></pre><h3 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h3><p>use <code>CXX_FLAGS=-fopenmp</code> in CMakeLists.txt</p><pre class="language-cmake"><code class="language-cmake">cmake_minimum_required(VERSION 3.0.0)
 
 project(hello)
 
@@ -484,11 +55,7 @@ endif()
 
 add_executable(hello hello.cpp)
 #target_link_libraries(hello xxx)
-</code></pre>
-<p>options<br><img src="https://img2018.cnblogs.com/blog/635233/201810/635233-20181031153435506-1474472980.png" alt="openmp"></p>
-<p>or use <code>g++ hello.cpp -fopenmp</code> to compile</p>
-<h3 id="view-demo"><a href="#view-demo" class="headerlink" title="view demo"></a>view demo</h3><p>list dynamic dependencies  (ldd)</p>
-<pre><code>ldd hello 
+</code></pre><p>options<br><img src="https://img2018.cnblogs.com/blog/635233/201810/635233-20181031153435506-1474472980.png" alt="openmp"></p><p>or use <code>g++ hello.cpp -fopenmp</code> to compile</p><h3 id="view-demo"><a href="#view-demo" class="headerlink" title="view demo"></a>view demo</h3><p>list dynamic dependencies (ldd)</p><pre><code>ldd hello 
     linux-vdso.so.1 =&gt;  (0x00007ffd71365000)
     libstdc++.so.6 =&gt; /usr/lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f8ea7f00000)
     libgomp.so.1 =&gt; /usr/lib/x86_64-linux-gnu/libgomp.so.1 (0x00007f8ea7cde000)
@@ -498,11 +65,7 @@ add_executable(hello hello.cpp)
     libgcc_s.so.1 =&gt; /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f8ea73f5000)
     libdl.so.2 =&gt; /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f8ea71f1000)
     libpthread.so.0 =&gt; /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f8ea6fd4000)
-</code></pre><blockquote>
-<p><code>libgomp.so.1 =&gt; /usr/lib/x86_64-linux-gnu/libgomp.so.1</code> </p>
-</blockquote>
-<p>list names (nm) </p>
-<pre><code>nm hello 
+</code></pre><blockquote><p><code>libgomp.so.1 =&gt; /usr/lib/x86_64-linux-gnu/libgomp.so.1</code></p></blockquote><p>list names (nm)</p><pre><code>nm hello 
 0000000000602080 B __bss_start
 0000000000602190 b completed.7594
                  U __cxa_atexit@@GLIBC_2.2.5
@@ -552,65 +115,14 @@ add_executable(hello hello.cpp)
                  U _ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_@@GLIBCXX_3.4
 0000000000602191 b _ZStL8__ioinit
                  U _ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_c@@GLIBCXX_3.4
-</code></pre><blockquote>
-<p><code>omp_get_num_threads</code>, <code>omp_get_thread_num</code></p>
-</blockquote>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- kzl in-article ad -->
-<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-
-
-<h2 id="OpenMP-Introduction"><a href="#OpenMP-Introduction" class="headerlink" title="OpenMP Introduction"></a>OpenMP Introduction</h2><ul>
-<li><a href="https://zhuanlan.zhihu.com/p/51173703" rel="noopener external nofollow noreferrer" target="_blank">openmp</a></li>
-</ul>
-<p>OpenMP的指令格式</p>
-<pre><code>#pragma omp directive [clause[clause]…]
+</code></pre><blockquote><p><code>omp_get_num_threads</code>, <code>omp_get_thread_num</code></p></blockquote><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h2 id="OpenMP-Introduction"><a href="#OpenMP-Introduction" class="headerlink" title="OpenMP Introduction"></a>OpenMP Introduction</h2><ul><li><a href="https://zhuanlan.zhihu.com/p/51173703" rel="noopener external nofollow noreferrer" target="_blank">openmp</a></li></ul><p>OpenMP的指令格式</p><pre><code>#pragma omp directive [clause[clause]…]
 #pragma omp parallel private(i, j)
-</code></pre><blockquote>
-<p><code>parallel</code> is directive， <code>private</code> is clause</p>
-</blockquote>
-<h3 id="directive"><a href="#directive" class="headerlink" title="directive"></a>directive</h3><ul>
-<li><strong>parallel</strong>，用在一个代码段之前，表示这段代码将被多个线程并行执行</li>
-<li><strong>for</strong>，用于for循环之前，将循环分配到多个线程中并行执行，必须保证每次循环之间无相关性。</li>
-<li><strong>parallel for</strong>， parallel 和 for语句的结合，也是用在一个for循环之前，表示for循环的代码将被多个线程并行执行。</li>
-<li><strong>sections</strong>，用在可能会被并行执行的代码段之前</li>
-<li><strong>parallel sections</strong>，parallel和sections两个语句的结合</li>
-<li>critical，用在一段代码临界区之前</li>
-<li>single，用在一段只被单个线程执行的代码段之前，表示后面的代码段将被单线程执行。</li>
-<li>flush，</li>
-<li>barrier，用于并行区内代码的线程同步，所有线程执行到barrier时要停止，直到所有线程都执行到barrier时才继续往下执行。</li>
-<li>atomic，用于指定一块内存区域被制动更新</li>
-<li>master，用于指定一段代码块由主线程执行</li>
-<li>ordered， 用于指定并行区域的循环按顺序执行</li>
-<li>threadprivate, 用于指定一个变量是线程私有的。</li>
-</ul>
-<h4 id="parallel-for"><a href="#parallel-for" class="headerlink" title="parallel for"></a>parallel for</h4><p>OpenMP 对可以多线程化的循环有如下五个要求：</p>
-<ul>
-<li>循环的变量变量（就是i）必须是有符号整形，其他的都不行。</li>
-<li>循环的比较条件必须是&lt; &lt;= &gt; &gt;=中的一种</li>
-<li>循环的增量部分必须是增减一个不变的值（即每次循环是不变的）。</li>
-<li>如果比较符号是&lt; &lt;=，那每次循环i应该增加，反之应该减小</li>
-<li>循环必须是没有奇奇怪怪的东西，不能从内部循环跳到外部循环，goto和break只能在循环内部跳转，异常必须在循环内部被捕获。</li>
-</ul>
-<p>如果你的循环不符合这些条件，那就只好改写了.</p>
-<blockquote>
-<p>avoid race condition</p>
-</blockquote>
-<p>当一个循环满足以上五个条件时，依然可能因为数据依赖而不能够合理的并行化。当两个不同的迭代之间的数据存在依赖关系时，就会发生这种情况。</p>
-<pre class=" language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">// 假设数组已经初始化为1</span>
+</code></pre><blockquote><p><code>parallel</code> is directive， <code>private</code> is clause</p></blockquote><h3 id="directive"><a href="#directive" class="headerlink" title="directive"></a>directive</h3><ul><li><strong>parallel</strong>，用在一个代码段之前，表示这段代码将被多个线程并行执行</li><li><strong>for</strong>，用于for循环之前，将循环分配到多个线程中并行执行，必须保证每次循环之间无相关性。</li><li><strong>parallel for</strong>， parallel 和 for语句的结合，也是用在一个for循环之前，表示for循环的代码将被多个线程并行执行。</li><li><strong>sections</strong>，用在可能会被并行执行的代码段之前</li><li><strong>parallel sections</strong>，parallel和sections两个语句的结合</li><li>critical，用在一段代码临界区之前</li><li>single，用在一段只被单个线程执行的代码段之前，表示后面的代码段将被单线程执行。</li><li>flush，</li><li>barrier，用于并行区内代码的线程同步，所有线程执行到barrier时要停止，直到所有线程都执行到barrier时才继续往下执行。</li><li>atomic，用于指定一块内存区域被制动更新</li><li>master，用于指定一段代码块由主线程执行</li><li>ordered， 用于指定并行区域的循环按顺序执行</li><li>threadprivate, 用于指定一个变量是线程私有的。</li></ul><h4 id="parallel-for"><a href="#parallel-for" class="headerlink" title="parallel for"></a>parallel for</h4><p>OpenMP 对可以多线程化的循环有如下五个要求：</p><ul><li>循环的变量变量（就是i）必须是有符号整形，其他的都不行。</li><li>循环的比较条件必须是&lt; &lt;= &gt; &gt;=中的一种</li><li>循环的增量部分必须是增减一个不变的值（即每次循环是不变的）。</li><li>如果比较符号是&lt; &lt;=，那每次循环i应该增加，反之应该减小</li><li>循环必须是没有奇奇怪怪的东西，不能从内部循环跳到外部循环，goto和break只能在循环内部跳转，异常必须在循环内部被捕获。</li></ul><p>如果你的循环不符合这些条件，那就只好改写了.</p><blockquote><p>avoid race condition</p></blockquote><p>当一个循环满足以上五个条件时，依然可能因为数据依赖而不能够合理的并行化。当两个不同的迭代之间的数据存在依赖关系时，就会发生这种情况。</p><pre class="language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">// 假设数组已经初始化为1</span>
 <span class="token macro property">#<span class="token directive keyword">pragma</span> omp parallel for</span>
 <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     factorial<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> i <span class="token operator">*</span> factorial<span class="token punctuation">[</span>i<span class="token number">-1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre>
-<blockquote>
-<p>ERROR.</p>
-</blockquote>
-<pre class=" language-cpp"><code class="language-cpp"><span class="token function">omp_set_num_threads</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre><blockquote><p>ERROR.</p></blockquote><pre class="language-cpp"><code class="language-cpp"><span class="token function">omp_set_num_threads</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token macro property">#<span class="token directive keyword">pragma</span> omp parallel</span>
     <span class="token punctuation">{</span>
         <span class="token macro property">#<span class="token directive keyword">pragma</span> omp for</span>
@@ -619,16 +131,13 @@ add_executable(hello hello.cpp)
             <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"i = %d, I am Thread %d\n"</span><span class="token punctuation">,</span> i<span class="token punctuation">,</span> <span class="token function">omp_get_thread_num</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
-</code></pre>
-<p>same as </p>
-<pre class=" language-cpp"><code class="language-cpp"><span class="token function">omp_set_num_threads</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre><p>same as</p><pre class="language-cpp"><code class="language-cpp"><span class="token function">omp_set_num_threads</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token macro property">#<span class="token directive keyword">pragma</span> omp parallel for</span>
     <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">8</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
     <span class="token punctuation">{</span>
         <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"i = %d, I am Thread %d\n"</span><span class="token punctuation">,</span> i<span class="token punctuation">,</span> <span class="token function">omp_get_thread_num</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-</code></pre>
-<h4 id="parallel-sections"><a href="#parallel-sections" class="headerlink" title="parallel sections"></a>parallel sections</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">pragma</span> omp parallel sections # parallel </span>
+</code></pre><h4 id="parallel-sections"><a href="#parallel-sections" class="headerlink" title="parallel sections"></a>parallel sections</h4><pre class="language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">pragma</span> omp parallel sections # parallel </span>
 <span class="token punctuation">{</span>
     <span class="token macro property">#<span class="token directive keyword">pragma</span> omp section # thread-1</span>
     <span class="token punctuation">{</span>
@@ -639,25 +148,7 @@ add_executable(hello hello.cpp)
         <span class="token function">function2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-</code></pre>
-<blockquote>
-<p>parallel sections里面的内容要并行执行，具体分工上，每个线程执行其中的一个section</p>
-</blockquote>
-<h3 id="clause"><a href="#clause" class="headerlink" title="clause"></a>clause</h3><ul>
-<li><strong>private</strong>, 指定每个线程都有它自己的变量私有副本。</li>
-<li>firstprivate，指定每个线程都有它自己的变量私有副本，并且变量要被继承主线程中的初值。</li>
-<li>lastprivate，主要是用来指定将线程中的私有变量的值在并行处理结束后复制回主线程中的对应变量。</li>
-<li><strong>reduce</strong>，用来指定一个或多个变量是私有的，并且在并行处理结束后这些变量要执行指定的运算。</li>
-<li>nowait，忽略指定中暗含的等待</li>
-<li><strong>num_threads</strong>，指定线程的个数</li>
-<li><strong>schedule</strong>，指定如何调度for循环迭代</li>
-<li>shared，指定一个或多个变量为多个线程间的共享变量</li>
-<li>ordered，用来指定for循环的执行要按顺序执行</li>
-<li>copyprivate，用于single指令中的指定变量为多个线程的共享变量</li>
-<li>copyin，用来指定一个threadprivate的变量的值要用主线程的值进行初始化。</li>
-<li>default，用来指定并行处理区域内的变量的使用方式，缺省是shared</li>
-</ul>
-<h4 id="private"><a href="#private" class="headerlink" title="private"></a>private</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">pragma</span> omp parallel</span>
+</code></pre><blockquote><p>parallel sections里面的内容要并行执行，具体分工上，每个线程执行其中的一个section</p></blockquote><h3 id="clause"><a href="#clause" class="headerlink" title="clause"></a>clause</h3><ul><li><strong>private</strong>, 指定每个线程都有它自己的变量私有副本。</li><li>firstprivate，指定每个线程都有它自己的变量私有副本，并且变量要被继承主线程中的初值。</li><li>lastprivate，主要是用来指定将线程中的私有变量的值在并行处理结束后复制回主线程中的对应变量。</li><li><strong>reduce</strong>，用来指定一个或多个变量是私有的，并且在并行处理结束后这些变量要执行指定的运算。</li><li>nowait，忽略指定中暗含的等待</li><li><strong>num_threads</strong>，指定线程的个数</li><li><strong>schedule</strong>，指定如何调度for循环迭代</li><li>shared，指定一个或多个变量为多个线程间的共享变量</li><li>ordered，用来指定for循环的执行要按顺序执行</li><li>copyprivate，用于single指令中的指定变量为多个线程的共享变量</li><li>copyin，用来指定一个threadprivate的变量的值要用主线程的值进行初始化。</li><li>default，用来指定并行处理区域内的变量的使用方式，缺省是shared</li></ul><h4 id="private"><a href="#private" class="headerlink" title="private"></a>private</h4><pre class="language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">pragma</span> omp parallel</span>
 <span class="token punctuation">{</span>
     <span class="token keyword">int</span> x<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// private to each thread ? YES</span>
 <span class="token punctuation">}</span>
@@ -667,21 +158,14 @@ add_executable(hello hello.cpp)
 <span class="token punctuation">{</span>
     <span class="token keyword">int</span> x<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// private to each thread ? YES</span>
 <span class="token punctuation">}</span>
-</code></pre>
-<blockquote>
-<p>local variables are automatically private to each thread.<br>The reason for the existence of the <code>private</code> clause is so that you don’t have to change your code.<br>see <a href="https://stackoverflow.com/questions/6358375/openmp-are-local-variables-automatically-private" rel="noopener external nofollow noreferrer" target="_blank">here</a></p>
-</blockquote>
-<p>The only way to parallelize the following code without the private clause</p>
-<pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">int</span> i<span class="token punctuation">,</span>j<span class="token punctuation">;</span>
+</code></pre><blockquote><p>local variables are automatically private to each thread.<br>The reason for the existence of the <code>private</code> clause is so that you don’t have to change your code.<br>see <a href="https://stackoverflow.com/questions/6358375/openmp-are-local-variables-automatically-private" rel="noopener external nofollow noreferrer" target="_blank">here</a></p></blockquote><p>The only way to parallelize the following code without the private clause</p><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">int</span> i<span class="token punctuation">,</span>j<span class="token punctuation">;</span>
 <span class="token macro property">#<span class="token directive keyword">pragma</span> omp parallel for private(j)</span>
 <span class="token keyword">for</span><span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">for</span><span class="token punctuation">(</span>j <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> j <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token comment" spellcheck="true">//do something</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-</code></pre>
-<p>is to change the code. For example like this:</p>
-<pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">int</span> i<span class="token punctuation">;</span>
+</code></pre><p>is to change the code. For example like this:</p><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">int</span> i<span class="token punctuation">;</span>
 <span class="token macro property">#<span class="token directive keyword">pragma</span> omp parallel for</span>
 <span class="token keyword">for</span><span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">int</span> j<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// mark j as local variable to worker thread</span>
@@ -689,74 +173,24 @@ add_executable(hello hello.cpp)
         <span class="token comment" spellcheck="true">//do something</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-</code></pre>
-<h4 id="reduction"><a href="#reduction" class="headerlink" title="reduction"></a>reduction</h4><p>例如累加</p>
-<pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">int</span> sum <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+</code></pre><h4 id="reduction"><a href="#reduction" class="headerlink" title="reduction"></a>reduction</h4><p>例如累加</p><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">int</span> sum <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">100</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     sum <span class="token operator">+</span><span class="token operator">=</span> array<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// sum需要私有才能实现并行化，但是又必须是公有的才能产生正确结果</span>
 <span class="token punctuation">}</span>
-</code></pre>
-<p>上面的这个程序里，sum公有或者私有都不对，为了解决这个问题，OpenMP 提供了<code>reduction</code>语句；</p>
-<pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">int</span> sum <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+</code></pre><p>上面的这个程序里，sum公有或者私有都不对，为了解决这个问题，OpenMP 提供了<code>reduction</code>语句；</p><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">int</span> sum <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token macro property">#<span class="token directive keyword">pragma</span> omp parallel for reduction(+:sum)</span>
 <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">100</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     sum <span class="token operator">+</span><span class="token operator">=</span> array<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre>
-<blockquote>
-<p>内部实现中，OpenMP为每个线程提供了私有的sum变量(初始化为0)，当线程退出时，OpenMP再把每个线程私有的sum加在一起得到最终结果。</p>
-</blockquote>
-<h4 id="num-threads"><a href="#num-threads" class="headerlink" title="num_threads"></a>num_threads</h4><p><code>num_threads(4)</code> same as <code>omp_set_num_threads(4)</code></p>
-<pre class=" language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">// `num_threads(4)` same as `omp_set_num_threads(4)`</span>
+</code></pre><blockquote><p>内部实现中，OpenMP为每个线程提供了私有的sum变量(初始化为0)，当线程退出时，OpenMP再把每个线程私有的sum加在一起得到最终结果。</p></blockquote><h4 id="num-threads"><a href="#num-threads" class="headerlink" title="num_threads"></a>num_threads</h4><p><code>num_threads(4)</code> same as <code>omp_set_num_threads(4)</code></p><pre class="language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">// `num_threads(4)` same as `omp_set_num_threads(4)`</span>
     <span class="token macro property">#<span class="token directive keyword">pragma</span> omp parallel num_threads(4)</span>
     <span class="token punctuation">{</span>
         <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Hello, I am Thread %d\n"</span><span class="token punctuation">,</span> <span class="token function">omp_get_thread_num</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 0,1,2,3,</span>
     <span class="token punctuation">}</span>
-</code></pre>
-<h4 id="schedule"><a href="#schedule" class="headerlink" title="schedule"></a>schedule</h4><p>format</p>
-<pre><code>#pragma omp parallel for schedule(kind [, chunk size])
-</code></pre><p>kind: see <a href="https://software.intel.com/en-us/articles/openmp-loop-scheduling" rel="noopener external nofollow noreferrer" target="_blank">openmp-loop-scheduling</a> and <a href="https://stackoverflow.com/questions/10850155/whats-the-difference-between-static-and-dynamic-schedule-in-openmp" rel="noopener external nofollow noreferrer" target="_blank">whats-the-difference-between-static-and-dynamic-schedule-in-openmp</a></p>
-<ul>
-<li><code>static</code>: Divide the loop into equal-sized chunks or as equal as possible in the case where the number of loop iterations is not evenly divisible by the number of threads multiplied by the chunk size. <code>By default, chunk size is loop_count/number_of_threads</code>.</li>
-<li><code>dynamic</code>: Use the internal work queue to give a chunk-sized block of loop iterations to each thread. When a thread is finished, it retrieves the next block of loop iterations from the top of the work queue. <code>By default, the chunk size is 1</code>. Be careful when using this scheduling type because of the extra overhead involved.</li>
-<li><code>guided</code>: special case of <code>dynamic</code>. Similar to dynamic scheduling, but the chunk size starts off large and decreases to better handle load imbalance between iterations. The optional chunk parameter specifies them minimum size chunk to use. <code>By default the chunk size is approximately loop_count/number_of_threads</code>.</li>
-<li><code>auto</code>: When schedule (auto) is specified, the decision regarding <code>scheduling is delegated to the compiler</code>. The programmer gives the compiler the freedom to choose any possible mapping of iterations to threads in the team. </li>
-<li><code>runtime</code>: with ENV<code>OMP_SCHEDULE</code>, we can test 3 types scheduling: <code>static,dynamic,guided</code> without recompile the code.</li>
-</ul>
-<blockquote>
-<p>The optional parameter (chunk), when specified, must be a positive integer.</p>
-</blockquote>
-<p>默认情况下，OpenMP认为所有的循环迭代运行的时间都是一样的，这就导致了OpenMP会把不同的迭代等分到不同的核心上，并且让他们分布的尽可能减小内存访问冲突，这样做是因为循环一般会线性地访问内存, 所以把循环按照前一半后一半的方法分配可以最大程度的减少冲突. 然而对内存访问来说这可能是最好的方法, 但是对于负载均衡可能并不是最好的方法, 而且反过来最好的负载均衡可能也会破坏内存访问. 因此必须折衷考虑.</p>
-<blockquote>
-<p>内存访问vs负载均衡,需要折中考虑。<br>openmp默认使用的schedule是取决于编译器实现的。gcc默认使用schedule(dynamic,1)，也就是动态调度并且块大小是1.<br>线程数不要大于实际核数，否则就是oversubscription</p>
-</blockquote>
-<p><a href="https://software.intel.com/en-us/vtune-amplifier-cookbook-openmp-imbalance-and-scheduling-overhead" rel="noopener external nofollow noreferrer" target="_blank">isprime</a>可以对dynamic做一个展示。</p>
-<h3 id="functions"><a href="#functions" class="headerlink" title="functions"></a>functions</h3><ul>
-<li><code>omp_get_num_procs</code>, 返回运行本线程的多处理机的处理器个数。</li>
-<li><code>omp_set_num_threads</code>, 设置并行执行代码时的线程个数</li>
-<li><code>omp_get_num_threads</code>, 返回当前并行区域中的活动线程(active thread)个数,如果没有设置，默认为1。</li>
-<li><code>omp_get_thread_num</code>, 返回线程号(0,1,2,…)</li>
-<li><code>omp_init_lock</code>, 初始化一个简单锁</li>
-<li><code>omp_set_lock</code>， 上锁操作</li>
-<li><code>omp_unset_lock</code>， 解锁操作，要和<code>omp_set_lock</code>函数配对使用</li>
-<li><code>omp_destroy_lock</code>，关闭一个锁，要和 <code>omp_init_lock</code>函数配对使用</li>
-</ul>
-<p>check cpu</p>
-<pre><code>cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c 
+</code></pre><h4 id="schedule"><a href="#schedule" class="headerlink" title="schedule"></a>schedule</h4><p>format</p><pre><code>#pragma omp parallel for schedule(kind [, chunk size])
+</code></pre><p>kind: see <a href="https://software.intel.com/en-us/articles/openmp-loop-scheduling" rel="noopener external nofollow noreferrer" target="_blank">openmp-loop-scheduling</a> and <a href="https://stackoverflow.com/questions/10850155/whats-the-difference-between-static-and-dynamic-schedule-in-openmp" rel="noopener external nofollow noreferrer" target="_blank">whats-the-difference-between-static-and-dynamic-schedule-in-openmp</a></p><ul><li><code>static</code>: Divide the loop into equal-sized chunks or as equal as possible in the case where the number of loop iterations is not evenly divisible by the number of threads multiplied by the chunk size. <code>By default, chunk size is loop_count/number_of_threads</code>.</li><li><code>dynamic</code>: Use the internal work queue to give a chunk-sized block of loop iterations to each thread. When a thread is finished, it retrieves the next block of loop iterations from the top of the work queue. <code>By default, the chunk size is 1</code>. Be careful when using this scheduling type because of the extra overhead involved.</li><li><code>guided</code>: special case of <code>dynamic</code>. Similar to dynamic scheduling, but the chunk size starts off large and decreases to better handle load imbalance between iterations. The optional chunk parameter specifies them minimum size chunk to use. <code>By default the chunk size is approximately loop_count/number_of_threads</code>.</li><li><code>auto</code>: When schedule (auto) is specified, the decision regarding <code>scheduling is delegated to the compiler</code>. The programmer gives the compiler the freedom to choose any possible mapping of iterations to threads in the team.</li><li><code>runtime</code>: with ENV<code>OMP_SCHEDULE</code>, we can test 3 types scheduling: <code>static,dynamic,guided</code> without recompile the code.</li></ul><blockquote><p>The optional parameter (chunk), when specified, must be a positive integer.</p></blockquote><p>默认情况下，OpenMP认为所有的循环迭代运行的时间都是一样的，这就导致了OpenMP会把不同的迭代等分到不同的核心上，并且让他们分布的尽可能减小内存访问冲突，这样做是因为循环一般会线性地访问内存, 所以把循环按照前一半后一半的方法分配可以最大程度的减少冲突. 然而对内存访问来说这可能是最好的方法, 但是对于负载均衡可能并不是最好的方法, 而且反过来最好的负载均衡可能也会破坏内存访问. 因此必须折衷考虑.</p><blockquote><p>内存访问vs负载均衡,需要折中考虑。<br>openmp默认使用的schedule是取决于编译器实现的。gcc默认使用schedule(dynamic,1)，也就是动态调度并且块大小是1.<br>线程数不要大于实际核数，否则就是oversubscription</p></blockquote><p><a href="https://software.intel.com/en-us/vtune-amplifier-cookbook-openmp-imbalance-and-scheduling-overhead" rel="noopener external nofollow noreferrer" target="_blank">isprime</a>可以对dynamic做一个展示。</p><h3 id="functions"><a href="#functions" class="headerlink" title="functions"></a>functions</h3><ul><li><code>omp_get_num_procs</code>, 返回运行本线程的多处理机的处理器个数。</li><li><code>omp_set_num_threads</code>, 设置并行执行代码时的线程个数</li><li><code>omp_get_num_threads</code>, 返回当前并行区域中的活动线程(active thread)个数,如果没有设置，默认为1。</li><li><code>omp_get_thread_num</code>, 返回线程号(0,1,2,…)</li><li><code>omp_init_lock</code>, 初始化一个简单锁</li><li><code>omp_set_lock</code>， 上锁操作</li><li><code>omp_unset_lock</code>， 解锁操作，要和<code>omp_set_lock</code>函数配对使用</li><li><code>omp_destroy_lock</code>，关闭一个锁，要和 <code>omp_init_lock</code>函数配对使用</li></ul><p>check cpu</p><pre><code>cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c 
     8  Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz
-</code></pre><blockquote>
-<p><code>omp_get_num_procs</code> return <code>8</code>.</p>
-</blockquote>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- kzl in-article ad -->
-<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-
-
-<h2 id="OpenMP-Example"><a href="#OpenMP-Example" class="headerlink" title="OpenMP Example"></a>OpenMP Example</h2><h3 id="omp-get-num-threads"><a href="#omp-get-num-threads" class="headerlink" title="omp_get_num_threads"></a>omp_get_num_threads</h3><pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test0</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre><blockquote><p><code>omp_get_num_procs</code> return <code>8</code>.</p></blockquote><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h2 id="OpenMP-Example"><a href="#OpenMP-Example" class="headerlink" title="OpenMP Example"></a>OpenMP Example</h2><h3 id="omp-get-num-threads"><a href="#omp-get-num-threads" class="headerlink" title="omp_get_num_threads"></a>omp_get_num_threads</h3><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test0</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"I am Thread %d,  omp_get_num_threads = %d, omp_get_num_procs = %d\n"</span><span class="token punctuation">,</span> 
         <span class="token function">omp_get_thread_num</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> 
@@ -767,8 +201,7 @@ add_executable(hello hello.cpp)
 <span class="token comment" spellcheck="true">/*
 I am Thread 0,  omp_get_num_threads = 1, omp_get_num_procs = 8
 */</span>
-</code></pre>
-<h3 id="parallel"><a href="#parallel" class="headerlink" title="parallel"></a>parallel</h3><h4 id="case1"><a href="#case1" class="headerlink" title="case1"></a>case1</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test1</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre><h3 id="parallel"><a href="#parallel" class="headerlink" title="parallel"></a>parallel</h3><h4 id="case1"><a href="#case1" class="headerlink" title="case1"></a>case1</h4><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test1</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">// `parallel`，用在一个代码段之前，表示这段代码block将被多个线程并行执行</span>
     <span class="token comment" spellcheck="true">// if not set `omp_set_num_threads`, by default use `omp_get_num_procs`, eg 8</span>
@@ -792,8 +225,7 @@ Hello, I am Thread 4,  omp_get_num_threads = 8, omp_get_num_procs = 8
 Hello, I am Thread 2,  omp_get_num_threads = 8, omp_get_num_procs = 8
 Hello, I am Thread 0,  omp_get_num_threads = 8, omp_get_num_procs = 8
 */</span>
-</code></pre>
-<h4 id="case2"><a href="#case2" class="headerlink" title="case2"></a>case2</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test1_2</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre><h4 id="case2"><a href="#case2" class="headerlink" title="case2"></a>case2</h4><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test1_2</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">// `parallel`，用在一个代码段之前，表示这段代码block将被多个线程并行执行</span>
     <span class="token function">omp_set_num_threads</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 设置线程数，一般设置的线程数不超过CPU核心数</span>
@@ -822,11 +254,7 @@ Hello, I am Thread 1,  omp_get_num_threads = 4, omp_get_num_procs = 8
 Hello, I am Thread 2,  omp_get_num_threads = 4, omp_get_num_procs = 8
 */</span>
 
-</code></pre>
-<blockquote>
-<p>notice the difference of <code>std::cout</code> and <code>printf</code></p>
-</blockquote>
-<h4 id="case3"><a href="#case3" class="headerlink" title="case3"></a>case3</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test1_3</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre><blockquote><p>notice the difference of <code>std::cout</code> and <code>printf</code></p></blockquote><h4 id="case3"><a href="#case3" class="headerlink" title="case3"></a>case3</h4><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test1_3</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">// `parallel`，用在一个代码段之前，表示这段代码block将被多个线程并行执行</span>
     <span class="token function">omp_set_num_threads</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -850,8 +278,7 @@ i = 0, I am Thread 0
 i = 1, I am Thread 0
 i = 2, I am Thread 0
 */</span>
-</code></pre>
-<h3 id="omp-parallel-for"><a href="#omp-parallel-for" class="headerlink" title="omp parallel/for"></a>omp parallel/for</h3><h4 id="omp-parallel-omp-for"><a href="#omp-parallel-omp-for" class="headerlink" title="omp parallel + omp for"></a>omp parallel + omp for</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test2</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre><h3 id="omp-parallel-for"><a href="#omp-parallel-for" class="headerlink" title="omp parallel/for"></a>omp parallel/for</h3><h4 id="omp-parallel-omp-for"><a href="#omp-parallel-omp-for" class="headerlink" title="omp parallel + omp for"></a>omp parallel + omp for</h4><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test2</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">// `omp parallel` + `omp for` === `omp parallel for`</span>
     <span class="token comment" spellcheck="true">// `omp for` 用在一个for循环之前，表示for循环的每一次iteration将被分配到多个线程并行执行。</span>
@@ -883,8 +310,7 @@ i = 7, I am Thread 3
 i = 4, I am Thread 2
 i = 5, I am Thread 2
 */</span>
-</code></pre>
-<h4 id="omp-parallel-for-1"><a href="#omp-parallel-for-1" class="headerlink" title="omp parallel for"></a>omp parallel for</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test2_2</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre><h4 id="omp-parallel-for-1"><a href="#omp-parallel-for-1" class="headerlink" title="omp parallel for"></a>omp parallel for</h4><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test2_2</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">// `parallel for`，用在一个for循环之前，表示for循环的每一次iteration将被分配到多个线程并行执行。</span>
     <span class="token comment" spellcheck="true">// 此处8次iteration被平均分配到4个thread执行，每个thread执行2次iteration</span>
@@ -912,8 +338,7 @@ i = 7, I am Thread 3
 i = 2, I am Thread 1
 i = 3, I am Thread 1
 */</span>
-</code></pre>
-<h4 id="sqrt-case"><a href="#sqrt-case" class="headerlink" title="sqrt case"></a>sqrt case</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">base_sqrt</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre><h4 id="sqrt-case"><a href="#sqrt-case" class="headerlink" title="sqrt case"></a>sqrt case</h4><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">base_sqrt</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     boost<span class="token operator">::</span>posix_time<span class="token operator">::</span>ptime pt1 <span class="token operator">=</span> boost<span class="token operator">::</span>posix_time<span class="token operator">::</span>microsec_clock<span class="token operator">::</span><span class="token function">local_time</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
@@ -939,9 +364,7 @@ i = 3, I am Thread 1
     int64_t cost <span class="token operator">=</span> <span class="token punctuation">(</span>pt2 <span class="token operator">-</span> pt1<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">total_milliseconds</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Main Thread = %d, cost = %d ms\n"</span><span class="token punctuation">,</span><span class="token function">omp_get_thread_num</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> cost<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre>
-<p>sequential</p>
-<pre><code>time ./demo_openmp
+</code></pre><p>sequential</p><pre><code>time ./demo_openmp
 Worker Thread = 0, cost = 1746 ms
 Worker Thread = 0, cost = 1711 ms
 Worker Thread = 0, cost = 1736 ms
@@ -952,8 +375,7 @@ Worker Thread = 0, cost = 1769 ms
 Worker Thread = 0, cost = 1732 ms
 Main Thread = 0, cost = 13899 ms
 ./demo_openmp  13.90s user 0.00s system 99% cpu 13.903 total
-</code></pre><p>parallel </p>
-<pre><code>time ./demo_openmp
+</code></pre><p>parallel</p><pre><code>time ./demo_openmp
 Worker Thread = 1, cost = 1875 ms
 Worker Thread = 6, cost = 1876 ms
 Worker Thread = 0, cost = 1876 ms
@@ -964,10 +386,7 @@ Worker Thread = 4, cost = 2000 ms
 Worker Thread = 2, cost = 2027 ms
 Main Thread = 0, cost = 2031 ms
 ./demo_openmp  15.10s user 0.01s system 740% cpu 2.041 total
-</code></pre><blockquote>
-<p>2031s + 10ms(system) = 2041ms (total)<br>2.041* 740% = 15.1034 s</p>
-</blockquote>
-<h3 id="parallel-sections-1"><a href="#parallel-sections-1" class="headerlink" title="parallel sections"></a>parallel sections</h3><pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test3</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre><blockquote><p>2031s + 10ms(system) = 2041ms (total)<br>2.041* 740% = 15.1034 s</p></blockquote><h3 id="parallel-sections-1"><a href="#parallel-sections-1" class="headerlink" title="parallel sections"></a>parallel sections</h3><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test3</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     boost<span class="token operator">::</span>posix_time<span class="token operator">::</span>ptime pt1 <span class="token operator">=</span> boost<span class="token operator">::</span>posix_time<span class="token operator">::</span>microsec_clock<span class="token operator">::</span><span class="token function">local_time</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
@@ -1010,8 +429,7 @@ Main Thread = 0, cost = 1845 ms
 ./demo_openmp  7.39s user 0.00s system 398% cpu 1.855 total
 */</span>
 
-</code></pre>
-<h3 id="private-1"><a href="#private-1" class="headerlink" title="private"></a>private</h3><h4 id="error-case"><a href="#error-case" class="headerlink" title="error case"></a>error case</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test4_error</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre><h3 id="private-1"><a href="#private-1" class="headerlink" title="private"></a>private</h3><h4 id="error-case"><a href="#error-case" class="headerlink" title="error case"></a>error case</h4><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test4_error</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token keyword">int</span> i<span class="token punctuation">,</span>j<span class="token punctuation">;</span>
     <span class="token function">omp_set_num_threads</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1036,11 +454,7 @@ Worker Thread = 0, j = 6 ms
 Worker Thread = 1, j = 0 ms
 Worker Thread = 2, j = 0 ms
 */</span>
-</code></pre>
-<blockquote>
-<p>error results.</p>
-</blockquote>
-<h4 id="fix1-by-changing-code"><a href="#fix1-by-changing-code" class="headerlink" title="fix1 by changing code"></a>fix1 by changing code</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test4_fix1</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre><blockquote><p>error results.</p></blockquote><h4 id="fix1-by-changing-code"><a href="#fix1-by-changing-code" class="headerlink" title="fix1 by changing code"></a>fix1 by changing code</h4><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test4_fix1</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token keyword">int</span> i<span class="token punctuation">;</span>
     <span class="token function">omp_set_num_threads</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1090,8 +504,7 @@ Worker Thread = 3, j = 6 ms
 Worker Thread = 3, j = 7 ms
 */</span>
 
-</code></pre>
-<h4 id="fix2-by-private-j"><a href="#fix2-by-private-j" class="headerlink" title="fix2 by private(j)"></a>fix2 by private(j)</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test4_fix2</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre><h4 id="fix2-by-private-j"><a href="#fix2-by-private-j" class="headerlink" title="fix2 by private(j)"></a>fix2 by private(j)</h4><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test4_fix2</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token keyword">int</span> i<span class="token punctuation">,</span>j<span class="token punctuation">;</span>
     <span class="token function">omp_set_num_threads</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1141,8 +554,7 @@ Worker Thread = 3, j = 6 ms
 Worker Thread = 3, j = 7 ms
 */</span>
 
-</code></pre>
-<h3 id="reduction-1"><a href="#reduction-1" class="headerlink" title="reduction"></a>reduction</h3><h4 id="error-case-1"><a href="#error-case-1" class="headerlink" title="error case"></a>error case</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test5_error</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre><h3 id="reduction-1"><a href="#reduction-1" class="headerlink" title="reduction"></a>reduction</h3><h4 id="error-case-1"><a href="#error-case-1" class="headerlink" title="error case"></a>error case</h4><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test5_error</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token keyword">int</span> array<span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">6</span><span class="token punctuation">,</span><span class="token number">7</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
 
@@ -1168,8 +580,7 @@ Worker Thread = 2, sum = 4 ms
 Worker Thread = 2, sum = 24 ms
 Main Thread = 0, sum = 24 ms
 */</span>
-</code></pre>
-<h4 id="reduction-sum"><a href="#reduction-sum" class="headerlink" title="reduction(+:sum)"></a>reduction(+:sum)</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test5_fix</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre><h4 id="reduction-sum"><a href="#reduction-sum" class="headerlink" title="reduction(+:sum)"></a>reduction(+:sum)</h4><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test5_fix</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token keyword">int</span> array<span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">6</span><span class="token punctuation">,</span><span class="token number">7</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
 
@@ -1201,8 +612,7 @@ Worker Thread = 2, sum = 4 ms
 Worker Thread = 2, sum = 9 ms
 Main Thread = 0, sum = 28 ms
 */</span>
-</code></pre>
-<h4 id="num-threads-1"><a href="#num-threads-1" class="headerlink" title="num_threads"></a>num_threads</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test6</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre><h4 id="num-threads-1"><a href="#num-threads-1" class="headerlink" title="num_threads"></a>num_threads</h4><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test6</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">// `num_threads(4)` same as `omp_set_num_threads(4)`</span>
     <span class="token macro property">#<span class="token directive keyword">pragma</span> omp parallel num_threads(4)</span>
@@ -1216,8 +626,7 @@ Hello, I am Thread 2
 Hello, I am Thread 3
 Hello, I am Thread 1
 */</span>
-</code></pre>
-<h3 id="schedule-1"><a href="#schedule-1" class="headerlink" title="schedule"></a>schedule</h3><h4 id="static-2"><a href="#static-2" class="headerlink" title="(static,2)"></a>(static,2)</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test7_1</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre><h3 id="schedule-1"><a href="#schedule-1" class="headerlink" title="schedule"></a>schedule</h3><h4 id="static-2"><a href="#static-2" class="headerlink" title="(static,2)"></a>(static,2)</h4><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test7_1</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token function">omp_set_num_threads</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token comment" spellcheck="true">// static, num_loop/num_threads</span>
@@ -1238,8 +647,7 @@ i = 0, I am Thread 0
 i = 1, I am Thread 0
 */</span>
 
-</code></pre>
-<h4 id="static-4"><a href="#static-4" class="headerlink" title="(static,4)"></a>(static,4)</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test7_2</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre><h4 id="static-4"><a href="#static-4" class="headerlink" title="(static,4)"></a>(static,4)</h4><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test7_2</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token function">omp_set_num_threads</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token comment" spellcheck="true">// static, num_loop/num_threads</span>
@@ -1259,8 +667,7 @@ i = 5, I am Thread 1
 i = 6, I am Thread 1
 i = 7, I am Thread 1
 */</span>
-</code></pre>
-<h4 id="dynamic-1"><a href="#dynamic-1" class="headerlink" title="(dynamic,1)"></a>(dynamic,1)</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test7_3</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre><h4 id="dynamic-1"><a href="#dynamic-1" class="headerlink" title="(dynamic,1)"></a>(dynamic,1)</h4><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test7_3</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token function">omp_set_num_threads</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token comment" spellcheck="true">// dynamic</span>
@@ -1281,8 +688,7 @@ i = 1, I am Thread 0
 i = 2, I am Thread 1
 */</span>
 
-</code></pre>
-<h4 id="dynamic-3"><a href="#dynamic-3" class="headerlink" title="(dynamic,3)"></a>(dynamic,3)</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test7_4</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre><h4 id="dynamic-3"><a href="#dynamic-3" class="headerlink" title="(dynamic,3)"></a>(dynamic,3)</h4><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">test7_4</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token function">omp_set_num_threads</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token comment" spellcheck="true">// dynamic</span>
@@ -1302,8 +708,7 @@ i = 3, I am Thread 1
 i = 4, I am Thread 1
 i = 5, I am Thread 1
 */</span>
-</code></pre>
-<h3 id="schedule-compare"><a href="#schedule-compare" class="headerlink" title="schedule compare"></a>schedule compare</h3><pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">define</span> NUM 100000000</span>
+</code></pre><h3 id="schedule-compare"><a href="#schedule-compare" class="headerlink" title="schedule compare"></a>schedule compare</h3><pre class="language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">define</span> NUM 100000000</span>
 
 <span class="token keyword">int</span> <span class="token function">isprime</span><span class="token punctuation">(</span> <span class="token keyword">int</span> x <span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
@@ -1327,49 +732,11 @@ i = 5, I am Thread 1
 
     <span class="token function">printf</span><span class="token punctuation">(</span> <span class="token string">"Number of primes numbers: %d"</span><span class="token punctuation">,</span> sum <span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre>
-<h4 id="no-schedule"><a href="#no-schedule" class="headerlink" title="no schedule"></a>no schedule</h4><pre><code>Number of primes numbers: 5761455./demo_openmp  151.64s user 0.04s system 582% cpu 26.048 total
+</code></pre><h4 id="no-schedule"><a href="#no-schedule" class="headerlink" title="no schedule"></a>no schedule</h4><pre><code>Number of primes numbers: 5761455./demo_openmp  151.64s user 0.04s system 582% cpu 26.048 total
 </code></pre><h4 id="schedule-static-1"><a href="#schedule-static-1" class="headerlink" title="schedule(static,1)"></a>schedule(static,1)</h4><pre><code>Number of primes numbers: 5761455./demo_openmp  111.13s user 0.00s system 399% cpu 27.799 total
 </code></pre><h4 id="schedule-dynamic-1"><a href="#schedule-dynamic-1" class="headerlink" title="schedule(dynamic,1)"></a>schedule(dynamic,1)</h4><pre><code>Number of primes numbers: 5761455./demo_openmp  167.22s user 0.02s system 791% cpu 21.135 total
 </code></pre><h4 id="schedule-dynamic-200"><a href="#schedule-dynamic-200" class="headerlink" title="schedule(dynamic,200)"></a>schedule(dynamic,200)</h4><pre><code>Number of primes numbers: 5761455./demo_openmp  165.96s user 0.02s system 791% cpu 20.981 total
-</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- kzl in-article ad -->
-<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-
-
-
-<h2 id="OpenCV-with-OpenMP"><a href="#OpenCV-with-OpenMP" class="headerlink" title="OpenCV with OpenMP"></a>OpenCV with OpenMP</h2><p>see <a href="http://answers.opencv.org/question/103701/how-opencv-use-openmp-thread-to-get-performance/" rel="noopener external nofollow noreferrer" target="_blank">how-opencv-use-openmp-thread-to-get-performance</a></p>
-<p>3 type OpenCV implementation</p>
-<ul>
-<li>sequential implementation: default (slowest)</li>
-<li>parallel implementation: OpenMP / TBB</li>
-<li>GPU implementation: CUDA(fastest) / OpenCL</li>
-</ul>
-<blockquote>
-<p>With CMake-gui, Building <code>OpenCV</code> with the <code>WITH_OPENMP</code> flag means that the internal functions will use <code>OpenMP</code> to parallelize some of the algorithms, like <code>cvCanny</code>, <code>cvSmooth</code> and <code>cvThreshold</code>.</p>
-</blockquote>
-<blockquote>
-<p>In OpenCV, an algorithm can have a <code>sequential (slowest) implementation</code>; a <code>parallel implementation</code> using <code>OpenMP</code> or <code>TBB</code>; and a <code>GPU implementation</code> using <code>OpenCL</code> or <code>CUDA</code>(fastest). You can decide with the <code>WITH_XXX</code> flags which version to use.</p>
-</blockquote>
-<blockquote>
-<p>Of course, not every algorithm can be parallelized.</p>
-</blockquote>
-<blockquote>
-<p>Now, if you want to parallelize your methods with OpenMP, you have to implement it yourself.</p>
-</blockquote>
-<h3 id="concepts"><a href="#concepts" class="headerlink" title="concepts"></a>concepts</h3><p><code>avoiding extra copying</code></p>
-<p>from <a href="https://stackoverflow.com/questions/9039449/improving-image-processing-speed?r=SearchResults" rel="noopener external nofollow noreferrer" target="_blank">improving-image-processing-speed</a></p>
-<blockquote>
-<p>There is one important thing about increasing speed in OpenCV not related to processor nor algorithm and it is <strong>avoiding extra copying</strong> when dealing with matrices. I will give you an example taken from the documentation:</p>
-</blockquote>
-<blockquote>
-<p>“…by constructing a header for a part of another matrix. It can be a single row, single column, several rows, several columns, rectangular region in the matrix (called a minor in algebra) or a diagonal. Such operations are also O(1), because the new header will reference the same data. You can actually modify a part of the matrix using this feature, e.g.”</p>
-</blockquote>
-<h3 id="parallel-for-1"><a href="#parallel-for-1" class="headerlink" title="parallel for"></a>parallel for</h3><pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"opencv2/highgui/highgui.hpp"</span></span>
+</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h2 id="OpenCV-with-OpenMP"><a href="#OpenCV-with-OpenMP" class="headerlink" title="OpenCV with OpenMP"></a>OpenCV with OpenMP</h2><p>see <a href="http://answers.opencv.org/question/103701/how-opencv-use-openmp-thread-to-get-performance/" rel="noopener external nofollow noreferrer" target="_blank">how-opencv-use-openmp-thread-to-get-performance</a></p><p>3 type OpenCV implementation</p><ul><li>sequential implementation: default (slowest)</li><li>parallel implementation: OpenMP / TBB</li><li>GPU implementation: CUDA(fastest) / OpenCL</li></ul><blockquote><p>With CMake-gui, Building <code>OpenCV</code> with the <code>WITH_OPENMP</code> flag means that the internal functions will use <code>OpenMP</code> to parallelize some of the algorithms, like <code>cvCanny</code>, <code>cvSmooth</code> and <code>cvThreshold</code>.</p></blockquote><blockquote><p>In OpenCV, an algorithm can have a <code>sequential (slowest) implementation</code>; a <code>parallel implementation</code> using <code>OpenMP</code> or <code>TBB</code>; and a <code>GPU implementation</code> using <code>OpenCL</code> or <code>CUDA</code>(fastest). You can decide with the <code>WITH_XXX</code> flags which version to use.</p></blockquote><blockquote><p>Of course, not every algorithm can be parallelized.</p></blockquote><blockquote><p>Now, if you want to parallelize your methods with OpenMP, you have to implement it yourself.</p></blockquote><h3 id="concepts"><a href="#concepts" class="headerlink" title="concepts"></a>concepts</h3><p><code>avoiding extra copying</code></p><p>from <a href="https://stackoverflow.com/questions/9039449/improving-image-processing-speed?r=SearchResults" rel="noopener external nofollow noreferrer" target="_blank">improving-image-processing-speed</a></p><blockquote><p>There is one important thing about increasing speed in OpenCV not related to processor nor algorithm and it is <strong>avoiding extra copying</strong> when dealing with matrices. I will give you an example taken from the documentation:</p></blockquote><blockquote><p>“…by constructing a header for a part of another matrix. It can be a single row, single column, several rows, several columns, rectangular region in the matrix (called a minor in algebra) or a diagonal. Such operations are also O(1), because the new header will reference the same data. You can actually modify a part of the matrix using this feature, e.g.”</p></blockquote><h3 id="parallel-for-1"><a href="#parallel-for-1" class="headerlink" title="parallel for"></a>parallel for</h3><pre class="language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"opencv2/highgui/highgui.hpp"</span></span>
 <span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"opencv2/features2d/features2d.hpp"</span></span>
 <span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
 <span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;vector></span></span>
@@ -1409,8 +776,7 @@ i = 5, I am Thread 1
     cv<span class="token operator">::</span><span class="token function">imshow</span><span class="token punctuation">(</span> <span class="token string">"Matches"</span><span class="token punctuation">,</span> img_matches <span class="token punctuation">)</span><span class="token punctuation">;</span>
     cv<span class="token operator">::</span><span class="token function">waitKey</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre>
-<h3 id="parallel-sections-2"><a href="#parallel-sections-2" class="headerlink" title="parallel sections"></a>parallel sections</h3><pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">pragma</span> omp parallel sections</span>
+</code></pre><h3 id="parallel-sections-2"><a href="#parallel-sections-2" class="headerlink" title="parallel sections"></a>parallel sections</h3><pre class="language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">pragma</span> omp parallel sections</span>
     <span class="token punctuation">{</span>
 <span class="token macro property">#<span class="token directive keyword">pragma</span> omp section</span>
         <span class="token punctuation">{</span>
@@ -1430,401 +796,14 @@ i = 5, I am Thread 1
             std<span class="token operator">::</span>cout<span class="token operator">&lt;&lt;</span><span class="token string">"find "</span><span class="token operator">&lt;&lt;</span>keypoints1<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&lt;&lt;</span><span class="token string">"keypoints in im1"</span><span class="token operator">&lt;&lt;</span>std<span class="token operator">::</span>endl<span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
-</code></pre>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
-<li><a href="https://blog.csdn.net/baimafujinji/article/details/52444739" rel="noopener external nofollow noreferrer" target="_blank">openmp</a></li>
-<li><a href="https://blog.csdn.net/baimafujinji/article/details/52769930" rel="noopener external nofollow noreferrer" target="_blank">openmp + MPI</a></li>
-<li><a href="https://www.cnblogs.com/ospider/p/5265975.html" rel="noopener external nofollow noreferrer" target="_blank">openmp</a></li>
-<li><a href="http://answers.opencv.org/question/103701/how-opencv-use-openmp-thread-to-get-performance/" rel="noopener external nofollow noreferrer" target="_blank">how-opencv-use-openmp-thread-to-get-performance</a></li>
-<li><a href="https://blog.csdn.net/wangzhebupt/article/details/22743515" rel="noopener external nofollow noreferrer" target="_blank">csdn opencv with openmp for+section </a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/51173703" rel="noopener external nofollow noreferrer" target="_blank">openmp functions</a></li>
-<li><a href="https://stackoverflow.com/questions/9039449/improving-image-processing-speed?r=SearchResults" rel="noopener external nofollow noreferrer" target="_blank">improving-image-processing-speed</a></li>
-<li><a href="https://stackoverflow.com/questions/6358375/openmp-are-local-variables-automatically-private" rel="noopener external nofollow noreferrer" target="_blank">openmp-are-local-variables-automatically-private</a></li>
-<li><a href="https://stackoverflow.com/questions/10850155/whats-the-difference-between-static-and-dynamic-schedule-in-openmp" rel="noopener external nofollow noreferrer" target="_blank">whats-the-difference-between-static-and-dynamic-schedule-in-openmp</a></li>
-<li><a href="https://software.intel.com/en-us/vtune-amplifier-cookbook-openmp-imbalance-and-scheduling-overhead" rel="noopener external nofollow noreferrer" target="_blank">dynamic openmp with isprime</a></li>
-</ul>
-<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
-<li>20190403: created.</li>
-</ul>
-
-            </div>
-            <hr/>
-
-            
-
-    <div class="reprint" id="reprint-statement">
-        
-            <div class="reprint__author">
-                <span class="reprint-meta" style="font-weight: bold;">
-                    <i class="fas fa-user">
-                        Author:
-                    </i>
-                </span>
-                <span class="reprint-info">
-                    <a href="https://kezunlin.me" rel="external nofollow noreferrer">kezunlin</a>
-                </span>
-            </div>
-            <div class="reprint__type">
-                <span class="reprint-meta" style="font-weight: bold;">
-                    <i class="fas fa-link">
-                        Link:
-                    </i>
-                </span>
-                <span class="reprint-info">
-                    <a href="https://kezunlin.me/post/7a6ba82e/">https://kezunlin.me/post/7a6ba82e/</a>
-                </span>
-            </div>
-            <div class="reprint__notice">
-                <span class="reprint-meta" style="font-weight: bold;">
-                    <i class="fas fa-copyright">
-                        Reprint policy:
-                    </i>
-                </span>
-                <span class="reprint-info">
-                    All articles in this blog are used except for special statements
-                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
-                    reprint polocy. If reproduced, please indicate source
-                    <a href="https://kezunlin.me" target="_blank">kezunlin</a>
-                    !
-                </span>
-            </div>
-        
-    </div>
-
-    <script async defer>
-      document.addEventListener("copy", function (e) {
+</code></pre><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul><li><a href="https://blog.csdn.net/baimafujinji/article/details/52444739" rel="noopener external nofollow noreferrer" target="_blank">openmp</a></li><li><a href="https://blog.csdn.net/baimafujinji/article/details/52769930" rel="noopener external nofollow noreferrer" target="_blank">openmp + MPI</a></li><li><a href="https://www.cnblogs.com/ospider/p/5265975.html" rel="noopener external nofollow noreferrer" target="_blank">openmp</a></li><li><a href="http://answers.opencv.org/question/103701/how-opencv-use-openmp-thread-to-get-performance/" rel="noopener external nofollow noreferrer" target="_blank">how-opencv-use-openmp-thread-to-get-performance</a></li><li><a href="https://blog.csdn.net/wangzhebupt/article/details/22743515" rel="noopener external nofollow noreferrer" target="_blank">csdn opencv with openmp for+section</a></li><li><a href="https://zhuanlan.zhihu.com/p/51173703" rel="noopener external nofollow noreferrer" target="_blank">openmp functions</a></li><li><a href="https://stackoverflow.com/questions/9039449/improving-image-processing-speed?r=SearchResults" rel="noopener external nofollow noreferrer" target="_blank">improving-image-processing-speed</a></li><li><a href="https://stackoverflow.com/questions/6358375/openmp-are-local-variables-automatically-private" rel="noopener external nofollow noreferrer" target="_blank">openmp-are-local-variables-automatically-private</a></li><li><a href="https://stackoverflow.com/questions/10850155/whats-the-difference-between-static-and-dynamic-schedule-in-openmp" rel="noopener external nofollow noreferrer" target="_blank">whats-the-difference-between-static-and-dynamic-schedule-in-openmp</a></li><li><a href="https://software.intel.com/en-us/vtune-amplifier-cookbook-openmp-imbalance-and-scheduling-overhead" rel="noopener external nofollow noreferrer" target="_blank">dynamic openmp with isprime</a></li></ul><h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul><li>20190403: created.</li></ul></div><hr><div class="reprint" id="reprint-statement"><div class="reprint__author"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-user">Author: </i></span><span class="reprint-info"><a href="https://kezunlin.me" rel="external nofollow noreferrer">kezunlin</a></span></div><div class="reprint__type"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-link">Link: </i></span><span class="reprint-info"><a href="https://kezunlin.me/post/7a6ba82e/">https://kezunlin.me/post/7a6ba82e/</a></span></div><div class="reprint__notice"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-copyright">Reprint policy: </i></span><span class="reprint-info">All articles in this blog are used except for special statements <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a> reprint polocy. If reproduced, please indicate source <a href="https://kezunlin.me" target="_blank">kezunlin</a> !</span></div></div><script async defer>document.addEventListener("copy", function (e) {
         let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
         M.toast({html: toastHTML})
       });
 
       function navToReprintStatement() {
         $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
-      }
-    </script>
-
-
-
-            <div class="tag_share" style="display: block;">
-                <div class="post-meta__tag-list" style="display: inline-block;">
-                    
-                        <div class="article-tag">
-                            
-                                <a href="/tags/opencv/">
-                                    <span class="chip bg-color">opencv</span>
-                                </a>
-                            
-                                <a href="/tags/openmp/">
-                                    <span class="chip bg-color">openmp</span>
-                                </a>
-                            
-                        </div>
-                    
-                </div>
-            </div>
-            
-                <style>
-    #reward {
-        margin: 40px 0;
-        text-align: center;
-    }
-
-    #reward .reward-link {
-        font-size: 1.88rem;
-    }
-
-    #reward .btn-floating:hover {
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    #rewardModal {
-        width: 320px;
-        height: 350px;
-    }
-
-    #rewardModal .reward-title {
-        margin: 15px auto;
-        padding-bottom: 5px;
-    }
-
-    #rewardModal .modal-content {
-        padding: 10px;
-    }
-
-    #rewardModal .close {
-        position: absolute;
-        right: 15px;
-        top: 15px;
-        color: rgba(0, 0, 0, 0.5);
-        font-size: 1.3rem;
-        line-height: 20px;
-        cursor: pointer;
-    }
-
-    #rewardModal .close:hover {
-        color: #ef5350;
-        transform: scale(1.3);
-        -moz-transform:scale(1.3);
-        -webkit-transform:scale(1.3);
-        -o-transform:scale(1.3);
-    }
-
-    #rewardModal .reward-tabs {
-        margin: 0 auto;
-        width: 210px;
-    }
-
-    .reward-tabs .tabs {
-        height: 38px;
-        margin: 10px auto;
-        padding-left: 0;
-    }
-
-    .reward-content ul {
-        padding-left: 0 !important;
-    }
-
-    .reward-tabs .tabs .tab {
-        height: 38px;
-        line-height: 38px;
-    }
-
-    .reward-tabs .tab a {
-        color: #fff;
-        background-color: #ccc;
-    }
-
-    .reward-tabs .tab a:hover {
-        background-color: #ccc;
-        color: #fff;
-    }
-
-    .reward-tabs .wechat-tab .active {
-        color: #fff !important;
-        background-color: #22AB38 !important;
-    }
-
-    .reward-tabs .alipay-tab .active {
-        color: #fff !important;
-        background-color: #019FE8 !important;
-    }
-
-    .reward-tabs .reward-img {
-        width: 210px;
-        height: 210px;
-    }
-</style>
-
-<div id="reward">
-    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
-
-    <!-- Modal Structure -->
-    <div id="rewardModal" class="modal">
-        <div class="modal-content">
-            <a class="close modal-close"><i class="fas fa-times"></i></a>
-            <h4 class="reward-title">你的赏识是我前进的动力</h4>
-            <div class="reward-content">
-                <div class="reward-tabs">
-                    <ul class="tabs row">
-                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
-                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
-                    </ul>
-                    <div id="alipay">
-                        <img src="/medias/reward/alipay.jpeg" class="reward-img" alt="支付宝打赏二维码">
-                    </div>
-                    <div id="wechat">
-                        <img src="/medias/reward/wechat.jpeg" class="reward-img" alt="微信打赏二维码">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    $(function () {
-        $('.tabs').tabs();
-    });
-</script>
-            
-
-            <!-- hack -->
-            
-                <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
-
-<div id="article-share">
-    
-    
-    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-    <script src="/libs/share/js/social-share.min.js"></script>
-    
-
-    
-
-</div>
-
-            
-
-            <!-- hack -->
-            <!-- Google AdSense -->
-
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <!-- kzl in-article ad -->
-     <ins class="adsbygoogle"
-          style="display:block; text-align:center;"
-          data-ad-layout="in-article"
-          data-ad-format="fluid"
-          data-ad-client="ca-pub-5653382914441020"
-          data-ad-slot="7925631830"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-
-        </div>
-    </div>
-
-    <!-- hack -->
-    
-
-<article id="prenext-posts" class="prev-next articles">
-    <div class="row article-row">
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
-            <div class="card">
-                <a href="/post/d5c57f56/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="python tkinter tutorial">
-                        
-                        <span class="card-title">python tkinter tutorial</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            how to use python tkinter to create gui program
-                        
-                    </div>
-                    <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2019-04-11
-                        </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/python/" class="post-category">
-                                    python
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/gui/">
-                        <span class="chip bg-color">gui</span>
-                    </a>
-                    
-                    <a href="/tags/tkinter/">
-                        <span class="chip bg-color">tkinter</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                Next&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/post/7813e5f8/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="install and use nvidia management library (nvml)">
-                        
-                        <span class="card-title">install and use nvidia management library (nvml)</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            how to install and use nvidia management library (nvml)
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-03-21
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/python/" class="post-category">
-                                    python
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/nvml/">
-                        <span class="chip bg-color">nvml</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-    </div>
-</article>
-
-
-    
-        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
-<link rel="stylesheet" href="/css/my-gitalk.css">
-
-<div class="card gitalk-card" data-aos="fade-up">
-    <!-- hack -->
-    <!-- Google AdSense -->
-
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <!-- kzl display ad -->
-     <ins class="adsbygoogle"
-          style="display:block"
-          data-ad-client="ca-pub-5653382914441020"
-          data-ad-slot="7570408610"
-          data-ad-format="auto"
-          data-full-width-responsive="true"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-
-
-
-
-    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
-        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
-        <span>评论</span>
-    </div>
-    <div id="gitalk-container" class="card-content"></div>
-</div>
-
-<script src="/libs/gitalk/gitalk.min.js"></script>
-<script>
-    let gitalk = new Gitalk({
+      }</script><div class="tag_share" style="display:block"><div class="post-meta__tag-list" style="display:inline-block"><div class="article-tag"><a href="/tags/opencv/"><span class="chip bg-color">opencv</span> </a><a href="/tags/openmp/"><span class="chip bg-color">openmp</span></a></div></div></div><style>#reward{margin:40px 0;text-align:center}#reward .reward-link{font-size:1.88rem}#reward .btn-floating:hover{box-shadow:0 6px 12px rgba(0,0,0,.2),0 5px 15px rgba(0,0,0,.2)}#rewardModal{width:320px;height:350px}#rewardModal .reward-title{margin:15px auto;padding-bottom:5px}#rewardModal .modal-content{padding:10px}#rewardModal .close{position:absolute;right:15px;top:15px;color:rgba(0,0,0,.5);font-size:1.3rem;line-height:20px;cursor:pointer}#rewardModal .close:hover{color:#ef5350;transform:scale(1.3);-moz-transform:scale(1.3);-webkit-transform:scale(1.3);-o-transform:scale(1.3)}#rewardModal .reward-tabs{margin:0 auto;width:210px}.reward-tabs .tabs{height:38px;margin:10px auto;padding-left:0}.reward-content ul{padding-left:0!important}.reward-tabs .tabs .tab{height:38px;line-height:38px}.reward-tabs .tab a{color:#fff;background-color:#ccc}.reward-tabs .tab a:hover{background-color:#ccc;color:#fff}.reward-tabs .wechat-tab .active{color:#fff!important;background-color:#22AB38!important}.reward-tabs .alipay-tab .active{color:#fff!important;background-color:#019FE8!important}.reward-tabs .reward-img{width:210px;height:210px}</style><div id="reward"><a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a><div id="rewardModal" class="modal"><div class="modal-content"><a class="close modal-close"><i class="fas fa-times"></i></a><h4 class="reward-title">你的赏识是我前进的动力</h4><div class="reward-content"><div class="reward-tabs"><ul class="tabs row"><li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li><li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li></ul><div id="alipay"><img src="/medias/reward/alipay.jpeg" class="reward-img" alt="支付宝打赏二维码"></div><div id="wechat"><img src="/medias/reward/wechat.jpeg" class="reward-img" alt="微信打赏二维码"></div></div></div></div></div></div><script>$(function(){$(".tabs").tabs()})</script><link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css"><div id="article-share"><div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div><script src="/libs/share/js/social-share.min.js"></script></div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div></div><article id="prenext-posts" class="prev-next articles"><div class="row article-row"><div class="article col s12 m6" data-aos="fade-up"><div class="article-badge left-badge text-color"><i class="fas fa-chevron-left"></i>&nbsp;Previous</div><div class="card"><a href="/post/d5c57f56/"><div class="card-image"><img src="/medias/featureimages/21.jpg" class="responsive-img" alt="python tkinter tutorial"> <span class="card-title">python tkinter tutorial</span></div></a><div class="card-content article-content"><div class="summary block-with-text">how to use python tkinter to create gui program</div><div class="publish-info"><span class="publish-date"><i class="far fa-clock fa-fw icon-date"></i>2019-04-11 </span><span class="publish-author"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/python/" class="post-category">python</a></span></div></div><div class="card-action article-tags"><a href="/tags/gui/"><span class="chip bg-color">gui</span> </a><a href="/tags/tkinter/"><span class="chip bg-color">tkinter</span></a></div></div></div><div class="article col s12 m6" data-aos="fade-up"><div class="article-badge right-badge text-color">Next&nbsp;<i class="fas fa-chevron-right"></i></div><div class="card"><a href="/post/7813e5f8/"><div class="card-image"><img src="/medias/featureimages/22.jpg" class="responsive-img" alt="install and use nvidia management library (nvml)"> <span class="card-title">install and use nvidia management library (nvml)</span></div></a><div class="card-content article-content"><div class="summary block-with-text">how to install and use nvidia management library (nvml)</div><div class="publish-info"><span class="publish-date"><i class="far fa-clock fa-fw icon-date"></i>2019-03-21 </span><span class="publish-author"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/python/" class="post-category">python</a></span></div></div><div class="card-action article-tags"><a href="/tags/nvml/"><span class="chip bg-color">nvml</span></a></div></div></div></div></article><link rel="stylesheet" href="/libs/gitalk/gitalk.css"><link rel="stylesheet" href="/css/my-gitalk.css"><div class="card gitalk-card" data-aos="fade-up"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7570408610" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><div class="comment_headling" style="font-size:20px;font-weight:700;position:relative;left:20px;top:15px;padding-bottom:5px"><i class="fas fa-comments fa-fw" aria-hidden="true"></i> <span>评论</span></div><div id="gitalk-container" class="card-content"></div></div><script src="/libs/gitalk/gitalk.min.js"></script><script>let gitalk = new Gitalk({
         clientID: '4d1e3d463455e6bc7eba',
         clientSecret: '4af023d85b66c4161a83b3f9297036e84c9ba57f',
         repo: 'gitalk',
@@ -1834,79 +813,7 @@ i = 5, I am Thread 1
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
-    gitalk.render('gitalk-container');
-</script>
-    
-
-    
-
-    
-
-    
-
-    
-</div>
-
-
-
-
-
-<!-- 代码语言 -->
-
-    
-<!-- 代码块复制 -->
-
-
-<!-- 代码块收缩 -->
-
-<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
-
-
-<!-- 代码块折行 -->
-
-<style type="text/css">
-code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
-</style>
-
-    </div>
-    <div id="toc-aside" class="col l3 hide-on-med-and-down">
-        <div class="toc-widget">
-            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
-            <div id="toc-content"></div>
-
-            <!-- hack -->
-            <!-- Google AdSense -->
-
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <!-- kzl display ad -->
-     <ins class="adsbygoogle"
-          style="display:block"
-          data-ad-client="ca-pub-5653382914441020"
-          data-ad-slot="7570408610"
-          data-ad-format="auto"
-          data-full-width-responsive="true"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-
-
-
-        </div>
-    </div>
-</div>
-
-<!-- TOC 悬浮按钮. -->
-
-<div id="floating-toc-btn" class="hide-on-med-and-down">
-    <a class="btn-floating btn-large bg-color">
-        <i class="fas fa-list-ul"></i>
-    </a>
-</div>
-
-
-<script src="/libs/tocbot/tocbot.min.js"></script>
-<script>
-    $(function () {
+    gitalk.render('gitalk-container');</script></div><script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script><style type="text/css">code[class*=language-],pre[class*=language-]{white-space:pre!important}</style></div><div id="toc-aside" class="col l3 hide-on-med-and-down"><div class="toc-widget"><div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div><div id="toc-content"></div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7570408610" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div></div></div><div id="floating-toc-btn" class="hide-on-med-and-down"><a class="btn-floating btn-large bg-color"><i class="fas fa-list-ul"></i></a></div><script src="/libs/tocbot/tocbot.min.js"></script><script>$(function () {
         tocbot.init({
             tocSelector: '#toc-content',
             contentSelector: '#articleContent',
@@ -1977,208 +884,4 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             fixPostCardWidth('artDetail', 'prenext-posts');
         });
         
-    });
-</script>
-
-    
-
-</main>
-
-
-
-    <footer class="page-footer bg-color">
-    <div class="container row center-align">
-        <div class="col s12 m8 l8 copy-right">
-            Copyright&nbsp;&copy;
-            <span id="year">年份</span>
-            <a href="https://kezunlin.me" target="_blank">kezunlin</a>
-            <br>
-            
-            
-            
-            
-            
-            
-            <span id="busuanzi_container_site_pv">
-                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
-                    class="white-color"></span>&nbsp;次
-            </span>
-            
-            
-            <span id="busuanzi_container_site_uv">
-                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
-                    class="white-color"></span>&nbsp;人
-            </span>
-            
-            <br>
-            
-            <span id="sitetime">载入运行时间...</span>
-            <script>
-                function siteTime() {
-                    window.setTimeout("siteTime()", 1000);
-                    var seconds = 1000;
-                    var minutes = seconds * 60;
-                    var hours = minutes * 60;
-                    var days = hours * 24;
-                    var years = days * 365;
-                    var today = new Date();
-                    var startYear = "2017";
-                    var startMonth = "11";
-                    var startDate = "11";
-                    var startHour = "0";
-                    var startMinute = "0";
-                    var startSecond = "0";
-                    var todayYear = today.getFullYear();
-                    var todayMonth = today.getMonth() + 1;
-                    var todayDate = today.getDate();
-                    var todayHour = today.getHours();
-                    var todayMinute = today.getMinutes();
-                    var todaySecond = today.getSeconds();
-                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
-                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
-                    var diff = t2 - t1;
-                    var diffYears = Math.floor(diff / years);
-                    var diffDays = Math.floor((diff / days) - diffYears * 365);
-                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
-                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
-                        minutes);
-                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
-                        diffMinutes * minutes) / seconds);
-                    if (startYear == todayYear) {
-                        document.getElementById("year").innerHTML = todayYear;
-                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
-                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
-                    } else {
-                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
-                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
-                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
-                    }
-                }
-                setInterval(siteTime, 1000);
-            </script>
-            
-            <br>
-            
-        </div>
-        <div class="col s12 m4 l4 social-link social-statis">
-    <a href="https://github.com/kezunlin" rel="external nofollow noreferrer" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
-        <i class="fab fa-github"></i>
-    </a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
-        <i class="fas fa-rss"></i>
-    </a>
-
-</div>
-    </div>
-</footer>
-
-<div class="progress-bar"></div>
-
-
-    <!-- 搜索遮罩框 -->
-<div id="searchModal" class="modal">
-    <div class="modal-content">
-        <div class="search-header">
-            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
-            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
-                   class="search-input">
-        </div>
-        <div id="searchResult"></div>
-    </div>
-</div>
-
-<script src="/js/search.js"></script>
-<script type="text/javascript">
-$(function () {
-    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
-});
-</script>
-    <!-- 回到顶部按钮 -->
-<div id="backTop" class="top-scroll">
-    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
-        <i class="fas fa-arrow-up"></i>
-    </a>
-</div>
-
-
-    <script src="/libs/materialize/materialize.min.js"></script>
-    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="/libs/aos/aos.js"></script>
-    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="/js/matery.js"></script>
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-
-
-<!-- 
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-111858944-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-        dataLayer.push(arguments);
-    }
-
-    gtag('js', new Date());
-    gtag('config', 'UA-111858944-1');
-</script>
--->
-
-<script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-    ga('create', 'UA-111858944-1', 'auto');
-    ga('send', 'pageview');
-</script>
-
-
-    <!-- hack -->
-    <!-- Google AdSense header-->
-
-     <script data-ad-client="ca-pub-5653382914441020" 
-          async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
-     </script>
-
-    <!-- Baidu Analytics -->
-
-    <!-- Baidu Push -->
-
-    
-    
-    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-    
-    <script src="/libs/instantpage/instantpage.js" type="module"></script>
-    
-
-</body>
-
-</html>
+    });</script></main><footer class="page-footer bg-color"><div class="container row center-align"><div class="col s12 m8 l8 copy-right">Copyright&nbsp;&copy; <span id="year">年份</span> <a href="https://kezunlin.me" target="_blank">kezunlin</a><br><span id="busuanzi_container_site_pv">|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv" class="white-color"></span>&nbsp;次 </span><span id="busuanzi_container_site_uv">|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv" class="white-color"></span>&nbsp;人</span><br><span id="sitetime">载入运行时间...</span><script>function siteTime(){window.setTimeout("siteTime()",1e3);var e=1e3,t=60*e,n=60*t,o=24*n,i=365*o,r=new Date,a="2017",m="11",l="11",M="0",d="0",g="0",s=r.getFullYear(),T=r.getMonth()+1,u=r.getDate(),c=r.getHours(),f=r.getMinutes(),h=r.getSeconds(),y=Date.UTC(a,m,l,M,d,g),H=Date.UTC(s,T,u,c,f,h),I=H-y,B=Math.floor(I/i),D=Math.floor(I/o-365*B),E=Math.floor((I-(365*B+D)*o)/n),L=Math.floor((I-(365*B+D)*o-E*n)/t),w=Math.floor((I-(365*B+D)*o-E*n-L*t)/e);a==s?(document.getElementById("year").innerHTML=s,document.getElementById("sitetime").innerHTML="本站已安全运行 "+D+" 天 "+E+" 小时 "+L+" 分钟 "+w+" 秒"):(document.getElementById("year").innerHTML=a+" - "+s,document.getElementById("sitetime").innerHTML="本站已安全运行 "+B+" 年 "+D+" 天 "+E+" 小时 "+L+" 分钟 "+w+" 秒")}setInterval(siteTime,1e3)</script><br></div><div class="col s12 m4 l4 social-link social-statis"><a href="https://github.com/kezunlin" rel="external nofollow noreferrer" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50"><i class="fab fa-github"></i> </a><a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50"><i class="fas fa-rss"></i></a></div></div></footer><div class="progress-bar"></div><div id="searchModal" class="modal"><div class="modal-content"><div class="search-header"><span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span> <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword" class="search-input"></div><div id="searchResult"></div></div></div><script src="/js/search.js"></script><script type="text/javascript">$(function(){searchFunc("/search.xml","searchInput","searchResult")})</script><div id="backTop" class="top-scroll"><a class="btn-floating btn-large waves-effect waves-light" href="#!"><i class="fas fa-arrow-up"></i></a></div><script src="/libs/materialize/materialize.min.js"></script><script src="/libs/masonry/masonry.pkgd.min.js"></script><script src="/libs/aos/aos.js"></script><script src="/libs/scrollprogress/scrollProgress.min.js"></script><script src="/libs/lightGallery/js/lightgallery-all.min.js"></script><script src="/js/matery.js"></script><script>!function(e,t,a,n,c,o,s){e.GoogleAnalyticsObject=c,e[c]=e[c]||function(){(e[c].q=e[c].q||[]).push(arguments)},e[c].l=1*new Date,o=t.createElement(a),s=t.getElementsByTagName(a)[0],o.async=1,o.src=n,s.parentNode.insertBefore(o,s)}(window,document,"script","https://www.google-analytics.com/analytics.js","ga"),ga("create","UA-111858944-1","auto"),ga("send","pageview")</script><script data-ad-client="ca-pub-5653382914441020" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script async src="/libs/others/busuanzi.pure.mini.js"></script><script src="/libs/instantpage/instantpage.js" type="module"></script></body></html><!-- rebuild by neat -->

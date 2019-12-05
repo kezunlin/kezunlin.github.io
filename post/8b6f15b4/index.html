@@ -1,551 +1,58 @@
-<!DOCTYPE HTML>
-<html lang="en">
-
-
-<head><meta name="generator" content="Hexo 3.9.0">
-    <meta charset="utf-8">
-    <meta name="keywords" content="how to use linux xargs command, C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog">
-    <meta name="description" content="Guideparam input &amp;amp;&amp;amp; stdinlinux命令可以从两个地方读取要处理的内容
+<!-- build time:Thu Dec 05 2019 16:31:38 GMT+0800 (CST) --><!DOCTYPE HTML><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta name="keywords" content="how to use linux xargs command, C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog"><meta name="description" content="Guideparam input &amp;amp;&amp;amp; stdinlinux命令可以从两个地方读取要处理的内容
 
 通过命令行参数输入,通过main函数的argc,argv获取
 标准输入stdin,通过scanf或者cin获取
 
-然后产生输出">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="renderer" content="webkit|ie-stand|ie-comp">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>how to use linux xargs command | C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog</title>
-    <link rel="icon" type="image/jpeg" href="/favicon.jpg">
-
-    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
-    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="/css/my.css">
-    
-    <script src="/libs/jquery/jquery.min.js"></script>
-    
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
-
-
-<body>
-    <header class="navbar-fixed">
-    <nav id="headNav" class="bg-color nav-transparent">
-        <div id="navContainer" class="nav-wrapper container">
-            <div class="brand-logo">
-                <a href="/" class="waves-effect waves-light">
-                    
-                    <img src="/medias/logo.jpg" class="logo-img" alt="LOGO">
-                    
-                    <span class="logo-span">KeZunLin</span>
-                </a>
-            </div>
-            
-
-<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
-<ul class="right nav-menu">
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/" class="waves-effect waves-light">
-      
-      <i class="fas fa-home" style="zoom: 0.6;"></i>
-      
-      <span>Index</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/tags" class="waves-effect waves-light">
-      
-      <i class="fas fa-tags" style="zoom: 0.6;"></i>
-      
-      <span>Tags</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/categories" class="waves-effect waves-light">
-      
-      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
-      
-      <span>Categories</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/archives" class="waves-effect waves-light">
-      
-      <i class="fas fa-archive" style="zoom: 0.6;"></i>
-      
-      <span>Archives</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/about" class="waves-effect waves-light">
-      
-      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
-      
-      <span>About</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/friends" class="waves-effect waves-light">
-      
-      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
-      
-      <span>Friends</span>
-    </a>
-    
-  </li>
-  
-  <li>
-    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
-      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
-    </a>
-  </li>
-</ul>
-
-<div id="mobile-nav" class="side-nav sidenav">
-
-    <div class="mobile-head bg-color">
-        
-        <img src="/medias/logo.jpg" class="logo-img circle responsive-img">
-        
-        <div class="logo-name">KeZunLin</div>
-        <div class="logo-desc">
-            
-            OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle.
-            
-        </div>
-    </div>
-
-    
-
-    <ul class="menu-list mobile-menu-list">
-        
-        <li class="m-nav-item">
-	  
-		<a href="/" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-home"></i>
-			
-			Index
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/tags" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-tags"></i>
-			
-			Tags
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/categories" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-bookmark"></i>
-			
-			Categories
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/archives" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-archive"></i>
-			
-			Archives
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/about" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-user-circle"></i>
-			
-			About
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/friends" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-address-book"></i>
-			
-			Friends
-		</a>
-          
-        </li>
-        
-        
-    </ul>
-</div>
-
-        </div>
-
-        
-    </nav>
-
-</header>
-
-    
-
-
-
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/18.jpg')">
-    <div class="container" style="right: 0px;left: 0px;">
-        <div class="row">
-            <div class="col s12 m12 l12">
-                <div class="brand">
-                    <div class="description center-align post-title">
-                        how to use linux xargs command
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-<main class="post-container content">
-
-    
-    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
-<style>
-    #articleContent h1::before,
-    #articleContent h2::before,
-    #articleContent h3::before,
-    #articleContent h4::before,
-    #articleContent h5::before,
-    #articleContent h6::before {
-        display: block;
-        content: " ";
-        height: 100px;
-        margin-top: -100px;
-        visibility: hidden;
-    }
-
-    #articleContent :focus {
-        outline: none;
-    }
-
-    .toc-fixed {
-        position: fixed;
-        top: 64px;
-    }
-
-    .toc-widget {
-        padding-left: 20px;
-    }
-
-    .toc-widget .toc-title {
-        margin: 35px 0 15px 0;
-        padding-left: 17px;
-        font-size: 1.5rem;
-        font-weight: bold;
-        line-height: 1.5rem;
-    }
-
-    .toc-widget ol {
-        padding: 0;
-        list-style: none;
-    }
-
-    #toc-content ol {
-        padding-left: 10px;
-    }
-
-    #toc-content ol li {
-        padding-left: 10px;
-    }
-
-    #toc-content .toc-link:hover {
-        color: #42b983;
-        font-weight: 700;
-        text-decoration: underline;
-    }
-
-    #toc-content .toc-link::before {
-        background-color: transparent;
-        max-height: 25px;
-    }
-
-    #toc-content .is-active-link {
-        color: #42b983;
-    }
-
-    #toc-content .is-active-link::before {
-        background-color: #42b983;
-    }
-
-    #floating-toc-btn {
-        position: fixed;
-        right: 15px;
-        bottom: 76px;
-        padding-top: 15px;
-        margin-bottom: 0;
-        z-index: 998;
-    }
-
-    #floating-toc-btn .btn-floating {
-        width: 48px;
-        height: 48px;
-    }
-
-    #floating-toc-btn .btn-floating i {
-        line-height: 48px;
-        font-size: 1.4rem;
-    }
-</style>
-<div class="row">
-    <div id="main-content" class="col s12 m12 l9">
-        <!-- 文章内容详情 -->
-<div id="artDetail">
-    <div class="card">
-        <div class="card-content article-info">
-            <div class="row tag-cate">
-                <div class="col s7">
-                    
-                    <div class="article-tag">
-                        
-                            <a href="/tags/xargs/">
-                                <span class="chip bg-color">xargs</span>
-                            </a>
-                        
-                    </div>
-                    
-                </div>
-                <div class="col s5 right-align">
-                    
-                    <div class="post-cate">
-                        <i class="fas fa-bookmark fa-fw icon-category"></i>
-                        
-                            <a href="/categories/linux/" class="post-category">
-                                linux
-                            </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-
-            <div class="post-info">
-                
-                <div class="post-date info-break-policy">
-                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2018-09-20
-                </div>
-                
-
-                
-
-                
-                <div class="info-break-policy">
-                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    1,825
-                </div>
-                
-
-                
-                <div class="info-break-policy">
-                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
-                    8 Min
-                </div>
-                
-				
-                
-                    <div id="busuanzi_container_page_pv" class="info-break-policy">
-                        <i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp;
-                        <span id="busuanzi_value_page_pv"></span>
-                    </div>
-				
-            </div>
-            
-        </div>
-        <hr class="clearfix">
-
-        <div class="card-content article-card-content">
-            <!-- hack -->
-            <!-- Google AdSense -->
-
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <!-- kzl in-article ad -->
-     <ins class="adsbygoogle"
-          style="display:block; text-align:center;"
-          data-ad-layout="in-article"
-          data-ad-format="fluid"
-          data-ad-client="ca-pub-5653382914441020"
-          data-ad-slot="7925631830"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-
-
-            <div id="articleContent">
-                <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="param-input-amp-amp-stdin"><a href="#param-input-amp-amp-stdin" class="headerlink" title="param input &amp;&amp; stdin"></a>param input &amp;&amp; stdin</h3><p>linux命令可以从两个地方读取要处理的内容</p>
-<ul>
-<li>通过命令行参数输入,通过main函数的argc,argv获取</li>
-<li>标准输入stdin,通过scanf或者cin获取</li>
-</ul>
-<p>然后产生输出</p>
-<ul>
-<li>标准输出stdout,通过printf或者cout输出</li>
-</ul>
-<p>命令类型</p>
-<ul>
-<li>部分命令可以接受参数输入＋标准输入stdin，比如cat、grep等。</li>
-<li>部分命令只接受参数输入，不接受标准输入stdin，比如kill、rm等。</li>
-</ul>
-<pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span><span class="token operator">*</span>argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+然后产生输出"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><meta name="renderer" content="webkit|ie-stand|ie-comp"><meta name="mobile-web-app-capable" content="yes"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><title>how to use linux xargs command | C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog</title><link rel="icon" type="image/jpeg" href="/favicon.jpg"><link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css"><link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css"><link rel="stylesheet" type="text/css" href="/libs/aos/aos.css"><link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css"><link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css"><link rel="stylesheet" type="text/css" href="/css/matery.css"><link rel="stylesheet" type="text/css" href="/css/my.css"><script src="/libs/jquery/jquery.min.js"></script><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head><body><header class="navbar-fixed"><nav id="headNav" class="bg-color nav-transparent"><div id="navContainer" class="nav-wrapper container"><div class="brand-logo"><a href="/" class="waves-effect waves-light"><img src="/medias/logo.jpg" class="logo-img" alt="LOGO"> <span class="logo-span">KeZunLin</span></a></div><a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a><ul class="right nav-menu"><li class="hide-on-med-and-down nav-item"><a href="/" class="waves-effect waves-light"><i class="fas fa-home" style="zoom:.6"></i> <span>Index</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/tags" class="waves-effect waves-light"><i class="fas fa-tags" style="zoom:.6"></i> <span>Tags</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/categories" class="waves-effect waves-light"><i class="fas fa-bookmark" style="zoom:.6"></i> <span>Categories</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/archives" class="waves-effect waves-light"><i class="fas fa-archive" style="zoom:.6"></i> <span>Archives</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/about" class="waves-effect waves-light"><i class="fas fa-user-circle" style="zoom:.6"></i> <span>About</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/friends" class="waves-effect waves-light"><i class="fas fa-address-book" style="zoom:.6"></i> <span>Friends</span></a></li><li><a href="#searchModal" class="modal-trigger waves-effect waves-light"><i id="searchIcon" class="fas fa-search" title="Search" style="zoom:.85"></i></a></li></ul><div id="mobile-nav" class="side-nav sidenav"><div class="mobile-head bg-color"><img src="/medias/logo.jpg" class="logo-img circle responsive-img"><div class="logo-name">KeZunLin</div><div class="logo-desc">OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle.</div></div><ul class="menu-list mobile-menu-list"><li class="m-nav-item"><a href="/" class="waves-effect waves-light"><i class="fa-fw fas fa-home"></i> Index</a></li><li class="m-nav-item"><a href="/tags" class="waves-effect waves-light"><i class="fa-fw fas fa-tags"></i> Tags</a></li><li class="m-nav-item"><a href="/categories" class="waves-effect waves-light"><i class="fa-fw fas fa-bookmark"></i> Categories</a></li><li class="m-nav-item"><a href="/archives" class="waves-effect waves-light"><i class="fa-fw fas fa-archive"></i> Archives</a></li><li class="m-nav-item"><a href="/about" class="waves-effect waves-light"><i class="fa-fw fas fa-user-circle"></i> About</a></li><li class="m-nav-item"><a href="/friends" class="waves-effect waves-light"><i class="fa-fw fas fa-address-book"></i> Friends</a></li></ul></div></div></nav></header><div class="bg-cover pd-header post-cover" style="background-image:url(/medias/featureimages/18.jpg)"><div class="container" style="right:0;left:0"><div class="row"><div class="col s12 m12 l12"><div class="brand"><div class="description center-align post-title">how to use linux xargs command</div></div></div></div></div></div><main class="post-container content"><link rel="stylesheet" href="/libs/tocbot/tocbot.css"><style>#articleContent h1::before,#articleContent h2::before,#articleContent h3::before,#articleContent h4::before,#articleContent h5::before,#articleContent h6::before{display:block;content:" ";height:100px;margin-top:-100px;visibility:hidden}#articleContent :focus{outline:0}.toc-fixed{position:fixed;top:64px}.toc-widget{padding-left:20px}.toc-widget .toc-title{margin:35px 0 15px 0;padding-left:17px;font-size:1.5rem;font-weight:700;line-height:1.5rem}.toc-widget ol{padding:0;list-style:none}#toc-content ol{padding-left:10px}#toc-content ol li{padding-left:10px}#toc-content .toc-link:hover{color:#42b983;font-weight:700;text-decoration:underline}#toc-content .toc-link::before{background-color:transparent;max-height:25px}#toc-content .is-active-link{color:#42b983}#toc-content .is-active-link::before{background-color:#42b983}#floating-toc-btn{position:fixed;right:15px;bottom:76px;padding-top:15px;margin-bottom:0;z-index:998}#floating-toc-btn .btn-floating{width:48px;height:48px}#floating-toc-btn .btn-floating i{line-height:48px;font-size:1.4rem}</style><div class="row"><div id="main-content" class="col s12 m12 l9"><div id="artDetail"><div class="card"><div class="card-content article-info"><div class="row tag-cate"><div class="col s7"><div class="article-tag"><a href="/tags/xargs/"><span class="chip bg-color">xargs</span></a></div></div><div class="col s5 right-align"><div class="post-cate"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/linux/" class="post-category">linux</a></div></div></div><div class="post-info"><div class="post-date info-break-policy"><i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp; 2018-09-20</div><div class="info-break-policy"><i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp; 1,825</div><div class="info-break-policy"><i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp; 8 Min</div><div id="busuanzi_container_page_pv" class="info-break-policy"><i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp; <span id="busuanzi_value_page_pv"></span></div></div></div><hr class="clearfix"><div class="card-content article-card-content"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><div id="articleContent"><h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="param-input-amp-amp-stdin"><a href="#param-input-amp-amp-stdin" class="headerlink" title="param input &amp;&amp; stdin"></a>param input &amp;&amp; stdin</h3><p>linux命令可以从两个地方读取要处理的内容</p><ul><li>通过命令行参数输入,通过main函数的argc,argv获取</li><li>标准输入stdin,通过scanf或者cin获取</li></ul><p>然后产生输出</p><ul><li>标准输出stdout,通过printf或者cout输出</li></ul><p>命令类型</p><ul><li>部分命令可以接受参数输入＋标准输入stdin，比如cat、grep等。</li><li>部分命令只接受参数输入，不接受标准输入stdin，比如kill、rm等。</li></ul><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span><span class="token operator">*</span>argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">// argc, argv</span>
     <span class="token comment" spellcheck="true">// cin, scanf </span>
     <span class="token comment" spellcheck="true">// cout printf</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre>
-<blockquote>
-<p>指定参数输入，则从参数输入读取内容;<br>未指定或者在命令的最后使用 <code>-</code>则从标准输入读取内容;<br>管道<code>｜</code>将stdout重定向到后续命令的stdin;</p>
-</blockquote>
-<h3 id="cat-grep"><a href="#cat-grep" class="headerlink" title="cat/grep"></a>cat/grep</h3><h4 id="cat"><a href="#cat" class="headerlink" title="cat"></a>cat</h4><ul>
-<li><p>指定参数输入1.txt，文件存在【从参数输入读取】</p>
-<pre><code>cat 1.txt
+</code></pre><blockquote><p>指定参数输入，则从参数输入读取内容;<br>未指定或者在命令的最后使用 <code>-</code>则从标准输入读取内容;<br>管道<code>｜</code>将stdout重定向到后续命令的stdin;</p></blockquote><h3 id="cat-grep"><a href="#cat-grep" class="headerlink" title="cat/grep"></a>cat/grep</h3><h4 id="cat"><a href="#cat" class="headerlink" title="cat"></a>cat</h4><ul><li><p>指定参数输入1.txt，文件存在【从参数输入读取】</p><pre><code>cat 1.txt
 hello world 
-</code></pre></li>
-<li><p>指定参数输入1.txt，文件不存在【从参数输入读取】</p>
-<pre><code>cat 1.txt2
+</code></pre></li><li><p>指定参数输入1.txt，文件不存在【从参数输入读取】</p><pre><code>cat 1.txt2
 cat: 1.txt2: No such file or directory
-</code></pre></li>
-<li><p>未指定参数输入【从stdin读取】</p>
-<pre><code>cat
+</code></pre></li><li><p>未指定参数输入【从stdin读取】</p><pre><code>cat
 hello
 hello
 ^C
-</code></pre></li>
-<li><p>使用<code>-</code>【从stdin读取】</p>
-<pre><code>cat -
+</code></pre></li><li><p>使用<code>-</code>【从stdin读取】</p><pre><code>cat -
 hello
 hello
 ^C
-</code></pre></li>
-<li><p>指定参数输入1.txt，文件存在+使用<code>-</code>【从参数输入读取+stdin读取】</p>
-<pre><code>cat 1.txt -
+</code></pre></li><li><p>指定参数输入1.txt，文件存在+使用<code>-</code>【从参数输入读取+stdin读取】</p><pre><code>cat 1.txt -
 hello world 
 hello
 hello
 ^C
-</code></pre></li>
-</ul>
-<h4 id="cat-pipe"><a href="#cat-pipe" class="headerlink" title="cat + pipe"></a>cat + pipe</h4><ul>
-<li><p>指定参数输入1.txt，文件存在 + stdin【only从参数输入读取】</p>
-<pre><code>echo &#39;hello&#39; | cat 1.txt
+</code></pre></li></ul><h4 id="cat-pipe"><a href="#cat-pipe" class="headerlink" title="cat + pipe"></a>cat + pipe</h4><ul><li><p>指定参数输入1.txt，文件存在 + stdin【only从参数输入读取】</p><pre><code>echo &#39;hello&#39; | cat 1.txt
 hello world 
-</code></pre></li>
-<li><p>指定参数输入1.txt，文件不存在【only从参数输入读取】</p>
-<pre><code>echo &#39;hello&#39; | cat 1.txt2
+</code></pre></li><li><p>指定参数输入1.txt，文件不存在【only从参数输入读取】</p><pre><code>echo &#39;hello&#39; | cat 1.txt2
 cat: 1.txt2: No such file or directory
-</code></pre></li>
-<li><p>未指定参数输入【从stdin读取】</p>
-<pre><code>echo &#39;hello&#39; |　cat
+</code></pre></li><li><p>未指定参数输入【从stdin读取】</p><pre><code>echo &#39;hello&#39; |　cat
 hello
-</code></pre></li>
-<li><p>使用<code>-</code>【从stdin读取】</p>
-<pre><code>echo &#39;hello&#39; |　cat -
+</code></pre></li><li><p>使用<code>-</code>【从stdin读取】</p><pre><code>echo &#39;hello&#39; |　cat -
 hello
-</code></pre></li>
-<li><p>指定参数输入1.txt，文件存在+使用<code>-</code>【从参数输入读取+stdin读取】</p>
-<pre><code>echo &#39;hello&#39; |　cat 1.txt -
+</code></pre></li><li><p>指定参数输入1.txt，文件存在+使用<code>-</code>【从参数输入读取+stdin读取】</p><pre><code>echo &#39;hello&#39; |　cat 1.txt -
 hello world 
 hello
-</code></pre></li>
-</ul>
-<h4 id="grep-pipe"><a href="#grep-pipe" class="headerlink" title="grep + pipe"></a>grep + pipe</h4><ul>
-<li><p>指定参数输入1.txt，文件存在 + stdin【only从参数输入读取】</p>
-<pre><code>echo &#39;hello&#39; | grep &#39;hello&#39; 1.txt
+</code></pre></li></ul><h4 id="grep-pipe"><a href="#grep-pipe" class="headerlink" title="grep + pipe"></a>grep + pipe</h4><ul><li><p>指定参数输入1.txt，文件存在 + stdin【only从参数输入读取】</p><pre><code>echo &#39;hello&#39; | grep &#39;hello&#39; 1.txt
 hello world 
-</code></pre></li>
-<li><p>指定参数输入1.txt，文件存在+使用<code>-</code>【从参数输入读取+stdin读取】</p>
-<pre><code>echo &#39;hello&#39; | grep &#39;hello&#39; 1.txt -
+</code></pre></li><li><p>指定参数输入1.txt，文件存在+使用<code>-</code>【从参数输入读取+stdin读取】</p><pre><code>echo &#39;hello&#39; | grep &#39;hello&#39; 1.txt -
 1.txt:hello world
 (standard input):hello
-</code></pre></li>
-</ul>
-<h3 id="kill-rm"><a href="#kill-rm" class="headerlink" title="kill/rm"></a>kill/rm</h3><ul>
-<li><p>kill不接受stdin</p>
-<pre><code>echo &#39;516&#39; | kill
+</code></pre></li></ul><h3 id="kill-rm"><a href="#kill-rm" class="headerlink" title="kill/rm"></a>kill/rm</h3><ul><li><p>kill不接受stdin</p><pre><code>echo &#39;516&#39; | kill
 kill: usage: kill [-s sigspec | -n signum | -sigspec] pid | jobspec ... or kill -l [sigspec]
-</code></pre></li>
-<li><p>rm 不接受stdin</p>
-<pre><code>  echo &#39;test&#39; | rm -f
-</code></pre></li>
-</ul>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- kzl in-article ad -->
-<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-
-
-
-<h3 id="xargs"><a href="#xargs" class="headerlink" title="xargs"></a>xargs</h3><p>如何实现<code>echo &#39;516&#39; | kill</code>类似的效果?</p>
-<ul>
-<li><p>method 1</p>
-<pre><code>  kill `ps -ef | grep &#39;xxx&#39;`  # same as   kill $pid
-</code></pre></li>
-<li><p>method 2</p>
-<pre><code>  for pid in $(ps -aux | grep &quot;some search&quot; | awk &#39;{print $2}&#39;);                 do kill -9 $pid; 
+</code></pre></li><li><p>rm 不接受stdin</p><pre><code>  echo &#39;test&#39; | rm -f
+</code></pre></li></ul><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h3 id="xargs"><a href="#xargs" class="headerlink" title="xargs"></a>xargs</h3><p>如何实现<code>echo &#39;516&#39; | kill</code>类似的效果?</p><ul><li><p>method 1</p><pre><code>  kill `ps -ef | grep &#39;xxx&#39;`  # same as   kill $pid
+</code></pre></li><li><p>method 2</p><pre><code>  for pid in $(ps -aux | grep &quot;some search&quot; | awk &#39;{print $2}&#39;);                 do kill -9 $pid; 
   done 
-</code></pre></li>
-<li><p>method 3</p>
-<pre><code>  ps -ef | grep &#39;xxx&#39; | xargs kill  
-</code></pre></li>
-</ul>
-<p>xargs命令可以通过管道接受字符串，并将接收到的字符串通过空格分割成许多参数(默认情况下是通过空格分割) 然后将参数传递给其后面的命令，作为后面命令的命令行参数输入</p>
-<blockquote>
-<p>xargs可以实现命令的参数输入</p>
-</blockquote>
-<h3 id="xargs-vs-pipe"><a href="#xargs-vs-pipe" class="headerlink" title="xargs vs pipe"></a>xargs vs pipe</h3><ul>
-<li><p>pipe 使得–help成为cat的stdin</p>
-<pre><code>$ echo &#39;--help&#39; | cat 
+</code></pre></li><li><p>method 3</p><pre><code>  ps -ef | grep &#39;xxx&#39; | xargs kill  
+</code></pre></li></ul><p>xargs命令可以通过管道接受字符串，并将接收到的字符串通过空格分割成许多参数(默认情况下是通过空格分割) 然后将参数传递给其后面的命令，作为后面命令的命令行参数输入</p><blockquote><p>xargs可以实现命令的参数输入</p></blockquote><h3 id="xargs-vs-pipe"><a href="#xargs-vs-pipe" class="headerlink" title="xargs vs pipe"></a>xargs vs pipe</h3><ul><li><p>pipe 使得–help成为cat的stdin</p><pre><code>$ echo &#39;--help&#39; | cat 
 --help
-</code></pre></li>
-<li><p>xargs使得–help成为cat的命令行参数输入,等价于 <code>cat --help</code></p>
-<pre><code>$ echo &#39;--help&#39; | xargs cat 
+</code></pre></li><li><p>xargs使得–help成为cat的命令行参数输入,等价于 <code>cat --help</code></p><pre><code>$ echo &#39;--help&#39; | xargs cat 
 Usage: cat [OPTION]... [FILE]...
 Concatenate FILE(s) to standard output.
 
@@ -571,36 +78,26 @@ Examples:
 GNU coreutils online help: &lt;http://www.gnu.org/software/coreutils/&gt;
 Full documentation at: &lt;http://www.gnu.org/software/coreutils/cat&gt;
 or available locally via: info &#39;(coreutils) cat invocation&#39;
-</code></pre></li>
-</ul>
-<p><code>echo &#39;1.txt 2.txt&#39; | xargs cat</code> 等价于 <code>cat 1.txt 2.txt</code></p>
-<h3 id="xargs-options"><a href="#xargs-options" class="headerlink" title="xargs options"></a>xargs options</h3><h4 id="d-选项"><a href="#d-选项" class="headerlink" title="-d 选项"></a>-d 选项</h4><p>默认情况下xargs将其标准输入中的内容以空白(包括空格、Tab、回车换行等)分割成多个之后当作命令行参数传递给其后面的命令，并运行之，我们可以使用 -d 命令指定分隔符</p>
-<pre><code>  echo &#39;11@22@33&#39; | xargs echo 
+</code></pre></li></ul><p><code>echo &#39;1.txt 2.txt&#39; | xargs cat</code> 等价于 <code>cat 1.txt 2.txt</code></p><h3 id="xargs-options"><a href="#xargs-options" class="headerlink" title="xargs options"></a>xargs options</h3><h4 id="d-选项"><a href="#d-选项" class="headerlink" title="-d 选项"></a>-d 选项</h4><p>默认情况下xargs将其标准输入中的内容以空白(包括空格、Tab、回车换行等)分割成多个之后当作命令行参数传递给其后面的命令，并运行之，我们可以使用 -d 命令指定分隔符</p><pre><code>  echo &#39;11@22@33&#39; | xargs echo 
   11@22@33
 
   echo &#39;11@22@33&#39; | xargs -d &#39;@&#39; echo 
   11 22 33
-</code></pre><p>等价于 </p>
-<pre><code>echo 11 22 33
-</code></pre><h4 id="p-选项"><a href="#p-选项" class="headerlink" title="-p 选项"></a>-p 选项</h4><p>使用该选项之后xargs并不会马上执行其后面的命令，而是输出即将要执行的完整的命令(包括命令以及传递给命令的命令行参数)，询问是否执行，输入 y 才继续执行，否则不执行。这种方式可以清楚的看到执行的命令是什么样子，也就是xargs传递给命令的参数是什么</p>
-<pre><code>  echo &#39;11@22@33&#39; | xargs -p -d &#39;@&#39;  echo 
+</code></pre><p>等价于</p><pre><code>echo 11 22 33
+</code></pre><h4 id="p-选项"><a href="#p-选项" class="headerlink" title="-p 选项"></a>-p 选项</h4><p>使用该选项之后xargs并不会马上执行其后面的命令，而是输出即将要执行的完整的命令(包括命令以及传递给命令的命令行参数)，询问是否执行，输入 y 才继续执行，否则不执行。这种方式可以清楚的看到执行的命令是什么样子，也就是xargs传递给命令的参数是什么</p><pre><code>  echo &#39;11@22@33&#39; | xargs -p -d &#39;@&#39;  echo 
   echo 11 22 33
    ?...yes
   11 22 33
-</code></pre><h4 id="n-选项"><a href="#n-选项" class="headerlink" title="-n 选项"></a>-n 选项</h4><p>该选项表示将xargs生成的命令行参数，每次传递几个参数给其后面的命令执行，例如如果xargs从标准输入中读入内容，然后以分隔符分割之后生成的命令行参数有10个，使用 -n 3 之后表示一次传递给xargs后面的命令是3个参数，因为一共有10个参数，所以要执行4次，才能将参数用完。</p>
-<pre><code>  echo &#39;11@22@33@44@55@66@77@88@99@00&#39; | xargs -d &#39;@&#39; -n 3 echo 
+</code></pre><h4 id="n-选项"><a href="#n-选项" class="headerlink" title="-n 选项"></a>-n 选项</h4><p>该选项表示将xargs生成的命令行参数，每次传递几个参数给其后面的命令执行，例如如果xargs从标准输入中读入内容，然后以分隔符分割之后生成的命令行参数有10个，使用 -n 3 之后表示一次传递给xargs后面的命令是3个参数，因为一共有10个参数，所以要执行4次，才能将参数用完。</p><pre><code>  echo &#39;11@22@33@44@55@66@77@88@99@00&#39; | xargs -d &#39;@&#39; -n 3 echo 
   11 22 33
   44 55 66
   77 88 99
   00
-</code></pre><p>等价于</p>
-<pre><code>echo 11 22 33
+</code></pre><p>等价于</p><pre><code>echo 11 22 33
 echo 44 55 66
 echo 77 88 99
 echo 00
-</code></pre><p>使用<code>-n 1</code>得到类似于对循环处理的结果。</p>
-<p>默认一次送入n个参数，一次处理完毕</p>
-<pre><code>ls *.txt | xargs -p cat 
+</code></pre><p>使用<code>-n 1</code>得到类似于对循环处理的结果。</p><p>默认一次送入n个参数，一次处理完毕</p><pre><code>ls *.txt | xargs -p cat 
 cat 1.txt 2.txt 3.txt ?...y
 111
 222
@@ -612,8 +109,7 @@ cat 1.txt 2.txt 3.txt
 111
 222
 333
-</code></pre><p><code>-n 1</code>一次送入１个参数，相当于循环处理了３次，每次处理一个文件</p>
-<pre><code>ls *.txt | xargs -n 1 -p cat 
+</code></pre><p><code>-n 1</code>一次送入１个参数，相当于循环处理了３次，每次处理一个文件</p><pre><code>ls *.txt | xargs -n 1 -p cat 
 cat 1.txt ?...y
 111
 cat 2.txt ?...y
@@ -632,21 +128,15 @@ cat ２.txt
 
 cat ３.txt
 333
-</code></pre><h4 id="E-选项"><a href="#E-选项" class="headerlink" title="-E 选项"></a>-E 选项</h4><p>有的系统的xargs版本可能是<code>-e  eof-str</code>,该选项指定一个字符串，当xargs解析出多个命令行参数的时候，如果搜索到-e指定的命令行参数，则只会将-e指定的命令行参数之前的参数(不包括-e指定的这个参数)传递给xargs后面的命令</p>
-<pre><code>echo &#39;11 22 33 44&#39; | xargs -E &#39;33&#39; echo 
+</code></pre><h4 id="E-选项"><a href="#E-选项" class="headerlink" title="-E 选项"></a>-E 选项</h4><p>有的系统的xargs版本可能是<code>-e eof-str</code>,该选项指定一个字符串，当xargs解析出多个命令行参数的时候，如果搜索到-e指定的命令行参数，则只会将-e指定的命令行参数之前的参数(不包括-e指定的这个参数)传递给xargs后面的命令</p><pre><code>echo &#39;11 22 33 44&#39; | xargs -E &#39;33&#39; echo 
 11 22 
-</code></pre><blockquote>
-<p>-E只有在xargs不指定-d或者-0的时候有效<br>-0 选项表示以 ‘\0’ 为分隔符，一般与find结合使用<br>-0 等同于 -d ‘\0’</p>
-</blockquote>
-<p>使用<code>-d</code> </p>
-<pre><code>  echo &#39;11@22@33@44@55@66@77@88@99@00 aa 33 bb&#39; | xargs -E &#39;33&#39; -d &#39;@&#39; -p  echo
+</code></pre><blockquote><p>-E只有在xargs不指定-d或者-0的时候有效<br>-0 选项表示以 ‘\0’ 为分隔符，一般与find结合使用<br>-0 等同于 -d ‘\0’</p></blockquote><p>使用<code>-d</code></p><pre><code>  echo &#39;11@22@33@44@55@66@77@88@99@00 aa 33 bb&#39; | xargs -E &#39;33&#39; -d &#39;@&#39; -p  echo
   xargs: warning: the -E option has no effect if -0 or -d is used.
 
   echo 11 22 33 44 55 66 77 88 99 00 aa 33 bb
    ?...y
   11 22 33 44 55 66 77 88 99 00 aa 33 bb
-</code></pre><p>不使用<code>-d</code></p>
-<pre><code>  echo &#39;11@22@33@44@55@66@77@88@99@00 aa 33 bb&#39; | xargs -E &#39;33&#39; -p  echo
+</code></pre><p>不使用<code>-d</code></p><pre><code>  echo &#39;11@22@33@44@55@66@77@88@99@00 aa 33 bb&#39; | xargs -E &#39;33&#39; -p  echo
   echo 11@22@33@44@55@66@77@88@99@00 aa ?...y
   11@22@33@44@55@66@77@88@99@00 aa
 </code></pre><h4 id="0-amp-amp-find"><a href="#0-amp-amp-find" class="headerlink" title="-0 &amp;&amp; find"></a>-0 &amp;&amp; find</h4><pre><code>find . -name &quot;*.txt&quot;
@@ -667,399 +157,18 @@ find . -name &quot;*.txt&quot; -print0 | xargs -d &#39;\0&#39; echo
 默认使用空白分隔符(换行符也是)
 find . -name &quot;*.txt&quot;  | xargs  echo 
 ./2.txt ./3.txt ./1.txt
-</code></pre><h3 id="xargs-as-loop"><a href="#xargs-as-loop" class="headerlink" title="xargs as loop"></a>xargs as loop</h3><p>one image at once </p>
-<pre class=" language-bash"><code class="language-bash">python text_recognition.py  --east frozen_east_text_detection.pb --image 1.jpg
-</code></pre>
-<p>for loop </p>
-<pre class=" language-bash"><code class="language-bash"><span class="token function">find</span> roi/ -name <span class="token string">"*.jpg"</span> <span class="token operator">|</span> <span class="token function">xargs</span> -n 1 python text_recognition.py  --east frozen_east_text_detection.pb --image 
+</code></pre><h3 id="xargs-as-loop"><a href="#xargs-as-loop" class="headerlink" title="xargs as loop"></a>xargs as loop</h3><p>one image at once</p><pre class="language-bash"><code class="language-bash">python text_recognition.py  --east frozen_east_text_detection.pb --image 1.jpg
+</code></pre><p>for loop</p><pre class="language-bash"><code class="language-bash"><span class="token function">find</span> roi/ -name <span class="token string">"*.jpg"</span> <span class="token operator">|</span> <span class="token function">xargs</span> -n 1 python text_recognition.py  --east frozen_east_text_detection.pb --image 
 
 <span class="token function">ls</span> roi/*.jpg <span class="token operator">|</span> <span class="token function">xargs</span> -n 1 python text_recognition.py  --east frozen_east_text_detection.pb --image 
-</code></pre>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
-<li><a href="https://www.cnblogs.com/wangqiguo/p/6464234.html" rel="noopener external nofollow noreferrer" target="_blank">xargs命令详解，xargs与管道的区别</a></li>
-</ul>
-<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
-<li>20180920:  created.</li>
-</ul>
-
-            </div>
-            <hr/>
-
-            
-
-    <div class="reprint" id="reprint-statement">
-        
-            <div class="reprint__author">
-                <span class="reprint-meta" style="font-weight: bold;">
-                    <i class="fas fa-user">
-                        Author:
-                    </i>
-                </span>
-                <span class="reprint-info">
-                    <a href="https://kezunlin.me" rel="external nofollow noreferrer">kezunlin</a>
-                </span>
-            </div>
-            <div class="reprint__type">
-                <span class="reprint-meta" style="font-weight: bold;">
-                    <i class="fas fa-link">
-                        Link:
-                    </i>
-                </span>
-                <span class="reprint-info">
-                    <a href="https://kezunlin.me/post/8b6f15b4/">https://kezunlin.me/post/8b6f15b4/</a>
-                </span>
-            </div>
-            <div class="reprint__notice">
-                <span class="reprint-meta" style="font-weight: bold;">
-                    <i class="fas fa-copyright">
-                        Reprint policy:
-                    </i>
-                </span>
-                <span class="reprint-info">
-                    All articles in this blog are used except for special statements
-                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
-                    reprint polocy. If reproduced, please indicate source
-                    <a href="https://kezunlin.me" target="_blank">kezunlin</a>
-                    !
-                </span>
-            </div>
-        
-    </div>
-
-    <script async defer>
-      document.addEventListener("copy", function (e) {
+</code></pre><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul><li><a href="https://www.cnblogs.com/wangqiguo/p/6464234.html" rel="noopener external nofollow noreferrer" target="_blank">xargs命令详解，xargs与管道的区别</a></li></ul><h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul><li>20180920: created.</li></ul></div><hr><div class="reprint" id="reprint-statement"><div class="reprint__author"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-user">Author: </i></span><span class="reprint-info"><a href="https://kezunlin.me" rel="external nofollow noreferrer">kezunlin</a></span></div><div class="reprint__type"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-link">Link: </i></span><span class="reprint-info"><a href="https://kezunlin.me/post/8b6f15b4/">https://kezunlin.me/post/8b6f15b4/</a></span></div><div class="reprint__notice"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-copyright">Reprint policy: </i></span><span class="reprint-info">All articles in this blog are used except for special statements <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a> reprint polocy. If reproduced, please indicate source <a href="https://kezunlin.me" target="_blank">kezunlin</a> !</span></div></div><script async defer>document.addEventListener("copy", function (e) {
         let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
         M.toast({html: toastHTML})
       });
 
       function navToReprintStatement() {
         $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
-      }
-    </script>
-
-
-
-            <div class="tag_share" style="display: block;">
-                <div class="post-meta__tag-list" style="display: inline-block;">
-                    
-                        <div class="article-tag">
-                            
-                                <a href="/tags/xargs/">
-                                    <span class="chip bg-color">xargs</span>
-                                </a>
-                            
-                        </div>
-                    
-                </div>
-            </div>
-            
-                <style>
-    #reward {
-        margin: 40px 0;
-        text-align: center;
-    }
-
-    #reward .reward-link {
-        font-size: 1.88rem;
-    }
-
-    #reward .btn-floating:hover {
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    #rewardModal {
-        width: 320px;
-        height: 350px;
-    }
-
-    #rewardModal .reward-title {
-        margin: 15px auto;
-        padding-bottom: 5px;
-    }
-
-    #rewardModal .modal-content {
-        padding: 10px;
-    }
-
-    #rewardModal .close {
-        position: absolute;
-        right: 15px;
-        top: 15px;
-        color: rgba(0, 0, 0, 0.5);
-        font-size: 1.3rem;
-        line-height: 20px;
-        cursor: pointer;
-    }
-
-    #rewardModal .close:hover {
-        color: #ef5350;
-        transform: scale(1.3);
-        -moz-transform:scale(1.3);
-        -webkit-transform:scale(1.3);
-        -o-transform:scale(1.3);
-    }
-
-    #rewardModal .reward-tabs {
-        margin: 0 auto;
-        width: 210px;
-    }
-
-    .reward-tabs .tabs {
-        height: 38px;
-        margin: 10px auto;
-        padding-left: 0;
-    }
-
-    .reward-content ul {
-        padding-left: 0 !important;
-    }
-
-    .reward-tabs .tabs .tab {
-        height: 38px;
-        line-height: 38px;
-    }
-
-    .reward-tabs .tab a {
-        color: #fff;
-        background-color: #ccc;
-    }
-
-    .reward-tabs .tab a:hover {
-        background-color: #ccc;
-        color: #fff;
-    }
-
-    .reward-tabs .wechat-tab .active {
-        color: #fff !important;
-        background-color: #22AB38 !important;
-    }
-
-    .reward-tabs .alipay-tab .active {
-        color: #fff !important;
-        background-color: #019FE8 !important;
-    }
-
-    .reward-tabs .reward-img {
-        width: 210px;
-        height: 210px;
-    }
-</style>
-
-<div id="reward">
-    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
-
-    <!-- Modal Structure -->
-    <div id="rewardModal" class="modal">
-        <div class="modal-content">
-            <a class="close modal-close"><i class="fas fa-times"></i></a>
-            <h4 class="reward-title">你的赏识是我前进的动力</h4>
-            <div class="reward-content">
-                <div class="reward-tabs">
-                    <ul class="tabs row">
-                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
-                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
-                    </ul>
-                    <div id="alipay">
-                        <img src="/medias/reward/alipay.jpeg" class="reward-img" alt="支付宝打赏二维码">
-                    </div>
-                    <div id="wechat">
-                        <img src="/medias/reward/wechat.jpeg" class="reward-img" alt="微信打赏二维码">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    $(function () {
-        $('.tabs').tabs();
-    });
-</script>
-            
-
-            <!-- hack -->
-            
-                <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
-
-<div id="article-share">
-    
-    
-    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-    <script src="/libs/share/js/social-share.min.js"></script>
-    
-
-    
-
-</div>
-
-            
-
-            <!-- hack -->
-            <!-- Google AdSense -->
-
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <!-- kzl in-article ad -->
-     <ins class="adsbygoogle"
-          style="display:block; text-align:center;"
-          data-ad-layout="in-article"
-          data-ad-format="fluid"
-          data-ad-client="ca-pub-5653382914441020"
-          data-ad-slot="7925631830"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-
-        </div>
-    </div>
-
-    <!-- hack -->
-    
-
-<article id="prenext-posts" class="prev-next articles">
-    <div class="row article-row">
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
-            <div class="card">
-                <a href="/post/dcffb1c7/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="compile and install cryptopp 7.0 on windows 10">
-                        
-                        <span class="card-title">compile and install cryptopp 7.0 on windows 10</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            how to compile and install cryptopp 7.0 on windows 10
-                        
-                    </div>
-                    <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2018-10-18
-                        </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/cpp/" class="post-category">
-                                    cpp
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/cryptopp/">
-                        <span class="chip bg-color">cryptopp</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                Next&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/post/722778b1/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="OpenCV OCR and text recognition with Tesseract on ubuntu 16.04">
-                        
-                        <span class="card-title">OpenCV OCR and text recognition with Tesseract on ubuntu 16.04</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            how to use OpenCV OCR and text recognition with Tesseract on ubuntu 16.04
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2018-09-20
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/linux/" class="post-category">
-                                    linux
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/opencv/">
-                        <span class="chip bg-color">opencv</span>
-                    </a>
-                    
-                    <a href="/tags/ocr/">
-                        <span class="chip bg-color">ocr</span>
-                    </a>
-                    
-                    <a href="/tags/tesseract/">
-                        <span class="chip bg-color">tesseract</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-    </div>
-</article>
-
-
-    
-        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
-<link rel="stylesheet" href="/css/my-gitalk.css">
-
-<div class="card gitalk-card" data-aos="fade-up">
-    <!-- hack -->
-    <!-- Google AdSense -->
-
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <!-- kzl display ad -->
-     <ins class="adsbygoogle"
-          style="display:block"
-          data-ad-client="ca-pub-5653382914441020"
-          data-ad-slot="7570408610"
-          data-ad-format="auto"
-          data-full-width-responsive="true"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-
-
-
-
-    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
-        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
-        <span>评论</span>
-    </div>
-    <div id="gitalk-container" class="card-content"></div>
-</div>
-
-<script src="/libs/gitalk/gitalk.min.js"></script>
-<script>
-    let gitalk = new Gitalk({
+      }</script><div class="tag_share" style="display:block"><div class="post-meta__tag-list" style="display:inline-block"><div class="article-tag"><a href="/tags/xargs/"><span class="chip bg-color">xargs</span></a></div></div></div><style>#reward{margin:40px 0;text-align:center}#reward .reward-link{font-size:1.88rem}#reward .btn-floating:hover{box-shadow:0 6px 12px rgba(0,0,0,.2),0 5px 15px rgba(0,0,0,.2)}#rewardModal{width:320px;height:350px}#rewardModal .reward-title{margin:15px auto;padding-bottom:5px}#rewardModal .modal-content{padding:10px}#rewardModal .close{position:absolute;right:15px;top:15px;color:rgba(0,0,0,.5);font-size:1.3rem;line-height:20px;cursor:pointer}#rewardModal .close:hover{color:#ef5350;transform:scale(1.3);-moz-transform:scale(1.3);-webkit-transform:scale(1.3);-o-transform:scale(1.3)}#rewardModal .reward-tabs{margin:0 auto;width:210px}.reward-tabs .tabs{height:38px;margin:10px auto;padding-left:0}.reward-content ul{padding-left:0!important}.reward-tabs .tabs .tab{height:38px;line-height:38px}.reward-tabs .tab a{color:#fff;background-color:#ccc}.reward-tabs .tab a:hover{background-color:#ccc;color:#fff}.reward-tabs .wechat-tab .active{color:#fff!important;background-color:#22AB38!important}.reward-tabs .alipay-tab .active{color:#fff!important;background-color:#019FE8!important}.reward-tabs .reward-img{width:210px;height:210px}</style><div id="reward"><a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a><div id="rewardModal" class="modal"><div class="modal-content"><a class="close modal-close"><i class="fas fa-times"></i></a><h4 class="reward-title">你的赏识是我前进的动力</h4><div class="reward-content"><div class="reward-tabs"><ul class="tabs row"><li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li><li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li></ul><div id="alipay"><img src="/medias/reward/alipay.jpeg" class="reward-img" alt="支付宝打赏二维码"></div><div id="wechat"><img src="/medias/reward/wechat.jpeg" class="reward-img" alt="微信打赏二维码"></div></div></div></div></div></div><script>$(function(){$(".tabs").tabs()})</script><link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css"><div id="article-share"><div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div><script src="/libs/share/js/social-share.min.js"></script></div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div></div><article id="prenext-posts" class="prev-next articles"><div class="row article-row"><div class="article col s12 m6" data-aos="fade-up"><div class="article-badge left-badge text-color"><i class="fas fa-chevron-left"></i>&nbsp;Previous</div><div class="card"><a href="/post/dcffb1c7/"><div class="card-image"><img src="/medias/featureimages/22.jpg" class="responsive-img" alt="compile and install cryptopp 7.0 on windows 10"> <span class="card-title">compile and install cryptopp 7.0 on windows 10</span></div></a><div class="card-content article-content"><div class="summary block-with-text">how to compile and install cryptopp 7.0 on windows 10</div><div class="publish-info"><span class="publish-date"><i class="far fa-clock fa-fw icon-date"></i>2018-10-18 </span><span class="publish-author"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/cpp/" class="post-category">cpp</a></span></div></div><div class="card-action article-tags"><a href="/tags/cryptopp/"><span class="chip bg-color">cryptopp</span></a></div></div></div><div class="article col s12 m6" data-aos="fade-up"><div class="article-badge right-badge text-color">Next&nbsp;<i class="fas fa-chevron-right"></i></div><div class="card"><a href="/post/722778b1/"><div class="card-image"><img src="/medias/featureimages/21.jpg" class="responsive-img" alt="OpenCV OCR and text recognition with Tesseract on ubuntu 16.04"> <span class="card-title">OpenCV OCR and text recognition with Tesseract on ubuntu 16.04</span></div></a><div class="card-content article-content"><div class="summary block-with-text">how to use OpenCV OCR and text recognition with Tesseract on ubuntu 16.04</div><div class="publish-info"><span class="publish-date"><i class="far fa-clock fa-fw icon-date"></i>2018-09-20 </span><span class="publish-author"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/linux/" class="post-category">linux</a></span></div></div><div class="card-action article-tags"><a href="/tags/opencv/"><span class="chip bg-color">opencv</span> </a><a href="/tags/ocr/"><span class="chip bg-color">ocr</span> </a><a href="/tags/tesseract/"><span class="chip bg-color">tesseract</span></a></div></div></div></div></article><link rel="stylesheet" href="/libs/gitalk/gitalk.css"><link rel="stylesheet" href="/css/my-gitalk.css"><div class="card gitalk-card" data-aos="fade-up"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7570408610" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><div class="comment_headling" style="font-size:20px;font-weight:700;position:relative;left:20px;top:15px;padding-bottom:5px"><i class="fas fa-comments fa-fw" aria-hidden="true"></i> <span>评论</span></div><div id="gitalk-container" class="card-content"></div></div><script src="/libs/gitalk/gitalk.min.js"></script><script>let gitalk = new Gitalk({
         clientID: '4d1e3d463455e6bc7eba',
         clientSecret: '4af023d85b66c4161a83b3f9297036e84c9ba57f',
         repo: 'gitalk',
@@ -1069,79 +178,7 @@ find . -name &quot;*.txt&quot;  | xargs  echo
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
-    gitalk.render('gitalk-container');
-</script>
-    
-
-    
-
-    
-
-    
-
-    
-</div>
-
-
-
-
-
-<!-- 代码语言 -->
-
-    
-<!-- 代码块复制 -->
-
-
-<!-- 代码块收缩 -->
-
-<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
-
-
-<!-- 代码块折行 -->
-
-<style type="text/css">
-code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
-</style>
-
-    </div>
-    <div id="toc-aside" class="col l3 hide-on-med-and-down">
-        <div class="toc-widget">
-            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
-            <div id="toc-content"></div>
-
-            <!-- hack -->
-            <!-- Google AdSense -->
-
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <!-- kzl display ad -->
-     <ins class="adsbygoogle"
-          style="display:block"
-          data-ad-client="ca-pub-5653382914441020"
-          data-ad-slot="7570408610"
-          data-ad-format="auto"
-          data-full-width-responsive="true"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-
-
-
-        </div>
-    </div>
-</div>
-
-<!-- TOC 悬浮按钮. -->
-
-<div id="floating-toc-btn" class="hide-on-med-and-down">
-    <a class="btn-floating btn-large bg-color">
-        <i class="fas fa-list-ul"></i>
-    </a>
-</div>
-
-
-<script src="/libs/tocbot/tocbot.min.js"></script>
-<script>
-    $(function () {
+    gitalk.render('gitalk-container');</script></div><script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script><style type="text/css">code[class*=language-],pre[class*=language-]{white-space:pre!important}</style></div><div id="toc-aside" class="col l3 hide-on-med-and-down"><div class="toc-widget"><div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div><div id="toc-content"></div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7570408610" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div></div></div><div id="floating-toc-btn" class="hide-on-med-and-down"><a class="btn-floating btn-large bg-color"><i class="fas fa-list-ul"></i></a></div><script src="/libs/tocbot/tocbot.min.js"></script><script>$(function () {
         tocbot.init({
             tocSelector: '#toc-content',
             contentSelector: '#articleContent',
@@ -1212,208 +249,4 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             fixPostCardWidth('artDetail', 'prenext-posts');
         });
         
-    });
-</script>
-
-    
-
-</main>
-
-
-
-    <footer class="page-footer bg-color">
-    <div class="container row center-align">
-        <div class="col s12 m8 l8 copy-right">
-            Copyright&nbsp;&copy;
-            <span id="year">年份</span>
-            <a href="https://kezunlin.me" target="_blank">kezunlin</a>
-            <br>
-            
-            
-            
-            
-            
-            
-            <span id="busuanzi_container_site_pv">
-                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
-                    class="white-color"></span>&nbsp;次
-            </span>
-            
-            
-            <span id="busuanzi_container_site_uv">
-                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
-                    class="white-color"></span>&nbsp;人
-            </span>
-            
-            <br>
-            
-            <span id="sitetime">载入运行时间...</span>
-            <script>
-                function siteTime() {
-                    window.setTimeout("siteTime()", 1000);
-                    var seconds = 1000;
-                    var minutes = seconds * 60;
-                    var hours = minutes * 60;
-                    var days = hours * 24;
-                    var years = days * 365;
-                    var today = new Date();
-                    var startYear = "2017";
-                    var startMonth = "11";
-                    var startDate = "11";
-                    var startHour = "0";
-                    var startMinute = "0";
-                    var startSecond = "0";
-                    var todayYear = today.getFullYear();
-                    var todayMonth = today.getMonth() + 1;
-                    var todayDate = today.getDate();
-                    var todayHour = today.getHours();
-                    var todayMinute = today.getMinutes();
-                    var todaySecond = today.getSeconds();
-                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
-                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
-                    var diff = t2 - t1;
-                    var diffYears = Math.floor(diff / years);
-                    var diffDays = Math.floor((diff / days) - diffYears * 365);
-                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
-                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
-                        minutes);
-                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
-                        diffMinutes * minutes) / seconds);
-                    if (startYear == todayYear) {
-                        document.getElementById("year").innerHTML = todayYear;
-                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
-                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
-                    } else {
-                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
-                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
-                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
-                    }
-                }
-                setInterval(siteTime, 1000);
-            </script>
-            
-            <br>
-            
-        </div>
-        <div class="col s12 m4 l4 social-link social-statis">
-    <a href="https://github.com/kezunlin" rel="external nofollow noreferrer" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
-        <i class="fab fa-github"></i>
-    </a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
-        <i class="fas fa-rss"></i>
-    </a>
-
-</div>
-    </div>
-</footer>
-
-<div class="progress-bar"></div>
-
-
-    <!-- 搜索遮罩框 -->
-<div id="searchModal" class="modal">
-    <div class="modal-content">
-        <div class="search-header">
-            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
-            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
-                   class="search-input">
-        </div>
-        <div id="searchResult"></div>
-    </div>
-</div>
-
-<script src="/js/search.js"></script>
-<script type="text/javascript">
-$(function () {
-    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
-});
-</script>
-    <!-- 回到顶部按钮 -->
-<div id="backTop" class="top-scroll">
-    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
-        <i class="fas fa-arrow-up"></i>
-    </a>
-</div>
-
-
-    <script src="/libs/materialize/materialize.min.js"></script>
-    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="/libs/aos/aos.js"></script>
-    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="/js/matery.js"></script>
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-
-
-<!-- 
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-111858944-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-        dataLayer.push(arguments);
-    }
-
-    gtag('js', new Date());
-    gtag('config', 'UA-111858944-1');
-</script>
--->
-
-<script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-    ga('create', 'UA-111858944-1', 'auto');
-    ga('send', 'pageview');
-</script>
-
-
-    <!-- hack -->
-    <!-- Google AdSense header-->
-
-     <script data-ad-client="ca-pub-5653382914441020" 
-          async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
-     </script>
-
-    <!-- Baidu Analytics -->
-
-    <!-- Baidu Push -->
-
-    
-    
-    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-    
-    <script src="/libs/instantpage/instantpage.js" type="module"></script>
-    
-
-</body>
-
-</html>
+    });</script></main><footer class="page-footer bg-color"><div class="container row center-align"><div class="col s12 m8 l8 copy-right">Copyright&nbsp;&copy; <span id="year">年份</span> <a href="https://kezunlin.me" target="_blank">kezunlin</a><br><span id="busuanzi_container_site_pv">|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv" class="white-color"></span>&nbsp;次 </span><span id="busuanzi_container_site_uv">|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv" class="white-color"></span>&nbsp;人</span><br><span id="sitetime">载入运行时间...</span><script>function siteTime(){window.setTimeout("siteTime()",1e3);var e=1e3,t=60*e,n=60*t,o=24*n,i=365*o,r=new Date,a="2017",m="11",l="11",M="0",d="0",g="0",s=r.getFullYear(),T=r.getMonth()+1,u=r.getDate(),c=r.getHours(),f=r.getMinutes(),h=r.getSeconds(),y=Date.UTC(a,m,l,M,d,g),H=Date.UTC(s,T,u,c,f,h),I=H-y,B=Math.floor(I/i),D=Math.floor(I/o-365*B),E=Math.floor((I-(365*B+D)*o)/n),L=Math.floor((I-(365*B+D)*o-E*n)/t),w=Math.floor((I-(365*B+D)*o-E*n-L*t)/e);a==s?(document.getElementById("year").innerHTML=s,document.getElementById("sitetime").innerHTML="本站已安全运行 "+D+" 天 "+E+" 小时 "+L+" 分钟 "+w+" 秒"):(document.getElementById("year").innerHTML=a+" - "+s,document.getElementById("sitetime").innerHTML="本站已安全运行 "+B+" 年 "+D+" 天 "+E+" 小时 "+L+" 分钟 "+w+" 秒")}setInterval(siteTime,1e3)</script><br></div><div class="col s12 m4 l4 social-link social-statis"><a href="https://github.com/kezunlin" rel="external nofollow noreferrer" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50"><i class="fab fa-github"></i> </a><a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50"><i class="fas fa-rss"></i></a></div></div></footer><div class="progress-bar"></div><div id="searchModal" class="modal"><div class="modal-content"><div class="search-header"><span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span> <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword" class="search-input"></div><div id="searchResult"></div></div></div><script src="/js/search.js"></script><script type="text/javascript">$(function(){searchFunc("/search.xml","searchInput","searchResult")})</script><div id="backTop" class="top-scroll"><a class="btn-floating btn-large waves-effect waves-light" href="#!"><i class="fas fa-arrow-up"></i></a></div><script src="/libs/materialize/materialize.min.js"></script><script src="/libs/masonry/masonry.pkgd.min.js"></script><script src="/libs/aos/aos.js"></script><script src="/libs/scrollprogress/scrollProgress.min.js"></script><script src="/libs/lightGallery/js/lightgallery-all.min.js"></script><script src="/js/matery.js"></script><script>!function(e,t,a,n,c,o,s){e.GoogleAnalyticsObject=c,e[c]=e[c]||function(){(e[c].q=e[c].q||[]).push(arguments)},e[c].l=1*new Date,o=t.createElement(a),s=t.getElementsByTagName(a)[0],o.async=1,o.src=n,s.parentNode.insertBefore(o,s)}(window,document,"script","https://www.google-analytics.com/analytics.js","ga"),ga("create","UA-111858944-1","auto"),ga("send","pageview")</script><script data-ad-client="ca-pub-5653382914441020" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script async src="/libs/others/busuanzi.pure.mini.js"></script><script src="/libs/instantpage/instantpage.js" type="module"></script></body></html><!-- rebuild by neat -->

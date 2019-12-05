@@ -1,450 +1,9 @@
-<!DOCTYPE HTML>
-<html lang="en">
-
-
-<head><meta name="generator" content="Hexo 3.9.0">
-    <meta charset="utf-8">
-    <meta name="keywords" content="Part-4: Install PCL with vtk qt support on windows 10, C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog">
-    <meta name="description" content="Series
+<!-- build time:Thu Dec 05 2019 16:31:40 GMT+0800 (CST) --><!DOCTYPE HTML><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta name="keywords" content="Part-4: Install PCL with vtk qt support on windows 10, C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog"><meta name="description" content="Series
 Part-1: Install and Configure Qt5 on Ubuntu 16.04
-Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="renderer" content="webkit|ie-stand|ie-comp">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Part-4: Install PCL with vtk qt support on windows 10 | C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog</title>
-    <link rel="icon" type="image/jpeg" href="/favicon.jpg">
-
-    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
-    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="/css/my.css">
-    
-    <script src="/libs/jquery/jquery.min.js"></script>
-    
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
-
-
-<body>
-    <header class="navbar-fixed">
-    <nav id="headNav" class="bg-color nav-transparent">
-        <div id="navContainer" class="nav-wrapper container">
-            <div class="brand-logo">
-                <a href="/" class="waves-effect waves-light">
-                    
-                    <img src="/medias/logo.jpg" class="logo-img" alt="LOGO">
-                    
-                    <span class="logo-span">KeZunLin</span>
-                </a>
-            </div>
-            
-
-<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
-<ul class="right nav-menu">
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/" class="waves-effect waves-light">
-      
-      <i class="fas fa-home" style="zoom: 0.6;"></i>
-      
-      <span>Index</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/tags" class="waves-effect waves-light">
-      
-      <i class="fas fa-tags" style="zoom: 0.6;"></i>
-      
-      <span>Tags</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/categories" class="waves-effect waves-light">
-      
-      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
-      
-      <span>Categories</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/archives" class="waves-effect waves-light">
-      
-      <i class="fas fa-archive" style="zoom: 0.6;"></i>
-      
-      <span>Archives</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/about" class="waves-effect waves-light">
-      
-      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
-      
-      <span>About</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/friends" class="waves-effect waves-light">
-      
-      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
-      
-      <span>Friends</span>
-    </a>
-    
-  </li>
-  
-  <li>
-    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
-      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
-    </a>
-  </li>
-</ul>
-
-<div id="mobile-nav" class="side-nav sidenav">
-
-    <div class="mobile-head bg-color">
-        
-        <img src="/medias/logo.jpg" class="logo-img circle responsive-img">
-        
-        <div class="logo-name">KeZunLin</div>
-        <div class="logo-desc">
-            
-            OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle.
-            
-        </div>
-    </div>
-
-    
-
-    <ul class="menu-list mobile-menu-list">
-        
-        <li class="m-nav-item">
-	  
-		<a href="/" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-home"></i>
-			
-			Index
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/tags" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-tags"></i>
-			
-			Tags
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/categories" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-bookmark"></i>
-			
-			Categories
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/archives" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-archive"></i>
-			
-			Archives
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/about" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-user-circle"></i>
-			
-			About
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/friends" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-address-book"></i>
-			
-			Friends
-		</a>
-          
-        </li>
-        
-        
-    </ul>
-</div>
-
-        </div>
-
-        
-    </nav>
-
-</header>
-
-    
-
-
-
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
-    <div class="container" style="right: 0px;left: 0px;">
-        <div class="row">
-            <div class="col s12 m12 l12">
-                <div class="brand">
-                    <div class="description center-align post-title">
-                        Part-4: Install PCL with vtk qt support on windows 10
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-<main class="post-container content">
-
-    
-    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
-<style>
-    #articleContent h1::before,
-    #articleContent h2::before,
-    #articleContent h3::before,
-    #articleContent h4::before,
-    #articleContent h5::before,
-    #articleContent h6::before {
-        display: block;
-        content: " ";
-        height: 100px;
-        margin-top: -100px;
-        visibility: hidden;
-    }
-
-    #articleContent :focus {
-        outline: none;
-    }
-
-    .toc-fixed {
-        position: fixed;
-        top: 64px;
-    }
-
-    .toc-widget {
-        padding-left: 20px;
-    }
-
-    .toc-widget .toc-title {
-        margin: 35px 0 15px 0;
-        padding-left: 17px;
-        font-size: 1.5rem;
-        font-weight: bold;
-        line-height: 1.5rem;
-    }
-
-    .toc-widget ol {
-        padding: 0;
-        list-style: none;
-    }
-
-    #toc-content ol {
-        padding-left: 10px;
-    }
-
-    #toc-content ol li {
-        padding-left: 10px;
-    }
-
-    #toc-content .toc-link:hover {
-        color: #42b983;
-        font-weight: 700;
-        text-decoration: underline;
-    }
-
-    #toc-content .toc-link::before {
-        background-color: transparent;
-        max-height: 25px;
-    }
-
-    #toc-content .is-active-link {
-        color: #42b983;
-    }
-
-    #toc-content .is-active-link::before {
-        background-color: #42b983;
-    }
-
-    #floating-toc-btn {
-        position: fixed;
-        right: 15px;
-        bottom: 76px;
-        padding-top: 15px;
-        margin-bottom: 0;
-        z-index: 998;
-    }
-
-    #floating-toc-btn .btn-floating {
-        width: 48px;
-        height: 48px;
-    }
-
-    #floating-toc-btn .btn-floating i {
-        line-height: 48px;
-        font-size: 1.4rem;
-    }
-</style>
-<div class="row">
-    <div id="main-content" class="col s12 m12 l9">
-        <!-- 文章内容详情 -->
-<div id="artDetail">
-    <div class="card">
-        <div class="card-content article-info">
-            <div class="row tag-cate">
-                <div class="col s7">
-                    
-                    <div class="article-tag">
-                        
-                            <a href="/tags/qt/">
-                                <span class="chip bg-color">qt</span>
-                            </a>
-                        
-                            <a href="/tags/vtk/">
-                                <span class="chip bg-color">vtk</span>
-                            </a>
-                        
-                            <a href="/tags/pcl/">
-                                <span class="chip bg-color">pcl</span>
-                            </a>
-                        
-                    </div>
-                    
-                </div>
-                <div class="col s5 right-align">
-                    
-                    <div class="post-cate">
-                        <i class="fas fa-bookmark fa-fw icon-category"></i>
-                        
-                            <a href="/categories/cpp/" class="post-category">
-                                cpp
-                            </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-
-            <div class="post-info">
-                
-                <div class="post-date info-break-policy">
-                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2018-01-22
-                </div>
-                
-
-                
-
-                
-                <div class="info-break-policy">
-                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    3,250
-                </div>
-                
-
-                
-                <div class="info-break-policy">
-                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
-                    20 Min
-                </div>
-                
-				
-                
-                    <div id="busuanzi_container_page_pv" class="info-break-policy">
-                        <i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp;
-                        <span id="busuanzi_value_page_pv"></span>
-                    </div>
-				
-            </div>
-            
-        </div>
-        <hr class="clearfix">
-
-        <div class="card-content article-card-content">
-            <!-- hack -->
-            <!-- Google AdSense -->
-
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <!-- kzl in-article ad -->
-     <ins class="adsbygoogle"
-          style="display:block; text-align:center;"
-          data-ad-layout="in-article"
-          data-ad-format="fluid"
-          data-ad-client="ca-pub-5653382914441020"
-          data-ad-slot="7925631830"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-
-
-            <div id="articleContent">
-                <h2 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h2><ul>
-<li><a href="https://kezunlin.me/post/91842b71/">Part-1: Install and Configure Qt5 on Ubuntu 16.04</a></li>
-<li><a href="https://kezunlin.me/post/b901735e/">Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04</a></li>
-<li><a href="https://kezunlin.me/post/137aa5fc/">Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubuntu 16.04 from source</a></li>
-<li><a href="https://kezunlin.me/post/2d809f92/"><strong>Part-4: Install and Configure PCL 1.8.1 with vtk qt support on windows 10 from source</strong></a></li>
-</ul>
-<h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><p>Tips</p>
-<blockquote>
-<p>we’d better to use SSD to compile source code instead HDD. So put source code in C folder on windows.<br>use multiple processor to compile with <code>/MP</code> options.</p>
-</blockquote>
-<h3 id="prepare"><a href="#prepare" class="headerlink" title="prepare"></a>prepare</h3><h4 id="software"><a href="#software" class="headerlink" title="software"></a>software</h4><ul>
-<li>vs: vs2015 installer</li>
-<li>qt: <a href="http://mirrors.tuna.tsinghua.edu.cn/qt/archive/qt/5.7/5.7.1/qt-opensource-windows-x86-msvc2015_64-5.7.1.exe" rel="noopener external nofollow noreferrer" target="_blank">http://mirrors.tuna.tsinghua.edu.cn/qt/archive/qt/5.7/5.7.1/qt-opensource-windows-x86-msvc2015_64-5.7.1.exe</a></li>
-<li>qt vs tools: <a href="https://mirrors.tuna.tsinghua.edu.cn/qt/archive/vsaddin/qt-vs-tools-msvc2015-2.1.1.vsix" rel="noopener external nofollow noreferrer" target="_blank">https://mirrors.tuna.tsinghua.edu.cn/qt/archive/vsaddin/qt-vs-tools-msvc2015-2.1.1.vsix</a></li>
-<li>pcl installer: <a href="https://github.com/PointCloudLibrary/pcl/releases/download/pcl-1.8.1/PCL-1.8.1-AllInOne-msvc2015-win64.exe" rel="noopener external nofollow noreferrer" target="_blank">https://github.com/PointCloudLibrary/pcl/releases/download/pcl-1.8.1/PCL-1.8.1-AllInOne-msvc2015-win64.exe</a></li>
-<li>vtk source:    <a href="https://www.vtk.org/files/release/8.1/VTK-8.1.0.zip" rel="noopener external nofollow noreferrer" target="_blank">https://www.vtk.org/files/release/8.1/VTK-8.1.0.zip</a></li>
-<li>vtk data:     <a href="https://www.vtk.org/files/release/8.1/VTKData-8.1.0.zip" rel="noopener external nofollow noreferrer" target="_blank">https://www.vtk.org/files/release/8.1/VTKData-8.1.0.zip</a></li>
-<li>pcl source:    <a href="https://github.com/PointCloudLibrary/pcl/archive/pcl-1.8.1.zip" rel="noopener external nofollow noreferrer" target="_blank">https://github.com/PointCloudLibrary/pcl/archive/pcl-1.8.1.zip</a></li>
-</ul>
-<p>download </p>
-<pre class=" language-bash"><code class="language-bash"><span class="token function">wget</span> https://www.vtk.org/files/release/8.1/VTK-8.1.0.zip
+Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><meta name="renderer" content="webkit|ie-stand|ie-comp"><meta name="mobile-web-app-capable" content="yes"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><title>Part-4: Install PCL with vtk qt support on windows 10 | C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog</title><link rel="icon" type="image/jpeg" href="/favicon.jpg"><link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css"><link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css"><link rel="stylesheet" type="text/css" href="/libs/aos/aos.css"><link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css"><link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css"><link rel="stylesheet" type="text/css" href="/css/matery.css"><link rel="stylesheet" type="text/css" href="/css/my.css"><script src="/libs/jquery/jquery.min.js"></script><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head><body><header class="navbar-fixed"><nav id="headNav" class="bg-color nav-transparent"><div id="navContainer" class="nav-wrapper container"><div class="brand-logo"><a href="/" class="waves-effect waves-light"><img src="/medias/logo.jpg" class="logo-img" alt="LOGO"> <span class="logo-span">KeZunLin</span></a></div><a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a><ul class="right nav-menu"><li class="hide-on-med-and-down nav-item"><a href="/" class="waves-effect waves-light"><i class="fas fa-home" style="zoom:.6"></i> <span>Index</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/tags" class="waves-effect waves-light"><i class="fas fa-tags" style="zoom:.6"></i> <span>Tags</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/categories" class="waves-effect waves-light"><i class="fas fa-bookmark" style="zoom:.6"></i> <span>Categories</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/archives" class="waves-effect waves-light"><i class="fas fa-archive" style="zoom:.6"></i> <span>Archives</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/about" class="waves-effect waves-light"><i class="fas fa-user-circle" style="zoom:.6"></i> <span>About</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/friends" class="waves-effect waves-light"><i class="fas fa-address-book" style="zoom:.6"></i> <span>Friends</span></a></li><li><a href="#searchModal" class="modal-trigger waves-effect waves-light"><i id="searchIcon" class="fas fa-search" title="Search" style="zoom:.85"></i></a></li></ul><div id="mobile-nav" class="side-nav sidenav"><div class="mobile-head bg-color"><img src="/medias/logo.jpg" class="logo-img circle responsive-img"><div class="logo-name">KeZunLin</div><div class="logo-desc">OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle.</div></div><ul class="menu-list mobile-menu-list"><li class="m-nav-item"><a href="/" class="waves-effect waves-light"><i class="fa-fw fas fa-home"></i> Index</a></li><li class="m-nav-item"><a href="/tags" class="waves-effect waves-light"><i class="fa-fw fas fa-tags"></i> Tags</a></li><li class="m-nav-item"><a href="/categories" class="waves-effect waves-light"><i class="fa-fw fas fa-bookmark"></i> Categories</a></li><li class="m-nav-item"><a href="/archives" class="waves-effect waves-light"><i class="fa-fw fas fa-archive"></i> Archives</a></li><li class="m-nav-item"><a href="/about" class="waves-effect waves-light"><i class="fa-fw fas fa-user-circle"></i> About</a></li><li class="m-nav-item"><a href="/friends" class="waves-effect waves-light"><i class="fa-fw fas fa-address-book"></i> Friends</a></li></ul></div></div></nav></header><div class="bg-cover pd-header post-cover" style="background-image:url(/medias/featureimages/0.jpg)"><div class="container" style="right:0;left:0"><div class="row"><div class="col s12 m12 l12"><div class="brand"><div class="description center-align post-title">Part-4: Install PCL with vtk qt support on windows 10</div></div></div></div></div></div><main class="post-container content"><link rel="stylesheet" href="/libs/tocbot/tocbot.css"><style>#articleContent h1::before,#articleContent h2::before,#articleContent h3::before,#articleContent h4::before,#articleContent h5::before,#articleContent h6::before{display:block;content:" ";height:100px;margin-top:-100px;visibility:hidden}#articleContent :focus{outline:0}.toc-fixed{position:fixed;top:64px}.toc-widget{padding-left:20px}.toc-widget .toc-title{margin:35px 0 15px 0;padding-left:17px;font-size:1.5rem;font-weight:700;line-height:1.5rem}.toc-widget ol{padding:0;list-style:none}#toc-content ol{padding-left:10px}#toc-content ol li{padding-left:10px}#toc-content .toc-link:hover{color:#42b983;font-weight:700;text-decoration:underline}#toc-content .toc-link::before{background-color:transparent;max-height:25px}#toc-content .is-active-link{color:#42b983}#toc-content .is-active-link::before{background-color:#42b983}#floating-toc-btn{position:fixed;right:15px;bottom:76px;padding-top:15px;margin-bottom:0;z-index:998}#floating-toc-btn .btn-floating{width:48px;height:48px}#floating-toc-btn .btn-floating i{line-height:48px;font-size:1.4rem}</style><div class="row"><div id="main-content" class="col s12 m12 l9"><div id="artDetail"><div class="card"><div class="card-content article-info"><div class="row tag-cate"><div class="col s7"><div class="article-tag"><a href="/tags/qt/"><span class="chip bg-color">qt</span> </a><a href="/tags/vtk/"><span class="chip bg-color">vtk</span> </a><a href="/tags/pcl/"><span class="chip bg-color">pcl</span></a></div></div><div class="col s5 right-align"><div class="post-cate"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/cpp/" class="post-category">cpp</a></div></div></div><div class="post-info"><div class="post-date info-break-policy"><i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp; 2018-01-22</div><div class="info-break-policy"><i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp; 3,250</div><div class="info-break-policy"><i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp; 20 Min</div><div id="busuanzi_container_page_pv" class="info-break-policy"><i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp; <span id="busuanzi_value_page_pv"></span></div></div></div><hr class="clearfix"><div class="card-content article-card-content"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><div id="articleContent"><h2 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h2><ul><li><a href="https://kezunlin.me/post/91842b71/">Part-1: Install and Configure Qt5 on Ubuntu 16.04</a></li><li><a href="https://kezunlin.me/post/b901735e/">Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04</a></li><li><a href="https://kezunlin.me/post/137aa5fc/">Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubuntu 16.04 from source</a></li><li><a href="https://kezunlin.me/post/2d809f92/"><strong>Part-4: Install and Configure PCL 1.8.1 with vtk qt support on windows 10 from source</strong></a></li></ul><h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><p>Tips</p><blockquote><p>we’d better to use SSD to compile source code instead HDD. So put source code in C folder on windows.<br>use multiple processor to compile with <code>/MP</code> options.</p></blockquote><h3 id="prepare"><a href="#prepare" class="headerlink" title="prepare"></a>prepare</h3><h4 id="software"><a href="#software" class="headerlink" title="software"></a>software</h4><ul><li>vs: vs2015 installer</li><li>qt: <a href="http://mirrors.tuna.tsinghua.edu.cn/qt/archive/qt/5.7/5.7.1/qt-opensource-windows-x86-msvc2015_64-5.7.1.exe" rel="noopener external nofollow noreferrer" target="_blank">http://mirrors.tuna.tsinghua.edu.cn/qt/archive/qt/5.7/5.7.1/qt-opensource-windows-x86-msvc2015_64-5.7.1.exe</a></li><li>qt vs tools: <a href="https://mirrors.tuna.tsinghua.edu.cn/qt/archive/vsaddin/qt-vs-tools-msvc2015-2.1.1.vsix" rel="noopener external nofollow noreferrer" target="_blank">https://mirrors.tuna.tsinghua.edu.cn/qt/archive/vsaddin/qt-vs-tools-msvc2015-2.1.1.vsix</a></li><li>pcl installer: <a href="https://github.com/PointCloudLibrary/pcl/releases/download/pcl-1.8.1/PCL-1.8.1-AllInOne-msvc2015-win64.exe" rel="noopener external nofollow noreferrer" target="_blank">https://github.com/PointCloudLibrary/pcl/releases/download/pcl-1.8.1/PCL-1.8.1-AllInOne-msvc2015-win64.exe</a></li><li>vtk source: <a href="https://www.vtk.org/files/release/8.1/VTK-8.1.0.zip" rel="noopener external nofollow noreferrer" target="_blank">https://www.vtk.org/files/release/8.1/VTK-8.1.0.zip</a></li><li>vtk data: <a href="https://www.vtk.org/files/release/8.1/VTKData-8.1.0.zip" rel="noopener external nofollow noreferrer" target="_blank">https://www.vtk.org/files/release/8.1/VTKData-8.1.0.zip</a></li><li>pcl source: <a href="https://github.com/PointCloudLibrary/pcl/archive/pcl-1.8.1.zip" rel="noopener external nofollow noreferrer" target="_blank">https://github.com/PointCloudLibrary/pcl/archive/pcl-1.8.1.zip</a></li></ul><p>download</p><pre class="language-bash"><code class="language-bash"><span class="token function">wget</span> https://www.vtk.org/files/release/8.1/VTK-8.1.0.zip
 <span class="token function">wget</span> https://www.vtk.org/files/release/8.1/VTKData-8.1.0.zip
 <span class="token function">wget</span> https://github.com/PointCloudLibrary/pcl/archive/pcl-1.8.1.zip
-</code></pre>
-<h4 id="version"><a href="#version" class="headerlink" title="version"></a>version</h4><pre><code>window: 10
+</code></pre><h4 id="version"><a href="#version" class="headerlink" title="version"></a>version</h4><pre><code>window: 10
 qt: 5.7.1
 qmake: 3.0 based on Qt 5.7.1
 qtcreator: 4.2.0 based on Qt 5.7.1
@@ -465,50 +24,31 @@ Qt Creator 4.2.0 based on Qt 5.7.1
 
 $ cmake -version
 cmake version 3.10.0
-</code></pre><h4 id="install-vs2015"><a href="#install-vs2015" class="headerlink" title="install vs2015"></a>install vs2015</h4><p>skip.</p>
-<h4 id="configure-vs2015-with-admin"><a href="#configure-vs2015-with-admin" class="headerlink" title="configure vs2015 with admin"></a>configure vs2015 with admin</h4><p>when we compile pcl by vs2015 and install to folder <code>C:/Program Files/PCL</code> , we need administrative priviledges.<br>follow steps：</p>
-<pre><code>cmd+r 
+</code></pre><h4 id="install-vs2015"><a href="#install-vs2015" class="headerlink" title="install vs2015"></a>install vs2015</h4><p>skip.</p><h4 id="configure-vs2015-with-admin"><a href="#configure-vs2015-with-admin" class="headerlink" title="configure vs2015 with admin"></a>configure vs2015 with admin</h4><p>when we compile pcl by vs2015 and install to folder <code>C:/Program Files/PCL</code> , we need administrative priviledges.<br>follow steps：</p><pre><code>cmd+r 
 regeidt
 HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers
 
 # new string entry
 key: C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe
 value: ~ RUNASADMIN
-</code></pre><p><img src="http://images2017.cnblogs.com/blog/635233/201802/635233-20180211194409045-927426521.png" alt="vs2015 regedit for runasadmin"></p>
-<h4 id="install-qt"><a href="#install-qt" class="headerlink" title="install qt"></a>install qt</h4><p>install qt to path <code>C:\Qt\Qt5.7.1</code></p>
-<p>add the following to system path.</p>
-<pre><code>C:\Qt\Qt5.7.1\5.7\msvc2015_64\bin
+</code></pre><p><img src="http://images2017.cnblogs.com/blog/635233/201802/635233-20180211194409045-927426521.png" alt="vs2015 regedit for runasadmin"></p><h4 id="install-qt"><a href="#install-qt" class="headerlink" title="install qt"></a>install qt</h4><p>install qt to path <code>C:\Qt\Qt5.7.1</code></p><p>add the following to system path.</p><pre><code>C:\Qt\Qt5.7.1\5.7\msvc2015_64\bin
 C:\Qt\Qt5.7.1\Tools\QtCreator\bin
-</code></pre><h4 id="install-qt-vs-tools"><a href="#install-qt-vs-tools" class="headerlink" title="install qt-vs-tools"></a>install qt-vs-tools</h4><h5 id="online-install-by-vs2015"><a href="#online-install-by-vs2015" class="headerlink" title="online install by vs2015"></a>online install by vs2015</h5><p>start vs2015, install <code>Qt Visual Sutido Tools</code> by:</p>
-<pre><code>Tools---&gt; Extensions and Update... ---&gt; online search qt ---&gt; install Qt Visual Sutido Tools ---&gt; OK
-</code></pre><p>restart vs2015 and new menu <code>Qt VS Tools</code> will be added to VS Main menu.</p>
-<h5 id="offline-install-by-vsix"><a href="#offline-install-by-vsix" class="headerlink" title="offline install by vsix"></a>offline install by vsix</h5><pre><code>wget https://mirrors.tuna.tsinghua.edu.cn/qt/archive/vsaddin/qt-vs-tools-msvc2015-2.1.1.vsix
-</code></pre><p>double click <code>qt-vs-tools-msvc2015-2.1.1.vsix</code> and install.</p>
-<h4 id="configure-qt-for-vs"><a href="#configure-qt-for-vs" class="headerlink" title="configure qt for vs"></a>configure qt for vs</h4><p>follow steps</p>
-<pre><code>Qt VS Tools ---&gt; Qt Options ---&gt; Add name and path
-</code></pre><p>Add qt path for vs2015 so that we can find <code>%PATH%\bin\qmake.exe</code></p>
-<pre><code>Name: Qt 5.7.1
+</code></pre><h4 id="install-qt-vs-tools"><a href="#install-qt-vs-tools" class="headerlink" title="install qt-vs-tools"></a>install qt-vs-tools</h4><h5 id="online-install-by-vs2015"><a href="#online-install-by-vs2015" class="headerlink" title="online install by vs2015"></a>online install by vs2015</h5><p>start vs2015, install <code>Qt Visual Sutido Tools</code> by:</p><pre><code>Tools---&gt; Extensions and Update... ---&gt; online search qt ---&gt; install Qt Visual Sutido Tools ---&gt; OK
+</code></pre><p>restart vs2015 and new menu <code>Qt VS Tools</code> will be added to VS Main menu.</p><h5 id="offline-install-by-vsix"><a href="#offline-install-by-vsix" class="headerlink" title="offline install by vsix"></a>offline install by vsix</h5><pre><code>wget https://mirrors.tuna.tsinghua.edu.cn/qt/archive/vsaddin/qt-vs-tools-msvc2015-2.1.1.vsix
+</code></pre><p>double click <code>qt-vs-tools-msvc2015-2.1.1.vsix</code> and install.</p><h4 id="configure-qt-for-vs"><a href="#configure-qt-for-vs" class="headerlink" title="configure qt for vs"></a>configure qt for vs</h4><p>follow steps</p><pre><code>Qt VS Tools ---&gt; Qt Options ---&gt; Add name and path
+</code></pre><p>Add qt path for vs2015 so that we can find <code>%PATH%\bin\qmake.exe</code></p><pre><code>Name: Qt 5.7.1
 Path: C:\Qt\Qt5.7.1\5.7\msvc2015_64\
-</code></pre><p><img src="http://images2017.cnblogs.com/blog/635233/201801/635233-20180112145011910-995769793.png" alt="qt options"></p>
-<h4 id="new-qt-project-from-vs"><a href="#new-qt-project-from-vs" class="headerlink" title="new qt project from vs"></a>new qt project from vs</h4><p>start vs2015, and new <code>Qt Gui Application</code>. </p>
-<p><img src="http://images2017.cnblogs.com/blog/635233/201801/635233-20180112145039222-1499154536.png" alt="new qt gui application"></p>
-<p>Compile and run first qt program.<br>Success. </p>
-<h3 id="install-pcl-third-parties"><a href="#install-pcl-third-parties" class="headerlink" title="install pcl third parties"></a>install pcl third parties</h3><h4 id="install-pcl-by-installer"><a href="#install-pcl-by-installer" class="headerlink" title="install pcl by installer"></a>install pcl by installer</h4><p>install pcl to <code>C:\Program Files\PCL 1.8.1\</code></p>
-<p>choose to install OpenNI2 to <code>C:\Program Files\PCL 1.8.1\3rdParty\OpenNI2\</code></p>
-<p>this process will add 4 system env.</p>
-<pre><code>PCL_ROOT          C:\Program Files\PCL 1.8.1
+</code></pre><p><img src="http://images2017.cnblogs.com/blog/635233/201801/635233-20180112145011910-995769793.png" alt="qt options"></p><h4 id="new-qt-project-from-vs"><a href="#new-qt-project-from-vs" class="headerlink" title="new qt project from vs"></a>new qt project from vs</h4><p>start vs2015, and new <code>Qt Gui Application</code>.</p><p><img src="http://images2017.cnblogs.com/blog/635233/201801/635233-20180112145039222-1499154536.png" alt="new qt gui application"></p><p>Compile and run first qt program.<br>Success.</p><h3 id="install-pcl-third-parties"><a href="#install-pcl-third-parties" class="headerlink" title="install pcl third parties"></a>install pcl third parties</h3><h4 id="install-pcl-by-installer"><a href="#install-pcl-by-installer" class="headerlink" title="install pcl by installer"></a>install pcl by installer</h4><p>install pcl to <code>C:\Program Files\PCL 1.8.1\</code></p><p>choose to install OpenNI2 to <code>C:\Program Files\PCL 1.8.1\3rdParty\OpenNI2\</code></p><p>this process will add 4 system env.</p><pre><code>PCL_ROOT          C:\Program Files\PCL 1.8.1
 OPENNI2_INCLUDE64 C:\Program Files\PCL 1.8.1\3rdParty\OpenNI2\Include\
 OPENNI2_LIB64     C:\Program Files\PCL 1.8.1\3rdParty\OpenNI2\Lib\ 
 OPENNI2_REDIST64  C:\Program Files\PCL 1.8.1\3rdParty\OpenNI2\Redist\
-</code></pre><h4 id="configure-env"><a href="#configure-env" class="headerlink" title="configure env"></a>configure env</h4><p>add env to <code>Path</code>.</p>
-<pre><code>%PCL_ROOT\bin
+</code></pre><h4 id="configure-env"><a href="#configure-env" class="headerlink" title="configure env"></a>configure env</h4><p>add env to <code>Path</code>.</p><pre><code>%PCL_ROOT\bin
 %PCL_ROOT%\3rdParty\FLANN\bin
 %PCL_ROOT%\3rdParty\OpenNI2\Redist
 %PCL_ROOT%\3rdParty\OpenNI2\Tools
 %PCL_ROOT%\3rdParty\Qhull\bin
 %PCL_ROOT%\3rdParty\VTK\bin
-</code></pre><h4 id="copy-winpap-package"><a href="#copy-winpap-package" class="headerlink" title="copy winpap package"></a>copy winpap package</h4><p>copy winpap to <code>C:\Program Files\PCL 1.8.1\3rdParty\</code>, and 3rdParty folder looks like this:</p>
-<pre><code>$ ls -al
+</code></pre><h4 id="copy-winpap-package"><a href="#copy-winpap-package" class="headerlink" title="copy winpap package"></a>copy winpap package</h4><p>copy winpap to <code>C:\Program Files\PCL 1.8.1\3rdParty\</code>, and 3rdParty folder looks like this:</p><pre><code>$ ls -al
 
 total 16
 drwxr-xr-x 1 zunli 197609 0 1月  11 12:47 ./
@@ -520,16 +60,12 @@ drwxr-xr-x 1 zunli 197609 0 1月  11 08:04 OpenNI2/
 drwxr-xr-x 1 zunli 197609 0 1月  11 08:02 Qhull/
 drwxr-xr-x 1 zunli 197609 0 1月  11 08:03 VTK/
 drwxr-xr-x 1 zunli 197609 0 1月  11 12:47 winpcap/
-</code></pre><h2 id="compile-vtk"><a href="#compile-vtk" class="headerlink" title="compile vtk"></a>compile vtk</h2><h3 id="download-vtk-and-data"><a href="#download-vtk-and-data" class="headerlink" title="download vtk and data"></a>download vtk and data</h3><pre class=" language-bash"><code class="language-bash"><span class="token function">wget</span> https://www.vtk.org/files/release/8.1/VTK-8.1.0.zip
+</code></pre><h2 id="compile-vtk"><a href="#compile-vtk" class="headerlink" title="compile vtk"></a>compile vtk</h2><h3 id="download-vtk-and-data"><a href="#download-vtk-and-data" class="headerlink" title="download vtk and data"></a>download vtk and data</h3><pre class="language-bash"><code class="language-bash"><span class="token function">wget</span> https://www.vtk.org/files/release/8.1/VTK-8.1.0.zip
 <span class="token function">wget</span> https://www.vtk.org/files/release/8.1/VTKData-8.1.0.zip
-</code></pre>
-<h3 id="configure-source"><a href="#configure-source" class="headerlink" title="configure source"></a>configure source</h3><p>we need to compile vtk to replace <code>C:\Program Files\PCL 1.8.1\3rdParty\VTK\</code></p>
-<pre class=" language-bash"><code class="language-bash"><span class="token function">cd</span> c:/compile/VTK-8.1.0
+</code></pre><h3 id="configure-source"><a href="#configure-source" class="headerlink" title="configure source"></a>configure source</h3><p>we need to compile vtk to replace <code>C:\Program Files\PCL 1.8.1\3rdParty\VTK\</code></p><pre class="language-bash"><code class="language-bash"><span class="token function">cd</span> c:/compile/VTK-8.1.0
 <span class="token function">mkdir</span> build <span class="token operator">&amp;&amp;</span> <span class="token function">cd</span> build 
 cmake-gui <span class="token punctuation">..</span>
-</code></pre>
-<p>configure generator to <code>Visual Studio 14 2015 Win64</code> with options </p>
-<pre><code>VTK_Group_Qt  ON
+</code></pre><p>configure generator to <code>Visual Studio 14 2015 Win64</code> with options</p><pre><code>VTK_Group_Qt  ON
 VTK_QT_VERSION     5  # by default 4
 VTK_RENDERING_BACKEND OpenGL2 # by default OpenGL
 Qt5_DIR  C:/Qt/Qt5.7.1/5.7/msvc2015_64/lib/cmake/Qt5
@@ -538,85 +74,24 @@ CMAKE_INSTALL_PREFIX  C:/Program Files/VTK  # by default
 BUILD_SHARED_LIBS  ON
 CMAKE_CONFIGURATION_TYPES Release # Release
 CMAKE_CXX_FLAGS_RELEASE /MD /O2 /Ob2 /DNDEBUG /MP # for multiple processor
-</code></pre><blockquote>
-<p>unzip <code>VTKData-8.1.0.zip</code> and copy <code>MD5</code> to <code>VTK-8.1.0/build/ExternalData/Objects/MD5</code></p>
-</blockquote>
-<p>Detailed steps as follows: </p>
-<ol>
-<li><p>With VTK = 8.1.0:</p>
-<pre><code> VTK_Group_Qt  ON
-</code></pre><p> configure again, and then <code>QT_QMAKE_EXECUTABLE</code> and <code>VTK_QT_VERSION</code>  will appear.</p>
-</li>
-<li><p>we need to change <code>VTK_QT_VERSION</code> from 4 to 5.</p>
-<pre><code> VTK_QT_VERSION     5  # by default 4
-</code></pre></li>
-<li><p>change <code>VTK_RENDERING_BACKEND</code> from OpenGL to OpenGL2.</p>
-<pre><code> VTK_RENDERING_BACKEND OpenGL2 # by default OpenGL
-</code></pre></li>
-<li><p>set install path <code>C:\Program Files\VTK\</code></p>
-<pre><code> CMAKE_INSTALL_PREFIX  C:/Program Files/VTK  
-</code></pre><blockquote>
-<p>we need write privileges to install to <code>C:\Program Files\VTK\</code></p>
-</blockquote>
-</li>
-<li><p>we should also notice <code>BUILD_SHARED_LIBS</code></p>
-<pre><code> BUILD_SHARED_LIBS  ON
-</code></pre></li>
-<li><p>add <code>/MP</code> for multiple processor compile </p>
-<pre><code> CMAKE_CXX_FLAGS_RELEASE /MD /O2 /Ob2 /DNDEBUG /MP # for multiple processor
+</code></pre><blockquote><p>unzip <code>VTKData-8.1.0.zip</code> and copy <code>MD5</code> to <code>VTK-8.1.0/build/ExternalData/Objects/MD5</code></p></blockquote><p>Detailed steps as follows:</p><ol><li><p>With VTK = 8.1.0:</p><pre><code> VTK_Group_Qt  ON
+</code></pre><p>configure again, and then <code>QT_QMAKE_EXECUTABLE</code> and <code>VTK_QT_VERSION</code> will appear.</p></li><li><p>we need to change <code>VTK_QT_VERSION</code> from 4 to 5.</p><pre><code> VTK_QT_VERSION     5  # by default 4
+</code></pre></li><li><p>change <code>VTK_RENDERING_BACKEND</code> from OpenGL to OpenGL2.</p><pre><code> VTK_RENDERING_BACKEND OpenGL2 # by default OpenGL
+</code></pre></li><li><p>set install path <code>C:\Program Files\VTK\</code></p><pre><code> CMAKE_INSTALL_PREFIX  C:/Program Files/VTK  
+</code></pre><blockquote><p>we need write privileges to install to <code>C:\Program Files\VTK\</code></p></blockquote></li><li><p>we should also notice <code>BUILD_SHARED_LIBS</code></p><pre><code> BUILD_SHARED_LIBS  ON
+</code></pre></li><li><p>add <code>/MP</code> for multiple processor compile</p><pre><code> CMAKE_CXX_FLAGS_RELEASE /MD /O2 /Ob2 /DNDEBUG /MP # for multiple processor
 
  CMAKE_CXX_MP_FLAG ON
  CMAKE_CXX_MP_NUM_PROCESSORS 8
-</code></pre></li>
-<li><p>Configure</p>
-</li>
-</ol>
-<h3 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h3><p>If everything goes well, then generate <code>VTK.sln</code>.</p>
-<p>Open <code>VTK.sln</code> in vs2015 and build with <code>Release X64</code>.</p>
-<blockquote>
-<p>NOTICE: this build process will take about 10 minutes.(10:35-10:45)</p>
-</blockquote>
-<h3 id="install-vtk"><a href="#install-vtk" class="headerlink" title="install vtk"></a>install vtk</h3><p>choose <code>INSTALL</code> and generate , and VTK will be installed to <code>C:\Program Files\VTK\</code>.</p>
-<p>Notice for <code>QVTKWidgetPlugin</code> and copy dll and lib to <code>C:\Program Files\VTK\</code>.</p>
-<ul>
-<li>dll: copy <code>C:\compile\VTK-8.1.0\build\bin\Release\QVTKWidgetPlugin.dll</code> to <code>C:\Program Files\VTK\bin\QVTKWidgetPlugin.dll</code></li>
-<li>lib:  copy <code>C:\compile\VTK-8.1.0\build\lib\Release\QVTKWidgetPlugin.lib</code>to <code>C:\Program Files\VTK\lib\QVTKWidgetPlugin.lib</code></li>
-</ul>
-<p>we should also notice that dll has been copied to <code>C:\Program Files\VTK\plugins\designer\QVTKWidgetPlugin.dll</code></p>
-<h3 id="copy-vtk-to-pcl"><a href="#copy-vtk-to-pcl" class="headerlink" title="copy vtk to pcl"></a>copy vtk to pcl</h3><p>copy vtk from  <code>C:\Program Files\VTK\</code> to <code>C:/Program Files/PCL 1.8.1/3rdParty/VTK</code> to replace old one.</p>
-<h3 id="install-QVTKWidgetPlugin"><a href="#install-QVTKWidgetPlugin" class="headerlink" title="install QVTKWidgetPlugin"></a>install QVTKWidgetPlugin</h3><p>copy <code>C:\Program Files\VTK\plugins\designer\QVTKWidgetPlugin.dll</code> to<br><code>C:\Qt\Qt5.7.1\5.7\msvc2015_64\plugins\designer</code></p>
-<p>start vs2015 again, view <code>mainwindow.ui</code> in <code>Qt Designer</code>.</p>
-<p>Now <code>QVTKWidget</code> will occur.</p>
-<p><img src="http://images2017.cnblogs.com/blog/635233/201801/635233-20180112233204410-2114402383.png" alt="qvtkwidget_in_qt_designer"></p>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- kzl in-article ad -->
-<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-
-<h2 id="compile-pcl"><a href="#compile-pcl" class="headerlink" title="compile pcl"></a>compile pcl</h2><h3 id="3rdParty"><a href="#3rdParty" class="headerlink" title="3rdParty"></a>3rdParty</h3><p>install pcl to get 3rdparty libraries and copy to proper folder.</p>
-<ul>
-<li>Boost:  C:/Boost/include lib  version: 1.64        (auto find by cmake)</li>
-<li>eigen3: C:/Program Files/Eigen/eigen3, version: 3.3.4 (auto find by cmake)</li>
-<li>FLANN:  C:/Program Files/FLANN/include lib bin      (auto find by cmake)</li>
-<li>OpenNI2: C:/Program Files/OpenNI2/Include Lib Redist  (<strong>user input</strong>)</li>
-<li>Qhull:  C:/Program Files/Qhull/include lib bin      (auto find by cmake)</li>
-<li>winpcap: C:/Program Files/winpcap/Include Lib      (<strong>user input</strong>)</li>
-</ul>
-<p>cmake options </p>
-<pre><code>OpenNI2 include: C:/Program Files/OpenNI2/Include
+</code></pre></li><li><p>Configure</p></li></ol><h3 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h3><p>If everything goes well, then generate <code>VTK.sln</code>.</p><p>Open <code>VTK.sln</code> in vs2015 and build with <code>Release X64</code>.</p><blockquote><p>NOTICE: this build process will take about 10 minutes.(10:35-10:45)</p></blockquote><h3 id="install-vtk"><a href="#install-vtk" class="headerlink" title="install vtk"></a>install vtk</h3><p>choose <code>INSTALL</code> and generate , and VTK will be installed to <code>C:\Program Files\VTK\</code>.</p><p>Notice for <code>QVTKWidgetPlugin</code> and copy dll and lib to <code>C:\Program Files\VTK\</code>.</p><ul><li>dll: copy <code>C:\compile\VTK-8.1.0\build\bin\Release\QVTKWidgetPlugin.dll</code> to <code>C:\Program Files\VTK\bin\QVTKWidgetPlugin.dll</code></li><li>lib: copy <code>C:\compile\VTK-8.1.0\build\lib\Release\QVTKWidgetPlugin.lib</code>to <code>C:\Program Files\VTK\lib\QVTKWidgetPlugin.lib</code></li></ul><p>we should also notice that dll has been copied to <code>C:\Program Files\VTK\plugins\designer\QVTKWidgetPlugin.dll</code></p><h3 id="copy-vtk-to-pcl"><a href="#copy-vtk-to-pcl" class="headerlink" title="copy vtk to pcl"></a>copy vtk to pcl</h3><p>copy vtk from <code>C:\Program Files\VTK\</code> to <code>C:/Program Files/PCL 1.8.1/3rdParty/VTK</code> to replace old one.</p><h3 id="install-QVTKWidgetPlugin"><a href="#install-QVTKWidgetPlugin" class="headerlink" title="install QVTKWidgetPlugin"></a>install QVTKWidgetPlugin</h3><p>copy <code>C:\Program Files\VTK\plugins\designer\QVTKWidgetPlugin.dll</code> to<br><code>C:\Qt\Qt5.7.1\5.7\msvc2015_64\plugins\designer</code></p><p>start vs2015 again, view <code>mainwindow.ui</code> in <code>Qt Designer</code>.</p><p>Now <code>QVTKWidget</code> will occur.</p><p><img src="http://images2017.cnblogs.com/blog/635233/201801/635233-20180112233204410-2114402383.png" alt="qvtkwidget_in_qt_designer"></p><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h2 id="compile-pcl"><a href="#compile-pcl" class="headerlink" title="compile pcl"></a>compile pcl</h2><h3 id="3rdParty"><a href="#3rdParty" class="headerlink" title="3rdParty"></a>3rdParty</h3><p>install pcl to get 3rdparty libraries and copy to proper folder.</p><ul><li>Boost: C:/Boost/include lib version: 1.64 (auto find by cmake)</li><li>eigen3: C:/Program Files/Eigen/eigen3, version: 3.3.4 (auto find by cmake)</li><li>FLANN: C:/Program Files/FLANN/include lib bin (auto find by cmake)</li><li>OpenNI2: C:/Program Files/OpenNI2/Include Lib Redist (<strong>user input</strong>)</li><li>Qhull: C:/Program Files/Qhull/include lib bin (auto find by cmake)</li><li>winpcap: C:/Program Files/winpcap/Include Lib (<strong>user input</strong>)</li></ul><p>cmake options</p><pre><code>OpenNI2 include: C:/Program Files/OpenNI2/Include
 OpenNI2 LIBRARY: C:/Program Files/OpenNI2/Lib/OpenNI2.lib
 
 pcap  include: C:/Program Files/winpcap/Include
 pcap  library: C:/Program Files/winpcap/Lib/x64/wpcap.lib
-</code></pre><h3 id="configure"><a href="#configure" class="headerlink" title="configure"></a>configure</h3><pre class=" language-cmake"><code class="language-cmake">cd c:/compile/pcl-1.8.1
+</code></pre><h3 id="configure"><a href="#configure" class="headerlink" title="configure"></a>configure</h3><pre class="language-cmake"><code class="language-cmake">cd c:/compile/pcl-1.8.1
 mkdir build && cd build
 cmake-gui ..
-</code></pre>
-<p>with options </p>
-<pre><code>QT_USE_FILE C:/compile/pcl-1.8.1/build/use-qt5.cmake
+</code></pre><p>with options</p><pre><code>QT_USE_FILE C:/compile/pcl-1.8.1/build/use-qt5.cmake
 VTK_DIR  C:/Program Files/VTK/lib/cmake/vtk-8.1
 CMAKE_INSTALL_PREFIX  C:/Program Files/PCL 
 
@@ -639,8 +114,7 @@ zlib library: C:/Program Files/VTK/lib/vtkzlib-8.1.lib
 
 png include:  C:/Program Files/VTK/include/vtk-8.1/vtkpng
 png library:  C:/Program Files/VTK/lib/vtkpng-8.1.lib
-</code></pre><p>configure output </p>
-<pre><code>code;arch=compute_53,code=sm_53;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_61,code=sm_61
+</code></pre><p>configure output</p><pre><code>code;arch=compute_53,code=sm_53;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_61,code=sm_61
 ...
 Boost version: 1.64.0
 Found the following Boost libraries:
@@ -684,23 +158,7 @@ The following subsystems will not be built:
   simulation: Disabled: visualization missing.
   global_tests: No reason
 Configuring done
-</code></pre><p>OK. </p>
-<h3 id="compile-1"><a href="#compile-1" class="headerlink" title="compile"></a>compile</h3><p>If everything goes well, then generate <code>PCL.sln</code></p>
-<p>Open <code>PCL.sln</code> in vs2015 and build with <code>Release X64</code>.</p>
-<p>NOTICE: this build process will take about 30 minutes.</p>
-<h3 id="install-pcl"><a href="#install-pcl" class="headerlink" title="install pcl"></a>install pcl</h3><blockquote>
-<p>by default install need administrator privilidges to write to <code>C:/Program Files/PCL/</code>.</p>
-</blockquote>
-<p>choose <code>INSTALL</code> and generate , and PCL will be installed to <code>C:/Program Files/PCL</code>.</p>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- kzl in-article ad -->
-<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-
-<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><h3 id="pcl-only"><a href="#pcl-only" class="headerlink" title="pcl only"></a>pcl only</h3><h4 id="pcd-write-cpp"><a href="#pcd-write-cpp" class="headerlink" title="pcd_write.cpp"></a>pcd_write.cpp</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+</code></pre><p>OK.</p><h3 id="compile-1"><a href="#compile-1" class="headerlink" title="compile"></a>compile</h3><p>If everything goes well, then generate <code>PCL.sln</code></p><p>Open <code>PCL.sln</code> in vs2015 and build with <code>Release X64</code>.</p><p>NOTICE: this build process will take about 30 minutes.</p><h3 id="install-pcl"><a href="#install-pcl" class="headerlink" title="install pcl"></a>install pcl</h3><blockquote><p>by default install need administrator privilidges to write to <code>C:/Program Files/PCL/</code>.</p></blockquote><p>choose <code>INSTALL</code> and generate , and PCL will be installed to <code>C:/Program Files/PCL</code>.</p><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><h3 id="pcl-only"><a href="#pcl-only" class="headerlink" title="pcl only"></a>pcl only</h3><h4 id="pcd-write-cpp"><a href="#pcd-write-cpp" class="headerlink" title="pcd_write.cpp"></a>pcd_write.cpp</h4><pre class="language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
 <span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;pcl/io/pcd_io.h></span></span>
 <span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;pcl/point_types.h></span></span>
 
@@ -729,8 +187,7 @@ Configuring done
 
   <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre>
-<h4 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h4><pre class=" language-bash"><code class="language-bash">cmake_minimum_required<span class="token punctuation">(</span>VERSION 2.8 FATAL_ERROR<span class="token punctuation">)</span>
+</code></pre><h4 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h4><pre class="language-bash"><code class="language-bash">cmake_minimum_required<span class="token punctuation">(</span>VERSION 2.8 FATAL_ERROR<span class="token punctuation">)</span>
 project<span class="token punctuation">(</span>pcd_write_test<span class="token punctuation">)</span>
 
 <span class="token comment" spellcheck="true"># Set the output folder where your program will be created</span>
@@ -755,16 +212,9 @@ message <span class="token punctuation">(</span><span class="token punctuation">
 
 add_executable<span class="token punctuation">(</span>pcd_write_test pcd_write.cpp<span class="token punctuation">)</span>
 target_link_libraries<span class="token punctuation">(</span>pcd_write_test <span class="token variable">${PCL_COMMON_LIBRARIES}</span> <span class="token variable">${PCL_IO_LIBRARIES}</span><span class="token punctuation">)</span>
-</code></pre>
-<h4 id="run-demo"><a href="#run-demo" class="headerlink" title="run demo"></a>run demo</h4><p>compile to <code>pcd_write_test.exe</code> and run, errors may occur:</p>
-<pre><code>pcd_write_test.exe: error while loading shared libraries: ?: cannot open shared object file: No such file or directory
-</code></pre><p>we need to find out which dlls are imported by exe.</p>
-<pre><code>wget http://www.dependencywalker.com/depends22_x64.zip
-</code></pre><blockquote>
-<p>Tips: use <code>dependency walker</code> to check which dlls are imported, and then copy dll to exe folder.<br>copy <code>pcl/bin/*.dll</code> and <code>vtk/bin/*.dll</code> to exe folder.</p>
-</blockquote>
-<p>run exe and output </p>
-<pre><code>$ ./pcd_write_test.exe   
+</code></pre><h4 id="run-demo"><a href="#run-demo" class="headerlink" title="run demo"></a>run demo</h4><p>compile to <code>pcd_write_test.exe</code> and run, errors may occur:</p><pre><code>pcd_write_test.exe: error while loading shared libraries: ?: cannot open shared object file: No such file or directory
+</code></pre><p>we need to find out which dlls are imported by exe.</p><pre><code>wget http://www.dependencywalker.com/depends22_x64.zip
+</code></pre><blockquote><p>Tips: use <code>dependency walker</code> to check which dlls are imported, and then copy dll to exe folder.<br>copy <code>pcl/bin/*.dll</code> and <code>vtk/bin/*.dll</code> to exe folder.</p></blockquote><p>run exe and output</p><pre><code>$ ./pcd_write_test.exe   
 
 Saved 5 data points to test_pcd.pcd.
     1.28125 577.094 197.938
@@ -790,26 +240,7 @@ DATA ascii
 358.6875 917.4375 842.5625
 764.5 178.28125 879.53125
 727.53125 525.84375 311.28125
-</code></pre><p>create pcl project with vtk and qt support.</p>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- kzl in-article ad -->
-<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-
-
-
-<h3 id="pcl-vtk-qt-PointCloud-Viewer-RECOMMEND"><a href="#pcl-vtk-qt-PointCloud-Viewer-RECOMMEND" class="headerlink" title="pcl+vtk+qt PointCloud Viewer (RECOMMEND)"></a>pcl+vtk+qt PointCloud Viewer (RECOMMEND)</h3><p>This project use <code>QVTKWidgetPlugin</code> to display point cloud data.</p>
-<ul>
-<li>mainwindow.h</li>
-<li>mainwindow.cpp</li>
-<li>mainwindow.ui  (Contains QVTKWidgetPlugin)</li>
-<li>main.cpp</li>
-<li>CMakeLists.txt</li>
-</ul>
-<h4 id="mainwindow-h"><a href="#mainwindow-h" class="headerlink" title="mainwindow.h"></a>mainwindow.h</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">ifndef</span> MAINWINDOW_H</span>
+</code></pre><p>create pcl project with vtk and qt support.</p><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h3 id="pcl-vtk-qt-PointCloud-Viewer-RECOMMEND"><a href="#pcl-vtk-qt-PointCloud-Viewer-RECOMMEND" class="headerlink" title="pcl+vtk+qt PointCloud Viewer (RECOMMEND)"></a>pcl+vtk+qt PointCloud Viewer (RECOMMEND)</h3><p>This project use <code>QVTKWidgetPlugin</code> to display point cloud data.</p><ul><li>mainwindow.h</li><li>mainwindow.cpp</li><li>mainwindow.ui (Contains QVTKWidgetPlugin)</li><li>main.cpp</li><li>CMakeLists.txt</li></ul><h4 id="mainwindow-h"><a href="#mainwindow-h" class="headerlink" title="mainwindow.h"></a>mainwindow.h</h4><pre class="language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">ifndef</span> MAINWINDOW_H</span>
 <span class="token macro property">#<span class="token directive keyword">define</span> MAINWINDOW_H</span>
 
 <span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;QMainWindow></span></span>
@@ -858,8 +289,7 @@ DATA ascii
 
 <span class="token macro property">#<span class="token directive keyword">endif</span> </span><span class="token comment" spellcheck="true">// MAINWINDOW_H</span>
 
-</code></pre>
-<h4 id="mainwindow-cpp"><a href="#mainwindow-cpp" class="headerlink" title="mainwindow.cpp"></a>mainwindow.cpp</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"mainwindow.h"</span></span>
+</code></pre><h4 id="mainwindow-cpp"><a href="#mainwindow-cpp" class="headerlink" title="mainwindow.cpp"></a>mainwindow.cpp</h4><pre class="language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"mainwindow.h"</span></span>
 <span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"ui_mainwindow.h"</span></span>
 
 <span class="token comment" spellcheck="true">// qt</span>
@@ -949,8 +379,7 @@ MainWindow<span class="token operator">::</span><span class="token operator">~</
     QMessageBox<span class="token operator">::</span><span class="token function">information</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> <span class="token string">"Cancel"</span><span class="token punctuation">,</span> text<span class="token punctuation">)</span><span class="token punctuation">;</span>
     ui<span class="token operator">-</span><span class="token operator">></span>pushButtonCancel<span class="token operator">-</span><span class="token operator">></span><span class="token function">setText</span><span class="token punctuation">(</span> <span class="token function">tr</span><span class="token punctuation">(</span><span class="token string">"(Cancel.click me)"</span><span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre>
-<h4 id="main-cpp"><a href="#main-cpp" class="headerlink" title="main.cpp"></a>main.cpp</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"mainwindow.h"</span></span>
+</code></pre><h4 id="main-cpp"><a href="#main-cpp" class="headerlink" title="main.cpp"></a>main.cpp</h4><pre class="language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"mainwindow.h"</span></span>
 <span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;QApplication></span></span>
 
 <span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
@@ -962,8 +391,7 @@ MainWindow<span class="token operator">::</span><span class="token operator">~</
     <span class="token keyword">return</span> a<span class="token punctuation">.</span><span class="token function">exec</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 
-</code></pre>
-<h4 id="mainwindow-ui"><a href="#mainwindow-ui" class="headerlink" title="mainwindow.ui"></a>mainwindow.ui</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token operator">&lt;</span><span class="token operator">?</span>xml version<span class="token operator">=</span><span class="token string">"1.0"</span> encoding<span class="token operator">=</span><span class="token string">"UTF-8"</span><span class="token operator">?</span><span class="token operator">></span>
+</code></pre><h4 id="mainwindow-ui"><a href="#mainwindow-ui" class="headerlink" title="mainwindow.ui"></a>mainwindow.ui</h4><pre class="language-cpp"><code class="language-cpp"><span class="token operator">&lt;</span><span class="token operator">?</span>xml version<span class="token operator">=</span><span class="token string">"1.0"</span> encoding<span class="token operator">=</span><span class="token string">"UTF-8"</span><span class="token operator">?</span><span class="token operator">></span>
 <span class="token operator">&lt;</span>ui version<span class="token operator">=</span><span class="token string">"4.0"</span><span class="token operator">></span>
  <span class="token operator">&lt;</span><span class="token keyword">class</span><span class="token operator">></span>MainWindow<span class="token operator">&lt;</span><span class="token operator">/</span><span class="token keyword">class</span><span class="token operator">></span>
  <span class="token operator">&lt;</span>widget <span class="token keyword">class</span><span class="token operator">=</span><span class="token string">"QMainWindow"</span> name<span class="token operator">=</span><span class="token string">"MainWindow"</span><span class="token operator">></span>
@@ -1116,8 +544,7 @@ MainWindow<span class="token operator">::</span><span class="token operator">~</
  <span class="token operator">&lt;</span><span class="token operator">/</span>resources<span class="token operator">></span>
  <span class="token operator">&lt;</span>connections<span class="token operator">/</span><span class="token operator">></span>
 <span class="token operator">&lt;</span><span class="token operator">/</span>ui<span class="token operator">></span>
-</code></pre>
-<h4 id="CMakeLists-txt-1"><a href="#CMakeLists-txt-1" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h4><pre class=" language-cmake"><code class="language-cmake">cmake_minimum_required(VERSION 2.8.8)
+</code></pre><h4 id="CMakeLists-txt-1"><a href="#CMakeLists-txt-1" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h4><pre class="language-cmake"><code class="language-cmake">cmake_minimum_required(VERSION 2.8.8)
 
 project(point_cloud_viewer)
 
@@ -1220,21 +647,13 @@ target_link_libraries(test_pcd
     ${PCL_VISUALIZATION_LIBRARIES}
 )
 
-</code></pre>
-<h4 id="snapshot"><a href="#snapshot" class="headerlink" title="snapshot"></a>snapshot</h4><pre><code>./point_cloud_viewer.exe
-</code></pre><p><img src="http://images2017.cnblogs.com/blog/635233/201802/635233-20180208210623795-1984024029.png" alt="Point Cloud Viewer for pcd file"></p>
-<h4 id="errors"><a href="#errors" class="headerlink" title="errors"></a><del>errors</del></h4><p>when run example, errors may occur: (which has been fixed by now.)<br><img src="http://images2017.cnblogs.com/blog/635233/201801/635233-20180114210710582-1020157530.png" alt="vtkOutputWindow error: no overide found for &#39;vtkPolyDataMapper&#39;"></p>
-<h3 id="fix-error"><a href="#fix-error" class="headerlink" title="fix error"></a>fix error</h3><p>fix pcl min,max conflict with windows.h macro</p>
-<h4 id="error"><a href="#error" class="headerlink" title="error"></a>error</h4><blockquote>
-<p>C:\Boost\include\boost-1_64\boost\asio\detail\socket_types.hpp(37):#   include &lt;windows.h&gt;<br>we use boost which includes <code>&lt;windows.h&gt;</code> and import macro <code>min/max</code>.<br>in pcl, <code>std::numeric_limits&lt;int&gt;::max</code> conflict with <code>min/max</code>.</p>
-</blockquote>
-<pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">template</span> <span class="token operator">&lt;</span><span class="token keyword">typename</span> PointT<span class="token operator">></span> <span class="token keyword">static</span> std<span class="token operator">::</span>string
+</code></pre><h4 id="snapshot"><a href="#snapshot" class="headerlink" title="snapshot"></a>snapshot</h4><pre><code>./point_cloud_viewer.exe
+</code></pre><p><img src="http://images2017.cnblogs.com/blog/635233/201802/635233-20180208210623795-1984024029.png" alt="Point Cloud Viewer for pcd file"></p><h4 id="errors"><a href="#errors" class="headerlink" title="errors"></a><del>errors</del></h4><p>when run example, errors may occur: (which has been fixed by now.)<br><img src="http://images2017.cnblogs.com/blog/635233/201801/635233-20180114210710582-1020157530.png" alt="vtkOutputWindow error: no overide found for &#39;vtkPolyDataMapper&#39;"></p><h3 id="fix-error"><a href="#fix-error" class="headerlink" title="fix error"></a>fix error</h3><p>fix pcl min,max conflict with windows.h macro</p><h4 id="error"><a href="#error" class="headerlink" title="error"></a>error</h4><blockquote><p>C:\Boost\include\boost-1_64\boost\asio\detail\socket_types.hpp(37):# include &lt;windows.h&gt;<br>we use boost which includes <code>&lt;windows.h&gt;</code> and import macro <code>min/max</code>.<br>in pcl, <code>std::numeric_limits&lt;int&gt;::max</code> conflict with <code>min/max</code>.</p></blockquote><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">template</span> <span class="token operator">&lt;</span><span class="token keyword">typename</span> PointT<span class="token operator">></span> <span class="token keyword">static</span> std<span class="token operator">::</span>string
 <span class="token function">generateHeader</span> <span class="token punctuation">(</span><span class="token keyword">const</span> pcl<span class="token operator">::</span>PointCloud<span class="token operator">&lt;</span>PointT<span class="token operator">></span> <span class="token operator">&amp;</span>cloud<span class="token punctuation">,</span>
 <span class="token keyword">const</span> <span class="token keyword">int</span> nr_points <span class="token operator">=</span> std<span class="token operator">::</span>numeric_limits<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span><span class="token operator">::</span><span class="token function">max</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 <span class="token keyword">int</span> m <span class="token operator">=</span> std<span class="token operator">::</span>numeric_limits<span class="token operator">&lt;</span><span class="token keyword">float</span><span class="token operator">></span><span class="token operator">::</span><span class="token function">max</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-</code></pre>
-<h4 id="solution"><a href="#solution" class="headerlink" title="solution"></a>solution</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">// method(1): put this befor pcl headers</span>
+</code></pre><h4 id="solution"><a href="#solution" class="headerlink" title="solution"></a>solution</h4><pre class="language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">// method(1): put this befor pcl headers</span>
 <span class="token macro property">#<span class="token directive keyword">undef</span> max</span>
 <span class="token macro property">#<span class="token directive keyword">undef</span> min </span>
 
@@ -1244,405 +663,14 @@ target_link_libraries(test_pcd
 <span class="token comment" spellcheck="true">// pcl headers</span>
 <span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;pcl/point_cloud.h></span></span>
 <span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;pcl/point_types.h></span></span>
-</code></pre>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
-<li><a href="https://segmentfault.com/a/1190000007125502" rel="noopener external nofollow noreferrer" target="_blank">good pcl tutorials</a></li>
-<li><a href="https://gist.github.com/UnaNancyOwen/59319050d53c137ca8f3#file-pcl1-8-0-md" rel="noopener external nofollow noreferrer" target="_blank">Building PCL 1.7.2 with Visual Studio</a></li>
-<li><a href="http://www.pointclouds.org/documentation/tutorials/compiling_pcl_windows.php" rel="noopener external nofollow noreferrer" target="_blank">offical: compile pcl on windows</a></li>
-<li><a href="http://www.pointclouds.org/documentation/tutorials/using_pcl_pcl_config.php#using-pcl-pcl-config" rel="noopener external nofollow noreferrer" target="_blank">offical: using pcl example</a></li>
-<li><a href="http://www.pointclouds.org/documentation/tutorials/writing_pcd.php#writing-pcd" rel="noopener external nofollow noreferrer" target="_blank">offical: writing pcd</a></li>
-<li><a href="http://pointclouds.org/documentation/tutorials/qt_visualizer.php" rel="noopener external nofollow noreferrer" target="_blank">offical pcl with qt visualizer</a></li>
-<li><a href="http://wiki.ros.org/pcl/Overview" rel="noopener external nofollow noreferrer" target="_blank">offical: pcl with ros</a></li>
-<li><a href="http://www.eaglevi.com/archives/27" rel="noopener external nofollow noreferrer" target="_blank">install pcl by isstallers</a></li>
-<li><a href="https://segmentfault.com/a/1190000012719850" rel="noopener external nofollow noreferrer" target="_blank">pcl point cloud realtime viewer</a></li>
-<li><a href="https://stackoverflow.com/questions/18642155/no-override-found-for-vtkpolydatamapper" rel="noopener external nofollow noreferrer" target="_blank">no-override-found-for-vtkpolydatamappe</a></li>
-<li><a href="https://www.vtk.org/Wiki/VTK/VTK_6_Migration/Factories_now_require_defines" rel="noopener external nofollow noreferrer" target="_blank">VTK 6 Migration/Factories now require defines</a></li>
-</ul>
-<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
-<li>20180112: created.</li>
-<li>20180208: add DependencyWalker,add pcl pcd demo, pcl+vtk+qt demo.</li>
-<li>20180211: add vs2015 regedit for runasadmin.</li>
-<li>20180301: change VTK-8.0.1 to VTK-8.1.0.</li>
-</ul>
-
-            </div>
-            <hr/>
-
-            
-
-    <div class="reprint" id="reprint-statement">
-        
-            <div class="reprint__author">
-                <span class="reprint-meta" style="font-weight: bold;">
-                    <i class="fas fa-user">
-                        Author:
-                    </i>
-                </span>
-                <span class="reprint-info">
-                    <a href="https://kezunlin.me" rel="external nofollow noreferrer">kezunlin</a>
-                </span>
-            </div>
-            <div class="reprint__type">
-                <span class="reprint-meta" style="font-weight: bold;">
-                    <i class="fas fa-link">
-                        Link:
-                    </i>
-                </span>
-                <span class="reprint-info">
-                    <a href="https://kezunlin.me/post/2d809f92/">https://kezunlin.me/post/2d809f92/</a>
-                </span>
-            </div>
-            <div class="reprint__notice">
-                <span class="reprint-meta" style="font-weight: bold;">
-                    <i class="fas fa-copyright">
-                        Reprint policy:
-                    </i>
-                </span>
-                <span class="reprint-info">
-                    All articles in this blog are used except for special statements
-                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
-                    reprint polocy. If reproduced, please indicate source
-                    <a href="https://kezunlin.me" target="_blank">kezunlin</a>
-                    !
-                </span>
-            </div>
-        
-    </div>
-
-    <script async defer>
-      document.addEventListener("copy", function (e) {
+</code></pre><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul><li><a href="https://segmentfault.com/a/1190000007125502" rel="noopener external nofollow noreferrer" target="_blank">good pcl tutorials</a></li><li><a href="https://gist.github.com/UnaNancyOwen/59319050d53c137ca8f3#file-pcl1-8-0-md" rel="noopener external nofollow noreferrer" target="_blank">Building PCL 1.7.2 with Visual Studio</a></li><li><a href="http://www.pointclouds.org/documentation/tutorials/compiling_pcl_windows.php" rel="noopener external nofollow noreferrer" target="_blank">offical: compile pcl on windows</a></li><li><a href="http://www.pointclouds.org/documentation/tutorials/using_pcl_pcl_config.php#using-pcl-pcl-config" rel="noopener external nofollow noreferrer" target="_blank">offical: using pcl example</a></li><li><a href="http://www.pointclouds.org/documentation/tutorials/writing_pcd.php#writing-pcd" rel="noopener external nofollow noreferrer" target="_blank">offical: writing pcd</a></li><li><a href="http://pointclouds.org/documentation/tutorials/qt_visualizer.php" rel="noopener external nofollow noreferrer" target="_blank">offical pcl with qt visualizer</a></li><li><a href="http://wiki.ros.org/pcl/Overview" rel="noopener external nofollow noreferrer" target="_blank">offical: pcl with ros</a></li><li><a href="http://www.eaglevi.com/archives/27" rel="noopener external nofollow noreferrer" target="_blank">install pcl by isstallers</a></li><li><a href="https://segmentfault.com/a/1190000012719850" rel="noopener external nofollow noreferrer" target="_blank">pcl point cloud realtime viewer</a></li><li><a href="https://stackoverflow.com/questions/18642155/no-override-found-for-vtkpolydatamapper" rel="noopener external nofollow noreferrer" target="_blank">no-override-found-for-vtkpolydatamappe</a></li><li><a href="https://www.vtk.org/Wiki/VTK/VTK_6_Migration/Factories_now_require_defines" rel="noopener external nofollow noreferrer" target="_blank">VTK 6 Migration/Factories now require defines</a></li></ul><h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul><li>20180112: created.</li><li>20180208: add DependencyWalker,add pcl pcd demo, pcl+vtk+qt demo.</li><li>20180211: add vs2015 regedit for runasadmin.</li><li>20180301: change VTK-8.0.1 to VTK-8.1.0.</li></ul></div><hr><div class="reprint" id="reprint-statement"><div class="reprint__author"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-user">Author: </i></span><span class="reprint-info"><a href="https://kezunlin.me" rel="external nofollow noreferrer">kezunlin</a></span></div><div class="reprint__type"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-link">Link: </i></span><span class="reprint-info"><a href="https://kezunlin.me/post/2d809f92/">https://kezunlin.me/post/2d809f92/</a></span></div><div class="reprint__notice"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-copyright">Reprint policy: </i></span><span class="reprint-info">All articles in this blog are used except for special statements <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a> reprint polocy. If reproduced, please indicate source <a href="https://kezunlin.me" target="_blank">kezunlin</a> !</span></div></div><script async defer>document.addEventListener("copy", function (e) {
         let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
         M.toast({html: toastHTML})
       });
 
       function navToReprintStatement() {
         $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
-      }
-    </script>
-
-
-
-            <div class="tag_share" style="display: block;">
-                <div class="post-meta__tag-list" style="display: inline-block;">
-                    
-                        <div class="article-tag">
-                            
-                                <a href="/tags/qt/">
-                                    <span class="chip bg-color">qt</span>
-                                </a>
-                            
-                                <a href="/tags/vtk/">
-                                    <span class="chip bg-color">vtk</span>
-                                </a>
-                            
-                                <a href="/tags/pcl/">
-                                    <span class="chip bg-color">pcl</span>
-                                </a>
-                            
-                        </div>
-                    
-                </div>
-            </div>
-            
-                <style>
-    #reward {
-        margin: 40px 0;
-        text-align: center;
-    }
-
-    #reward .reward-link {
-        font-size: 1.88rem;
-    }
-
-    #reward .btn-floating:hover {
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    #rewardModal {
-        width: 320px;
-        height: 350px;
-    }
-
-    #rewardModal .reward-title {
-        margin: 15px auto;
-        padding-bottom: 5px;
-    }
-
-    #rewardModal .modal-content {
-        padding: 10px;
-    }
-
-    #rewardModal .close {
-        position: absolute;
-        right: 15px;
-        top: 15px;
-        color: rgba(0, 0, 0, 0.5);
-        font-size: 1.3rem;
-        line-height: 20px;
-        cursor: pointer;
-    }
-
-    #rewardModal .close:hover {
-        color: #ef5350;
-        transform: scale(1.3);
-        -moz-transform:scale(1.3);
-        -webkit-transform:scale(1.3);
-        -o-transform:scale(1.3);
-    }
-
-    #rewardModal .reward-tabs {
-        margin: 0 auto;
-        width: 210px;
-    }
-
-    .reward-tabs .tabs {
-        height: 38px;
-        margin: 10px auto;
-        padding-left: 0;
-    }
-
-    .reward-content ul {
-        padding-left: 0 !important;
-    }
-
-    .reward-tabs .tabs .tab {
-        height: 38px;
-        line-height: 38px;
-    }
-
-    .reward-tabs .tab a {
-        color: #fff;
-        background-color: #ccc;
-    }
-
-    .reward-tabs .tab a:hover {
-        background-color: #ccc;
-        color: #fff;
-    }
-
-    .reward-tabs .wechat-tab .active {
-        color: #fff !important;
-        background-color: #22AB38 !important;
-    }
-
-    .reward-tabs .alipay-tab .active {
-        color: #fff !important;
-        background-color: #019FE8 !important;
-    }
-
-    .reward-tabs .reward-img {
-        width: 210px;
-        height: 210px;
-    }
-</style>
-
-<div id="reward">
-    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
-
-    <!-- Modal Structure -->
-    <div id="rewardModal" class="modal">
-        <div class="modal-content">
-            <a class="close modal-close"><i class="fas fa-times"></i></a>
-            <h4 class="reward-title">你的赏识是我前进的动力</h4>
-            <div class="reward-content">
-                <div class="reward-tabs">
-                    <ul class="tabs row">
-                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
-                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
-                    </ul>
-                    <div id="alipay">
-                        <img src="/medias/reward/alipay.jpeg" class="reward-img" alt="支付宝打赏二维码">
-                    </div>
-                    <div id="wechat">
-                        <img src="/medias/reward/wechat.jpeg" class="reward-img" alt="微信打赏二维码">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    $(function () {
-        $('.tabs').tabs();
-    });
-</script>
-            
-
-            <!-- hack -->
-            
-                <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
-
-<div id="article-share">
-    
-    
-    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-    <script src="/libs/share/js/social-share.min.js"></script>
-    
-
-    
-
-</div>
-
-            
-
-            <!-- hack -->
-            <!-- Google AdSense -->
-
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <!-- kzl in-article ad -->
-     <ins class="adsbygoogle"
-          style="display:block; text-align:center;"
-          data-ad-layout="in-article"
-          data-ad-format="fluid"
-          data-ad-client="ca-pub-5653382914441020"
-          data-ad-slot="7925631830"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-
-        </div>
-    </div>
-
-    <!-- hack -->
-    
-
-<article id="prenext-posts" class="prev-next articles">
-    <div class="row article-row">
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
-            <div class="card">
-                <a href="/post/12ab5707/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="compile cmake from source on ubuntu and write your own user defined FindXXX.cmake">
-                        
-                        <span class="card-title">compile cmake from source on ubuntu and write your own user defined FindXXX.cmake</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            tutorial to compile and install cmake from source on ubuntu 16.04 and how to write your own user defined FindXXX.cmake
-                        
-                    </div>
-                    <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2018-01-22
-                        </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/cpp/" class="post-category">
-                                    cpp
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/cmake/">
-                        <span class="chip bg-color">cmake</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                Next&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/post/8932eaec/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="how to implement singleton class in cpp">
-                        
-                        <span class="card-title">how to implement singleton class in cpp</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            how to implement singleton class in cpp
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2018-01-22
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/cpp/" class="post-category">
-                                    cpp
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/singleton/">
-                        <span class="chip bg-color">singleton</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-    </div>
-</article>
-
-
-    
-        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
-<link rel="stylesheet" href="/css/my-gitalk.css">
-
-<div class="card gitalk-card" data-aos="fade-up">
-    <!-- hack -->
-    <!-- Google AdSense -->
-
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <!-- kzl display ad -->
-     <ins class="adsbygoogle"
-          style="display:block"
-          data-ad-client="ca-pub-5653382914441020"
-          data-ad-slot="7570408610"
-          data-ad-format="auto"
-          data-full-width-responsive="true"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-
-
-
-
-    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
-        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
-        <span>评论</span>
-    </div>
-    <div id="gitalk-container" class="card-content"></div>
-</div>
-
-<script src="/libs/gitalk/gitalk.min.js"></script>
-<script>
-    let gitalk = new Gitalk({
+      }</script><div class="tag_share" style="display:block"><div class="post-meta__tag-list" style="display:inline-block"><div class="article-tag"><a href="/tags/qt/"><span class="chip bg-color">qt</span> </a><a href="/tags/vtk/"><span class="chip bg-color">vtk</span> </a><a href="/tags/pcl/"><span class="chip bg-color">pcl</span></a></div></div></div><style>#reward{margin:40px 0;text-align:center}#reward .reward-link{font-size:1.88rem}#reward .btn-floating:hover{box-shadow:0 6px 12px rgba(0,0,0,.2),0 5px 15px rgba(0,0,0,.2)}#rewardModal{width:320px;height:350px}#rewardModal .reward-title{margin:15px auto;padding-bottom:5px}#rewardModal .modal-content{padding:10px}#rewardModal .close{position:absolute;right:15px;top:15px;color:rgba(0,0,0,.5);font-size:1.3rem;line-height:20px;cursor:pointer}#rewardModal .close:hover{color:#ef5350;transform:scale(1.3);-moz-transform:scale(1.3);-webkit-transform:scale(1.3);-o-transform:scale(1.3)}#rewardModal .reward-tabs{margin:0 auto;width:210px}.reward-tabs .tabs{height:38px;margin:10px auto;padding-left:0}.reward-content ul{padding-left:0!important}.reward-tabs .tabs .tab{height:38px;line-height:38px}.reward-tabs .tab a{color:#fff;background-color:#ccc}.reward-tabs .tab a:hover{background-color:#ccc;color:#fff}.reward-tabs .wechat-tab .active{color:#fff!important;background-color:#22AB38!important}.reward-tabs .alipay-tab .active{color:#fff!important;background-color:#019FE8!important}.reward-tabs .reward-img{width:210px;height:210px}</style><div id="reward"><a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a><div id="rewardModal" class="modal"><div class="modal-content"><a class="close modal-close"><i class="fas fa-times"></i></a><h4 class="reward-title">你的赏识是我前进的动力</h4><div class="reward-content"><div class="reward-tabs"><ul class="tabs row"><li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li><li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li></ul><div id="alipay"><img src="/medias/reward/alipay.jpeg" class="reward-img" alt="支付宝打赏二维码"></div><div id="wechat"><img src="/medias/reward/wechat.jpeg" class="reward-img" alt="微信打赏二维码"></div></div></div></div></div></div><script>$(function(){$(".tabs").tabs()})</script><link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css"><div id="article-share"><div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div><script src="/libs/share/js/social-share.min.js"></script></div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div></div><article id="prenext-posts" class="prev-next articles"><div class="row article-row"><div class="article col s12 m6" data-aos="fade-up"><div class="article-badge left-badge text-color"><i class="fas fa-chevron-left"></i>&nbsp;Previous</div><div class="card"><a href="/post/12ab5707/"><div class="card-image"><img src="/medias/featureimages/8.jpg" class="responsive-img" alt="compile cmake from source on ubuntu and write your own user defined FindXXX.cmake"> <span class="card-title">compile cmake from source on ubuntu and write your own user defined FindXXX.cmake</span></div></a><div class="card-content article-content"><div class="summary block-with-text">tutorial to compile and install cmake from source on ubuntu 16.04 and how to write your own user defined FindXXX.cmake</div><div class="publish-info"><span class="publish-date"><i class="far fa-clock fa-fw icon-date"></i>2018-01-22 </span><span class="publish-author"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/cpp/" class="post-category">cpp</a></span></div></div><div class="card-action article-tags"><a href="/tags/cmake/"><span class="chip bg-color">cmake</span></a></div></div></div><div class="article col s12 m6" data-aos="fade-up"><div class="article-badge right-badge text-color">Next&nbsp;<i class="fas fa-chevron-right"></i></div><div class="card"><a href="/post/8932eaec/"><div class="card-image"><img src="/medias/featureimages/1.jpg" class="responsive-img" alt="how to implement singleton class in cpp"> <span class="card-title">how to implement singleton class in cpp</span></div></a><div class="card-content article-content"><div class="summary block-with-text">how to implement singleton class in cpp</div><div class="publish-info"><span class="publish-date"><i class="far fa-clock fa-fw icon-date"></i>2018-01-22 </span><span class="publish-author"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/cpp/" class="post-category">cpp</a></span></div></div><div class="card-action article-tags"><a href="/tags/singleton/"><span class="chip bg-color">singleton</span></a></div></div></div></div></article><link rel="stylesheet" href="/libs/gitalk/gitalk.css"><link rel="stylesheet" href="/css/my-gitalk.css"><div class="card gitalk-card" data-aos="fade-up"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7570408610" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><div class="comment_headling" style="font-size:20px;font-weight:700;position:relative;left:20px;top:15px;padding-bottom:5px"><i class="fas fa-comments fa-fw" aria-hidden="true"></i> <span>评论</span></div><div id="gitalk-container" class="card-content"></div></div><script src="/libs/gitalk/gitalk.min.js"></script><script>let gitalk = new Gitalk({
         clientID: '4d1e3d463455e6bc7eba',
         clientSecret: '4af023d85b66c4161a83b3f9297036e84c9ba57f',
         repo: 'gitalk',
@@ -1652,79 +680,7 @@ target_link_libraries(test_pcd
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
-    gitalk.render('gitalk-container');
-</script>
-    
-
-    
-
-    
-
-    
-
-    
-</div>
-
-
-
-
-
-<!-- 代码语言 -->
-
-    
-<!-- 代码块复制 -->
-
-
-<!-- 代码块收缩 -->
-
-<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
-
-
-<!-- 代码块折行 -->
-
-<style type="text/css">
-code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
-</style>
-
-    </div>
-    <div id="toc-aside" class="col l3 hide-on-med-and-down">
-        <div class="toc-widget">
-            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
-            <div id="toc-content"></div>
-
-            <!-- hack -->
-            <!-- Google AdSense -->
-
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <!-- kzl display ad -->
-     <ins class="adsbygoogle"
-          style="display:block"
-          data-ad-client="ca-pub-5653382914441020"
-          data-ad-slot="7570408610"
-          data-ad-format="auto"
-          data-full-width-responsive="true"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-
-
-
-        </div>
-    </div>
-</div>
-
-<!-- TOC 悬浮按钮. -->
-
-<div id="floating-toc-btn" class="hide-on-med-and-down">
-    <a class="btn-floating btn-large bg-color">
-        <i class="fas fa-list-ul"></i>
-    </a>
-</div>
-
-
-<script src="/libs/tocbot/tocbot.min.js"></script>
-<script>
-    $(function () {
+    gitalk.render('gitalk-container');</script></div><script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script><style type="text/css">code[class*=language-],pre[class*=language-]{white-space:pre!important}</style></div><div id="toc-aside" class="col l3 hide-on-med-and-down"><div class="toc-widget"><div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div><div id="toc-content"></div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7570408610" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div></div></div><div id="floating-toc-btn" class="hide-on-med-and-down"><a class="btn-floating btn-large bg-color"><i class="fas fa-list-ul"></i></a></div><script src="/libs/tocbot/tocbot.min.js"></script><script>$(function () {
         tocbot.init({
             tocSelector: '#toc-content',
             contentSelector: '#articleContent',
@@ -1795,208 +751,4 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             fixPostCardWidth('artDetail', 'prenext-posts');
         });
         
-    });
-</script>
-
-    
-
-</main>
-
-
-
-    <footer class="page-footer bg-color">
-    <div class="container row center-align">
-        <div class="col s12 m8 l8 copy-right">
-            Copyright&nbsp;&copy;
-            <span id="year">年份</span>
-            <a href="https://kezunlin.me" target="_blank">kezunlin</a>
-            <br>
-            
-            
-            
-            
-            
-            
-            <span id="busuanzi_container_site_pv">
-                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
-                    class="white-color"></span>&nbsp;次
-            </span>
-            
-            
-            <span id="busuanzi_container_site_uv">
-                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
-                    class="white-color"></span>&nbsp;人
-            </span>
-            
-            <br>
-            
-            <span id="sitetime">载入运行时间...</span>
-            <script>
-                function siteTime() {
-                    window.setTimeout("siteTime()", 1000);
-                    var seconds = 1000;
-                    var minutes = seconds * 60;
-                    var hours = minutes * 60;
-                    var days = hours * 24;
-                    var years = days * 365;
-                    var today = new Date();
-                    var startYear = "2017";
-                    var startMonth = "11";
-                    var startDate = "11";
-                    var startHour = "0";
-                    var startMinute = "0";
-                    var startSecond = "0";
-                    var todayYear = today.getFullYear();
-                    var todayMonth = today.getMonth() + 1;
-                    var todayDate = today.getDate();
-                    var todayHour = today.getHours();
-                    var todayMinute = today.getMinutes();
-                    var todaySecond = today.getSeconds();
-                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
-                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
-                    var diff = t2 - t1;
-                    var diffYears = Math.floor(diff / years);
-                    var diffDays = Math.floor((diff / days) - diffYears * 365);
-                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
-                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
-                        minutes);
-                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
-                        diffMinutes * minutes) / seconds);
-                    if (startYear == todayYear) {
-                        document.getElementById("year").innerHTML = todayYear;
-                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
-                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
-                    } else {
-                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
-                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
-                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
-                    }
-                }
-                setInterval(siteTime, 1000);
-            </script>
-            
-            <br>
-            
-        </div>
-        <div class="col s12 m4 l4 social-link social-statis">
-    <a href="https://github.com/kezunlin" rel="external nofollow noreferrer" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
-        <i class="fab fa-github"></i>
-    </a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
-        <i class="fas fa-rss"></i>
-    </a>
-
-</div>
-    </div>
-</footer>
-
-<div class="progress-bar"></div>
-
-
-    <!-- 搜索遮罩框 -->
-<div id="searchModal" class="modal">
-    <div class="modal-content">
-        <div class="search-header">
-            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
-            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
-                   class="search-input">
-        </div>
-        <div id="searchResult"></div>
-    </div>
-</div>
-
-<script src="/js/search.js"></script>
-<script type="text/javascript">
-$(function () {
-    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
-});
-</script>
-    <!-- 回到顶部按钮 -->
-<div id="backTop" class="top-scroll">
-    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
-        <i class="fas fa-arrow-up"></i>
-    </a>
-</div>
-
-
-    <script src="/libs/materialize/materialize.min.js"></script>
-    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="/libs/aos/aos.js"></script>
-    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="/js/matery.js"></script>
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-
-
-<!-- 
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-111858944-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-        dataLayer.push(arguments);
-    }
-
-    gtag('js', new Date());
-    gtag('config', 'UA-111858944-1');
-</script>
--->
-
-<script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-    ga('create', 'UA-111858944-1', 'auto');
-    ga('send', 'pageview');
-</script>
-
-
-    <!-- hack -->
-    <!-- Google AdSense header-->
-
-     <script data-ad-client="ca-pub-5653382914441020" 
-          async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
-     </script>
-
-    <!-- Baidu Analytics -->
-
-    <!-- Baidu Push -->
-
-    
-    
-    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-    
-    <script src="/libs/instantpage/instantpage.js" type="module"></script>
-    
-
-</body>
-
-</html>
+    });</script></main><footer class="page-footer bg-color"><div class="container row center-align"><div class="col s12 m8 l8 copy-right">Copyright&nbsp;&copy; <span id="year">年份</span> <a href="https://kezunlin.me" target="_blank">kezunlin</a><br><span id="busuanzi_container_site_pv">|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv" class="white-color"></span>&nbsp;次 </span><span id="busuanzi_container_site_uv">|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv" class="white-color"></span>&nbsp;人</span><br><span id="sitetime">载入运行时间...</span><script>function siteTime(){window.setTimeout("siteTime()",1e3);var e=1e3,t=60*e,n=60*t,o=24*n,i=365*o,r=new Date,a="2017",m="11",l="11",M="0",d="0",g="0",s=r.getFullYear(),T=r.getMonth()+1,u=r.getDate(),c=r.getHours(),f=r.getMinutes(),h=r.getSeconds(),y=Date.UTC(a,m,l,M,d,g),H=Date.UTC(s,T,u,c,f,h),I=H-y,B=Math.floor(I/i),D=Math.floor(I/o-365*B),E=Math.floor((I-(365*B+D)*o)/n),L=Math.floor((I-(365*B+D)*o-E*n)/t),w=Math.floor((I-(365*B+D)*o-E*n-L*t)/e);a==s?(document.getElementById("year").innerHTML=s,document.getElementById("sitetime").innerHTML="本站已安全运行 "+D+" 天 "+E+" 小时 "+L+" 分钟 "+w+" 秒"):(document.getElementById("year").innerHTML=a+" - "+s,document.getElementById("sitetime").innerHTML="本站已安全运行 "+B+" 年 "+D+" 天 "+E+" 小时 "+L+" 分钟 "+w+" 秒")}setInterval(siteTime,1e3)</script><br></div><div class="col s12 m4 l4 social-link social-statis"><a href="https://github.com/kezunlin" rel="external nofollow noreferrer" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50"><i class="fab fa-github"></i> </a><a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50"><i class="fas fa-rss"></i></a></div></div></footer><div class="progress-bar"></div><div id="searchModal" class="modal"><div class="modal-content"><div class="search-header"><span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span> <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword" class="search-input"></div><div id="searchResult"></div></div></div><script src="/js/search.js"></script><script type="text/javascript">$(function(){searchFunc("/search.xml","searchInput","searchResult")})</script><div id="backTop" class="top-scroll"><a class="btn-floating btn-large waves-effect waves-light" href="#!"><i class="fas fa-arrow-up"></i></a></div><script src="/libs/materialize/materialize.min.js"></script><script src="/libs/masonry/masonry.pkgd.min.js"></script><script src="/libs/aos/aos.js"></script><script src="/libs/scrollprogress/scrollProgress.min.js"></script><script src="/libs/lightGallery/js/lightgallery-all.min.js"></script><script src="/js/matery.js"></script><script>!function(e,t,a,n,c,o,s){e.GoogleAnalyticsObject=c,e[c]=e[c]||function(){(e[c].q=e[c].q||[]).push(arguments)},e[c].l=1*new Date,o=t.createElement(a),s=t.getElementsByTagName(a)[0],o.async=1,o.src=n,s.parentNode.insertBefore(o,s)}(window,document,"script","https://www.google-analytics.com/analytics.js","ga"),ga("create","UA-111858944-1","auto"),ga("send","pageview")</script><script data-ad-client="ca-pub-5653382914441020" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script async src="/libs/others/busuanzi.pure.mini.js"></script><script src="/libs/instantpage/instantpage.js" type="module"></script></body></html><!-- rebuild by neat -->
