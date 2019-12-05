@@ -1,16 +1,505 @@
-<!-- build time:Fri Nov 29 2019 15:13:56 GMT+0800 (CST) --><!DOCTYPE html><html class="theme-next gemini" lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#222"><meta name="referrer" content="no-referrer"><meta name="google-site-verification" content="WSpJFvfcmIPBX_iK8uPbmCHIy_0f1lvd7ZJpbyad2sA"><meta name="yandex-verification" content="808eb057eb8396cc"><meta name="baidu-site-verification" content="9tyEi4Fq0J"><meta name="360-site-verification" content="202e7cd2d29c6b138e4b78d9e9b62d43"><meta name="sogou_site_verification" content="euHq4j1Rpe"><script data-ad-client="ca-pub-5653382914441020" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"><link href="//fonts.googleapis.com/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|16:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css"><link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css"><link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3"><link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222"><meta name="keywords" content="KeZunLin, kezunlin, c++, python, linux, ubuntu, deep learning, caffe, tensorflow, mxnet, keras, pytorch, computer vision, kaggle, opencv, cmake, git, vim, github, google, stackoverflow"><link rel="alternate" href="/atom.xml" title="C++ Python. Computer Vision Deep Learning | KeZunLin's Blog" type="application/atom+xml"><meta name="description" content="matplot RGB vs opencv BGR vs caffe images"><meta property="og:type" content="article"><meta property="og:title" content="matplot RGB vs opencv BGR vs caffe images"><meta property="og:url" content="https://kezunlin.me/post/62811272/index.html"><meta property="og:site_name" content="C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog"><meta property="og:description" content="matplot RGB vs opencv BGR vs caffe images"><meta property="og:locale" content="en"><meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102819164-727852617.png"><meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102819164-727852617.png"><meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102822472-37116830.png"><meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102827030-476523183.png"><meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102829804-2136984998.png"><meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102832577-885538468.png"><meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102837178-881579112.png"><meta property="og:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102840423-899986139.png"><meta property="og:updated_time" content="2019-11-18T05:27:27.915Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="matplot RGB vs opencv BGR vs caffe images"><meta name="twitter:description" content="matplot RGB vs opencv BGR vs caffe images"><meta name="twitter:image" content="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102819164-727852617.png"><script type="text/javascript" id="hexo.configurations">var NexT=window.NexT||{},CONFIG={root:"/",scheme:"Gemini",version:"5.1.3",sidebar:{position:"left",display:"post",offset:12,b2t:!0,scrollpercent:!0,onmobile:!1},fancybox:!0,tabs:!0,motion:{enable:!1,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},duoshuo:{userId:"0",author:"Author"},algolia:{applicationID:"",apiKey:"",indexName:"",hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}}}</script><link rel="canonical" href="https://kezunlin.me/post/62811272/"><title>matplot RGB vs opencv BGR vs caffe images | C++ Python. Computer Vision Deep Learning | KeZunLin's Blog</title><script>!function(e,t,a,n,c,o,s){e.GoogleAnalyticsObject=c,e[c]=e[c]||function(){(e[c].q=e[c].q||[]).push(arguments)},e[c].l=1*new Date,o=t.createElement(a),s=t.getElementsByTagName(a)[0],o.async=1,o.src=n,s.parentNode.insertBefore(o,s)}(window,document,"script","https://www.google-analytics.com/analytics.js","ga"),ga("create","UA-111858944-1","auto"),ga("send","pageview")</script></head><body itemscope itemtype="http://schema.org/WebPage" lang="en"><div class="container sidebar-position-left page-post-detail"><div class="headband"></div><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-wrapper"><div class="site-meta"><div class="custom-logo-site-title"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span> <span class="site-title">C++ Python. Computer Vision Deep Learning | KeZunLin's Blog</span> <span class="logo-line-after"><i></i></span></a></div><h1 class="site-subtitle" itemprop="description">C++ && Python. CV && DL.</h1></div><div class="site-nav-toggle"><button><span class="btn-bar"></span> <span class="btn-bar"></span> <span class="btn-bar"></span></button></div></div><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i><br>Home</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i><br>Archives</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i><br>Categories</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i><br>Tags</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="menu-item-icon fa fa-fw fa-link"></i><br>Friends</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i><br>About</a></li><li class="menu-item menu-item-search"><a href="javascript:;" rel="external nofollow noreferrer" class="popup-trigger"><i class="menu-item-icon fa fa-search fa-fw"></i><br>Search</a></li></ul><div class="site-search"><div class="popup search-popup local-search-popup"><div class="local-search-header clearfix"><span class="search-icon"><i class="fa fa-search"></i> </span><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span><div class="local-search-input-wrapper"><input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input"></div></div><div id="local-search-result"></div></div></div></nav></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><div id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="https://kezunlin.me/post/62811272/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="kezunlin"><meta itemprop="description" content><meta itemprop="image" content="/images/kezunlin_avatar.jpg"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="C++ Python. Computer Vision Deep Learning | KeZunLin's Blog"><img itemprop="logo" src="/images/kezunlin_avatar.jpg" title="KeZunLin's Blog" alt="logo"></span><header class="post-header"><h2 class="post-title" itemprop="name headline">matplot RGB vs opencv BGR vs caffe images</h2><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i> </span><span class="post-meta-item-text">Posted on</span> <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-16T10:27:00+08:00">2018-08-16 </time></span><span class="post-category"><span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-folder-o"></i> </span><span class="post-meta-item-text">In</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/caffe/" itemprop="url" rel="index"><span itemprop="name">caffe</span> </a></span>, <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/caffe/tutorials/" itemprop="url" rel="index"><span itemprop="name">tutorials</span></a></span></span><div class="post-wordcount"><span class="post-meta-item-icon"><i class="fa fa-file-word-o"></i> </span><span class="post-meta-item-text">Words count&#58;</span> <span title="Words count">3,491 </span><span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i> </span><span class="post-meta-item-text">Reading time &asymp;</span> <span title="Reading time">22</span></div></div></header><div class="post-body" itemprop="articleBody"><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div><p>matplot RGB vs opencv BGR vs caffe images<br><a id="more"></a></p><h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><h2 id="Matplot-skimage-PIL-Image"><a href="#Matplot-skimage-PIL-Image" class="headerlink" title="Matplot (skimage/ PIL Image)"></a>Matplot (skimage/ PIL Image)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Matplot: dims: (height,width,channels),order: RGB,range: [0,255] dtype: uint8</span></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> matplotlib.image <span class="keyword">as</span> img</span><br><span class="line">image = img.imread(<span class="string">"images/cat.jpg"</span>)</span><br><span class="line"><span class="keyword">print</span> image.shape <span class="comment"># (360, 480, 3)</span></span><br><span class="line"><span class="keyword">print</span> image[:<span class="number">5</span>,:<span class="number">5</span>,<span class="number">0</span>]</span><br><span class="line"><span class="comment">#plt.axis("off")</span></span><br><span class="line">plt.imshow(image)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure><pre><code>(360, 480, 3)
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="matplot RGB vs opencv BGR vs caffe images, C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog">
+    <meta name="description" content="GuideMatplot (skimage/ PIL Image)# Matplot: dims: (height,width,channels),order: RGB,range: [0,255] dtype: uint8
+import ">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>matplot RGB vs opencv BGR vs caffe images | C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog</title>
+    <link rel="icon" type="image/jpeg" href="/favicon.jpg">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.jpg" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">KeZunLin</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Index</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.jpg" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">KeZunLin</div>
+        <div class="logo-desc">
+            
+            OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Index
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/9.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        matplot RGB vs opencv BGR vs caffe images
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/opencv/">
+                                <span class="chip bg-color">opencv</span>
+                            </a>
+                        
+                            <a href="/tags/rgb/">
+                                <span class="chip bg-color">rgb</span>
+                            </a>
+                        
+                            <a href="/tags/bgr/">
+                                <span class="chip bg-color">bgr</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/python/" class="post-category">
+                                python
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2018-08-16
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
+                    3,140
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
+                    20 Min
+                </div>
+                
+				
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+            
+        </div>
+        <hr class="clearfix">
+        <!-- hack -->
+        <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <!-- kzl in-article ad -->
+     <ins class="adsbygoogle"
+          style="display:block; text-align:center;"
+          data-ad-layout="in-article"
+          data-ad-format="fluid"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="7925631830"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="Matplot-skimage-PIL-Image"><a href="#Matplot-skimage-PIL-Image" class="headerlink" title="Matplot (skimage/ PIL Image)"></a>Matplot (skimage/ PIL Image)</h3><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># Matplot: dims: (height,width,channels),order: RGB,range: [0,255] dtype: uint8</span>
+<span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+<span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>image <span class="token keyword">as</span> img
+image <span class="token operator">=</span> img<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string">"images/cat.jpg"</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span> image<span class="token punctuation">.</span>shape <span class="token comment" spellcheck="true"># (360, 480, 3)</span>
+<span class="token keyword">print</span> image<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">]</span>
+<span class="token comment" spellcheck="true">#plt.axis("off")</span>
+plt<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span>image<span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<pre><code>(360, 480, 3)
 [[26 27 25 28 30]
  [26 27 25 26 28]
  [26 26 26 26 27]
  [27 26 27 28 29]
  [29 27 26 26 29]]
-</code></pre><p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102819164-727852617.png" alt="png"></p><h2 id="PIL-Image"><a href="#PIL-Image" class="headerlink" title="PIL.Image"></a>PIL.Image</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># PIL Image.open: dims: hwc,order: RGB, ??( range: [0,255] dtype: uint8)??</span><br><span class="line"></span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">from PIL import Image</span><br><span class="line">image = Image.open(&quot;images/cat.jpg&quot;)</span><br><span class="line">print(image)</span><br><span class="line"># &lt;PIL.JpegImagePlugin.JpegImageFile image mode=RGB size=480x360 at 0x7F258E0B8410&gt;</span><br><span class="line">plt.imshow(image)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure><p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102819164-727852617.png" alt="png"></p><h2 id="skimage"><a href="#skimage" class="headerlink" title="skimage"></a>skimage</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import skimage</span><br><span class="line">image = skimage.io.imread(image_filepath) # RGB  (608, 606, 3)</span><br></pre></td></tr></table></figure><h2 id="OpenCV"><a href="#OpenCV" class="headerlink" title="OpenCV"></a>OpenCV</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># OpenCV: dims: (height,width,channels),order: BGR,range: [0,255] dtype: uint8</span></span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line">image = cv2.imread(<span class="string">"images/cat.jpg"</span>)</span><br><span class="line"><span class="keyword">print</span> image.shape <span class="comment"># (360, 480, 3)</span></span><br><span class="line"><span class="keyword">print</span> image[:<span class="number">5</span>,:<span class="number">5</span>,<span class="number">0</span>]</span><br><span class="line"><span class="comment">#plt.axis("off")</span></span><br><span class="line">plt.imshow(image)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure><pre><code>(360, 480, 3)
+</code></pre><p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102819164-727852617.png" alt="png"></p>
+<h3 id="PIL-Image"><a href="#PIL-Image" class="headerlink" title="PIL.Image"></a>PIL.Image</h3><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># PIL Image.open: dims: hwc,order: RGB, ??( range: [0,255] dtype: uint8)??</span>
+
+<span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+<span class="token keyword">from</span> PIL <span class="token keyword">import</span> Image
+image <span class="token operator">=</span> Image<span class="token punctuation">.</span>open<span class="token punctuation">(</span><span class="token string">"images/cat.jpg"</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>image<span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true"># &lt;PIL.JpegImagePlugin.JpegImageFile image mode=RGB size=480x360 at 0x7F258E0B8410></span>
+plt<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span>image<span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102819164-727852617.png" alt="png"></p>
+<h3 id="skimage"><a href="#skimage" class="headerlink" title="skimage"></a>skimage</h3><pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> skimage
+image <span class="token operator">=</span> skimage<span class="token punctuation">.</span>io<span class="token punctuation">.</span>imread<span class="token punctuation">(</span>image_filepath<span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># RGB  (608, 606, 3)</span>
+</code></pre>
+<h3 id="OpenCV"><a href="#OpenCV" class="headerlink" title="OpenCV"></a>OpenCV</h3><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># OpenCV: dims: (height,width,channels),order: BGR,range: [0,255] dtype: uint8</span>
+<span class="token keyword">import</span> cv2
+image <span class="token operator">=</span> cv2<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string">"images/cat.jpg"</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span> image<span class="token punctuation">.</span>shape <span class="token comment" spellcheck="true"># (360, 480, 3)</span>
+<span class="token keyword">print</span> image<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">]</span>
+<span class="token comment" spellcheck="true">#plt.axis("off")</span>
+plt<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span>image<span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<pre><code>(360, 480, 3)
 [[49 50 47 48 50]
  [51 52 48 48 50]
  [51 51 49 48 49]
  [50 49 49 48 49]
  [52 50 49 48 49]]
-</code></pre><p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102822472-37116830.png" alt="png"></p><p>The colors of our image are clearly wrong! Why is this?</p><p>The answer lies as a caveat with OpenCV.OpenCV represents RGB images as multi-dimensional NumPy arrays…but in reverse order! This means that <strong>OpenCV images are actually represented in BGR order rather than RGB</strong>!</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line">image = cv2.imread(<span class="string">"images/cat.jpg"</span>)</span><br><span class="line"><span class="comment"># convert from BGR to RGB</span></span><br><span class="line">rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)</span><br><span class="line">plt.axis(<span class="string">"off"</span>)</span><br><span class="line">plt.imshow(rgb_image)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure><p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102827030-476523183.png" alt="png"></p><h2 id="Matplot-VS-OpenCV"><a href="#Matplot-VS-OpenCV" class="headerlink" title="Matplot VS. OpenCV"></a>Matplot VS. OpenCV</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> matplotlib.image <span class="keyword">as</span> img</span><br><span class="line">image1 = img.imread(<span class="string">"images/cat.jpg"</span>) <span class="comment"># rgb</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line">image = cv2.imread(<span class="string">"images/cat.jpg"</span>)</span><br><span class="line"><span class="comment"># convert from BGR to RGB</span></span><br><span class="line">image2 = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) <span class="comment"># rgb</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#image1 and image2 are same at all.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> image1.dtype</span><br><span class="line"><span class="keyword">print</span> image1[:<span class="number">5</span>,:<span class="number">5</span>,<span class="number">0</span>] </span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> </span><br><span class="line"><span class="keyword">print</span> image2.dtype</span><br><span class="line"><span class="keyword">print</span> image2[:<span class="number">5</span>,:<span class="number">5</span>,<span class="number">0</span>] </span><br><span class="line"></span><br><span class="line">equal_count = np.sum( np.equal(image1[:,:,:],image2[:,:,:]) )</span><br><span class="line"><span class="keyword">print</span> equal_count</span><br><span class="line"><span class="keyword">print</span> equal_count == <span class="number">360</span>*<span class="number">480</span>*<span class="number">3</span></span><br></pre></td></tr></table></figure><pre><code>uint8
+</code></pre><p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102822472-37116830.png" alt="png"></p>
+<p>The colors of our image are clearly wrong! Why is this?</p>
+<p>The answer lies as a caveat with OpenCV.OpenCV represents RGB images as multi-dimensional NumPy arrays…but in reverse order! This means that <strong>OpenCV images are actually represented in BGR order rather than RGB</strong>!</p>
+<pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> cv2
+image <span class="token operator">=</span> cv2<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string">"images/cat.jpg"</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true"># convert from BGR to RGB</span>
+rgb_image <span class="token operator">=</span> cv2<span class="token punctuation">.</span>cvtColor<span class="token punctuation">(</span>image<span class="token punctuation">,</span> cv2<span class="token punctuation">.</span>COLOR_BGR2RGB<span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>axis<span class="token punctuation">(</span><span class="token string">"off"</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span>rgb_image<span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102827030-476523183.png" alt="png"></p>
+<h3 id="Matplot-VS-OpenCV"><a href="#Matplot-VS-OpenCV" class="headerlink" title="Matplot VS. OpenCV"></a>Matplot VS. OpenCV</h3><pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+<span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>image <span class="token keyword">as</span> img
+image1 <span class="token operator">=</span> img<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string">"images/cat.jpg"</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># rgb</span>
+
+<span class="token keyword">import</span> cv2
+image <span class="token operator">=</span> cv2<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string">"images/cat.jpg"</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true"># convert from BGR to RGB</span>
+image2 <span class="token operator">=</span> cv2<span class="token punctuation">.</span>cvtColor<span class="token punctuation">(</span>image<span class="token punctuation">,</span> cv2<span class="token punctuation">.</span>COLOR_BGR2RGB<span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># rgb</span>
+
+<span class="token comment" spellcheck="true">#image1 and image2 are same at all.</span>
+
+<span class="token keyword">print</span> image1<span class="token punctuation">.</span>dtype
+<span class="token keyword">print</span> image1<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">]</span> 
+
+<span class="token keyword">print</span> 
+<span class="token keyword">print</span> image2<span class="token punctuation">.</span>dtype
+<span class="token keyword">print</span> image2<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">]</span> 
+
+equal_count <span class="token operator">=</span> np<span class="token punctuation">.</span>sum<span class="token punctuation">(</span> np<span class="token punctuation">.</span>equal<span class="token punctuation">(</span>image1<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span><span class="token punctuation">:</span><span class="token punctuation">,</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">,</span>image2<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span><span class="token punctuation">:</span><span class="token punctuation">,</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">)</span>
+<span class="token keyword">print</span> equal_count
+<span class="token keyword">print</span> equal_count <span class="token operator">==</span> <span class="token number">360</span><span class="token operator">*</span><span class="token number">480</span><span class="token operator">*</span><span class="token number">3</span>
+</code></pre>
+<pre><code>uint8
 [[26 27 25 28 30]
  [26 27 25 26 28]
  [26 26 26 26 27]
@@ -25,7 +514,62 @@ uint8
  [29 27 26 26 29]]
 518400
 True
-</code></pre><h2 id="caffe-io-load-image"><a href="#caffe-io-load-image" class="headerlink" title="caffe.io.load_image"></a>caffe.io.load_image</h2><p><code>caffe.io.load_image</code> loads data in a normalized form (0-1)</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># caffe.io.load_image: dims: (height,width,channels),order: RGB,range: [0,1] dtype: float32</span></span><br><span class="line"><span class="comment"># matplot: caffe_image = matplot_image/255.0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">%matplotlib inline</span><br><span class="line"></span><br><span class="line"><span class="comment"># configure plotting</span></span><br><span class="line"><span class="comment">#plt.rcParams['figure.figsize'] = (10, 10)</span></span><br><span class="line">plt.rcParams[<span class="string">'image.interpolation'</span>] = <span class="string">'nearest'</span></span><br><span class="line"><span class="comment">#plt.rcParams['image.cmap'] = 'gray'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">caffe_root = <span class="string">'../'</span>  <span class="comment"># this file should be run from &#123;caffe_root&#125;/examples (otherwise change this line)</span></span><br><span class="line">sys.path.insert(<span class="number">0</span>, caffe_root + <span class="string">'python'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> caffe</span><br><span class="line"><span class="comment">#======================================================================</span></span><br><span class="line"><span class="comment"># load image</span></span><br><span class="line"><span class="comment">#======================================================================</span></span><br><span class="line">image = caffe.io.load_image(caffe_root + <span class="string">'examples/images/cat.jpg'</span>)</span><br><span class="line"><span class="keyword">print</span> image.shape,image.dtype <span class="comment"># (360, 480, 3) float32</span></span><br><span class="line"><span class="keyword">print</span> image[:<span class="number">5</span>,:<span class="number">5</span>,<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.imshow(image) <span class="comment"># (360, 480, 3) RGB</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#======================================================================</span></span><br><span class="line"><span class="comment"># load color image with color=False</span></span><br><span class="line"><span class="comment">#======================================================================</span></span><br><span class="line">image2 = caffe.io.load_image(caffe_root + <span class="string">'examples/images/cat.jpg'</span>,color=<span class="literal">False</span>)</span><br><span class="line"><span class="keyword">print</span> image2.shape  <span class="comment">#(360, 480, 1)</span></span><br><span class="line">gray_image2 = image2.squeeze()</span><br><span class="line"><span class="keyword">print</span> gray_image2.shape,gray_image2.dtype <span class="comment"># (360, 480) float32</span></span><br><span class="line"><span class="keyword">print</span> gray_image2[:<span class="number">5</span>,:<span class="number">5</span>]</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.imshow(gray_image2) <span class="comment"># (360, 480) gray</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#======================================================================</span></span><br><span class="line"><span class="comment"># load color image with color=False</span></span><br><span class="line"><span class="comment">#======================================================================</span></span><br><span class="line">image3 = caffe.io.load_image(caffe_root + <span class="string">'examples/images/cat_gray.jpg'</span>,color=<span class="literal">False</span>)</span><br><span class="line"><span class="keyword">print</span> image3.shape  <span class="comment">#(360, 480, 1)</span></span><br><span class="line">gray_image3 = image3.squeeze()</span><br><span class="line"><span class="keyword">print</span> gray_image3.shape,gray_image3.dtype <span class="comment"># (360, 480) float32</span></span><br><span class="line"><span class="keyword">print</span> gray_image3[:<span class="number">5</span>,:<span class="number">5</span>]</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.imshow(gray_image3) <span class="comment"># (360, 480) gray</span></span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure><pre><code>(360, 480, 3) float32
+</code></pre><h3 id="caffe-io-load-image"><a href="#caffe-io-load-image" class="headerlink" title="caffe.io.load_image"></a>caffe.io.load_image</h3><p><code>caffe.io.load_image</code> loads data in a normalized form (0-1)</p>
+<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># caffe.io.load_image: dims: (height,width,channels),order: RGB,range: [0,1] dtype: float32</span>
+<span class="token comment" spellcheck="true"># matplot: caffe_image = matplot_image/255.0</span>
+
+<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+<span class="token operator">%</span>matplotlib inline
+
+<span class="token comment" spellcheck="true"># configure plotting</span>
+<span class="token comment" spellcheck="true">#plt.rcParams['figure.figsize'] = (10, 10)</span>
+plt<span class="token punctuation">.</span>rcParams<span class="token punctuation">[</span><span class="token string">'image.interpolation'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">'nearest'</span>
+<span class="token comment" spellcheck="true">#plt.rcParams['image.cmap'] = 'gray'</span>
+
+<span class="token keyword">import</span> sys
+caffe_root <span class="token operator">=</span> <span class="token string">'../'</span>  <span class="token comment" spellcheck="true"># this file should be run from {caffe_root}/examples (otherwise change this line)</span>
+sys<span class="token punctuation">.</span>path<span class="token punctuation">.</span>insert<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> caffe_root <span class="token operator">+</span> <span class="token string">'python'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">import</span> caffe
+<span class="token comment" spellcheck="true">#======================================================================</span>
+<span class="token comment" spellcheck="true"># load image</span>
+<span class="token comment" spellcheck="true">#======================================================================</span>
+image <span class="token operator">=</span> caffe<span class="token punctuation">.</span>io<span class="token punctuation">.</span>load_image<span class="token punctuation">(</span>caffe_root <span class="token operator">+</span> <span class="token string">'examples/images/cat.jpg'</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span> image<span class="token punctuation">.</span>shape<span class="token punctuation">,</span>image<span class="token punctuation">.</span>dtype <span class="token comment" spellcheck="true"># (360, 480, 3) float32</span>
+<span class="token keyword">print</span> image<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">]</span>
+
+plt<span class="token punctuation">.</span>figure<span class="token punctuation">(</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span>image<span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># (360, 480, 3) RGB</span>
+
+<span class="token comment" spellcheck="true">#======================================================================</span>
+<span class="token comment" spellcheck="true"># load color image with color=False</span>
+<span class="token comment" spellcheck="true">#======================================================================</span>
+image2 <span class="token operator">=</span> caffe<span class="token punctuation">.</span>io<span class="token punctuation">.</span>load_image<span class="token punctuation">(</span>caffe_root <span class="token operator">+</span> <span class="token string">'examples/images/cat.jpg'</span><span class="token punctuation">,</span>color<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span> image2<span class="token punctuation">.</span>shape  <span class="token comment" spellcheck="true">#(360, 480, 1)</span>
+gray_image2 <span class="token operator">=</span> image2<span class="token punctuation">.</span>squeeze<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span> gray_image2<span class="token punctuation">.</span>shape<span class="token punctuation">,</span>gray_image2<span class="token punctuation">.</span>dtype <span class="token comment" spellcheck="true"># (360, 480) float32</span>
+<span class="token keyword">print</span> gray_image2<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">]</span>
+
+plt<span class="token punctuation">.</span>figure<span class="token punctuation">(</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span>gray_image2<span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># (360, 480) gray</span>
+
+
+<span class="token comment" spellcheck="true">#======================================================================</span>
+<span class="token comment" spellcheck="true"># load color image with color=False</span>
+<span class="token comment" spellcheck="true">#======================================================================</span>
+image3 <span class="token operator">=</span> caffe<span class="token punctuation">.</span>io<span class="token punctuation">.</span>load_image<span class="token punctuation">(</span>caffe_root <span class="token operator">+</span> <span class="token string">'examples/images/cat_gray.jpg'</span><span class="token punctuation">,</span>color<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span> image3<span class="token punctuation">.</span>shape  <span class="token comment" spellcheck="true">#(360, 480, 1)</span>
+gray_image3 <span class="token operator">=</span> image3<span class="token punctuation">.</span>squeeze<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span> gray_image3<span class="token punctuation">.</span>shape<span class="token punctuation">,</span>gray_image3<span class="token punctuation">.</span>dtype <span class="token comment" spellcheck="true"># (360, 480) float32</span>
+<span class="token keyword">print</span> gray_image3<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">]</span>
+
+plt<span class="token punctuation">.</span>figure<span class="token punctuation">(</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span>gray_image3<span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># (360, 480) gray</span>
+
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<pre><code>(360, 480, 3) float32
 [[ 0.10196079  0.10588235  0.09803922  0.10980392  0.11764706]
  [ 0.10196079  0.10588235  0.09803922  0.10196079  0.10980392]
  [ 0.10196079  0.10196079  0.10196079  0.10196079  0.10588235]
@@ -45,7 +589,71 @@ True
  [ 0.10196079  0.10588235  0.10196079  0.10196079  0.10588235]
  [ 0.10588235  0.10196079  0.10588235  0.10980392  0.11372549]
  [ 0.11764706  0.10196079  0.10196079  0.10588235  0.10980392]]
-</code></pre><p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102829804-2136984998.png" alt="png"></p><p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102832577-885538468.png" alt="png"></p><p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102837178-881579112.png" alt="png"></p><h2 id="caffe-io-Transformer"><a href="#caffe-io-Transformer" class="headerlink" title="caffe.io.Transformer"></a>caffe.io.Transformer</h2><p><code>caffe.io.Transformer</code> for Network input blob(m,c,h,w):</p><ul><li><strong>caffe Network default use BGR image format just as OpenCV format</strong>.</li><li>caffe mean files use BGR ordering, which is calculated from <strong>trainning images</strong> instead of test images. <code>mu = np.array([104, 117, 123] # BGR</code></li><li>pixel range in <strong>[0,255] with dtype float32.</strong></li><li>(m,c,h,w), BGR order,[0,255] range,float32</li></ul><h3 id="caffe-io-load-image-1"><a href="#caffe-io-load-image-1" class="headerlink" title="caffe.io.load_image"></a>caffe.io.load_image</h3><p><code>caffe.io.Transformer</code>:</p><ul><li>input image: caffe.io.load_image: (h,w,c),RGB,[0,1],float32</li><li>transformed image: (c,h,w), BGR,[0,255] float32</li></ul><p><code>caffe.io.Transformer</code> steps:</p><p>Note that the mean subtraction is always carried out before scaling.</p><ul><li>transformer.set_transpose(‘data’, (2,0,1)) #(h,w,c)-&gt;(c,h,w)</li><li>transformer.set_channel_swap(‘data’, (2,1,0)) # RGB-&gt;BGR</li><li>transformer.set_raw_scale(‘data’, 255) # [0,1]-&gt;[0,255] float32</li><li>transformer.set_mean(‘data’, mu) # subtract BGR</li></ul><p>keep in mind that <strong>the Transformer is only required when using a deploy.prototxt</strong>-like network definition, so without the Data Layer. When using a Data Layer, things get easier to understand.</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">caffe_root = <span class="string">'../'</span>  <span class="comment"># this file should be run from &#123;caffe_root&#125;/examples (otherwise change this line)</span></span><br><span class="line">sys.path.insert(<span class="number">0</span>, caffe_root + <span class="string">'python'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> caffe</span><br><span class="line">image = caffe.io.load_image(caffe_root + <span class="string">'examples/images/cat.jpg'</span>)</span><br><span class="line"><span class="comment"># caffe.io.load_image: dims: (height,width,channels),order: RGB,range: [0,1] dtype: float32</span></span><br><span class="line"><span class="keyword">print</span> image.shape,image.dtype <span class="comment"># (360, 480, 3) float32</span></span><br><span class="line"><span class="keyword">print</span> image[:<span class="number">5</span>,:<span class="number">5</span>,<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#plt.imshow(image)</span></span><br><span class="line"><span class="comment">#plt.show()</span></span><br><span class="line"></span><br><span class="line">mu = np.load(caffe_root + <span class="string">'python/caffe/imagenet/ilsvrc_2012_mean.npy'</span>) </span><br><span class="line">mu = mu.mean(<span class="number">1</span>).mean(<span class="number">1</span>)  <span class="comment"># # BGR</span></span><br><span class="line"></span><br><span class="line">data_shape = (<span class="number">10</span>, <span class="number">3</span>, <span class="number">227</span>, <span class="number">227</span>)</span><br><span class="line">transformer = caffe.io.Transformer(&#123;<span class="string">'data'</span>: data_shape&#125;)</span><br><span class="line"></span><br><span class="line">transformer.set_transpose(<span class="string">'data'</span>, (<span class="number">2</span>,<span class="number">0</span>,<span class="number">1</span>)) <span class="comment"># h,w,c-&gt;c,h,w(012-&gt;201) move image channels to outermost dimension</span></span><br><span class="line">transformer.set_channel_swap(<span class="string">'data'</span>, (<span class="number">2</span>,<span class="number">1</span>,<span class="number">0</span>))  <span class="comment"># swap channels from RGB to BGR</span></span><br><span class="line">transformer.set_raw_scale(<span class="string">'data'</span>, <span class="number">255</span>)      <span class="comment"># rescale from [0, 1] to [0, 255]</span></span><br><span class="line">transformer.set_mean(<span class="string">'data'</span>, mu)            <span class="comment"># subtract the dataset-mean value(BGR) in each channel</span></span><br><span class="line"></span><br><span class="line">transformed_image = transformer.preprocess(<span class="string">'data'</span>, image) </span><br><span class="line"><span class="keyword">print</span> </span><br><span class="line"><span class="keyword">print</span> <span class="string">'original  image: '</span>,image.shape,image.dtype             <span class="comment"># (360, 480, 3) float32</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">'transform image: '</span>,transformed_image.shape,transformed_image.dtype <span class="comment">#(3, 227, 227) float32</span></span><br><span class="line"><span class="keyword">print</span> transformed_image[<span class="number">0</span>,:<span class="number">5</span>,:<span class="number">5</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># By default, using CaffeNet, your net.blobs['data'].data.shape == (10, 3, 227, 227). </span></span><br><span class="line"><span class="comment"># This is because 10 random 227x227 crops are supposed to be extracted from a 256x256 image </span></span><br><span class="line"><span class="comment"># and passed through the net.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># net.blobs['data'].reshape(50,3,227,227) # we can change network input mini-batch to 50 as we like</span></span><br><span class="line"><span class="comment"># net.blobs['data'].data[...] = transformed_image # ---&gt;(50,3,227,227) 50 images</span></span><br></pre></td></tr></table></figure><pre><code>(360, 480, 3) float32
+</code></pre><p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102829804-2136984998.png" alt="png"></p>
+<p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102832577-885538468.png" alt="png"></p>
+<p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102837178-881579112.png" alt="png"></p>
+<h3 id="caffe-io-Transformer"><a href="#caffe-io-Transformer" class="headerlink" title="caffe.io.Transformer"></a>caffe.io.Transformer</h3><p><code>caffe.io.Transformer</code> for Network input blob(m,c,h,w):</p>
+<ul>
+<li><strong>caffe Network default use BGR image format just as OpenCV format</strong>.</li>
+<li>caffe mean files use BGR ordering, which is calculated from <strong>trainning images</strong> instead of test images. <code>mu = np.array([104, 117, 123] # BGR</code></li>
+<li>pixel range in <strong>[0,255] with dtype float32.</strong></li>
+<li>(m,c,h,w), BGR order,[0,255] range,float32</li>
+</ul>
+<h4 id="caffe-io-load-image-1"><a href="#caffe-io-load-image-1" class="headerlink" title="caffe.io.load_image"></a>caffe.io.load_image</h4><p><code>caffe.io.Transformer</code>: </p>
+<ul>
+<li>input image: caffe.io.load_image: (h,w,c),RGB,[0,1],float32 </li>
+<li>transformed image: (c,h,w), BGR,[0,255] float32</li>
+</ul>
+<p><code>caffe.io.Transformer</code> steps: </p>
+<p>Note that the mean subtraction is always carried out before scaling. </p>
+<ul>
+<li>transformer.set_transpose(‘data’, (2,0,1))  #(h,w,c)-&gt;(c,h,w)</li>
+<li>transformer.set_channel_swap(‘data’, (2,1,0)) # RGB-&gt;BGR</li>
+<li>transformer.set_raw_scale(‘data’, 255) # [0,1]-&gt;[0,255] float32</li>
+<li>transformer.set_mean(‘data’, mu) #  subtract BGR</li>
+</ul>
+<p>keep in mind that <strong>the Transformer is only required when using a deploy.prototxt</strong>-like network definition, so without the Data Layer. When using a Data Layer, things get easier to understand.</p>
+<pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+
+<span class="token keyword">import</span> sys
+caffe_root <span class="token operator">=</span> <span class="token string">'../'</span>  <span class="token comment" spellcheck="true"># this file should be run from {caffe_root}/examples (otherwise change this line)</span>
+sys<span class="token punctuation">.</span>path<span class="token punctuation">.</span>insert<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> caffe_root <span class="token operator">+</span> <span class="token string">'python'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">import</span> caffe
+image <span class="token operator">=</span> caffe<span class="token punctuation">.</span>io<span class="token punctuation">.</span>load_image<span class="token punctuation">(</span>caffe_root <span class="token operator">+</span> <span class="token string">'examples/images/cat.jpg'</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true"># caffe.io.load_image: dims: (height,width,channels),order: RGB,range: [0,1] dtype: float32</span>
+<span class="token keyword">print</span> image<span class="token punctuation">.</span>shape<span class="token punctuation">,</span>image<span class="token punctuation">.</span>dtype <span class="token comment" spellcheck="true"># (360, 480, 3) float32</span>
+<span class="token keyword">print</span> image<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">]</span>
+
+<span class="token comment" spellcheck="true">#plt.imshow(image)</span>
+<span class="token comment" spellcheck="true">#plt.show()</span>
+
+mu <span class="token operator">=</span> np<span class="token punctuation">.</span>load<span class="token punctuation">(</span>caffe_root <span class="token operator">+</span> <span class="token string">'python/caffe/imagenet/ilsvrc_2012_mean.npy'</span><span class="token punctuation">)</span> 
+mu <span class="token operator">=</span> mu<span class="token punctuation">.</span>mean<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">.</span>mean<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># # BGR</span>
+
+data_shape <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">227</span><span class="token punctuation">,</span> <span class="token number">227</span><span class="token punctuation">)</span>
+transformer <span class="token operator">=</span> caffe<span class="token punctuation">.</span>io<span class="token punctuation">.</span>Transformer<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">'data'</span><span class="token punctuation">:</span> data_shape<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+transformer<span class="token punctuation">.</span>set_transpose<span class="token punctuation">(</span><span class="token string">'data'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># h,w,c->c,h,w(012->201) move image channels to outermost dimension</span>
+transformer<span class="token punctuation">.</span>set_channel_swap<span class="token punctuation">(</span><span class="token string">'data'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># swap channels from RGB to BGR</span>
+transformer<span class="token punctuation">.</span>set_raw_scale<span class="token punctuation">(</span><span class="token string">'data'</span><span class="token punctuation">,</span> <span class="token number">255</span><span class="token punctuation">)</span>      <span class="token comment" spellcheck="true"># rescale from [0, 1] to [0, 255]</span>
+transformer<span class="token punctuation">.</span>set_mean<span class="token punctuation">(</span><span class="token string">'data'</span><span class="token punctuation">,</span> mu<span class="token punctuation">)</span>            <span class="token comment" spellcheck="true"># subtract the dataset-mean value(BGR) in each channel</span>
+
+transformed_image <span class="token operator">=</span> transformer<span class="token punctuation">.</span>preprocess<span class="token punctuation">(</span><span class="token string">'data'</span><span class="token punctuation">,</span> image<span class="token punctuation">)</span> 
+<span class="token keyword">print</span> 
+<span class="token keyword">print</span> <span class="token string">'original  image: '</span><span class="token punctuation">,</span>image<span class="token punctuation">.</span>shape<span class="token punctuation">,</span>image<span class="token punctuation">.</span>dtype             <span class="token comment" spellcheck="true"># (360, 480, 3) float32</span>
+<span class="token keyword">print</span> <span class="token string">'transform image: '</span><span class="token punctuation">,</span>transformed_image<span class="token punctuation">.</span>shape<span class="token punctuation">,</span>transformed_image<span class="token punctuation">.</span>dtype <span class="token comment" spellcheck="true">#(3, 227, 227) float32</span>
+<span class="token keyword">print</span> transformed_image<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">]</span>
+
+<span class="token comment" spellcheck="true"># By default, using CaffeNet, your net.blobs['data'].data.shape == (10, 3, 227, 227). </span>
+<span class="token comment" spellcheck="true"># This is because 10 random 227x227 crops are supposed to be extracted from a 256x256 image </span>
+<span class="token comment" spellcheck="true"># and passed through the net.</span>
+
+<span class="token comment" spellcheck="true"># net.blobs['data'].reshape(50,3,227,227) # we can change network input mini-batch to 50 as we like</span>
+<span class="token comment" spellcheck="true"># net.blobs['data'].data[...] = transformed_image # --->(50,3,227,227) 50 images</span>
+</code></pre>
+<pre><code>(360, 480, 3) float32
 [[ 0.10196079  0.10588235  0.09803922  0.10980392  0.11764706]
  [ 0.10196079  0.10588235  0.09803922  0.10196079  0.10980392]
  [ 0.10196079  0.10196079  0.10196079  0.10196079  0.10588235]
@@ -59,13 +667,96 @@ transform image:  (3, 227, 227) float32
  [-53.89373398 -55.67879486 -55.4278717  -55.22265625 -53.47174454]
  [-50.98455811 -51.3506012  -54.06866074 -52.09104156 -52.94168854]
  [-49.92769241 -49.85874176 -52.08575439 -52.50840759 -51.3900528 ]]
-</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h3 id="cv2-imread"><a href="#cv2-imread" class="headerlink" title="cv2.imread"></a>cv2.imread</h3><p><code>caffe.io.Transformer</code>:</p><ul><li>input image: cv2.imread: (h,w,c),BGR,[0,255],float32</li><li>transformed image: (c,h,w), BGR order,[0,255] float32</li></ul><p><code>caffe.io.Transformer</code> steps:</p><p>Note that the mean subtraction is always carried out before scaling.</p><ul><li>transformer.set_transpose(‘data’, (2,0,1)) #(h,w,c)-&gt;(c,h,w)</li><li>transformer.set_mean(‘data’, mu) # subtract BGR</li></ul><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line">image = cv2.imread(<span class="string">"test/cat.jpg"</span>)</span><br><span class="line"></span><br><span class="line">data_shape = (<span class="number">10</span>, <span class="number">3</span>, <span class="number">227</span>, <span class="number">227</span>)</span><br><span class="line"></span><br><span class="line">transformer = caffe.io.Transformer(&#123;<span class="string">'data'</span>: data_shape&#125;)</span><br><span class="line">transformer.set_transpose(<span class="string">'data'</span>, (<span class="number">2</span>,<span class="number">0</span>,<span class="number">1</span>)) </span><br><span class="line">transformer.set_mean(<span class="string">'data'</span>, mu)     </span><br><span class="line"></span><br><span class="line">transformed_image = transformer.preprocess(<span class="string">'data'</span>, image) </span><br><span class="line"><span class="keyword">print</span> </span><br><span class="line"><span class="keyword">print</span> <span class="string">'original  image: '</span>,image.shape,image.dtype             <span class="comment"># (360, 480, 3) float32</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">'transform image: '</span>,transformed_image.shape,transformed_image.dtype <span class="comment">#(3, 227, 227) float32</span></span><br><span class="line"><span class="keyword">print</span> transformed_image[<span class="number">0</span>,:<span class="number">5</span>,:<span class="number">5</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># By default, using CaffeNet, your net.blobs['data'].data.shape == (10, 3, 227, 227). </span></span><br><span class="line"><span class="comment"># This is because 10 random 227x227 crops are supposed to be extracted from a 256x256 image </span></span><br><span class="line"><span class="comment"># and passed through the net.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># net.blobs['data'].reshape(50,3,227,227) # we can change network input mini-batch to 50 as we like</span></span><br><span class="line"><span class="comment"># net.blobs['data'].data[...] = transformed_image # ---&gt;(50,3,227,227) 50</span></span><br></pre></td></tr></table></figure><h3 id="deprocess-transformed-image"><a href="#deprocess-transformed-image" class="headerlink" title="deprocess transformed_image"></a>deprocess transformed_image</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Helper function for deprocessing preprocessed images, e.g., for display.</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">deprocess_net_image</span><span class="params">(image)</span>:</span></span><br><span class="line">    <span class="comment"># [('B', 104.0069879317889), ('G', 116.66876761696767), ('R', 122.6789143406786)]</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># input: (c,h,w), BGR,[lower,upper],float32</span></span><br><span class="line">    <span class="comment"># output: (h,w,c), RGB,[0,255],      uint8</span></span><br><span class="line">    image = image.copy()              <span class="comment"># don't modify destructively</span></span><br><span class="line">    image = image[::<span class="number">-1</span>]               <span class="comment"># BGR -&gt; RGB</span></span><br><span class="line">    image = image.transpose(<span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>)  <span class="comment"># CHW -&gt; HWC</span></span><br><span class="line">    image += [<span class="number">123</span>, <span class="number">117</span>, <span class="number">104</span>]          <span class="comment"># (approximately) undo mean subtraction  RGB</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># clamp values in [0, 255]</span></span><br><span class="line">    image[image &lt; <span class="number">0</span>], image[image &gt; <span class="number">255</span>] = <span class="number">0</span>, <span class="number">255</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># round and cast from float32 to uint8</span></span><br><span class="line">    image = np.round(image)</span><br><span class="line">    image = np.require(image, dtype=np.uint8)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> image</span><br><span class="line"></span><br><span class="line">image = deprocess_net_image(transformed_image)</span><br><span class="line"><span class="comment">#(h,w,c), RGB,[0,255],      uint8</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> image.shape,image.dtype <span class="comment"># (227, 227, 3) uint8</span></span><br><span class="line"><span class="keyword">print</span> image[:<span class="number">5</span>,:<span class="number">5</span>,<span class="number">0</span>]</span><br><span class="line">plt.imshow(image)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure><pre><code>(227, 227, 3) uint8
+</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+<h4 id="cv2-imread"><a href="#cv2-imread" class="headerlink" title="cv2.imread"></a>cv2.imread</h4><p><code>caffe.io.Transformer</code>: </p>
+<ul>
+<li>input image: cv2.imread: (h,w,c),BGR,[0,255],float32 </li>
+<li>transformed image: (c,h,w), BGR order,[0,255] float32</li>
+</ul>
+<p><code>caffe.io.Transformer</code> steps: </p>
+<p>Note that the mean subtraction is always carried out before scaling. </p>
+<ul>
+<li>transformer.set_transpose(‘data’, (2,0,1))  #(h,w,c)-&gt;(c,h,w)</li>
+<li>transformer.set_mean(‘data’, mu) #  subtract BGR</li>
+</ul>
+<pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> cv2
+
+image <span class="token operator">=</span> cv2<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string">"test/cat.jpg"</span><span class="token punctuation">)</span>
+
+data_shape <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">227</span><span class="token punctuation">,</span> <span class="token number">227</span><span class="token punctuation">)</span>
+
+transformer <span class="token operator">=</span> caffe<span class="token punctuation">.</span>io<span class="token punctuation">.</span>Transformer<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">'data'</span><span class="token punctuation">:</span> data_shape<span class="token punctuation">}</span><span class="token punctuation">)</span>
+transformer<span class="token punctuation">.</span>set_transpose<span class="token punctuation">(</span><span class="token string">'data'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span> 
+transformer<span class="token punctuation">.</span>set_mean<span class="token punctuation">(</span><span class="token string">'data'</span><span class="token punctuation">,</span> mu<span class="token punctuation">)</span>     
+
+transformed_image <span class="token operator">=</span> transformer<span class="token punctuation">.</span>preprocess<span class="token punctuation">(</span><span class="token string">'data'</span><span class="token punctuation">,</span> image<span class="token punctuation">)</span> 
+<span class="token keyword">print</span> 
+<span class="token keyword">print</span> <span class="token string">'original  image: '</span><span class="token punctuation">,</span>image<span class="token punctuation">.</span>shape<span class="token punctuation">,</span>image<span class="token punctuation">.</span>dtype             <span class="token comment" spellcheck="true"># (360, 480, 3) float32</span>
+<span class="token keyword">print</span> <span class="token string">'transform image: '</span><span class="token punctuation">,</span>transformed_image<span class="token punctuation">.</span>shape<span class="token punctuation">,</span>transformed_image<span class="token punctuation">.</span>dtype <span class="token comment" spellcheck="true">#(3, 227, 227) float32</span>
+<span class="token keyword">print</span> transformed_image<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">]</span>
+
+<span class="token comment" spellcheck="true"># By default, using CaffeNet, your net.blobs['data'].data.shape == (10, 3, 227, 227). </span>
+<span class="token comment" spellcheck="true"># This is because 10 random 227x227 crops are supposed to be extracted from a 256x256 image </span>
+<span class="token comment" spellcheck="true"># and passed through the net.</span>
+
+<span class="token comment" spellcheck="true"># net.blobs['data'].reshape(50,3,227,227) # we can change network input mini-batch to 50 as we like</span>
+<span class="token comment" spellcheck="true"># net.blobs['data'].data[...] = transformed_image # --->(50,3,227,227) 50 </span>
+</code></pre>
+<h4 id="deprocess-transformed-image"><a href="#deprocess-transformed-image" class="headerlink" title="deprocess transformed_image"></a>deprocess transformed_image</h4><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># Helper function for deprocessing preprocessed images, e.g., for display.</span>
+<span class="token keyword">def</span> <span class="token function">deprocess_net_image</span><span class="token punctuation">(</span>image<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment" spellcheck="true"># [('B', 104.0069879317889), ('G', 116.66876761696767), ('R', 122.6789143406786)]</span>
+
+    <span class="token comment" spellcheck="true"># input: (c,h,w), BGR,[lower,upper],float32</span>
+    <span class="token comment" spellcheck="true"># output: (h,w,c), RGB,[0,255],      uint8</span>
+    image <span class="token operator">=</span> image<span class="token punctuation">.</span>copy<span class="token punctuation">(</span><span class="token punctuation">)</span>              <span class="token comment" spellcheck="true"># don't modify destructively</span>
+    image <span class="token operator">=</span> image<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span>               <span class="token comment" spellcheck="true"># BGR -> RGB</span>
+    image <span class="token operator">=</span> image<span class="token punctuation">.</span>transpose<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># CHW -> HWC</span>
+    image <span class="token operator">+=</span> <span class="token punctuation">[</span><span class="token number">123</span><span class="token punctuation">,</span> <span class="token number">117</span><span class="token punctuation">,</span> <span class="token number">104</span><span class="token punctuation">]</span>          <span class="token comment" spellcheck="true"># (approximately) undo mean subtraction  RGB</span>
+
+    <span class="token comment" spellcheck="true"># clamp values in [0, 255]</span>
+    image<span class="token punctuation">[</span>image <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> image<span class="token punctuation">[</span>image <span class="token operator">></span> <span class="token number">255</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">255</span>
+
+    <span class="token comment" spellcheck="true"># round and cast from float32 to uint8</span>
+    image <span class="token operator">=</span> np<span class="token punctuation">.</span>round<span class="token punctuation">(</span>image<span class="token punctuation">)</span>
+    image <span class="token operator">=</span> np<span class="token punctuation">.</span>require<span class="token punctuation">(</span>image<span class="token punctuation">,</span> dtype<span class="token operator">=</span>np<span class="token punctuation">.</span>uint8<span class="token punctuation">)</span>
+
+    <span class="token keyword">return</span> image
+
+image <span class="token operator">=</span> deprocess_net_image<span class="token punctuation">(</span>transformed_image<span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">#(h,w,c), RGB,[0,255],      uint8</span>
+
+<span class="token keyword">print</span> image<span class="token punctuation">.</span>shape<span class="token punctuation">,</span>image<span class="token punctuation">.</span>dtype <span class="token comment" spellcheck="true"># (227, 227, 3) uint8</span>
+<span class="token keyword">print</span> image<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">]</span>
+plt<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span>image<span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<pre><code>(227, 227, 3) uint8
 [[27 27 29 29 30]
  [26 26 28 27 28]
  [27 27 27 26 28]
  [27 28 25 28 27]
  [26 29 28 28 28]]
-</code></pre><p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102840423-899986139.png" alt="png"></p><h3 id="set-3-dim-image-to-4-dim-input-blob-data"><a href="#set-3-dim-image-to-4-dim-input-blob-data" class="headerlink" title="set 3-dim image to 4-dim input blob data"></a>set 3-dim image to 4-dim input blob data</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">data = np.zeros((<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">4</span>))</span><br><span class="line"><span class="keyword">print</span> data</span><br><span class="line">image = np.arange(<span class="number">48</span>).reshape(<span class="number">3</span>,<span class="number">4</span>,<span class="number">4</span>) </span><br><span class="line"><span class="keyword">print</span> </span><br><span class="line"><span class="keyword">print</span> image</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">'set image to data'</span></span><br><span class="line">data[...] = image <span class="comment"># auto broadcasting from 3-dims to 4-dims</span></span><br><span class="line"><span class="keyword">print</span> data</span><br></pre></td></tr></table></figure><pre><code>[[[[ 0.  0.  0.  0.]
+</code></pre><p><img src="https://images2018.cnblogs.com/blog/635233/201808/635233-20180816102840423-899986139.png" alt="png"></p>
+<h4 id="set-3-dim-image-to-4-dim-input-blob-data"><a href="#set-3-dim-image-to-4-dim-input-blob-data" class="headerlink" title="set 3-dim image to 4-dim input blob data"></a>set 3-dim image to 4-dim input blob data</h4><pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+data <span class="token operator">=</span> np<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span> data
+image <span class="token operator">=</span> np<span class="token punctuation">.</span>arange<span class="token punctuation">(</span><span class="token number">48</span><span class="token punctuation">)</span><span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span> 
+<span class="token keyword">print</span> 
+<span class="token keyword">print</span> image
+
+<span class="token keyword">print</span> <span class="token string">'set image to data'</span>
+data<span class="token punctuation">[</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">]</span> <span class="token operator">=</span> image <span class="token comment" spellcheck="true"># auto broadcasting from 3-dims to 4-dims</span>
+<span class="token keyword">print</span> data
+</code></pre>
+<pre><code>[[[[ 0.  0.  0.  0.]
    [ 0.  0.  0.  0.]
    [ 0.  0.  0.  0.]
    [ 0.  0.  0.  0.]]
@@ -141,9 +832,44 @@ set image to data
    [ 36.  37.  38.  39.]
    [ 40.  41.  42.  43.]
    [ 44.  45.  46.  47.]]]]
-</code></pre><h2 id="transformer-vs-python-code"><a href="#transformer-vs-python-code" class="headerlink" title="transformer vs. python code"></a>transformer vs. python code</h2><h3 id="caffe-io-load-image-2"><a href="#caffe-io-load-image-2" class="headerlink" title="caffe.io.load_image"></a>caffe.io.load_image</h3><h4 id="transformer"><a href="#transformer" class="headerlink" title="transformer"></a>transformer</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">import cv2</span><br><span class="line">import numpy as np</span><br><span class="line"># Make sure that caffe is on the python path:</span><br><span class="line">caffe_root = &apos;./&apos;</span><br><span class="line">os.chdir(caffe_root)</span><br><span class="line">sys.path.insert(0, os.path.join(caffe_root, &apos;python&apos;))</span><br><span class="line">import caffe</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># caffe.io.load_image: transformer  + python code</span><br><span class="line">data_shape = [1,3,512,512]</span><br><span class="line"></span><br><span class="line">transformer = caffe.io.Transformer(&#123;&apos;data&apos;:data_shape&#125;) # resize</span><br><span class="line">transformer.set_transpose(&apos;data&apos;, (2, 0, 1)) # hwc ===&gt; chw</span><br><span class="line">transformer.set_channel_swap(&apos;data&apos;, (2, 1, 0))  # rgb===&gt;bgr</span><br><span class="line">transformer.set_raw_scale(&apos;data&apos;, 255)  # [0-1]===&gt; [0,255]</span><br><span class="line">transformer.set_mean(&apos;data&apos;, np.array([104, 117, 123]))  # bgr mean pixel</span><br><span class="line"></span><br><span class="line">image_file = &quot;./images/1.png&quot;</span><br><span class="line">print(&quot;image_file=&quot;, image_file)</span><br><span class="line">image = caffe.io.load_image(image_file) # hwc, rgb, 0-1 </span><br><span class="line">print(&quot;image.shape=&quot;, image.shape)</span><br><span class="line"></span><br><span class="line">transformed_image = transformer.preprocess(&apos;data&apos;, image) #</span><br><span class="line">print(&quot;transformed_image.shape=&quot;, transformed_image.shape) # 3,512,512</span><br><span class="line">b,g,r = transformed_image </span><br><span class="line">print(b.shape) # 512,512</span><br><span class="line">print(g.shape)</span><br><span class="line">print(r.shape)</span><br><span class="line"></span><br><span class="line">print(&quot;&quot;)</span><br><span class="line">print(transformed_image[:,:5,:5])</span><br></pre></td></tr></table></figure><p>output</p><pre><code>(&apos;image_file=&apos;, &apos;./images/1.png&apos;)
-(&apos;image.shape=&apos;, (1080, 1920, 3))
-(&apos;transformed_image.shape=&apos;, (3, 512, 512))
+</code></pre><h3 id="transformer-vs-python-code"><a href="#transformer-vs-python-code" class="headerlink" title="transformer vs. python code"></a>transformer vs. python code</h3><h4 id="caffe-io-load-image-2"><a href="#caffe-io-load-image-2" class="headerlink" title="caffe.io.load_image"></a>caffe.io.load_image</h4><h5 id="transformer"><a href="#transformer" class="headerlink" title="transformer"></a>transformer</h5><pre><code>import os
+import sys
+import cv2
+import numpy as np
+# Make sure that caffe is on the python path:
+caffe_root = &#39;./&#39;
+os.chdir(caffe_root)
+sys.path.insert(0, os.path.join(caffe_root, &#39;python&#39;))
+import caffe
+
+
+# caffe.io.load_image: transformer  + python code
+data_shape = [1,3,512,512]
+
+transformer = caffe.io.Transformer({&#39;data&#39;:data_shape}) # resize
+transformer.set_transpose(&#39;data&#39;, (2, 0, 1)) # hwc ===&gt; chw
+transformer.set_channel_swap(&#39;data&#39;, (2, 1, 0))  # rgb===&gt;bgr
+transformer.set_raw_scale(&#39;data&#39;, 255)  # [0-1]===&gt; [0,255]
+transformer.set_mean(&#39;data&#39;, np.array([104, 117, 123]))  # bgr mean pixel
+
+image_file = &quot;./images/1.png&quot;
+print(&quot;image_file=&quot;, image_file)
+image = caffe.io.load_image(image_file) # hwc, rgb, 0-1 
+print(&quot;image.shape=&quot;, image.shape)
+
+transformed_image = transformer.preprocess(&#39;data&#39;, image) #
+print(&quot;transformed_image.shape=&quot;, transformed_image.shape) # 3,512,512
+b,g,r = transformed_image 
+print(b.shape) # 512,512
+print(g.shape)
+print(r.shape)
+
+print(&quot;&quot;)
+print(transformed_image[:,:5,:5])
+</code></pre><p>output </p>
+<pre><code>(&#39;image_file=&#39;, &#39;./images/1.png&#39;)
+(&#39;image.shape=&#39;, (1080, 1920, 3))
+(&#39;transformed_image.shape=&#39;, (3, 512, 512))
 (512, 512)
 (512, 512)
 (512, 512)
@@ -165,9 +891,39 @@ set image to data
   [ -52.96776581  -57.58105469  -60.359375    -54.08592987  -57.90721893]
   [ -40.21874237  -44.71092987  -47.46875     -47.27832031  -44.572258  ]
   [ -40.75        -45.12499237  -48.          -48.          -47.984375  ]]]
-</code></pre><h4 id="python-code"><a href="#python-code" class="headerlink" title="python code"></a>python code</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">print(image.shape) # hwc,rgb,0-1   (1080, 1920, 3)</span><br><span class="line">print(image.dtype) # float32</span><br><span class="line"></span><br><span class="line"># resize</span><br><span class="line">image = cv2.resize(image, (512,512)) </span><br><span class="line">print(&quot;image resize = &quot;,image.shape) # (512, 512, 3)</span><br><span class="line"></span><br><span class="line"># hwc,rgb ===&gt; chw, bgr</span><br><span class="line">r,g,b = image[:,:,0],image[:,:,1],image[:,:,2]</span><br><span class="line"></span><br><span class="line">print(b.shape) # (512, 512)</span><br><span class="line">print(g.shape) # (512, 512)</span><br><span class="line">print(r.shape) # (512, 512)</span><br><span class="line"></span><br><span class="line">bgr = np.zeros([3,b.shape[0],b.shape[1]])</span><br><span class="line">print(bgr.shape)</span><br><span class="line">bgr[0,:,:] = b </span><br><span class="line">bgr[1,:,:] = g </span><br><span class="line">bgr[2,:,:] = r </span><br><span class="line"></span><br><span class="line"># 0-1 ===&gt;0-255</span><br><span class="line">bgr = bgr *255.</span><br><span class="line"></span><br><span class="line"># -mean</span><br><span class="line">print(&quot;&quot;)</span><br><span class="line">bgr[0] -= 104</span><br><span class="line">bgr[1] -= 117</span><br><span class="line">bgr[2] -= 123</span><br><span class="line">print(bgr[:,:5,:5])</span><br></pre></td></tr></table></figure><p>output</p><pre><code>(1080, 1920, 3)
+</code></pre><h5 id="python-code"><a href="#python-code" class="headerlink" title="python code"></a>python code</h5><pre><code>print(image.shape) # hwc,rgb,0-1   (1080, 1920, 3)
+print(image.dtype) # float32
+
+# resize
+image = cv2.resize(image, (512,512)) 
+print(&quot;image resize = &quot;,image.shape) # (512, 512, 3)
+
+# hwc,rgb ===&gt; chw, bgr
+r,g,b = image[:,:,0],image[:,:,1],image[:,:,2]
+
+print(b.shape) # (512, 512)
+print(g.shape) # (512, 512)
+print(r.shape) # (512, 512)
+
+bgr = np.zeros([3,b.shape[0],b.shape[1]])
+print(bgr.shape)
+bgr[0,:,:] = b 
+bgr[1,:,:] = g 
+bgr[2,:,:] = r 
+
+# 0-1 ===&gt;0-255
+bgr = bgr *255.
+
+# -mean
+print(&quot;&quot;)
+bgr[0] -= 104
+bgr[1] -= 117
+bgr[2] -= 123
+print(bgr[:,:5,:5])
+</code></pre><p>output </p>
+<pre><code>(1080, 1920, 3)
 float32
-(&apos;image resize = &apos;, (512, 512, 3))
+(&#39;image resize = &#39;, (512, 512, 3))
 float32
 (512, 512)
 (512, 512)
@@ -191,9 +947,44 @@ float32
   [ -52.9677667   -57.58105356  -60.35937327  -54.0859327   -57.90722805]
   [ -40.21874401  -44.71093136  -47.46874738  -47.2783168   -44.5722692 ]
   [ -40.7499935   -45.12499514  -47.99999687  -47.99999687  -47.98437211]]]
-</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h3 id="cv2-imread-1"><a href="#cv2-imread-1" class="headerlink" title="cv2.imread"></a>cv2.imread</h3><h4 id="transformer-1"><a href="#transformer-1" class="headerlink" title="transformer"></a>transformer</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cv2.imread: transformer  + python code</span></span><br><span class="line">data_shape = [<span class="number">1</span>,<span class="number">3</span>,<span class="number">512</span>,<span class="number">512</span>]</span><br><span class="line"></span><br><span class="line">transformer = caffe.io.Transformer(&#123;<span class="string">'data'</span>:data_shape&#125;) <span class="comment"># resize</span></span><br><span class="line">transformer.set_transpose(<span class="string">'data'</span>, (<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>)) <span class="comment"># hwc ===&gt; chw</span></span><br><span class="line"><span class="comment">#transformer.set_channel_swap('data', (2, 1, 0))  # rgb===&gt;bgr</span></span><br><span class="line"><span class="comment">#transformer.set_raw_scale('data', 255)  # [0-1]===&gt; [0,255]</span></span><br><span class="line">transformer.set_mean(<span class="string">'data'</span>, np.array([<span class="number">104</span>, <span class="number">117</span>, <span class="number">123</span>]))  <span class="comment"># bgr mean pixel</span></span><br><span class="line"></span><br><span class="line">image_file = <span class="string">"./images/1.png"</span></span><br><span class="line">print(<span class="string">"image_file="</span>, image_file)</span><br><span class="line">image = cv2.imread(image_file) <span class="comment"># hwc, bgr, 0-255</span></span><br><span class="line">print(<span class="string">"image.shape="</span>, image.shape)</span><br><span class="line"></span><br><span class="line">transformed_image = transformer.preprocess(<span class="string">'data'</span>, image) <span class="comment">#</span></span><br><span class="line">print(<span class="string">"transformed_image.shape="</span>, transformed_image.shape) <span class="comment"># 3,512,512</span></span><br><span class="line">b,g,r = transformed_image </span><br><span class="line">print(b.shape) <span class="comment"># 512,512</span></span><br><span class="line">print(g.shape)</span><br><span class="line">print(r.shape)</span><br><span class="line"></span><br><span class="line">print(<span class="string">""</span>)</span><br><span class="line">print(transformed_image[:,:<span class="number">5</span>,:<span class="number">5</span>])</span><br></pre></td></tr></table></figure><p>output</p><pre><code>(&apos;image_file=&apos;, &apos;./images/1.png&apos;)
-(&apos;image.shape=&apos;, (1080, 1920, 3))
-(&apos;transformed_image.shape=&apos;, (3, 512, 512))
+</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+<h4 id="cv2-imread-1"><a href="#cv2-imread-1" class="headerlink" title="cv2.imread"></a>cv2.imread</h4><h5 id="transformer-1"><a href="#transformer-1" class="headerlink" title="transformer"></a>transformer</h5><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># cv2.imread: transformer  + python code</span>
+data_shape <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">512</span><span class="token punctuation">,</span><span class="token number">512</span><span class="token punctuation">]</span>
+
+transformer <span class="token operator">=</span> caffe<span class="token punctuation">.</span>io<span class="token punctuation">.</span>Transformer<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">'data'</span><span class="token punctuation">:</span>data_shape<span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># resize</span>
+transformer<span class="token punctuation">.</span>set_transpose<span class="token punctuation">(</span><span class="token string">'data'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># hwc ===> chw</span>
+<span class="token comment" spellcheck="true">#transformer.set_channel_swap('data', (2, 1, 0))  # rgb===>bgr</span>
+<span class="token comment" spellcheck="true">#transformer.set_raw_scale('data', 255)  # [0-1]===> [0,255]</span>
+transformer<span class="token punctuation">.</span>set_mean<span class="token punctuation">(</span><span class="token string">'data'</span><span class="token punctuation">,</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">104</span><span class="token punctuation">,</span> <span class="token number">117</span><span class="token punctuation">,</span> <span class="token number">123</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># bgr mean pixel</span>
+
+image_file <span class="token operator">=</span> <span class="token string">"./images/1.png"</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"image_file="</span><span class="token punctuation">,</span> image_file<span class="token punctuation">)</span>
+image <span class="token operator">=</span> cv2<span class="token punctuation">.</span>imread<span class="token punctuation">(</span>image_file<span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># hwc, bgr, 0-255</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"image.shape="</span><span class="token punctuation">,</span> image<span class="token punctuation">.</span>shape<span class="token punctuation">)</span>
+
+transformed_image <span class="token operator">=</span> transformer<span class="token punctuation">.</span>preprocess<span class="token punctuation">(</span><span class="token string">'data'</span><span class="token punctuation">,</span> image<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"transformed_image.shape="</span><span class="token punctuation">,</span> transformed_image<span class="token punctuation">.</span>shape<span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># 3,512,512</span>
+b<span class="token punctuation">,</span>g<span class="token punctuation">,</span>r <span class="token operator">=</span> transformed_image 
+<span class="token keyword">print</span><span class="token punctuation">(</span>b<span class="token punctuation">.</span>shape<span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># 512,512</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>g<span class="token punctuation">.</span>shape<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span>shape<span class="token punctuation">)</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>transformed_image<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+</code></pre>
+<p>output </p>
+<pre><code>(&#39;image_file=&#39;, &#39;./images/1.png&#39;)
+(&#39;image.shape=&#39;, (1080, 1920, 3))
+(&#39;transformed_image.shape=&#39;, (3, 512, 512))
 (512, 512)
 (512, 512)
 (512, 512)
@@ -215,10 +1006,56 @@ float32
   [ -52.96777344  -57.58105469  -60.35937119  -54.0859375   -57.90722656]
   [ -40.21875     -44.7109375   -47.46875     -47.27832031  -44.57226562]
   [ -40.75        -45.125       -48.          -48.          -47.984375  ]]]
-</code></pre><h4 id="python-code-1"><a href="#python-code-1" class="headerlink" title="python code"></a>python code</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">print(image.shape) # hwc,bgr,0-255   (1080, 1920, 3)</span><br><span class="line">print(image.dtype) # uint8</span><br><span class="line"></span><br><span class="line"># int8 ===&gt;float32</span><br><span class="line">image = image.astype(&apos;float32&apos;) # key steps</span><br><span class="line">print(image.dtype) # float32</span><br><span class="line"></span><br><span class="line"># resize</span><br><span class="line">image = cv2.resize(image, (512,512)) </span><br><span class="line">print(&quot;image resize = &quot;,image.shape) # (512, 512, 3)</span><br><span class="line">print(image.dtype) # float32</span><br><span class="line"></span><br><span class="line"># hwc ===&gt; chw</span><br><span class="line">b,g,r = image[:,:,0],image[:,:,1],image[:,:,2]</span><br><span class="line"></span><br><span class="line">print(b.shape) # (512, 512)</span><br><span class="line">print(g.shape) # (512, 512)</span><br><span class="line">print(r.shape) # (512, 512)</span><br><span class="line"></span><br><span class="line">bgr = np.zeros([3,b.shape[0],b.shape[1]])</span><br><span class="line">print(bgr.shape)</span><br><span class="line"></span><br><span class="line"># -mean</span><br><span class="line">b -= 104</span><br><span class="line">g -= 117</span><br><span class="line">r -= 123</span><br><span class="line"></span><br><span class="line">bgr[0,:,:] = b </span><br><span class="line">bgr[1,:,:] = g </span><br><span class="line">bgr[2,:,:] = r </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">print(bgr[:,:5,:5])</span><br></pre></td></tr></table></figure><h4 id="python-code-v2"><a href="#python-code-v2" class="headerlink" title="python code v2"></a>python code v2</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">image = cv2.imread(filepath) # hwc, bgr,0-255</span><br><span class="line">print(image.dtype) # uint8</span><br><span class="line">        </span><br><span class="line">image = image.astype(&apos;float32&apos;) # key steps</span><br><span class="line">image = cv2.resize(image, (512,512)) </span><br><span class="line">print(&quot;image resize = &quot;,image.shape) # (512, 512, 3)</span><br><span class="line">print(image.dtype) # float32</span><br><span class="line"></span><br><span class="line">image -= np.array((104.00698793,116.66876762,122.67891434)) # bgr mean</span><br><span class="line">image = image.transpose((2,0,1)) # hwc ===&gt;chw</span><br><span class="line"></span><br><span class="line">print(image[:,:5,:5])</span><br></pre></td></tr></table></figure><p>output</p><pre><code>(1080, 1920, 3)
+</code></pre><h5 id="python-code-1"><a href="#python-code-1" class="headerlink" title="python code"></a>python code</h5><pre><code>print(image.shape) # hwc,bgr,0-255   (1080, 1920, 3)
+print(image.dtype) # uint8
+
+# int8 ===&gt;float32
+image = image.astype(&#39;float32&#39;) # key steps
+print(image.dtype) # float32
+
+# resize
+image = cv2.resize(image, (512,512)) 
+print(&quot;image resize = &quot;,image.shape) # (512, 512, 3)
+print(image.dtype) # float32
+
+# hwc ===&gt; chw
+b,g,r = image[:,:,0],image[:,:,1],image[:,:,2]
+
+print(b.shape) # (512, 512)
+print(g.shape) # (512, 512)
+print(r.shape) # (512, 512)
+
+bgr = np.zeros([3,b.shape[0],b.shape[1]])
+print(bgr.shape)
+
+# -mean
+b -= 104
+g -= 117
+r -= 123
+
+bgr[0,:,:] = b 
+bgr[1,:,:] = g 
+bgr[2,:,:] = r 
+
+
+print(bgr[:,:5,:5])
+</code></pre><h5 id="python-code-v2"><a href="#python-code-v2" class="headerlink" title="python code v2"></a>python code v2</h5><pre><code>image = cv2.imread(filepath) # hwc, bgr,0-255
+print(image.dtype) # uint8
+
+image = image.astype(&#39;float32&#39;) # key steps
+image = cv2.resize(image, (512,512)) 
+print(&quot;image resize = &quot;,image.shape) # (512, 512, 3)
+print(image.dtype) # float32
+
+image -= np.array((104.00698793,116.66876762,122.67891434)) # bgr mean
+image = image.transpose((2,0,1)) # hwc ===&gt;chw
+
+print(image[:,:5,:5])
+</code></pre><p>output </p>
+<pre><code>(1080, 1920, 3)
 uint8
 float32
-(&apos;image resize = &apos;, (512, 512, 3))
+(&#39;image resize = &#39;, (512, 512, 3))
 float32
 (512, 512)
 (512, 512)
@@ -242,4 +1079,752 @@ float32
   [ -52.96777344  -57.58105469  -60.359375    -54.0859375   -57.90722656]
   [ -40.21875     -44.7109375   -47.46875     -47.27832031  -44.57226562]
   [ -40.75        -45.125       -48.          -48.          -47.984375  ]]]
-</code></pre><h2 id="Conclusions"><a href="#Conclusions" class="headerlink" title="Conclusions"></a>Conclusions</h2><ul><li><strong>Matplot.imread</strong>: dims: (height,width,channels),order: RGB,range: [0,255] dtype: uint8, plot</li><li><strong>OpenCV.imread</strong>: dims: (height,width,channels),order: <strong>BGR</strong>,range: [0,255] dtype: uint8, plot</li><li><strong>caffe.io.load_image</strong>: dims: (height,width,channels),order: RGB,range: <strong>[0,1]</strong> dtype: float32 (caffe_io_image = matplot_image/255.0) ,plot</li><li><strong>caffe Network Input(Transformer)</strong>: dims: (m,c,h,w), order: <strong>BGR</strong>, range [0,255],dtype: float32, <strong>PLOT ERROR</strong></li></ul><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul><li><a href="https://www.pyimagesearch.com/2014/11/03/display-matplotlib-rgb-image/" rel="noopener external nofollow noreferrer" target="_blank">display-matplotlib-rgb-image</a></li><li><a href="http://www.bogotobogo.com/python/OpenCV_Python/python_opencv3_matplotlib_rgb_brg_image_load_display_save.php" rel="noopener external nofollow noreferrer" target="_blank">python_opencv3_matplotlib_rgb_brg_image_load_display_save</a></li><li><a href="http://blog.csdn.net/lovelyaiq/article/details/70254583" rel="noopener external nofollow noreferrer" target="_blank">caffe vs opencv images</a></li></ul><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul><li>20180816: created.</li></ul><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div></div><div><div style="padding:10px 0;margin:20px auto;width:90%;text-align:center"><div>坚持技术分享，您的支持将鼓励我继续创作！</div><button id="rewardButton" disable="enable" onclick='var e=document.getElementById("QR");"none"===e.style.display?e.style.display="block":e.style.display="none"'><span>Donate</span></button><div id="QR" style="display:none"><div id="wechat" style="display:inline-block"><img id="wechat_qr" src="/images/wechatpay.jpeg" alt="kezunlin WeChat Pay"><p>WeChat Pay</p></div></div></div></div><div><ul class="post-copyright"><li class="post-copyright-author"><strong>Post author:</strong> kezunlin</li><li class="post-copyright-link"><strong>Post link:</strong> <a href="https://kezunlin.me/post/62811272/" title="matplot RGB vs opencv BGR vs caffe images">https://kezunlin.me/post/62811272/</a></li><li class="post-copyright-license"><strong>Copyright Notice: </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.</li></ul></div><footer class="post-footer"><div class="post-nav"><div class="post-nav-next post-nav-item"><a href="/post/66241a6b/" rel="next" title="a quick guide to rcnn"><i class="fa fa-chevron-left"></i> a quick guide to rcnn</a></div><span class="post-nav-divider"></span><div class="post-nav-prev post-nav-item"><a href="/post/9eb841ce/" rel="prev" title="a quick guide to py-faster-rcnn">a quick guide to py-faster-rcnn <i class="fa fa-chevron-right"></i></a></div></div></footer></div></article><div class="post-spread"></div></div></div><div class="comments" id="comments"><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div><div id="gitalk-container"></div></div></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span> <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span> <span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">Table of Contents</li><li class="sidebar-nav-overview" data-target="site-overview-wrap">Overview</li></ul><section class="site-overview-wrap sidebar-panel"><div class="site-overview"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"><img class="site-author-image" itemprop="image" title="KeZunLin's Blog" src="/images/kezunlin_avatar.jpg" alt="kezunlin"><p class="site-author-name" itemprop="name">kezunlin</p><p class="site-description motion-element" itemprop="description"></p></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"><a href="/archives/"><span class="site-state-item-count">160</span> <span class="site-state-item-name">posts</span></a></div><div class="site-state-item site-state-categories"><a href="/categories/index.html"><span class="site-state-item-count">41</span> <span class="site-state-item-name">categories</span></a></div><div class="site-state-item site-state-tags"><a href="/tags/index.html"><span class="site-state-item-count">169</span> <span class="site-state-item-name">tags</span></a></div></nav><div class="feed-link motion-element"><a href="/atom.xml" rel="alternate"><i class="fa fa-rss"></i> RSS</a></div><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/kezunlin" rel="external nofollow noreferrer" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i></a> </span><span class="links-of-author-item"><a href="mailto:zunlin1234@gmail.com" rel="external nofollow noreferrer" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i></a></span></div></div></section><section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active"><div class="post-toc"><div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Matplot-skimage-PIL-Image"><span class="nav-number">1.1.</span> <span class="nav-text">Matplot (skimage/ PIL Image)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PIL-Image"><span class="nav-number">1.2.</span> <span class="nav-text">PIL.Image</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#skimage"><span class="nav-number">1.3.</span> <span class="nav-text">skimage</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenCV"><span class="nav-number">1.4.</span> <span class="nav-text">OpenCV</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Matplot-VS-OpenCV"><span class="nav-number">1.5.</span> <span class="nav-text">Matplot VS. OpenCV</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#caffe-io-load-image"><span class="nav-number">1.6.</span> <span class="nav-text">caffe.io.load_image</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#caffe-io-Transformer"><span class="nav-number">1.7.</span> <span class="nav-text">caffe.io.Transformer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#caffe-io-load-image-1"><span class="nav-number">1.7.1.</span> <span class="nav-text">caffe.io.load_image</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cv2-imread"><span class="nav-number">1.7.2.</span> <span class="nav-text">cv2.imread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#deprocess-transformed-image"><span class="nav-number">1.7.3.</span> <span class="nav-text">deprocess transformed_image</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set-3-dim-image-to-4-dim-input-blob-data"><span class="nav-number">1.7.4.</span> <span class="nav-text">set 3-dim image to 4-dim input blob data</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#transformer-vs-python-code"><span class="nav-number">1.8.</span> <span class="nav-text">transformer vs. python code</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#caffe-io-load-image-2"><span class="nav-number">1.8.1.</span> <span class="nav-text">caffe.io.load_image</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#transformer"><span class="nav-number">1.8.1.1.</span> <span class="nav-text">transformer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#python-code"><span class="nav-number">1.8.1.2.</span> <span class="nav-text">python code</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cv2-imread-1"><span class="nav-number">1.8.2.</span> <span class="nav-text">cv2.imread</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#transformer-1"><span class="nav-number">1.8.2.1.</span> <span class="nav-text">transformer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#python-code-1"><span class="nav-number">1.8.2.2.</span> <span class="nav-text">python code</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#python-code-v2"><span class="nav-number">1.8.2.3.</span> <span class="nav-text">python code v2</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conclusions"><span class="nav-number">1.9.</span> <span class="nav-text">Conclusions</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div></div></section><div class="back-to-top"><i class="fa fa-arrow-up"></i> <span id="scrollpercent"><span>0</span>%</span></div><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7570408610" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div></div></aside></div></main><footer id="footer" class="footer"><div class="footer-inner"><div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span> <span class="with-love"><i class="fa fa-user"></i> </span><span class="author" itemprop="copyrightHolder">kezunlin</span></div><div id="cnzz_id"><script type="text/javascript">var cnzz_protocol="https:"==document.location.protocol?"https://":"http://";document.write(unescape("%3Cspan id='cnzz_stat_icon_1278202133'%3E%3C/span%3E%3Cscript src='"+cnzz_protocol+"s4.cnzz.com/z_stat.php%3Fid%3D1278202133%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"))</script></div></div></footer></div><script type="text/javascript">"[object Function]"!==Object.prototype.toString.call(window.Promise)&&(window.Promise=null)</script><script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script><script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script><script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script><script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script><script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script><script src="https://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.min.js"></script><script type="text/javascript">var gitalk=new Gitalk({clientID:"4d1e3d463455e6bc7eba",clientSecret:"4af023d85b66c4161a83b3f9297036e84c9ba57f",repo:"gitalk",owner:"kezunlin",admin:["kezunlin"],id:md5(location.pathname),distractionFreeMode:"true"});gitalk.render("gitalk-container")</script><script type="text/javascript">function proceedsearch(){$("body").append('<div class="search-popup-overlay local-search-pop-overlay"></div>').css("overflow","hidden"),$(".search-popup-overlay").click(onPopupClose),$(".popup").toggle();var t=$("#local-search-input");t.attr("autocapitalize","none"),t.attr("autocorrect","off"),t.focus()}var isfetched=!1,isXml=!0,search_path="search.xml";0===search_path.length?search_path="search.xml":/json$/i.test(search_path)&&(isXml=!1);var path="/"+search_path,onPopupClose=function(t){$(".popup").hide(),$("#local-search-input").val(""),$(".search-result-list").remove(),$("#no-result").remove(),$(".local-search-pop-overlay").remove(),$("body").css("overflow","")},searchFunc=function(t,e,o){"use strict";$("body").append('<div class="search-popup-overlay local-search-pop-overlay"><div id="search-loading-icon"><i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i></div></div>').css("overflow","hidden"),$("#search-loading-icon").css("margin","20% auto 0 auto").css("text-align","center"),$.ajax({url:t,dataType:isXml?"xml":"json",async:!0,success:function(t){isfetched=!0,$(".popup").detach().appendTo(".header-inner");var n=isXml?$("entry",t).map(function(){return{title:$("title",this).text(),content:$("content",this).text(),url:$("url",this).text()}}).get():t,r=document.getElementById(e),s=document.getElementById(o),a=function(){var t=r.value.trim().toLowerCase(),e=t.split(/[\s\-]+/);e.length>1&&e.push(t);var o=[];if(t.length>0&&n.forEach(function(n){function r(e,o,n,r){for(var s=r[r.length-1],a=s.position,i=s.word,l=[],h=0;a+i.length<=n&&0!=r.length;){i===t&&h++,l.push({position:a,length:i.length});var p=a+i.length;for(r.pop();0!=r.length&&(s=r[r.length-1],a=s.position,i=s.word,p>a);)r.pop()}return c+=h,{hits:l,start:o,end:n,searchTextCount:h}}function s(t,e){var o="",n=e.start;return e.hits.forEach(function(e){o+=t.substring(n,e.position);var r=e.position+e.length;o+='<b class="search-keyword">'+t.substring(e.position,r)+"</b>",n=r}),o+=t.substring(n,e.end)}var a=!1,i=0,c=0,l=n.title.trim(),h=l.toLowerCase(),p=n.content.trim().replace(/<[^>]+>/g,""),u=p.toLowerCase(),f=decodeURIComponent(n.url),d=[],g=[];if(""!=l&&(e.forEach(function(t){function e(t,e,o){var n=t.length;if(0===n)return[];var r=0,s=[],a=[];for(o||(e=e.toLowerCase(),t=t.toLowerCase());(s=e.indexOf(t,r))>-1;)a.push({position:s,word:t}),r=s+n;return a}d=d.concat(e(t,h,!1)),g=g.concat(e(t,u,!1))}),(d.length>0||g.length>0)&&(a=!0,i=d.length+g.length)),a){[d,g].forEach(function(t){t.sort(function(t,e){return e.position!==t.position?e.position-t.position:t.word.length-e.word.length})});var v=[];0!=d.length&&v.push(r(l,0,l.length,d));for(var $=[];0!=g.length;){var C=g[g.length-1],m=C.position,x=C.word,w=m-20,y=m+80;w<0&&(w=0),y<m+x.length&&(y=m+x.length),y>p.length&&(y=p.length),$.push(r(p,w,y,g))}$.sort(function(t,e){return t.searchTextCount!==e.searchTextCount?e.searchTextCount-t.searchTextCount:t.hits.length!==e.hits.length?e.hits.length-t.hits.length:t.start-e.start});var T=parseInt("1");T>=0&&($=$.slice(0,T));var b="";b+=0!=v.length?"<li><a href='"+f+"' class='search-result-title'>"+s(l,v[0])+"</a>":"<li><a href='"+f+"' class='search-result-title'>"+l+"</a>",$.forEach(function(t){b+="<a href='"+f+'\'><p class="search-result">'+s(p,t)+"...</p></a>"}),b+="</li>",o.push({item:b,searchTextCount:c,hitCount:i,id:o.length})}}),1===e.length&&""===e[0])s.innerHTML='<div id="no-result"><i class="fa fa-search fa-5x" /></div>';else if(0===o.length)s.innerHTML='<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>';else{o.sort(function(t,e){return t.searchTextCount!==e.searchTextCount?e.searchTextCount-t.searchTextCount:t.hitCount!==e.hitCount?e.hitCount-t.hitCount:e.id-t.id});var a='<ul class="search-result-list">';o.forEach(function(t){a+=t.item}),a+="</ul>",s.innerHTML=a}};r.addEventListener("input",a),$(".local-search-pop-overlay").remove(),$("body").css("overflow",""),proceedsearch()}})};$(".popup-trigger").click(function(t){t.stopPropagation(),isfetched===!1?searchFunc(path,"local-search-input","local-search-result"):proceedsearch()}),$(".popup-btn-close").click(onPopupClose),$(".popup").click(function(t){t.stopPropagation()}),$(document).on("keyup",function(t){var e=27===t.which&&$(".search-popup").is(":visible");e&&onPopupClose()})</script><script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/linkcard.js"></script><script type="text/javascript" src="/lib/zclip/clipboard.min.js"></script><script type="text/javascript" src="/lib/zclip/clipboard-use.js"></script></body></html><!-- rebuild by neat -->
+</code></pre><h3 id="Conclusions"><a href="#Conclusions" class="headerlink" title="Conclusions"></a>Conclusions</h3><ul>
+<li><strong>Matplot.imread</strong>:        dims: (height,width,channels),order: RGB,range: [0,255] dtype: uint8, plot</li>
+<li><strong>OpenCV.imread</strong>:         dims: (height,width,channels),order: <strong>BGR</strong>,range: [0,255] dtype: uint8, plot</li>
+<li><strong>caffe.io.load_image</strong>:   dims: (height,width,channels),order: RGB,range: <strong>[0,1]</strong>   dtype: float32 (caffe_io_image = matplot_image/255.0) ,plot</li>
+<li><strong>caffe Network Input(Transformer)</strong>:   dims: (m,c,h,w), order: <strong>BGR</strong>, range [0,255],dtype: float32, <strong>PLOT ERROR</strong></li>
+</ul>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a href="https://www.pyimagesearch.com/2014/11/03/display-matplotlib-rgb-image/" rel="noopener external nofollow noreferrer" target="_blank">display-matplotlib-rgb-image</a></li>
+<li><a href="http://www.bogotobogo.com/python/OpenCV_Python/python_opencv3_matplotlib_rgb_brg_image_load_display_save.php" rel="noopener external nofollow noreferrer" target="_blank">python_opencv3_matplotlib_rgb_brg_image_load_display_save</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180816: created.</li>
+</ul>
+
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        Author:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://kezunlin.me" rel="external nofollow noreferrer">kezunlin</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        Link:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://kezunlin.me/post/62811272/">https://kezunlin.me/post/62811272/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        Reprint policy:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    All articles in this blog are used except for special statements
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    reprint polocy. If reproduced, please indicate source
+                    <a href="https://kezunlin.me" target="_blank">kezunlin</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/opencv/">
+                                    <span class="chip bg-color">opencv</span>
+                                </a>
+                            
+                                <a href="/tags/rgb/">
+                                    <span class="chip bg-color">rgb</span>
+                                </a>
+                            
+                                <a href="/tags/bgr/">
+                                    <span class="chip bg-color">bgr</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpeg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.jpeg" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <!-- hack -->
+            
+                <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+            
+
+            <!-- hack -->
+            <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <!-- kzl in-article ad -->
+     <ins class="adsbygoogle"
+          style="display:block; text-align:center;"
+          data-ad-layout="in-article"
+          data-ad-format="fluid"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="7925631830"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+        </div>
+    </div>
+
+    <!-- hack -->
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+            <div class="card">
+                <a href="/post/9eb841ce/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="a quick guide to py-faster-rcnn">
+                        
+                        <span class="card-title">a quick guide to py-faster-rcnn</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            a quick guide to py-faster-rcnn
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2018-08-16
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/deep-learning/" class="post-category">
+                                    deep learning
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/caffe/">
+                        <span class="chip bg-color">caffe</span>
+                    </a>
+                    
+                    <a href="/tags/rcnn/">
+                        <span class="chip bg-color">rcnn</span>
+                    </a>
+                    
+                    <a href="/tags/faster-rcnn/">
+                        <span class="chip bg-color">faster rcnn</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/post/66241a6b/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="a quick guide to rcnn">
+                        
+                        <span class="card-title">a quick guide to rcnn</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            a quick guide to rcnn with caffe and python
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2018-08-16
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/deep-learning/" class="post-category">
+                                    deep learning
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/caffe/">
+                        <span class="chip bg-color">caffe</span>
+                    </a>
+                    
+                    <a href="/tags/rcnn/">
+                        <span class="chip bg-color">rcnn</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <!-- hack -->
+    <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <!-- kzl display ad -->
+     <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="7570408610"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+
+
+
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '4d1e3d463455e6bc7eba',
+        clientSecret: '4af023d85b66c4161a83b3f9297036e84c9ba57f',
+        repo: 'gitalk',
+        owner: 'kezunlin',
+        admin: "kezunlin",
+        id: '2018-08-16T10-27-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+</div>
+
+
+
+
+
+<!-- 代码语言 -->
+
+    
+<!-- 代码块复制 -->
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+    </div>
+    <div id="toc-aside" class="col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+
+            <!-- hack -->
+            <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <!-- kzl display ad -->
+     <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="7570408610"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+
+
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">年份</span>
+            <a href="https://kezunlin.me" target="_blank">kezunlin</a>
+            <br>
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    window.setTimeout("siteTime()", 1000);
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2017";
+                    var startMonth = "11";
+                    var startDate = "11";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/kezunlin" rel="external nofollow noreferrer" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-111858944-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-111858944-1');
+</script>
+
+
+    <!-- hack -->
+    <!-- Google AdSense header-->
+
+     <script data-ad-client="ca-pub-5653382914441020" 
+          async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+     </script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

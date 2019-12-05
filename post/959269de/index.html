@@ -1,6 +1,439 @@
-<!-- build time:Fri Nov 29 2019 15:13:57 GMT+0800 (CST) --><!DOCTYPE html><html class="theme-next gemini" lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#222"><meta name="referrer" content="no-referrer"><meta name="google-site-verification" content="WSpJFvfcmIPBX_iK8uPbmCHIy_0f1lvd7ZJpbyad2sA"><meta name="yandex-verification" content="808eb057eb8396cc"><meta name="baidu-site-verification" content="9tyEi4Fq0J"><meta name="360-site-verification" content="202e7cd2d29c6b138e4b78d9e9b62d43"><meta name="sogou_site_verification" content="euHq4j1Rpe"><script data-ad-client="ca-pub-5653382914441020" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"><link href="//fonts.googleapis.com/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|16:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css"><link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css"><link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3"><link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222"><meta name="keywords" content="LeNet,"><link rel="alternate" href="/atom.xml" title="C++ Python. Computer Vision Deep Learning | KeZunLin's Blog" type="application/atom+xml"><meta name="description" content="Tutorial for Training LeNet on MNIST with Caffe"><meta name="keywords" content="LeNet"><meta property="og:type" content="article"><meta property="og:title" content="Tutorial for Training LeNet on MNIST with Caffe"><meta property="og:url" content="https://kezunlin.me/post/959269de/index.html"><meta property="og:site_name" content="C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog"><meta property="og:description" content="Tutorial for Training LeNet on MNIST with Caffe"><meta property="og:locale" content="en"><meta property="og:updated_time" content="2019-11-18T05:22:56.454Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Tutorial for Training LeNet on MNIST with Caffe"><meta name="twitter:description" content="Tutorial for Training LeNet on MNIST with Caffe"><script type="text/javascript" id="hexo.configurations">var NexT=window.NexT||{},CONFIG={root:"/",scheme:"Gemini",version:"5.1.3",sidebar:{position:"left",display:"post",offset:12,b2t:!0,scrollpercent:!0,onmobile:!1},fancybox:!0,tabs:!0,motion:{enable:!1,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},duoshuo:{userId:"0",author:"Author"},algolia:{applicationID:"",apiKey:"",indexName:"",hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}}}</script><link rel="canonical" href="https://kezunlin.me/post/959269de/"><title>Tutorial for Training LeNet on MNIST with Caffe | C++ Python. Computer Vision Deep Learning | KeZunLin's Blog</title><script>!function(e,t,a,n,c,o,s){e.GoogleAnalyticsObject=c,e[c]=e[c]||function(){(e[c].q=e[c].q||[]).push(arguments)},e[c].l=1*new Date,o=t.createElement(a),s=t.getElementsByTagName(a)[0],o.async=1,o.src=n,s.parentNode.insertBefore(o,s)}(window,document,"script","https://www.google-analytics.com/analytics.js","ga"),ga("create","UA-111858944-1","auto"),ga("send","pageview")</script></head><body itemscope itemtype="http://schema.org/WebPage" lang="en"><div class="container sidebar-position-left page-post-detail"><div class="headband"></div><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-wrapper"><div class="site-meta"><div class="custom-logo-site-title"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span> <span class="site-title">C++ Python. Computer Vision Deep Learning | KeZunLin's Blog</span> <span class="logo-line-after"><i></i></span></a></div><h1 class="site-subtitle" itemprop="description">C++ && Python. CV && DL.</h1></div><div class="site-nav-toggle"><button><span class="btn-bar"></span> <span class="btn-bar"></span> <span class="btn-bar"></span></button></div></div><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i><br>Home</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i><br>Archives</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i><br>Categories</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i><br>Tags</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="menu-item-icon fa fa-fw fa-link"></i><br>Friends</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i><br>About</a></li><li class="menu-item menu-item-search"><a href="javascript:;" rel="external nofollow noreferrer" class="popup-trigger"><i class="menu-item-icon fa fa-search fa-fw"></i><br>Search</a></li></ul><div class="site-search"><div class="popup search-popup local-search-popup"><div class="local-search-header clearfix"><span class="search-icon"><i class="fa fa-search"></i> </span><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span><div class="local-search-input-wrapper"><input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input"></div></div><div id="local-search-result"></div></div></div></nav></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><div id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="https://kezunlin.me/post/959269de/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="kezunlin"><meta itemprop="description" content><meta itemprop="image" content="/images/kezunlin_avatar.jpg"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="C++ Python. Computer Vision Deep Learning | KeZunLin's Blog"><img itemprop="logo" src="/images/kezunlin_avatar.jpg" title="KeZunLin's Blog" alt="logo"></span><header class="post-header"><h2 class="post-title" itemprop="name headline">Tutorial for Training LeNet on MNIST with Caffe</h2><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i> </span><span class="post-meta-item-text">Posted on</span> <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-07T15:56:00+08:00">2018-08-07 </time></span><span class="post-category"><span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-folder-o"></i> </span><span class="post-meta-item-text">In</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/caffe/" itemprop="url" rel="index"><span itemprop="name">caffe</span></a></span></span><div class="post-wordcount"><span class="post-meta-item-icon"><i class="fa fa-file-word-o"></i> </span><span class="post-meta-item-text">Words count&#58;</span> <span title="Words count">1,388 </span><span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i> </span><span class="post-meta-item-text">Reading time &asymp;</span> <span title="Reading time">8</span></div></div></header><div class="post-body" itemprop="articleBody"><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div><p>Tutorial for Training LeNet on MNIST with Caffe<br><a id="more"></a></p><h1 id="LeNet"><a href="#LeNet" class="headerlink" title="LeNet"></a>LeNet</h1><p>The design of LeNet contains the essence of CNNs that are still used in larger models such as the ones in ImageNet. In general, it consists of a convolutional layer followed by a pooling layer, another convolution layer followed by a pooling layer, and then two fully connected layers similar to the conventional multilayer perceptrons.</p><p>经典LeNet结构:</p><pre><code>input-&gt;conv1(20,)-pool1-conv2(50,)-pool2-f1(500,ReLU)-f2(10,softmax)-&gt;output
-</code></pre><h2 id="lenet-train-test-prototxt"><a href="#lenet-train-test-prototxt" class="headerlink" title="lenet_train_test.prototxt"></a>lenet_train_test.prototxt</h2><ul><li>batch size设置在net.prototxt中而不是solver.prototxt中,用以明确blob的dims</li><li>bottom: layer的input blob; top: layer的output blob</li><li>对于0-255区间的pixel，需要归一化到0-1区间，scale = 1/256. = 0.00390625</li><li>lr_mult: 1表示learning时，weight的learning rate需要x1;</li><li>lr_mult: 2表示learning时，bias的learning rate需要x2 (this usually leads to better convergence rates)</li><li>InnerProduct默认输出的是z,而不是a=sigmoid(z)</li><li>ReLU是Inplace操作，输入输出blob都是ip1,对于其他Layer,input和output的blob不能是相同的</li></ul><h2 id="Input-Layer-types"><a href="#Input-Layer-types" class="headerlink" title="Input Layer types"></a>Input Layer types</h2><h3 id="Input-Layer-types-for-train-val-prototxt"><a href="#Input-Layer-types-for-train-val-prototxt" class="headerlink" title="Input Layer types for train_val.prototxt"></a>Input Layer types for <strong>train_val.prototxt</strong></h3><pre><code>solver.net.forward() # load mini-batch images from training data
-</code></pre><p><strong>1. Data</strong></p><pre><code>name: &quot;mnist&quot;
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="Tutorial for Training LeNet on MNIST with Caffe, C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog">
+    <meta name="description" content="LeNetThe design of LeNet contains the essence of CNNs that are still used in larger models such as the ones in ImageNet.">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Tutorial for Training LeNet on MNIST with Caffe | C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog</title>
+    <link rel="icon" type="image/jpeg" href="/favicon.jpg">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.jpg" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">KeZunLin</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Index</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.jpg" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">KeZunLin</div>
+        <div class="logo-desc">
+            
+            OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Index
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        Tutorial for Training LeNet on MNIST with Caffe
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/caffe/">
+                                <span class="chip bg-color">caffe</span>
+                            </a>
+                        
+                            <a href="/tags/LeNet/">
+                                <span class="chip bg-color">LeNet</span>
+                            </a>
+                        
+                            <a href="/tags/mnist/">
+                                <span class="chip bg-color">mnist</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/deep-learning/" class="post-category">
+                                deep learning
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2018-08-07
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
+                    1,175
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
+                    7 Min
+                </div>
+                
+				
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+            
+        </div>
+        <hr class="clearfix">
+        <!-- hack -->
+        <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <!-- kzl in-article ad -->
+     <ins class="adsbygoogle"
+          style="display:block; text-align:center;"
+          data-ad-layout="in-article"
+          data-ad-format="fluid"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="7925631830"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="LeNet"><a href="#LeNet" class="headerlink" title="LeNet"></a>LeNet</h2><p>The design of LeNet contains the essence of CNNs that are still used in larger models such as the ones in ImageNet. In general, it consists of a convolutional layer followed by a pooling layer, another convolution layer followed by a pooling layer, and then two fully connected layers similar to the conventional multilayer perceptrons. </p>
+<p>经典LeNet结构:</p>
+<pre><code>input-&gt;conv1(20,)-pool1-conv2(50,)-pool2-f1(500,ReLU)-f2(10,softmax)-&gt;output
+</code></pre><h3 id="lenet-train-test-prototxt"><a href="#lenet-train-test-prototxt" class="headerlink" title="lenet_train_test.prototxt"></a>lenet_train_test.prototxt</h3><ul>
+<li>batch size设置在net.prototxt中而不是solver.prototxt中,用以明确blob的dims</li>
+<li>bottom: layer的input blob; top: layer的output blob</li>
+<li>对于0-255区间的pixel，需要归一化到0-1区间，scale = 1/256. = 0.00390625</li>
+<li>lr_mult: 1表示learning时，weight的learning rate需要x1;</li>
+<li>lr_mult: 2表示learning时，bias的learning rate需要x2 (this usually leads to better convergence rates)</li>
+<li>InnerProduct默认输出的是z,而不是a=sigmoid(z)</li>
+<li>ReLU是Inplace操作，输入输出blob都是ip1,对于其他Layer,input和output的blob不能是相同的</li>
+</ul>
+<h3 id="Input-Layer-types"><a href="#Input-Layer-types" class="headerlink" title="Input Layer types"></a>Input Layer types</h3><h4 id="Input-Layer-types-for-train-val-prototxt"><a href="#Input-Layer-types-for-train-val-prototxt" class="headerlink" title="Input Layer types for train_val.prototxt"></a>Input Layer types for <strong>train_val.prototxt</strong></h4><p><code></code>python<br>solver.net.forward() # load mini-batch images from training data</p>
+<pre><code>
+**Data** 
+```prototxt
+name: &quot;mnist&quot;
 layer {
   name: &quot;mnist&quot;
   type: &quot;Data&quot;
@@ -48,36 +481,48 @@ layer {
     backend: LMDB
   }
 }
-</code></pre><p><strong>2. ImageData</strong>: read raw images.</p><pre><code>layer {
-  name: &quot;data&quot;
-  type: &quot;ImageData&quot;
-  top: &quot;data&quot;
-  top: &quot;label&quot;
+</code></pre><p><strong> ImageData</strong>: read raw images.</p>
+<pre class=" language-prototxt"><code class="language-prototxt">layer {
+  name: "data"
+  type: "ImageData"
+  top: "data"
+  top: "label"
   include {
     phase: TRAIN
   }
   transform_param {
     mirror: true
     crop_size: 227
-    mean_file: &quot;data/ilsvrc12/imagenet_mean.binaryproto&quot;
+    mean_file: "data/ilsvrc12/imagenet_mean.binaryproto"
   }
   image_data_param {
-    source: &quot;data/flickr_style/train.txt&quot;
+    source: "data/flickr_style/train.txt"
     batch_size: 50
     new_height: 256
     new_width: 256
   }
 }
-</code></pre><h3 id="Input-Layer-types-for-deploy-prototxt"><a href="#Input-Layer-types-for-deploy-prototxt" class="headerlink" title="Input Layer types for deploy.prototxt"></a>Input Layer types for <strong>deploy.prototxt</strong></h3><ol start="3"><li><p>DummyDat: no labels, only for forward and get probs</p><p>layer {<br>name: “data”<br>type: “DummyData”<br>top: “data”<br>dummy_data_param {</p><pre><code>shape {
-  dim: 1
-  dim: 3
-  dim: 227
-  dim: 227
+</code></pre>
+<h4 id="Input-Layer-types-for-deploy-prototxt"><a href="#Input-Layer-types-for-deploy-prototxt" class="headerlink" title="Input Layer types for deploy.prototxt"></a>Input Layer types for <strong>deploy.prototxt</strong></h4><p><strong> DummyData </strong>: no labels, only for forward and get probs</p>
+<pre class=" language-prototxt"><code class="language-prototxt">layer {
+  name: "data"
+  type: "DummyData"
+  top: "data"
+  dummy_data_param {
+    shape {
+      dim: 1
+      dim: 3
+      dim: 227
+      dim: 227
+    }
+  }
 }
-</code></pre><p>}<br>}</p></li></ol><p><strong>4. Input</strong> : typically used for networks that are being deployed.</p><pre><code>layer {
-  name: &quot;data&quot;
-  type: &quot;Input&quot;
-  top: &quot;data&quot;
+</code></pre>
+<p><strong> Input</strong> :  typically used for networks that are being deployed.</p>
+<pre class=" language-prototxt"><code class="language-prototxt">layer {
+  name: "data"
+  type: "Input"
+  top: "data"
   input_param { 
   shape {
       dim: 10
@@ -86,25 +531,1006 @@ layer {
       dim: 227
     }
 }
-</code></pre><h2 id="LeNet-train-val-prototxt"><a href="#LeNet-train-val-prototxt" class="headerlink" title="LeNet train_val.prototxt"></a>LeNet train_val.prototxt</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br></pre></td><td class="code"><pre><span class="line">name: &quot;LeNet&quot;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;mnist&quot;</span><br><span class="line">  type: &quot;Data&quot;</span><br><span class="line">  top: &quot;data&quot;</span><br><span class="line">  top: &quot;label&quot;</span><br><span class="line">  include &#123;</span><br><span class="line">    phase: TRAIN</span><br><span class="line">  &#125;</span><br><span class="line">  transform_param &#123;</span><br><span class="line">    scale: 0.00390625</span><br><span class="line">  &#125;</span><br><span class="line">  data_param &#123;</span><br><span class="line">    source: &quot;examples/mnist/mnist_train_lmdb&quot;</span><br><span class="line">    batch_size: 64</span><br><span class="line">    backend: LMDB</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;mnist&quot;</span><br><span class="line">  type: &quot;Data&quot;</span><br><span class="line">  top: &quot;data&quot;</span><br><span class="line">  top: &quot;label&quot;</span><br><span class="line">  include &#123;</span><br><span class="line">    phase: TEST</span><br><span class="line">  &#125;</span><br><span class="line">  transform_param &#123;</span><br><span class="line">    scale: 0.00390625</span><br><span class="line">  &#125;</span><br><span class="line">  data_param &#123;</span><br><span class="line">    source: &quot;examples/mnist/mnist_test_lmdb&quot;</span><br><span class="line">    batch_size: 100</span><br><span class="line">    backend: LMDB</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;conv1&quot;</span><br><span class="line">  type: &quot;Convolution&quot;</span><br><span class="line">  bottom: &quot;data&quot;</span><br><span class="line">  top: &quot;conv1&quot;</span><br><span class="line">  param &#123;</span><br><span class="line">    lr_mult: 1</span><br><span class="line">  &#125;</span><br><span class="line">  param &#123;</span><br><span class="line">    lr_mult: 2</span><br><span class="line">  &#125;</span><br><span class="line">  convolution_param &#123;</span><br><span class="line">    num_output: 20</span><br><span class="line">    kernel_size: 5</span><br><span class="line">    stride: 1</span><br><span class="line">    weight_filler &#123;</span><br><span class="line">      type: &quot;xavier&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    bias_filler &#123;</span><br><span class="line">      type: &quot;constant&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;pool1&quot;</span><br><span class="line">  type: &quot;Pooling&quot;</span><br><span class="line">  bottom: &quot;conv1&quot;</span><br><span class="line">  top: &quot;pool1&quot;</span><br><span class="line">  pooling_param &#123;</span><br><span class="line">    pool: MAX</span><br><span class="line">    kernel_size: 2</span><br><span class="line">    stride: 2</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;conv2&quot;</span><br><span class="line">  type: &quot;Convolution&quot;</span><br><span class="line">  bottom: &quot;pool1&quot;</span><br><span class="line">  top: &quot;conv2&quot;</span><br><span class="line">  param &#123;</span><br><span class="line">    lr_mult: 1</span><br><span class="line">  &#125;</span><br><span class="line">  param &#123;</span><br><span class="line">    lr_mult: 2</span><br><span class="line">  &#125;</span><br><span class="line">  convolution_param &#123;</span><br><span class="line">    num_output: 50</span><br><span class="line">    kernel_size: 5</span><br><span class="line">    stride: 1</span><br><span class="line">    weight_filler &#123;</span><br><span class="line">      type: &quot;xavier&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    bias_filler &#123;</span><br><span class="line">      type: &quot;constant&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;pool2&quot;</span><br><span class="line">  type: &quot;Pooling&quot;</span><br><span class="line">  bottom: &quot;conv2&quot;</span><br><span class="line">  top: &quot;pool2&quot;</span><br><span class="line">  pooling_param &#123;</span><br><span class="line">    pool: MAX</span><br><span class="line">    kernel_size: 2</span><br><span class="line">    stride: 2</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;ip1&quot;</span><br><span class="line">  type: &quot;InnerProduct&quot;</span><br><span class="line">  bottom: &quot;pool2&quot;</span><br><span class="line">  top: &quot;ip1&quot;</span><br><span class="line">  param &#123;</span><br><span class="line">    lr_mult: 1</span><br><span class="line">  &#125;</span><br><span class="line">  param &#123;</span><br><span class="line">    lr_mult: 2</span><br><span class="line">  &#125;</span><br><span class="line">  inner_product_param &#123;</span><br><span class="line">    num_output: 500</span><br><span class="line">    weight_filler &#123;</span><br><span class="line">      type: &quot;xavier&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    bias_filler &#123;</span><br><span class="line">      type: &quot;constant&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;relu1&quot;</span><br><span class="line">  type: &quot;ReLU&quot;</span><br><span class="line">  bottom: &quot;ip1&quot;</span><br><span class="line">  top: &quot;ip1&quot;</span><br><span class="line">&#125;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;ip2&quot;</span><br><span class="line">  type: &quot;InnerProduct&quot;</span><br><span class="line">  bottom: &quot;ip1&quot;</span><br><span class="line">  top: &quot;ip2&quot;</span><br><span class="line">  param &#123;</span><br><span class="line">    lr_mult: 1</span><br><span class="line">  &#125;</span><br><span class="line">  param &#123;</span><br><span class="line">    lr_mult: 2</span><br><span class="line">  &#125;</span><br><span class="line">  inner_product_param &#123;</span><br><span class="line">    num_output: 10</span><br><span class="line">    weight_filler &#123;</span><br><span class="line">      type: &quot;xavier&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    bias_filler &#123;</span><br><span class="line">      type: &quot;constant&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;accuracy&quot;</span><br><span class="line">  type: &quot;Accuracy&quot;</span><br><span class="line">  bottom: &quot;ip2&quot;</span><br><span class="line">  bottom: &quot;label&quot;</span><br><span class="line">  top: &quot;accuracy&quot;</span><br><span class="line">  include &#123;</span><br><span class="line">    phase: TEST</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;loss&quot;</span><br><span class="line">  type: &quot;SoftmaxWithLoss&quot;</span><br><span class="line">  bottom: &quot;ip2&quot;</span><br><span class="line">  bottom: &quot;label&quot;</span><br><span class="line">  top: &quot;loss&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h2 id="LeNet-solver-prototxt"><a href="#LeNet-solver-prototxt" class="headerlink" title="LeNet solver.prototxt"></a>LeNet solver.prototxt</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"># The train/test net protocol buffer definition</span><br><span class="line">net: &quot;examples/mnist/lenet_train_test.prototxt&quot;</span><br><span class="line">    </span><br><span class="line"># batch_size定义在net.prototxt中,train_mini_batch_size = 64,test_mini_batch_size = 100</span><br><span class="line"></span><br><span class="line"># test_iter specifies how many forward passes the test should carry out.</span><br><span class="line"># In the case of MNIST, we have test batch size 100 and 100 test iterations,</span><br><span class="line"># covering the full 10,000 testing images.</span><br><span class="line">test_iter: 100 # test_iter = num_test_images/test_mini_batch_size = 10000/100</span><br><span class="line"># Carry out testing every 500 training iterations.</span><br><span class="line">test_interval: 500</span><br><span class="line"># The base learning rate, momentum and the weight decay of the network.</span><br><span class="line">base_lr: 0.01</span><br><span class="line">momentum: 0.9</span><br><span class="line">weight_decay: 0.0005</span><br><span class="line"># The learning rate policy</span><br><span class="line">lr_policy: &quot;inv&quot;</span><br><span class="line">gamma: 0.0001</span><br><span class="line">power: 0.75</span><br><span class="line"># Display every 100 iterations</span><br><span class="line">display: 100</span><br><span class="line"># The maximum number of iterations</span><br><span class="line">max_iter: 10000  # epoch = </span><br><span class="line"># snapshot intermediate results</span><br><span class="line">snapshot: 5000</span><br><span class="line">snapshot_prefix: &quot;examples/mnist/lenet&quot;</span><br><span class="line"># solver mode: CPU or GPU</span><br><span class="line">solver_mode: GPU</span><br></pre></td></tr></table></figure><h3 id="learning-rate-policy-todo…"><a href="#learning-rate-policy-todo…" class="headerlink" title="learning rate policy (todo…)"></a>learning rate policy (todo…)</h3><p>This is the same policy as our default LeNet.</p><pre><code>s.lr_policy = &apos;inv&apos;
+</code></pre>
+<h3 id="LeNet-train-val-prototxt"><a href="#LeNet-train-val-prototxt" class="headerlink" title="LeNet train_val.prototxt"></a>LeNet train_val.prototxt</h3><pre class=" language-prototxt"><code class="language-prototxt">name: "LeNet"
+layer {
+  name: "mnist"
+  type: "Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TRAIN
+  }
+  transform_param {
+    scale: 0.00390625
+  }
+  data_param {
+    source: "examples/mnist/mnist_train_lmdb"
+    batch_size: 64
+    backend: LMDB
+  }
+}
+layer {
+  name: "mnist"
+  type: "Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TEST
+  }
+  transform_param {
+    scale: 0.00390625
+  }
+  data_param {
+    source: "examples/mnist/mnist_test_lmdb"
+    batch_size: 100
+    backend: LMDB
+  }
+}
+layer {
+  name: "conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "conv1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 20
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "pool1"
+  type: "Pooling"
+  bottom: "conv1"
+  top: "pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "conv2"
+  type: "Convolution"
+  bottom: "pool1"
+  top: "conv2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 50
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "pool2"
+  type: "Pooling"
+  bottom: "conv2"
+  top: "pool2"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "ip1"
+  type: "InnerProduct"
+  bottom: "pool2"
+  top: "ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 500
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "relu1"
+  type: "ReLU"
+  bottom: "ip1"
+  top: "ip1"
+}
+layer {
+  name: "ip2"
+  type: "InnerProduct"
+  bottom: "ip1"
+  top: "ip2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "accuracy"
+  type: "Accuracy"
+  bottom: "ip2"
+  bottom: "label"
+  top: "accuracy"
+  include {
+    phase: TEST
+  }
+}
+layer {
+  name: "loss"
+  type: "SoftmaxWithLoss"
+  bottom: "ip2"
+  bottom: "label"
+  top: "loss"
+}
+</code></pre>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+<h3 id="LeNet-solver-prototxt"><a href="#LeNet-solver-prototxt" class="headerlink" title="LeNet solver.prototxt"></a>LeNet solver.prototxt</h3><pre class=" language-prototxt"><code class="language-prototxt"># The train/test net protocol buffer definition
+net: "examples/mnist/lenet_train_test.prototxt"
+
+# batch_size定义在net.prototxt中,train_mini_batch_size = 64,test_mini_batch_size = 100
+
+# test_iter specifies how many forward passes the test should carry out.
+# In the case of MNIST, we have test batch size 100 and 100 test iterations,
+# covering the full 10,000 testing images.
+test_iter: 100 # test_iter = num_test_images/test_mini_batch_size = 10000/100
+# Carry out testing every 500 training iterations.
+test_interval: 500
+# The base learning rate, momentum and the weight decay of the network.
+base_lr: 0.01
+momentum: 0.9
+weight_decay: 0.0005
+# The learning rate policy
+lr_policy: "inv"
+gamma: 0.0001
+power: 0.75
+# Display every 100 iterations
+display: 100
+# The maximum number of iterations
+max_iter: 10000  # epoch = 
+# snapshot intermediate results
+snapshot: 5000
+snapshot_prefix: "examples/mnist/lenet"
+# solver mode: CPU or GPU
+solver_mode: GPU
+</code></pre>
+<h4 id="learning-rate-policy-todo…"><a href="#learning-rate-policy-todo…" class="headerlink" title="learning rate policy (todo…)"></a>learning rate policy (todo…)</h4><p>This is the same policy as our default LeNet.</p>
+<pre class=" language-prototxt"><code class="language-prototxt">s.lr_policy = 'inv'
 s.gamma = 0.0001
 s.power = 0.75
-</code></pre><p>EDIT HERE to try the fixed rate (and compare with adaptive solvers)<br><code>fixed</code> is the simplest policy that keeps the learning rate constant.</p><pre><code>s.lr_policy = &apos;fixed&apos;
-</code></pre><p>Set <code>lr_policy</code> to define how the learning rate changes during training.</p><pre><code># Here, we &apos;step&apos; the learning rate by multiplying it by a factor `gamma`
+</code></pre>
+<p> EDIT HERE to try the fixed rate (and compare with adaptive solvers)<br><code>fixed</code> is the simplest policy that keeps the learning rate constant.</p>
+<pre class=" language-prototxt"><code class="language-prototxt">s.lr_policy = 'fixed'
+</code></pre>
+<p>Set <code>lr_policy</code> to define how the learning rate changes during training.</p>
+<pre class=" language-prototxt"><code class="language-prototxt"># Here, we 'step' the learning rate by multiplying it by a factor `gamma`
 # every `stepsize` iterations.
-s.lr_policy = &apos;step&apos;
+s.lr_policy = 'step'
 s.gamma = 0.1
 s.stepsize = 20000
-</code></pre><h3 id="solver-types-todo…"><a href="#solver-types-todo…" class="headerlink" title="solver types (todo…)"></a>solver types (todo…)</h3><p>solver types include “SGD”, “Adam”, and “Nesterov” among others.</p><pre><code>s.type = &quot;SGD&quot;
-</code></pre><h2 id="Train-LeNet"><a href="#Train-LeNet" class="headerlink" title="Train LeNet"></a>Train LeNet</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd $CAFFE_ROOT</span><br><span class="line">./examples/mnist/train_lenet.sh</span><br></pre></td></tr></table></figure><pre><code>#!/usr/bin/env sh
+</code></pre>
+<h4 id="solver-types-todo…"><a href="#solver-types-todo…" class="headerlink" title="solver types (todo…)"></a>solver types (todo…)</h4><p>solver types include “SGD”, “Adam”, and “Nesterov” among others.</p>
+<pre class=" language-prototxt"><code class="language-prototxt">s.type = "SGD"
+</code></pre>
+<h3 id="Train-LeNet"><a href="#Train-LeNet" class="headerlink" title="Train LeNet"></a>Train LeNet</h3><pre class=" language-bash"><code class="language-bash"><span class="token function">cd</span> <span class="token variable">$CAFFE_ROOT</span>
+./examples/mnist/train_lenet.sh
+</code></pre>
+<pre><code>#!/usr/bin/env sh
 set -e
 
 ./build/tools/caffe train --solver=examples/mnist/lenet_solver.prototxt $@
-</code></pre><p>train output</p><pre><code>I0807 16:15:29.555564  4273 solver.cpp:310] Iteration 10000, loss = 0.00251452
+</code></pre><p>train output </p>
+<pre><code>I0807 16:15:29.555564  4273 solver.cpp:310] Iteration 10000, loss = 0.00251452
 I0807 16:15:29.555619  4273 solver.cpp:330] Iteration 10000, Testing net (#0)
 I0807 16:15:29.634243  4281 data_layer.cpp:73] Restarting data prefetching from start.
 I0807 16:15:29.635372  4273 solver.cpp:397]     Test net output #0: accuracy = 0.9909
 I0807 16:15:29.635409  4273 solver.cpp:397]     Test net output #1: loss = 0.0302912 (* 1 = 0.0302912 loss)
 I0807 16:15:29.635416  4273 solver.cpp:315] Optimization Done.
 I0807 16:15:29.635439  4273 caffe.cpp:259] Optimization Done.
-</code></pre><h2 id="Deploy-model"><a href="#Deploy-model" class="headerlink" title="Deploy model"></a>Deploy model</h2><ul><li>for train, <code>train_test.prototxt</code> + <code>solver.prototxt</code></li><li>for deploy, <code>deploy.prototxt</code>+ <code>model.caffemodel</code></li></ul><blockquote><p>depoly: no weight_filler,bias_filler, loaded from weights.caffemodel. if not set weights file, w,b default to 0s</p></blockquote><h2 id="Pycaffe"><a href="#Pycaffe" class="headerlink" title="Pycaffe"></a>Pycaffe</h2><p><a href="http://caffe.berkeleyvision.org/tutorial/interfaces.html" rel="noopener external nofollow noreferrer" target="_blank">pycaffe interfaces</a></p><p>The Python interface – <code>pycaffe</code> – is the caffe module and its scripts in caffe/python. import caffe to load models, do forward and backward, handle IO, visualize networks, and even instrument model solving. All model data, derivatives, and parameters are exposed for reading and writing.</p><ul><li><code>caffe.Net</code> is the central interface for loading, configuring, and running models.</li><li><code>caffe.Classifier</code> and caffe.Detector provide convenience interfaces for common tasks.</li><li><code>caffe.SGDSolver</code> exposes the solving interface.</li><li><code>caffe.io</code> handles input / output with preprocessing and protocol buffers.</li><li><code>caffe.draw</code> visualizes network architectures.</li><li>Caffe blobs are exposed as numpy ndarrays for ease-of-use and efficiency.</li></ul><p>Tutorial IPython notebooks are found in caffe/examples: do <code>ipython notebook caffe/examples</code> to try them. For developer reference docstrings can be found throughout the code.</p><p>Compile pycaffe by make pycaffe. Add the module directory to your <code>$PYTHONPATH</code> by <code>export PYTHONPATH=/path/to/caffe/python:$PYTHONPATH</code> or the like for <code>import caffe</code>.</p><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul><li><a href="http://caffe.berkeleyvision.org/gathered/examples/mnist.html" rel="noopener external nofollow noreferrer" target="_blank">minist</a></li><li><a href="http://caffe.berkeleyvision.org/tutorial/layers.html" rel="noopener external nofollow noreferrer" target="_blank">caffe layers</a></li><li><a href="http://caffe.berkeleyvision.org/tutorial/layers/python.html" rel="noopener external nofollow noreferrer" target="_blank">caffe python layer</a></li><li><a href="https://www.cnblogs.com/leo-sun/p/6032684.html" rel="noopener external nofollow noreferrer" target="_blank">caffe常用layer参数</a></li></ul><h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul><li>20180807: created.</li></ul><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div></div><div><div style="padding:10px 0;margin:20px auto;width:90%;text-align:center"><div>坚持技术分享，您的支持将鼓励我继续创作！</div><button id="rewardButton" disable="enable" onclick='var e=document.getElementById("QR");"none"===e.style.display?e.style.display="block":e.style.display="none"'><span>Donate</span></button><div id="QR" style="display:none"><div id="wechat" style="display:inline-block"><img id="wechat_qr" src="/images/wechatpay.jpeg" alt="kezunlin WeChat Pay"><p>WeChat Pay</p></div></div></div></div><div><ul class="post-copyright"><li class="post-copyright-author"><strong>Post author:</strong> kezunlin</li><li class="post-copyright-link"><strong>Post link:</strong> <a href="https://kezunlin.me/post/959269de/" title="Tutorial for Training LeNet on MNIST with Caffe">https://kezunlin.me/post/959269de/</a></li><li class="post-copyright-license"><strong>Copyright Notice: </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.</li></ul></div><footer class="post-footer"><div class="post-tags"><a href="/tags/LeNet/" rel="tag"># LeNet</a></div><div><br><div class="recommended_posts"><h1>Recommended Posts</h1><ul class="popular-posts"><li class="popular-posts-item"><a href="https://kezunlin.me/post/9f5552a3/" rel="bookmark">learning lenet</a></li></ul></div></div><div class="post-nav"><div class="post-nav-next post-nav-item"><a href="/post/b90033a9/" rel="next" title="Install and Configure Caffe on ubuntu 16.04"><i class="fa fa-chevron-left"></i> Install and Configure Caffe on ubuntu 16.04</a></div><span class="post-nav-divider"></span><div class="post-nav-prev post-nav-item"><a href="/post/924c1a5a/" rel="prev" title="Classification: Instant Recognition with Caffe">Classification: Instant Recognition with Caffe <i class="fa fa-chevron-right"></i></a></div></div></footer></div></article><div class="post-spread"></div></div></div><div class="comments" id="comments"><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div><div id="gitalk-container"></div></div></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span> <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span> <span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">Table of Contents</li><li class="sidebar-nav-overview" data-target="site-overview-wrap">Overview</li></ul><section class="site-overview-wrap sidebar-panel"><div class="site-overview"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"><img class="site-author-image" itemprop="image" title="KeZunLin's Blog" src="/images/kezunlin_avatar.jpg" alt="kezunlin"><p class="site-author-name" itemprop="name">kezunlin</p><p class="site-description motion-element" itemprop="description"></p></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"><a href="/archives/"><span class="site-state-item-count">160</span> <span class="site-state-item-name">posts</span></a></div><div class="site-state-item site-state-categories"><a href="/categories/index.html"><span class="site-state-item-count">41</span> <span class="site-state-item-name">categories</span></a></div><div class="site-state-item site-state-tags"><a href="/tags/index.html"><span class="site-state-item-count">169</span> <span class="site-state-item-name">tags</span></a></div></nav><div class="feed-link motion-element"><a href="/atom.xml" rel="alternate"><i class="fa fa-rss"></i> RSS</a></div><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/kezunlin" rel="external nofollow noreferrer" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i></a> </span><span class="links-of-author-item"><a href="mailto:zunlin1234@gmail.com" rel="external nofollow noreferrer" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i></a></span></div></div></section><section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active"><div class="post-toc"><div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LeNet"><span class="nav-number">1.</span> <span class="nav-text">LeNet</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#lenet-train-test-prototxt"><span class="nav-number">1.1.</span> <span class="nav-text">lenet_train_test.prototxt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Input-Layer-types"><span class="nav-number">1.2.</span> <span class="nav-text">Input Layer types</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Input-Layer-types-for-train-val-prototxt"><span class="nav-number">1.2.1.</span> <span class="nav-text">Input Layer types for train_val.prototxt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Input-Layer-types-for-deploy-prototxt"><span class="nav-number">1.2.2.</span> <span class="nav-text">Input Layer types for deploy.prototxt</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LeNet-train-val-prototxt"><span class="nav-number">1.3.</span> <span class="nav-text">LeNet train_val.prototxt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LeNet-solver-prototxt"><span class="nav-number">1.4.</span> <span class="nav-text">LeNet solver.prototxt</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#learning-rate-policy-todo…"><span class="nav-number">1.4.1.</span> <span class="nav-text">learning rate policy (todo…)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#solver-types-todo…"><span class="nav-number">1.4.2.</span> <span class="nav-text">solver types (todo…)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Train-LeNet"><span class="nav-number">1.5.</span> <span class="nav-text">Train LeNet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Deploy-model"><span class="nav-number">1.6.</span> <span class="nav-text">Deploy model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pycaffe"><span class="nav-number">1.7.</span> <span class="nav-text">Pycaffe</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div></div></section><div class="back-to-top"><i class="fa fa-arrow-up"></i> <span id="scrollpercent"><span>0</span>%</span></div><div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7570408610" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div></div></aside></div></main><footer id="footer" class="footer"><div class="footer-inner"><div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span> <span class="with-love"><i class="fa fa-user"></i> </span><span class="author" itemprop="copyrightHolder">kezunlin</span></div><div id="cnzz_id"><script type="text/javascript">var cnzz_protocol="https:"==document.location.protocol?"https://":"http://";document.write(unescape("%3Cspan id='cnzz_stat_icon_1278202133'%3E%3C/span%3E%3Cscript src='"+cnzz_protocol+"s4.cnzz.com/z_stat.php%3Fid%3D1278202133%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"))</script></div></div></footer></div><script type="text/javascript">"[object Function]"!==Object.prototype.toString.call(window.Promise)&&(window.Promise=null)</script><script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script><script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script><script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script><script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script><script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script><script src="https://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.min.js"></script><script type="text/javascript">var gitalk=new Gitalk({clientID:"4d1e3d463455e6bc7eba",clientSecret:"4af023d85b66c4161a83b3f9297036e84c9ba57f",repo:"gitalk",owner:"kezunlin",admin:["kezunlin"],id:md5(location.pathname),distractionFreeMode:"true"});gitalk.render("gitalk-container")</script><script type="text/javascript">function proceedsearch(){$("body").append('<div class="search-popup-overlay local-search-pop-overlay"></div>').css("overflow","hidden"),$(".search-popup-overlay").click(onPopupClose),$(".popup").toggle();var t=$("#local-search-input");t.attr("autocapitalize","none"),t.attr("autocorrect","off"),t.focus()}var isfetched=!1,isXml=!0,search_path="search.xml";0===search_path.length?search_path="search.xml":/json$/i.test(search_path)&&(isXml=!1);var path="/"+search_path,onPopupClose=function(t){$(".popup").hide(),$("#local-search-input").val(""),$(".search-result-list").remove(),$("#no-result").remove(),$(".local-search-pop-overlay").remove(),$("body").css("overflow","")},searchFunc=function(t,e,o){"use strict";$("body").append('<div class="search-popup-overlay local-search-pop-overlay"><div id="search-loading-icon"><i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i></div></div>').css("overflow","hidden"),$("#search-loading-icon").css("margin","20% auto 0 auto").css("text-align","center"),$.ajax({url:t,dataType:isXml?"xml":"json",async:!0,success:function(t){isfetched=!0,$(".popup").detach().appendTo(".header-inner");var n=isXml?$("entry",t).map(function(){return{title:$("title",this).text(),content:$("content",this).text(),url:$("url",this).text()}}).get():t,r=document.getElementById(e),s=document.getElementById(o),a=function(){var t=r.value.trim().toLowerCase(),e=t.split(/[\s\-]+/);e.length>1&&e.push(t);var o=[];if(t.length>0&&n.forEach(function(n){function r(e,o,n,r){for(var s=r[r.length-1],a=s.position,i=s.word,l=[],h=0;a+i.length<=n&&0!=r.length;){i===t&&h++,l.push({position:a,length:i.length});var p=a+i.length;for(r.pop();0!=r.length&&(s=r[r.length-1],a=s.position,i=s.word,p>a);)r.pop()}return c+=h,{hits:l,start:o,end:n,searchTextCount:h}}function s(t,e){var o="",n=e.start;return e.hits.forEach(function(e){o+=t.substring(n,e.position);var r=e.position+e.length;o+='<b class="search-keyword">'+t.substring(e.position,r)+"</b>",n=r}),o+=t.substring(n,e.end)}var a=!1,i=0,c=0,l=n.title.trim(),h=l.toLowerCase(),p=n.content.trim().replace(/<[^>]+>/g,""),u=p.toLowerCase(),f=decodeURIComponent(n.url),d=[],g=[];if(""!=l&&(e.forEach(function(t){function e(t,e,o){var n=t.length;if(0===n)return[];var r=0,s=[],a=[];for(o||(e=e.toLowerCase(),t=t.toLowerCase());(s=e.indexOf(t,r))>-1;)a.push({position:s,word:t}),r=s+n;return a}d=d.concat(e(t,h,!1)),g=g.concat(e(t,u,!1))}),(d.length>0||g.length>0)&&(a=!0,i=d.length+g.length)),a){[d,g].forEach(function(t){t.sort(function(t,e){return e.position!==t.position?e.position-t.position:t.word.length-e.word.length})});var v=[];0!=d.length&&v.push(r(l,0,l.length,d));for(var $=[];0!=g.length;){var C=g[g.length-1],m=C.position,x=C.word,w=m-20,y=m+80;w<0&&(w=0),y<m+x.length&&(y=m+x.length),y>p.length&&(y=p.length),$.push(r(p,w,y,g))}$.sort(function(t,e){return t.searchTextCount!==e.searchTextCount?e.searchTextCount-t.searchTextCount:t.hits.length!==e.hits.length?e.hits.length-t.hits.length:t.start-e.start});var T=parseInt("1");T>=0&&($=$.slice(0,T));var b="";b+=0!=v.length?"<li><a href='"+f+"' class='search-result-title'>"+s(l,v[0])+"</a>":"<li><a href='"+f+"' class='search-result-title'>"+l+"</a>",$.forEach(function(t){b+="<a href='"+f+'\'><p class="search-result">'+s(p,t)+"...</p></a>"}),b+="</li>",o.push({item:b,searchTextCount:c,hitCount:i,id:o.length})}}),1===e.length&&""===e[0])s.innerHTML='<div id="no-result"><i class="fa fa-search fa-5x" /></div>';else if(0===o.length)s.innerHTML='<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>';else{o.sort(function(t,e){return t.searchTextCount!==e.searchTextCount?e.searchTextCount-t.searchTextCount:t.hitCount!==e.hitCount?e.hitCount-t.hitCount:e.id-t.id});var a='<ul class="search-result-list">';o.forEach(function(t){a+=t.item}),a+="</ul>",s.innerHTML=a}};r.addEventListener("input",a),$(".local-search-pop-overlay").remove(),$("body").css("overflow",""),proceedsearch()}})};$(".popup-trigger").click(function(t){t.stopPropagation(),isfetched===!1?searchFunc(path,"local-search-input","local-search-result"):proceedsearch()}),$(".popup-btn-close").click(onPopupClose),$(".popup").click(function(t){t.stopPropagation()}),$(document).on("keyup",function(t){var e=27===t.which&&$(".search-popup").is(":visible");e&&onPopupClose()})</script><script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/linkcard.js"></script><script type="text/javascript" src="/lib/zclip/clipboard.min.js"></script><script type="text/javascript" src="/lib/zclip/clipboard-use.js"></script></body></html><!-- rebuild by neat -->
+</code></pre><h3 id="Deploy-model"><a href="#Deploy-model" class="headerlink" title="Deploy model"></a>Deploy model</h3><ul>
+<li>for train, <code>train_test.prototxt</code> + <code>solver.prototxt</code></li>
+<li>for deploy, <code>deploy.prototxt</code>+ <code>model.caffemodel</code></li>
+</ul>
+<blockquote>
+<p>depoly: no weight_filler,bias_filler, loaded from weights.caffemodel. if not set weights file, w,b default to 0s</p>
+</blockquote>
+<h3 id="PyCaffe"><a href="#PyCaffe" class="headerlink" title="PyCaffe"></a>PyCaffe</h3><p><a href="http://caffe.berkeleyvision.org/tutorial/interfaces.html" rel="noopener external nofollow noreferrer" target="_blank">pycaffe interfaces</a></p>
+<p>The Python interface – <code>pycaffe</code> – is the caffe module and its scripts in caffe/python. import caffe to load models, do forward and backward, handle IO, visualize networks, and even instrument model solving. All model data, derivatives, and parameters are exposed for reading and writing.</p>
+<ul>
+<li><code>caffe.Net</code> is the central interface for loading, configuring, and running models. </li>
+<li><code>caffe.Classifier</code> and caffe.Detector provide convenience interfaces for common tasks.</li>
+<li><code>caffe.SGDSolver</code> exposes the solving interface.</li>
+<li><code>caffe.io</code> handles input / output with preprocessing and protocol buffers.</li>
+<li><code>caffe.draw</code> visualizes network architectures.</li>
+<li>Caffe blobs are exposed as numpy ndarrays for ease-of-use and efficiency.</li>
+</ul>
+<p>Tutorial IPython notebooks are found in caffe/examples: do <code>ipython notebook caffe/examples</code> to try them. For developer reference docstrings can be found throughout the code.</p>
+<p>Compile pycaffe by make pycaffe. Add the module directory to your <code>$PYTHONPATH</code> by <code>export PYTHONPATH=/path/to/caffe/python:$PYTHONPATH</code> or the like for <code>import caffe</code>.</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a href="http://caffe.berkeleyvision.org/gathered/examples/mnist.html" rel="noopener external nofollow noreferrer" target="_blank">minist</a></li>
+<li><a href="http://caffe.berkeleyvision.org/tutorial/layers.html" rel="noopener external nofollow noreferrer" target="_blank">caffe layers</a></li>
+<li><a href="http://caffe.berkeleyvision.org/tutorial/layers/python.html" rel="noopener external nofollow noreferrer" target="_blank">caffe python layer</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180807: created.</li>
+</ul>
+
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        Author:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://kezunlin.me" rel="external nofollow noreferrer">kezunlin</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        Link:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://kezunlin.me/post/959269de/">https://kezunlin.me/post/959269de/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        Reprint policy:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    All articles in this blog are used except for special statements
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    reprint polocy. If reproduced, please indicate source
+                    <a href="https://kezunlin.me" target="_blank">kezunlin</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/caffe/">
+                                    <span class="chip bg-color">caffe</span>
+                                </a>
+                            
+                                <a href="/tags/LeNet/">
+                                    <span class="chip bg-color">LeNet</span>
+                                </a>
+                            
+                                <a href="/tags/mnist/">
+                                    <span class="chip bg-color">mnist</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpeg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.jpeg" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <!-- hack -->
+            
+                <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+            
+
+            <!-- hack -->
+            <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <!-- kzl in-article ad -->
+     <ins class="adsbygoogle"
+          style="display:block; text-align:center;"
+          data-ad-layout="in-article"
+          data-ad-format="fluid"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="7925631830"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+        </div>
+    </div>
+
+    <!-- hack -->
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+            <div class="card">
+                <a href="/post/924c1a5a/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="Classification: Instant Recognition with Caffe">
+                        
+                        <span class="card-title">Classification: Instant Recognition with Caffe</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            how to do image classification with Caffe
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2018-08-07
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/deep-learning/" class="post-category">
+                                    deep learning
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/caffe/">
+                        <span class="chip bg-color">caffe</span>
+                    </a>
+                    
+                    <a href="/tags/image-classification/">
+                        <span class="chip bg-color">image classification</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/post/b90033a9/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Install and Configure Caffe on ubuntu 16.04">
+                        
+                        <span class="card-title">Install and Configure Caffe on ubuntu 16.04</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            how to install and configure Caffe on ubuntu 16.04
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2018-08-07
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/deep-learning/" class="post-category">
+                                    deep learning
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/caffe/">
+                        <span class="chip bg-color">caffe</span>
+                    </a>
+                    
+                    <a href="/tags/cuda/">
+                        <span class="chip bg-color">cuda</span>
+                    </a>
+                    
+                    <a href="/tags/cudnn/">
+                        <span class="chip bg-color">cudnn</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <!-- hack -->
+    <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <!-- kzl display ad -->
+     <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="7570408610"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+
+
+
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '4d1e3d463455e6bc7eba',
+        clientSecret: '4af023d85b66c4161a83b3f9297036e84c9ba57f',
+        repo: 'gitalk',
+        owner: 'kezunlin',
+        admin: "kezunlin",
+        id: '2018-08-07T15-56-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+</div>
+
+
+
+
+
+<!-- 代码语言 -->
+
+    
+<!-- 代码块复制 -->
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+    </div>
+    <div id="toc-aside" class="col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+
+            <!-- hack -->
+            <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <!-- kzl display ad -->
+     <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="7570408610"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+
+
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">年份</span>
+            <a href="https://kezunlin.me" target="_blank">kezunlin</a>
+            <br>
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    window.setTimeout("siteTime()", 1000);
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2017";
+                    var startMonth = "11";
+                    var startDate = "11";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/kezunlin" rel="external nofollow noreferrer" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-111858944-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-111858944-1');
+</script>
+
+
+    <!-- hack -->
+    <!-- Google AdSense header-->
+
+     <script data-ad-client="ca-pub-5653382914441020" 
+          async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+     </script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
