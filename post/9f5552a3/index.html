@@ -1,431 +1,11 @@
-<!DOCTYPE HTML>
-<html lang="en">
-
-
-<head><meta name="generator" content="Hexo 3.9.0">
-    <meta charset="utf-8">
-    <meta name="keywords" content="learning lenet with caffe and python, kezunlin, kezunlin.me, C++, Python, Computer Vision, Deep Learning, OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle.">
-    <meta name="description" content="learning lenet with caffe and python">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="renderer" content="webkit|ie-stand|ie-comp">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>learning lenet with caffe and python | C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog</title>
-    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
-
-    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
-    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="/css/my.css">
-    
-    <script src="/libs/jquery/jquery.min.js"></script>
-    
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
-
-
-<body>
-    <header class="navbar-fixed">
-    <nav id="headNav" class="bg-color nav-transparent">
-        <div id="navContainer" class="nav-wrapper container">
-            <div class="brand-logo">
-                <a href="/" class="waves-effect waves-light">
-                    
-                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
-                    
-                    <span class="logo-span">KeZunLin</span>
-                </a>
-            </div>
-            
-
-<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
-<ul class="right nav-menu">
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/" class="waves-effect waves-light">
-      
-      <i class="fas fa-home" style="zoom: 0.6;"></i>
-      
-      <span>Index</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/tags" class="waves-effect waves-light">
-      
-      <i class="fas fa-tags" style="zoom: 0.6;"></i>
-      
-      <span>Tags</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/categories" class="waves-effect waves-light">
-      
-      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
-      
-      <span>Categories</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/archives" class="waves-effect waves-light">
-      
-      <i class="fas fa-archive" style="zoom: 0.6;"></i>
-      
-      <span>Archives</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/about" class="waves-effect waves-light">
-      
-      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
-      
-      <span>About</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/friends" class="waves-effect waves-light">
-      
-      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
-      
-      <span>Friends</span>
-    </a>
-    
-  </li>
-  
-  <li>
-    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
-      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
-    </a>
-  </li>
-</ul>
-
-<div id="mobile-nav" class="side-nav sidenav">
-
-    <div class="mobile-head bg-color">
-        
-        <img src="/medias/logo.png" class="logo-img circle responsive-img">
-        
-        <div class="logo-name">KeZunLin</div>
-        <div class="logo-desc">
-            
-            OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle.
-            
-        </div>
-    </div>
-
-    
-
-    <ul class="menu-list mobile-menu-list">
-        
-        <li class="m-nav-item">
-	  
-		<a href="/" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-home"></i>
-			
-			Index
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/tags" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-tags"></i>
-			
-			Tags
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/categories" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-bookmark"></i>
-			
-			Categories
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/archives" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-archive"></i>
-			
-			Archives
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/about" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-user-circle"></i>
-			
-			About
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/friends" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-address-book"></i>
-			
-			Friends
-		</a>
-          
-        </li>
-        
-        
-    </ul>
-</div>
-
-        </div>
-
-        
-    </nav>
-
-</header>
-
-    
-
-
-
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
-    <div class="container" style="right: 0px;left: 0px;">
-        <div class="row">
-            <div class="col s12 m12 l12">
-                <div class="brand">
-                    <h1 class="description center-align post-title">learning lenet with caffe and python</h1>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-<main class="post-container content">
-
-    
-    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
-<style>
-    #articleContent h1::before,
-    #articleContent h2::before,
-    #articleContent h3::before,
-    #articleContent h4::before,
-    #articleContent h5::before,
-    #articleContent h6::before {
-        display: block;
-        content: " ";
-        height: 100px;
-        margin-top: -100px;
-        visibility: hidden;
-    }
-
-    #articleContent :focus {
-        outline: none;
-    }
-
-    .toc-fixed {
-        position: fixed;
-        top: 64px;
-    }
-
-    .toc-widget {
-        width: 345px;
-        padding-left: 20px;
-    }
-
-    .toc-widget .toc-title {
-        margin: 35px 0 15px 0;
-        padding-left: 17px;
-        font-size: 1.5rem;
-        font-weight: bold;
-        line-height: 1.5rem;
-    }
-
-    .toc-widget ol {
-        padding: 0;
-        list-style: none;
-    }
-
-    #toc-content {
-        height: calc(100vh - 250px);
-        overflow: auto;
-    }
-
-    #toc-content ol {
-        padding-left: 10px;
-    }
-
-    #toc-content ol li {
-        padding-left: 10px;
-    }
-
-    #toc-content .toc-link:hover {
-        color: #42b983;
-        font-weight: 700;
-        text-decoration: underline;
-    }
-
-    #toc-content .toc-link::before {
-        background-color: transparent;
-        max-height: 25px;
-    }
-
-    #toc-content .is-active-link {
-        color: #42b983;
-    }
-
-    #toc-content .is-active-link::before {
-        background-color: #42b983;
-    }
-
-    #floating-toc-btn {
-        position: fixed;
-        right: 15px;
-        bottom: 76px;
-        padding-top: 15px;
-        margin-bottom: 0;
-        z-index: 998;
-    }
-
-    #floating-toc-btn .btn-floating {
-        width: 48px;
-        height: 48px;
-    }
-
-    #floating-toc-btn .btn-floating i {
-        line-height: 48px;
-        font-size: 1.4rem;
-    }
-</style>
-<div class="row">
-    <div id="main-content" class="col s12 m12 l9">
-        <!-- 文章内容详情 -->
-<div id="artDetail">
-    <div class="card">
-        <div class="card-content article-info">
-            <div class="row tag-cate">
-                <div class="col s7">
-                    
-                    <div class="article-tag">
-                        
-                            <a href="/tags/caffe/">
-                                <span class="chip bg-color">caffe</span>
-                            </a>
-                        
-                            <a href="/tags/LeNet/">
-                                <span class="chip bg-color">LeNet</span>
-                            </a>
-                        
-                    </div>
-                    
-                </div>
-                <div class="col s5 right-align">
-                    
-                    <div class="post-cate">
-                        <i class="fas fa-bookmark fa-fw icon-category"></i>
-                        
-                            <a href="/categories/deep-learning/" class="post-category">
-                                deep learning
-                            </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-
-            <div class="post-info">
-                
-                <div class="post-date info-break-policy">
-                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2018-08-08
-                </div>
-                
-
-                
-
-                
-                <div class="info-break-policy">
-                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    2,712
-                </div>
-                
-
-                
-                <div class="info-break-policy">
-                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
-                    17 Min
-                </div>
-                
-				
-                
-                    <div id="busuanzi_container_page_pv" class="info-break-policy">
-                        <i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp;
-                        <span id="busuanzi_value_page_pv"></span>
-                    </div>
-				
-            </div>
-            
-        </div>
-        <hr class="clearfix">
-
-        <div class="card-content article-card-content">
-            <!-- hack -->
-            <!-- Google AdSense -->
-
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <!-- kzl in-article ad -->
-     <ins class="adsbygoogle"
-          style="display:block; text-align:center;"
-          data-ad-layout="in-article"
-          data-ad-format="fluid"
-          data-ad-client="ca-pub-5653382914441020"
-          data-ad-slot="7925631830"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-
-
-            <div id="articleContent">
-                <!-- build time:Fri Dec 13 2019 11:02:23 GMT+0800 (CST) --><h2 id="Solving-in-Python-with-LeNet"><a href="#Solving-in-Python-with-LeNet" class="headerlink" title="Solving in Python with LeNet"></a>Solving in Python with LeNet</h2><p>In this example, we’ll explore learning with Caffe in Python, using the fully-exposed <code>Solver</code> interface.</p><h3 id="Setup"><a href="#Setup" class="headerlink" title="Setup"></a>Setup</h3><ul><li>Set up the Python environment: we’ll use the <code>pylab</code> import for numpy and plot inline.</li></ul><pre class=" language-python"><code class="language-python"><span class="token keyword">from</span> pylab <span class="token keyword">import</span> <span class="token operator">*</span>
+<!-- build time:Fri Dec 13 2019 15:35:23 GMT+0800 (CST) --><!DOCTYPE HTML><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta name="keywords" content="learning lenet with caffe and python, kezunlin, kezunlin.me, C++, Python, Computer Vision, Deep Learning, OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle."><meta name="description" content="learning lenet with caffe and python"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><meta name="renderer" content="webkit|ie-stand|ie-comp"><meta name="mobile-web-app-capable" content="yes"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><title>learning lenet with caffe and python | C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog</title><link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico"><link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css"><link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css"><link rel="stylesheet" type="text/css" href="/libs/aos/aos.css"><link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css"><link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css"><link rel="stylesheet" type="text/css" href="/css/matery.css"><link rel="stylesheet" type="text/css" href="/css/my.css"><script src="/libs/jquery/jquery.min.js"></script><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head><body><header class="navbar-fixed"><nav id="headNav" class="bg-color nav-transparent"><div id="navContainer" class="nav-wrapper container"><div class="brand-logo"><a href="/" class="waves-effect waves-light"><img src="/medias/logo.png" class="logo-img" alt="LOGO"> <span class="logo-span">KeZunLin</span></a></div><a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a><ul class="right nav-menu"><li class="hide-on-med-and-down nav-item"><a href="/" class="waves-effect waves-light"><i class="fas fa-home" style="zoom:.6"></i> <span>Index</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/tags" class="waves-effect waves-light"><i class="fas fa-tags" style="zoom:.6"></i> <span>Tags</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/categories" class="waves-effect waves-light"><i class="fas fa-bookmark" style="zoom:.6"></i> <span>Categories</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/archives" class="waves-effect waves-light"><i class="fas fa-archive" style="zoom:.6"></i> <span>Archives</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/about" class="waves-effect waves-light"><i class="fas fa-user-circle" style="zoom:.6"></i> <span>About</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/friends" class="waves-effect waves-light"><i class="fas fa-address-book" style="zoom:.6"></i> <span>Friends</span></a></li><li><a href="#searchModal" class="modal-trigger waves-effect waves-light"><i id="searchIcon" class="fas fa-search" title="Search" style="zoom:.85"></i></a></li></ul><div id="mobile-nav" class="side-nav sidenav"><div class="mobile-head bg-color"><img src="/medias/logo.png" class="logo-img circle responsive-img"><div class="logo-name">KeZunLin</div><div class="logo-desc">OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle.</div></div><ul class="menu-list mobile-menu-list"><li class="m-nav-item"><a href="/" class="waves-effect waves-light"><i class="fa-fw fas fa-home"></i> Index</a></li><li class="m-nav-item"><a href="/tags" class="waves-effect waves-light"><i class="fa-fw fas fa-tags"></i> Tags</a></li><li class="m-nav-item"><a href="/categories" class="waves-effect waves-light"><i class="fa-fw fas fa-bookmark"></i> Categories</a></li><li class="m-nav-item"><a href="/archives" class="waves-effect waves-light"><i class="fa-fw fas fa-archive"></i> Archives</a></li><li class="m-nav-item"><a href="/about" class="waves-effect waves-light"><i class="fa-fw fas fa-user-circle"></i> About</a></li><li class="m-nav-item"><a href="/friends" class="waves-effect waves-light"><i class="fa-fw fas fa-address-book"></i> Friends</a></li></ul></div></div></nav></header><div class="bg-cover pd-header post-cover" style="background-image:url(/medias/featureimages/22.jpg)"><div class="container" style="right:0;left:0"><div class="row"><div class="col s12 m12 l12"><div class="brand"><h1 class="description center-align post-title">learning lenet with caffe and python</h1></div></div></div></div></div><main class="post-container content"><link rel="stylesheet" href="/libs/tocbot/tocbot.css"><style>#articleContent h1::before,#articleContent h2::before,#articleContent h3::before,#articleContent h4::before,#articleContent h5::before,#articleContent h6::before{display:block;content:" ";height:100px;margin-top:-100px;visibility:hidden}#articleContent :focus{outline:0}.toc-fixed{position:fixed;top:64px}.toc-widget{width:345px;padding-left:20px}.toc-widget .toc-title{margin:35px 0 15px 0;padding-left:17px;font-size:1.5rem;font-weight:700;line-height:1.5rem}.toc-widget ol{padding:0;list-style:none}#toc-content{height:calc(100vh - 250px);overflow:auto}#toc-content ol{padding-left:10px}#toc-content ol li{padding-left:10px}#toc-content .toc-link:hover{color:#42b983;font-weight:700;text-decoration:underline}#toc-content .toc-link::before{background-color:transparent;max-height:25px}#toc-content .is-active-link{color:#42b983}#toc-content .is-active-link::before{background-color:#42b983}#floating-toc-btn{position:fixed;right:15px;bottom:76px;padding-top:15px;margin-bottom:0;z-index:998}#floating-toc-btn .btn-floating{width:48px;height:48px}#floating-toc-btn .btn-floating i{line-height:48px;font-size:1.4rem}</style><div class="row"><div id="main-content" class="col s12 m12 l9"><div id="artDetail"><div class="card"><div class="card-content article-info"><div class="row tag-cate"><div class="col s7"><div class="article-tag"><a href="/tags/caffe/"><span class="chip bg-color">caffe</span> </a><a href="/tags/LeNet/"><span class="chip bg-color">LeNet</span></a></div></div><div class="col s5 right-align"><div class="post-cate"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/deep-learning/" class="post-category">deep learning</a></div></div></div><div class="post-info"><div class="post-date info-break-policy"><i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp; 2018-08-08</div><div class="info-break-policy"><i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp; 2,712</div><div class="info-break-policy"><i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp; 17 Min</div><div id="busuanzi_container_page_pv" class="info-break-policy"><i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp; <span id="busuanzi_value_page_pv"></span></div></div></div><hr class="clearfix"><div class="card-content article-card-content"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><div id="articleContent"><h2 id="Solving-in-Python-with-LeNet"><a href="#Solving-in-Python-with-LeNet" class="headerlink" title="Solving in Python with LeNet"></a>Solving in Python with LeNet</h2><p>In this example, we’ll explore learning with Caffe in Python, using the fully-exposed <code>Solver</code> interface.</p><h3 id="Setup"><a href="#Setup" class="headerlink" title="Setup"></a>Setup</h3><ul><li>Set up the Python environment: we’ll use the <code>pylab</code> import for numpy and plot inline.</li></ul><pre class="language-python"><code class="language-python"><span class="token keyword">from</span> pylab <span class="token keyword">import</span> <span class="token operator">*</span>
 <span class="token operator">%</span>matplotlib inline
-</code></pre><ul><li>Import <code>caffe</code>, adding it to <code>sys.path</code> if needed. Make sure you’ve built pycaffe.</li></ul><pre class=" language-python"><code class="language-python">caffe_root <span class="token operator">=</span> <span class="token string">'../'</span>  <span class="token comment" spellcheck="true"># this file should be run from {caffe_root}/examples (otherwise change this line)</span>
+</code></pre><ul><li>Import <code>caffe</code>, adding it to <code>sys.path</code> if needed. Make sure you’ve built pycaffe.</li></ul><pre class="language-python"><code class="language-python">caffe_root <span class="token operator">=</span> <span class="token string">'../'</span>  <span class="token comment" spellcheck="true"># this file should be run from {caffe_root}/examples (otherwise change this line)</span>
 
 <span class="token keyword">import</span> sys
 sys<span class="token punctuation">.</span>path<span class="token punctuation">.</span>insert<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> caffe_root <span class="token operator">+</span> <span class="token string">'python'</span><span class="token punctuation">)</span>
 <span class="token keyword">import</span> caffe
-</code></pre><ul><li>We’ll be using the provided LeNet example data and networks (make sure you’ve downloaded the data and created the databases, as below).</li></ul><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># run scripts from caffe root</span>
+</code></pre><ul><li>We’ll be using the provided LeNet example data and networks (make sure you’ve downloaded the data and created the databases, as below).</li></ul><pre class="language-python"><code class="language-python"><span class="token comment" spellcheck="true"># run scripts from caffe root</span>
 <span class="token keyword">import</span> os
 os<span class="token punctuation">.</span>chdir<span class="token punctuation">(</span>caffe_root<span class="token punctuation">)</span>
 <span class="token comment" spellcheck="true"># Download data</span>
@@ -437,7 +17,7 @@ os<span class="token punctuation">.</span>chdir<span class="token punctuation">(
 </code></pre><pre><code>Downloading...
 Creating lmdb...
 Done.
-</code></pre><h3 id="Creating-the-net"><a href="#Creating-the-net" class="headerlink" title="Creating the net"></a>Creating the net</h3><p>Now let’s make a variant of LeNet, the classic 1989 convnet architecture.</p><p>We’ll need two external files to help out:</p><ul><li>the net <code>prototxt</code>, defining the architecture and pointing to the train/test data</li><li>the solver <code>prototxt</code>, defining the learning parameters</li></ul><p>We start by creating the net. We’ll write the net in a succinct and natural way as Python code that serializes to Caffe’s protobuf model format.</p><p>This network expects to read from pregenerated LMDBs, but reading directly from <code>ndarray</code>s is also possible using <code>MemoryDataLayer</code>.</p><pre class=" language-python"><code class="language-python"><span class="token keyword">from</span> caffe <span class="token keyword">import</span> layers <span class="token keyword">as</span> L<span class="token punctuation">,</span> params <span class="token keyword">as</span> P
+</code></pre><h3 id="Creating-the-net"><a href="#Creating-the-net" class="headerlink" title="Creating the net"></a>Creating the net</h3><p>Now let’s make a variant of LeNet, the classic 1989 convnet architecture.</p><p>We’ll need two external files to help out:</p><ul><li>the net <code>prototxt</code>, defining the architecture and pointing to the train/test data</li><li>the solver <code>prototxt</code>, defining the learning parameters</li></ul><p>We start by creating the net. We’ll write the net in a succinct and natural way as Python code that serializes to Caffe’s protobuf model format.</p><p>This network expects to read from pregenerated LMDBs, but reading directly from <code>ndarray</code>s is also possible using <code>MemoryDataLayer</code>.</p><pre class="language-python"><code class="language-python"><span class="token keyword">from</span> caffe <span class="token keyword">import</span> layers <span class="token keyword">as</span> L<span class="token punctuation">,</span> params <span class="token keyword">as</span> P
 
 <span class="token keyword">def</span> <span class="token function">lenet</span><span class="token punctuation">(</span>lmdb<span class="token punctuation">,</span> batch_size<span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token comment" spellcheck="true"># our version of LeNet: a series of linear and simple nonlinear transformations</span>
@@ -462,7 +42,7 @@ Done.
 
 <span class="token keyword">with</span> open<span class="token punctuation">(</span><span class="token string">'mnist/lenet_auto_test.prototxt'</span><span class="token punctuation">,</span> <span class="token string">'w'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
     f<span class="token punctuation">.</span>write<span class="token punctuation">(</span>str<span class="token punctuation">(</span>lenet<span class="token punctuation">(</span><span class="token string">'mnist/mnist_test_lmdb'</span><span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-</code></pre><p>The net has been written to disk in a more verbose but human-readable serialization format using Google’s protobuf library. You can read, write, and modify this description directly. Let’s take a look at the train net.</p><pre class=" language-python"><code class="language-python">!cat mnist<span class="token operator">/</span>lenet_auto_train<span class="token punctuation">.</span>prototxt
+</code></pre><p>The net has been written to disk in a more verbose but human-readable serialization format using Google’s protobuf library. You can read, write, and modify this description directly. Let’s take a look at the train net.</p><pre class="language-python"><code class="language-python">!cat mnist<span class="token operator">/</span>lenet_auto_train<span class="token punctuation">.</span>prototxt
 </code></pre><pre><code>layer {
   name: &quot;data&quot;
   type: &quot;Data&quot;
@@ -562,7 +142,7 @@ layer {
   bottom: &quot;label&quot;
   top: &quot;loss&quot;
 }
-</code></pre><p>Now let’s see the learning parameters, which are also written as a <code>prototxt</code> file (already provided on disk). We’re using SGD with momentum, weight decay, and a specific learning rate schedule.</p><pre class=" language-python"><code class="language-python">!cat mnist<span class="token operator">/</span>lenet_auto_solver<span class="token punctuation">.</span>prototxt
+</code></pre><p>Now let’s see the learning parameters, which are also written as a <code>prototxt</code> file (already provided on disk). We’re using SGD with momentum, weight decay, and a specific learning rate schedule.</p><pre class="language-python"><code class="language-python">!cat mnist<span class="token operator">/</span>lenet_auto_solver<span class="token punctuation">.</span>prototxt
 </code></pre><pre><code># The train/test net protocol buffer definition
 train_net: &quot;mnist/lenet_auto_train.prototxt&quot;
 test_net: &quot;mnist/lenet_auto_test.prototxt&quot;
@@ -587,13 +167,13 @@ max_iter: 10000
 # snapshot intermediate results
 snapshot: 5000
 snapshot_prefix: &quot;mnist/lenet&quot;
-</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h3 id="Loading-and-checking-the-solver"><a href="#Loading-and-checking-the-solver" class="headerlink" title="Loading and checking the solver"></a>Loading and checking the solver</h3><ul><li>Let’s pick a device and load the solver. We’ll use SGD (with momentum), but other methods (such as Adagrad and Nesterov’s accelerated gradient) are also available.</li></ul><pre class=" language-python"><code class="language-python">caffe<span class="token punctuation">.</span>set_device<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h3 id="Loading-and-checking-the-solver"><a href="#Loading-and-checking-the-solver" class="headerlink" title="Loading and checking the solver"></a>Loading and checking the solver</h3><ul><li>Let’s pick a device and load the solver. We’ll use SGD (with momentum), but other methods (such as Adagrad and Nesterov’s accelerated gradient) are also available.</li></ul><pre class="language-python"><code class="language-python">caffe<span class="token punctuation">.</span>set_device<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
 caffe<span class="token punctuation">.</span>set_mode_gpu<span class="token punctuation">(</span><span class="token punctuation">)</span>
 
 <span class="token comment" spellcheck="true">### load the solver and create train and test nets</span>
 solver <span class="token operator">=</span> None  <span class="token comment" spellcheck="true"># ignore this workaround for lmdb data (can't instantiate two solvers on the same data)</span>
 solver <span class="token operator">=</span> caffe<span class="token punctuation">.</span>SGDSolver<span class="token punctuation">(</span><span class="token string">'mnist/lenet_auto_solver.prototxt'</span><span class="token punctuation">)</span>
-</code></pre><ul><li>To get an idea of the architecture of our net, we can check the dimensions of the intermediate features (blobs) and parameters (these will also be useful to refer to when manipulating data later).</li></ul><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># each output is (batch size, feature dim, spatial dim)</span>
+</code></pre><ul><li>To get an idea of the architecture of our net, we can check the dimensions of the intermediate features (blobs) and parameters (these will also be useful to refer to when manipulating data later).</li></ul><pre class="language-python"><code class="language-python"><span class="token comment" spellcheck="true"># each output is (batch size, feature dim, spatial dim)</span>
 <span class="token punctuation">[</span><span class="token punctuation">(</span>k<span class="token punctuation">,</span> v<span class="token punctuation">.</span>data<span class="token punctuation">.</span>shape<span class="token punctuation">)</span> <span class="token keyword">for</span> k<span class="token punctuation">,</span> v <span class="token keyword">in</span> solver<span class="token punctuation">.</span>net<span class="token punctuation">.</span>blobs<span class="token punctuation">.</span>items<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
 </code></pre><pre><code>[(&#39;data&#39;, (64, 1, 28, 28)),
  (&#39;label&#39;, (64,)),
@@ -604,27 +184,27 @@ solver <span class="token operator">=</span> caffe<span class="token punctuation
  (&#39;fc1&#39;, (64, 500)),
  (&#39;score&#39;, (64, 10)),
  (&#39;loss&#39;, ())]
-</code></pre><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># just print the weight sizes (we'll omit the biases)</span>
+</code></pre><pre class="language-python"><code class="language-python"><span class="token comment" spellcheck="true"># just print the weight sizes (we'll omit the biases)</span>
 <span class="token punctuation">[</span><span class="token punctuation">(</span>k<span class="token punctuation">,</span> v<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>data<span class="token punctuation">.</span>shape<span class="token punctuation">)</span> <span class="token keyword">for</span> k<span class="token punctuation">,</span> v <span class="token keyword">in</span> solver<span class="token punctuation">.</span>net<span class="token punctuation">.</span>params<span class="token punctuation">.</span>items<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
 </code></pre><pre><code>[(&#39;conv1&#39;, (20, 1, 5, 5)),
  (&#39;conv2&#39;, (50, 20, 5, 5)),
  (&#39;fc1&#39;, (500, 800)),
  (&#39;score&#39;, (10, 500))]
-</code></pre><ul><li>Before taking off, let’s check that everything is loaded as we expect. We’ll run a forward pass on the train and test nets and check that they contain our data.</li></ul><pre class=" language-python"><code class="language-python">solver<span class="token punctuation">.</span>net<span class="token punctuation">.</span>forward<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># train net</span>
+</code></pre><ul><li>Before taking off, let’s check that everything is loaded as we expect. We’ll run a forward pass on the train and test nets and check that they contain our data.</li></ul><pre class="language-python"><code class="language-python">solver<span class="token punctuation">.</span>net<span class="token punctuation">.</span>forward<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># train net</span>
 solver<span class="token punctuation">.</span>test_nets<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># test net (there can be more than one)</span>
 </code></pre><pre><code>{&#39;loss&#39;: array(2.365971088409424, dtype=float32)}
-</code></pre><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># we use a little trick to tile the first eight images</span>
+</code></pre><pre class="language-python"><code class="language-python"><span class="token comment" spellcheck="true"># we use a little trick to tile the first eight images</span>
 imshow<span class="token punctuation">(</span>solver<span class="token punctuation">.</span>net<span class="token punctuation">.</span>blobs<span class="token punctuation">[</span><span class="token string">'data'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>data<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>transpose<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token number">28</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token operator">*</span><span class="token number">28</span><span class="token punctuation">)</span><span class="token punctuation">,</span> cmap<span class="token operator">=</span><span class="token string">'gray'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> axis<span class="token punctuation">(</span><span class="token string">'off'</span><span class="token punctuation">)</span>
 <span class="token keyword">print</span> <span class="token string">'train labels:'</span><span class="token punctuation">,</span> solver<span class="token punctuation">.</span>net<span class="token punctuation">.</span>blobs<span class="token punctuation">[</span><span class="token string">'label'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>data<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">8</span><span class="token punctuation">]</span>
 </code></pre><pre><code>train labels: [ 5.  0.  4.  1.  9.  2.  1.  3.]
-</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808094007919-402598205.png" alt="png"></p><pre class=" language-python"><code class="language-python">imshow<span class="token punctuation">(</span>solver<span class="token punctuation">.</span>test_nets<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>blobs<span class="token punctuation">[</span><span class="token string">'data'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>data<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>transpose<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token number">28</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token operator">*</span><span class="token number">28</span><span class="token punctuation">)</span><span class="token punctuation">,</span> cmap<span class="token operator">=</span><span class="token string">'gray'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> axis<span class="token punctuation">(</span><span class="token string">'off'</span><span class="token punctuation">)</span>
+</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808094007919-402598205.png" alt="png"></p><pre class="language-python"><code class="language-python">imshow<span class="token punctuation">(</span>solver<span class="token punctuation">.</span>test_nets<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>blobs<span class="token punctuation">[</span><span class="token string">'data'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>data<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>transpose<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token number">28</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token operator">*</span><span class="token number">28</span><span class="token punctuation">)</span><span class="token punctuation">,</span> cmap<span class="token operator">=</span><span class="token string">'gray'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> axis<span class="token punctuation">(</span><span class="token string">'off'</span><span class="token punctuation">)</span>
 <span class="token keyword">print</span> <span class="token string">'test labels:'</span><span class="token punctuation">,</span> solver<span class="token punctuation">.</span>test_nets<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>blobs<span class="token punctuation">[</span><span class="token string">'label'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>data<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">8</span><span class="token punctuation">]</span>
 </code></pre><pre><code>test labels: [ 7.  2.  1.  0.  4.  1.  4.  9.]
-</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808094011687-911149908.png" alt="png"></p><h3 id="Stepping-the-solver"><a href="#Stepping-the-solver" class="headerlink" title="Stepping the solver"></a>Stepping the solver</h3><p>Both train and test nets seem to be loading data, and to have correct labels.</p><ul><li>Let’s take one step of (minibatch) SGD and see what happens.</li></ul><pre class=" language-python"><code class="language-python">solver<span class="token punctuation">.</span>step<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
-</code></pre><p>Do we have gradients propagating through our filters? Let’s see the updates to the first layer, shown here as a $4 \times 5$ grid of $5 \times 5$ filters.</p><pre class=" language-python"><code class="language-python">imshow<span class="token punctuation">(</span>solver<span class="token punctuation">.</span>net<span class="token punctuation">.</span>params<span class="token punctuation">[</span><span class="token string">'conv1'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>diff<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span>
+</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808094011687-911149908.png" alt="png"></p><h3 id="Stepping-the-solver"><a href="#Stepping-the-solver" class="headerlink" title="Stepping the solver"></a>Stepping the solver</h3><p>Both train and test nets seem to be loading data, and to have correct labels.</p><ul><li>Let’s take one step of (minibatch) SGD and see what happens.</li></ul><pre class="language-python"><code class="language-python">solver<span class="token punctuation">.</span>step<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+</code></pre><p>Do we have gradients propagating through our filters? Let’s see the updates to the first layer, shown here as a $4 \times 5$ grid of $5 \times 5$ filters.</p><pre class="language-python"><code class="language-python">imshow<span class="token punctuation">(</span>solver<span class="token punctuation">.</span>net<span class="token punctuation">.</span>params<span class="token punctuation">[</span><span class="token string">'conv1'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>diff<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span>
        <span class="token punctuation">.</span>transpose<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token number">4</span><span class="token operator">*</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token operator">*</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">,</span> cmap<span class="token operator">=</span><span class="token string">'gray'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> axis<span class="token punctuation">(</span><span class="token string">'off'</span><span class="token punctuation">)</span>
 </code></pre><pre><code>(-0.5, 24.5, 19.5, -0.5)
-</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808094015260-1011851543.png" alt="png"></p><h3 id="Writing-a-custom-training-loop"><a href="#Writing-a-custom-training-loop" class="headerlink" title="Writing a custom training loop"></a>Writing a custom training loop</h3><p>Something is happening. Let’s run the net for a while, keeping track of a few things as it goes.<br>Note that this process will be the same as if training through the <code>caffe</code> binary. In particular:</p><ul><li>logging will continue to happen as normal</li><li>snapshots will be taken at the interval specified in the solver prototxt (here, every 5000 iterations)</li><li>testing will happen at the interval specified (here, every 500 iterations)</li></ul><p>Since we have control of the loop in Python, we’re free to compute additional things as we go, as we show below. We can do many other things as well, for example:</p><ul><li>write a custom stopping criterion</li><li>change the solving process by updating the net in the loop</li></ul><pre class=" language-python"><code class="language-python"><span class="token operator">%</span><span class="token operator">%</span>time
+</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808094015260-1011851543.png" alt="png"></p><h3 id="Writing-a-custom-training-loop"><a href="#Writing-a-custom-training-loop" class="headerlink" title="Writing a custom training loop"></a>Writing a custom training loop</h3><p>Something is happening. Let’s run the net for a while, keeping track of a few things as it goes.<br>Note that this process will be the same as if training through the <code>caffe</code> binary. In particular:</p><ul><li>logging will continue to happen as normal</li><li>snapshots will be taken at the interval specified in the solver prototxt (here, every 5000 iterations)</li><li>testing will happen at the interval specified (here, every 500 iterations)</li></ul><p>Since we have control of the loop in Python, we’re free to compute additional things as we go, as we show below. We can do many other things as well, for example:</p><ul><li>write a custom stopping criterion</li><li>change the solving process by updating the net in the loop</li></ul><pre class="language-python"><code class="language-python"><span class="token operator">%</span><span class="token operator">%</span>time
 niter <span class="token operator">=</span> <span class="token number">200</span>
 test_interval <span class="token operator">=</span> <span class="token number">25</span>
 <span class="token comment" spellcheck="true"># losses will also be stored in the log</span>
@@ -665,7 +245,7 @@ Iteration 150 testing...
 Iteration 175 testing...
 CPU times: user 12.6 s, sys: 2.4 s, total: 15 s
 Wall time: 14.4 s
-</code></pre><ul><li>Let’s plot the train loss and test accuracy.</li></ul><pre class=" language-python"><code class="language-python">_<span class="token punctuation">,</span> ax1 <span class="token operator">=</span> subplots<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre><ul><li>Let’s plot the train loss and test accuracy.</li></ul><pre class="language-python"><code class="language-python">_<span class="token punctuation">,</span> ax1 <span class="token operator">=</span> subplots<span class="token punctuation">(</span><span class="token punctuation">)</span>
 ax2 <span class="token operator">=</span> ax1<span class="token punctuation">.</span>twinx<span class="token punctuation">(</span><span class="token punctuation">)</span>
 ax1<span class="token punctuation">.</span>plot<span class="token punctuation">(</span>arange<span class="token punctuation">(</span>niter<span class="token punctuation">)</span><span class="token punctuation">,</span> train_loss<span class="token punctuation">)</span>
 ax2<span class="token punctuation">.</span>plot<span class="token punctuation">(</span>test_interval <span class="token operator">*</span> arange<span class="token punctuation">(</span>len<span class="token punctuation">(</span>test_acc<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> test_acc<span class="token punctuation">,</span> <span class="token string">'r'</span><span class="token punctuation">)</span>
@@ -674,21 +254,21 @@ ax1<span class="token punctuation">.</span>set_ylabel<span class="token punctuat
 ax2<span class="token punctuation">.</span>set_ylabel<span class="token punctuation">(</span><span class="token string">'test accuracy'</span><span class="token punctuation">)</span>
 ax2<span class="token punctuation">.</span>set_title<span class="token punctuation">(</span><span class="token string">'Test Accuracy: {:.2f}'</span><span class="token punctuation">.</span>format<span class="token punctuation">(</span>test_acc<span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 </code></pre><pre><code>&lt;matplotlib.text.Text at 0x7f5199b33610&gt;
-</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808094018680-398130560.png" alt="png"></p><p>The loss seems to have dropped quickly and coverged (except for stochasticity), while the accuracy rose correspondingly. Hooray!</p><ul><li>Since we saved the results on the first test batch, we can watch how our prediction scores evolved. We’ll plot time on the $x$ axis and each possible label on the $y$, with lightness indicating confidence.</li></ul><pre class=" language-python"><code class="language-python"><span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808094018680-398130560.png" alt="png"></p><p>The loss seems to have dropped quickly and coverged (except for stochasticity), while the accuracy rose correspondingly. Hooray!</p><ul><li>Since we saved the results on the first test batch, we can watch how our prediction scores evolved. We’ll plot time on the $x$ axis and each possible label on the $y$, with lightness indicating confidence.</li></ul><pre class="language-python"><code class="language-python"><span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     figure<span class="token punctuation">(</span>figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
     imshow<span class="token punctuation">(</span>solver<span class="token punctuation">.</span>test_nets<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>blobs<span class="token punctuation">[</span><span class="token string">'data'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>data<span class="token punctuation">[</span>i<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> cmap<span class="token operator">=</span><span class="token string">'gray'</span><span class="token punctuation">)</span>
     figure<span class="token punctuation">(</span>figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
     imshow<span class="token punctuation">(</span>output<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">50</span><span class="token punctuation">,</span> i<span class="token punctuation">]</span><span class="token punctuation">.</span>T<span class="token punctuation">,</span> interpolation<span class="token operator">=</span><span class="token string">'nearest'</span><span class="token punctuation">,</span> cmap<span class="token operator">=</span><span class="token string">'gray'</span><span class="token punctuation">)</span>
     xlabel<span class="token punctuation">(</span><span class="token string">'iteration'</span><span class="token punctuation">)</span>
     ylabel<span class="token punctuation">(</span><span class="token string">'label'</span><span class="token punctuation">)</span>
-</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808094024721-1595689994.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094029552-416345653.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094034649-822966977.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094311497-1449576622.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094314887-1994925148.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094317536-26566385.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094335122-926095188.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094337980-697149050.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094432007-708264326.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094434566-1643487577.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094437895-820163270.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094440686-873638921.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094443597-1649048206.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094538529-1155732317.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094541236-1763457969.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094544775-920829401.png" alt="png"></p><p>We started with little idea about any of these digits, and ended up with correct classifications for each. If you’ve been following along, you’ll see the last digit is the most difficult, a slanted “9” that’s (understandably) most confused with “4”.</p><ul><li>Note that these are the “raw” output scores rather than the softmax-computed probability vectors. The latter, shown below, make it easier to see the confidence of our net (but harder to see the scores for less likely digits).</li></ul><pre class=" language-python"><code class="language-python"><span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808094024721-1595689994.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094029552-416345653.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094034649-822966977.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094311497-1449576622.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094314887-1994925148.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094317536-26566385.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094335122-926095188.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094337980-697149050.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094432007-708264326.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094434566-1643487577.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094437895-820163270.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094440686-873638921.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094443597-1649048206.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094538529-1155732317.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094541236-1763457969.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094544775-920829401.png" alt="png"></p><p>We started with little idea about any of these digits, and ended up with correct classifications for each. If you’ve been following along, you’ll see the last digit is the most difficult, a slanted “9” that’s (understandably) most confused with “4”.</p><ul><li>Note that these are the “raw” output scores rather than the softmax-computed probability vectors. The latter, shown below, make it easier to see the confidence of our net (but harder to see the scores for less likely digits).</li></ul><pre class="language-python"><code class="language-python"><span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     figure<span class="token punctuation">(</span>figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
     imshow<span class="token punctuation">(</span>solver<span class="token punctuation">.</span>test_nets<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>blobs<span class="token punctuation">[</span><span class="token string">'data'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>data<span class="token punctuation">[</span>i<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> cmap<span class="token operator">=</span><span class="token string">'gray'</span><span class="token punctuation">)</span>
     figure<span class="token punctuation">(</span>figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
     imshow<span class="token punctuation">(</span>exp<span class="token punctuation">(</span>output<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">50</span><span class="token punctuation">,</span> i<span class="token punctuation">]</span><span class="token punctuation">.</span>T<span class="token punctuation">)</span> <span class="token operator">/</span> exp<span class="token punctuation">(</span>output<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">50</span><span class="token punctuation">,</span> i<span class="token punctuation">]</span><span class="token punctuation">.</span>T<span class="token punctuation">)</span><span class="token punctuation">.</span>sum<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> interpolation<span class="token operator">=</span><span class="token string">'nearest'</span><span class="token punctuation">,</span> cmap<span class="token operator">=</span><span class="token string">'gray'</span><span class="token punctuation">)</span>
     xlabel<span class="token punctuation">(</span><span class="token string">'iteration'</span><span class="token punctuation">)</span>
     ylabel<span class="token punctuation">(</span><span class="token string">'label'</span><span class="token punctuation">)</span>
-</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808094547389-452464521.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094550416-1980646715.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094643633-1555377796.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094646089-423286443.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094648806-227199948.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094652998-1285471219.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094655636-2019663924.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094801120-1382644570.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094803553-433970977.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094806318-876599599.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094808993-1657424066.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094812363-210748808.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094910532-638562904.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094913556-1116095260.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094916138-1679934767.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094919214-1696881500.png" alt="png"></p><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h3 id="Experiment-with-architecture-and-optimization"><a href="#Experiment-with-architecture-and-optimization" class="headerlink" title="Experiment with architecture and optimization"></a>Experiment with architecture and optimization</h3><p>Now that we’ve defined, trained, and tested LeNet there are many possible next steps:</p><ul><li>Define new architectures for comparison</li><li>Tune optimization by setting <code>base_lr</code> and the like or simply training longer</li><li>Switching the solver type from <code>SGD</code> to an adaptive method like <code>AdaDelta</code> or <code>Adam</code></li></ul><p>Feel free to explore these directions by editing the all-in-one example that follows.<br>Look for “<code>EDIT HERE</code>“ comments for suggested choice points.</p><p>By default this defines a simple linear classifier as a baseline.</p><p>In case your coffee hasn’t kicked in and you’d like inspiration, try out</p><ol><li>Switch the nonlinearity from <code>ReLU</code> to <code>ELU</code> or a saturing nonlinearity like <code>Sigmoid</code></li><li>Stack more fully connected and nonlinear layers</li><li>Search over learning rate 10x at a time (trying <code>0.1</code> and <code>0.001</code>)</li><li>Switch the solver type to <code>Adam</code> (this adaptive solver type should be less sensitive to hyperparameters, but no guarantees…)</li><li>Solve for longer by setting <code>niter</code> higher (to 500 or 1,000 for instance) to better show training differences</li></ol><pre class=" language-python"><code class="language-python">train_net_path <span class="token operator">=</span> <span class="token string">'mnist/custom_auto_train.prototxt'</span>
+</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808094547389-452464521.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094550416-1980646715.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094643633-1555377796.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094646089-423286443.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094648806-227199948.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094652998-1285471219.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094655636-2019663924.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094801120-1382644570.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094803553-433970977.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094806318-876599599.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094808993-1657424066.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094812363-210748808.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094910532-638562904.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094913556-1116095260.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094916138-1679934767.png" alt="png"></p><p><img src="https://kezunlin.me/images/posts/635233-20180808094919214-1696881500.png" alt="png"></p><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h3 id="Experiment-with-architecture-and-optimization"><a href="#Experiment-with-architecture-and-optimization" class="headerlink" title="Experiment with architecture and optimization"></a>Experiment with architecture and optimization</h3><p>Now that we’ve defined, trained, and tested LeNet there are many possible next steps:</p><ul><li>Define new architectures for comparison</li><li>Tune optimization by setting <code>base_lr</code> and the like or simply training longer</li><li>Switching the solver type from <code>SGD</code> to an adaptive method like <code>AdaDelta</code> or <code>Adam</code></li></ul><p>Feel free to explore these directions by editing the all-in-one example that follows.<br>Look for “<code>EDIT HERE</code>“ comments for suggested choice points.</p><p>By default this defines a simple linear classifier as a baseline.</p><p>In case your coffee hasn’t kicked in and you’d like inspiration, try out</p><ol><li>Switch the nonlinearity from <code>ReLU</code> to <code>ELU</code> or a saturing nonlinearity like <code>Sigmoid</code></li><li>Stack more fully connected and nonlinear layers</li><li>Search over learning rate 10x at a time (trying <code>0.1</code> and <code>0.001</code>)</li><li>Switch the solver type to <code>Adam</code> (this adaptive solver type should be less sensitive to hyperparameters, but no guarantees…)</li><li>Solve for longer by setting <code>niter</code> higher (to 500 or 1,000 for instance) to better show training differences</li></ol><pre class="language-python"><code class="language-python">train_net_path <span class="token operator">=</span> <span class="token string">'mnist/custom_auto_train.prototxt'</span>
 test_net_path <span class="token operator">=</span> <span class="token string">'mnist/custom_auto_test.prototxt'</span>
 solver_config_path <span class="token operator">=</span> <span class="token string">'mnist/custom_auto_solver.prototxt'</span>
 
@@ -832,392 +412,14 @@ Iteration 225 testing...
 
 
 &lt;matplotlib.text.Text at 0x7f5199af9f50&gt;
-</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808094922779-1511591853.png" alt="png"></p><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul><li><a href="http://demo.vislab.berkeleyvision.org/" rel="noopener external nofollow noreferrer" target="_blank">demo</a></li><li><a href="https://github.com/BVLC/caffe" rel="noopener external nofollow noreferrer" target="_blank">caffe git</a></li></ul><h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul><li>20180808: created.</li></ul><!-- rebuild by neat -->
-            </div>
-            <hr/>
-
-            
-
-    <div class="reprint" id="reprint-statement">
-        
-            <div class="reprint__author">
-                <span class="reprint-meta" style="font-weight: bold;">
-                    <i class="fas fa-user">
-                        Author:
-                    </i>
-                </span>
-                <span class="reprint-info">
-                    <a href="https://kezunlin.me" rel="external nofollow noreferrer">kezunlin</a>
-                </span>
-            </div>
-            <div class="reprint__type">
-                <span class="reprint-meta" style="font-weight: bold;">
-                    <i class="fas fa-link">
-                        Link:
-                    </i>
-                </span>
-                <span class="reprint-info">
-                    <a href="https://kezunlin.me/post/9f5552a3/">https://kezunlin.me/post/9f5552a3/</a>
-                </span>
-            </div>
-            <div class="reprint__notice">
-                <span class="reprint-meta" style="font-weight: bold;">
-                    <i class="fas fa-copyright">
-                        Reprint policy:
-                    </i>
-                </span>
-                <span class="reprint-info">
-                    All articles in this blog are used except for special statements
-                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
-                    reprint polocy. If reproduced, please indicate source
-                    <a href="https://kezunlin.me" target="_blank">kezunlin</a>
-                    !
-                </span>
-            </div>
-        
-    </div>
-
-    <script async defer>
-      document.addEventListener("copy", function (e) {
+</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808094922779-1511591853.png" alt="png"></p><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul><li><a href="http://demo.vislab.berkeleyvision.org/" rel="noopener external nofollow noreferrer" target="_blank">demo</a></li><li><a href="https://github.com/BVLC/caffe" rel="noopener external nofollow noreferrer" target="_blank">caffe git</a></li></ul><h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul><li>20180808: created.</li></ul></div><hr><div class="reprint" id="reprint-statement"><div class="reprint__author"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-user">Author: </i></span><span class="reprint-info"><a href="https://kezunlin.me" rel="external nofollow noreferrer">kezunlin</a></span></div><div class="reprint__type"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-link">Link: </i></span><span class="reprint-info"><a href="https://kezunlin.me/post/9f5552a3/">https://kezunlin.me/post/9f5552a3/</a></span></div><div class="reprint__notice"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-copyright">Reprint policy: </i></span><span class="reprint-info">All articles in this blog are used except for special statements <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a> reprint polocy. If reproduced, please indicate source <a href="https://kezunlin.me" target="_blank">kezunlin</a> !</span></div></div><script async defer>document.addEventListener("copy", function (e) {
         let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
         M.toast({html: toastHTML})
       });
 
       function navToReprintStatement() {
         $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
-      }
-    </script>
-
-
-
-            <div class="tag_share" style="display: block;">
-                <div class="post-meta__tag-list" style="display: inline-block;">
-                    
-                        <div class="article-tag">
-                            
-                                <a href="/tags/caffe/">
-                                    <span class="chip bg-color">caffe</span>
-                                </a>
-                            
-                                <a href="/tags/LeNet/">
-                                    <span class="chip bg-color">LeNet</span>
-                                </a>
-                            
-                        </div>
-                    
-                </div>
-            </div>
-            
-                <style>
-    #reward {
-        margin: 40px 0;
-        text-align: center;
-    }
-
-    #reward .reward-link {
-        font-size: 1.88rem;
-    }
-
-    #reward .btn-floating:hover {
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    #rewardModal {
-        width: 320px;
-        height: 350px;
-    }
-
-    #rewardModal .reward-title {
-        margin: 15px auto;
-        padding-bottom: 5px;
-    }
-
-    #rewardModal .modal-content {
-        padding: 10px;
-    }
-
-    #rewardModal .close {
-        position: absolute;
-        right: 15px;
-        top: 15px;
-        color: rgba(0, 0, 0, 0.5);
-        font-size: 1.3rem;
-        line-height: 20px;
-        cursor: pointer;
-    }
-
-    #rewardModal .close:hover {
-        color: #ef5350;
-        transform: scale(1.3);
-        -moz-transform:scale(1.3);
-        -webkit-transform:scale(1.3);
-        -o-transform:scale(1.3);
-    }
-
-    #rewardModal .reward-tabs {
-        margin: 0 auto;
-        width: 210px;
-    }
-
-    .reward-tabs .tabs {
-        height: 38px;
-        margin: 10px auto;
-        padding-left: 0;
-    }
-
-    .reward-content ul {
-        padding-left: 0 !important;
-    }
-
-    .reward-tabs .tabs .tab {
-        height: 38px;
-        line-height: 38px;
-    }
-
-    .reward-tabs .tab a {
-        color: #fff;
-        background-color: #ccc;
-    }
-
-    .reward-tabs .tab a:hover {
-        background-color: #ccc;
-        color: #fff;
-    }
-
-    .reward-tabs .wechat-tab .active {
-        color: #fff !important;
-        background-color: #22AB38 !important;
-    }
-
-    .reward-tabs .alipay-tab .active {
-        color: #fff !important;
-        background-color: #019FE8 !important;
-    }
-
-    .reward-tabs .reward-img {
-        width: 210px;
-        height: 210px;
-    }
-</style>
-
-<div id="reward">
-    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
-
-    <!-- Modal Structure -->
-    <div id="rewardModal" class="modal">
-        <div class="modal-content">
-            <a class="close modal-close"><i class="fas fa-times"></i></a>
-            <h4 class="reward-title">你的赏识是我前进的动力</h4>
-            <div class="reward-content">
-                <div class="reward-tabs">
-                    <ul class="tabs row">
-                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
-                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
-                    </ul>
-                    <div id="alipay">
-                        <img src="/medias/reward/alipay.jpeg" class="reward-img" alt="支付宝打赏二维码">
-                    </div>
-                    <div id="wechat">
-                        <img src="/medias/reward/wechat.jpeg" class="reward-img" alt="微信打赏二维码">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    $(function () {
-        $('.tabs').tabs();
-    });
-</script>
-            
-
-            <!-- hack -->
-            
-                <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
-
-<div id="article-share">
-    
-    
-    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-    <script src="/libs/share/js/social-share.min.js"></script>
-    
-
-    
-
-</div>
-
-            
-
-            <!-- hack -->
-            <!-- Google AdSense -->
-
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <ins class="adsbygoogle"
-          style="display:block"
-          data-ad-format="autorelaxed"
-          data-ad-client="ca-pub-5653382914441020"
-          data-ad-slot="2904827724"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-
-        </div>
-    </div>
-
-    <!-- hack -->
-    
-
-<!-- hack  replace prev-next -->
-<article id="prenext-posts" class="prev-next articles">
-    <div class="row article-row">
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
-            <div class="card">
-                <a href="/post/924c1a5a/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="Classification: Instant Recognition with Caffe">
-                        
-                        <span class="card-title">Classification: Instant Recognition with Caffe</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            how to do image classification with Caffe
-                        
-                    </div>
-                    <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2018-08-07
-                        </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/deep-learning/" class="post-category">
-                                    deep learning
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/caffe/">
-                        <span class="chip bg-color">caffe</span>
-                    </a>
-                    
-                    <a href="/tags/image-classification/">
-                        <span class="chip bg-color">image classification</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                Next&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/post/3ae35270/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="Fine-tuning a Pretrained Network for Style Recognition">
-                        
-                        <span class="card-title">Fine-tuning a Pretrained Network for Style Recognition</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            Fine-tuning a Pretrained Network for Style Recognition
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2018-08-08
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/deep-learning/" class="post-category">
-                                    deep learning
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/caffe/">
-                        <span class="chip bg-color">caffe</span>
-                    </a>
-                    
-                    <a href="/tags/fine-tuning/">
-                        <span class="chip bg-color">fine-tuning</span>
-                    </a>
-                    
-                    <a href="/tags/style-recognition/">
-                        <span class="chip bg-color">style recognition</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-    </div>
-</article>
-
-
-    
-        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
-<link rel="stylesheet" href="/css/my-gitalk.css">
-
-<div class="card gitalk-card" data-aos="fade-up">
-    <!-- hack -->
-    <!-- Google AdSense -->
-
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <!-- kzl display ad -->
-     <ins class="adsbygoogle"
-          style="display:block"
-          data-ad-client="ca-pub-5653382914441020"
-          data-ad-slot="7570408610"
-          data-ad-format="auto"
-          data-full-width-responsive="true"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-
-
-
-
-    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
-        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
-        <span>评论</span>
-    </div>
-    <div id="gitalk-container" class="card-content"></div>
-</div>
-
-<script src="/libs/gitalk/gitalk.min.js"></script>
-<script>
-    let gitalk = new Gitalk({
+      }</script><div class="tag_share" style="display:block"><div class="post-meta__tag-list" style="display:inline-block"><div class="article-tag"><a href="/tags/caffe/"><span class="chip bg-color">caffe</span> </a><a href="/tags/LeNet/"><span class="chip bg-color">LeNet</span></a></div></div></div><style>#reward{margin:40px 0;text-align:center}#reward .reward-link{font-size:1.88rem}#reward .btn-floating:hover{box-shadow:0 6px 12px rgba(0,0,0,.2),0 5px 15px rgba(0,0,0,.2)}#rewardModal{width:320px;height:350px}#rewardModal .reward-title{margin:15px auto;padding-bottom:5px}#rewardModal .modal-content{padding:10px}#rewardModal .close{position:absolute;right:15px;top:15px;color:rgba(0,0,0,.5);font-size:1.3rem;line-height:20px;cursor:pointer}#rewardModal .close:hover{color:#ef5350;transform:scale(1.3);-moz-transform:scale(1.3);-webkit-transform:scale(1.3);-o-transform:scale(1.3)}#rewardModal .reward-tabs{margin:0 auto;width:210px}.reward-tabs .tabs{height:38px;margin:10px auto;padding-left:0}.reward-content ul{padding-left:0!important}.reward-tabs .tabs .tab{height:38px;line-height:38px}.reward-tabs .tab a{color:#fff;background-color:#ccc}.reward-tabs .tab a:hover{background-color:#ccc;color:#fff}.reward-tabs .wechat-tab .active{color:#fff!important;background-color:#22AB38!important}.reward-tabs .alipay-tab .active{color:#fff!important;background-color:#019FE8!important}.reward-tabs .reward-img{width:210px;height:210px}</style><div id="reward"><a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a><div id="rewardModal" class="modal"><div class="modal-content"><a class="close modal-close"><i class="fas fa-times"></i></a><h4 class="reward-title">你的赏识是我前进的动力</h4><div class="reward-content"><div class="reward-tabs"><ul class="tabs row"><li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li><li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li></ul><div id="alipay"><img src="/medias/reward/alipay.jpeg" class="reward-img" alt="支付宝打赏二维码"></div><div id="wechat"><img src="/medias/reward/wechat.jpeg" class="reward-img" alt="微信打赏二维码"></div></div></div></div></div></div><script>$(function(){$(".tabs").tabs()})</script><link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css"><div id="article-share"><div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div><script src="/libs/share/js/social-share.min.js"></script></div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-format="autorelaxed" data-ad-client="ca-pub-5653382914441020" data-ad-slot="2904827724"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div></div><article id="prenext-posts" class="prev-next articles"><div class="row article-row"><div class="article col s12 m6" data-aos="fade-up"><div class="article-badge left-badge text-color"><i class="fas fa-chevron-left"></i>&nbsp;Previous</div><div class="card"><a href="/post/924c1a5a/"><div class="card-image"><img src="/medias/featureimages/15.jpg" class="responsive-img" alt="Classification: Instant Recognition with Caffe"> <span class="card-title">Classification: Instant Recognition with Caffe</span></div></a><div class="card-content article-content"><div class="summary block-with-text">how to do image classification with Caffe</div><div class="publish-info"><span class="publish-date"><i class="far fa-clock fa-fw icon-date"></i>2018-08-07 </span><span class="publish-author"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/deep-learning/" class="post-category">deep learning</a></span></div></div><div class="card-action article-tags"><a href="/tags/caffe/"><span class="chip bg-color">caffe</span> </a><a href="/tags/image-classification/"><span class="chip bg-color">image classification</span></a></div></div></div><div class="article col s12 m6" data-aos="fade-up"><div class="article-badge right-badge text-color">Next&nbsp;<i class="fas fa-chevron-right"></i></div><div class="card"><a href="/post/3ae35270/"><div class="card-image"><img src="/medias/featureimages/22.jpg" class="responsive-img" alt="Fine-tuning a Pretrained Network for Style Recognition"> <span class="card-title">Fine-tuning a Pretrained Network for Style Recognition</span></div></a><div class="card-content article-content"><div class="summary block-with-text">Fine-tuning a Pretrained Network for Style Recognition</div><div class="publish-info"><span class="publish-date"><i class="far fa-clock fa-fw icon-date"></i>2018-08-08 </span><span class="publish-author"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/deep-learning/" class="post-category">deep learning</a></span></div></div><div class="card-action article-tags"><a href="/tags/caffe/"><span class="chip bg-color">caffe</span> </a><a href="/tags/fine-tuning/"><span class="chip bg-color">fine-tuning</span> </a><a href="/tags/style-recognition/"><span class="chip bg-color">style recognition</span></a></div></div></div></div></article><link rel="stylesheet" href="/libs/gitalk/gitalk.css"><link rel="stylesheet" href="/css/my-gitalk.css"><div class="card gitalk-card" data-aos="fade-up"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7570408610" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><div class="comment_headling" style="font-size:20px;font-weight:700;position:relative;left:20px;top:15px;padding-bottom:5px"><i class="fas fa-comments fa-fw" aria-hidden="true"></i> <span>评论</span></div><div id="gitalk-container" class="card-content"></div></div><script src="/libs/gitalk/gitalk.min.js"></script><script>let gitalk = new Gitalk({
         clientID: '4d1e3d463455e6bc7eba',
         clientSecret: '4af023d85b66c4161a83b3f9297036e84c9ba57f',
         repo: 'gitalk',
@@ -1227,69 +429,7 @@ Iteration 225 testing...
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
-    gitalk.render('gitalk-container');
-</script>
-    
-
-    
-
-    
-
-    
-
-    
-</div>
-
-
-
-
-<!-- 
-
-    
-
-
-
-
-
--->
-    </div>
-    <div id="toc-aside" class="col l3 hide-on-med-and-down">
-        <div class="toc-widget">
-            <!-- hack -->
-            <!-- Google AdSense -->
-
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <!-- kzl display ad -->
-     <ins class="adsbygoogle"
-          style="display:block"
-          data-ad-client="ca-pub-5653382914441020"
-          data-ad-slot="7570408610"
-          data-ad-format="auto"
-          data-full-width-responsive="true"></ins>
-     <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-
-
-
-            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
-            <div id="toc-content"></div>
-        </div>
-    </div>
-</div>
-
-<!-- TOC 悬浮按钮. -->
-
-<div id="floating-toc-btn" class="hide-on-med-and-down">
-    <a class="btn-floating btn-large bg-color">
-        <i class="fas fa-list-ul"></i>
-    </a>
-</div>
-
-
-<script src="/libs/tocbot/tocbot.min.js"></script>
-<script>
-    $(function () {
+    gitalk.render('gitalk-container');</script></div></div><div id="toc-aside" class="col l3 hide-on-med-and-down"><div class="toc-widget"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7570408610" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div><div id="toc-content"></div></div></div></div><div id="floating-toc-btn" class="hide-on-med-and-down"><a class="btn-floating btn-large bg-color"><i class="fas fa-list-ul"></i></a></div><script src="/libs/tocbot/tocbot.min.js"></script><script>$(function () {
         tocbot.init({
             tocSelector: '#toc-content',
             contentSelector: '#articleContent',
@@ -1361,204 +501,4 @@ Iteration 225 testing...
             fixPostCardWidth('artDetail', 'prenext-posts');
         });
         
-    });
-</script>
-
-    
-
-</main>
-
-
-
-    <footer class="page-footer bg-color">
-    <div class="container row center-align">
-        <div class="col s12 m8 l8 copy-right">
-            Copyright&nbsp;&copy;
-            <span id="year">2017</span>
-            <a href="https://kezunlin.me" target="_blank">kezunlin</a>
-            <br>
-            
-            
-            
-            
-            
-            
-            <span id="busuanzi_container_site_pv">
-                |&nbsp;<i class="far fa-eye"></i>&nbsp;Total Page View:&nbsp;<span id="busuanzi_value_site_pv"
-                    class="white-color"></span>&nbsp;
-            </span>
-            
-            
-            <span id="busuanzi_container_site_uv">
-                |&nbsp;<i class="fas fa-users"></i>&nbsp;Total Visitors:&nbsp;<span id="busuanzi_value_site_uv"
-                    class="white-color"></span>&nbsp;
-            </span>
-            
-            <br>
-            
-            <span id="sitetime">载入运行时间...</span>
-            <script>
-                function siteTime() {
-                    var seconds = 1000;
-                    var minutes = seconds * 60;
-                    var hours = minutes * 60;
-                    var days = hours * 24;
-                    var years = days * 365;
-                    var today = new Date();
-                    var startYear = "2017";
-                    var startMonth = "11";
-                    var startDate = "11";
-                    var startHour = "0";
-                    var startMinute = "0";
-                    var startSecond = "0";
-                    var todayYear = today.getFullYear();
-                    var todayMonth = today.getMonth() + 1;
-                    var todayDate = today.getDate();
-                    var todayHour = today.getHours();
-                    var todayMinute = today.getMinutes();
-                    var todaySecond = today.getSeconds();
-                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
-                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
-                    var diff = t2 - t1;
-                    var diffYears = Math.floor(diff / years);
-                    var diffDays = Math.floor((diff / days) - diffYears * 365);
-                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
-                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
-                        minutes);
-                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
-                        diffMinutes * minutes) / seconds);
-                    
-                    // hack 
-                    if (startYear == todayYear) {
-                        document.getElementById("year").innerHTML = todayYear;
-                        //document.getElementById("sitetime").innerHTML = "Site has already been running for " + diffDays + " days " + diffHours +
-                        //    " hours " + diffMinutes + " minutes " + diffSeconds + " seconds";
-                    } else {
-                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
-                        //document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
-                        //    " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
-                    }
-                    document.getElementById("sitetime").innerHTML = "Site has already been running for " +
-                         diffYears + " years " + diffDays + " days ";
-                    
-                }
-                setInterval(siteTime, 1000);
-            </script>
-            
-            <br>
-            
-        </div>
-        <div class="col s12 m4 l4 social-link social-statis">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-    </div>
-</footer>
-
-<div class="progress-bar"></div>
-
-
-    <!-- 搜索遮罩框 -->
-<div id="searchModal" class="modal">
-    <div class="modal-content">
-        <div class="search-header">
-            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
-            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
-                   class="search-input">
-        </div>
-        <div id="searchResult"></div>
-    </div>
-</div>
-
-<script src="/js/search.js"></script>
-<script type="text/javascript">
-$(function () {
-    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
-});
-</script>
-    <!-- 回到顶部按钮 -->
-<div id="backTop" class="top-scroll">
-    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
-        <i class="fas fa-arrow-up"></i>
-    </a>
-</div>
-
-
-    <script src="/libs/materialize/materialize.min.js"></script>
-    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="/libs/aos/aos.js"></script>
-    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="/js/matery.js"></script>
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-
-
-<!-- 
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-111858944-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-        dataLayer.push(arguments);
-    }
-
-    gtag('js', new Date());
-    gtag('config', 'UA-111858944-1');
-</script>
--->
-<meta name="yandex-verification" content="{{ theme.yandex_site_verification }}">
-<script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-    ga('create', 'UA-111858944-1', 'auto');
-    ga('send', 'pageview');
-</script>
-
-
-    <!-- hack -->
-    <!-- Google AdSense header-->
-
-     <script data-ad-client="ca-pub-5653382914441020" 
-          async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
-     </script>
-
-    <!-- Baidu Analytics -->
-
-    <!-- Baidu Push -->
-
-    
-    
-    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-    
-    <script src="/libs/instantpage/instantpage.js" type="module"></script>
-    
-
-</body>
-
-</html>
+    });</script></main><footer class="page-footer bg-color"><div class="container row center-align"><div class="col s12 m8 l8 copy-right">Copyright&nbsp;&copy; <span id="year">2017</span> <a href="https://kezunlin.me" target="_blank">kezunlin</a><br><span id="busuanzi_container_site_pv">|&nbsp;<i class="far fa-eye"></i>&nbsp;Total Page View:&nbsp;<span id="busuanzi_value_site_pv" class="white-color"></span>&nbsp; </span><span id="busuanzi_container_site_uv">|&nbsp;<i class="fas fa-users"></i>&nbsp;Total Visitors:&nbsp;<span id="busuanzi_value_site_uv" class="white-color"></span>&nbsp;</span><br><span id="sitetime">载入运行时间...</span><script>function siteTime(){var e=1e3,t=60*e,n=60*t,a=24*n,o=365*a,r=new Date,i="2017",l="11",g="11",s="0",M="0",d="0",m=r.getFullYear(),u=r.getMonth()+1,y=r.getDate(),f=r.getHours(),h=r.getMinutes(),T=r.getSeconds(),c=Date.UTC(i,l,g,s,M,d),D=Date.UTC(m,u,y,f,h,T),H=D-c,I=Math.floor(H/o),B=Math.floor(H/a-365*I),E=Math.floor((H-(365*I+B)*a)/n),L=Math.floor((H-(365*I+B)*a-E*n)/t);Math.floor((H-(365*I+B)*a-E*n-L*t)/e),i==m?document.getElementById("year").innerHTML=m:document.getElementById("year").innerHTML=i+" - "+m,document.getElementById("sitetime").innerHTML="Site has already been running for "+I+" years "+B+" days "}setInterval(siteTime,1e3)</script><br></div><div class="col s12 m4 l4 social-link social-statis"></div></div></footer><div class="progress-bar"></div><div id="searchModal" class="modal"><div class="modal-content"><div class="search-header"><span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span> <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword" class="search-input"></div><div id="searchResult"></div></div></div><script src="/js/search.js"></script><script type="text/javascript">$(function(){searchFunc("/search.xml","searchInput","searchResult")})</script><div id="backTop" class="top-scroll"><a class="btn-floating btn-large waves-effect waves-light" href="#!"><i class="fas fa-arrow-up"></i></a></div><script src="/libs/materialize/materialize.min.js"></script><script src="/libs/masonry/masonry.pkgd.min.js"></script><script src="/libs/aos/aos.js"></script><script src="/libs/scrollprogress/scrollProgress.min.js"></script><script src="/libs/lightGallery/js/lightgallery-all.min.js"></script><script src="/js/matery.js"></script><meta name="yandex-verification" content="{{ theme.yandex_site_verification }}"><script>!function(e,t,a,n,c,o,s){e.GoogleAnalyticsObject=c,e[c]=e[c]||function(){(e[c].q=e[c].q||[]).push(arguments)},e[c].l=1*new Date,o=t.createElement(a),s=t.getElementsByTagName(a)[0],o.async=1,o.src=n,s.parentNode.insertBefore(o,s)}(window,document,"script","https://www.google-analytics.com/analytics.js","ga"),ga("create","UA-111858944-1","auto"),ga("send","pageview")</script><script data-ad-client="ca-pub-5653382914441020" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script async src="/libs/others/busuanzi.pure.mini.js"></script><script src="/libs/instantpage/instantpage.js" type="module"></script></body></html><!-- rebuild by neat -->
