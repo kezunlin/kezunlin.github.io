@@ -1,4 +1,424 @@
-<!-- build time:Fri Dec 13 2019 14:42:51 GMT+0800 (CST) --><!DOCTYPE HTML><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta name="keywords" content="tutorials on deep learning for image classification, C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog"><meta name="description" content="Getting StartedShared variables tipsWe encourage you to store the dataset into shared variables and access it based on t"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><meta name="renderer" content="webkit|ie-stand|ie-comp"><meta name="mobile-web-app-capable" content="yes"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><title>tutorials on deep learning for image classification | C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog</title><link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico"><link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css"><link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css"><link rel="stylesheet" type="text/css" href="/libs/aos/aos.css"><link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css"><link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css"><link rel="stylesheet" type="text/css" href="/css/matery.css"><link rel="stylesheet" type="text/css" href="/css/my.css"><script src="/libs/jquery/jquery.min.js"></script><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head><body><header class="navbar-fixed"><nav id="headNav" class="bg-color nav-transparent"><div id="navContainer" class="nav-wrapper container"><div class="brand-logo"><a href="/" class="waves-effect waves-light"><img src="/medias/logo.png" class="logo-img" alt="LOGO"> <span class="logo-span">KeZunLin</span></a></div><a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a><ul class="right nav-menu"><li class="hide-on-med-and-down nav-item"><a href="/" class="waves-effect waves-light"><i class="fas fa-home" style="zoom:.6"></i> <span>Index</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/tags" class="waves-effect waves-light"><i class="fas fa-tags" style="zoom:.6"></i> <span>Tags</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/categories" class="waves-effect waves-light"><i class="fas fa-bookmark" style="zoom:.6"></i> <span>Categories</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/archives" class="waves-effect waves-light"><i class="fas fa-archive" style="zoom:.6"></i> <span>Archives</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/about" class="waves-effect waves-light"><i class="fas fa-user-circle" style="zoom:.6"></i> <span>About</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/friends" class="waves-effect waves-light"><i class="fas fa-address-book" style="zoom:.6"></i> <span>Friends</span></a></li><li><a href="#searchModal" class="modal-trigger waves-effect waves-light"><i id="searchIcon" class="fas fa-search" title="Search" style="zoom:.85"></i></a></li></ul><div id="mobile-nav" class="side-nav sidenav"><div class="mobile-head bg-color"><img src="/medias/logo.png" class="logo-img circle responsive-img"><div class="logo-name">KeZunLin</div><div class="logo-desc">OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle.</div></div><ul class="menu-list mobile-menu-list"><li class="m-nav-item"><a href="/" class="waves-effect waves-light"><i class="fa-fw fas fa-home"></i> Index</a></li><li class="m-nav-item"><a href="/tags" class="waves-effect waves-light"><i class="fa-fw fas fa-tags"></i> Tags</a></li><li class="m-nav-item"><a href="/categories" class="waves-effect waves-light"><i class="fa-fw fas fa-bookmark"></i> Categories</a></li><li class="m-nav-item"><a href="/archives" class="waves-effect waves-light"><i class="fa-fw fas fa-archive"></i> Archives</a></li><li class="m-nav-item"><a href="/about" class="waves-effect waves-light"><i class="fa-fw fas fa-user-circle"></i> About</a></li><li class="m-nav-item"><a href="/friends" class="waves-effect waves-light"><i class="fa-fw fas fa-address-book"></i> Friends</a></li></ul></div></div></nav></header><div class="bg-cover pd-header post-cover" style="background-image:url(/medias/featureimages/6.jpg)"><div class="container" style="right:0;left:0"><div class="row"><div class="col s12 m12 l12"><div class="brand"><div class="description center-align post-title">tutorials on deep learning for image classification</div></div></div></div></div></div><main class="post-container content"><link rel="stylesheet" href="/libs/tocbot/tocbot.css"><style>#articleContent h1::before,#articleContent h2::before,#articleContent h3::before,#articleContent h4::before,#articleContent h5::before,#articleContent h6::before{display:block;content:" ";height:100px;margin-top:-100px;visibility:hidden}#articleContent :focus{outline:0}.toc-fixed{position:fixed;top:64px}.toc-widget{padding-left:20px}.toc-widget .toc-title{margin:35px 0 15px 0;padding-left:17px;font-size:1.5rem;font-weight:700;line-height:1.5rem}.toc-widget ol{padding:0;list-style:none}#toc-content ol{padding-left:10px}#toc-content ol li{padding-left:10px}#toc-content .toc-link:hover{color:#42b983;font-weight:700;text-decoration:underline}#toc-content .toc-link::before{background-color:transparent;max-height:25px}#toc-content .is-active-link{color:#42b983}#toc-content .is-active-link::before{background-color:#42b983}#floating-toc-btn{position:fixed;right:15px;bottom:76px;padding-top:15px;margin-bottom:0;z-index:998}#floating-toc-btn .btn-floating{width:48px;height:48px}#floating-toc-btn .btn-floating i{line-height:48px;font-size:1.4rem}</style><div class="row"><div id="main-content" class="col s12 m12 l9"><div id="artDetail"><div class="card"><div class="card-content article-info"><div class="row tag-cate"><div class="col s7"><div class="article-tag"><a href="/tags/caffe/"><span class="chip bg-color">caffe</span> </a><a href="/tags/image-classification/"><span class="chip bg-color">image classification</span></a></div></div><div class="col s5 right-align"><div class="post-cate"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/deep-learning/" class="post-category">deep learning</a></div></div></div><div class="post-info"><div class="post-date info-break-policy"><i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp; 2018-08-07</div><div class="info-break-policy"><i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp; 2,828</div><div class="info-break-policy"><i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp; 16 Min</div><div id="busuanzi_container_page_pv" class="info-break-policy"><i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp; <span id="busuanzi_value_page_pv"></span></div></div></div><hr class="clearfix"><div class="card-content article-card-content"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><div id="articleContent"><h2 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h2><h3 id="Shared-variables-tips"><a href="#Shared-variables-tips" class="headerlink" title="Shared variables tips"></a>Shared variables tips</h3><p>We encourage you to store the dataset into shared variables and access it based on the minibatch index, given a fixed and known batch size. The reason behind shared variables is related to using the GPU. There is a large overhead when copying data into the GPU memory.</p><blockquote><p>将数据存储在shared variable便于加速GPU计算，避免数据从CPU拷贝到GPU。</p></blockquote><p>If you have your data in Theano shared variables though, you give Theano the possibility to copy the entire data on the GPU in a single call when the shared variables are constructed.</p><blockquote><p>shared构建的时候，theano一次性讲所有数据拷贝至GPU.</p></blockquote><p>Because the datapoints and their labels are usually of different nature (labels are usually integers while datapoints are real numbers) we suggest to use different variables for label and data. Also we recommend using different variables for the training set, validation set and testing set to make the code more readable (resulting in 6 different shared variables).</p><blockquote><p>data,label使用２个shared variables，train,valid,test使用不同的shared variables，总计6个</p></blockquote><h3 id="Mini-batch-data"><a href="#Mini-batch-data" class="headerlink" title="Mini-batch data"></a>Mini-batch data</h3><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">shared_dataset</span><span class="token punctuation">(</span>data_xy<span class="token punctuation">)</span><span class="token punctuation">:</span>
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="tutorials on deep learning for image classification, kezunlin, kezunlin.me, C++, Python, Computer Vision, Deep Learning, OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle.">
+    <meta name="description" content="tutorials on deep learning for image classification">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>tutorials on deep learning for image classification | C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">KeZunLin</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Index</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">KeZunLin</div>
+        <div class="logo-desc">
+            
+            OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Index
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/6.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">tutorials on deep learning for image classification</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/caffe/">
+                                <span class="chip bg-color">caffe</span>
+                            </a>
+                        
+                            <a href="/tags/image-classification/">
+                                <span class="chip bg-color">image classification</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/deep-learning/" class="post-category">
+                                deep learning
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2018-08-07
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
+                    2,828
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
+                    16 Min
+                </div>
+                
+				
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+            
+        </div>
+        <hr class="clearfix">
+
+        <div class="card-content article-card-content">
+            <!-- hack -->
+            <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <!-- kzl in-article ad -->
+     <ins class="adsbygoogle"
+          style="display:block; text-align:center;"
+          data-ad-layout="in-article"
+          data-ad-format="fluid"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="7925631830"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+
+            <div id="articleContent">
+                <!-- build time:Fri Dec 13 2019 11:02:23 GMT+0800 (CST) --><h2 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h2><h3 id="Shared-variables-tips"><a href="#Shared-variables-tips" class="headerlink" title="Shared variables tips"></a>Shared variables tips</h3><p>We encourage you to store the dataset into shared variables and access it based on the minibatch index, given a fixed and known batch size. The reason behind shared variables is related to using the GPU. There is a large overhead when copying data into the GPU memory.</p><blockquote><p>将数据存储在shared variable便于加速GPU计算，避免数据从CPU拷贝到GPU。</p></blockquote><p>If you have your data in Theano shared variables though, you give Theano the possibility to copy the entire data on the GPU in a single call when the shared variables are constructed.</p><blockquote><p>shared构建的时候，theano一次性讲所有数据拷贝至GPU.</p></blockquote><p>Because the datapoints and their labels are usually of different nature (labels are usually integers while datapoints are real numbers) we suggest to use different variables for label and data. Also we recommend using different variables for the training set, validation set and testing set to make the code more readable (resulting in 6 different shared variables).</p><blockquote><p>data,label使用２个shared variables，train,valid,test使用不同的shared variables，总计6个</p></blockquote><h3 id="Mini-batch-data"><a href="#Mini-batch-data" class="headerlink" title="Mini-batch data"></a>Mini-batch data</h3><pre class=" language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">shared_dataset</span><span class="token punctuation">(</span>data_xy<span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token triple-quoted-string string">""" Function that loads the dataset into shared variables
 
     The reason we store our dataset in shared variables is to allow
@@ -31,7 +451,7 @@ batch_size <span class="token operator">=</span> <span class="token number">500<
 
 data  <span class="token operator">=</span> train_set_x<span class="token punctuation">[</span><span class="token number">2</span> <span class="token operator">*</span> batch_size<span class="token punctuation">:</span> <span class="token number">3</span> <span class="token operator">*</span> batch_size<span class="token punctuation">]</span>
 label <span class="token operator">=</span> train_set_y<span class="token punctuation">[</span><span class="token number">2</span> <span class="token operator">*</span> batch_size<span class="token punctuation">:</span> <span class="token number">3</span> <span class="token operator">*</span> batch_size<span class="token punctuation">]</span>
-</code></pre><h3 id="SGD-pseudo-code-in-theano"><a href="#SGD-pseudo-code-in-theano" class="headerlink" title="SGD pseudo code in theano"></a>SGD pseudo code in theano</h3><h4 id="Traditional-GD-m-N"><a href="#Traditional-GD-m-N" class="headerlink" title="Traditional GD (m=N)"></a>Traditional GD (m=N)</h4><pre class="language-python"><code class="language-python"><span class="token comment" spellcheck="true"># GRADIENT DESCENT</span>
+</code></pre><h3 id="SGD-pseudo-code-in-theano"><a href="#SGD-pseudo-code-in-theano" class="headerlink" title="SGD pseudo code in theano"></a>SGD pseudo code in theano</h3><h4 id="Traditional-GD-m-N"><a href="#Traditional-GD-m-N" class="headerlink" title="Traditional GD (m=N)"></a>Traditional GD (m=N)</h4><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># GRADIENT DESCENT</span>
 
 <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
     loss <span class="token operator">=</span> f<span class="token punctuation">(</span>params<span class="token punctuation">)</span>
@@ -39,7 +459,7 @@ label <span class="token operator">=</span> train_set_y<span class="token punctu
     params <span class="token operator">-=</span> learning_rate <span class="token operator">*</span> d_loss_wrt_params
     <span class="token keyword">if</span> <span class="token operator">&lt;</span>stopping condition <span class="token keyword">is</span> met<span class="token operator">></span><span class="token punctuation">:</span>
         <span class="token keyword">return</span> params
-</code></pre><p>Stochastic gradient descent (SGD) works according to the same principles as ordinary gradient descent, but proceeds more quickly by estimating the gradient from just a few examples at a time instead of the entire training set. In its purest form, we estimate the gradient from just a single example at a time.</p><h4 id="Online-Learning-SGD-m-1"><a href="#Online-Learning-SGD-m-1" class="headerlink" title="Online Learning SGD (m=1)"></a>Online Learning SGD (m=1)</h4><pre class="language-python"><code class="language-python"><span class="token comment" spellcheck="true"># STOCHASTIC GRADIENT DESCENT</span>
+</code></pre><p>Stochastic gradient descent (SGD) works according to the same principles as ordinary gradient descent, but proceeds more quickly by estimating the gradient from just a few examples at a time instead of the entire training set. In its purest form, we estimate the gradient from just a single example at a time.</p><h4 id="Online-Learning-SGD-m-1"><a href="#Online-Learning-SGD-m-1" class="headerlink" title="Online Learning SGD (m=1)"></a>Online Learning SGD (m=1)</h4><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># STOCHASTIC GRADIENT DESCENT</span>
 <span class="token keyword">for</span> <span class="token punctuation">(</span>x_i<span class="token punctuation">,</span>y_i<span class="token punctuation">)</span> <span class="token keyword">in</span> training_set<span class="token punctuation">:</span>
                             <span class="token comment" spellcheck="true"># imagine an infinite generator</span>
                             <span class="token comment" spellcheck="true"># that may repeat examples (if there is only a finite training set)</span>
@@ -48,7 +468,7 @@ label <span class="token operator">=</span> train_set_y<span class="token punctu
     params <span class="token operator">-=</span> learning_rate <span class="token operator">*</span> d_loss_wrt_params
     <span class="token keyword">if</span> <span class="token operator">&lt;</span>stopping condition <span class="token keyword">is</span> met<span class="token operator">></span><span class="token punctuation">:</span>
         <span class="token keyword">return</span> params
-</code></pre><p>The variant that we recommend for deep learning is a further twist on stochastic gradient descent using so-called “minibatches”. Minibatch SGD (MSGD) works identically to SGD, except that we use more than one training example to make each estimate of the gradient. This technique reduces variance in the estimate of the gradient, and often makes better use of the hierarchical memory organization in modern computers.</p><h4 id="Minibatch-SGD-m"><a href="#Minibatch-SGD-m" class="headerlink" title="Minibatch SGD (m)"></a>Minibatch SGD (m)</h4><pre class="language-python"><code class="language-python"><span class="token keyword">for</span> <span class="token punctuation">(</span>x_batch<span class="token punctuation">,</span>y_batch<span class="token punctuation">)</span> <span class="token keyword">in</span> train_batches<span class="token punctuation">:</span>
+</code></pre><p>The variant that we recommend for deep learning is a further twist on stochastic gradient descent using so-called “minibatches”. Minibatch SGD (MSGD) works identically to SGD, except that we use more than one training example to make each estimate of the gradient. This technique reduces variance in the estimate of the gradient, and often makes better use of the hierarchical memory organization in modern computers.</p><h4 id="Minibatch-SGD-m"><a href="#Minibatch-SGD-m" class="headerlink" title="Minibatch SGD (m)"></a>Minibatch SGD (m)</h4><pre class=" language-python"><code class="language-python"><span class="token keyword">for</span> <span class="token punctuation">(</span>x_batch<span class="token punctuation">,</span>y_batch<span class="token punctuation">)</span> <span class="token keyword">in</span> train_batches<span class="token punctuation">:</span>
                             <span class="token comment" spellcheck="true"># imagine an infinite generator</span>
                             <span class="token comment" spellcheck="true"># that may repeat examples</span>
     loss <span class="token operator">=</span> f<span class="token punctuation">(</span>params<span class="token punctuation">,</span> x_batch<span class="token punctuation">,</span> y_batch<span class="token punctuation">)</span>
@@ -56,7 +476,7 @@ label <span class="token operator">=</span> train_set_y<span class="token punctu
     params <span class="token operator">-=</span> learning_rate <span class="token operator">*</span> d_loss_wrt_params
     <span class="token keyword">if</span> <span class="token operator">&lt;</span>stopping condition <span class="token keyword">is</span> met<span class="token operator">></span><span class="token punctuation">:</span>
         <span class="token keyword">return</span> params
-</code></pre><h4 id="Theano-pseudo-code-of-Minibatch-SGD"><a href="#Theano-pseudo-code-of-Minibatch-SGD" class="headerlink" title="Theano pseudo code of Minibatch SGD"></a>Theano pseudo code of Minibatch SGD</h4><pre class="language-python"><code class="language-python"><span class="token comment" spellcheck="true"># Minibatch Stochastic Gradient Descent</span>
+</code></pre><h4 id="Theano-pseudo-code-of-Minibatch-SGD"><a href="#Theano-pseudo-code-of-Minibatch-SGD" class="headerlink" title="Theano pseudo code of Minibatch SGD"></a>Theano pseudo code of Minibatch SGD</h4><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># Minibatch Stochastic Gradient Descent</span>
 
 <span class="token comment" spellcheck="true"># assume loss is a symbolic description of the loss function given</span>
 <span class="token comment" spellcheck="true"># the symbolic variables params (shared variable), x_batch, y_batch;</span>
@@ -74,7 +494,7 @@ MSGD <span class="token operator">=</span> theano<span class="token punctuation"
     <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'Current loss is '</span><span class="token punctuation">,</span> MSGD<span class="token punctuation">(</span>x_batch<span class="token punctuation">,</span> y_batch<span class="token punctuation">)</span><span class="token punctuation">)</span>
     <span class="token keyword">if</span> stopping_condition_is_met<span class="token punctuation">:</span>
         <span class="token keyword">return</span> params
-</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h3 id="Regularization"><a href="#Regularization" class="headerlink" title="Regularization"></a>Regularization</h3><h4 id="L1-L2-regularization"><a href="#L1-L2-regularization" class="headerlink" title="L1/L2 regularization"></a>L1/L2 regularization</h4><p>L1/L2 regularization and early-stopping.</p><p>Commonly used values for p are 1 and 2, hence the L1/L2 nomenclature. If p=2, then the regularizer is also called “weight decay”.</p><p>To follow Occam’s razor principle, this minimization should find us the simplest solution (as measured by our simplicity criterion) that fits the training data.</p><pre class="language-python"><code class="language-python"><span class="token comment" spellcheck="true"># symbolic Theano variable that represents the L1 regularization term</span>
+</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h3 id="Regularization"><a href="#Regularization" class="headerlink" title="Regularization"></a>Regularization</h3><h4 id="L1-L2-regularization"><a href="#L1-L2-regularization" class="headerlink" title="L1/L2 regularization"></a>L1/L2 regularization</h4><p>L1/L2 regularization and early-stopping.</p><p>Commonly used values for p are 1 and 2, hence the L1/L2 nomenclature. If p=2, then the regularizer is also called “weight decay”.</p><p>To follow Occam’s razor principle, this minimization should find us the simplest solution (as measured by our simplicity criterion) that fits the training data.</p><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># symbolic Theano variable that represents the L1 regularization term</span>
 L1  <span class="token operator">=</span> T<span class="token punctuation">.</span>sum<span class="token punctuation">(</span>abs<span class="token punctuation">(</span>param<span class="token punctuation">)</span><span class="token punctuation">)</span>
 
 <span class="token comment" spellcheck="true"># symbolic Theano variable that represents the squared L2 term</span>
@@ -82,7 +502,7 @@ L2 <span class="token operator">=</span> T<span class="token punctuation">.</spa
 
 <span class="token comment" spellcheck="true"># the loss</span>
 loss <span class="token operator">=</span> NLL <span class="token operator">+</span> lambda_1 <span class="token operator">*</span> L1 <span class="token operator">+</span> lambda_2 <span class="token operator">*</span> L2
-</code></pre><h4 id="Early-Stopping"><a href="#Early-Stopping" class="headerlink" title="Early-Stopping"></a>Early-Stopping</h4><p>Early-stopping combats overfitting by monitoring the model’s performance on a validation set. A validation set is a set of examples that we never use for gradient descent, but which is also not a part of the test set.</p><p>所谓early stopping，即在每一个epoch结束时（一个epoch即对所有训练数据的一轮遍历）计算 validation data的accuracy，当accuracy不再提高时，就停止训练。这是很自然的做法，因为accuracy不再提高了，训练下去也没用。另外，这样做还能防止overfitting。</p><p>那么，怎么样才算是validation accuracy不再提高呢？并不是说validation accuracy一降下来，它就是“不再提高”，因为可能经过这个epoch后，accuracy降低了，但是随后的epoch又让accuracy升上去了，所以不能根据一两次的连续降低就判断“不再提高”。正确的做法是，在训练的过程中，记录最佳的validation accuracy，当连续10次epoch（或者更多次）没达到最佳accuracy时，你可以认为“不再提高”，此时使用early stopping。这个策略就叫“ no-improvement-in-n”，n即epoch的次数，可以根据实际情况取10、20、30….</p><h4 id="Variable-learning-rate"><a href="#Variable-learning-rate" class="headerlink" title="Variable learning rate"></a>Variable learning rate</h4><ul><li><p>Decreasing the learning rate over time is sometimes a good idea. eta = eta0/(1+d*epoch) (d: eta decrease constant, d=0.001)</p></li><li><p>Early stopping + decrease learning rate. eta = eta0/2 until eta= eta0/1024</p></li></ul><p>一个简单有效的做法就是，当validation accuracy满足 no-improvement-in-n规则时，本来我们是要early stopping的，但是我们可以不stop，而是让learning rate减半，之后让程序继续跑。下一次validation accuracy又满足no-improvement-in-n规则时，我们同样再将learning rate减半（此时变为原始learni rate的四分之一）…继续这个过程，直到learning rate变为原来的1/1024再终止程序。（1/1024还是1/512还是其他可以根据实际确定）。【PS：也可以选择每一次将learning rate除以10，而不是除以2.】</p><p>实践中，eta/2变化太快，eta0/(1+d*epoch),d=0.001比较合适。</p><pre class="language-python"><code class="language-python"><span class="token comment" spellcheck="true"># early-stopping parameters</span>
+</code></pre><h4 id="Early-Stopping"><a href="#Early-Stopping" class="headerlink" title="Early-Stopping"></a>Early-Stopping</h4><p>Early-stopping combats overfitting by monitoring the model’s performance on a validation set. A validation set is a set of examples that we never use for gradient descent, but which is also not a part of the test set.</p><p>所谓early stopping，即在每一个epoch结束时（一个epoch即对所有训练数据的一轮遍历）计算 validation data的accuracy，当accuracy不再提高时，就停止训练。这是很自然的做法，因为accuracy不再提高了，训练下去也没用。另外，这样做还能防止overfitting。</p><p>那么，怎么样才算是validation accuracy不再提高呢？并不是说validation accuracy一降下来，它就是“不再提高”，因为可能经过这个epoch后，accuracy降低了，但是随后的epoch又让accuracy升上去了，所以不能根据一两次的连续降低就判断“不再提高”。正确的做法是，在训练的过程中，记录最佳的validation accuracy，当连续10次epoch（或者更多次）没达到最佳accuracy时，你可以认为“不再提高”，此时使用early stopping。这个策略就叫“ no-improvement-in-n”，n即epoch的次数，可以根据实际情况取10、20、30….</p><h4 id="Variable-learning-rate"><a href="#Variable-learning-rate" class="headerlink" title="Variable learning rate"></a>Variable learning rate</h4><ul><li><p>Decreasing the learning rate over time is sometimes a good idea. eta = eta0/(1+d*epoch) (d: eta decrease constant, d=0.001)</p></li><li><p>Early stopping + decrease learning rate. eta = eta0/2 until eta= eta0/1024</p></li></ul><p>一个简单有效的做法就是，当validation accuracy满足 no-improvement-in-n规则时，本来我们是要early stopping的，但是我们可以不stop，而是让learning rate减半，之后让程序继续跑。下一次validation accuracy又满足no-improvement-in-n规则时，我们同样再将learning rate减半（此时变为原始learni rate的四分之一）…继续这个过程，直到learning rate变为原来的1/1024再终止程序。（1/1024还是1/512还是其他可以根据实际确定）。【PS：也可以选择每一次将learning rate除以10，而不是除以2.】</p><p>实践中，eta/2变化太快，eta0/(1+d*epoch),d=0.001比较合适。</p><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># early-stopping parameters</span>
 patience <span class="token operator">=</span> <span class="token number">5000</span>  <span class="token comment" spellcheck="true"># look as this many examples regardless</span>
 patience_increase <span class="token operator">=</span> <span class="token number">2</span>     <span class="token comment" spellcheck="true"># wait this much longer when a new best is</span>
                               <span class="token comment" spellcheck="true"># found</span>
@@ -133,17 +553,17 @@ epoch <span class="token operator">=</span> <span class="token number">0</span>
 
 <span class="token comment" spellcheck="true"># POSTCONDITION:</span>
 <span class="token comment" spellcheck="true"># best_params refers to the best out-of-sample parameters observed during the optimization</span>
-</code></pre><h3 id="Theano-Python-Tips"><a href="#Theano-Python-Tips" class="headerlink" title="Theano/Python Tips"></a>Theano/Python Tips</h3><h4 id="Loading-and-Saving-Models"><a href="#Loading-and-Saving-Models" class="headerlink" title="Loading and Saving Models"></a>Loading and Saving Models</h4><ul><li><p>DO: <strong>Pickle the numpy ndarrays from your shared variables</strong></p></li><li><p>DON’T: <strong>Do not pickle your training or test functions for long-term storage</strong></p></li></ul><pre class="language-python"><code class="language-python"><span class="token keyword">import</span> cPickle
+</code></pre><h3 id="Theano-Python-Tips"><a href="#Theano-Python-Tips" class="headerlink" title="Theano/Python Tips"></a>Theano/Python Tips</h3><h4 id="Loading-and-Saving-Models"><a href="#Loading-and-Saving-Models" class="headerlink" title="Loading and Saving Models"></a>Loading and Saving Models</h4><ul><li><p>DO: <strong>Pickle the numpy ndarrays from your shared variables</strong></p></li><li><p>DON’T: <strong>Do not pickle your training or test functions for long-term storage</strong></p></li></ul><pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> cPickle
 save_file <span class="token operator">=</span> open<span class="token punctuation">(</span><span class="token string">'path'</span><span class="token punctuation">,</span> <span class="token string">'wb'</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># this will overwrite current contents</span>
 cPickle<span class="token punctuation">.</span>dump<span class="token punctuation">(</span>w<span class="token punctuation">.</span>get_value<span class="token punctuation">(</span>borrow<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span class="token punctuation">,</span> save_file<span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># the -1 is for HIGHEST_PROTOCOL</span>
 cPickle<span class="token punctuation">.</span>dump<span class="token punctuation">(</span>v<span class="token punctuation">.</span>get_value<span class="token punctuation">(</span>borrow<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span class="token punctuation">,</span> save_file<span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># .. and it triggers much more efficient</span>
 cPickle<span class="token punctuation">.</span>dump<span class="token punctuation">(</span>u<span class="token punctuation">.</span>get_value<span class="token punctuation">(</span>borrow<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span class="token punctuation">,</span> save_file<span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># .. storage than numpy's default</span>
 save_file<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
-</code></pre><p>Then later, you can load your data back like this:</p><pre class="language-python"><code class="language-python">save_file <span class="token operator">=</span> open<span class="token punctuation">(</span><span class="token string">'path'</span><span class="token punctuation">)</span>
+</code></pre><p>Then later, you can load your data back like this:</p><pre class=" language-python"><code class="language-python">save_file <span class="token operator">=</span> open<span class="token punctuation">(</span><span class="token string">'path'</span><span class="token punctuation">)</span>
 w<span class="token punctuation">.</span>set_value<span class="token punctuation">(</span>cPickle<span class="token punctuation">.</span>load<span class="token punctuation">(</span>save_file<span class="token punctuation">)</span><span class="token punctuation">,</span> borrow<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
 v<span class="token punctuation">.</span>set_value<span class="token punctuation">(</span>cPickle<span class="token punctuation">.</span>load<span class="token punctuation">(</span>save_file<span class="token punctuation">)</span><span class="token punctuation">,</span> borrow<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
 u<span class="token punctuation">.</span>set_value<span class="token punctuation">(</span>cPickle<span class="token punctuation">.</span>load<span class="token punctuation">(</span>save_file<span class="token punctuation">)</span><span class="token punctuation">,</span> borrow<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
-</code></pre><h4 id="Plotting-Intermediate-Results"><a href="#Plotting-Intermediate-Results" class="headerlink" title="Plotting Intermediate Results"></a>Plotting Intermediate Results</h4><p>If you have enough disk space, your training script should save intermediate models and a visualization script should process those saved models.</p><h2 id="MLP"><a href="#MLP" class="headerlink" title="MLP"></a>MLP</h2><blockquote><p>see <a href="http://deeplearning.net/tutorial/mlp.html" rel="noopener external nofollow noreferrer" target="_blank">here</a></p></blockquote><p>An MLP can be viewed as a logistic regression classifier where the input is first transformed using a learnt non-linear transformation sigmoid. This transformation projects the input data into a space where it becomes linearly separable. This intermediate layer is referred to as a hidden layer. A single hidden layer is sufficient to make MLPs a universal approximator.</p><h3 id="weight-initializations"><a href="#weight-initializations" class="headerlink" title="weight initializations"></a>weight initializations</h3><ul><li>old version: 1/sqrt(n_in)</li></ul><p>The initial values for the weights of a hidden layer i should be uniformly sampled from a symmetric interval that depends on the activation function. weight的初始化依赖于activation</p><ul><li>tanh: uniformely sampled from -sqrt(6./(n_in+n_hidden)) and sqrt(6./(n_in+n_hidden))</li><li>sigmoid : use 4 times larger initial weights for sigmoid compared to tanh</li></ul><pre class="language-python"><code class="language-python"><span class="token comment" spellcheck="true"># `W` is initialized with `W_values` which is uniformely sampled</span>
+</code></pre><h4 id="Plotting-Intermediate-Results"><a href="#Plotting-Intermediate-Results" class="headerlink" title="Plotting Intermediate Results"></a>Plotting Intermediate Results</h4><p>If you have enough disk space, your training script should save intermediate models and a visualization script should process those saved models.</p><h2 id="MLP"><a href="#MLP" class="headerlink" title="MLP"></a>MLP</h2><blockquote><p>see <a href="http://deeplearning.net/tutorial/mlp.html" rel="noopener external nofollow noreferrer" target="_blank">here</a></p></blockquote><p>An MLP can be viewed as a logistic regression classifier where the input is first transformed using a learnt non-linear transformation sigmoid. This transformation projects the input data into a space where it becomes linearly separable. This intermediate layer is referred to as a hidden layer. A single hidden layer is sufficient to make MLPs a universal approximator.</p><h3 id="weight-initializations"><a href="#weight-initializations" class="headerlink" title="weight initializations"></a>weight initializations</h3><ul><li>old version: 1/sqrt(n_in)</li></ul><p>The initial values for the weights of a hidden layer i should be uniformly sampled from a symmetric interval that depends on the activation function. weight的初始化依赖于activation</p><ul><li>tanh: uniformely sampled from -sqrt(6./(n_in+n_hidden)) and sqrt(6./(n_in+n_hidden))</li><li>sigmoid : use 4 times larger initial weights for sigmoid compared to tanh</li></ul><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># `W` is initialized with `W_values` which is uniformely sampled</span>
         <span class="token comment" spellcheck="true"># from sqrt(-6./(n_in+n_hidden)) and sqrt(6./(n_in+n_hidden))</span>
         <span class="token comment" spellcheck="true"># for tanh activation function</span>
         <span class="token comment" spellcheck="true"># the output of uniform if converted using asarray to dtype</span>
@@ -175,7 +595,7 @@ u<span class="token punctuation">.</span>set_value<span class="token punctuation
 
         self<span class="token punctuation">.</span>W <span class="token operator">=</span> W
         self<span class="token punctuation">.</span>b <span class="token operator">=</span> b
-</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h3 id="Tips-and-Tricks-for-training-MLPs"><a href="#Tips-and-Tricks-for-training-MLPs" class="headerlink" title="Tips and Tricks for training MLPs"></a>Tips and Tricks for training MLPs</h3><h4 id="Nonlinearity"><a href="#Nonlinearity" class="headerlink" title="Nonlinearity"></a>Nonlinearity</h4><p>Two of the most common ones are the <strong>sigmoid</strong> and the <strong>tanh</strong> function. nonlinearities that are symmetric around the origin are preferred because they tend to produce zero-mean inputs to the next layer (which is a desirable property). Empirically, we have observed that the tanh has better convergence properties.</p><h4 id="Weight-initialization"><a href="#Weight-initialization" class="headerlink" title="Weight initialization"></a>Weight initialization</h4><p>At initialization we want the weights to be small enough around the origin so that the activation function operates in its linear regime, where gradients are the largest. <strong>weight的初始化依赖于activation</strong></p><h4 id="Learning-rate"><a href="#Learning-rate" class="headerlink" title="Learning rate"></a>Learning rate</h4><ul><li><p>The simplest solution is to simply have a <strong>constant rate</strong>. Rule of thumb: try several log-spaced values (10^{-1},10^{-2},\ldots) and narrow the (logarithmic) grid search to the region where you obtain the lowest validation error.</p></li><li><p>Decreasing the learning rate over time is sometimes a good idea. eta = eta0/(1+d*epoch) (d: decrease constant, 0.001)</p></li><li><p>Early stopping + decrease learning rate. eta = eta0/2 until eta= eta0/1024</p></li></ul><h4 id="Regularization-parameter"><a href="#Regularization-parameter" class="headerlink" title="Regularization parameter"></a>Regularization parameter</h4><p>Typical values to try for the L1/L2 regularization parameter \lambda are 10^{-2},10^{-3},\ldots. In the framework that we described so far, optimizing this parameter will not lead to significantly better solutions, but is worth exploring nonetheless.</p><h4 id="Number-of-hidden-units"><a href="#Number-of-hidden-units" class="headerlink" title="Number of hidden units"></a>Number of hidden units</h4><p>This hyper-parameter is very much dataset-dependent. <strong>hidden neurons的数量依赖于具体的数据集</strong>。Unless we employ some regularization scheme (early stopping or L1/L2 penalties), a typical number of hidden units vs. generalization performance graph will be U-shaped.</p><h2 id="CNN"><a href="#CNN" class="headerlink" title="CNN"></a>CNN</h2><ul><li><a href="http://deeplearning.net/tutorial/lenet.html" rel="noopener external nofollow noreferrer" target="_blank">LeNet</a></li></ul><h3 id="The-Convolution-and-Pool-Operator"><a href="#The-Convolution-and-Pool-Operator" class="headerlink" title="The Convolution and Pool Operator"></a>The Convolution and Pool Operator</h3><pre class="language-python"><code class="language-python"><span class="token keyword">import</span> theano
+</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h3 id="Tips-and-Tricks-for-training-MLPs"><a href="#Tips-and-Tricks-for-training-MLPs" class="headerlink" title="Tips and Tricks for training MLPs"></a>Tips and Tricks for training MLPs</h3><h4 id="Nonlinearity"><a href="#Nonlinearity" class="headerlink" title="Nonlinearity"></a>Nonlinearity</h4><p>Two of the most common ones are the <strong>sigmoid</strong> and the <strong>tanh</strong> function. nonlinearities that are symmetric around the origin are preferred because they tend to produce zero-mean inputs to the next layer (which is a desirable property). Empirically, we have observed that the tanh has better convergence properties.</p><h4 id="Weight-initialization"><a href="#Weight-initialization" class="headerlink" title="Weight initialization"></a>Weight initialization</h4><p>At initialization we want the weights to be small enough around the origin so that the activation function operates in its linear regime, where gradients are the largest. <strong>weight的初始化依赖于activation</strong></p><h4 id="Learning-rate"><a href="#Learning-rate" class="headerlink" title="Learning rate"></a>Learning rate</h4><ul><li><p>The simplest solution is to simply have a <strong>constant rate</strong>. Rule of thumb: try several log-spaced values (10^{-1},10^{-2},\ldots) and narrow the (logarithmic) grid search to the region where you obtain the lowest validation error.</p></li><li><p>Decreasing the learning rate over time is sometimes a good idea. eta = eta0/(1+d*epoch) (d: decrease constant, 0.001)</p></li><li><p>Early stopping + decrease learning rate. eta = eta0/2 until eta= eta0/1024</p></li></ul><h4 id="Regularization-parameter"><a href="#Regularization-parameter" class="headerlink" title="Regularization parameter"></a>Regularization parameter</h4><p>Typical values to try for the L1/L2 regularization parameter \lambda are 10^{-2},10^{-3},\ldots. In the framework that we described so far, optimizing this parameter will not lead to significantly better solutions, but is worth exploring nonetheless.</p><h4 id="Number-of-hidden-units"><a href="#Number-of-hidden-units" class="headerlink" title="Number of hidden units"></a>Number of hidden units</h4><p>This hyper-parameter is very much dataset-dependent. <strong>hidden neurons的数量依赖于具体的数据集</strong>。Unless we employ some regularization scheme (early stopping or L1/L2 penalties), a typical number of hidden units vs. generalization performance graph will be U-shaped.</p><h2 id="CNN"><a href="#CNN" class="headerlink" title="CNN"></a>CNN</h2><ul><li><a href="http://deeplearning.net/tutorial/lenet.html" rel="noopener external nofollow noreferrer" target="_blank">LeNet</a></li></ul><h3 id="The-Convolution-and-Pool-Operator"><a href="#The-Convolution-and-Pool-Operator" class="headerlink" title="The Convolution and Pool Operator"></a>The Convolution and Pool Operator</h3><pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> theano
 <span class="token keyword">from</span> theano <span class="token keyword">import</span> tensor <span class="token keyword">as</span> T
 <span class="token keyword">from</span> theano<span class="token punctuation">.</span>tensor<span class="token punctuation">.</span>nnet <span class="token keyword">import</span> conv2d<span class="token punctuation">,</span>sigmoid
 <span class="token keyword">from</span> theano<span class="token punctuation">.</span>tensor<span class="token punctuation">.</span>signal<span class="token punctuation">.</span>pool <span class="token keyword">import</span> pool_2d
@@ -269,14 +689,388 @@ Using gpu device 0: GeForce GTX 1060 (CNMeM is enabled with initial size: 80.0% 
 
 (1, 2, 631, 508)
 (1, 2, 315, 254)
-</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180807105128016-1414614810.png" alt="png"></p><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul><li><a href="http://deeplearning.net/tutorial/gettingstarted.html#gettingstarted" rel="noopener external nofollow noreferrer" target="_blank">deeplearning getting started</a></li><li><a href="http://deeplearning.net/tutorial/mlp.html" rel="noopener external nofollow noreferrer" target="_blank">mlp</a></li><li><a href="http://deeplearning.net/tutorial/lenet.html" rel="noopener external nofollow noreferrer" target="_blank">lenet</a></li></ul><h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul><li>20180807: created.</li></ul></div><hr><div class="reprint" id="reprint-statement"><div class="reprint__author"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-user">Author: </i></span><span class="reprint-info"><a href="https://kezunlin.me" rel="external nofollow noreferrer">kezunlin</a></span></div><div class="reprint__type"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-link">Link: </i></span><span class="reprint-info"><a href="https://kezunlin.me/post/9cffdbe3/">https://kezunlin.me/post/9cffdbe3/</a></span></div><div class="reprint__notice"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-copyright">Reprint policy: </i></span><span class="reprint-info">All articles in this blog are used except for special statements <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a> reprint polocy. If reproduced, please indicate source <a href="https://kezunlin.me" target="_blank">kezunlin</a> !</span></div></div><script async defer>document.addEventListener("copy", function (e) {
+</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180807105128016-1414614810.png" alt="png"></p><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul><li><a href="http://deeplearning.net/tutorial/gettingstarted.html#gettingstarted" rel="noopener external nofollow noreferrer" target="_blank">deeplearning getting started</a></li><li><a href="http://deeplearning.net/tutorial/mlp.html" rel="noopener external nofollow noreferrer" target="_blank">mlp</a></li><li><a href="http://deeplearning.net/tutorial/lenet.html" rel="noopener external nofollow noreferrer" target="_blank">lenet</a></li></ul><h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul><li>20180807: created.</li></ul><!-- rebuild by neat -->
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        Author:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://kezunlin.me" rel="external nofollow noreferrer">kezunlin</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        Link:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://kezunlin.me/post/9cffdbe3/">https://kezunlin.me/post/9cffdbe3/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        Reprint policy:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    All articles in this blog are used except for special statements
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    reprint polocy. If reproduced, please indicate source
+                    <a href="https://kezunlin.me" target="_blank">kezunlin</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
         let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
         M.toast({html: toastHTML})
       });
 
       function navToReprintStatement() {
         $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
-      }</script><div class="tag_share" style="display:block"><div class="post-meta__tag-list" style="display:inline-block"><div class="article-tag"><a href="/tags/caffe/"><span class="chip bg-color">caffe</span> </a><a href="/tags/image-classification/"><span class="chip bg-color">image classification</span></a></div></div></div><style>#reward{margin:40px 0;text-align:center}#reward .reward-link{font-size:1.88rem}#reward .btn-floating:hover{box-shadow:0 6px 12px rgba(0,0,0,.2),0 5px 15px rgba(0,0,0,.2)}#rewardModal{width:320px;height:350px}#rewardModal .reward-title{margin:15px auto;padding-bottom:5px}#rewardModal .modal-content{padding:10px}#rewardModal .close{position:absolute;right:15px;top:15px;color:rgba(0,0,0,.5);font-size:1.3rem;line-height:20px;cursor:pointer}#rewardModal .close:hover{color:#ef5350;transform:scale(1.3);-moz-transform:scale(1.3);-webkit-transform:scale(1.3);-o-transform:scale(1.3)}#rewardModal .reward-tabs{margin:0 auto;width:210px}.reward-tabs .tabs{height:38px;margin:10px auto;padding-left:0}.reward-content ul{padding-left:0!important}.reward-tabs .tabs .tab{height:38px;line-height:38px}.reward-tabs .tab a{color:#fff;background-color:#ccc}.reward-tabs .tab a:hover{background-color:#ccc;color:#fff}.reward-tabs .wechat-tab .active{color:#fff!important;background-color:#22AB38!important}.reward-tabs .alipay-tab .active{color:#fff!important;background-color:#019FE8!important}.reward-tabs .reward-img{width:210px;height:210px}</style><div id="reward"><a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a><div id="rewardModal" class="modal"><div class="modal-content"><a class="close modal-close"><i class="fas fa-times"></i></a><h4 class="reward-title">你的赏识是我前进的动力</h4><div class="reward-content"><div class="reward-tabs"><ul class="tabs row"><li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li><li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li></ul><div id="alipay"><img src="/medias/reward/alipay.jpeg" class="reward-img" alt="支付宝打赏二维码"></div><div id="wechat"><img src="/medias/reward/wechat.jpeg" class="reward-img" alt="微信打赏二维码"></div></div></div></div></div></div><script>$(function(){$(".tabs").tabs()})</script><link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css"><div id="article-share"><div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div><script src="/libs/share/js/social-share.min.js"></script></div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-format="autorelaxed" data-ad-client="ca-pub-5653382914441020" data-ad-slot="2904827724"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div></div><article id="prenext-posts" class="prev-next articles"><div class="row article-row"><div class="article col s12 m6" data-aos="fade-up"><div class="article-badge left-badge text-color"><i class="fas fa-chevron-left"></i>&nbsp;Previous</div><div class="card"><a href="/post/32533b9f/"><div class="card-image"><img src="/medias/featureimages/19.jpg" class="responsive-img" alt="theano conv pool example"> <span class="card-title">theano conv pool example</span></div></a><div class="card-content article-content"><div class="summary block-with-text">theano conv pool example</div><div class="publish-info"><span class="publish-date"><i class="far fa-clock fa-fw icon-date"></i>2018-08-07 </span><span class="publish-author"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/deep-learning/" class="post-category">deep learning</a></span></div></div><div class="card-action article-tags"><a href="/tags/neural-networks-and-deep-learning/"><span class="chip bg-color">neural networks and deep learning</span></a></div></div></div><div class="article col s12 m6" data-aos="fade-up"><div class="article-badge right-badge text-color">Next&nbsp;<i class="fas fa-chevron-right"></i></div><div class="card"><a href="/post/b90033a9/"><div class="card-image"><img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Install and Configure Caffe on ubuntu 16.04"> <span class="card-title">Install and Configure Caffe on ubuntu 16.04</span></div></a><div class="card-content article-content"><div class="summary block-with-text">how to install and configure Caffe on ubuntu 16.04</div><div class="publish-info"><span class="publish-date"><i class="far fa-clock fa-fw icon-date"></i>2018-08-07 </span><span class="publish-author"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/deep-learning/" class="post-category">deep learning</a></span></div></div><div class="card-action article-tags"><a href="/tags/caffe/"><span class="chip bg-color">caffe</span> </a><a href="/tags/cuda/"><span class="chip bg-color">cuda</span> </a><a href="/tags/cudnn/"><span class="chip bg-color">cudnn</span></a></div></div></div></div></article><link rel="stylesheet" href="/libs/gitalk/gitalk.css"><link rel="stylesheet" href="/css/my-gitalk.css"><div class="card gitalk-card" data-aos="fade-up"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7570408610" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><div class="comment_headling" style="font-size:20px;font-weight:700;position:relative;left:20px;top:15px;padding-bottom:5px"><i class="fas fa-comments fa-fw" aria-hidden="true"></i> <span>评论</span></div><div id="gitalk-container" class="card-content"></div></div><script src="/libs/gitalk/gitalk.min.js"></script><script>let gitalk = new Gitalk({
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/caffe/">
+                                    <span class="chip bg-color">caffe</span>
+                                </a>
+                            
+                                <a href="/tags/image-classification/">
+                                    <span class="chip bg-color">image classification</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpeg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.jpeg" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <!-- hack -->
+            
+                <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+            
+
+            <!-- hack -->
+            <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-format="autorelaxed"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="2904827724"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+        </div>
+    </div>
+
+    <!-- hack -->
+    
+
+<!-- hack  replace prev-next -->
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+            <div class="card">
+                <a href="/post/32533b9f/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="theano conv pool example">
+                        
+                        <span class="card-title">theano conv pool example</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            theano conv pool example
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2018-08-07
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/deep-learning/" class="post-category">
+                                    deep learning
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/neural-networks-and-deep-learning/">
+                        <span class="chip bg-color">neural networks and deep learning</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/post/b90033a9/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Install and Configure Caffe on ubuntu 16.04">
+                        
+                        <span class="card-title">Install and Configure Caffe on ubuntu 16.04</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            how to install and configure Caffe on ubuntu 16.04
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2018-08-07
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/deep-learning/" class="post-category">
+                                    deep learning
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/caffe/">
+                        <span class="chip bg-color">caffe</span>
+                    </a>
+                    
+                    <a href="/tags/cuda/">
+                        <span class="chip bg-color">cuda</span>
+                    </a>
+                    
+                    <a href="/tags/cudnn/">
+                        <span class="chip bg-color">cudnn</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <!-- hack -->
+    <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <!-- kzl display ad -->
+     <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="7570408610"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+
+
+
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
         clientID: '4d1e3d463455e6bc7eba',
         clientSecret: '4af023d85b66c4161a83b3f9297036e84c9ba57f',
         repo: 'gitalk',
@@ -286,12 +1080,75 @@ Using gpu device 0: GeForce GTX 1060 (CNMeM is enabled with initial size: 80.0% 
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
-    gitalk.render('gitalk-container');</script></div></div><div id="toc-aside" class="col l3 hide-on-med-and-down"><div class="toc-widget"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7570408610" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div><div id="toc-content"></div></div></div></div><div id="floating-toc-btn" class="hide-on-med-and-down"><a class="btn-floating btn-large bg-color"><i class="fas fa-list-ul"></i></a></div><script src="/libs/tocbot/tocbot.min.js"></script><script>$(function () {
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+</div>
+
+
+
+
+<!-- 
+
+    
+
+
+
+
+
+-->
+    </div>
+    <div id="toc-aside" class="col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <!-- hack -->
+            <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <!-- kzl display ad -->
+     <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="7570408610"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+
+
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
         tocbot.init({
             tocSelector: '#toc-content',
             contentSelector: '#articleContent',
             headingsOffset: -($(window).height() * 0.4 - 45),
             // headingsOffset: -205,
+            collapseDepth: Number('0'),
             headingSelector: 'h2, h3, h4'
         });
 
@@ -357,11 +1214,204 @@ Using gpu device 0: GeForce GTX 1060 (CNMeM is enabled with initial size: 80.0% 
             fixPostCardWidth('artDetail', 'prenext-posts');
         });
         
-    });</script></main><footer class="page-footer bg-color"><div class="container row center-align"><div class="col s12 m8 l8 copy-right">Copyright&nbsp;&copy; <span id="year">年份</span> <a href="https://kezunlin.me" target="_blank">kezunlin</a><br><span id="busuanzi_container_site_pv">|&nbsp;<i class="far fa-eye"></i>&nbsp;Total Page View:&nbsp;<span id="busuanzi_value_site_pv" class="white-color"></span>&nbsp; </span><span id="busuanzi_container_site_uv">|&nbsp;<i class="fas fa-users"></i>&nbsp;Total Visitors:&nbsp;<span id="busuanzi_value_site_uv" class="white-color"></span>&nbsp;</span><br><span id="sitetime">载入运行时间...</span><script>function siteTime(){window.setTimeout("siteTime()",1e3);var e=1e3,t=60*e,n=60*t,o=24*n,a=365*o,r=new Date,i="2017",l="11",s="11",m="0",d="0",g="0",M=r.getFullYear(),u=r.getMonth()+1,T=r.getDate(),y=r.getHours(),f=r.getMinutes(),h=r.getSeconds(),c=Date.UTC(i,l,s,m,d,g),D=Date.UTC(M,u,T,y,f,h),H=D-c,I=Math.floor(H/a),w=Math.floor(H/o-365*I),B=Math.floor((H-(365*I+w)*o)/n),E=Math.floor((H-(365*I+w)*o-B*n)/t);Math.floor((H-(365*I+w)*o-B*n-E*t)/e),i==M?document.getElementById("year").innerHTML=M:document.getElementById("year").innerHTML=i+" - "+M,document.getElementById("sitetime").innerHTML="Site has already been running for "+I+" years "+w+" days "}setInterval(siteTime,1e3)</script><br></div><div class="col s12 m4 l4 social-link social-statis"></div></div></footer><div class="progress-bar"></div><div id="searchModal" class="modal"><div class="modal-content"><div class="search-header"><span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span> <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword" class="search-input"></div><div id="searchResult"></div></div></div><script src="/js/search.js"></script><script type="text/javascript">$(function(){searchFunc("/search.xml","searchInput","searchResult")})</script><div id="backTop" class="top-scroll"><a class="btn-floating btn-large waves-effect waves-light" href="#!"><i class="fas fa-arrow-up"></i></a></div><script src="/libs/materialize/materialize.min.js"></script><script src="/libs/masonry/masonry.pkgd.min.js"></script><script src="/libs/aos/aos.js"></script><script src="/libs/scrollprogress/scrollProgress.min.js"></script><script src="/libs/lightGallery/js/lightgallery-all.min.js"></script><script src="/js/matery.js"></script><script><meta name="yandex-verification" content="{{ theme.yandex_site_verification }}" />
+    });
+</script>
 
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2017</span>
+            <a href="https://kezunlin.me" target="_blank">kezunlin</a>
+            <br>
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;Total Page View:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;Total Visitors:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;
+            </span>
+            
+            <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2017";
+                    var startMonth = "11";
+                    var startDate = "11";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    
+                    // hack 
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        //document.getElementById("sitetime").innerHTML = "Site has already been running for " + diffDays + " days " + diffHours +
+                        //    " hours " + diffMinutes + " minutes " + diffSeconds + " seconds";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        //document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                        //    " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                    document.getElementById("sitetime").innerHTML = "Site has already been running for " +
+                         diffYears + " years " + diffDays + " days ";
+                    
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+<!-- 
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-111858944-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-111858944-1');
+</script>
+-->
+<meta name="yandex-verification" content="{{ theme.yandex_site_verification }}">
+<script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
     ga('create', 'UA-111858944-1', 'auto');
-    ga('send', 'pageview');</script><script data-ad-client="ca-pub-5653382914441020" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script async src="/libs/others/busuanzi.pure.mini.js"></script><script src="/libs/instantpage/instantpage.js" type="module"></script></body></html><!-- rebuild by neat -->
+    ga('send', 'pageview');
+</script>
+
+
+    <!-- hack -->
+    <!-- Google AdSense header-->
+
+     <script data-ad-client="ca-pub-5653382914441020" 
+          async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+     </script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

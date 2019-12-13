@@ -1,4 +1,428 @@
-<!-- build time:Fri Dec 13 2019 14:42:51 GMT+0800 (CST) --><!DOCTYPE HTML><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta name="keywords" content="speed up opencv image mat for loop, C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog"><meta name="description" content="SeriesPart 1: compile opencv on ubuntu 16.04Part 2: compile opencv with CUDA support on windows 10Part 3: opencv mat for"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><meta name="renderer" content="webkit|ie-stand|ie-comp"><meta name="mobile-web-app-capable" content="yes"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><title>speed up opencv image mat for loop | C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog</title><link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico"><link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css"><link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css"><link rel="stylesheet" type="text/css" href="/libs/aos/aos.css"><link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css"><link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css"><link rel="stylesheet" type="text/css" href="/css/matery.css"><link rel="stylesheet" type="text/css" href="/css/my.css"><script src="/libs/jquery/jquery.min.js"></script><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head><body><header class="navbar-fixed"><nav id="headNav" class="bg-color nav-transparent"><div id="navContainer" class="nav-wrapper container"><div class="brand-logo"><a href="/" class="waves-effect waves-light"><img src="/medias/logo.png" class="logo-img" alt="LOGO"> <span class="logo-span">KeZunLin</span></a></div><a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a><ul class="right nav-menu"><li class="hide-on-med-and-down nav-item"><a href="/" class="waves-effect waves-light"><i class="fas fa-home" style="zoom:.6"></i> <span>Index</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/tags" class="waves-effect waves-light"><i class="fas fa-tags" style="zoom:.6"></i> <span>Tags</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/categories" class="waves-effect waves-light"><i class="fas fa-bookmark" style="zoom:.6"></i> <span>Categories</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/archives" class="waves-effect waves-light"><i class="fas fa-archive" style="zoom:.6"></i> <span>Archives</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/about" class="waves-effect waves-light"><i class="fas fa-user-circle" style="zoom:.6"></i> <span>About</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/friends" class="waves-effect waves-light"><i class="fas fa-address-book" style="zoom:.6"></i> <span>Friends</span></a></li><li><a href="#searchModal" class="modal-trigger waves-effect waves-light"><i id="searchIcon" class="fas fa-search" title="Search" style="zoom:.85"></i></a></li></ul><div id="mobile-nav" class="side-nav sidenav"><div class="mobile-head bg-color"><img src="/medias/logo.png" class="logo-img circle responsive-img"><div class="logo-name">KeZunLin</div><div class="logo-desc">OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle.</div></div><ul class="menu-list mobile-menu-list"><li class="m-nav-item"><a href="/" class="waves-effect waves-light"><i class="fa-fw fas fa-home"></i> Index</a></li><li class="m-nav-item"><a href="/tags" class="waves-effect waves-light"><i class="fa-fw fas fa-tags"></i> Tags</a></li><li class="m-nav-item"><a href="/categories" class="waves-effect waves-light"><i class="fa-fw fas fa-bookmark"></i> Categories</a></li><li class="m-nav-item"><a href="/archives" class="waves-effect waves-light"><i class="fa-fw fas fa-archive"></i> Archives</a></li><li class="m-nav-item"><a href="/about" class="waves-effect waves-light"><i class="fa-fw fas fa-user-circle"></i> About</a></li><li class="m-nav-item"><a href="/friends" class="waves-effect waves-light"><i class="fa-fw fas fa-address-book"></i> Friends</a></li></ul></div></div></nav></header><div class="bg-cover pd-header post-cover" style="background-image:url(/medias/featureimages/9.jpg)"><div class="container" style="right:0;left:0"><div class="row"><div class="col s12 m12 l12"><div class="brand"><div class="description center-align post-title">speed up opencv image mat for loop</div></div></div></div></div></div><main class="post-container content"><link rel="stylesheet" href="/libs/tocbot/tocbot.css"><style>#articleContent h1::before,#articleContent h2::before,#articleContent h3::before,#articleContent h4::before,#articleContent h5::before,#articleContent h6::before{display:block;content:" ";height:100px;margin-top:-100px;visibility:hidden}#articleContent :focus{outline:0}.toc-fixed{position:fixed;top:64px}.toc-widget{padding-left:20px}.toc-widget .toc-title{margin:35px 0 15px 0;padding-left:17px;font-size:1.5rem;font-weight:700;line-height:1.5rem}.toc-widget ol{padding:0;list-style:none}#toc-content ol{padding-left:10px}#toc-content ol li{padding-left:10px}#toc-content .toc-link:hover{color:#42b983;font-weight:700;text-decoration:underline}#toc-content .toc-link::before{background-color:transparent;max-height:25px}#toc-content .is-active-link{color:#42b983}#toc-content .is-active-link::before{background-color:#42b983}#floating-toc-btn{position:fixed;right:15px;bottom:76px;padding-top:15px;margin-bottom:0;z-index:998}#floating-toc-btn .btn-floating{width:48px;height:48px}#floating-toc-btn .btn-floating i{line-height:48px;font-size:1.4rem}</style><div class="row"><div id="main-content" class="col s12 m12 l9"><div id="artDetail"><div class="card"><div class="card-content article-info"><div class="row tag-cate"><div class="col s7"><div class="article-tag"><a href="/tags/opencv/"><span class="chip bg-color">opencv</span> </a><a href="/tags/cython/"><span class="chip bg-color">cython</span> </a><a href="/tags/numba/"><span class="chip bg-color">numba</span></a></div></div><div class="col s5 right-align"><div class="post-cate"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/cpp/" class="post-category">cpp</a></div></div></div><div class="post-info"><div class="post-date info-break-policy"><i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp; 2018-08-23</div><div class="info-break-policy"><i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp; 1,449</div><div class="info-break-policy"><i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp; 9 Min</div><div id="busuanzi_container_page_pv" class="info-break-policy"><i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp; <span id="busuanzi_value_page_pv"></span></div></div></div><hr class="clearfix"><div class="card-content article-card-content"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><div id="articleContent"><h2 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h2><ul><li><a href="https://kezunlin.me/post/15f5c3e8/">Part 1: compile opencv on ubuntu 16.04</a></li><li><a href="https://kezunlin.me/post/6580691f/">Part 2: compile opencv with CUDA support on windows 10</a></li><li><strong><a href="https://kezunlin.me/post/61d55ab4/">Part 3: opencv mat for loop</a></strong></li><li><a href="https://kezunlin.me/post/7a6ba82e/">Part 4: speed up opencv image processing with openmp</a></li></ul><h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="Mat"><a href="#Mat" class="headerlink" title="Mat"></a>Mat</h3><ul><li>for gray image, use type <code>&lt;uchar&gt;</code></li><li>for RGB color image，use type <code>&lt;Vec3b&gt;</code></li></ul><p>gray format storage<br><img src="https://kezunlin.me/images/posts/635233-20180906105458661-1770351097.png" alt="gray"></p><p>color format storage: BGR<br><img src="https://kezunlin.me/images/posts/635233-20180906105501938-701356597.png" alt="BGR"></p><blockquote><p>we can use method <code>isContinuous()</code> to judge whether the memory buffer is continuous or not.</p></blockquote><h3 id="color-space-reduction"><a href="#color-space-reduction" class="headerlink" title="color space reduction"></a>color space reduction</h3><pre class="language-cpp"><code class="language-cpp">uchar <span class="token function">color_space_reduction</span><span class="token punctuation">(</span>uchar pixel<span class="token punctuation">)</span>
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="speed up opencv image mat for loop, kezunlin, kezunlin.me, C++, Python, Computer Vision, Deep Learning, OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle.">
+    <meta name="description" content="how to speed up opencv image mat for loop">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>speed up opencv image mat for loop | C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">KeZunLin</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Index</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">KeZunLin</div>
+        <div class="logo-desc">
+            
+            OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Index
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/9.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">speed up opencv image mat for loop</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/opencv/">
+                                <span class="chip bg-color">opencv</span>
+                            </a>
+                        
+                            <a href="/tags/cython/">
+                                <span class="chip bg-color">cython</span>
+                            </a>
+                        
+                            <a href="/tags/numba/">
+                                <span class="chip bg-color">numba</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/cpp/" class="post-category">
+                                cpp
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2018-08-23
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
+                    1,449
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
+                    9 Min
+                </div>
+                
+				
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+            
+        </div>
+        <hr class="clearfix">
+
+        <div class="card-content article-card-content">
+            <!-- hack -->
+            <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <!-- kzl in-article ad -->
+     <ins class="adsbygoogle"
+          style="display:block; text-align:center;"
+          data-ad-layout="in-article"
+          data-ad-format="fluid"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="7925631830"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+
+            <div id="articleContent">
+                <!-- build time:Fri Dec 13 2019 11:02:23 GMT+0800 (CST) --><h2 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h2><ul><li><a href="https://kezunlin.me/post/15f5c3e8/">Part 1: compile opencv on ubuntu 16.04</a></li><li><a href="https://kezunlin.me/post/6580691f/">Part 2: compile opencv with CUDA support on windows 10</a></li><li><strong><a href="https://kezunlin.me/post/61d55ab4/">Part 3: opencv mat for loop</a></strong></li><li><a href="https://kezunlin.me/post/7a6ba82e/">Part 4: speed up opencv image processing with openmp</a></li></ul><h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="Mat"><a href="#Mat" class="headerlink" title="Mat"></a>Mat</h3><ul><li>for gray image, use type <code>&lt;uchar&gt;</code></li><li>for RGB color image，use type <code>&lt;Vec3b&gt;</code></li></ul><p>gray format storage<br><img src="https://kezunlin.me/images/posts/635233-20180906105458661-1770351097.png" alt="gray"></p><p>color format storage: BGR<br><img src="https://kezunlin.me/images/posts/635233-20180906105501938-701356597.png" alt="BGR"></p><blockquote><p>we can use method <code>isContinuous()</code> to judge whether the memory buffer is continuous or not.</p></blockquote><h3 id="color-space-reduction"><a href="#color-space-reduction" class="headerlink" title="color space reduction"></a>color space reduction</h3><pre class=" language-cpp"><code class="language-cpp">uchar <span class="token function">color_space_reduction</span><span class="token punctuation">(</span>uchar pixel<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">/*
     0-9 ===>0
@@ -15,7 +439,7 @@
     uchar new_pixel <span class="token operator">=</span> <span class="token punctuation">(</span>pixel <span class="token operator">/</span> divideWith<span class="token punctuation">)</span><span class="token operator">*</span>divideWith<span class="token punctuation">;</span>
     <span class="token keyword">return</span> new_pixel<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre><h3 id="color-table"><a href="#color-table" class="headerlink" title="color table"></a>color table</h3><pre class="language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">get_color_table</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre><h3 id="color-table"><a href="#color-table" class="headerlink" title="color table"></a>color table</h3><pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">get_color_table</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">// cache color value in table[256]</span>
     <span class="token keyword">int</span> divideWith <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
@@ -23,7 +447,7 @@
     <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">256</span><span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span>
         table<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> divideWith<span class="token operator">*</span> <span class="token punctuation">(</span>i <span class="token operator">/</span> divideWith<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><h3 id="ptr"><a href="#ptr" class="headerlink" title="ptr []"></a>ptr []</h3><pre class="language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">// C ptr []: faster but not safe</span>
+</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><h3 id="ptr"><a href="#ptr" class="headerlink" title="ptr []"></a>ptr []</h3><pre class=" language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">// C ptr []: faster but not safe</span>
 Mat<span class="token operator">&amp;</span> <span class="token function">ScanImageAndReduce_Cptr</span><span class="token punctuation">(</span>Mat<span class="token operator">&amp;</span> I<span class="token punctuation">,</span> <span class="token keyword">const</span> uchar<span class="token operator">*</span> <span class="token keyword">const</span> table<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">// accept only char type matrices</span>
@@ -48,7 +472,7 @@ Mat<span class="token operator">&amp;</span> <span class="token function">ScanIm
     <span class="token punctuation">}</span>
     <span class="token keyword">return</span> I<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre><h3 id="ptr-1"><a href="#ptr-1" class="headerlink" title="ptr ++"></a>ptr ++</h3><pre class="language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">// C ptr ++: faster but not safe</span>
+</code></pre><h3 id="ptr-1"><a href="#ptr-1" class="headerlink" title="ptr ++"></a>ptr ++</h3><pre class=" language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">// C ptr ++: faster but not safe</span>
 Mat<span class="token operator">&amp;</span> <span class="token function">ScanImageAndReduce_Cptr2</span><span class="token punctuation">(</span>Mat<span class="token operator">&amp;</span> I<span class="token punctuation">,</span> <span class="token keyword">const</span> uchar<span class="token operator">*</span> <span class="token keyword">const</span> table<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">// accept only char type matrices</span>
@@ -69,7 +493,7 @@ Mat<span class="token operator">&amp;</span> <span class="token function">ScanIm
     <span class="token punctuation">}</span>
     <span class="token keyword">return</span> I<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre><h3 id="at-i-j"><a href="#at-i-j" class="headerlink" title="at(i,j)"></a>at<uchar>(i,j)</uchar></h3><pre class="language-cpp"><code class="language-cpp"> <span class="token comment" spellcheck="true">// at&lt;uchar>(i,j): random access, slow</span>
+</code></pre><h3 id="at-i-j"><a href="#at-i-j" class="headerlink" title="at(i,j)"></a>at<uchar>(i,j)</uchar></h3><pre class=" language-cpp"><code class="language-cpp"> <span class="token comment" spellcheck="true">// at&lt;uchar>(i,j): random access, slow</span>
 Mat<span class="token operator">&amp;</span> <span class="token function">ScanImageAndReduce_atRandomAccess</span><span class="token punctuation">(</span>Mat<span class="token operator">&amp;</span> I<span class="token punctuation">,</span> <span class="token keyword">const</span> uchar<span class="token operator">*</span> <span class="token keyword">const</span> table<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">// accept only char type matrices</span>
@@ -102,7 +526,7 @@ Mat<span class="token operator">&amp;</span> <span class="token function">ScanIm
     <span class="token keyword">return</span> I<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 
-</code></pre><h3 id="Iterator"><a href="#Iterator" class="headerlink" title="Iterator"></a>Iterator</h3><pre class="language-cpp"><code class="language-cpp"> <span class="token comment" spellcheck="true">// MatIterator_&lt;uchar>: safe but slow</span>
+</code></pre><h3 id="Iterator"><a href="#Iterator" class="headerlink" title="Iterator"></a>Iterator</h3><pre class=" language-cpp"><code class="language-cpp"> <span class="token comment" spellcheck="true">// MatIterator_&lt;uchar>: safe but slow</span>
 Mat<span class="token operator">&amp;</span> <span class="token function">ScanImageAndReduce_Iterator</span><span class="token punctuation">(</span>Mat<span class="token operator">&amp;</span> I<span class="token punctuation">,</span> <span class="token keyword">const</span> uchar<span class="token operator">*</span> <span class="token keyword">const</span> table<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">// accept only char type matrices</span>
@@ -130,7 +554,7 @@ Mat<span class="token operator">&amp;</span> <span class="token function">ScanIm
     <span class="token punctuation">}</span>
     <span class="token keyword">return</span> I<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre><h3 id="opencv-LUT"><a href="#opencv-LUT" class="headerlink" title="opencv LUT"></a>opencv LUT</h3><pre class="language-cpp"><code class="language-cpp"> <span class="token comment" spellcheck="true">// LUT</span>
+</code></pre><h3 id="opencv-LUT"><a href="#opencv-LUT" class="headerlink" title="opencv LUT"></a>opencv LUT</h3><pre class=" language-cpp"><code class="language-cpp"> <span class="token comment" spellcheck="true">// LUT</span>
 Mat<span class="token operator">&amp;</span> <span class="token function">ScanImageAndReduce_LUT</span><span class="token punctuation">(</span>Mat<span class="token operator">&amp;</span> I<span class="token punctuation">,</span> <span class="token keyword">const</span> uchar<span class="token operator">*</span> <span class="token keyword">const</span> table<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     Mat <span class="token function">lookUpTable</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">256</span><span class="token punctuation">,</span> CV_8U<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -141,7 +565,7 @@ Mat<span class="token operator">&amp;</span> <span class="token function">ScanIm
     cv<span class="token operator">::</span><span class="token function">LUT</span><span class="token punctuation">(</span>I<span class="token punctuation">,</span> lookUpTable<span class="token punctuation">,</span> I<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">return</span> I<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h3 id="forEach"><a href="#forEach" class="headerlink" title="forEach"></a>forEach</h3><blockquote><p><code>forEach</code> method of the <code>Mat</code> class that utilizes all the cores on your machine to apply any function at every pixel.</p></blockquote><pre class="language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">// Parallel execution with function object.</span>
+</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h3 id="forEach"><a href="#forEach" class="headerlink" title="forEach"></a>forEach</h3><blockquote><p><code>forEach</code> method of the <code>Mat</code> class that utilizes all the cores on your machine to apply any function at every pixel.</p></blockquote><pre class=" language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">// Parallel execution with function object.</span>
 <span class="token keyword">struct</span> ForEachOperator
 <span class="token punctuation">{</span>
     uchar m_table<span class="token punctuation">[</span><span class="token number">256</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
@@ -166,7 +590,7 @@ Mat<span class="token operator">&amp;</span> <span class="token function">ScanIm
     I<span class="token punctuation">.</span>forEach<span class="token operator">&lt;</span>uchar<span class="token operator">></span><span class="token punctuation">(</span><span class="token function">ForEachOperator</span><span class="token punctuation">(</span>table<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">return</span> I<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre><h3 id="forEach-with-lambda"><a href="#forEach-with-lambda" class="headerlink" title="forEach with lambda"></a>forEach with lambda</h3><pre class="language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">// forEach lambda use multiple processors, very fast (lambda slower than ForEachOperator)</span>
+</code></pre><h3 id="forEach-with-lambda"><a href="#forEach-with-lambda" class="headerlink" title="forEach with lambda"></a>forEach with lambda</h3><pre class=" language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">// forEach lambda use multiple processors, very fast (lambda slower than ForEachOperator)</span>
 Mat<span class="token operator">&amp;</span> <span class="token function">ScanImageAndReduce_forEach_with_lambda</span><span class="token punctuation">(</span>Mat<span class="token operator">&amp;</span> I<span class="token punctuation">,</span> <span class="token keyword">const</span> uchar<span class="token operator">*</span> <span class="token keyword">const</span> table<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     I<span class="token punctuation">.</span>forEach<span class="token operator">&lt;</span>uchar<span class="token operator">></span>
@@ -194,24 +618,24 @@ Mat<span class="token operator">&amp;</span> <span class="token function">ScanIm
 
 [5 forEach     ] times=20000, total_cost=17 ms, avg_cost=0.00085 ms
 [5 forEach lambda] times=20000, total_cost=23 ms, avg_cost=0.00115 ms
-</code></pre><h4 id="results"><a href="#results" class="headerlink" title="results"></a>results</h4><table><thead><tr><th style="text-align:center">Loop Type</th><th>Time Cost (us)</th></tr></thead><tbody><tr><td style="text-align:center">ptr []</td><td>242</td></tr><tr><td style="text-align:center">ptr ++</td><td>339</td></tr><tr><td style="text-align:center">at<uchar></uchar></td><td>2002</td></tr><tr><td style="text-align:center">iterator</td><td>3998</td></tr><tr><td style="text-align:center">LUT</td><td>10</td></tr><tr><td style="text-align:center">forEach</td><td>0.85</td></tr><tr><td style="text-align:center">forEach lambda</td><td>1.15</td></tr></tbody></table><p><code>forEach</code> is 10x times faster than <code>LUT</code>, 240~340x times faster than <code>ptr []</code> and <code>ptr ++</code>, and 2000~4000x times faster than <code>at</code> and <code>iterator</code>.</p><h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><p><a href="https://gist.github.com/kezunlin/8a8f1be7c0e101ce3f0e16e529288afc" rel="noopener external nofollow noreferrer" target="_blank">code here</a></p><h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><h3 id="pure-python"><a href="#pure-python" class="headerlink" title="pure python"></a>pure python</h3><pre class="language-python"><code class="language-python"><span class="token comment" spellcheck="true"># import the necessary packages</span>
+</code></pre><h4 id="results"><a href="#results" class="headerlink" title="results"></a>results</h4><table><thead><tr><th style="text-align:center">Loop Type</th><th>Time Cost (us)</th></tr></thead><tbody><tr><td style="text-align:center">ptr []</td><td>242</td></tr><tr><td style="text-align:center">ptr ++</td><td>339</td></tr><tr><td style="text-align:center">at<uchar></uchar></td><td>2002</td></tr><tr><td style="text-align:center">iterator</td><td>3998</td></tr><tr><td style="text-align:center">LUT</td><td>10</td></tr><tr><td style="text-align:center">forEach</td><td>0.85</td></tr><tr><td style="text-align:center">forEach lambda</td><td>1.15</td></tr></tbody></table><p><code>forEach</code> is 10x times faster than <code>LUT</code>, 240~340x times faster than <code>ptr []</code> and <code>ptr ++</code>, and 2000~4000x times faster than <code>at</code> and <code>iterator</code>.</p><h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><p><a href="https://gist.github.com/kezunlin/8a8f1be7c0e101ce3f0e16e529288afc" rel="noopener external nofollow noreferrer" target="_blank">code here</a></p><h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><h3 id="pure-python"><a href="#pure-python" class="headerlink" title="pure python"></a>pure python</h3><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># import the necessary packages</span>
 <span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
 <span class="token keyword">import</span> cv2
 <span class="token keyword">print</span><span class="token punctuation">(</span>cv2<span class="token punctuation">.</span>__version__<span class="token punctuation">)</span>
 
 <span class="token operator">%</span>matplotlib inline
 </code></pre><pre><code>3.4.2
-</code></pre><pre class="language-python"><code class="language-python"><span class="token comment" spellcheck="true"># load the original image, convert it to grayscale, and display</span>
+</code></pre><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># load the original image, convert it to grayscale, and display</span>
 <span class="token comment" spellcheck="true"># it inline</span>
 image <span class="token operator">=</span> cv2<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string">"cat.jpg"</span><span class="token punctuation">)</span>
 image <span class="token operator">=</span> cv2<span class="token punctuation">.</span>cvtColor<span class="token punctuation">(</span>image<span class="token punctuation">,</span> cv2<span class="token punctuation">.</span>COLOR_BGR2GRAY<span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>image<span class="token punctuation">.</span>shape<span class="token punctuation">)</span>
 <span class="token comment" spellcheck="true">#plt.imshow(image, cmap="gray")</span>
 </code></pre><pre><code>(360, 480)
-</code></pre><pre class="language-python"><code class="language-python"><span class="token operator">%</span>load_ext cython
+</code></pre><pre class=" language-python"><code class="language-python"><span class="token operator">%</span>load_ext cython
 </code></pre><pre><code>The cython extension is already loaded. To reload it, use:
   %reload_ext cython
-</code></pre><pre class="language-cython"><code class="language-cython">%%cython -a
+</code></pre><pre class=" language-cython"><code class="language-cython">%%cython -a
 
 def threshold_python(T, image):
     # grab the image dimensions
@@ -226,9 +650,9 @@ def threshold_python(T, image):
 
     # return the thresholded image
     return image
-</code></pre><pre class="language-python"><code class="language-python"><span class="token operator">%</span>timeit threshold_python<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> image<span class="token punctuation">)</span>
+</code></pre><pre class=" language-python"><code class="language-python"><span class="token operator">%</span>timeit threshold_python<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> image<span class="token punctuation">)</span>
 </code></pre><pre><code>263 ms ± 20.2 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
-</code></pre><h3 id="cython"><a href="#cython" class="headerlink" title="cython"></a>cython</h3><pre class="language-cython"><code class="language-cython">%%cython -a
+</code></pre><h3 id="cython"><a href="#cython" class="headerlink" title="cython"></a>cython</h3><pre class=" language-cython"><code class="language-cython">%%cython -a
 
 import cython
 
@@ -249,9 +673,9 @@ cpdef unsigned char[:, :] threshold_cython(int T, unsigned char [:, :] image):
 
     # return the thresholded image
     return image
-</code></pre><h3 id="numba"><a href="#numba" class="headerlink" title="numba"></a>numba</h3><pre class="language-python"><code class="language-python"><span class="token operator">%</span>timeit threshold_cython<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> image<span class="token punctuation">)</span>
+</code></pre><h3 id="numba"><a href="#numba" class="headerlink" title="numba"></a>numba</h3><pre class=" language-python"><code class="language-python"><span class="token operator">%</span>timeit threshold_cython<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> image<span class="token punctuation">)</span>
 </code></pre><pre><code>150 µs ± 7.14 µs per loop (mean ± std. dev. of 7 runs, 10000 loops each)
-</code></pre><pre class="language-python"><code class="language-python"><span class="token keyword">from</span> numba <span class="token keyword">import</span> njit
+</code></pre><pre class=" language-python"><code class="language-python"><span class="token keyword">from</span> numba <span class="token keyword">import</span> njit
 
 @njit
 <span class="token keyword">def</span> <span class="token function">threshold_njit</span><span class="token punctuation">(</span>T<span class="token punctuation">,</span> image<span class="token punctuation">)</span><span class="token punctuation">:</span>
@@ -267,14 +691,14 @@ cpdef unsigned char[:, :] threshold_cython(int T, unsigned char [:, :] image):
 
     <span class="token comment" spellcheck="true"># return the thresholded image</span>
     <span class="token keyword">return</span> image
-</code></pre><pre class="language-python"><code class="language-python"><span class="token operator">%</span>timeit threshold_njit<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> image<span class="token punctuation">)</span>
+</code></pre><pre class=" language-python"><code class="language-python"><span class="token operator">%</span>timeit threshold_njit<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> image<span class="token punctuation">)</span>
 </code></pre><pre><code>43.5 µs ± 142 ns per loop (mean ± std. dev. of 7 runs, 10000 loops each)
-</code></pre><h3 id="numpy"><a href="#numpy" class="headerlink" title="numpy"></a>numpy</h3><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">threshold_numpy</span><span class="token punctuation">(</span>T<span class="token punctuation">,</span> image<span class="token punctuation">)</span><span class="token punctuation">:</span>
+</code></pre><h3 id="numpy"><a href="#numpy" class="headerlink" title="numpy"></a>numpy</h3><pre class=" language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">threshold_numpy</span><span class="token punctuation">(</span>T<span class="token punctuation">,</span> image<span class="token punctuation">)</span><span class="token punctuation">:</span>
     image<span class="token punctuation">[</span>image <span class="token operator">></span> T<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">255</span>
     <span class="token keyword">return</span> image
-</code></pre><pre class="language-python"><code class="language-python"><span class="token operator">%</span>timeit threshold_numpy<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> image<span class="token punctuation">)</span>
+</code></pre><pre class=" language-python"><code class="language-python"><span class="token operator">%</span>timeit threshold_numpy<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> image<span class="token punctuation">)</span>
 </code></pre><pre><code>111 µs ± 334 ns per loop (mean ± std. dev. of 7 runs, 10000 loops each)
-</code></pre><h3 id="conclusions"><a href="#conclusions" class="headerlink" title="conclusions"></a>conclusions</h3><pre class="language-python"><code class="language-python">image <span class="token operator">=</span> cv2<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string">"cat.jpg"</span><span class="token punctuation">)</span>
+</code></pre><h3 id="conclusions"><a href="#conclusions" class="headerlink" title="conclusions"></a>conclusions</h3><pre class=" language-python"><code class="language-python">image <span class="token operator">=</span> cv2<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string">"cat.jpg"</span><span class="token punctuation">)</span>
 image <span class="token operator">=</span> cv2<span class="token punctuation">.</span>cvtColor<span class="token punctuation">(</span>image<span class="token punctuation">,</span> cv2<span class="token punctuation">.</span>COLOR_BGR2GRAY<span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>image<span class="token punctuation">.</span>shape<span class="token punctuation">)</span>
 
@@ -287,7 +711,7 @@ image <span class="token operator">=</span> cv2<span class="token punctuation">.
 143 µs ± 1.19 µs per loop (mean ± std. dev. of 7 runs, 10000 loops each)
 43.8 µs ± 284 ns per loop (mean ± std. dev. of 7 runs, 10000 loops each)
 113 µs ± 957 ns per loop (mean ± std. dev. of 7 runs, 10000 loops each)
-</code></pre><pre class="language-python"><code class="language-python">image <span class="token operator">=</span> cv2<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string">"big.jpg"</span><span class="token punctuation">)</span>
+</code></pre><pre class=" language-python"><code class="language-python">image <span class="token operator">=</span> cv2<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string">"big.jpg"</span><span class="token punctuation">)</span>
 image <span class="token operator">=</span> cv2<span class="token punctuation">.</span>cvtColor<span class="token punctuation">(</span>image<span class="token punctuation">,</span> cv2<span class="token punctuation">.</span>COLOR_BGR2GRAY<span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>image<span class="token punctuation">.</span>shape<span class="token punctuation">)</span>
 
@@ -300,14 +724,388 @@ image <span class="token operator">=</span> cv2<span class="token punctuation">.
 12.3 ms ± 231 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
 3.91 ms ± 66.1 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
 10.3 ms ± 179 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
-</code></pre><p>60,480</p><ul><li>python: 251 ms</li><li>cython: 143 us</li><li>numba: 43 us</li><li>numpy: 113 us</li></ul><p>2880, 5120</p><ul><li>python: 21 s</li><li>cython: 12 ms</li><li>numba: 4 ms</li><li>numpy: 10 ms</li></ul><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul><li><a href="https://www.learnopencv.com/parallel-pixel-access-in-opencv-using-foreach/" rel="noopener external nofollow noreferrer" target="_blank">parallel-pixel-access-in-opencv-using-foreach</a></li><li><a href="https://www.pyimagesearch.com/2017/08/28/fast-optimized-for-pixel-loops-with-opencv-and-python/" rel="noopener external nofollow noreferrer" target="_blank">fast-optimized-for-pixel-loops-with-opencv-and-python</a></li><li><a href="https://wiki.python.org/moin/PythonSpeed/PerformanceTips" rel="noopener external nofollow noreferrer" target="_blank">python performance tips</a></li></ul><h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul><li>20180823: created.</li></ul></div><hr><div class="reprint" id="reprint-statement"><div class="reprint__author"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-user">Author: </i></span><span class="reprint-info"><a href="https://kezunlin.me" rel="external nofollow noreferrer">kezunlin</a></span></div><div class="reprint__type"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-link">Link: </i></span><span class="reprint-info"><a href="https://kezunlin.me/post/61d55ab4/">https://kezunlin.me/post/61d55ab4/</a></span></div><div class="reprint__notice"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-copyright">Reprint policy: </i></span><span class="reprint-info">All articles in this blog are used except for special statements <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a> reprint polocy. If reproduced, please indicate source <a href="https://kezunlin.me" target="_blank">kezunlin</a> !</span></div></div><script async defer>document.addEventListener("copy", function (e) {
+</code></pre><p>60,480</p><ul><li>python: 251 ms</li><li>cython: 143 us</li><li>numba: 43 us</li><li>numpy: 113 us</li></ul><p>2880, 5120</p><ul><li>python: 21 s</li><li>cython: 12 ms</li><li>numba: 4 ms</li><li>numpy: 10 ms</li></ul><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul><li><a href="https://www.learnopencv.com/parallel-pixel-access-in-opencv-using-foreach/" rel="noopener external nofollow noreferrer" target="_blank">parallel-pixel-access-in-opencv-using-foreach</a></li><li><a href="https://www.pyimagesearch.com/2017/08/28/fast-optimized-for-pixel-loops-with-opencv-and-python/" rel="noopener external nofollow noreferrer" target="_blank">fast-optimized-for-pixel-loops-with-opencv-and-python</a></li><li><a href="https://wiki.python.org/moin/PythonSpeed/PerformanceTips" rel="noopener external nofollow noreferrer" target="_blank">python performance tips</a></li></ul><h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul><li>20180823: created.</li></ul><!-- rebuild by neat -->
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        Author:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://kezunlin.me" rel="external nofollow noreferrer">kezunlin</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        Link:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://kezunlin.me/post/61d55ab4/">https://kezunlin.me/post/61d55ab4/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        Reprint policy:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    All articles in this blog are used except for special statements
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    reprint polocy. If reproduced, please indicate source
+                    <a href="https://kezunlin.me" target="_blank">kezunlin</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
         let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
         M.toast({html: toastHTML})
       });
 
       function navToReprintStatement() {
         $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
-      }</script><div class="tag_share" style="display:block"><div class="post-meta__tag-list" style="display:inline-block"><div class="article-tag"><a href="/tags/opencv/"><span class="chip bg-color">opencv</span> </a><a href="/tags/cython/"><span class="chip bg-color">cython</span> </a><a href="/tags/numba/"><span class="chip bg-color">numba</span></a></div></div></div><style>#reward{margin:40px 0;text-align:center}#reward .reward-link{font-size:1.88rem}#reward .btn-floating:hover{box-shadow:0 6px 12px rgba(0,0,0,.2),0 5px 15px rgba(0,0,0,.2)}#rewardModal{width:320px;height:350px}#rewardModal .reward-title{margin:15px auto;padding-bottom:5px}#rewardModal .modal-content{padding:10px}#rewardModal .close{position:absolute;right:15px;top:15px;color:rgba(0,0,0,.5);font-size:1.3rem;line-height:20px;cursor:pointer}#rewardModal .close:hover{color:#ef5350;transform:scale(1.3);-moz-transform:scale(1.3);-webkit-transform:scale(1.3);-o-transform:scale(1.3)}#rewardModal .reward-tabs{margin:0 auto;width:210px}.reward-tabs .tabs{height:38px;margin:10px auto;padding-left:0}.reward-content ul{padding-left:0!important}.reward-tabs .tabs .tab{height:38px;line-height:38px}.reward-tabs .tab a{color:#fff;background-color:#ccc}.reward-tabs .tab a:hover{background-color:#ccc;color:#fff}.reward-tabs .wechat-tab .active{color:#fff!important;background-color:#22AB38!important}.reward-tabs .alipay-tab .active{color:#fff!important;background-color:#019FE8!important}.reward-tabs .reward-img{width:210px;height:210px}</style><div id="reward"><a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a><div id="rewardModal" class="modal"><div class="modal-content"><a class="close modal-close"><i class="fas fa-times"></i></a><h4 class="reward-title">你的赏识是我前进的动力</h4><div class="reward-content"><div class="reward-tabs"><ul class="tabs row"><li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li><li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li></ul><div id="alipay"><img src="/medias/reward/alipay.jpeg" class="reward-img" alt="支付宝打赏二维码"></div><div id="wechat"><img src="/medias/reward/wechat.jpeg" class="reward-img" alt="微信打赏二维码"></div></div></div></div></div></div><script>$(function(){$(".tabs").tabs()})</script><link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css"><div id="article-share"><div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div><script src="/libs/share/js/social-share.min.js"></script></div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-format="autorelaxed" data-ad-client="ca-pub-5653382914441020" data-ad-slot="2904827724"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div></div><article id="prenext-posts" class="prev-next articles"><div class="row article-row"><div class="article col s12 m6" data-aos="fade-up"><div class="article-badge left-badge text-color"><i class="fas fa-chevron-left"></i>&nbsp;Previous</div><div class="card"><a href="/post/f7eab850/"><div class="card-image"><img src="/medias/featureimages/13.jpg" class="responsive-img" alt="install and use tensorflow on ubuntu 16.04"> <span class="card-title">install and use tensorflow on ubuntu 16.04</span></div></a><div class="card-content article-content"><div class="summary block-with-text">how to install and use tensorflow on ubuntu 16.04</div><div class="publish-info"><span class="publish-date"><i class="far fa-clock fa-fw icon-date"></i>2018-08-21 </span><span class="publish-author"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/deep-learning/" class="post-category">deep learning</a></span></div></div><div class="card-action article-tags"><a href="/tags/tensorflow/"><span class="chip bg-color">tensorflow</span></a></div></div></div><div class="article col s12 m6" data-aos="fade-up"><div class="article-badge right-badge text-color">Next&nbsp;<i class="fas fa-chevron-right"></i></div><div class="card"><a href="/post/e2c16468/"><div class="card-image"><img src="/medias/featureimages/14.jpg" class="responsive-img" alt="c++ 11 lambda"> <span class="card-title">c++ 11 lambda</span></div></a><div class="card-content article-content"><div class="summary block-with-text">introduction to c++ 11 lambda</div><div class="publish-info"><span class="publish-date"><i class="far fa-clock fa-fw icon-date"></i>2018-08-23 </span><span class="publish-author"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/cpp/" class="post-category">cpp</a></span></div></div><div class="card-action article-tags"><a href="/tags/lambda/"><span class="chip bg-color">lambda</span> </a><a href="/tags/c-11/"><span class="chip bg-color">c++ 11</span></a></div></div></div></div></article><link rel="stylesheet" href="/libs/gitalk/gitalk.css"><link rel="stylesheet" href="/css/my-gitalk.css"><div class="card gitalk-card" data-aos="fade-up"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7570408610" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><div class="comment_headling" style="font-size:20px;font-weight:700;position:relative;left:20px;top:15px;padding-bottom:5px"><i class="fas fa-comments fa-fw" aria-hidden="true"></i> <span>评论</span></div><div id="gitalk-container" class="card-content"></div></div><script src="/libs/gitalk/gitalk.min.js"></script><script>let gitalk = new Gitalk({
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/opencv/">
+                                    <span class="chip bg-color">opencv</span>
+                                </a>
+                            
+                                <a href="/tags/cython/">
+                                    <span class="chip bg-color">cython</span>
+                                </a>
+                            
+                                <a href="/tags/numba/">
+                                    <span class="chip bg-color">numba</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpeg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.jpeg" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <!-- hack -->
+            
+                <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+            
+
+            <!-- hack -->
+            <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-format="autorelaxed"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="2904827724"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+        </div>
+    </div>
+
+    <!-- hack -->
+    
+
+<!-- hack  replace prev-next -->
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+            <div class="card">
+                <a href="/post/f7eab850/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="install and use tensorflow on ubuntu 16.04">
+                        
+                        <span class="card-title">install and use tensorflow on ubuntu 16.04</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            how to install and use tensorflow on ubuntu 16.04
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2018-08-21
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/deep-learning/" class="post-category">
+                                    deep learning
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/tensorflow/">
+                        <span class="chip bg-color">tensorflow</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/post/e2c16468/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="c++ 11 lambda">
+                        
+                        <span class="card-title">c++ 11 lambda</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            introduction to c++ 11 lambda
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2018-08-23
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/cpp/" class="post-category">
+                                    cpp
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/lambda/">
+                        <span class="chip bg-color">lambda</span>
+                    </a>
+                    
+                    <a href="/tags/c-11/">
+                        <span class="chip bg-color">c++ 11</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <!-- hack -->
+    <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <!-- kzl display ad -->
+     <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="7570408610"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+
+
+
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
         clientID: '4d1e3d463455e6bc7eba',
         clientSecret: '4af023d85b66c4161a83b3f9297036e84c9ba57f',
         repo: 'gitalk',
@@ -317,12 +1115,75 @@ image <span class="token operator">=</span> cv2<span class="token punctuation">.
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
-    gitalk.render('gitalk-container');</script></div></div><div id="toc-aside" class="col l3 hide-on-med-and-down"><div class="toc-widget"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7570408610" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div><div id="toc-content"></div></div></div></div><div id="floating-toc-btn" class="hide-on-med-and-down"><a class="btn-floating btn-large bg-color"><i class="fas fa-list-ul"></i></a></div><script src="/libs/tocbot/tocbot.min.js"></script><script>$(function () {
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+</div>
+
+
+
+
+<!-- 
+
+    
+
+
+
+
+
+-->
+    </div>
+    <div id="toc-aside" class="col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <!-- hack -->
+            <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <!-- kzl display ad -->
+     <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="7570408610"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+
+
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
         tocbot.init({
             tocSelector: '#toc-content',
             contentSelector: '#articleContent',
             headingsOffset: -($(window).height() * 0.4 - 45),
             // headingsOffset: -205,
+            collapseDepth: Number('0'),
             headingSelector: 'h2, h3, h4'
         });
 
@@ -388,11 +1249,204 @@ image <span class="token operator">=</span> cv2<span class="token punctuation">.
             fixPostCardWidth('artDetail', 'prenext-posts');
         });
         
-    });</script></main><footer class="page-footer bg-color"><div class="container row center-align"><div class="col s12 m8 l8 copy-right">Copyright&nbsp;&copy; <span id="year">年份</span> <a href="https://kezunlin.me" target="_blank">kezunlin</a><br><span id="busuanzi_container_site_pv">|&nbsp;<i class="far fa-eye"></i>&nbsp;Total Page View:&nbsp;<span id="busuanzi_value_site_pv" class="white-color"></span>&nbsp; </span><span id="busuanzi_container_site_uv">|&nbsp;<i class="fas fa-users"></i>&nbsp;Total Visitors:&nbsp;<span id="busuanzi_value_site_uv" class="white-color"></span>&nbsp;</span><br><span id="sitetime">载入运行时间...</span><script>function siteTime(){window.setTimeout("siteTime()",1e3);var e=1e3,t=60*e,n=60*t,o=24*n,a=365*o,r=new Date,i="2017",l="11",s="11",m="0",d="0",g="0",M=r.getFullYear(),u=r.getMonth()+1,T=r.getDate(),y=r.getHours(),f=r.getMinutes(),h=r.getSeconds(),c=Date.UTC(i,l,s,m,d,g),D=Date.UTC(M,u,T,y,f,h),H=D-c,I=Math.floor(H/a),w=Math.floor(H/o-365*I),B=Math.floor((H-(365*I+w)*o)/n),E=Math.floor((H-(365*I+w)*o-B*n)/t);Math.floor((H-(365*I+w)*o-B*n-E*t)/e),i==M?document.getElementById("year").innerHTML=M:document.getElementById("year").innerHTML=i+" - "+M,document.getElementById("sitetime").innerHTML="Site has already been running for "+I+" years "+w+" days "}setInterval(siteTime,1e3)</script><br></div><div class="col s12 m4 l4 social-link social-statis"></div></div></footer><div class="progress-bar"></div><div id="searchModal" class="modal"><div class="modal-content"><div class="search-header"><span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span> <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword" class="search-input"></div><div id="searchResult"></div></div></div><script src="/js/search.js"></script><script type="text/javascript">$(function(){searchFunc("/search.xml","searchInput","searchResult")})</script><div id="backTop" class="top-scroll"><a class="btn-floating btn-large waves-effect waves-light" href="#!"><i class="fas fa-arrow-up"></i></a></div><script src="/libs/materialize/materialize.min.js"></script><script src="/libs/masonry/masonry.pkgd.min.js"></script><script src="/libs/aos/aos.js"></script><script src="/libs/scrollprogress/scrollProgress.min.js"></script><script src="/libs/lightGallery/js/lightgallery-all.min.js"></script><script src="/js/matery.js"></script><script><meta name="yandex-verification" content="{{ theme.yandex_site_verification }}" />
+    });
+</script>
 
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2017</span>
+            <a href="https://kezunlin.me" target="_blank">kezunlin</a>
+            <br>
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;Total Page View:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;Total Visitors:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;
+            </span>
+            
+            <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2017";
+                    var startMonth = "11";
+                    var startDate = "11";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    
+                    // hack 
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        //document.getElementById("sitetime").innerHTML = "Site has already been running for " + diffDays + " days " + diffHours +
+                        //    " hours " + diffMinutes + " minutes " + diffSeconds + " seconds";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        //document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                        //    " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                    document.getElementById("sitetime").innerHTML = "Site has already been running for " +
+                         diffYears + " years " + diffDays + " days ";
+                    
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+<!-- 
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-111858944-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-111858944-1');
+</script>
+-->
+<meta name="yandex-verification" content="{{ theme.yandex_site_verification }}">
+<script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
     ga('create', 'UA-111858944-1', 'auto');
-    ga('send', 'pageview');</script><script data-ad-client="ca-pub-5653382914441020" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script async src="/libs/others/busuanzi.pure.mini.js"></script><script src="/libs/instantpage/instantpage.js" type="module"></script></body></html><!-- rebuild by neat -->
+    ga('send', 'pageview');
+</script>
+
+
+    <!-- hack -->
+    <!-- Google AdSense header-->
+
+     <script data-ad-client="ca-pub-5653382914441020" 
+          async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+     </script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

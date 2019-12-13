@@ -1,34 +1,448 @@
-<!-- build time:Fri Dec 13 2019 14:42:12 GMT+0800 (CST) --><!DOCTYPE HTML><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta name="keywords" content="use python ctypes to load and use functions from C C++ DLL, C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog"><meta name="description" content="Guidectypes intropython only support c api.ctype usage# (1) get and set value for c_int
-from ctypes import *
-i = c_int(4"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><meta name="renderer" content="webkit|ie-stand|ie-comp"><meta name="mobile-web-app-capable" content="yes"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><title>use python ctypes to load and use functions from C C++ DLL | C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog</title><link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico"><link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css"><link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css"><link rel="stylesheet" type="text/css" href="/libs/aos/aos.css"><link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css"><link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css"><link rel="stylesheet" type="text/css" href="/css/matery.css"><link rel="stylesheet" type="text/css" href="/css/my.css"><script src="/libs/jquery/jquery.min.js"></script><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head><body><header class="navbar-fixed"><nav id="headNav" class="bg-color nav-transparent"><div id="navContainer" class="nav-wrapper container"><div class="brand-logo"><a href="/" class="waves-effect waves-light"><img src="/medias/logo.png" class="logo-img" alt="LOGO"> <span class="logo-span">KeZunLin</span></a></div><a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a><ul class="right nav-menu"><li class="hide-on-med-and-down nav-item"><a href="/" class="waves-effect waves-light"><i class="fas fa-home" style="zoom:.6"></i> <span>Index</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/tags" class="waves-effect waves-light"><i class="fas fa-tags" style="zoom:.6"></i> <span>Tags</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/categories" class="waves-effect waves-light"><i class="fas fa-bookmark" style="zoom:.6"></i> <span>Categories</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/archives" class="waves-effect waves-light"><i class="fas fa-archive" style="zoom:.6"></i> <span>Archives</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/about" class="waves-effect waves-light"><i class="fas fa-user-circle" style="zoom:.6"></i> <span>About</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/friends" class="waves-effect waves-light"><i class="fas fa-address-book" style="zoom:.6"></i> <span>Friends</span></a></li><li><a href="#searchModal" class="modal-trigger waves-effect waves-light"><i id="searchIcon" class="fas fa-search" title="Search" style="zoom:.85"></i></a></li></ul><div id="mobile-nav" class="side-nav sidenav"><div class="mobile-head bg-color"><img src="/medias/logo.png" class="logo-img circle responsive-img"><div class="logo-name">KeZunLin</div><div class="logo-desc">OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle.</div></div><ul class="menu-list mobile-menu-list"><li class="m-nav-item"><a href="/" class="waves-effect waves-light"><i class="fa-fw fas fa-home"></i> Index</a></li><li class="m-nav-item"><a href="/tags" class="waves-effect waves-light"><i class="fa-fw fas fa-tags"></i> Tags</a></li><li class="m-nav-item"><a href="/categories" class="waves-effect waves-light"><i class="fa-fw fas fa-bookmark"></i> Categories</a></li><li class="m-nav-item"><a href="/archives" class="waves-effect waves-light"><i class="fa-fw fas fa-archive"></i> Archives</a></li><li class="m-nav-item"><a href="/about" class="waves-effect waves-light"><i class="fa-fw fas fa-user-circle"></i> About</a></li><li class="m-nav-item"><a href="/friends" class="waves-effect waves-light"><i class="fa-fw fas fa-address-book"></i> Friends</a></li></ul></div></div></nav></header><div class="bg-cover pd-header post-cover" style="background-image:url(/medias/featureimages/9.jpg)"><div class="container" style="right:0;left:0"><div class="row"><div class="col s12 m12 l12"><div class="brand"><div class="description center-align post-title">use python ctypes to load and use functions from C C++ DLL</div></div></div></div></div></div><main class="post-container content"><link rel="stylesheet" href="/libs/tocbot/tocbot.css"><style>#articleContent h1::before,#articleContent h2::before,#articleContent h3::before,#articleContent h4::before,#articleContent h5::before,#articleContent h6::before{display:block;content:" ";height:100px;margin-top:-100px;visibility:hidden}#articleContent :focus{outline:0}.toc-fixed{position:fixed;top:64px}.toc-widget{padding-left:20px}.toc-widget .toc-title{margin:35px 0 15px 0;padding-left:17px;font-size:1.5rem;font-weight:700;line-height:1.5rem}.toc-widget ol{padding:0;list-style:none}#toc-content ol{padding-left:10px}#toc-content ol li{padding-left:10px}#toc-content .toc-link:hover{color:#42b983;font-weight:700;text-decoration:underline}#toc-content .toc-link::before{background-color:transparent;max-height:25px}#toc-content .is-active-link{color:#42b983}#toc-content .is-active-link::before{background-color:#42b983}#floating-toc-btn{position:fixed;right:15px;bottom:76px;padding-top:15px;margin-bottom:0;z-index:998}#floating-toc-btn .btn-floating{width:48px;height:48px}#floating-toc-btn .btn-floating i{line-height:48px;font-size:1.4rem}</style><div class="row"><div id="main-content" class="col s12 m12 l9"><div id="artDetail"><div class="card"><div class="card-content article-info"><div class="row tag-cate"><div class="col s7"><div class="article-tag"><a href="/tags/ctypes/"><span class="chip bg-color">ctypes</span></a></div></div><div class="col s5 right-align"><div class="post-cate"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/python/" class="post-category">python</a></div></div></div><div class="post-info"><div class="post-date info-break-policy"><i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp; 2019-03-08</div><div class="info-break-policy"><i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp; 1,915</div><div class="info-break-policy"><i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp; 12 Min</div><div id="busuanzi_container_page_pv" class="info-break-policy"><i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp; <span id="busuanzi_value_page_pv"></span></div></div></div><hr class="clearfix"><div class="card-content article-card-content"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><div id="articleContent"><h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="ctypes-intro"><a href="#ctypes-intro" class="headerlink" title="ctypes intro"></a>ctypes intro</h3><p>python only support c api.</p><p><img src="https://kezunlin.me/images/posts/429727-20151024205048099-526137943.png" alt="ctypes types, C type, Python type"></p><h3 id="ctype-usage"><a href="#ctype-usage" class="headerlink" title="ctype usage"></a>ctype usage</h3><pre class="language-python"><code class="language-python"><span class="token comment" spellcheck="true"># (1) get and set value for c_int</span>
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="use python ctypes to load and use functions from C C++ DLL, kezunlin, kezunlin.me, C++, Python, Computer Vision, Deep Learning, OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle.">
+    <meta name="description" content="how to use python ctypes to load and use functions from C C++ DLL">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>use python ctypes to load and use functions from C C++ DLL | C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">KeZunLin</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Index</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">KeZunLin</div>
+        <div class="logo-desc">
+            
+            OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Index
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/9.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">use python ctypes to load and use functions from C C++ DLL</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/ctypes/">
+                                <span class="chip bg-color">ctypes</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/python/" class="post-category">
+                                python
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2019-03-08
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
+                    1,915
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
+                    12 Min
+                </div>
+                
+				
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+            
+        </div>
+        <hr class="clearfix">
+
+        <div class="card-content article-card-content">
+            <!-- hack -->
+            <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <!-- kzl in-article ad -->
+     <ins class="adsbygoogle"
+          style="display:block; text-align:center;"
+          data-ad-layout="in-article"
+          data-ad-format="fluid"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="7925631830"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+
+            <div id="articleContent">
+                <!-- build time:Fri Dec 13 2019 11:02:23 GMT+0800 (CST) --><h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="ctypes-intro"><a href="#ctypes-intro" class="headerlink" title="ctypes intro"></a>ctypes intro</h3><p>python only support c api.</p><p><img src="https://kezunlin.me/images/posts/429727-20151024205048099-526137943.png" alt="ctypes types, C type, Python type"></p><h3 id="ctype-usage"><a href="#ctype-usage" class="headerlink" title="ctype usage"></a>ctype usage</h3><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># (1) get and set value for c_int</span>
 <span class="token keyword">from</span> ctypes <span class="token keyword">import</span> <span class="token operator">*</span>
 i <span class="token operator">=</span> c_int<span class="token punctuation">(</span><span class="token number">45</span><span class="token punctuation">)</span>
 i<span class="token punctuation">.</span>value
 </code></pre><pre><code>45
-</code></pre><pre class="language-python"><code class="language-python">i<span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token number">55</span>
+</code></pre><pre class=" language-python"><code class="language-python">i<span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token number">55</span>
 i<span class="token punctuation">.</span>value
 </code></pre><pre><code>55
-</code></pre><pre class="language-python"><code class="language-python"><span class="token comment" spellcheck="true"># (2) set and get value for c_char_Array_10  (c array)</span>
+</code></pre><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># (2) set and get value for c_char_Array_10  (c array)</span>
 p <span class="token operator">=</span> create_string_buffer<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>
 p
 </code></pre><pre><code>&lt;ctypes.c_char_Array_10 at 0x7fe008061170&gt;
-</code></pre><pre class="language-python"><code class="language-python">p<span class="token punctuation">.</span>raw
+</code></pre><pre class=" language-python"><code class="language-python">p<span class="token punctuation">.</span>raw
 </code></pre><pre><code>&#39;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#39;
-</code></pre><pre class="language-python"><code class="language-python">p<span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token string">"Student"</span>
+</code></pre><pre class=" language-python"><code class="language-python">p<span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token string">"Student"</span>
 p<span class="token punctuation">.</span>raw
 </code></pre><pre><code>&#39;Student\x00\x00\x00&#39;
-</code></pre><pre class="language-python"><code class="language-python">p<span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token string">"Big"</span> <span class="token comment" spellcheck="true"># set 3 chars "Big" and 4-th char "\0"</span>
+</code></pre><pre class=" language-python"><code class="language-python">p<span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token string">"Big"</span> <span class="token comment" spellcheck="true"># set 3 chars "Big" and 4-th char "\0"</span>
 p<span class="token punctuation">.</span>raw
 </code></pre><pre><code>&#39;Big\x00ent\x00\x00\x00&#39;
-</code></pre><pre class="language-python"><code class="language-python"><span class="token comment" spellcheck="true"># (3) get and set value by pointer </span>
+</code></pre><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># (3) get and set value by pointer </span>
 i <span class="token operator">=</span> c_int<span class="token punctuation">(</span><span class="token number">999</span><span class="token punctuation">)</span>     
 pi <span class="token operator">=</span> pointer<span class="token punctuation">(</span>i<span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># pointer to c_int</span>
 pi<span class="token punctuation">.</span>contents
 </code></pre><pre><code>c_int(999)
-</code></pre><pre class="language-python"><code class="language-python">pi<span class="token punctuation">.</span>contents <span class="token operator">=</span> c_int<span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span>
+</code></pre><pre class=" language-python"><code class="language-python">pi<span class="token punctuation">.</span>contents <span class="token operator">=</span> c_int<span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span>
 pi<span class="token punctuation">.</span>contents
 </code></pre><pre><code>c_int(1000)
-</code></pre><pre class="language-python"><code class="language-python"><span class="token comment" spellcheck="true"># (4) use struct</span>
+</code></pre><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># (4) use struct</span>
 <span class="token keyword">class</span> <span class="token class-name">Point</span><span class="token punctuation">(</span>Structure<span class="token punctuation">)</span><span class="token punctuation">:</span>                
     _fields_ <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">(</span><span class="token string">"x"</span><span class="token punctuation">,</span> c_int<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token string">"y"</span><span class="token punctuation">,</span> c_int<span class="token punctuation">)</span><span class="token punctuation">]</span> 
 pt <span class="token operator">=</span> Point<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">)</span>
@@ -38,13 +452,13 @@ pt2 <span class="token operator">=</span> Point<span class="token punctuation">(
 <span class="token keyword">print</span><span class="token punctuation">(</span>pt2<span class="token punctuation">.</span>x<span class="token punctuation">,</span> pt2<span class="token punctuation">.</span>y<span class="token punctuation">)</span>
 </code></pre><pre><code>(2, 5)
 (0, 5)
-</code></pre><pre class="language-python"><code class="language-python"><span class="token comment" spellcheck="true"># (5.1) use c array  c_int_Array_10</span>
+</code></pre><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># (5.1) use c array  c_int_Array_10</span>
 INT_ARRAY_10 <span class="token operator">=</span> c_int <span class="token operator">*</span><span class="token number">10</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>c_int<span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>INT_ARRAY_10<span class="token punctuation">)</span>
 </code></pre><pre><code>&lt;class &#39;ctypes.c_int&#39;&gt;
 &lt;class &#39;__main__.c_int_Array_10&#39;&gt;
-</code></pre><pre class="language-python"><code class="language-python">i_array <span class="token operator">=</span> INT_ARRAY_10<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># by default all 0</span>
+</code></pre><pre class=" language-python"><code class="language-python">i_array <span class="token operator">=</span> INT_ARRAY_10<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># by default all 0</span>
 
 <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     i_array<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> i
@@ -61,13 +475,13 @@ INT_ARRAY_10 <span class="token operator">=</span> c_int <span class="token oper
 7
 8
 9
-</code></pre><pre class="language-python"><code class="language-python"><span class="token comment" spellcheck="true"># (5.2) use c array  c_char_Array_10</span>
+</code></pre><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># (5.2) use c array  c_char_Array_10</span>
 CHAR_ARRAY_10 <span class="token operator">=</span> c_char <span class="token operator">*</span> <span class="token number">10</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>c_char<span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>CHAR_ARRAY_10<span class="token punctuation">)</span>
 </code></pre><pre><code>&lt;class &#39;ctypes.c_char&#39;&gt;
 &lt;class &#39;ctypes.c_char_Array_10&#39;&gt;
-</code></pre><pre class="language-python"><code class="language-python">c_array <span class="token operator">=</span> CHAR_ARRAY_10<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># by default all 0</span>
+</code></pre><pre class=" language-python"><code class="language-python">c_array <span class="token operator">=</span> CHAR_ARRAY_10<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># by default all 0</span>
 
 <span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     c_array<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"a"</span>
@@ -96,7 +510,7 @@ aaaaaaaaaa
 aaaaaaaaaa
 Student
 Student\00aa
-</code></pre><pre class="language-python"><code class="language-python"><span class="token comment" spellcheck="true"># (6) pointer</span>
+</code></pre><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># (6) pointer</span>
 <span class="token comment" spellcheck="true"># byref(x [, offset])   ---> get address of x                                    `&amp;num` </span>
 <span class="token comment" spellcheck="true"># pointer(x)            ---> create a pointer which points to x                  `int* p = &amp;num;`</span>
 <span class="token comment" spellcheck="true"># POINTER(type)         ---> return a `new type` which points to type instance    `Point*`</span>
@@ -127,7 +541,7 @@ c <span class="token operator">=</span> POINTER<span class="token punctuation">(
 &lt;__main__.LP_Point object at 0x7fe00805d5f0&gt;
 &lt;__main__.Point object at 0x7fe00805d440&gt;
 (2, 5)
-</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><h3 id="c-c-code"><a href="#c-c-code" class="headerlink" title="c++/c code"></a>c++/c code</h3><p>api.h</p><pre class="language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">pragma</span> once</span>
+</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><h3 id="c-c-code"><a href="#c-c-code" class="headerlink" title="c++/c code"></a>c++/c code</h3><p>api.h</p><pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">pragma</span> once</span>
 <span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"algorithm_shared_export.h"</span> </span>
 
 <span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
@@ -189,7 +603,7 @@ c <span class="token operator">=</span> POINTER<span class="token punctuation">(
 <span class="token macro property">#<span class="token directive keyword">ifdef</span> __cplusplus    </span>
 <span class="token punctuation">}</span>
 <span class="token macro property">#<span class="token directive keyword">endif</span> </span>
-</code></pre><p>api.cpp</p><pre class="language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"api.h"</span></span>
+</code></pre><p>api.cpp</p><pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"api.h"</span></span>
 
 <span class="token comment" spellcheck="true">// c++ class impl</span>
 
@@ -355,7 +769,7 @@ MyClass<span class="token operator">::</span><span class="token function">MyClas
 <span class="token macro property">#<span class="token directive keyword">ifdef</span> __cplusplus    </span>
 <span class="token punctuation">}</span>
 <span class="token macro property">#<span class="token directive keyword">endif</span> </span>
-</code></pre><h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><pre class="language-python"><code class="language-python"><span class="token keyword">from</span> ctypes <span class="token keyword">import</span> <span class="token operator">*</span>
+</code></pre><h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><pre class=" language-python"><code class="language-python"><span class="token keyword">from</span> ctypes <span class="token keyword">import</span> <span class="token operator">*</span>
 
 <span class="token keyword">import</span> cv2
 <span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
@@ -539,7 +953,7 @@ lib<span class="token punctuation">.</span>process_image_char<span class="token 
 
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
     main<span class="token punctuation">(</span><span class="token punctuation">)</span>
-</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h2 id="Python-OpenCV-Mat-to-CAPI"><a href="#Python-OpenCV-Mat-to-CAPI" class="headerlink" title="Python OpenCV Mat to CAPI"></a>Python OpenCV Mat to CAPI</h2><h3 id="C"><a href="#C" class="headerlink" title="C"></a>C</h3><h4 id="api-h"><a href="#api-h" class="headerlink" title="api.h"></a>api.h</h4><pre class="language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">pragma</span> once</span>
+</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h2 id="Python-OpenCV-Mat-to-CAPI"><a href="#Python-OpenCV-Mat-to-CAPI" class="headerlink" title="Python OpenCV Mat to CAPI"></a>Python OpenCV Mat to CAPI</h2><h3 id="C"><a href="#C" class="headerlink" title="C"></a>C</h3><h4 id="api-h"><a href="#api-h" class="headerlink" title="api.h"></a>api.h</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">pragma</span> once</span>
 
 <span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token punctuation">{</span>
     <span class="token keyword">int</span> H<span class="token punctuation">;</span>
@@ -558,7 +972,7 @@ lib<span class="token punctuation">.</span>process_image_char<span class="token 
 <span class="token macro property">#<span class="token directive keyword">ifdef</span> __cplusplus    </span>
 <span class="token punctuation">}</span>
 <span class="token macro property">#<span class="token directive keyword">endif</span> </span>
-</code></pre><h4 id="api-cpp"><a href="#api-cpp" class="headerlink" title="api.cpp"></a>api.cpp</h4><pre class="language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"api.h"</span></span>
+</code></pre><h4 id="api-cpp"><a href="#api-cpp" class="headerlink" title="api.cpp"></a>api.cpp</h4><pre class=" language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"api.h"</span></span>
 
 <span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;opencv2/opencv.hpp></span>  </span><span class="token comment" spellcheck="true">// Mat</span>
 <span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;opencv2/imgproc.hpp></span> </span><span class="token comment" spellcheck="true">// cvtColor</span>
@@ -580,7 +994,7 @@ lib<span class="token punctuation">.</span>process_image_char<span class="token 
 <span class="token macro property">#<span class="token directive keyword">ifdef</span> __cplusplus    </span>
 <span class="token punctuation">}</span>
 <span class="token macro property">#<span class="token directive keyword">endif</span> </span>
-</code></pre><h3 id="python-1"><a href="#python-1" class="headerlink" title="python"></a>python</h3><pre class="language-python"><code class="language-python"><span class="token keyword">from</span> ctypes <span class="token keyword">import</span> <span class="token operator">*</span>
+</code></pre><h3 id="python-1"><a href="#python-1" class="headerlink" title="python"></a>python</h3><pre class=" language-python"><code class="language-python"><span class="token keyword">from</span> ctypes <span class="token keyword">import</span> <span class="token operator">*</span>
 
 <span class="token keyword">import</span> cv2
 <span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
@@ -628,14 +1042,376 @@ lib<span class="token punctuation">.</span>process_image_char<span class="token 
 
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
     main<span class="token punctuation">(</span><span class="token punctuation">)</span>
-</code></pre><h2 id="Boost-python-extension"><a href="#Boost-python-extension" class="headerlink" title="Boost-python extension"></a>Boost-python extension</h2><ul><li><a href="https://github.com/spillai/numpy-opencv-converter" rel="noopener external nofollow noreferrer" target="_blank">numpy-opencv-converter</a></li><li><a href="https://github.com/Algomorph/pyboostcvconverter" rel="noopener external nofollow noreferrer" target="_blank">pyboostcvconverter</a></li></ul><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul><li><a href="https://www.cnblogs.com/night-ride-depart/p/4907613.html" rel="noopener external nofollow noreferrer" target="_blank">ctypes usage</a></li><li><a href="https://www.ibm.com/developerworks/cn/linux/l-cn-pythonandc/" rel="noopener external nofollow noreferrer" target="_blank">ctypes tutorial</a></li><li><a href="https://blog.csdn.net/taiyang1987912/article/details/44779719" rel="noopener external nofollow noreferrer" target="_blank">python call c++ and executable</a></li></ul><h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul><li>20190308: created.</li></ul></div><hr><div class="reprint" id="reprint-statement"><div class="reprint__author"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-user">Author: </i></span><span class="reprint-info"><a href="https://kezunlin.me" rel="external nofollow noreferrer">kezunlin</a></span></div><div class="reprint__type"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-link">Link: </i></span><span class="reprint-info"><a href="https://kezunlin.me/post/41fe963e/">https://kezunlin.me/post/41fe963e/</a></span></div><div class="reprint__notice"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-copyright">Reprint policy: </i></span><span class="reprint-info">All articles in this blog are used except for special statements <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a> reprint polocy. If reproduced, please indicate source <a href="https://kezunlin.me" target="_blank">kezunlin</a> !</span></div></div><script async defer>document.addEventListener("copy", function (e) {
+</code></pre><h2 id="Boost-python-extension"><a href="#Boost-python-extension" class="headerlink" title="Boost-python extension"></a>Boost-python extension</h2><ul><li><a href="https://github.com/spillai/numpy-opencv-converter" rel="noopener external nofollow noreferrer" target="_blank">numpy-opencv-converter</a></li><li><a href="https://github.com/Algomorph/pyboostcvconverter" rel="noopener external nofollow noreferrer" target="_blank">pyboostcvconverter</a></li></ul><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul><li><a href="https://www.cnblogs.com/night-ride-depart/p/4907613.html" rel="noopener external nofollow noreferrer" target="_blank">ctypes usage</a></li><li><a href="https://www.ibm.com/developerworks/cn/linux/l-cn-pythonandc/" rel="noopener external nofollow noreferrer" target="_blank">ctypes tutorial</a></li><li><a href="https://blog.csdn.net/taiyang1987912/article/details/44779719" rel="noopener external nofollow noreferrer" target="_blank">python call c++ and executable</a></li></ul><h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul><li>20190308: created.</li></ul><!-- rebuild by neat -->
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        Author:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://kezunlin.me" rel="external nofollow noreferrer">kezunlin</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        Link:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://kezunlin.me/post/41fe963e/">https://kezunlin.me/post/41fe963e/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        Reprint policy:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    All articles in this blog are used except for special statements
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    reprint polocy. If reproduced, please indicate source
+                    <a href="https://kezunlin.me" target="_blank">kezunlin</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
         let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
         M.toast({html: toastHTML})
       });
 
       function navToReprintStatement() {
         $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
-      }</script><div class="tag_share" style="display:block"><div class="post-meta__tag-list" style="display:inline-block"><div class="article-tag"><a href="/tags/ctypes/"><span class="chip bg-color">ctypes</span></a></div></div></div><style>#reward{margin:40px 0;text-align:center}#reward .reward-link{font-size:1.88rem}#reward .btn-floating:hover{box-shadow:0 6px 12px rgba(0,0,0,.2),0 5px 15px rgba(0,0,0,.2)}#rewardModal{width:320px;height:350px}#rewardModal .reward-title{margin:15px auto;padding-bottom:5px}#rewardModal .modal-content{padding:10px}#rewardModal .close{position:absolute;right:15px;top:15px;color:rgba(0,0,0,.5);font-size:1.3rem;line-height:20px;cursor:pointer}#rewardModal .close:hover{color:#ef5350;transform:scale(1.3);-moz-transform:scale(1.3);-webkit-transform:scale(1.3);-o-transform:scale(1.3)}#rewardModal .reward-tabs{margin:0 auto;width:210px}.reward-tabs .tabs{height:38px;margin:10px auto;padding-left:0}.reward-content ul{padding-left:0!important}.reward-tabs .tabs .tab{height:38px;line-height:38px}.reward-tabs .tab a{color:#fff;background-color:#ccc}.reward-tabs .tab a:hover{background-color:#ccc;color:#fff}.reward-tabs .wechat-tab .active{color:#fff!important;background-color:#22AB38!important}.reward-tabs .alipay-tab .active{color:#fff!important;background-color:#019FE8!important}.reward-tabs .reward-img{width:210px;height:210px}</style><div id="reward"><a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a><div id="rewardModal" class="modal"><div class="modal-content"><a class="close modal-close"><i class="fas fa-times"></i></a><h4 class="reward-title">你的赏识是我前进的动力</h4><div class="reward-content"><div class="reward-tabs"><ul class="tabs row"><li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li><li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li></ul><div id="alipay"><img src="/medias/reward/alipay.jpeg" class="reward-img" alt="支付宝打赏二维码"></div><div id="wechat"><img src="/medias/reward/wechat.jpeg" class="reward-img" alt="微信打赏二维码"></div></div></div></div></div></div><script>$(function(){$(".tabs").tabs()})</script><link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css"><div id="article-share"><div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div><script src="/libs/share/js/social-share.min.js"></script></div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-format="autorelaxed" data-ad-client="ca-pub-5653382914441020" data-ad-slot="2904827724"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div></div><article id="prenext-posts" class="prev-next articles"><div class="row article-row"><div class="article col s12 m6" data-aos="fade-up"><div class="article-badge left-badge text-color"><i class="fas fa-chevron-left"></i>&nbsp;Previous</div><div class="card"><a href="/post/b6e8d46e/"><div class="card-image"><img src="/medias/featureimages/5.jpg" class="responsive-img" alt="how to load python numpy table with C++"> <span class="card-title">how to load python numpy table with C++</span></div></a><div class="card-content article-content"><div class="summary block-with-text">how to load python numpy table with C++</div><div class="publish-info"><span class="publish-date"><i class="far fa-clock fa-fw icon-date"></i>2019-02-28 </span><span class="publish-author"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/cpp/" class="post-category">cpp</a></span></div></div><div class="card-action article-tags"><a href="/tags/numpy/"><span class="chip bg-color">numpy</span></a></div></div></div><div class="article col s12 m6" data-aos="fade-up"><div class="article-badge right-badge text-color">Next&nbsp;<i class="fas fa-chevron-right"></i></div><div class="card"><a href="/post/84daa1ca/"><div class="card-image"><img src="/medias/featureimages/14.jpg" class="responsive-img" alt="linux bash tutorial"> <span class="card-title">linux bash tutorial</span></div></a><div class="card-content article-content"><div class="summary block-with-text">linux bash tutorial</div><div class="publish-info"><span class="publish-date"><i class="far fa-clock fa-fw icon-date"></i>2019-03-08 </span><span class="publish-author"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/linux/" class="post-category">linux</a></span></div></div><div class="card-action article-tags"><a href="/tags/bash/"><span class="chip bg-color">bash</span></a></div></div></div></div></article><link rel="stylesheet" href="/libs/gitalk/gitalk.css"><link rel="stylesheet" href="/css/my-gitalk.css"><div class="card gitalk-card" data-aos="fade-up"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7570408610" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><div class="comment_headling" style="font-size:20px;font-weight:700;position:relative;left:20px;top:15px;padding-bottom:5px"><i class="fas fa-comments fa-fw" aria-hidden="true"></i> <span>评论</span></div><div id="gitalk-container" class="card-content"></div></div><script src="/libs/gitalk/gitalk.min.js"></script><script>let gitalk = new Gitalk({
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/ctypes/">
+                                    <span class="chip bg-color">ctypes</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpeg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.jpeg" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <!-- hack -->
+            
+                <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+            
+
+            <!-- hack -->
+            <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-format="autorelaxed"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="2904827724"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+        </div>
+    </div>
+
+    <!-- hack -->
+    
+
+<!-- hack  replace prev-next -->
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+            <div class="card">
+                <a href="/post/b6e8d46e/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="how to load python numpy table with C++">
+                        
+                        <span class="card-title">how to load python numpy table with C++</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            how to load python numpy table with C++
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2019-02-28
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/cpp/" class="post-category">
+                                    cpp
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/numpy/">
+                        <span class="chip bg-color">numpy</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/post/84daa1ca/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="linux bash tutorial">
+                        
+                        <span class="card-title">linux bash tutorial</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            linux bash tutorial
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-03-08
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/linux/" class="post-category">
+                                    linux
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/bash/">
+                        <span class="chip bg-color">bash</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <!-- hack -->
+    <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <!-- kzl display ad -->
+     <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="7570408610"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+
+
+
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
         clientID: '4d1e3d463455e6bc7eba',
         clientSecret: '4af023d85b66c4161a83b3f9297036e84c9ba57f',
         repo: 'gitalk',
@@ -645,12 +1421,75 @@ lib<span class="token punctuation">.</span>process_image_char<span class="token 
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
-    gitalk.render('gitalk-container');</script></div></div><div id="toc-aside" class="col l3 hide-on-med-and-down"><div class="toc-widget"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7570408610" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div><div id="toc-content"></div></div></div></div><div id="floating-toc-btn" class="hide-on-med-and-down"><a class="btn-floating btn-large bg-color"><i class="fas fa-list-ul"></i></a></div><script src="/libs/tocbot/tocbot.min.js"></script><script>$(function () {
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+</div>
+
+
+
+
+<!-- 
+
+    
+
+
+
+
+
+-->
+    </div>
+    <div id="toc-aside" class="col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <!-- hack -->
+            <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <!-- kzl display ad -->
+     <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="7570408610"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+
+
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
         tocbot.init({
             tocSelector: '#toc-content',
             contentSelector: '#articleContent',
             headingsOffset: -($(window).height() * 0.4 - 45),
             // headingsOffset: -205,
+            collapseDepth: Number('0'),
             headingSelector: 'h2, h3, h4'
         });
 
@@ -716,11 +1555,204 @@ lib<span class="token punctuation">.</span>process_image_char<span class="token 
             fixPostCardWidth('artDetail', 'prenext-posts');
         });
         
-    });</script></main><footer class="page-footer bg-color"><div class="container row center-align"><div class="col s12 m8 l8 copy-right">Copyright&nbsp;&copy; <span id="year">年份</span> <a href="https://kezunlin.me" target="_blank">kezunlin</a><br><span id="busuanzi_container_site_pv">|&nbsp;<i class="far fa-eye"></i>&nbsp;Total Page View:&nbsp;<span id="busuanzi_value_site_pv" class="white-color"></span>&nbsp; </span><span id="busuanzi_container_site_uv">|&nbsp;<i class="fas fa-users"></i>&nbsp;Total Visitors:&nbsp;<span id="busuanzi_value_site_uv" class="white-color"></span>&nbsp;</span><br><span id="sitetime">载入运行时间...</span><script>function siteTime(){window.setTimeout("siteTime()",1e3);var e=1e3,t=60*e,n=60*t,o=24*n,a=365*o,r=new Date,i="2017",l="11",s="11",m="0",d="0",g="0",M=r.getFullYear(),u=r.getMonth()+1,T=r.getDate(),y=r.getHours(),f=r.getMinutes(),h=r.getSeconds(),c=Date.UTC(i,l,s,m,d,g),D=Date.UTC(M,u,T,y,f,h),H=D-c,I=Math.floor(H/a),w=Math.floor(H/o-365*I),B=Math.floor((H-(365*I+w)*o)/n),E=Math.floor((H-(365*I+w)*o-B*n)/t);Math.floor((H-(365*I+w)*o-B*n-E*t)/e),i==M?document.getElementById("year").innerHTML=M:document.getElementById("year").innerHTML=i+" - "+M,document.getElementById("sitetime").innerHTML="Site has already been running for "+I+" years "+w+" days "}setInterval(siteTime,1e3)</script><br></div><div class="col s12 m4 l4 social-link social-statis"></div></div></footer><div class="progress-bar"></div><div id="searchModal" class="modal"><div class="modal-content"><div class="search-header"><span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span> <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword" class="search-input"></div><div id="searchResult"></div></div></div><script src="/js/search.js"></script><script type="text/javascript">$(function(){searchFunc("/search.xml","searchInput","searchResult")})</script><div id="backTop" class="top-scroll"><a class="btn-floating btn-large waves-effect waves-light" href="#!"><i class="fas fa-arrow-up"></i></a></div><script src="/libs/materialize/materialize.min.js"></script><script src="/libs/masonry/masonry.pkgd.min.js"></script><script src="/libs/aos/aos.js"></script><script src="/libs/scrollprogress/scrollProgress.min.js"></script><script src="/libs/lightGallery/js/lightgallery-all.min.js"></script><script src="/js/matery.js"></script><script><meta name="yandex-verification" content="{{ theme.yandex_site_verification }}" />
+    });
+</script>
 
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2017</span>
+            <a href="https://kezunlin.me" target="_blank">kezunlin</a>
+            <br>
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;Total Page View:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;Total Visitors:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;
+            </span>
+            
+            <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2017";
+                    var startMonth = "11";
+                    var startDate = "11";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    
+                    // hack 
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        //document.getElementById("sitetime").innerHTML = "Site has already been running for " + diffDays + " days " + diffHours +
+                        //    " hours " + diffMinutes + " minutes " + diffSeconds + " seconds";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        //document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                        //    " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                    document.getElementById("sitetime").innerHTML = "Site has already been running for " +
+                         diffYears + " years " + diffDays + " days ";
+                    
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+<!-- 
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-111858944-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-111858944-1');
+</script>
+-->
+<meta name="yandex-verification" content="{{ theme.yandex_site_verification }}">
+<script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
     ga('create', 'UA-111858944-1', 'auto');
-    ga('send', 'pageview');</script><script data-ad-client="ca-pub-5653382914441020" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script async src="/libs/others/busuanzi.pure.mini.js"></script><script src="/libs/instantpage/instantpage.js" type="module"></script></body></html><!-- rebuild by neat -->
+    ga('send', 'pageview');
+</script>
+
+
+    <!-- hack -->
+    <!-- Google AdSense header-->
+
+     <script data-ad-client="ca-pub-5653382914441020" 
+          async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+     </script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

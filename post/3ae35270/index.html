@@ -1,4 +1,428 @@
-<!-- build time:Fri Dec 13 2019 14:42:51 GMT+0800 (CST) --><!DOCTYPE HTML><html lang="en"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta name="keywords" content="Fine-tuning a Pretrained Network for Style Recognition, C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog"><meta name="description" content="TutorialIn this example, we’ll explore a common approach that is particularly useful in real-world applications: take a "><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><meta name="renderer" content="webkit|ie-stand|ie-comp"><meta name="mobile-web-app-capable" content="yes"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><title>Fine-tuning a Pretrained Network for Style Recognition | C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog</title><link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico"><link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css"><link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css"><link rel="stylesheet" type="text/css" href="/libs/aos/aos.css"><link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css"><link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css"><link rel="stylesheet" type="text/css" href="/css/matery.css"><link rel="stylesheet" type="text/css" href="/css/my.css"><script src="/libs/jquery/jquery.min.js"></script><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head><body><header class="navbar-fixed"><nav id="headNav" class="bg-color nav-transparent"><div id="navContainer" class="nav-wrapper container"><div class="brand-logo"><a href="/" class="waves-effect waves-light"><img src="/medias/logo.png" class="logo-img" alt="LOGO"> <span class="logo-span">KeZunLin</span></a></div><a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a><ul class="right nav-menu"><li class="hide-on-med-and-down nav-item"><a href="/" class="waves-effect waves-light"><i class="fas fa-home" style="zoom:.6"></i> <span>Index</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/tags" class="waves-effect waves-light"><i class="fas fa-tags" style="zoom:.6"></i> <span>Tags</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/categories" class="waves-effect waves-light"><i class="fas fa-bookmark" style="zoom:.6"></i> <span>Categories</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/archives" class="waves-effect waves-light"><i class="fas fa-archive" style="zoom:.6"></i> <span>Archives</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/about" class="waves-effect waves-light"><i class="fas fa-user-circle" style="zoom:.6"></i> <span>About</span></a></li><li class="hide-on-med-and-down nav-item"><a href="/friends" class="waves-effect waves-light"><i class="fas fa-address-book" style="zoom:.6"></i> <span>Friends</span></a></li><li><a href="#searchModal" class="modal-trigger waves-effect waves-light"><i id="searchIcon" class="fas fa-search" title="Search" style="zoom:.85"></i></a></li></ul><div id="mobile-nav" class="side-nav sidenav"><div class="mobile-head bg-color"><img src="/medias/logo.png" class="logo-img circle responsive-img"><div class="logo-name">KeZunLin</div><div class="logo-desc">OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle.</div></div><ul class="menu-list mobile-menu-list"><li class="m-nav-item"><a href="/" class="waves-effect waves-light"><i class="fa-fw fas fa-home"></i> Index</a></li><li class="m-nav-item"><a href="/tags" class="waves-effect waves-light"><i class="fa-fw fas fa-tags"></i> Tags</a></li><li class="m-nav-item"><a href="/categories" class="waves-effect waves-light"><i class="fa-fw fas fa-bookmark"></i> Categories</a></li><li class="m-nav-item"><a href="/archives" class="waves-effect waves-light"><i class="fa-fw fas fa-archive"></i> Archives</a></li><li class="m-nav-item"><a href="/about" class="waves-effect waves-light"><i class="fa-fw fas fa-user-circle"></i> About</a></li><li class="m-nav-item"><a href="/friends" class="waves-effect waves-light"><i class="fa-fw fas fa-address-book"></i> Friends</a></li></ul></div></div></nav></header><div class="bg-cover pd-header post-cover" style="background-image:url(/medias/featureimages/22.jpg)"><div class="container" style="right:0;left:0"><div class="row"><div class="col s12 m12 l12"><div class="brand"><div class="description center-align post-title">Fine-tuning a Pretrained Network for Style Recognition</div></div></div></div></div></div><main class="post-container content"><link rel="stylesheet" href="/libs/tocbot/tocbot.css"><style>#articleContent h1::before,#articleContent h2::before,#articleContent h3::before,#articleContent h4::before,#articleContent h5::before,#articleContent h6::before{display:block;content:" ";height:100px;margin-top:-100px;visibility:hidden}#articleContent :focus{outline:0}.toc-fixed{position:fixed;top:64px}.toc-widget{padding-left:20px}.toc-widget .toc-title{margin:35px 0 15px 0;padding-left:17px;font-size:1.5rem;font-weight:700;line-height:1.5rem}.toc-widget ol{padding:0;list-style:none}#toc-content ol{padding-left:10px}#toc-content ol li{padding-left:10px}#toc-content .toc-link:hover{color:#42b983;font-weight:700;text-decoration:underline}#toc-content .toc-link::before{background-color:transparent;max-height:25px}#toc-content .is-active-link{color:#42b983}#toc-content .is-active-link::before{background-color:#42b983}#floating-toc-btn{position:fixed;right:15px;bottom:76px;padding-top:15px;margin-bottom:0;z-index:998}#floating-toc-btn .btn-floating{width:48px;height:48px}#floating-toc-btn .btn-floating i{line-height:48px;font-size:1.4rem}</style><div class="row"><div id="main-content" class="col s12 m12 l9"><div id="artDetail"><div class="card"><div class="card-content article-info"><div class="row tag-cate"><div class="col s7"><div class="article-tag"><a href="/tags/caffe/"><span class="chip bg-color">caffe</span> </a><a href="/tags/fine-tuning/"><span class="chip bg-color">fine-tuning</span> </a><a href="/tags/style-recognition/"><span class="chip bg-color">style recognition</span></a></div></div><div class="col s5 right-align"><div class="post-cate"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/deep-learning/" class="post-category">deep learning</a></div></div></div><div class="post-info"><div class="post-date info-break-policy"><i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp; 2018-08-08</div><div class="info-break-policy"><i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp; 4,441</div><div class="info-break-policy"><i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp; 28 Min</div><div id="busuanzi_container_page_pv" class="info-break-policy"><i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp; <span id="busuanzi_value_page_pv"></span></div></div></div><hr class="clearfix"><div class="card-content article-card-content"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><div id="articleContent"><h2 id="Tutorial"><a href="#Tutorial" class="headerlink" title="Tutorial"></a>Tutorial</h2><p>In this example, we’ll explore a common approach that is particularly useful in real-world applications: take a pre-trained Caffe network and fine-tune the parameters on your custom data.</p><p>The advantage of this approach is that, since pre-trained networks are learned on a large set of images, the intermediate layers capture the “semantics” of the general visual appearance. Think of it as a very powerful generic visual feature that you can treat as a black box. On top of that, only a relatively small amount of data is needed for good performance on the target task.</p><p>First, we will need to prepare the data. This involves the following parts:<br>(1) Get the ImageNet ilsvrc pretrained model with the provided shell scripts.<br>(2) Download a subset of the overall Flickr style dataset for this demo.<br>(3) Compile the downloaded Flickr dataset into a database that Caffe can then consume.</p><pre class="language-python"><code class="language-python">caffe_root <span class="token operator">=</span> <span class="token string">'../'</span>  <span class="token comment" spellcheck="true"># this file should be run from {caffe_root}/examples (otherwise change this line)</span>
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="Fine-tuning a Pretrained Network for Style Recognition, kezunlin, kezunlin.me, C++, Python, Computer Vision, Deep Learning, OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle.">
+    <meta name="description" content="Fine-tuning a Pretrained Network for Style Recognition">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Fine-tuning a Pretrained Network for Style Recognition | C++ Python. Computer Vision Deep Learning | KeZunLin&#39;s Blog</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">KeZunLin</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Index</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">KeZunLin</div>
+        <div class="logo-desc">
+            
+            OpenCV, Scikit-learn, Caffe, Tensorflow, Keras, Pytorch, Kaggle.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Index
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Fine-tuning a Pretrained Network for Style Recognition</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/caffe/">
+                                <span class="chip bg-color">caffe</span>
+                            </a>
+                        
+                            <a href="/tags/fine-tuning/">
+                                <span class="chip bg-color">fine-tuning</span>
+                            </a>
+                        
+                            <a href="/tags/style-recognition/">
+                                <span class="chip bg-color">style recognition</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/deep-learning/" class="post-category">
+                                deep learning
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2018-08-08
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
+                    4,441
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
+                    28 Min
+                </div>
+                
+				
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+            
+        </div>
+        <hr class="clearfix">
+
+        <div class="card-content article-card-content">
+            <!-- hack -->
+            <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <!-- kzl in-article ad -->
+     <ins class="adsbygoogle"
+          style="display:block; text-align:center;"
+          data-ad-layout="in-article"
+          data-ad-format="fluid"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="7925631830"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+
+            <div id="articleContent">
+                <!-- build time:Fri Dec 13 2019 11:02:23 GMT+0800 (CST) --><h2 id="Tutorial"><a href="#Tutorial" class="headerlink" title="Tutorial"></a>Tutorial</h2><p>In this example, we’ll explore a common approach that is particularly useful in real-world applications: take a pre-trained Caffe network and fine-tune the parameters on your custom data.</p><p>The advantage of this approach is that, since pre-trained networks are learned on a large set of images, the intermediate layers capture the “semantics” of the general visual appearance. Think of it as a very powerful generic visual feature that you can treat as a black box. On top of that, only a relatively small amount of data is needed for good performance on the target task.</p><p>First, we will need to prepare the data. This involves the following parts:<br>(1) Get the ImageNet ilsvrc pretrained model with the provided shell scripts.<br>(2) Download a subset of the overall Flickr style dataset for this demo.<br>(3) Compile the downloaded Flickr dataset into a database that Caffe can then consume.</p><pre class=" language-python"><code class="language-python">caffe_root <span class="token operator">=</span> <span class="token string">'../'</span>  <span class="token comment" spellcheck="true"># this file should be run from {caffe_root}/examples (otherwise change this line)</span>
 
 <span class="token keyword">import</span> sys
 sys<span class="token punctuation">.</span>path<span class="token punctuation">.</span>insert<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> caffe_root <span class="token operator">+</span> <span class="token string">'python'</span><span class="token punctuation">)</span>
@@ -27,7 +451,7 @@ caffe<span class="token punctuation">.</span>set_mode_gpu<span class="token punc
     image <span class="token operator">=</span> np<span class="token punctuation">.</span>require<span class="token punctuation">(</span>image<span class="token punctuation">,</span> dtype<span class="token operator">=</span>np<span class="token punctuation">.</span>uint8<span class="token punctuation">)</span>
 
     <span class="token keyword">return</span> image
-</code></pre><h3 id="Setup-and-dataset-download"><a href="#Setup-and-dataset-download" class="headerlink" title="Setup and dataset download"></a>Setup and dataset download</h3><p>Download data required for this exercise.</p><ul><li><code>get_ilsvrc_aux.sh</code> to download the ImageNet data mean, labels, etc.</li><li><code>download_model_binary.py</code> to download the pretrained reference model</li><li><code>finetune_flickr_style/assemble_data.py</code> downloads the style training and testing data</li></ul><p>We’ll download just a small subset of the full dataset for this exercise: just 2000 of the 80K images, from 5 of the 20 style categories. (To download the full dataset, set <code>full_dataset = True</code> in the cell below.)</p><pre class="language-python"><code class="language-python"><span class="token comment" spellcheck="true"># Download just a small subset of the data for this exercise.</span>
+</code></pre><h3 id="Setup-and-dataset-download"><a href="#Setup-and-dataset-download" class="headerlink" title="Setup and dataset download"></a>Setup and dataset download</h3><p>Download data required for this exercise.</p><ul><li><code>get_ilsvrc_aux.sh</code> to download the ImageNet data mean, labels, etc.</li><li><code>download_model_binary.py</code> to download the pretrained reference model</li><li><code>finetune_flickr_style/assemble_data.py</code> downloads the style training and testing data</li></ul><p>We’ll download just a small subset of the full dataset for this exercise: just 2000 of the 80K images, from 5 of the 20 style categories. (To download the full dataset, set <code>full_dataset = True</code> in the cell below.)</p><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># Download just a small subset of the data for this exercise.</span>
 <span class="token comment" spellcheck="true"># (2000 of 80K images, 5 of 20 labels.)</span>
 <span class="token comment" spellcheck="true"># To download the entire dataset, set `full_dataset = True`.</span>
 full_dataset <span class="token operator">=</span> <span class="token boolean">False</span>
@@ -65,10 +489,10 @@ Done.
 Model already exists.
 Downloading 2000 images with 7 workers...
 Writing train/val for 1996 successfully downloaded images.
-</code></pre><p>Define <code>weights</code>, the path to the ImageNet pretrained weights we just downloaded, and make sure it exists.</p><pre class="language-python"><code class="language-python"><span class="token keyword">import</span> os
+</code></pre><p>Define <code>weights</code>, the path to the ImageNet pretrained weights we just downloaded, and make sure it exists.</p><pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> os
 weights <span class="token operator">=</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>caffe_root<span class="token punctuation">,</span> <span class="token string">'models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel'</span><span class="token punctuation">)</span>
 <span class="token keyword">assert</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>exists<span class="token punctuation">(</span>weights<span class="token punctuation">)</span>
-</code></pre><p>Load the 1000 ImageNet labels from <code>ilsvrc12/synset_words.txt</code>, and the 5 style labels from <code>finetune_flickr_style/style_names.txt</code>.</p><pre class="language-python"><code class="language-python"><span class="token comment" spellcheck="true"># Load ImageNet labels to imagenet_labels</span>
+</code></pre><p>Load the 1000 ImageNet labels from <code>ilsvrc12/synset_words.txt</code>, and the 5 style labels from <code>finetune_flickr_style/style_names.txt</code>.</p><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># Load ImageNet labels to imagenet_labels</span>
 imagenet_label_file <span class="token operator">=</span> caffe_root <span class="token operator">+</span> <span class="token string">'data/ilsvrc12/synset_words.txt'</span>
 imagenet_labels <span class="token operator">=</span> list<span class="token punctuation">(</span>np<span class="token punctuation">.</span>loadtxt<span class="token punctuation">(</span>imagenet_label_file<span class="token punctuation">,</span> str<span class="token punctuation">,</span> delimiter<span class="token operator">=</span><span class="token string">'\t'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 <span class="token keyword">assert</span> len<span class="token punctuation">(</span>imagenet_labels<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">1000</span>
@@ -95,7 +519,7 @@ n01518878 ostrich, Struthio camelus
 
 Loaded style labels:
 Detailed, Pastel, Melancholy, Noir, HDR
-</code></pre><h3 id="Defining-and-running-the-nets"><a href="#Defining-and-running-the-nets" class="headerlink" title="Defining and running the nets"></a>Defining and running the nets</h3><p>We’ll start by defining <code>caffenet</code>, a function which initializes the <em>CaffeNet</em> architecture (a minor variant on <em>AlexNet</em>), taking arguments specifying the data and number of output classes.</p><pre class="language-python"><code class="language-python"><span class="token keyword">from</span> caffe <span class="token keyword">import</span> layers <span class="token keyword">as</span> L
+</code></pre><h3 id="Defining-and-running-the-nets"><a href="#Defining-and-running-the-nets" class="headerlink" title="Defining and running the nets"></a>Defining and running the nets</h3><p>We’ll start by defining <code>caffenet</code>, a function which initializes the <em>CaffeNet</em> architecture (a minor variant on <em>AlexNet</em>), taking arguments specifying the data and number of output classes.</p><pre class=" language-python"><code class="language-python"><span class="token keyword">from</span> caffe <span class="token keyword">import</span> layers <span class="token keyword">as</span> L
 <span class="token keyword">from</span> caffe <span class="token keyword">import</span> params <span class="token keyword">as</span> P
 
 weight_param <span class="token operator">=</span> dict<span class="token punctuation">(</span>lr_mult<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> decay_mult<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>
@@ -166,10 +590,10 @@ frozen_param <span class="token operator">=</span> <span class="token punctuatio
     <span class="token keyword">with</span> tempfile<span class="token punctuation">.</span>NamedTemporaryFile<span class="token punctuation">(</span>delete<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
         f<span class="token punctuation">.</span>write<span class="token punctuation">(</span>str<span class="token punctuation">(</span>n<span class="token punctuation">.</span>to_proto<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
         <span class="token keyword">return</span> f<span class="token punctuation">.</span>name
-</code></pre><p>Now, let’s create a <em>CaffeNet</em> that takes unlabeled “dummy data” as input, allowing us to set its input images externally and see what ImageNet classes it predicts.</p><pre class="language-python"><code class="language-python">dummy_data <span class="token operator">=</span> L<span class="token punctuation">.</span>DummyData<span class="token punctuation">(</span>shape<span class="token operator">=</span>dict<span class="token punctuation">(</span>dim<span class="token operator">=</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">227</span><span class="token punctuation">,</span> <span class="token number">227</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre><p>Now, let’s create a <em>CaffeNet</em> that takes unlabeled “dummy data” as input, allowing us to set its input images externally and see what ImageNet classes it predicts.</p><pre class=" language-python"><code class="language-python">dummy_data <span class="token operator">=</span> L<span class="token punctuation">.</span>DummyData<span class="token punctuation">(</span>shape<span class="token operator">=</span>dict<span class="token punctuation">(</span>dim<span class="token operator">=</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">227</span><span class="token punctuation">,</span> <span class="token number">227</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 imagenet_net_filename <span class="token operator">=</span> caffenet<span class="token punctuation">(</span>data<span class="token operator">=</span>dummy_data<span class="token punctuation">,</span> train<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
 imagenet_net <span class="token operator">=</span> caffe<span class="token punctuation">.</span>Net<span class="token punctuation">(</span>imagenet_net_filename<span class="token punctuation">,</span> weights<span class="token punctuation">,</span> caffe<span class="token punctuation">.</span>TEST<span class="token punctuation">)</span>
-</code></pre><p>Define a function <code>style_net</code> which calls <code>caffenet</code> on data from the Flickr style dataset.</p><p>The new network will also have the <em>CaffeNet</em> architecture, with differences in the input and output:</p><ul><li>the input is the Flickr style data we downloaded, provided by an <code>ImageData</code> layer</li><li>the output is a distribution over 20 classes rather than the original 1000 ImageNet classes</li><li>the classification layer is renamed from <code>fc8</code> to <code>fc8_flickr</code> to tell Caffe not to load the original classifier (<code>fc8</code>) weights from the ImageNet-pretrained model</li></ul><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">style_net</span><span class="token punctuation">(</span>train<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> learn_all<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> subset<span class="token operator">=</span>None<span class="token punctuation">)</span><span class="token punctuation">:</span>
+</code></pre><p>Define a function <code>style_net</code> which calls <code>caffenet</code> on data from the Flickr style dataset.</p><p>The new network will also have the <em>CaffeNet</em> architecture, with differences in the input and output:</p><ul><li>the input is the Flickr style data we downloaded, provided by an <code>ImageData</code> layer</li><li>the output is a distribution over 20 classes rather than the original 1000 ImageNet classes</li><li>the classification layer is renamed from <code>fc8</code> to <code>fc8_flickr</code> to tell Caffe not to load the original classifier (<code>fc8</code>) weights from the ImageNet-pretrained model</li></ul><pre class=" language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">style_net</span><span class="token punctuation">(</span>train<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> learn_all<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> subset<span class="token operator">=</span>None<span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token keyword">if</span> subset <span class="token keyword">is</span> None<span class="token punctuation">:</span>
         subset <span class="token operator">=</span> <span class="token string">'train'</span> <span class="token keyword">if</span> train <span class="token keyword">else</span> <span class="token string">'test'</span>
     source <span class="token operator">=</span> caffe_root <span class="token operator">+</span> <span class="token string">'data/flickr_style/%s.txt'</span> <span class="token operator">%</span> subset
@@ -182,12 +606,12 @@ imagenet_net <span class="token operator">=</span> caffe<span class="token punct
                     num_classes<span class="token operator">=</span>NUM_STYLE_LABELS<span class="token punctuation">,</span>
                     classifier_name<span class="token operator">=</span><span class="token string">'fc8_flickr'</span><span class="token punctuation">,</span>
                     learn_all<span class="token operator">=</span>learn_all<span class="token punctuation">)</span>
-</code></pre><p>Use the <code>style_net</code> function defined above to initialize <code>untrained_style_net</code>, a <em>CaffeNet</em> with input images from the style dataset and weights from the pretrained ImageNet model.</p><p>Call <code>forward</code> on <code>untrained_style_net</code> to get a batch of style training data.</p><pre class="language-python"><code class="language-python">untrained_style_net <span class="token operator">=</span> caffe<span class="token punctuation">.</span>Net<span class="token punctuation">(</span>style_net<span class="token punctuation">(</span>train<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> subset<span class="token operator">=</span><span class="token string">'train'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+</code></pre><p>Use the <code>style_net</code> function defined above to initialize <code>untrained_style_net</code>, a <em>CaffeNet</em> with input images from the style dataset and weights from the pretrained ImageNet model.</p><p>Call <code>forward</code> on <code>untrained_style_net</code> to get a batch of style training data.</p><pre class=" language-python"><code class="language-python">untrained_style_net <span class="token operator">=</span> caffe<span class="token punctuation">.</span>Net<span class="token punctuation">(</span>style_net<span class="token punctuation">(</span>train<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> subset<span class="token operator">=</span><span class="token string">'train'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
                                 weights<span class="token punctuation">,</span> caffe<span class="token punctuation">.</span>TEST<span class="token punctuation">)</span>
 untrained_style_net<span class="token punctuation">.</span>forward<span class="token punctuation">(</span><span class="token punctuation">)</span>
 style_data_batch <span class="token operator">=</span> untrained_style_net<span class="token punctuation">.</span>blobs<span class="token punctuation">[</span><span class="token string">'data'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>data<span class="token punctuation">.</span>copy<span class="token punctuation">(</span><span class="token punctuation">)</span>
 style_label_batch <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>untrained_style_net<span class="token punctuation">.</span>blobs<span class="token punctuation">[</span><span class="token string">'label'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>data<span class="token punctuation">,</span> dtype<span class="token operator">=</span>np<span class="token punctuation">.</span>int32<span class="token punctuation">)</span>
-</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><p>Pick one of the style net training images from the batch of 50 (we’ll arbitrarily choose #8 here). Display it, then run it through <code>imagenet_net</code>, the ImageNet-pretrained network to view its top 5 predicted classes from the 1000 ImageNet classes.</p><p>Below we chose an image where the network’s predictions happen to be reasonable, as the image is of a beach, and “sandbar” and “seashore” both happen to be ImageNet-1000 categories. For other images, the predictions won’t be this good, sometimes due to the network actually failing to recognize the object(s) present in the image, but perhaps even more often due to the fact that not all images contain an object from the (somewhat arbitrarily chosen) 1000 ImageNet categories. Modify the <code>batch_index</code> variable by changing its default setting of 8 to another value from 0-49 (since the batch size is 50) to see predictions for other images in the batch. (To go beyond this batch of 50 images, first rerun the <em>above</em> cell to load a fresh batch of data into <code>style_net</code>.)</p><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">disp_preds</span><span class="token punctuation">(</span>net<span class="token punctuation">,</span> image<span class="token punctuation">,</span> labels<span class="token punctuation">,</span> k<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'ImageNet'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><p>Pick one of the style net training images from the batch of 50 (we’ll arbitrarily choose #8 here). Display it, then run it through <code>imagenet_net</code>, the ImageNet-pretrained network to view its top 5 predicted classes from the 1000 ImageNet classes.</p><p>Below we chose an image where the network’s predictions happen to be reasonable, as the image is of a beach, and “sandbar” and “seashore” both happen to be ImageNet-1000 categories. For other images, the predictions won’t be this good, sometimes due to the network actually failing to recognize the object(s) present in the image, but perhaps even more often due to the fact that not all images contain an object from the (somewhat arbitrarily chosen) 1000 ImageNet categories. Modify the <code>batch_index</code> variable by changing its default setting of 8 to another value from 0-49 (since the batch size is 50) to see predictions for other images in the batch. (To go beyond this batch of 50 images, first rerun the <em>above</em> cell to load a fresh batch of data into <code>style_net</code>.)</p><pre class=" language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">disp_preds</span><span class="token punctuation">(</span>net<span class="token punctuation">,</span> image<span class="token punctuation">,</span> labels<span class="token punctuation">,</span> k<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'ImageNet'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     input_blob <span class="token operator">=</span> net<span class="token punctuation">.</span>blobs<span class="token punctuation">[</span><span class="token string">'data'</span><span class="token punctuation">]</span>
     net<span class="token punctuation">.</span>blobs<span class="token punctuation">[</span><span class="token string">'data'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">]</span> <span class="token operator">=</span> image
     probs <span class="token operator">=</span> net<span class="token punctuation">.</span>forward<span class="token punctuation">(</span>start<span class="token operator">=</span><span class="token string">'conv1'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token string">'probs'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
@@ -201,30 +625,30 @@ style_label_batch <span class="token operator">=</span> np<span class="token pun
 
 <span class="token keyword">def</span> <span class="token function">disp_style_preds</span><span class="token punctuation">(</span>net<span class="token punctuation">,</span> image<span class="token punctuation">)</span><span class="token punctuation">:</span>
     disp_preds<span class="token punctuation">(</span>net<span class="token punctuation">,</span> image<span class="token punctuation">,</span> style_labels<span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'style'</span><span class="token punctuation">)</span>
-</code></pre><pre class="language-python"><code class="language-python">batch_index <span class="token operator">=</span> <span class="token number">8</span>
+</code></pre><pre class=" language-python"><code class="language-python">batch_index <span class="token operator">=</span> <span class="token number">8</span>
 image <span class="token operator">=</span> style_data_batch<span class="token punctuation">[</span>batch_index<span class="token punctuation">]</span>
 plt<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span>deprocess_net_image<span class="token punctuation">(</span>image<span class="token punctuation">)</span><span class="token punctuation">)</span>
 <span class="token keyword">print</span> <span class="token string">'actual label ='</span><span class="token punctuation">,</span> style_labels<span class="token punctuation">[</span>style_label_batch<span class="token punctuation">[</span>batch_index<span class="token punctuation">]</span><span class="token punctuation">]</span>
 </code></pre><pre><code>actual label = Melancholy
-</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808102003231-729149953.png" alt="png"></p><pre class="language-python"><code class="language-python">disp_imagenet_preds<span class="token punctuation">(</span>imagenet_net<span class="token punctuation">,</span> image<span class="token punctuation">)</span>
+</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808102003231-729149953.png" alt="png"></p><pre class=" language-python"><code class="language-python">disp_imagenet_preds<span class="token punctuation">(</span>imagenet_net<span class="token punctuation">,</span> image<span class="token punctuation">)</span>
 </code></pre><pre><code>top 5 predicted ImageNet labels =
     (1) 69.89% n09421951 sandbar, sand bar
     (2) 21.76% n09428293 seashore, coast, seacoast, sea-coast
     (3)  3.22% n02894605 breakwater, groin, groyne, mole, bulwark, seawall, jetty
     (4)  1.89% n04592741 wing
     (5)  1.23% n09332890 lakeside, lakeshore
-</code></pre><p>We can also look at <code>untrained_style_net</code>‘s predictions, but we won’t see anything interesting as its classifier hasn’t been trained yet.</p><p>In fact, since we zero-initialized the classifier (see <code>caffenet</code> definition – no <code>weight_filler</code> is passed to the final <code>InnerProduct</code> layer), the softmax inputs should be all zero and we should therefore see a predicted probability of 1/N for each label (for N labels). Since we set N = 5, we get a predicted probability of 20% for each class.</p><pre class="language-python"><code class="language-python">disp_style_preds<span class="token punctuation">(</span>untrained_style_net<span class="token punctuation">,</span> image<span class="token punctuation">)</span>
+</code></pre><p>We can also look at <code>untrained_style_net</code>‘s predictions, but we won’t see anything interesting as its classifier hasn’t been trained yet.</p><p>In fact, since we zero-initialized the classifier (see <code>caffenet</code> definition – no <code>weight_filler</code> is passed to the final <code>InnerProduct</code> layer), the softmax inputs should be all zero and we should therefore see a predicted probability of 1/N for each label (for N labels). Since we set N = 5, we get a predicted probability of 20% for each class.</p><pre class=" language-python"><code class="language-python">disp_style_preds<span class="token punctuation">(</span>untrained_style_net<span class="token punctuation">,</span> image<span class="token punctuation">)</span>
 </code></pre><pre><code>top 5 predicted style labels =
     (1) 20.00% Detailed
     (2) 20.00% Pastel
     (3) 20.00% Melancholy
     (4) 20.00% Noir
     (5) 20.00% HDR
-</code></pre><p>We can also verify that the activations in layer <code>fc7</code> immediately before the classification layer are the same as (or very close to) those in the ImageNet-pretrained model, since both models are using the same pretrained weights in the <code>conv1</code> through <code>fc7</code> layers.</p><pre class="language-python"><code class="language-python">diff <span class="token operator">=</span> untrained_style_net<span class="token punctuation">.</span>blobs<span class="token punctuation">[</span><span class="token string">'fc7'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">-</span> imagenet_net<span class="token punctuation">.</span>blobs<span class="token punctuation">[</span><span class="token string">'fc7'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+</code></pre><p>We can also verify that the activations in layer <code>fc7</code> immediately before the classification layer are the same as (or very close to) those in the ImageNet-pretrained model, since both models are using the same pretrained weights in the <code>conv1</code> through <code>fc7</code> layers.</p><pre class=" language-python"><code class="language-python">diff <span class="token operator">=</span> untrained_style_net<span class="token punctuation">.</span>blobs<span class="token punctuation">[</span><span class="token string">'fc7'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">-</span> imagenet_net<span class="token punctuation">.</span>blobs<span class="token punctuation">[</span><span class="token string">'fc7'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
 error <span class="token operator">=</span> <span class="token punctuation">(</span>diff <span class="token operator">**</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">.</span>sum<span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token keyword">assert</span> error <span class="token operator">&lt;</span> <span class="token number">1e</span><span class="token operator">-</span><span class="token number">8</span>
-</code></pre><p>Delete <code>untrained_style_net</code> to save memory. (Hang on to <code>imagenet_net</code> as we’ll use it again later.)</p><pre class="language-python"><code class="language-python"><span class="token keyword">del</span> untrained_style_net
-</code></pre><h3 id="Training-the-style-classifier"><a href="#Training-the-style-classifier" class="headerlink" title="Training the style classifier"></a>Training the style classifier</h3><p>Now, we’ll define a function <code>solver</code> to create our Caffe solvers, which are used to train the network (learn its weights). In this function we’ll set values for various parameters used for learning, display, and “snapshotting” – see the inline comments for explanations of what they mean. You may want to play with some of the learning parameters to see if you can improve on the results here!</p><pre class="language-python"><code class="language-python"><span class="token keyword">from</span> caffe<span class="token punctuation">.</span>proto <span class="token keyword">import</span> caffe_pb2
+</code></pre><p>Delete <code>untrained_style_net</code> to save memory. (Hang on to <code>imagenet_net</code> as we’ll use it again later.)</p><pre class=" language-python"><code class="language-python"><span class="token keyword">del</span> untrained_style_net
+</code></pre><h3 id="Training-the-style-classifier"><a href="#Training-the-style-classifier" class="headerlink" title="Training the style classifier"></a>Training the style classifier</h3><p>Now, we’ll define a function <code>solver</code> to create our Caffe solvers, which are used to train the network (learn its weights). In this function we’ll set values for various parameters used for learning, display, and “snapshotting” – see the inline comments for explanations of what they mean. You may want to play with some of the learning parameters to see if you can improve on the results here!</p><pre class=" language-python"><code class="language-python"><span class="token keyword">from</span> caffe<span class="token punctuation">.</span>proto <span class="token keyword">import</span> caffe_pb2
 
 <span class="token keyword">def</span> <span class="token function">solver</span><span class="token punctuation">(</span>train_net_path<span class="token punctuation">,</span> test_net_path<span class="token operator">=</span>None<span class="token punctuation">,</span> base_lr<span class="token operator">=</span><span class="token number">0.001</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     s <span class="token operator">=</span> caffe_pb2<span class="token punctuation">.</span>SolverParameter<span class="token punctuation">(</span><span class="token punctuation">)</span>
@@ -279,11 +703,11 @@ error <span class="token operator">=</span> <span class="token punctuation">(</s
     <span class="token keyword">with</span> tempfile<span class="token punctuation">.</span>NamedTemporaryFile<span class="token punctuation">(</span>delete<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
         f<span class="token punctuation">.</span>write<span class="token punctuation">(</span>str<span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">)</span>
         <span class="token keyword">return</span> f<span class="token punctuation">.</span>name
-</code></pre><p>Now we’ll invoke the solver to train the style net’s classification layer.</p><p>For the record, if you want to train the network using only the command line tool, this is the command:</p><pre class="language-bash"><code class="language-bash">build/tools/caffe train \
+</code></pre><p>Now we’ll invoke the solver to train the style net’s classification layer.</p><p>For the record, if you want to train the network using only the command line tool, this is the command:</p><pre class=" language-bash"><code class="language-bash">build/tools/caffe train \
 -solver models/finetune_flickr_style/solver.prototxt \
 -weights models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel \
 -gpu 0
-</code></pre><p>However, we will train using Python in this example.</p><p>We’ll first define <code>run_solvers</code>, a function that takes a list of solvers and steps each one in a round robin manner, recording the accuracy and loss values each iteration. At the end, the learned weights are saved to a file.</p><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">run_solvers</span><span class="token punctuation">(</span>niter<span class="token punctuation">,</span> solvers<span class="token punctuation">,</span> disp_interval<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+</code></pre><p>However, we will train using Python in this example.</p><p>We’ll first define <code>run_solvers</code>, a function that takes a list of solvers and steps each one in a round robin manner, recording the accuracy and loss values each iteration. At the end, the learned weights are saved to a file.</p><pre class=" language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">run_solvers</span><span class="token punctuation">(</span>niter<span class="token punctuation">,</span> solvers<span class="token punctuation">,</span> disp_interval<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token triple-quoted-string string">"""Run solvers for niter iterations,
        returning the loss and accuracy recorded each iteration.
        `solvers` is a list of (name, solver) tuples."""</span>
@@ -308,7 +732,7 @@ error <span class="token operator">=</span> <span class="token punctuation">(</s
         weights<span class="token punctuation">[</span>name<span class="token punctuation">]</span> <span class="token operator">=</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>weight_dir<span class="token punctuation">,</span> filename<span class="token punctuation">)</span>
         s<span class="token punctuation">.</span>net<span class="token punctuation">.</span>save<span class="token punctuation">(</span>weights<span class="token punctuation">[</span>name<span class="token punctuation">]</span><span class="token punctuation">)</span>
     <span class="token keyword">return</span> loss<span class="token punctuation">,</span> acc<span class="token punctuation">,</span> weights
-</code></pre><p>Let’s create and run solvers to train nets for the style recognition task. We’ll create two solvers – one (<code>style_solver</code>) will have its train net initialized to the ImageNet-pretrained weights (this is done by the call to the <code>copy_from</code> method), and the other (<code>scratch_style_solver</code>) will start from a <em>randomly</em> initialized net.</p><p>During training, we should see that the ImageNet pretrained net is learning faster and attaining better accuracies than the scratch net.</p><pre class="language-python"><code class="language-python">niter <span class="token operator">=</span> <span class="token number">200</span>  <span class="token comment" spellcheck="true"># number of iterations to train</span>
+</code></pre><p>Let’s create and run solvers to train nets for the style recognition task. We’ll create two solvers – one (<code>style_solver</code>) will have its train net initialized to the ImageNet-pretrained weights (this is done by the call to the <code>copy_from</code> method), and the other (<code>scratch_style_solver</code>) will start from a <em>randomly</em> initialized net.</p><p>During training, we should see that the ImageNet pretrained net is learning faster and attaining better accuracies than the scratch net.</p><pre class=" language-python"><code class="language-python">niter <span class="token operator">=</span> <span class="token number">200</span>  <span class="token comment" spellcheck="true"># number of iterations to train</span>
 
 <span class="token comment" spellcheck="true"># Reset style_solver as before.</span>
 style_solver_filename <span class="token operator">=</span> solver<span class="token punctuation">(</span>style_net<span class="token punctuation">(</span>train<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
@@ -355,28 +779,28 @@ style_weights<span class="token punctuation">,</span> scratch_style_weights <spa
 10)  pretrained: loss=0.737, acc=76%; scratch: loss=1.613, acc=18%
 11)  pretrained: loss=0.836, acc=70%; scratch: loss=1.614, acc=16%
 Done.
-</code></pre><p>Let’s look at the training loss and accuracy produced by the two training procedures. Notice how quickly the ImageNet pretrained model’s loss value (blue) drops, and that the randomly initialized model’s loss value (green) barely (if at all) improves from training only the classifier layer.</p><pre class="language-python"><code class="language-python">plot<span class="token punctuation">(</span>np<span class="token punctuation">.</span>vstack<span class="token punctuation">(</span><span class="token punctuation">[</span>train_loss<span class="token punctuation">,</span> scratch_train_loss<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span>T<span class="token punctuation">)</span>
+</code></pre><p>Let’s look at the training loss and accuracy produced by the two training procedures. Notice how quickly the ImageNet pretrained model’s loss value (blue) drops, and that the randomly initialized model’s loss value (green) barely (if at all) improves from training only the classifier layer.</p><pre class=" language-python"><code class="language-python">plot<span class="token punctuation">(</span>np<span class="token punctuation">.</span>vstack<span class="token punctuation">(</span><span class="token punctuation">[</span>train_loss<span class="token punctuation">,</span> scratch_train_loss<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span>T<span class="token punctuation">)</span>
 xlabel<span class="token punctuation">(</span><span class="token string">'Iteration #'</span><span class="token punctuation">)</span>
 ylabel<span class="token punctuation">(</span><span class="token string">'Loss'</span><span class="token punctuation">)</span>
 </code></pre><pre><code>&lt;matplotlib.text.Text at 0x7f75d49e1090&gt;
-</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808102005756-1000541529.png" alt="png"></p><pre class="language-python"><code class="language-python">plot<span class="token punctuation">(</span>np<span class="token punctuation">.</span>vstack<span class="token punctuation">(</span><span class="token punctuation">[</span>train_acc<span class="token punctuation">,</span> scratch_train_acc<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span>T<span class="token punctuation">)</span>
+</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808102005756-1000541529.png" alt="png"></p><pre class=" language-python"><code class="language-python">plot<span class="token punctuation">(</span>np<span class="token punctuation">.</span>vstack<span class="token punctuation">(</span><span class="token punctuation">[</span>train_acc<span class="token punctuation">,</span> scratch_train_acc<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span>T<span class="token punctuation">)</span>
 xlabel<span class="token punctuation">(</span><span class="token string">'Iteration #'</span><span class="token punctuation">)</span>
 ylabel<span class="token punctuation">(</span><span class="token string">'Accuracy'</span><span class="token punctuation">)</span>
 </code></pre><pre><code>&lt;matplotlib.text.Text at 0x7f75d49e1a90&gt;
-</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808102008709-1558718778.png" alt="png"></p><p>Let’s take a look at the testing accuracy after running 200 iterations of training. Note that we’re classifying among 5 classes, giving chance accuracy of 20%. We expect both results to be better than chance accuracy (20%), and we further expect the result from training using the ImageNet pretraining initialization to be much better than the one from training from scratch. Let’s see.</p><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">eval_style_net</span><span class="token punctuation">(</span>weights<span class="token punctuation">,</span> test_iters<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808102008709-1558718778.png" alt="png"></p><p>Let’s take a look at the testing accuracy after running 200 iterations of training. Note that we’re classifying among 5 classes, giving chance accuracy of 20%. We expect both results to be better than chance accuracy (20%), and we further expect the result from training using the ImageNet pretraining initialization to be much better than the one from training from scratch. Let’s see.</p><pre class=" language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">eval_style_net</span><span class="token punctuation">(</span>weights<span class="token punctuation">,</span> test_iters<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     test_net <span class="token operator">=</span> caffe<span class="token punctuation">.</span>Net<span class="token punctuation">(</span>style_net<span class="token punctuation">(</span>train<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span><span class="token punctuation">,</span> weights<span class="token punctuation">,</span> caffe<span class="token punctuation">.</span>TEST<span class="token punctuation">)</span>
     accuracy <span class="token operator">=</span> <span class="token number">0</span>
     <span class="token keyword">for</span> it <span class="token keyword">in</span> xrange<span class="token punctuation">(</span>test_iters<span class="token punctuation">)</span><span class="token punctuation">:</span>
         accuracy <span class="token operator">+=</span> test_net<span class="token punctuation">.</span>forward<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token string">'acc'</span><span class="token punctuation">]</span>
     accuracy <span class="token operator">/=</span> test_iters
     <span class="token keyword">return</span> test_net<span class="token punctuation">,</span> accuracy
-</code></pre><pre class="language-python"><code class="language-python">test_net<span class="token punctuation">,</span> accuracy <span class="token operator">=</span> eval_style_net<span class="token punctuation">(</span>style_weights<span class="token punctuation">)</span>
+</code></pre><pre class=" language-python"><code class="language-python">test_net<span class="token punctuation">,</span> accuracy <span class="token operator">=</span> eval_style_net<span class="token punctuation">(</span>style_weights<span class="token punctuation">)</span>
 <span class="token keyword">print</span> <span class="token string">'Accuracy, trained from ImageNet initialization: %3.1f%%'</span> <span class="token operator">%</span> <span class="token punctuation">(</span><span class="token number">100</span><span class="token operator">*</span>accuracy<span class="token punctuation">,</span> <span class="token punctuation">)</span>
 scratch_test_net<span class="token punctuation">,</span> scratch_accuracy <span class="token operator">=</span> eval_style_net<span class="token punctuation">(</span>scratch_style_weights<span class="token punctuation">)</span>
 <span class="token keyword">print</span> <span class="token string">'Accuracy, trained from   random initialization: %3.1f%%'</span> <span class="token operator">%</span> <span class="token punctuation">(</span><span class="token number">100</span><span class="token operator">*</span>scratch_accuracy<span class="token punctuation">,</span> <span class="token punctuation">)</span>
 </code></pre><pre><code>Accuracy, trained from ImageNet initialization: 50.0%
 Accuracy, trained from   random initialization: 23.6%
-</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h3 id="End-to-end-finetuning-for-style"><a href="#End-to-end-finetuning-for-style" class="headerlink" title="End-to-end finetuning for style"></a>End-to-end finetuning for style</h3><p>Finally, we’ll train both nets again, starting from the weights we just learned. The only difference this time is that we’ll be learning the weights “end-to-end” by turning on learning in <em>all</em> layers of the network, starting from the RGB <code>conv1</code> filters directly applied to the input image. We pass the argument <code>learn_all=True</code> to the <code>style_net</code> function defined earlier in this notebook, which tells the function to apply a positive (non-zero) <code>lr_mult</code> value for all parameters. Under the default, <code>learn_all=False</code>, all parameters in the pretrained layers (<code>conv1</code> through <code>fc7</code>) are frozen (<code>lr_mult = 0</code>), and we learn only the classifier layer <code>fc8_flickr</code>.</p><p>Note that both networks start at roughly the accuracy achieved at the end of the previous training session, and improve significantly with end-to-end training. To be more scientific, we’d also want to follow the same additional training procedure <em>without</em> the end-to-end training, to ensure that our results aren’t better simply because we trained for twice as long. Feel free to try this yourself!</p><pre class="language-python"><code class="language-python">end_to_end_net <span class="token operator">=</span> style_net<span class="token punctuation">(</span>train<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> learn_all<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+</code></pre><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7925631830"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><h3 id="End-to-end-finetuning-for-style"><a href="#End-to-end-finetuning-for-style" class="headerlink" title="End-to-end finetuning for style"></a>End-to-end finetuning for style</h3><p>Finally, we’ll train both nets again, starting from the weights we just learned. The only difference this time is that we’ll be learning the weights “end-to-end” by turning on learning in <em>all</em> layers of the network, starting from the RGB <code>conv1</code> filters directly applied to the input image. We pass the argument <code>learn_all=True</code> to the <code>style_net</code> function defined earlier in this notebook, which tells the function to apply a positive (non-zero) <code>lr_mult</code> value for all parameters. Under the default, <code>learn_all=False</code>, all parameters in the pretrained layers (<code>conv1</code> through <code>fc7</code>) are frozen (<code>lr_mult = 0</code>), and we learn only the classifier layer <code>fc8_flickr</code>.</p><p>Note that both networks start at roughly the accuracy achieved at the end of the previous training session, and improve significantly with end-to-end training. To be more scientific, we’d also want to follow the same additional training procedure <em>without</em> the end-to-end training, to ensure that our results aren’t better simply because we trained for twice as long. Feel free to try this yourself!</p><pre class=" language-python"><code class="language-python">end_to_end_net <span class="token operator">=</span> style_net<span class="token punctuation">(</span>train<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> learn_all<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
 
 <span class="token comment" spellcheck="true"># Set base_lr to 1e-3, the same as last time when learning only the classifier.</span>
 <span class="token comment" spellcheck="true"># You may want to play around with different values of this or other</span>
@@ -428,13 +852,13 @@ scratch_style_weights_ft <span class="token operator">=</span> finetuned_weights
 10)  pretrained, end-to-end: loss=0.360, acc=88%; scratch, end-to-end: loss=1.429, acc=44%
 11)  pretrained, end-to-end: loss=0.458, acc=78%; scratch, end-to-end: loss=1.370, acc=44%
 Done.
-</code></pre><p>Let’s now test the end-to-end finetuned models. Since all layers have been optimized for the style recognition task at hand, we expect both nets to get better results than the ones above, which were achieved by nets with only their classifier layers trained for the style task (on top of either ImageNet pretrained or randomly initialized weights).</p><pre class="language-python"><code class="language-python">test_net<span class="token punctuation">,</span> accuracy <span class="token operator">=</span> eval_style_net<span class="token punctuation">(</span>style_weights_ft<span class="token punctuation">)</span>
+</code></pre><p>Let’s now test the end-to-end finetuned models. Since all layers have been optimized for the style recognition task at hand, we expect both nets to get better results than the ones above, which were achieved by nets with only their classifier layers trained for the style task (on top of either ImageNet pretrained or randomly initialized weights).</p><pre class=" language-python"><code class="language-python">test_net<span class="token punctuation">,</span> accuracy <span class="token operator">=</span> eval_style_net<span class="token punctuation">(</span>style_weights_ft<span class="token punctuation">)</span>
 <span class="token keyword">print</span> <span class="token string">'Accuracy, finetuned from ImageNet initialization: %3.1f%%'</span> <span class="token operator">%</span> <span class="token punctuation">(</span><span class="token number">100</span><span class="token operator">*</span>accuracy<span class="token punctuation">,</span> <span class="token punctuation">)</span>
 scratch_test_net<span class="token punctuation">,</span> scratch_accuracy <span class="token operator">=</span> eval_style_net<span class="token punctuation">(</span>scratch_style_weights_ft<span class="token punctuation">)</span>
 <span class="token keyword">print</span> <span class="token string">'Accuracy, finetuned from   random initialization: %3.1f%%'</span> <span class="token operator">%</span> <span class="token punctuation">(</span><span class="token number">100</span><span class="token operator">*</span>scratch_accuracy<span class="token punctuation">,</span> <span class="token punctuation">)</span>
 </code></pre><pre><code>Accuracy, finetuned from ImageNet initialization: 53.6%
 Accuracy, finetuned from   random initialization: 39.2%
-</code></pre><p>We’ll first look back at the image we started with and check our end-to-end trained model’s predictions.</p><pre class="language-python"><code class="language-python">plt<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span>deprocess_net_image<span class="token punctuation">(</span>image<span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre><p>We’ll first look back at the image we started with and check our end-to-end trained model’s predictions.</p><pre class=" language-python"><code class="language-python">plt<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span>deprocess_net_image<span class="token punctuation">(</span>image<span class="token punctuation">)</span><span class="token punctuation">)</span>
 disp_style_preds<span class="token punctuation">(</span>test_net<span class="token punctuation">,</span> image<span class="token punctuation">)</span>
 </code></pre><pre><code>top 5 predicted style labels =
     (1) 55.67% Melancholy
@@ -442,40 +866,414 @@ disp_style_preds<span class="token punctuation">(</span>test_net<span class="tok
     (3) 16.46% Pastel
     (4)  0.63% Detailed
     (5)  0.03% Noir
-</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808102011453-804222341.png" alt="png"></p><p>Whew, that looks a lot better than before! But note that this image was from the training set, so the net got to see its label at training time.</p><p>Finally, we’ll pick an image from the test set (an image the model hasn’t seen) and look at our end-to-end finetuned style model’s predictions for it.</p><pre class="language-python"><code class="language-python">batch_index <span class="token operator">=</span> <span class="token number">1</span>
+</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808102011453-804222341.png" alt="png"></p><p>Whew, that looks a lot better than before! But note that this image was from the training set, so the net got to see its label at training time.</p><p>Finally, we’ll pick an image from the test set (an image the model hasn’t seen) and look at our end-to-end finetuned style model’s predictions for it.</p><pre class=" language-python"><code class="language-python">batch_index <span class="token operator">=</span> <span class="token number">1</span>
 image <span class="token operator">=</span> test_net<span class="token punctuation">.</span>blobs<span class="token punctuation">[</span><span class="token string">'data'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>data<span class="token punctuation">[</span>batch_index<span class="token punctuation">]</span>
 plt<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span>deprocess_net_image<span class="token punctuation">(</span>image<span class="token punctuation">)</span><span class="token punctuation">)</span>
 <span class="token keyword">print</span> <span class="token string">'actual label ='</span><span class="token punctuation">,</span> style_labels<span class="token punctuation">[</span>int<span class="token punctuation">(</span>test_net<span class="token punctuation">.</span>blobs<span class="token punctuation">[</span><span class="token string">'label'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>data<span class="token punctuation">[</span>batch_index<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
 </code></pre><pre><code>actual label = Pastel
-</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808102014230-1327642113.png" alt="png"></p><pre class="language-python"><code class="language-python">disp_style_preds<span class="token punctuation">(</span>test_net<span class="token punctuation">,</span> image<span class="token punctuation">)</span>
+</code></pre><p><img src="https://kezunlin.me/images/posts/635233-20180808102014230-1327642113.png" alt="png"></p><pre class=" language-python"><code class="language-python">disp_style_preds<span class="token punctuation">(</span>test_net<span class="token punctuation">,</span> image<span class="token punctuation">)</span>
 </code></pre><pre><code>top 5 predicted style labels =
     (1) 99.76% Pastel
     (2)  0.13% HDR
     (3)  0.11% Detailed
     (4)  0.00% Melancholy
     (5)  0.00% Noir
-</code></pre><p>We can also look at the predictions of the network trained from scratch. We see that in this case, the scratch network also predicts the correct label for the image (<em>Pastel</em>), but is much less confident in its prediction than the pretrained net.</p><pre class="language-python"><code class="language-python">disp_style_preds<span class="token punctuation">(</span>scratch_test_net<span class="token punctuation">,</span> image<span class="token punctuation">)</span>
+</code></pre><p>We can also look at the predictions of the network trained from scratch. We see that in this case, the scratch network also predicts the correct label for the image (<em>Pastel</em>), but is much less confident in its prediction than the pretrained net.</p><pre class=" language-python"><code class="language-python">disp_style_preds<span class="token punctuation">(</span>scratch_test_net<span class="token punctuation">,</span> image<span class="token punctuation">)</span>
 </code></pre><pre><code>top 5 predicted style labels =
     (1) 49.81% Pastel
     (2) 19.76% Detailed
     (3) 17.06% Melancholy
     (4) 11.66% HDR
     (5)  1.72% Noir
-</code></pre><p>Of course, we can again look at the ImageNet model’s predictions for the above image:</p><pre class="language-python"><code class="language-python">disp_imagenet_preds<span class="token punctuation">(</span>imagenet_net<span class="token punctuation">,</span> image<span class="token punctuation">)</span>
+</code></pre><p>Of course, we can again look at the ImageNet model’s predictions for the above image:</p><pre class=" language-python"><code class="language-python">disp_imagenet_preds<span class="token punctuation">(</span>imagenet_net<span class="token punctuation">,</span> image<span class="token punctuation">)</span>
 </code></pre><pre><code>top 5 predicted ImageNet labels =
     (1) 34.90% n07579787 plate
     (2) 21.63% n04263257 soup bowl
     (3) 17.75% n07875152 potpie
     (4)  5.72% n07711569 mashed potato
     (5)  5.27% n07584110 consomme
-</code></pre><p>So we did finetuning and it is awesome. Let’s take a look at what kind of results we are able to get with a longer, more complete run of the style recognition dataset. Note: the below URL might be occasionally down because it is run on a research machine.</p><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul><li><a href="http://demo.vislab.berkeleyvision.org/" rel="noopener external nofollow noreferrer" target="_blank">demo</a></li><li><a href="https://github.com/BVLC/caffe" rel="noopener external nofollow noreferrer" target="_blank">caffe git</a></li></ul><h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul><li>20180808: created.</li></ul></div><hr><div class="reprint" id="reprint-statement"><div class="reprint__author"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-user">Author: </i></span><span class="reprint-info"><a href="https://kezunlin.me" rel="external nofollow noreferrer">kezunlin</a></span></div><div class="reprint__type"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-link">Link: </i></span><span class="reprint-info"><a href="https://kezunlin.me/post/3ae35270/">https://kezunlin.me/post/3ae35270/</a></span></div><div class="reprint__notice"><span class="reprint-meta" style="font-weight:700"><i class="fas fa-copyright">Reprint policy: </i></span><span class="reprint-info">All articles in this blog are used except for special statements <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a> reprint polocy. If reproduced, please indicate source <a href="https://kezunlin.me" target="_blank">kezunlin</a> !</span></div></div><script async defer>document.addEventListener("copy", function (e) {
+</code></pre><p>So we did finetuning and it is awesome. Let’s take a look at what kind of results we are able to get with a longer, more complete run of the style recognition dataset. Note: the below URL might be occasionally down because it is run on a research machine.</p><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul><li><a href="http://demo.vislab.berkeleyvision.org/" rel="noopener external nofollow noreferrer" target="_blank">demo</a></li><li><a href="https://github.com/BVLC/caffe" rel="noopener external nofollow noreferrer" target="_blank">caffe git</a></li></ul><h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul><li>20180808: created.</li></ul><!-- rebuild by neat -->
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        Author:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://kezunlin.me" rel="external nofollow noreferrer">kezunlin</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        Link:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://kezunlin.me/post/3ae35270/">https://kezunlin.me/post/3ae35270/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        Reprint policy:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    All articles in this blog are used except for special statements
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    reprint polocy. If reproduced, please indicate source
+                    <a href="https://kezunlin.me" target="_blank">kezunlin</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
         let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
         M.toast({html: toastHTML})
       });
 
       function navToReprintStatement() {
         $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
-      }</script><div class="tag_share" style="display:block"><div class="post-meta__tag-list" style="display:inline-block"><div class="article-tag"><a href="/tags/caffe/"><span class="chip bg-color">caffe</span> </a><a href="/tags/fine-tuning/"><span class="chip bg-color">fine-tuning</span> </a><a href="/tags/style-recognition/"><span class="chip bg-color">style recognition</span></a></div></div></div><style>#reward{margin:40px 0;text-align:center}#reward .reward-link{font-size:1.88rem}#reward .btn-floating:hover{box-shadow:0 6px 12px rgba(0,0,0,.2),0 5px 15px rgba(0,0,0,.2)}#rewardModal{width:320px;height:350px}#rewardModal .reward-title{margin:15px auto;padding-bottom:5px}#rewardModal .modal-content{padding:10px}#rewardModal .close{position:absolute;right:15px;top:15px;color:rgba(0,0,0,.5);font-size:1.3rem;line-height:20px;cursor:pointer}#rewardModal .close:hover{color:#ef5350;transform:scale(1.3);-moz-transform:scale(1.3);-webkit-transform:scale(1.3);-o-transform:scale(1.3)}#rewardModal .reward-tabs{margin:0 auto;width:210px}.reward-tabs .tabs{height:38px;margin:10px auto;padding-left:0}.reward-content ul{padding-left:0!important}.reward-tabs .tabs .tab{height:38px;line-height:38px}.reward-tabs .tab a{color:#fff;background-color:#ccc}.reward-tabs .tab a:hover{background-color:#ccc;color:#fff}.reward-tabs .wechat-tab .active{color:#fff!important;background-color:#22AB38!important}.reward-tabs .alipay-tab .active{color:#fff!important;background-color:#019FE8!important}.reward-tabs .reward-img{width:210px;height:210px}</style><div id="reward"><a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a><div id="rewardModal" class="modal"><div class="modal-content"><a class="close modal-close"><i class="fas fa-times"></i></a><h4 class="reward-title">你的赏识是我前进的动力</h4><div class="reward-content"><div class="reward-tabs"><ul class="tabs row"><li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li><li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li></ul><div id="alipay"><img src="/medias/reward/alipay.jpeg" class="reward-img" alt="支付宝打赏二维码"></div><div id="wechat"><img src="/medias/reward/wechat.jpeg" class="reward-img" alt="微信打赏二维码"></div></div></div></div></div></div><script>$(function(){$(".tabs").tabs()})</script><link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css"><div id="article-share"><div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div><script src="/libs/share/js/social-share.min.js"></script></div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-format="autorelaxed" data-ad-client="ca-pub-5653382914441020" data-ad-slot="2904827724"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div></div><article id="prenext-posts" class="prev-next articles"><div class="row article-row"><div class="article col s12 m6" data-aos="fade-up"><div class="article-badge left-badge text-color"><i class="fas fa-chevron-left"></i>&nbsp;Previous</div><div class="card"><a href="/post/9f5552a3/"><div class="card-image"><img src="/medias/featureimages/22.jpg" class="responsive-img" alt="learning lenet with caffe and python"> <span class="card-title">learning lenet with caffe and python</span></div></a><div class="card-content article-content"><div class="summary block-with-text">learning lenet with caffe and python</div><div class="publish-info"><span class="publish-date"><i class="far fa-clock fa-fw icon-date"></i>2018-08-08 </span><span class="publish-author"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/deep-learning/" class="post-category">deep learning</a></span></div></div><div class="card-action article-tags"><a href="/tags/caffe/"><span class="chip bg-color">caffe</span> </a><a href="/tags/LeNet/"><span class="chip bg-color">LeNet</span></a></div></div></div><div class="article col s12 m6" data-aos="fade-up"><div class="article-badge right-badge text-color">Next&nbsp;<i class="fas fa-chevron-right"></i></div><div class="card"><a href="/post/9ab374d4/"><div class="card-image"><img src="/medias/featureimages/10.jpg" class="responsive-img" alt="Net Surgery with Caffe and Python"> <span class="card-title">Net Surgery with Caffe and Python</span></div></a><div class="card-content article-content"><div class="summary block-with-text">Net Surgery with Caffe and Python</div><div class="publish-info"><span class="publish-date"><i class="far fa-clock fa-fw icon-date"></i>2018-08-16 </span><span class="publish-author"><i class="fas fa-bookmark fa-fw icon-category"></i> <a href="/categories/deep-learning/" class="post-category">deep learning</a></span></div></div><div class="card-action article-tags"><a href="/tags/caffe/"><span class="chip bg-color">caffe</span></a></div></div></div></div></article><link rel="stylesheet" href="/libs/gitalk/gitalk.css"><link rel="stylesheet" href="/css/my-gitalk.css"><div class="card gitalk-card" data-aos="fade-up"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7570408610" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><div class="comment_headling" style="font-size:20px;font-weight:700;position:relative;left:20px;top:15px;padding-bottom:5px"><i class="fas fa-comments fa-fw" aria-hidden="true"></i> <span>评论</span></div><div id="gitalk-container" class="card-content"></div></div><script src="/libs/gitalk/gitalk.min.js"></script><script>let gitalk = new Gitalk({
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/caffe/">
+                                    <span class="chip bg-color">caffe</span>
+                                </a>
+                            
+                                <a href="/tags/fine-tuning/">
+                                    <span class="chip bg-color">fine-tuning</span>
+                                </a>
+                            
+                                <a href="/tags/style-recognition/">
+                                    <span class="chip bg-color">style recognition</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpeg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.jpeg" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <!-- hack -->
+            
+                <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+            
+
+            <!-- hack -->
+            <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-format="autorelaxed"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="2904827724"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+        </div>
+    </div>
+
+    <!-- hack -->
+    
+
+<!-- hack  replace prev-next -->
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+            <div class="card">
+                <a href="/post/9f5552a3/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="learning lenet with caffe and python">
+                        
+                        <span class="card-title">learning lenet with caffe and python</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            learning lenet with caffe and python
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2018-08-08
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/deep-learning/" class="post-category">
+                                    deep learning
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/caffe/">
+                        <span class="chip bg-color">caffe</span>
+                    </a>
+                    
+                    <a href="/tags/LeNet/">
+                        <span class="chip bg-color">LeNet</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/post/9ab374d4/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="Net Surgery with Caffe and Python">
+                        
+                        <span class="card-title">Net Surgery with Caffe and Python</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            Net Surgery with Caffe and Python
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2018-08-16
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/deep-learning/" class="post-category">
+                                    deep learning
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/caffe/">
+                        <span class="chip bg-color">caffe</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <!-- hack -->
+    <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <!-- kzl display ad -->
+     <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="7570408610"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+
+
+
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
         clientID: '4d1e3d463455e6bc7eba',
         clientSecret: '4af023d85b66c4161a83b3f9297036e84c9ba57f',
         repo: 'gitalk',
@@ -485,12 +1283,75 @@ plt<span class="token punctuation">.</span>imshow<span class="token punctuation"
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
-    gitalk.render('gitalk-container');</script></div></div><div id="toc-aside" class="col l3 hide-on-med-and-down"><div class="toc-widget"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5653382914441020" data-ad-slot="7570408610" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script><div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div><div id="toc-content"></div></div></div></div><div id="floating-toc-btn" class="hide-on-med-and-down"><a class="btn-floating btn-large bg-color"><i class="fas fa-list-ul"></i></a></div><script src="/libs/tocbot/tocbot.min.js"></script><script>$(function () {
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+</div>
+
+
+
+
+<!-- 
+
+    
+
+
+
+
+
+-->
+    </div>
+    <div id="toc-aside" class="col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <!-- hack -->
+            <!-- Google AdSense -->
+
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     <!-- kzl display ad -->
+     <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-5653382914441020"
+          data-ad-slot="7570408610"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+     <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+     </script>
+
+
+
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
         tocbot.init({
             tocSelector: '#toc-content',
             contentSelector: '#articleContent',
             headingsOffset: -($(window).height() * 0.4 - 45),
             // headingsOffset: -205,
+            collapseDepth: Number('0'),
             headingSelector: 'h2, h3, h4'
         });
 
@@ -556,11 +1417,204 @@ plt<span class="token punctuation">.</span>imshow<span class="token punctuation"
             fixPostCardWidth('artDetail', 'prenext-posts');
         });
         
-    });</script></main><footer class="page-footer bg-color"><div class="container row center-align"><div class="col s12 m8 l8 copy-right">Copyright&nbsp;&copy; <span id="year">年份</span> <a href="https://kezunlin.me" target="_blank">kezunlin</a><br><span id="busuanzi_container_site_pv">|&nbsp;<i class="far fa-eye"></i>&nbsp;Total Page View:&nbsp;<span id="busuanzi_value_site_pv" class="white-color"></span>&nbsp; </span><span id="busuanzi_container_site_uv">|&nbsp;<i class="fas fa-users"></i>&nbsp;Total Visitors:&nbsp;<span id="busuanzi_value_site_uv" class="white-color"></span>&nbsp;</span><br><span id="sitetime">载入运行时间...</span><script>function siteTime(){window.setTimeout("siteTime()",1e3);var e=1e3,t=60*e,n=60*t,o=24*n,a=365*o,r=new Date,i="2017",l="11",s="11",m="0",d="0",g="0",M=r.getFullYear(),u=r.getMonth()+1,T=r.getDate(),y=r.getHours(),f=r.getMinutes(),h=r.getSeconds(),c=Date.UTC(i,l,s,m,d,g),D=Date.UTC(M,u,T,y,f,h),H=D-c,I=Math.floor(H/a),w=Math.floor(H/o-365*I),B=Math.floor((H-(365*I+w)*o)/n),E=Math.floor((H-(365*I+w)*o-B*n)/t);Math.floor((H-(365*I+w)*o-B*n-E*t)/e),i==M?document.getElementById("year").innerHTML=M:document.getElementById("year").innerHTML=i+" - "+M,document.getElementById("sitetime").innerHTML="Site has already been running for "+I+" years "+w+" days "}setInterval(siteTime,1e3)</script><br></div><div class="col s12 m4 l4 social-link social-statis"></div></div></footer><div class="progress-bar"></div><div id="searchModal" class="modal"><div class="modal-content"><div class="search-header"><span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span> <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword" class="search-input"></div><div id="searchResult"></div></div></div><script src="/js/search.js"></script><script type="text/javascript">$(function(){searchFunc("/search.xml","searchInput","searchResult")})</script><div id="backTop" class="top-scroll"><a class="btn-floating btn-large waves-effect waves-light" href="#!"><i class="fas fa-arrow-up"></i></a></div><script src="/libs/materialize/materialize.min.js"></script><script src="/libs/masonry/masonry.pkgd.min.js"></script><script src="/libs/aos/aos.js"></script><script src="/libs/scrollprogress/scrollProgress.min.js"></script><script src="/libs/lightGallery/js/lightgallery-all.min.js"></script><script src="/js/matery.js"></script><script><meta name="yandex-verification" content="{{ theme.yandex_site_verification }}" />
+    });
+</script>
 
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2017</span>
+            <a href="https://kezunlin.me" target="_blank">kezunlin</a>
+            <br>
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;Total Page View:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;Total Visitors:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;
+            </span>
+            
+            <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2017";
+                    var startMonth = "11";
+                    var startDate = "11";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    
+                    // hack 
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        //document.getElementById("sitetime").innerHTML = "Site has already been running for " + diffDays + " days " + diffHours +
+                        //    " hours " + diffMinutes + " minutes " + diffSeconds + " seconds";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        //document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                        //    " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                    document.getElementById("sitetime").innerHTML = "Site has already been running for " +
+                         diffYears + " years " + diffDays + " days ";
+                    
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+<!-- 
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-111858944-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-111858944-1');
+</script>
+-->
+<meta name="yandex-verification" content="{{ theme.yandex_site_verification }}">
+<script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
     ga('create', 'UA-111858944-1', 'auto');
-    ga('send', 'pageview');</script><script data-ad-client="ca-pub-5653382914441020" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script async src="/libs/others/busuanzi.pure.mini.js"></script><script src="/libs/instantpage/instantpage.js" type="module"></script></body></html><!-- rebuild by neat -->
+    ga('send', 'pageview');
+</script>
+
+
+    <!-- hack -->
+    <!-- Google AdSense header-->
+
+     <script data-ad-client="ca-pub-5653382914441020" 
+          async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
+     </script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
