@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="GuideintroductionWhere produce-consumer pattern is present it is often the case that one is faster that the other:   a parsing producer reads records faster than a processing consumer;  a disk reading">
+<meta property="og:type" content="article">
+<meta property="og:title" content="concurrent queue or blocking queue implemented in cpp">
+<meta property="og:url" content="https://kezunlin.me/blog/concurrent-queue-or-blocking-queue-implemented-in-cpp/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="GuideintroductionWhere produce-consumer pattern is present it is often the case that one is faster that the other:   a parsing producer reads records faster than a processing consumer;  a disk reading">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-10-12T05:30:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.667Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="queue">
+<meta property="article:tag" content="concurrent queue">
+<meta property="article:tag" content="blocking queue">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/concurrent-queue-or-blocking-queue-implemented-in-cpp/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>concurrent queue or blocking queue implemented in cpp | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/concurrent-queue-or-blocking-queue-implemented-in-cpp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          concurrent queue or blocking queue implemented in cpp
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-10-12 13:30:00" itemprop="dateCreated datePublished" datetime="2019-10-12T13:30:00+08:00">2019-10-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h3><p>Where <code>produce-consumer</code> pattern is present it is often the case that <code>one is faster that the other</code>: </p>
+<ul>
+<li>a parsing producer reads records faster than a processing consumer; </li>
+<li>a disk reading producer is faster than network sending consumer.</li>
+</ul>
+<p>Producer and consumer often communicate by queues: <strong>the producer will put items on a queue while the consumer will pop items off a queue</strong>. What happens when the queue becomes full, or empty? </p>
+<p>One approach of the producer is to try to put an item on a queue and if it’s full yield the thread and repeat. Similarly the consumer can try to pop an item off a queue and if it’s empty, ditto. This approach of try-fail-yield can unnecessarily burn CPU cycles in tight loops that constantly try to put or pop items off a queue.</p>
+<p>Another approach is to temporarily grow the queue, but that doesn’t scale well. When do we stop growing? And once we stop we have to fall back onto the try-fail-yield method.</p>
+<p>What if we could implement a <code>blocking queue</code>: </p>
+<ul>
+<li><strong>a queue who’s put operation blocks when the queue if full, and unblocks only when another thread pops an item off the queue</strong></li>
+<li><strong>Similarly a queue who’s pop operation blocks when the queue is empty, and unblocks only when another thread puts an item on the queue.</strong></li>
+</ul>
+<blockquote>
+<p>Quote from <a target="_blank" rel="noopener" href="https://www.justsoftwaresolutions.co.uk/threading/implementing-a-thread-safe-queue-using-condition-variables.html">here</a></p>
+</blockquote>
+<p>An example of using such a queue would look like this (notice a fast producer and slow consumer in the code below):</p>
+<h3 id="blocking-queue-v1"><a href="#blocking-queue-v1" class="headerlink" title="blocking queue v1"></a>blocking queue v1</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//std</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;queue&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//boost</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;boost/thread.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;boost/bind.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;boost/asio.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> my &#123; </span><br><span class="line"><span class="keyword">namespace</span> algorithm &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Data&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SHARED_EXPORT</span> blocking_queue</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	std::queue&lt;Data&gt; the_queue;</span><br><span class="line">	<span class="keyword">mutable</span> boost::mutex the_mutex;</span><br><span class="line">	boost::condition_variable the_condition_variable;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">push</span><span class="params">(Data <span class="type">const</span>&amp; data)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		boost::<span class="function">mutex::scoped_lock <span class="title">lock</span><span class="params">(the_mutex)</span></span>;</span><br><span class="line">		the_queue.<span class="built_in">push</span>(data);</span><br><span class="line">		lock.<span class="built_in">unlock</span>();</span><br><span class="line">		the_condition_variable.<span class="built_in">notify_one</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">bool</span> <span class="title">empty</span><span class="params">()</span> <span class="type">const</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		boost::<span class="function">mutex::scoped_lock <span class="title">lock</span><span class="params">(the_mutex)</span></span>;</span><br><span class="line">		<span class="keyword">return</span> the_queue.<span class="built_in">empty</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">size_t</span> <span class="title">size</span><span class="params">()</span> <span class="type">const</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		boost::<span class="function">mutex::scoped_lock <span class="title">lock</span><span class="params">(the_mutex)</span></span>;</span><br><span class="line">		<span class="keyword">return</span> the_queue.<span class="built_in">size</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">bool</span> <span class="title">try_pop</span><span class="params">(Data&amp; popped_value)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		boost::<span class="function">mutex::scoped_lock <span class="title">lock</span><span class="params">(the_mutex)</span></span>;</span><br><span class="line">		<span class="keyword">if</span> (the_queue.<span class="built_in">empty</span>())</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		popped_value = the_queue.<span class="built_in">front</span>();</span><br><span class="line">		the_queue.<span class="built_in">pop</span>();</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">wait_and_pop</span><span class="params">(Data&amp; popped_value)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		boost::<span class="function">mutex::scoped_lock <span class="title">lock</span><span class="params">(the_mutex)</span></span>;</span><br><span class="line">		<span class="keyword">while</span> (the_queue.<span class="built_in">empty</span>())</span><br><span class="line">		&#123;</span><br><span class="line">			the_condition_variable.<span class="built_in">wait</span>(lock);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		popped_value = the_queue.<span class="built_in">front</span>();</span><br><span class="line">		the_queue.<span class="built_in">pop</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">signal_exit</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		Data data;</span><br><span class="line">		<span class="built_in">push</span>(data);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&#125;<span class="comment">// end namespace</span></span><br></pre></td></tr></table></figure>
+
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+<h3 id="blocking-queue-v2"><a href="#blocking-queue-v2" class="headerlink" title="blocking queue v2"></a>blocking queue v2</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span>	</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;mutex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;condition_variable&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAX_CAPACITY 20</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> my &#123;</span><br><span class="line"><span class="keyword">namespace</span> algorithm &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SHARED_EXPORT</span> BlockingQueue</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">BlockingQueue</span>() </span><br><span class="line">	:<span class="built_in">mtx</span>(), <span class="built_in">full_</span>(), <span class="built_in">empty_</span>(), <span class="built_in">capacity_</span>(MAX_CAPACITY) &#123; &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">Push</span><span class="params">(<span class="type">const</span> T&amp; data)</span></span>&#123;</span><br><span class="line">		<span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">lock</span><span class="params">(mtx)</span></span>;</span><br><span class="line">		<span class="keyword">while</span>(queue_.<span class="built_in">size</span>() == capacity_)&#123;</span><br><span class="line">			full_.<span class="built_in">wait</span>(lock );</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="built_in">assert</span>(queue_.<span class="built_in">size</span>() &lt; capacity_);</span><br><span class="line">		queue_.<span class="built_in">push</span>(data);</span><br><span class="line">		empty_.<span class="built_in">notify_all</span>(); </span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">T <span class="title">Pop</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">lock</span><span class="params">(mtx)</span></span>;</span><br><span class="line">		<span class="keyword">while</span>(queue_.<span class="built_in">empty</span>())&#123;</span><br><span class="line">			empty_.<span class="built_in">wait</span>(lock );</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="built_in">assert</span>(!queue_.<span class="built_in">empty</span>());</span><br><span class="line">		<span class="function">T <span class="title">front</span><span class="params">(queue_.front())</span></span>;</span><br><span class="line">		queue_.<span class="built_in">pop</span>();</span><br><span class="line">		full_.<span class="built_in">notify_all</span>();</span><br><span class="line">		<span class="keyword">return</span> front;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">T <span class="title">Front</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">lock</span><span class="params">(mtx)</span></span>;</span><br><span class="line">		<span class="keyword">while</span>(queue_.<span class="built_in">empty</span>())&#123;</span><br><span class="line">			empty_.<span class="built_in">wait</span>(lock );</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="built_in">assert</span>(!queue_.<span class="built_in">empty</span>());</span><br><span class="line">		<span class="function">T <span class="title">front</span><span class="params">(queue_.front())</span></span>;</span><br><span class="line">		<span class="keyword">return</span> front;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">T <span class="title">Back</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">lock</span><span class="params">(mtx)</span></span>;</span><br><span class="line">		<span class="keyword">while</span>(queue_.<span class="built_in">empty</span>())&#123;</span><br><span class="line">			empty_.<span class="built_in">wait</span>(lock );</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="built_in">assert</span>(!queue_.<span class="built_in">empty</span>());</span><br><span class="line">		<span class="function">T <span class="title">back</span><span class="params">(queue_.back())</span></span>;</span><br><span class="line">		<span class="keyword">return</span> back;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">size_t</span> <span class="title">Size</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="function">std::lock_guard&lt;std::mutex&gt; <span class="title">lock</span><span class="params">(mtx)</span></span>;</span><br><span class="line">		<span class="keyword">return</span> queue_.<span class="built_in">size</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">bool</span> <span class="title">Empty</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">lock</span><span class="params">(mtx)</span></span>;</span><br><span class="line">		<span class="keyword">return</span> queue_.<span class="built_in">empty</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">SetCapacity</span><span class="params">(<span class="type">const</span> <span class="type">size_t</span> capacity)</span></span>&#123;</span><br><span class="line">		capacity_ = (capacity &gt; <span class="number">0</span> ? capacity : MAX_CAPACITY);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="comment">//DISABLE_COPY_AND_ASSIGN(BlockingQueue);</span></span><br><span class="line">	<span class="built_in">BlockingQueue</span>(<span class="type">const</span> BlockingQueue&amp; rhs);</span><br><span class="line">	BlockingQueue&amp; <span class="keyword">operator</span>= (<span class="type">const</span> BlockingQueue&amp; rhs);</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">mutable</span> std::mutex mtx;</span><br><span class="line">	std::condition_variable full_;</span><br><span class="line">	std::condition_variable empty_;</span><br><span class="line">	std::queue&lt;T&gt; queue_;</span><br><span class="line">	<span class="type">size_t</span> capacity_; </span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&#125;<span class="comment">// end namespace</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.justsoftwaresolutions.co.uk/threading/implementing-a-thread-safe-queue-using-condition-variables.html">implementing-a-thread-safe-queue-using-condition-variables</a></li>
+<li><a target="_blank" rel="noopener" href="https://vorbrodt.blog/2019/02/03/blocking-queue/">blocking-queue</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/renbozqin/blocking_queue">blocking_queue v1</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/marso329/BlockingQueue/blob/master/BlockingQueue.cpp">blocking_queue v1  Simple Blockingqueue I have used in many projects</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20191012: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/queue/" rel="tag"># queue</a>
+              <a href="/tags/concurrent-queue/" rel="tag"># concurrent queue</a>
+              <a href="/tags/blocking-queue/" rel="tag"># blocking queue</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/golang-tutorial/" rel="prev" title="your first golang tutorial">
+      <i class="fa fa-chevron-left"></i> your first golang tutorial
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/nlohmann-json-for-modern-cpp/" rel="next" title="tutorial to use nlohmann json for serializing data with modern cpp">
+      tutorial to use nlohmann json for serializing data with modern cpp <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#introduction"><span class="nav-number">1.1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#blocking-queue-v1"><span class="nav-number">1.2.</span> <span class="nav-text">blocking queue v1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#blocking-queue-v2"><span class="nav-number">1.3.</span> <span class="nav-text">blocking queue v2</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

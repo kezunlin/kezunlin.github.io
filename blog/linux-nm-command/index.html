@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="GuideLinux&#x2F;Unix Address Space   memory area address space segment executable section    Code Text .text   Initialized data Data .data   Zero-Initialized Data .bss   Heap Data Heap   Stack Stack S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux program address space and nm command tutorial">
+<meta property="og:url" content="https://kezunlin.me/blog/linux-nm-command/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="GuideLinux&#x2F;Unix Address Space   memory area address space segment executable section    Code Text .text   Initialized data Data .data   Zero-Initialized Data .bss   Heap Data Heap   Stack Stack S">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-10-31T07:54:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="address space">
+<meta property="article:tag" content="nm">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/linux-nm-command/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>linux program address space and nm command tutorial | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/linux-nm-command/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          linux program address space and nm command tutorial
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-10-31 15:54:00" itemprop="dateCreated datePublished" datetime="2018-10-31T15:54:00+08:00">2018-10-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="Linux-Unix-Address-Space"><a href="#Linux-Unix-Address-Space" class="headerlink" title="Linux&#x2F;Unix Address Space"></a>Linux&#x2F;Unix Address Space</h3><table>
+<thead>
+<tr>
+<th align="center">memory area</th>
+<th align="center">address space segment</th>
+<th align="center">executable section</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Code</td>
+<td align="center">Text</td>
+<td align="center">.text</td>
+</tr>
+<tr>
+<td align="center">Initialized data</td>
+<td align="center">Data</td>
+<td align="center">.data</td>
+</tr>
+<tr>
+<td align="center">Zero-Initialized</td>
+<td align="center">Data</td>
+<td align="center">.bss</td>
+</tr>
+<tr>
+<td align="center">Heap</td>
+<td align="center">Data</td>
+<td align="center">Heap</td>
+</tr>
+<tr>
+<td align="center">Stack</td>
+<td align="center">Stack</td>
+<td align="center">Stack</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>BSS: Block Started by Symbol</p>
+</blockquote>
+<h4 id="program-memory-area"><a href="#program-memory-area" class="headerlink" title="program memory area"></a>program memory area</h4><p>program memory area: </p>
+<ul>
+<li>code: executable instructions （和 const 字符串常量？？？）</li>
+<li>initialized-data:  static&#x2F;global 初始化不为０的</li>
+<li>zero-initialized data(BSS): static&#x2F;global 初始化为０的</li>
+<li>heap： malloc&#x2F;new 动态分配，大小不固定</li>
+<li>stack：　非static的local variable; functin parameter; return value</li>
+</ul>
+<blockquote>
+<p>bss它不占用程序文件的大小，但是占用程序运行时的内存空间。<br>zero-initialized data(BSS)区域的变量不占用exe的磁盘空间，其内容由操作系统初始化（清零），而initialized-data需要占用exe的磁盘空间，其内容由程序初始化<br>同一个program的N个不同process,在内存中共享同一个code&#x2F;text segment，同时都有自己的initialized-data,zero-initialized data(BSS)对应的data　segment<br>字符串常量</p>
+</blockquote>
+<h4 id="address-space-segment"><a href="#address-space-segment" class="headerlink" title="address space segment"></a>address space segment</h4><p>address space segment</p>
+<ul>
+<li>text </li>
+<li>data</li>
+<li>stack</li>
+</ul>
+<blockquote>
+<ol>
+<li>text,data,stack占用３块不同的地址空间。</li>
+<li>initialized-data，zero-initialized data(BSS)，heap占用同一块连续的物理内存空间;</li>
+<li>heap地址空间从小到大增长；stack的地址空间从大往小减小;</li>
+</ol>
+</blockquote>
+<p>Heap，BSS，Data这三个段在物理内存中是连续存放的，可以这么理解：这三个是一体的。Text、Stack是独立存放的</p>
+<h4 id="executable-file-section"><a href="#executable-file-section" class="headerlink" title="executable file section"></a>executable file section</h4><p>executable file section</p>
+<ul>
+<li>.text: 在进程最初被加载到内存中开始，该节的大小就被固定，只读readonly。</li>
+<li>.data: 该节的大小在运行时固定的</li>
+<li>.bss: 该节的大小在运行时固定的</li>
+<li>heap: 从内存的低地址向高地址增长</li>
+<li>stack: 从内存的高地址向低地址增长</li>
+<li>.rodata: readonly data section</li>
+</ul>
+<p>eg</p>
+<pre><code>size a.out 
+   text	   data	    bss	    dec	    hex	filename
+   1551	    600	     40	   2191	    88f	a.out
+</code></pre>
+<p>a.out加载到内存中的大小为2191 bytes.</p>
+<h4 id="rodata"><a href="#rodata" class="headerlink" title="rodata"></a>rodata</h4><p>(1) const修饰的global放在.rodata, const修饰的local例外，没有放入常量区。<br>(３)对于global&#x2F;local字符串常量，编译器会去掉重复的常量，让程序的每个字符串常量只有一份，放在.rodata。（数组内容为字符串的除外）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> num = <span class="number">100</span>; <span class="comment">// .rodata </span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> *str = <span class="string">&quot;123456789&quot;</span>; <span class="comment">// 123456789 ===&gt;.rodata LC0</span></span><br><span class="line"><span class="type">char</span> *str1 = <span class="string">&quot;helloworld&quot;</span>; <span class="comment">// helloworld===&gt;.rodata LC1</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">　 <span class="type">const</span> <span class="type">int</span> local_num = <span class="number">99</span>; <span class="comment">// 没有放入.rodata</span></span><br><span class="line">  <span class="type">char</span>* a = <span class="string">&quot;helloworld&quot;</span>;  <span class="comment">// helloworld===&gt;.rodata LC1</span></span><br><span class="line">  <span class="type">char</span> b[<span class="number">10</span>] = <span class="string">&quot;helloworld&quot;</span>;<span class="comment">// helloworld　没有放入.rodata</span></span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+<h3 id="Example-code"><a href="#Example-code" class="headerlink" title="Example code"></a>Example code</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span>  </span></span><br><span class="line">  </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span>  </span></span><br><span class="line"><span class="function"></span>&#123;  </span><br><span class="line">    <span class="keyword">return</span> x + y;  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line"><span class="type">int</span> aaa,bbb;  <span class="comment">// auto zero-intialized(.bss)</span></span><br><span class="line"><span class="type">int</span> ccc000 = <span class="number">0</span>; <span class="comment">// auto zero-initialized(.bss)</span></span><br><span class="line"><span class="type">int</span> ccc111 = <span class="number">1</span>;  <span class="comment">// initialized(.data)</span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> *str1 = <span class="string">&quot;123&quot;</span>; <span class="comment">// str1---&gt;.data   123---&gt;.rodata A</span></span><br><span class="line"><span class="type">char</span> *str2 = <span class="string">&quot;xyz&quot;</span>; <span class="comment">//  str2---&gt;.data   xyz---&gt;.rodata B</span></span><br><span class="line"><span class="type">char</span> str3[] = <span class="string">&quot;abc&quot;</span>; <span class="comment">// str3---&gt;.data  </span></span><br><span class="line"><span class="type">char</span> *str4; <span class="comment">// .bss</span></span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> hhh; <span class="comment">// .bss</span></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> iii00 = <span class="number">0</span>; <span class="comment">// .bss</span></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> iii99 = <span class="number">99</span>; <span class="comment">// .data</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> NUM99 = <span class="number">99</span>; <span class="comment">// .rodata</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> NUM00 = <span class="number">0</span>; <span class="comment">// .rodata</span></span><br><span class="line">  </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span>  </span></span><br><span class="line"><span class="function"></span>&#123;  </span><br><span class="line">    <span class="type">static</span> <span class="type">int</span> jjj; <span class="comment">// .bss</span></span><br><span class="line">    <span class="type">static</span> <span class="type">int</span> kkk=<span class="number">1</span>; <span class="comment">// .data</span></span><br><span class="line"></span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> local_const00 = <span class="number">0</span>; <span class="comment">// </span></span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> local_const99 = <span class="number">99</span>; <span class="comment">// </span></span><br><span class="line"></span><br><span class="line">    <span class="type">char</span> *str5 = <span class="string">&quot;xyz&quot;</span>; <span class="comment">// str5===&gt; stack,  xyz===&gt; .rodata B</span></span><br><span class="line">    <span class="type">char</span> str6[] = <span class="string">&quot;abc&quot;</span>; <span class="comment">// str6---&gt;stack,  abc ===&gt; stack</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> local = <span class="number">2</span>;  <span class="comment">// stack</span></span><br><span class="line">    <span class="type">int</span> *local_new = <span class="keyword">new</span> <span class="built_in">int</span>(<span class="number">5</span>); <span class="comment">// heap</span></span><br><span class="line">    <span class="keyword">delete</span> local_new;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;  </span><br><span class="line">&#125;    </span><br></pre></td></tr></table></figure>
+
+<p>output </p>
+<pre><code>g++ hello.cpp
+nm a.out
+
+0000000000601078 B aaa
+000000000060107c B bbb
+000000000060106c B __bss_start
+0000000000601080 B ccc000
+0000000000601048 D ccc111
+0000000000601070 b completed.7594
+0000000000601038 D __data_start
+0000000000601038 W data_start
+00000000004005e0 t deregister_tm_clones
+0000000000400660 t __do_global_dtors_aux
+0000000000600e08 t __do_global_dtors_aux_fini_array_entry
+0000000000601040 D __dso_handle
+0000000000600e18 d _DYNAMIC
+000000000060106c D _edata
+00000000006010a0 B _end
+00000000004007a4 T _fini
+0000000000400680 t frame_dummy
+0000000000600e00 t __frame_dummy_init_array_entry
+0000000000400910 r __FRAME_END__
+0000000000601000 d _GLOBAL_OFFSET_TABLE_
+                 w __gmon_start__
+00000000004007c4 r __GNU_EH_FRAME_HDR
+0000000000400530 T _init
+0000000000600e08 t __init_array_end
+0000000000600e00 t __init_array_start
+00000000004007b0 R _IO_stdin_used
+                 w _ITM_deregisterTMCloneTable
+                 w _ITM_registerTMCloneTable
+0000000000600e10 d __JCR_END__
+0000000000600e10 d __JCR_LIST__
+                 w _Jv_RegisterClasses
+00000000004007a0 T __libc_csu_fini
+0000000000400730 T __libc_csu_init
+                 U __libc_start_main@@GLIBC_2.2.5
+00000000004006ba T main
+0000000000400620 t register_tm_clones
+                 U __stack_chk_fail@@GLIBC_2.4
+00000000004005b0 T _start
+0000000000601050 D str1
+0000000000601058 D str2
+0000000000601060 D str3
+0000000000601088 B str4
+0000000000601070 D __TMC_END__
+00000000004006a6 T _Z3addii
+                 U _ZdlPv@@GLIBCXX_3.4
+0000000000601090 b _ZL3hhh
+0000000000601094 b _ZL5iii00
+0000000000601064 d _ZL5iii99
+00000000004007c0 r _ZL5NUM00
+00000000004007bc r _ZL5NUM99
+                 U _Znwm@@GLIBCXX_3.4
+0000000000601098 b _ZZ4mainE3jjj
+0000000000601068 d _ZZ4mainE3kkk
+</code></pre>
+<p>other commands</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">strings a.out</span><br><span class="line">readelf -s a.out</span><br></pre></td></tr></table></figure>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://www.voidcn.com/article/p-wyahvgqg-qn.html">Linux段管理，BSS段，data段，.rodata段，text段</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.sanfoundry.com/c-tutorials-different-segments-program-have/">c-tutorials-different-segments-program-have</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.informit.com/articles/article.aspx?p=173438">Linux&#x2F;Unix process address space</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20181031: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/address-space/" rel="tag"># address space</a>
+              <a href="/tags/nm/" rel="tag"># nm</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/compile-darknet-on-ubuntu-16-04/" rel="prev" title="compile darknet on ubuntu 16.04">
+      <i class="fa fa-chevron-left"></i> compile darknet on ubuntu 16.04
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/compile-darknet-on-windows-10/" rel="next" title="compile and install darknet on windows 10">
+      compile and install darknet on windows 10 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux-Unix-Address-Space"><span class="nav-number">1.1.</span> <span class="nav-text">Linux&#x2F;Unix Address Space</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#program-memory-area"><span class="nav-number">1.1.1.</span> <span class="nav-text">program memory area</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#address-space-segment"><span class="nav-number">1.1.2.</span> <span class="nav-text">address space segment</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#executable-file-section"><span class="nav-number">1.1.3.</span> <span class="nav-text">executable file section</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#rodata"><span class="nav-number">1.1.4.</span> <span class="nav-text">rodata</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Example-code"><span class="nav-number">1.2.</span> <span class="nav-text">Example code</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

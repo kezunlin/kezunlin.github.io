@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Series Part 1: compile opencv on ubuntu 16.04 Part 2: compile opencv with CUDA support on windows 10 Part 3: opencv mat for loop Part 4: speed up opencv image processing with openmp  Guideconfig linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="speed up opencv image processing with openmp">
+<meta property="og:url" content="https://kezunlin.me/blog/speed-up-opencv-image-processing-with-openmp/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Series Part 1: compile opencv on ubuntu 16.04 Part 2: compile opencv with CUDA support on windows 10 Part 3: opencv mat for loop Part 4: speed up opencv image processing with openmp  Guideconfig linux">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20181031153435506-1474472980.png">
+<meta property="article:published_time" content="2019-04-03T08:14:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="opencv">
+<meta property="article:tag" content="openmp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kezunlin.me/images/posts/635233-20181031153435506-1474472980.png">
+
+<link rel="canonical" href="https://kezunlin.me/blog/speed-up-opencv-image-processing-with-openmp/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>speed up opencv image processing with openmp | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/speed-up-opencv-image-processing-with-openmp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          speed up opencv image processing with openmp
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-04-03 16:14:00" itemprop="dateCreated datePublished" datetime="2019-04-03T16:14:00+08:00">2019-04-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h2><ul>
+<li><a href="https://kezunlin.me/post/15f5c3e8/">Part 1: compile opencv on ubuntu 16.04</a></li>
+<li><a href="https://kezunlin.me/post/6580691f/">Part 2: compile opencv with CUDA support on windows 10</a></li>
+<li><a href="https://kezunlin.me/post/61d55ab4/">Part 3: opencv mat for loop</a></li>
+<li><strong><a href="https://kezunlin.me/post/7a6ba82e/">Part 4: speed up opencv image processing with openmp</a></strong></li>
+</ul>
+<h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="config"><a href="#config" class="headerlink" title="config"></a>config</h3><ul>
+<li>linux&#x2F;window:  cmake with <code>CXX_FLAGS=-fopenmp</code></li>
+<li>window VS: VS also support openmp, <code>C/C++| Language | /openmp</code></li>
+</ul>
+<h3 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;omp.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel for</span></span><br><span class="line">	<span class="keyword">for</span> loop ...</span><br></pre></td></tr></table></figure>
+
+<h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;omp.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">omp_set_num_threads</span>(<span class="number">4</span>);</span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel for</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;i = %d, I am Thread %d\n&quot;</span>, i, <span class="built_in">omp_get_thread_num</span>());</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);	</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">i = 0, I am Thread 0</span></span><br><span class="line"><span class="comment">i = 1, I am Thread 0</span></span><br><span class="line"><span class="comment">i = 4, I am Thread 2</span></span><br><span class="line"><span class="comment">i = 5, I am Thread 2</span></span><br><span class="line"><span class="comment">i = 6, I am Thread 3</span></span><br><span class="line"><span class="comment">i = 7, I am Thread 3</span></span><br><span class="line"><span class="comment">i = 2, I am Thread 1</span></span><br><span class="line"><span class="comment">i = 3, I am Thread 1</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h3><p>use <code>CXX_FLAGS=-fopenmp</code> in CMakeLists.txt</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.0</span>.<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">project</span>(hello)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(OpenMP REQUIRED)</span><br><span class="line"><span class="keyword">if</span>(OPENMP_FOUND)</span><br><span class="line">    <span class="keyword">message</span>(<span class="string">&quot;OPENMP FOUND&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">message</span>([main] <span class="string">&quot; OpenMP_C_FLAGS=$&#123;OpenMP_C_FLAGS&#125;&quot;</span>) <span class="comment"># -fopenmp</span></span><br><span class="line">    <span class="keyword">message</span>([main] <span class="string">&quot; OpenMP_CXX_FLAGS&#125;=$&#123;OpenMP_CXX_FLAGS&#125;&quot;</span>) <span class="comment"># -fopenmp</span></span><br><span class="line">    <span class="keyword">message</span>([main] <span class="string">&quot; OpenMP_EXE_LINKER_FLAGS=$&#123;OpenMP_EXE_LINKER_FLAGS&#125;&quot;</span>) <span class="comment"># ***</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># no use for xxx_INCLUDE_DIRS and xxx_libraries for OpenMP</span></span><br><span class="line">    <span class="keyword">message</span>([main] <span class="string">&quot; OpenMP_INCLUDE_DIRS=$&#123;OpenMP_INCLUDE_DIRS&#125;&quot;</span>) <span class="comment"># ***</span></span><br><span class="line">    <span class="keyword">message</span>([main] <span class="string">&quot; OpenMP_LIBRARIES=$&#123;OpenMP_LIBRARIES&#125;&quot;</span>) <span class="comment"># ***</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">set</span>(CMAKE_C_FLAGS <span class="string">&quot;$&#123;CMAKE_C_FLAGS&#125; $&#123;OpenMP_C_FLAGS&#125;&quot;</span>)</span><br><span class="line">    <span class="keyword">set</span>(CMAKE_CXX_FLAGS <span class="string">&quot;$&#123;CMAKE_CXX_FLAGS&#125; $&#123;OpenMP_CXX_FLAGS&#125;&quot;</span>)</span><br><span class="line">    <span class="keyword">set</span>(CMAKE_EXE_LINKER_FLAGS <span class="string">&quot;$&#123;CMAKE_EXE_LINKER_FLAGS&#125; $&#123;OpenMP_EXE_LINKER_FLAGS&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">endif</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">add_executable</span>(hello hello.cpp)</span><br><span class="line"><span class="comment">#target_link_libraries(hello xxx)</span></span><br></pre></td></tr></table></figure>
+<p>options<br><img src="https://kezunlin.me/images/posts/635233-20181031153435506-1474472980.png" alt="openmp"></p>
+<p>or use <code>g++ hello.cpp -fopenmp</code> to compile</p>
+<h3 id="view-demo"><a href="#view-demo" class="headerlink" title="view demo"></a>view demo</h3><p>list dynamic dependencies  (ldd)</p>
+<pre><code>ldd hello 
+    linux-vdso.so.1 =&gt;  (0x00007ffd71365000)
+    libstdc++.so.6 =&gt; /usr/lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f8ea7f00000)
+    libgomp.so.1 =&gt; /usr/lib/x86_64-linux-gnu/libgomp.so.1 (0x00007f8ea7cde000)
+    libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007f8ea7914000)
+    libm.so.6 =&gt; /lib/x86_64-linux-gnu/libm.so.6 (0x00007f8ea760b000)
+    /lib64/ld-linux-x86-64.so.2 (0x00007f8ea8282000)
+    libgcc_s.so.1 =&gt; /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f8ea73f5000)
+    libdl.so.2 =&gt; /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f8ea71f1000)
+    libpthread.so.0 =&gt; /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f8ea6fd4000)
+</code></pre>
+<blockquote>
+<p><code>libgomp.so.1 =&gt; /usr/lib/x86_64-linux-gnu/libgomp.so.1</code> </p>
+</blockquote>
+<p>list names (nm) </p>
+<pre><code>nm hello 
+0000000000602080 B __bss_start
+0000000000602190 b completed.7594
+                 U __cxa_atexit@@GLIBC_2.2.5
+0000000000602070 D __data_start
+0000000000602070 W data_start
+0000000000400b00 t deregister_tm_clones
+0000000000400b80 t __do_global_dtors_aux
+0000000000601df8 t __do_global_dtors_aux_fini_array_entry
+0000000000602078 d __dso_handle
+0000000000601e08 d _DYNAMIC
+0000000000602080 D _edata
+0000000000602198 B _end
+0000000000400d44 T _fini
+0000000000400ba0 t frame_dummy
+0000000000601de8 t __frame_dummy_init_array_entry
+0000000000400f18 r __FRAME_END__
+0000000000602000 d _GLOBAL_OFFSET_TABLE_
+0000000000400c28 t _GLOBAL__sub_I_main
+                 w __gmon_start__
+0000000000400d54 r __GNU_EH_FRAME_HDR
+                 U GOMP_parallel@@GOMP_4.0
+                 U __gxx_personality_v0@@CXXABI_1.3
+00000000004009e0 T _init
+0000000000601df8 t __init_array_end
+0000000000601de8 t __init_array_start
+0000000000400d50 R _IO_stdin_used
+                 w _ITM_deregisterTMCloneTable
+                 w _ITM_registerTMCloneTable
+0000000000601e00 d __JCR_END__
+0000000000601e00 d __JCR_LIST__
+                 w _Jv_RegisterClasses
+0000000000400d40 T __libc_csu_fini
+0000000000400cd0 T __libc_csu_init
+                 U __libc_start_main@@GLIBC_2.2.5
+0000000000400bc6 T main
+0000000000400c3d t main._omp_fn.0
+                 U omp_get_num_threads@@OMP_1.0
+                 U omp_get_thread_num@@OMP_1.0
+0000000000400b40 t register_tm_clones
+0000000000400ad0 T _start
+0000000000602080 d __TMC_END__
+0000000000400bea t _Z41__static_initialization_and_destruction_0ii
+                 U _ZNSolsEPFRSoS_E@@GLIBCXX_3.4
+                 U _ZNSt8ios_base4InitC1Ev@@GLIBCXX_3.4
+                 U _ZNSt8ios_base4InitD1Ev@@GLIBCXX_3.4
+0000000000602080 B _ZSt4cout@@GLIBCXX_3.4
+                 U _ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_@@GLIBCXX_3.4
+0000000000602191 b _ZStL8__ioinit
+                 U _ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_c@@GLIBCXX_3.4
+                 
+</code></pre>
+<blockquote>
+<p><code>omp_get_num_threads</code>, <code>omp_get_thread_num</code></p>
+</blockquote>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+<h2 id="OpenMP-Introduction"><a href="#OpenMP-Introduction" class="headerlink" title="OpenMP Introduction"></a>OpenMP Introduction</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/51173703">openmp</a></li>
+</ul>
+<p>OpenMP的指令格式</p>
+<pre><code>#pragma omp directive [clause[clause]…]
+#pragma omp parallel private(i, j)
+</code></pre>
+<blockquote>
+<p><code>parallel</code> is directive， <code>private</code> is clause</p>
+</blockquote>
+<h3 id="directive"><a href="#directive" class="headerlink" title="directive"></a>directive</h3><ul>
+<li><strong>parallel</strong>，用在一个代码段之前，表示这段代码将被多个线程并行执行</li>
+<li><strong>for</strong>，用于for循环之前，将循环分配到多个线程中并行执行，必须保证每次循环之间无相关性。</li>
+<li><strong>parallel for</strong>， parallel 和 for语句的结合，也是用在一个for循环之前，表示for循环的代码将被多个线程并行执行。</li>
+<li><strong>sections</strong>，用在可能会被并行执行的代码段之前</li>
+<li><strong>parallel sections</strong>，parallel和sections两个语句的结合</li>
+<li>critical，用在一段代码临界区之前</li>
+<li>single，用在一段只被单个线程执行的代码段之前，表示后面的代码段将被单线程执行。</li>
+<li>flush，</li>
+<li>barrier，用于并行区内代码的线程同步，所有线程执行到barrier时要停止，直到所有线程都执行到barrier时才继续往下执行。</li>
+<li>atomic，用于指定一块内存区域被制动更新</li>
+<li>master，用于指定一段代码块由主线程执行</li>
+<li>ordered， 用于指定并行区域的循环按顺序执行</li>
+<li>threadprivate, 用于指定一个变量是线程私有的。</li>
+</ul>
+<h4 id="parallel-for"><a href="#parallel-for" class="headerlink" title="parallel for"></a>parallel for</h4><p>OpenMP 对可以多线程化的循环有如下五个要求：</p>
+<ul>
+<li>循环的变量变量（就是i）必须是有符号整形，其他的都不行。</li>
+<li>循环的比较条件必须是&lt; &lt;&#x3D; &gt; &gt;&#x3D;中的一种</li>
+<li>循环的增量部分必须是增减一个不变的值（即每次循环是不变的）。</li>
+<li>如果比较符号是&lt; &lt;&#x3D;，那每次循环i应该增加，反之应该减小</li>
+<li>循环必须是没有奇奇怪怪的东西，不能从内部循环跳到外部循环，goto和break只能在循环内部跳转，异常必须在循环内部被捕获。</li>
+</ul>
+<p>如果你的循环不符合这些条件，那就只好改写了.</p>
+<blockquote>
+<p>avoid race condition</p>
+</blockquote>
+<p>当一个循环满足以上五个条件时，依然可能因为数据依赖而不能够合理的并行化。当两个不同的迭代之间的数据存在依赖关系时，就会发生这种情况。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 假设数组已经初始化为1</span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel for</span></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">2</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    factorial[i] = i * factorial[i<span class="number">-1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>ERROR.</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">omp_set_num_threads</span>(<span class="number">4</span>);</span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="meta">#<span class="keyword">pragma</span> omp for</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;i = %d, I am Thread %d\n&quot;</span>, i, <span class="built_in">omp_get_thread_num</span>());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>same as </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">omp_set_num_threads</span>(<span class="number">4</span>);</span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel for</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;i = %d, I am Thread %d\n&quot;</span>, i, <span class="built_in">omp_get_thread_num</span>());</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="parallel-sections"><a href="#parallel-sections" class="headerlink" title="parallel sections"></a>parallel sections</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel sections # parallel </span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="meta">#<span class="keyword">pragma</span> omp section # thread-1</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">function1</span>();</span><br><span class="line">    &#125;</span><br><span class="line">　　<span class="meta">#<span class="keyword">pragma</span> omp section # thread-2</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">function2</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>parallel sections里面的内容要并行执行，具体分工上，每个线程执行其中的一个section</p>
+</blockquote>
+<h3 id="clause"><a href="#clause" class="headerlink" title="clause"></a>clause</h3><ul>
+<li><strong>private</strong>, 指定每个线程都有它自己的变量私有副本。</li>
+<li>firstprivate，指定每个线程都有它自己的变量私有副本，并且变量要被继承主线程中的初值。</li>
+<li>lastprivate，主要是用来指定将线程中的私有变量的值在并行处理结束后复制回主线程中的对应变量。</li>
+<li><strong>reduce</strong>，用来指定一个或多个变量是私有的，并且在并行处理结束后这些变量要执行指定的运算。</li>
+<li>nowait，忽略指定中暗含的等待</li>
+<li><strong>num_threads</strong>，指定线程的个数</li>
+<li><strong>schedule</strong>，指定如何调度for循环迭代</li>
+<li>shared，指定一个或多个变量为多个线程间的共享变量</li>
+<li>ordered，用来指定for循环的执行要按顺序执行</li>
+<li>copyprivate，用于single指令中的指定变量为多个线程的共享变量</li>
+<li>copyin，用来指定一个threadprivate的变量的值要用主线程的值进行初始化。</li>
+<li>default，用来指定并行处理区域内的变量的使用方式，缺省是shared</li>
+</ul>
+<h4 id="private"><a href="#private" class="headerlink" title="private"></a>private</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> x; <span class="comment">// private to each thread ? YES</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel for</span></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">1000</span>; ++i)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> x; <span class="comment">// private to each thread ? YES</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>local variables are automatically private to each thread.<br>The reason for the existence of the <code>private</code> clause is so that you don’t have to change your code.<br>see <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/6358375/openmp-are-local-variables-automatically-private">here</a></p>
+</blockquote>
+<p>The only way to parallelize the following code without the private clause</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> i,j;</span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel for private(j)</span></span><br><span class="line"><span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">    <span class="keyword">for</span>(j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">        <span class="comment">//do something</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>is to change the code. For example like this:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> i;</span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel for</span></span><br><span class="line"><span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">    <span class="type">int</span> j; <span class="comment">// mark j as local variable to worker thread</span></span><br><span class="line">    <span class="keyword">for</span>(j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">        <span class="comment">//do something</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="reduction"><a href="#reduction" class="headerlink" title="reduction"></a>reduction</h4><p>例如累加</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">    sum += array[i]; <span class="comment">// sum需要私有才能实现并行化，但是又必须是公有的才能产生正确结果</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的这个程序里，sum公有或者私有都不对，为了解决这个问题，OpenMP 提供了<code>reduction</code>语句；</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel for reduction(+:sum)</span></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">    sum += array[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>内部实现中，OpenMP为每个线程提供了私有的sum变量(初始化为0)，当线程退出时，OpenMP再把每个线程私有的sum加在一起得到最终结果。</p>
+</blockquote>
+<h4 id="num-threads"><a href="#num-threads" class="headerlink" title="num_threads"></a>num_threads</h4><p><code>num_threads(4)</code> same as <code>omp_set_num_threads(4)</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// `num_threads(4)` same as `omp_set_num_threads(4)`</span></span><br><span class="line">	<span class="meta">#<span class="keyword">pragma</span> omp parallel num_threads(4)</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Hello, I am Thread %d\n&quot;</span>, <span class="built_in">omp_get_thread_num</span>()); <span class="comment">// 0,1,2,3,</span></span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="schedule"><a href="#schedule" class="headerlink" title="schedule"></a>schedule</h4><p>format</p>
+<pre><code>#pragma omp parallel for schedule(kind [, chunk size])
+</code></pre>
+<p>kind: see <a target="_blank" rel="noopener" href="https://software.intel.com/en-us/articles/openmp-loop-scheduling">openmp-loop-scheduling</a> and <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/10850155/whats-the-difference-between-static-and-dynamic-schedule-in-openmp">whats-the-difference-between-static-and-dynamic-schedule-in-openmp</a></p>
+<ul>
+<li><code>static</code>: Divide the loop into equal-sized chunks or as equal as possible in the case where the number of loop iterations is not evenly divisible by the number of threads multiplied by the chunk size. <code>By default, chunk size is loop_count/number_of_threads</code>.</li>
+<li><code>dynamic</code>: Use the internal work queue to give a chunk-sized block of loop iterations to each thread. When a thread is finished, it retrieves the next block of loop iterations from the top of the work queue. <code>By default, the chunk size is 1</code>. Be careful when using this scheduling type because of the extra overhead involved.</li>
+<li><code>guided</code>: special case of <code>dynamic</code>. Similar to dynamic scheduling, but the chunk size starts off large and decreases to better handle load imbalance between iterations. The optional chunk parameter specifies them minimum size chunk to use. <code>By default the chunk size is approximately loop_count/number_of_threads</code>.</li>
+<li><code>auto</code>: When schedule (auto) is specified, the decision regarding <code>scheduling is delegated to the compiler</code>. The programmer gives the compiler the freedom to choose any possible mapping of iterations to threads in the team. </li>
+<li><code>runtime</code>: with ENV<code>OMP_SCHEDULE</code>, we can test 3 types scheduling: <code>static,dynamic,guided</code> without recompile the code.</li>
+</ul>
+<blockquote>
+<p>The optional parameter (chunk), when specified, must be a positive integer.</p>
+</blockquote>
+<p>默认情况下，OpenMP认为所有的循环迭代运行的时间都是一样的，这就导致了OpenMP会把不同的迭代等分到不同的核心上，并且让他们分布的尽可能减小内存访问冲突，这样做是因为循环一般会线性地访问内存, 所以把循环按照前一半后一半的方法分配可以最大程度的减少冲突. 然而对内存访问来说这可能是最好的方法, 但是对于负载均衡可能并不是最好的方法, 而且反过来最好的负载均衡可能也会破坏内存访问. 因此必须折衷考虑.</p>
+<blockquote>
+<p>内存访问vs负载均衡,需要折中考虑。<br>openmp默认使用的schedule是取决于编译器实现的。gcc默认使用schedule(dynamic,1)，也就是动态调度并且块大小是1.<br>线程数不要大于实际核数，否则就是oversubscription</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://software.intel.com/en-us/vtune-amplifier-cookbook-openmp-imbalance-and-scheduling-overhead">isprime</a>可以对dynamic做一个展示。</p>
+<h3 id="functions"><a href="#functions" class="headerlink" title="functions"></a>functions</h3><ul>
+<li><code>omp_get_num_procs</code>, 返回运行本线程的多处理机的处理器个数。</li>
+<li><code>omp_set_num_threads</code>, 设置并行执行代码时的线程个数</li>
+<li><code>omp_get_num_threads</code>, 返回当前并行区域中的活动线程(active thread)个数,如果没有设置，默认为1。</li>
+<li><code>omp_get_thread_num</code>, 返回线程号(0,1,2,…)</li>
+<li><code>omp_init_lock</code>, 初始化一个简单锁</li>
+<li><code>omp_set_lock</code>， 上锁操作</li>
+<li><code>omp_unset_lock</code>， 解锁操作，要和<code>omp_set_lock</code>函数配对使用</li>
+<li><code>omp_destroy_lock</code>，关闭一个锁，要和 <code>omp_init_lock</code>函数配对使用</li>
+</ul>
+<p>check cpu</p>
+<pre><code>cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c 
+    8  Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz
+</code></pre>
+<blockquote>
+<p><code>omp_get_num_procs</code> return <code>8</code>.</p>
+</blockquote>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+<h2 id="OpenMP-Example"><a href="#OpenMP-Example" class="headerlink" title="OpenMP Example"></a>OpenMP Example</h2><h3 id="omp-get-num-threads"><a href="#omp-get-num-threads" class="headerlink" title="omp_get_num_threads"></a>omp_get_num_threads</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test0</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;I am Thread %d,  omp_get_num_threads = %d, omp_get_num_procs = %d\n&quot;</span>, </span><br><span class="line">		<span class="built_in">omp_get_thread_num</span>(), </span><br><span class="line">		<span class="built_in">omp_get_num_threads</span>(),</span><br><span class="line">		<span class="built_in">omp_get_num_procs</span>()</span><br><span class="line">	);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">I am Thread 0,  omp_get_num_threads = 1, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="parallel"><a href="#parallel" class="headerlink" title="parallel"></a>parallel</h3><h4 id="case1"><a href="#case1" class="headerlink" title="case1"></a>case1</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test1</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// `parallel`，用在一个代码段之前，表示这段代码block将被多个线程并行执行</span></span><br><span class="line">	<span class="comment">// if not set `omp_set_num_threads`, by default use `omp_get_num_procs`, eg 8</span></span><br><span class="line">	<span class="comment">//omp_set_num_threads(4); // 设置线程数，一般设置的线程数不超过CPU核心数</span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Hello, I am Thread %d,  omp_get_num_threads = %d, omp_get_num_procs = %d\n&quot;</span>, </span><br><span class="line">			<span class="built_in">omp_get_thread_num</span>(), </span><br><span class="line">			<span class="built_in">omp_get_num_threads</span>(),</span><br><span class="line">			<span class="built_in">omp_get_num_procs</span>()</span><br><span class="line">		);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Hello, I am Thread 3,  omp_get_num_threads = 8, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">Hello, I am Thread 7,  omp_get_num_threads = 8, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">Hello, I am Thread 1,  omp_get_num_threads = 8, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">Hello, I am Thread 6,  omp_get_num_threads = 8, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">Hello, I am Thread 5,  omp_get_num_threads = 8, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">Hello, I am Thread 4,  omp_get_num_threads = 8, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">Hello, I am Thread 2,  omp_get_num_threads = 8, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">Hello, I am Thread 0,  omp_get_num_threads = 8, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="case2"><a href="#case2" class="headerlink" title="case2"></a>case2</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test1_2</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// `parallel`，用在一个代码段之前，表示这段代码block将被多个线程并行执行</span></span><br><span class="line">	<span class="built_in">omp_set_num_threads</span>(<span class="number">4</span>); <span class="comment">// 设置线程数，一般设置的线程数不超过CPU核心数</span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Hello, I am Thread %d,  omp_get_num_threads = %d, omp_get_num_procs = %d\n&quot;</span>, </span><br><span class="line">			<span class="built_in">omp_get_thread_num</span>(), </span><br><span class="line">			<span class="built_in">omp_get_num_threads</span>(),</span><br><span class="line">			<span class="built_in">omp_get_num_procs</span>()</span><br><span class="line">		);</span><br><span class="line">		<span class="comment">//std::cout &lt;&lt; &quot;Hello&quot; &lt;&lt; &quot;, I am Thread &quot; &lt;&lt; omp_get_thread_num() &lt;&lt; std::endl; // 0,1,2,3</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"># use `cout`</span></span><br><span class="line"><span class="comment">HelloHello, I am Thread Hello, I am Thread , I am Thread Hello, I am Thread 2</span></span><br><span class="line"><span class="comment">1</span></span><br><span class="line"><span class="comment">3</span></span><br><span class="line"><span class="comment">0</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* use `printf`</span></span><br><span class="line"><span class="comment">Hello, I am Thread 0,  omp_get_num_threads = 4, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">Hello, I am Thread 3,  omp_get_num_threads = 4, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">Hello, I am Thread 1,  omp_get_num_threads = 4, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">Hello, I am Thread 2,  omp_get_num_threads = 4, omp_get_num_procs = 8</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>notice the difference of <code>std::cout</code> and <code>printf</code></p>
+</blockquote>
+<h4 id="case3"><a href="#case3" class="headerlink" title="case3"></a>case3</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test1_3</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// `parallel`，用在一个代码段之前，表示这段代码block将被多个线程并行执行</span></span><br><span class="line">	<span class="built_in">omp_set_num_threads</span>(<span class="number">4</span>);</span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;i = %d, I am Thread %d\n&quot;</span>, i, <span class="built_in">omp_get_thread_num</span>());</span><br><span class="line">	&#125;	</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">i = 0, I am Thread 1</span></span><br><span class="line"><span class="comment">i = 1, I am Thread 1</span></span><br><span class="line"><span class="comment">i = 2, I am Thread 1</span></span><br><span class="line"><span class="comment">i = 0, I am Thread 3</span></span><br><span class="line"><span class="comment">i = 1, I am Thread 3</span></span><br><span class="line"><span class="comment">i = 2, I am Thread 3</span></span><br><span class="line"><span class="comment">i = 0, I am Thread 2</span></span><br><span class="line"><span class="comment">i = 1, I am Thread 2</span></span><br><span class="line"><span class="comment">i = 2, I am Thread 2</span></span><br><span class="line"><span class="comment">i = 0, I am Thread 0</span></span><br><span class="line"><span class="comment">i = 1, I am Thread 0</span></span><br><span class="line"><span class="comment">i = 2, I am Thread 0</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="omp-parallel-for"><a href="#omp-parallel-for" class="headerlink" title="omp parallel&#x2F;for"></a>omp parallel&#x2F;for</h3><h4 id="omp-parallel-omp-for"><a href="#omp-parallel-omp-for" class="headerlink" title="omp parallel + omp for"></a>omp parallel + omp for</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test2</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// `omp parallel` + `omp for` === `omp parallel for`</span></span><br><span class="line">	<span class="comment">// `omp for` 用在一个for循环之前，表示for循环的每一次iteration将被分配到多个线程并行执行。</span></span><br><span class="line">	<span class="comment">// 此处8次iteration被平均分配到4个thread执行，每个thread执行2次iteration</span></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	iter   #thread id</span></span><br><span class="line"><span class="comment">	0,1     0</span></span><br><span class="line"><span class="comment">	2,3     1</span></span><br><span class="line"><span class="comment">	4,5     2</span></span><br><span class="line"><span class="comment">	6,7     3</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	<span class="built_in">omp_set_num_threads</span>(<span class="number">4</span>);</span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="meta">#<span class="keyword">pragma</span> omp for</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;i = %d, I am Thread %d\n&quot;</span>, i, <span class="built_in">omp_get_thread_num</span>());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">i = 0, I am Thread 0</span></span><br><span class="line"><span class="comment">i = 1, I am Thread 0</span></span><br><span class="line"><span class="comment">i = 2, I am Thread 1</span></span><br><span class="line"><span class="comment">i = 3, I am Thread 1</span></span><br><span class="line"><span class="comment">i = 6, I am Thread 3</span></span><br><span class="line"><span class="comment">i = 7, I am Thread 3</span></span><br><span class="line"><span class="comment">i = 4, I am Thread 2</span></span><br><span class="line"><span class="comment">i = 5, I am Thread 2</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<h4 id="omp-parallel-for-1"><a href="#omp-parallel-for-1" class="headerlink" title="omp parallel for"></a>omp parallel for</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test2_2</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// `parallel for`，用在一个for循环之前，表示for循环的每一次iteration将被分配到多个线程并行执行。</span></span><br><span class="line">	<span class="comment">// 此处8次iteration被平均分配到4个thread执行，每个thread执行2次iteration</span></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	iter   #thread id</span></span><br><span class="line"><span class="comment">	0,1     0</span></span><br><span class="line"><span class="comment">	2,3     1</span></span><br><span class="line"><span class="comment">	4,5     2</span></span><br><span class="line"><span class="comment">	6,7     3</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	<span class="built_in">omp_set_num_threads</span>(<span class="number">4</span>);</span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel for</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;i = %d, I am Thread %d\n&quot;</span>, i, <span class="built_in">omp_get_thread_num</span>());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">i = 0, I am Thread 0</span></span><br><span class="line"><span class="comment">i = 1, I am Thread 0</span></span><br><span class="line"><span class="comment">i = 4, I am Thread 2</span></span><br><span class="line"><span class="comment">i = 5, I am Thread 2</span></span><br><span class="line"><span class="comment">i = 6, I am Thread 3</span></span><br><span class="line"><span class="comment">i = 7, I am Thread 3</span></span><br><span class="line"><span class="comment">i = 2, I am Thread 1</span></span><br><span class="line"><span class="comment">i = 3, I am Thread 1</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="sqrt-case"><a href="#sqrt-case" class="headerlink" title="sqrt case"></a>sqrt case</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">base_sqrt</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	boost::posix_time::ptime pt1 = boost::posix_time::microsec_clock::<span class="built_in">local_time</span>();</span><br><span class="line"></span><br><span class="line">    <span class="type">float</span> a = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">1000000000</span>;i++)</span><br><span class="line">        a = <span class="built_in">sqrt</span>(i);</span><br><span class="line">	</span><br><span class="line">	boost::posix_time::ptime pt2 = boost::posix_time::microsec_clock::<span class="built_in">local_time</span>();</span><br><span class="line">	<span class="type">int64_t</span> cost = (pt2 - pt1).<span class="built_in">total_milliseconds</span>();</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Worker Thread = %d, cost = %d ms\n&quot;</span>,<span class="built_in">omp_get_thread_num</span>(), cost);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test2_3</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	boost::posix_time::ptime pt1 = boost::posix_time::microsec_clock::<span class="built_in">local_time</span>();</span><br><span class="line"></span><br><span class="line">	<span class="built_in">omp_set_num_threads</span>(<span class="number">8</span>);</span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel for</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">8</span>;i++)</span><br><span class="line">        <span class="built_in">base_sqrt</span>();</span><br><span class="line">    </span><br><span class="line">	boost::posix_time::ptime pt2 = boost::posix_time::microsec_clock::<span class="built_in">local_time</span>();</span><br><span class="line">	<span class="type">int64_t</span> cost = (pt2 - pt1).<span class="built_in">total_milliseconds</span>();</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Main Thread = %d, cost = %d ms\n&quot;</span>,<span class="built_in">omp_get_thread_num</span>(), cost);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>sequential</p>
+<pre><code>time ./demo_openmp
+Worker Thread = 0, cost = 1746 ms
+Worker Thread = 0, cost = 1711 ms
+Worker Thread = 0, cost = 1736 ms
+Worker Thread = 0, cost = 1734 ms
+Worker Thread = 0, cost = 1750 ms
+Worker Thread = 0, cost = 1718 ms
+Worker Thread = 0, cost = 1769 ms
+Worker Thread = 0, cost = 1732 ms
+Main Thread = 0, cost = 13899 ms
+./demo_openmp  13.90s user 0.00s system 99% cpu 13.903 total
+</code></pre>
+<p>parallel </p>
+<pre><code>time ./demo_openmp
+Worker Thread = 1, cost = 1875 ms
+Worker Thread = 6, cost = 1876 ms
+Worker Thread = 0, cost = 1876 ms
+Worker Thread = 7, cost = 1876 ms
+Worker Thread = 5, cost = 1877 ms
+Worker Thread = 3, cost = 1963 ms
+Worker Thread = 4, cost = 2000 ms
+Worker Thread = 2, cost = 2027 ms
+Main Thread = 0, cost = 2031 ms
+./demo_openmp  15.10s user 0.01s system 740% cpu 2.041 total
+</code></pre>
+<blockquote>
+<p>2031s + 10ms(system) &#x3D; 2041ms (total)<br>2.041* 740% &#x3D; 15.1034 s</p>
+</blockquote>
+<h3 id="parallel-sections-1"><a href="#parallel-sections-1" class="headerlink" title="parallel sections"></a>parallel sections</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test3</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	boost::posix_time::ptime pt1 = boost::posix_time::microsec_clock::<span class="built_in">local_time</span>();</span><br><span class="line"></span><br><span class="line">	<span class="built_in">omp_set_num_threads</span>(<span class="number">4</span>);</span><br><span class="line">	<span class="comment">// `parallel sections`里面的内容要并行执行，具体分工上，每个线程执行其中的一个`section`</span></span><br><span class="line">	<span class="meta">#<span class="keyword">pragma</span> omp parallel sections <span class="comment">// parallel </span></span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="meta">#<span class="keyword">pragma</span> omp section <span class="comment">// thread-0</span></span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">base_sqrt</span>();</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="meta">#<span class="keyword">pragma</span> omp section <span class="comment">// thread-1</span></span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">base_sqrt</span>();</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="meta">#<span class="keyword">pragma</span> omp section <span class="comment">// thread-2</span></span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">base_sqrt</span>();</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="meta">#<span class="keyword">pragma</span> omp section <span class="comment">// thread-3</span></span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">base_sqrt</span>();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	boost::posix_time::ptime pt2 = boost::posix_time::microsec_clock::<span class="built_in">local_time</span>();</span><br><span class="line">	<span class="type">int64_t</span> cost = (pt2 - pt1).<span class="built_in">total_milliseconds</span>();</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Main Thread = %d, cost = %d ms\n&quot;</span>,<span class="built_in">omp_get_thread_num</span>(), cost);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">time ./demo_openmp</span></span><br><span class="line"><span class="comment">Worker Thread = 0, cost = 1843 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 1, cost = 1843 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, cost = 1844 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 2, cost = 1845 ms</span></span><br><span class="line"><span class="comment">Main Thread = 0, cost = 1845 ms</span></span><br><span class="line"><span class="comment">./demo_openmp  7.39s user 0.00s system 398% cpu 1.855 total</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="private-1"><a href="#private-1" class="headerlink" title="private"></a>private</h3><h4 id="error-case"><a href="#error-case" class="headerlink" title="error case"></a>error case</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test4_error</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> i,j;</span><br><span class="line">	<span class="built_in">omp_set_num_threads</span>(<span class="number">4</span>);</span><br><span class="line">	<span class="comment">// we get error result, because `j` is shared between all worker threads.</span></span><br><span class="line">	<span class="meta">#<span class="keyword">pragma</span> omp parallel for</span></span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">		<span class="keyword">for</span>(j = <span class="number">0</span>; j &lt; <span class="number">8</span>; j++) &#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;Worker Thread = %d, j = %d ms\n&quot;</span>,<span class="built_in">omp_get_thread_num</span>(), j);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Worker Thread = 3, j = 0 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, j = 1 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 0, j = 0 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 0, j = 3 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 0, j = 4 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 0, j = 5 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, j = 2 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, j = 7 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 0, j = 6 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 1, j = 0 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 2, j = 0 ms</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>error results.</p>
+</blockquote>
+<h4 id="fix1-by-changing-code"><a href="#fix1-by-changing-code" class="headerlink" title="fix1 by changing code"></a>fix1 by changing code</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test4_fix1</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> i;</span><br><span class="line">	<span class="built_in">omp_set_num_threads</span>(<span class="number">4</span>);</span><br><span class="line">	<span class="comment">// we get error result, because `j` is shared between all worker threads.</span></span><br><span class="line">	<span class="comment">// fix1: we have to change original code to make j as local variable</span></span><br><span class="line">	<span class="meta">#<span class="keyword">pragma</span> omp parallel for</span></span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">		<span class="type">int</span> j;  <span class="comment">// fix1: `int j`</span></span><br><span class="line">		<span class="keyword">for</span>(j = <span class="number">0</span>; j &lt; <span class="number">8</span>; j++) &#123; </span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;Worker Thread = %d, j = %d ms\n&quot;</span>,<span class="built_in">omp_get_thread_num</span>(), j);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Worker Thread = 0, j = 0 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 0, j = 1 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 2, j = 0 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 2, j = 1 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 1, j = 0 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 1, j = 1 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 1, j = 2 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 1, j = 3 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 1, j = 4 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 1, j = 5 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 1, j = 6 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 1, j = 7 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 2, j = 2 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 2, j = 3 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 2, j = 4 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 2, j = 5 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 2, j = 6 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 2, j = 7 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 0, j = 2 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 0, j = 3 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 0, j = 4 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 0, j = 5 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 0, j = 6 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 0, j = 7 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, j = 0 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, j = 1 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, j = 2 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, j = 3 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, j = 4 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, j = 5 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, j = 6 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, j = 7 ms</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="fix2-by-private-j"><a href="#fix2-by-private-j" class="headerlink" title="fix2 by private(j)"></a>fix2 by private(j)</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test4_fix2</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> i,j;</span><br><span class="line">	<span class="built_in">omp_set_num_threads</span>(<span class="number">4</span>);</span><br><span class="line">	<span class="comment">// we get error result, because `j` is shared between all worker threads.</span></span><br><span class="line">	<span class="comment">// fix1: we have to change original code to make j as local variable</span></span><br><span class="line">	<span class="comment">// fix2: use `private(j)`, no need to change original code</span></span><br><span class="line">	<span class="meta">#<span class="keyword">pragma</span> omp parallel for private(j) <span class="comment">// fix2</span></span></span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">		<span class="keyword">for</span>(j = <span class="number">0</span>; j &lt; <span class="number">8</span>; j++) &#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;Worker Thread = %d, j = %d ms\n&quot;</span>,<span class="built_in">omp_get_thread_num</span>(), j);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Worker Thread = 0, j = 0 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 0, j = 1 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 0, j = 2 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 0, j = 3 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 0, j = 4 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 0, j = 5 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 0, j = 6 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 0, j = 7 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 2, j = 0 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 2, j = 1 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 2, j = 2 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 2, j = 3 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 2, j = 4 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 2, j = 5 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 2, j = 6 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 2, j = 7 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, j = 0 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, j = 1 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, j = 2 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, j = 3 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, j = 4 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, j = 5 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 1, j = 0 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 1, j = 1 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 1, j = 2 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 1, j = 3 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 1, j = 4 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 1, j = 5 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 1, j = 6 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 1, j = 7 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, j = 6 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, j = 7 ms</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="reduction-1"><a href="#reduction-1" class="headerlink" title="reduction"></a>reduction</h3><h4 id="error-case-1"><a href="#error-case-1" class="headerlink" title="error case"></a>error case</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test5_error</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> array[<span class="number">8</span>] = &#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>&#125;;</span><br><span class="line"></span><br><span class="line">	<span class="type">int</span> sum = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">omp_set_num_threads</span>(<span class="number">4</span>);</span><br><span class="line"><span class="comment">//#pragma omp parallel for reduction(+:sum)</span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel for  <span class="comment">// ERROR</span></span></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">		sum += array[i];</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Worker Thread = %d, sum = %d ms\n&quot;</span>,<span class="built_in">omp_get_thread_num</span>(), sum);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Main Thread = %d, sum = %d ms\n&quot;</span>,<span class="built_in">omp_get_thread_num</span>(), sum);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">// ERROR RESULT</span></span><br><span class="line"><span class="comment">Worker Thread = 0, sum = 0 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 0, sum = 9 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, sum = 8 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, sum = 16 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 1, sum = 2 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 1, sum = 19 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 2, sum = 4 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 2, sum = 24 ms</span></span><br><span class="line"><span class="comment">Main Thread = 0, sum = 24 ms</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="reduction-sum"><a href="#reduction-sum" class="headerlink" title="reduction(+:sum)"></a>reduction(+:sum)</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test5_fix</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> array[<span class="number">8</span>] = &#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>&#125;;</span><br><span class="line"></span><br><span class="line">	<span class="type">int</span> sum = <span class="number">0</span>;</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	sum需要私有才能实现并行化，但是又必须是公有的才能产生正确结果;</span></span><br><span class="line"><span class="comment">	sum公有或者私有都不对，为了解决这个问题，OpenMP提供了reduction语句.</span></span><br><span class="line"><span class="comment">	内部实现中，OpenMP为每个线程提供了私有的sum变量(初始化为0)，</span></span><br><span class="line"><span class="comment">	当线程退出时，OpenMP再把每个线程私有的sum加在一起得到最终结果。</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	<span class="built_in">omp_set_num_threads</span>(<span class="number">4</span>);</span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel for reduction(+:sum)</span></span><br><span class="line"><span class="comment">//#pragma omp parallel for  // ERROR</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">		sum += array[i];</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Worker Thread = %d, sum = %d ms\n&quot;</span>,<span class="built_in">omp_get_thread_num</span>(), sum);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Main Thread = %d, sum = %d ms\n&quot;</span>,<span class="built_in">omp_get_thread_num</span>(), sum);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Worker Thread = 0, sum = 0 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 0, sum = 1 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 1, sum = 2 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 1, sum = 5 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, sum = 6 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 3, sum = 13 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 2, sum = 4 ms</span></span><br><span class="line"><span class="comment">Worker Thread = 2, sum = 9 ms</span></span><br><span class="line"><span class="comment">Main Thread = 0, sum = 28 ms</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="num-threads-1"><a href="#num-threads-1" class="headerlink" title="num_threads"></a>num_threads</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test6</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// `num_threads(4)` same as `omp_set_num_threads(4)`</span></span><br><span class="line">	<span class="meta">#<span class="keyword">pragma</span> omp parallel num_threads(4)</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Hello, I am Thread %d\n&quot;</span>, <span class="built_in">omp_get_thread_num</span>()); <span class="comment">// 0,1,2,3,</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Hello, I am Thread 0</span></span><br><span class="line"><span class="comment">Hello, I am Thread 2</span></span><br><span class="line"><span class="comment">Hello, I am Thread 3</span></span><br><span class="line"><span class="comment">Hello, I am Thread 1</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="schedule-1"><a href="#schedule-1" class="headerlink" title="schedule"></a>schedule</h3><h4 id="static-2"><a href="#static-2" class="headerlink" title="(static,2)"></a>(static,2)</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test7_1</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">omp_set_num_threads</span>(<span class="number">4</span>);</span><br><span class="line">	<span class="comment">// static, num_loop/num_threads</span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel for schedule(static,2) </span></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;i = %d, I am Thread %d\n&quot;</span>, i, <span class="built_in">omp_get_thread_num</span>());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">i = 2, I am Thread 1</span></span><br><span class="line"><span class="comment">i = 3, I am Thread 1</span></span><br><span class="line"><span class="comment">i = 6, I am Thread 3</span></span><br><span class="line"><span class="comment">i = 7, I am Thread 3</span></span><br><span class="line"><span class="comment">i = 4, I am Thread 2</span></span><br><span class="line"><span class="comment">i = 5, I am Thread 2</span></span><br><span class="line"><span class="comment">i = 0, I am Thread 0</span></span><br><span class="line"><span class="comment">i = 1, I am Thread 0</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="static-4"><a href="#static-4" class="headerlink" title="(static,4)"></a>(static,4)</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test7_2</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">omp_set_num_threads</span>(<span class="number">4</span>);</span><br><span class="line">	<span class="comment">// static, num_loop/num_threads</span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel for schedule(static,4) </span></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;i = %d, I am Thread %d\n&quot;</span>, i, <span class="built_in">omp_get_thread_num</span>());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">i = 0, I am Thread 0</span></span><br><span class="line"><span class="comment">i = 1, I am Thread 0</span></span><br><span class="line"><span class="comment">i = 2, I am Thread 0</span></span><br><span class="line"><span class="comment">i = 3, I am Thread 0</span></span><br><span class="line"><span class="comment">i = 4, I am Thread 1</span></span><br><span class="line"><span class="comment">i = 5, I am Thread 1</span></span><br><span class="line"><span class="comment">i = 6, I am Thread 1</span></span><br><span class="line"><span class="comment">i = 7, I am Thread 1</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="dynamic-1"><a href="#dynamic-1" class="headerlink" title="(dynamic,1)"></a>(dynamic,1)</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test7_3</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">omp_set_num_threads</span>(<span class="number">4</span>);</span><br><span class="line">	<span class="comment">// dynamic</span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel for schedule(dynamic,1) </span></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;i = %d, I am Thread %d\n&quot;</span>, i, <span class="built_in">omp_get_thread_num</span>());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">i = 0, I am Thread 2</span></span><br><span class="line"><span class="comment">i = 4, I am Thread 2</span></span><br><span class="line"><span class="comment">i = 5, I am Thread 2</span></span><br><span class="line"><span class="comment">i = 6, I am Thread 2</span></span><br><span class="line"><span class="comment">i = 7, I am Thread 2</span></span><br><span class="line"><span class="comment">i = 3, I am Thread 3</span></span><br><span class="line"><span class="comment">i = 1, I am Thread 0</span></span><br><span class="line"><span class="comment">i = 2, I am Thread 1</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="dynamic-3"><a href="#dynamic-3" class="headerlink" title="(dynamic,3)"></a>(dynamic,3)</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test7_4</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">omp_set_num_threads</span>(<span class="number">4</span>);</span><br><span class="line">	<span class="comment">// dynamic</span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel for schedule(dynamic,3) </span></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;i = %d, I am Thread %d\n&quot;</span>, i, <span class="built_in">omp_get_thread_num</span>());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">i = 0, I am Thread 0</span></span><br><span class="line"><span class="comment">i = 1, I am Thread 0</span></span><br><span class="line"><span class="comment">i = 2, I am Thread 0</span></span><br><span class="line"><span class="comment">i = 6, I am Thread 2</span></span><br><span class="line"><span class="comment">i = 7, I am Thread 2</span></span><br><span class="line"><span class="comment">i = 3, I am Thread 1</span></span><br><span class="line"><span class="comment">i = 4, I am Thread 1</span></span><br><span class="line"><span class="comment">i = 5, I am Thread 1</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="schedule-compare"><a href="#schedule-compare" class="headerlink" title="schedule compare"></a>schedule compare</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> NUM 100000000</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">isprime</span><span class="params">( <span class="type">int</span> x )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>( <span class="type">int</span> y = <span class="number">2</span>; y * y &lt;= x; y++ )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>( x % y == <span class="number">0</span> )</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test8</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> sum = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	<span class="meta">#<span class="keyword">pragma</span> omp parallel for reduction (+:sum) schedule(dynamic,1) </span></span><br><span class="line">    <span class="keyword">for</span>( <span class="type">int</span> i = <span class="number">2</span>; i &lt;= NUM ; i++ )</span><br><span class="line">    &#123;</span><br><span class="line">        sum += <span class="built_in">isprime</span>(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>( <span class="string">&quot;Number of primes numbers: %d&quot;</span>, sum );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="no-schedule"><a href="#no-schedule" class="headerlink" title="no schedule"></a>no schedule</h4><pre><code>Number of primes numbers: 5761455./demo_openmp  151.64s user 0.04s system 582% cpu 26.048 total
+</code></pre>
+<h4 id="schedule-static-1"><a href="#schedule-static-1" class="headerlink" title="schedule(static,1)"></a>schedule(static,1)</h4><pre><code>Number of primes numbers: 5761455./demo_openmp  111.13s user 0.00s system 399% cpu 27.799 total
+</code></pre>
+<h4 id="schedule-dynamic-1"><a href="#schedule-dynamic-1" class="headerlink" title="schedule(dynamic,1)"></a>schedule(dynamic,1)</h4><pre><code>Number of primes numbers: 5761455./demo_openmp  167.22s user 0.02s system 791% cpu 21.135 total
+</code></pre>
+<h4 id="schedule-dynamic-200"><a href="#schedule-dynamic-200" class="headerlink" title="schedule(dynamic,200)"></a>schedule(dynamic,200)</h4><pre><code>Number of primes numbers: 5761455./demo_openmp  165.96s user 0.02s system 791% cpu 20.981 total
+</code></pre>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+<h2 id="OpenCV-with-OpenMP"><a href="#OpenCV-with-OpenMP" class="headerlink" title="OpenCV with OpenMP"></a>OpenCV with OpenMP</h2><p>see <a target="_blank" rel="noopener" href="http://answers.opencv.org/question/103701/how-opencv-use-openmp-thread-to-get-performance/">how-opencv-use-openmp-thread-to-get-performance</a></p>
+<p>3 type OpenCV implementation</p>
+<ul>
+<li>sequential implementation: default (slowest)</li>
+<li>parallel implementation: OpenMP &#x2F; TBB</li>
+<li>GPU implementation: CUDA(fastest) &#x2F; OpenCL</li>
+</ul>
+<blockquote>
+<p>With CMake-gui, Building <code>OpenCV</code> with the <code>WITH_OPENMP</code> flag means that the internal functions will use <code>OpenMP</code> to parallelize some of the algorithms, like <code>cvCanny</code>, <code>cvSmooth</code> and <code>cvThreshold</code>.</p>
+</blockquote>
+<blockquote>
+<p>In OpenCV, an algorithm can have a <code>sequential (slowest) implementation</code>; a <code>parallel implementation</code> using <code>OpenMP</code> or <code>TBB</code>; and a <code>GPU implementation</code> using <code>OpenCL</code> or <code>CUDA</code>(fastest). You can decide with the <code>WITH_XXX</code> flags which version to use.</p>
+</blockquote>
+<blockquote>
+<p>Of course, not every algorithm can be parallelized.</p>
+</blockquote>
+<blockquote>
+<p>Now, if you want to parallelize your methods with OpenMP, you have to implement it yourself.</p>
+</blockquote>
+<h3 id="concepts"><a href="#concepts" class="headerlink" title="concepts"></a>concepts</h3><p><code>avoiding extra copying</code></p>
+<p>from <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/9039449/improving-image-processing-speed?r=SearchResults">improving-image-processing-speed</a></p>
+<blockquote>
+<p>There is one important thing about increasing speed in OpenCV not related to processor nor algorithm and it is <strong>avoiding extra copying</strong> when dealing with matrices. I will give you an example taken from the documentation:</p>
+</blockquote>
+<blockquote>
+<p>“…by constructing a header for a part of another matrix. It can be a single row, single column, several rows, several columns, rectangular region in the matrix (called a minor in algebra) or a diagonal. Such operations are also O(1), because the new header will reference the same data. You can actually modify a part of the matrix using this feature, e.g.”</p>
+</blockquote>
+<h3 id="parallel-for-1"><a href="#parallel-for-1" class="headerlink" title="parallel for"></a>parallel for</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;opencv2/highgui/highgui.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;opencv2/features2d/features2d.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;omp.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">opencv_vector</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> imNum = <span class="number">2</span>;</span><br><span class="line">    <span class="function">std::vector&lt;cv::Mat&gt; <span class="title">imVec</span><span class="params">(imNum)</span></span>;</span><br><span class="line">    std::vector&lt;std::vector&lt;cv::KeyPoint&gt;&gt;<span class="built_in">keypointVec</span>(imNum);</span><br><span class="line">    <span class="function">std::vector&lt;cv::Mat&gt; <span class="title">descriptorsVec</span><span class="params">(imNum)</span></span>;</span><br><span class="line">	</span><br><span class="line">	cv::Ptr&lt;cv::ORB&gt; detector = cv::ORB::<span class="built_in">create</span>();</span><br><span class="line">	cv::Ptr&lt;DescriptorMatcher&gt; matcher = cv::DescriptorMatcher::<span class="built_in">create</span>(<span class="string">&quot;BruteForce-Hamming&quot;</span>);</span><br><span class="line"></span><br><span class="line">    std::vector&lt; cv::DMatch &gt; matches;</span><br><span class="line">    <span class="type">char</span> filename[<span class="number">100</span>];</span><br><span class="line">    <span class="type">double</span> t1 = <span class="built_in">omp_get_wtime</span>();</span><br><span class="line">    </span><br><span class="line"><span class="comment">//#pragma omp parallel for</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>;i&lt;imNum;i++)&#123;</span><br><span class="line">        <span class="built_in">sprintf</span>(filename,<span class="string">&quot;rgb%d.jpg&quot;</span>,i);</span><br><span class="line">        imVec[i] = cv::<span class="built_in">imread</span>( filename, CV_LOAD_IMAGE_GRAYSCALE );</span><br><span class="line">        detector-&gt;<span class="built_in">detect</span>( imVec[i], keypointVec[i] );</span><br><span class="line">        detector-&gt;<span class="built_in">compute</span>( imVec[i],keypointVec[i],descriptorsVec[i]);</span><br><span class="line">        std::cout&lt;&lt;<span class="string">&quot;find &quot;</span>&lt;&lt;keypointVec[i].<span class="built_in">size</span>()&lt;&lt;<span class="string">&quot; keypoints in im&quot;</span>&lt;&lt;i&lt;&lt;std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="type">double</span> t2 = <span class="built_in">omp_get_wtime</span>();</span><br><span class="line">    std::cout&lt;&lt;<span class="string">&quot;time: &quot;</span>&lt;&lt;t2-t1&lt;&lt;std::endl;</span><br><span class="line">	</span><br><span class="line">	matcher-&gt;<span class="built_in">match</span>(descriptorsVec[<span class="number">0</span>], descriptorsVec[<span class="number">1</span>], matches, <span class="number">2</span>); <span class="comment">// uchar descriptor Mat</span></span><br><span class="line"></span><br><span class="line">    cv::Mat img_matches;</span><br><span class="line">    cv::<span class="built_in">drawMatches</span>( imVec[<span class="number">0</span>], keypointVec[<span class="number">0</span>], imVec[<span class="number">1</span>], keypointVec[<span class="number">1</span>], matches, img_matches ); </span><br><span class="line">    cv::<span class="built_in">namedWindow</span>(<span class="string">&quot;Matches&quot;</span>,CV_WINDOW_AUTOSIZE);</span><br><span class="line">    cv::<span class="built_in">imshow</span>( <span class="string">&quot;Matches&quot;</span>, img_matches );</span><br><span class="line">    cv::<span class="built_in">waitKey</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="parallel-sections-2"><a href="#parallel-sections-2" class="headerlink" title="parallel sections"></a>parallel sections</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp parallel sections</span></span><br><span class="line">    &#123;</span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp section</span></span><br><span class="line">        &#123;</span><br><span class="line">            std::cout&lt;&lt;<span class="string">&quot;processing im0&quot;</span>&lt;&lt;std::endl;</span><br><span class="line">            im0 = cv::<span class="built_in">imread</span>(<span class="string">&quot;rgb0.jpg&quot;</span>, CV_LOAD_IMAGE_GRAYSCALE );</span><br><span class="line">            detector.<span class="built_in">detect</span>( im0, keypoints0);</span><br><span class="line">            extractor.<span class="built_in">compute</span>( im0,keypoints0,descriptors0);</span><br><span class="line">            std::cout&lt;&lt;<span class="string">&quot;find &quot;</span>&lt;&lt;keypoints<span class="number">0.</span><span class="built_in">size</span>()&lt;&lt;<span class="string">&quot;keypoints in im0&quot;</span>&lt;&lt;std::endl;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> omp section</span></span><br><span class="line">        &#123;</span><br><span class="line">            std::cout&lt;&lt;<span class="string">&quot;processing im1&quot;</span>&lt;&lt;std::endl;</span><br><span class="line">            im1 = cv::<span class="built_in">imread</span>(<span class="string">&quot;rgb1.jpg&quot;</span>, CV_LOAD_IMAGE_GRAYSCALE );</span><br><span class="line">            detector.<span class="built_in">detect</span>( im1, keypoints1);</span><br><span class="line">            extractor.<span class="built_in">compute</span>( im1,keypoints1,descriptors1);</span><br><span class="line">            std::cout&lt;&lt;<span class="string">&quot;find &quot;</span>&lt;&lt;keypoints<span class="number">1.</span><span class="built_in">size</span>()&lt;&lt;<span class="string">&quot;keypoints in im1&quot;</span>&lt;&lt;std::endl;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/baimafujinji/article/details/52444739">openmp</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/baimafujinji/article/details/52769930">openmp + MPI</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/ospider/p/5265975.html">openmp</a></li>
+<li><a target="_blank" rel="noopener" href="http://answers.opencv.org/question/103701/how-opencv-use-openmp-thread-to-get-performance/">how-opencv-use-openmp-thread-to-get-performance</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/wangzhebupt/article/details/22743515">csdn opencv with openmp for+section </a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/51173703">openmp functions</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/9039449/improving-image-processing-speed?r=SearchResults">improving-image-processing-speed</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/6358375/openmp-are-local-variables-automatically-private">openmp-are-local-variables-automatically-private</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/10850155/whats-the-difference-between-static-and-dynamic-schedule-in-openmp">whats-the-difference-between-static-and-dynamic-schedule-in-openmp</a></li>
+<li><a target="_blank" rel="noopener" href="https://software.intel.com/en-us/vtune-amplifier-cookbook-openmp-imbalance-and-scheduling-overhead">dynamic openmp with isprime</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20190403: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/opencv/" rel="tag"># opencv</a>
+              <a href="/tags/openmp/" rel="tag"># openmp</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/nvidia-management-library-nvml/" rel="prev" title="install and use nvidia management library (nvml)">
+      <i class="fa fa-chevron-left"></i> install and use nvidia management library (nvml)
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/python-tkinter-tutorial/" rel="next" title="python tkinter tutorial">
+      python tkinter tutorial <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Series"><span class="nav-number">1.</span> <span class="nav-text">Series</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">2.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#config"><span class="nav-number">2.1.</span> <span class="nav-text">config</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#usage"><span class="nav-number">2.2.</span> <span class="nav-text">usage</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#code"><span class="nav-number">2.3.</span> <span class="nav-text">code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">2.4.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#view-demo"><span class="nav-number">2.5.</span> <span class="nav-text">view demo</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenMP-Introduction"><span class="nav-number">3.</span> <span class="nav-text">OpenMP Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#directive"><span class="nav-number">3.1.</span> <span class="nav-text">directive</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#parallel-for"><span class="nav-number">3.1.1.</span> <span class="nav-text">parallel for</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#parallel-sections"><span class="nav-number">3.1.2.</span> <span class="nav-text">parallel sections</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#clause"><span class="nav-number">3.2.</span> <span class="nav-text">clause</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#private"><span class="nav-number">3.2.1.</span> <span class="nav-text">private</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#reduction"><span class="nav-number">3.2.2.</span> <span class="nav-text">reduction</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#num-threads"><span class="nav-number">3.2.3.</span> <span class="nav-text">num_threads</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#schedule"><span class="nav-number">3.2.4.</span> <span class="nav-text">schedule</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#functions"><span class="nav-number">3.3.</span> <span class="nav-text">functions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenMP-Example"><span class="nav-number">4.</span> <span class="nav-text">OpenMP Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#omp-get-num-threads"><span class="nav-number">4.1.</span> <span class="nav-text">omp_get_num_threads</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#parallel"><span class="nav-number">4.2.</span> <span class="nav-text">parallel</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#case1"><span class="nav-number">4.2.1.</span> <span class="nav-text">case1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#case2"><span class="nav-number">4.2.2.</span> <span class="nav-text">case2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#case3"><span class="nav-number">4.2.3.</span> <span class="nav-text">case3</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#omp-parallel-for"><span class="nav-number">4.3.</span> <span class="nav-text">omp parallel&#x2F;for</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#omp-parallel-omp-for"><span class="nav-number">4.3.1.</span> <span class="nav-text">omp parallel + omp for</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#omp-parallel-for-1"><span class="nav-number">4.3.2.</span> <span class="nav-text">omp parallel for</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sqrt-case"><span class="nav-number">4.3.3.</span> <span class="nav-text">sqrt case</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#parallel-sections-1"><span class="nav-number">4.4.</span> <span class="nav-text">parallel sections</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#private-1"><span class="nav-number">4.5.</span> <span class="nav-text">private</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#error-case"><span class="nav-number">4.5.1.</span> <span class="nav-text">error case</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#fix1-by-changing-code"><span class="nav-number">4.5.2.</span> <span class="nav-text">fix1 by changing code</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#fix2-by-private-j"><span class="nav-number">4.5.3.</span> <span class="nav-text">fix2 by private(j)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reduction-1"><span class="nav-number">4.6.</span> <span class="nav-text">reduction</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#error-case-1"><span class="nav-number">4.6.1.</span> <span class="nav-text">error case</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#reduction-sum"><span class="nav-number">4.6.2.</span> <span class="nav-text">reduction(+:sum)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#num-threads-1"><span class="nav-number">4.6.3.</span> <span class="nav-text">num_threads</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#schedule-1"><span class="nav-number">4.7.</span> <span class="nav-text">schedule</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#static-2"><span class="nav-number">4.7.1.</span> <span class="nav-text">(static,2)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#static-4"><span class="nav-number">4.7.2.</span> <span class="nav-text">(static,4)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#dynamic-1"><span class="nav-number">4.7.3.</span> <span class="nav-text">(dynamic,1)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#dynamic-3"><span class="nav-number">4.7.4.</span> <span class="nav-text">(dynamic,3)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#schedule-compare"><span class="nav-number">4.8.</span> <span class="nav-text">schedule compare</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#no-schedule"><span class="nav-number">4.8.1.</span> <span class="nav-text">no schedule</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#schedule-static-1"><span class="nav-number">4.8.2.</span> <span class="nav-text">schedule(static,1)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#schedule-dynamic-1"><span class="nav-number">4.8.3.</span> <span class="nav-text">schedule(dynamic,1)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#schedule-dynamic-200"><span class="nav-number">4.8.4.</span> <span class="nav-text">schedule(dynamic,200)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenCV-with-OpenMP"><span class="nav-number">5.</span> <span class="nav-text">OpenCV with OpenMP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#concepts"><span class="nav-number">5.1.</span> <span class="nav-text">concepts</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#parallel-for-1"><span class="nav-number">5.2.</span> <span class="nav-text">parallel for</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#parallel-sections-2"><span class="nav-number">5.3.</span> <span class="nav-text">parallel sections</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">6.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">7.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

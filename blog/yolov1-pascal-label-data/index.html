@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="code example12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989">
+<meta property="og:type" content="article">
+<meta property="og:title" content="yolov1 pascal label data">
+<meta property="og:url" content="https://kezunlin.me/blog/yolov1-pascal-label-data/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="code example12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20181126095114817-1975881555.png">
+<meta property="article:published_time" content="2018-11-26T01:48:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="object detect">
+<meta property="article:tag" content="yolov1">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kezunlin.me/images/posts/635233-20181126095114817-1975881555.png">
+
+<link rel="canonical" href="https://kezunlin.me/blog/yolov1-pascal-label-data/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>yolov1 pascal label data | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/yolov1-pascal-label-data/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          yolov1 pascal label data
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-11-26 09:48:00" itemprop="dateCreated datePublished" datetime="2018-11-26T09:48:00+08:00">2018-11-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deep-learning/" itemprop="url" rel="index"><span itemprop="name">deep learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="code-example"><a href="#code-example" class="headerlink" title="code example"></a>code example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> xml.etree.ElementTree <span class="keyword">as</span> ET</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> copy</span><br><span class="line"><span class="keyword">import</span> yolo.config <span class="keyword">as</span> cfg</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">np.random.seed(<span class="number">1234</span>)  <span class="comment"># for np.random.shuffle(gt_labels)</span></span><br><span class="line"></span><br><span class="line">classes = [<span class="string">&#x27;aeroplane&#x27;</span>, <span class="string">&#x27;bicycle&#x27;</span>, <span class="string">&#x27;bird&#x27;</span>, <span class="string">&#x27;boat&#x27;</span>, <span class="string">&#x27;bottle&#x27;</span>, <span class="string">&#x27;bus&#x27;</span>,</span><br><span class="line">           <span class="string">&#x27;car&#x27;</span>, <span class="string">&#x27;cat&#x27;</span>, <span class="string">&#x27;chair&#x27;</span>, <span class="string">&#x27;cow&#x27;</span>, <span class="string">&#x27;diningtable&#x27;</span>, <span class="string">&#x27;dog&#x27;</span>, <span class="string">&#x27;horse&#x27;</span>,</span><br><span class="line">           <span class="string">&#x27;motorbike&#x27;</span>, <span class="string">&#x27;person&#x27;</span>, <span class="string">&#x27;pottedplant&#x27;</span>, <span class="string">&#x27;sheep&#x27;</span>, <span class="string">&#x27;sofa&#x27;</span>,</span><br><span class="line">           <span class="string">&#x27;train&#x27;</span>, <span class="string">&#x27;tvmonitor&#x27;</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">pascal_voc</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, phase, rebuild=<span class="literal">False</span></span>):</span><br><span class="line">        <span class="variable language_">self</span>.devkil_path = os.path.join(cfg.PASCAL_PATH, <span class="string">&#x27;VOCdevkit&#x27;</span>)</span><br><span class="line">        <span class="variable language_">self</span>.data_path = os.path.join(<span class="variable language_">self</span>.devkil_path, <span class="string">&#x27;VOC2007&#x27;</span>)</span><br><span class="line">        <span class="variable language_">self</span>.cache_path = cfg.CACHE_PATH</span><br><span class="line">        <span class="variable language_">self</span>.batch_size = cfg.BATCH_SIZE</span><br><span class="line">        <span class="variable language_">self</span>.image_size = cfg.IMAGE_SIZE</span><br><span class="line">        <span class="variable language_">self</span>.cell_size = cfg.CELL_SIZE</span><br><span class="line">        <span class="variable language_">self</span>.classes = cfg.CLASSES</span><br><span class="line">        <span class="variable language_">self</span>.class_to_ind = <span class="built_in">dict</span>(<span class="built_in">zip</span>(<span class="variable language_">self</span>.classes, <span class="built_in">range</span>(<span class="built_in">len</span>(<span class="variable language_">self</span>.classes))))</span><br><span class="line">        <span class="variable language_">self</span>.flipped = <span class="literal">False</span>  <span class="comment"># cfg.FLIPPED</span></span><br><span class="line">        <span class="variable language_">self</span>.phase = phase</span><br><span class="line">        <span class="variable language_">self</span>.rebuild = rebuild</span><br><span class="line">        <span class="variable language_">self</span>.cursor = <span class="number">0</span></span><br><span class="line">        <span class="variable language_">self</span>.epoch = <span class="number">1</span></span><br><span class="line">        <span class="variable language_">self</span>.gt_labels = <span class="literal">None</span></span><br><span class="line">        <span class="variable language_">self</span>.prepare()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get</span>(<span class="params">self</span>):</span><br><span class="line">        images = np.zeros(</span><br><span class="line">            (<span class="variable language_">self</span>.batch_size, <span class="variable language_">self</span>.image_size, <span class="variable language_">self</span>.image_size, <span class="number">3</span>))</span><br><span class="line">        labels = np.zeros(</span><br><span class="line">            (<span class="variable language_">self</span>.batch_size, <span class="variable language_">self</span>.cell_size, <span class="variable language_">self</span>.cell_size, <span class="number">25</span>))</span><br><span class="line">        count = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> count &lt; <span class="variable language_">self</span>.batch_size:</span><br><span class="line">            imname = <span class="variable language_">self</span>.gt_labels[<span class="variable language_">self</span>.cursor][<span class="string">&#x27;imname&#x27;</span>]</span><br><span class="line">            flipped = <span class="variable language_">self</span>.gt_labels[<span class="variable language_">self</span>.cursor][<span class="string">&#x27;flipped&#x27;</span>]</span><br><span class="line">            images[count, :, :, :] = <span class="variable language_">self</span>.image_read(imname, flipped)</span><br><span class="line">            labels[count, :, :, :] = <span class="variable language_">self</span>.gt_labels[<span class="variable language_">self</span>.cursor][<span class="string">&#x27;label&#x27;</span>]</span><br><span class="line">            count += <span class="number">1</span></span><br><span class="line">            <span class="variable language_">self</span>.cursor += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> <span class="variable language_">self</span>.cursor &gt;= <span class="built_in">len</span>(<span class="variable language_">self</span>.gt_labels):</span><br><span class="line">                np.random.shuffle(<span class="variable language_">self</span>.gt_labels)</span><br><span class="line">                <span class="variable language_">self</span>.cursor = <span class="number">0</span></span><br><span class="line">                <span class="variable language_">self</span>.epoch += <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> images, labels</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">image_read</span>(<span class="params">self, imname, flipped=<span class="literal">False</span></span>):</span><br><span class="line">        image = cv2.imread(imname)</span><br><span class="line">        image = cv2.resize(image, (<span class="variable language_">self</span>.image_size, <span class="variable language_">self</span>.image_size))</span><br><span class="line">        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB).astype(np.float32)</span><br><span class="line">        image = (image / <span class="number">255.0</span>) * <span class="number">2.0</span> - <span class="number">1.0</span></span><br><span class="line">        <span class="keyword">if</span> flipped:</span><br><span class="line">            image = image[:, ::-<span class="number">1</span>, :]</span><br><span class="line">        <span class="keyword">return</span> image</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">prepare</span>(<span class="params">self</span>):</span><br><span class="line">        gt_labels = <span class="variable language_">self</span>.load_labels()</span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.flipped:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;Appending horizontally-flipped training examples ...&#x27;</span>)</span><br><span class="line">            <span class="comment"># keep y; flip x;</span></span><br><span class="line">            gt_labels_cp = copy.deepcopy(gt_labels)</span><br><span class="line">            <span class="keyword">for</span> idx <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(gt_labels_cp)):</span><br><span class="line">                gt_labels_cp[idx][<span class="string">&#x27;flipped&#x27;</span>] = <span class="literal">True</span></span><br><span class="line">                gt_labels_cp[idx][<span class="string">&#x27;label&#x27;</span>] = \</span><br><span class="line">                    gt_labels_cp[idx][<span class="string">&#x27;label&#x27;</span>][:, ::-<span class="number">1</span>, :]  <span class="comment"># flip x grid index  [0,1,2,3,4,5,6] ===&gt;[6,5,4,3,2,1,0]</span></span><br><span class="line">                <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="variable language_">self</span>.cell_size):</span><br><span class="line">                    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="variable language_">self</span>.cell_size):</span><br><span class="line">                        <span class="keyword">if</span> gt_labels_cp[idx][<span class="string">&#x27;label&#x27;</span>][i, j, <span class="number">0</span>] == <span class="number">1</span>:</span><br><span class="line">                            gt_labels_cp[idx][<span class="string">&#x27;label&#x27;</span>][i, j, <span class="number">1</span>] = \</span><br><span class="line">                                <span class="variable language_">self</span>.image_size - <span class="number">1</span> - \</span><br><span class="line">                                gt_labels_cp[idx][<span class="string">&#x27;label&#x27;</span>][i, j, <span class="number">1</span>]  <span class="comment"># cx = 448 -1 - cx  flipped cx</span></span><br><span class="line">            gt_labels += gt_labels_cp</span><br><span class="line">        np.random.shuffle(gt_labels)  <span class="comment"># shuffle labels</span></span><br><span class="line">        <span class="variable language_">self</span>.gt_labels = gt_labels</span><br><span class="line">        <span class="keyword">return</span> gt_labels</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">load_labels</span>(<span class="params">self</span>):</span><br><span class="line">        cache_file = os.path.join(</span><br><span class="line">            <span class="variable language_">self</span>.cache_path, <span class="string">&#x27;pascal_&#x27;</span> + <span class="variable language_">self</span>.phase + <span class="string">&#x27;_gt_labels.pkl&#x27;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> os.path.isfile(cache_file) <span class="keyword">and</span> <span class="keyword">not</span> <span class="variable language_">self</span>.rebuild:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;Loading gt_labels from: &#x27;</span> + cache_file)</span><br><span class="line">            <span class="keyword">with</span> <span class="built_in">open</span>(cache_file, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                gt_labels = pickle.load(f)</span><br><span class="line">            <span class="keyword">return</span> gt_labels</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;Processing gt_labels from: &#x27;</span> + <span class="variable language_">self</span>.data_path)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="variable language_">self</span>.cache_path):</span><br><span class="line">            os.makedirs(<span class="variable language_">self</span>.cache_path)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.phase == <span class="string">&#x27;train&#x27;</span>:</span><br><span class="line">            txtname = os.path.join(</span><br><span class="line">                <span class="variable language_">self</span>.data_path, <span class="string">&#x27;ImageSets&#x27;</span>, <span class="string">&#x27;Main&#x27;</span>, <span class="string">&#x27;trainval.txt&#x27;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            txtname = os.path.join(</span><br><span class="line">                <span class="variable language_">self</span>.data_path, <span class="string">&#x27;ImageSets&#x27;</span>, <span class="string">&#x27;Main&#x27;</span>, <span class="string">&#x27;test.txt&#x27;</span>)</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(txtname, <span class="string">&#x27;r&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="variable language_">self</span>.image_index = [x.strip() <span class="keyword">for</span> x <span class="keyword">in</span> f.readlines()]  <span class="comment"># 5011 lines</span></span><br><span class="line"></span><br><span class="line">        gt_labels = []</span><br><span class="line">        <span class="keyword">for</span> index <span class="keyword">in</span> <span class="variable language_">self</span>.image_index:</span><br><span class="line">            label, num = <span class="variable language_">self</span>.load_pascal_annotation(index)</span><br><span class="line">            <span class="keyword">if</span> num == <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            imname = os.path.join(<span class="variable language_">self</span>.data_path, <span class="string">&#x27;JPEGImages&#x27;</span>, index + <span class="string">&#x27;.jpg&#x27;</span>)</span><br><span class="line">            gt_labels.append(&#123;<span class="string">&#x27;imname&#x27;</span>: imname,</span><br><span class="line">                              <span class="string">&#x27;label&#x27;</span>: label,</span><br><span class="line">                              <span class="string">&#x27;flipped&#x27;</span>: <span class="literal">False</span>&#125;)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;Saving gt_labels to: &#x27;</span> + cache_file)</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(cache_file, <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            pickle.dump(gt_labels, f)</span><br><span class="line">        <span class="keyword">return</span> gt_labels</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">load_pascal_annotation</span>(<span class="params">self, index</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Load image and bounding boxes info from XML file in the PASCAL VOC</span></span><br><span class="line"><span class="string">        format.   002939</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">        imname = os.path.join(<span class="variable language_">self</span>.data_path, <span class="string">&#x27;JPEGImages&#x27;</span>, index + <span class="string">&#x27;.jpg&#x27;</span>)</span><br><span class="line">        im = cv2.imread(imname)</span><br><span class="line">        h_ratio = <span class="number">1.0</span> * <span class="variable language_">self</span>.image_size / im.shape[<span class="number">0</span>]</span><br><span class="line">        w_ratio = <span class="number">1.0</span> * <span class="variable language_">self</span>.image_size / im.shape[<span class="number">1</span>]</span><br><span class="line">        <span class="comment"># im = cv2.resize(im, [self.image_size, self.image_size])</span></span><br><span class="line"></span><br><span class="line">        label = np.zeros((<span class="variable language_">self</span>.cell_size, <span class="variable language_">self</span>.cell_size, <span class="number">25</span>))  <span class="comment"># 7,7,25</span></span><br><span class="line">        filename = os.path.join(<span class="variable language_">self</span>.data_path, <span class="string">&#x27;Annotations&#x27;</span>, index + <span class="string">&#x27;.xml&#x27;</span>)</span><br><span class="line">        tree = ET.parse(filename)</span><br><span class="line">        objs = tree.findall(<span class="string">&#x27;object&#x27;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> obj <span class="keyword">in</span> objs:</span><br><span class="line">            bbox = obj.find(<span class="string">&#x27;bndbox&#x27;</span>)  <span class="comment"># xmin,ymin,xmax,ymax  1-based ===&gt; 0-based</span></span><br><span class="line">            <span class="comment"># Make pixel indexes 0-based</span></span><br><span class="line">            x1 = <span class="built_in">max</span>(<span class="built_in">min</span>((<span class="built_in">float</span>(bbox.find(<span class="string">&#x27;xmin&#x27;</span>).text) - <span class="number">1</span>) * w_ratio, <span class="variable language_">self</span>.image_size - <span class="number">1</span>), <span class="number">0</span>)</span><br><span class="line">            y1 = <span class="built_in">max</span>(<span class="built_in">min</span>((<span class="built_in">float</span>(bbox.find(<span class="string">&#x27;ymin&#x27;</span>).text) - <span class="number">1</span>) * h_ratio, <span class="variable language_">self</span>.image_size - <span class="number">1</span>), <span class="number">0</span>)</span><br><span class="line">            x2 = <span class="built_in">max</span>(<span class="built_in">min</span>((<span class="built_in">float</span>(bbox.find(<span class="string">&#x27;xmax&#x27;</span>).text) - <span class="number">1</span>) * w_ratio, <span class="variable language_">self</span>.image_size - <span class="number">1</span>), <span class="number">0</span>)</span><br><span class="line">            y2 = <span class="built_in">max</span>(<span class="built_in">min</span>((<span class="built_in">float</span>(bbox.find(<span class="string">&#x27;ymax&#x27;</span>).text) - <span class="number">1</span>) * h_ratio, <span class="variable language_">self</span>.image_size - <span class="number">1</span>), <span class="number">0</span>)</span><br><span class="line">            cls_ind = <span class="variable language_">self</span>.class_to_ind[obj.find(<span class="string">&#x27;name&#x27;</span>).text.lower().strip()]</span><br><span class="line">            boxes = [(x2 + x1) / <span class="number">2.0</span>, (y2 + y1) / <span class="number">2.0</span>, x2 - x1, y2 - y1]  <span class="comment"># cx,cy,w,h   [0-447]</span></span><br><span class="line">            x_ind = <span class="built_in">int</span>(boxes[<span class="number">0</span>] * <span class="variable language_">self</span>.cell_size / <span class="variable language_">self</span>.image_size)  <span class="comment"># grid x,y index  [0-6]</span></span><br><span class="line">            y_ind = <span class="built_in">int</span>(boxes[<span class="number">1</span>] * <span class="variable language_">self</span>.cell_size / <span class="variable language_">self</span>.image_size)</span><br><span class="line">            <span class="keyword">if</span> label[y_ind, x_ind, <span class="number">0</span>] == <span class="number">1</span>:  <span class="comment"># if multiple objects fall in same grid, we only use the first one</span></span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            label[y_ind, x_ind, <span class="number">0</span>] = <span class="number">1</span>  <span class="comment"># has object  1 or 0</span></span><br><span class="line">            label[y_ind, x_ind, <span class="number">1</span>:<span class="number">5</span>] = boxes  <span class="comment"># boxs (cx,cy,w,h)  [0-447]</span></span><br><span class="line">            label[y_ind, x_ind, <span class="number">5</span> + cls_ind] = <span class="number">1</span>  <span class="comment"># class   20-one-hot-vector</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> label, <span class="built_in">len</span>(objs)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">3 , 4 =  [0. 0. 0. 0. 0.]</span></span><br><span class="line"><span class="string">3 , 5 =  [  1.    325.248 229.6   111.104 228.48 ]</span></span><br><span class="line"><span class="string">    class_one_hot =  [0. 0. 0. 0. 0. 0. 0. 0. 1. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]</span></span><br><span class="line"><span class="string">    class_index =  8</span></span><br><span class="line"><span class="string">    class_name =  chair</span></span><br><span class="line"><span class="string">3 , 6 =  [0. 0. 0. 0. 0.]</span></span><br><span class="line"><span class="string">4 , 0 =  [0. 0. 0. 0. 0.]</span></span><br><span class="line"><span class="string">4 , 1 =  [0. 0. 0. 0. 0.]</span></span><br><span class="line"><span class="string">4 , 2 =  [  1.    132.16  288.4   172.928 316.96 ]</span></span><br><span class="line"><span class="string">    class_one_hot =  [0. 0. 0. 0. 0. 0. 0. 0. 1. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]</span></span><br><span class="line"><span class="string">    class_index =  8</span></span><br><span class="line"><span class="string">    class_name =  chair</span></span><br><span class="line"><span class="string">4 , 3 =  [0. 0. 0. 0. 0.]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">data[&#x27;label&#x27;].shape # 7,7,25  (confidence+ (x,y,w,h) + 20-classes)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">confidence: 1 if gt_box center falls in this grid, otherwise 0</span></span><br><span class="line"><span class="string">box(x,y,w,h): gt_box center x,y,w,h; otherwize [0,0,0,0]</span></span><br><span class="line"><span class="string">class: 20-one-hot-vector if gt_box; othersize [0]*20</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">how flip works: flip x dim</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">(1) flip grid x-dim:  data[&#x27;label&#x27;] = data[&#x27;label&#x27;][:, ::-1, :]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">y-grid = y-grid  [0,1,2,3,4,5,6]</span></span><br><span class="line"><span class="string">x-grid flip      [0,1,2,3,4,5,6] ===&gt;[6,5,4,3,2,1,0]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">(2) flip data[&#x27;label&#x27;]</span></span><br><span class="line"><span class="string">confidence = confidence</span></span><br><span class="line"><span class="string">cx:  flip cx = 417-cx:   data[&#x27;label&#x27;][i, j, 1] = 448 - 1 - data[&#x27;label&#x27;][i, j, 1]</span></span><br><span class="line"><span class="string">cy = cy</span></span><br><span class="line"><span class="string">w = w</span></span><br><span class="line"><span class="string">h = h</span></span><br><span class="line"><span class="string">class = class</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">print_data</span>(<span class="params">data</span>):</span><br><span class="line">    <span class="comment"># grid y,x</span></span><br><span class="line">    <span class="keyword">for</span> y <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">7</span>):</span><br><span class="line">        <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">7</span>):</span><br><span class="line">            <span class="built_in">print</span>(y, <span class="string">&quot;,&quot;</span>, x, <span class="string">&quot;= &quot;</span>, data[<span class="string">&#x27;label&#x27;</span>][y, x, :<span class="number">5</span>])</span><br><span class="line">            <span class="keyword">if</span> data[<span class="string">&#x27;label&#x27;</span>][y, x, <span class="number">0</span>] &gt; <span class="number">0</span>:  <span class="comment"># confidence &gt;0</span></span><br><span class="line">                class_one_hot = data[<span class="string">&#x27;label&#x27;</span>][y, x, <span class="number">5</span>:]  <span class="comment"># (20)</span></span><br><span class="line">                class_index = np.argmax(class_one_hot)</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;    class_one_hot = &quot;</span>, class_one_hot)</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;    class_index = &quot;</span>, class_index)</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;    class_name = &quot;</span>, classes[class_index])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">flip_data</span>(<span class="params">data</span>):</span><br><span class="line">    data[<span class="string">&#x27;flipped&#x27;</span>] = <span class="literal">True</span></span><br><span class="line">    data[<span class="string">&#x27;label&#x27;</span>] = data[<span class="string">&#x27;label&#x27;</span>][:, ::-<span class="number">1</span>, :]</span><br><span class="line">    <span class="keyword">for</span> y <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">7</span>):</span><br><span class="line">        <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">7</span>):</span><br><span class="line">            <span class="keyword">if</span> data[<span class="string">&#x27;label&#x27;</span>][y, x, <span class="number">0</span>] == <span class="number">1</span>:</span><br><span class="line">                data[<span class="string">&#x27;label&#x27;</span>][y, x, <span class="number">1</span>] = <span class="number">448</span> - <span class="number">1</span> - data[<span class="string">&#x27;label&#x27;</span>][y, x, <span class="number">1</span>]  <span class="comment"># cx = 448 -1 - cx  flipped cx</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show_image</span>(<span class="params">filename</span>):</span><br><span class="line">    image = cv2.imread(filename)</span><br><span class="line">    <span class="comment"># convert from BGR to RGB</span></span><br><span class="line">    rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)</span><br><span class="line">    plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">    plt.imshow(rgb_image)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;========================PASCAL=================================&quot;</span>)</span><br><span class="line">pascal = pascal_voc(<span class="string">&#x27;train&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(pascal.class_to_ind)  <span class="comment"># dict 20</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(pascal.gt_labels))  <span class="comment"># list: default 5011; flipped 10022</span></span><br><span class="line">data = pascal.gt_labels[<span class="number">0</span>]</span><br><span class="line"><span class="built_in">print</span>(data.keys())  <span class="comment"># dict_keys([&#x27;flipped&#x27;, &#x27;imname&#x27;, &#x27;label&#x27;])</span></span><br><span class="line"><span class="built_in">print</span>(data[<span class="string">&#x27;imname&#x27;</span>])</span><br><span class="line"><span class="built_in">print</span>(data[<span class="string">&#x27;label&#x27;</span>].shape)  <span class="comment"># 7,7,25  (confidence+ (x,y,w,h) + 20-classes)</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(classes)</span><br><span class="line">show_image(data[<span class="string">&#x27;imname&#x27;</span>])</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;========================DATA=================================&quot;</span>)</span><br><span class="line">print_data(data)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;=========================FLIPPED================================&quot;</span>)</span><br><span class="line"><span class="comment"># flip data</span></span><br><span class="line">flipped = copy.deepcopy(data)</span><br><span class="line">flip_data(flipped)</span><br><span class="line">print_data(flipped)</span><br></pre></td></tr></table></figure>
+
+<pre><code>Loading gt_labels from: data\pascal_voc\cache\pascal_train_gt_labels.pkl
+&#123;&#39;dog&#39;: 11, &#39;train&#39;: 18, &#39;bus&#39;: 5, &#39;motorbike&#39;: 13, &#39;aeroplane&#39;: 0, &#39;bicycle&#39;: 1, &#39;person&#39;: 14, &#39;horse&#39;: 12, &#39;bird&#39;: 2, &#39;tvmonitor&#39;: 19, &#39;sheep&#39;: 16, &#39;boat&#39;: 3, &#39;car&#39;: 6, &#39;diningtable&#39;: 10, &#39;pottedplant&#39;: 15, &#39;sofa&#39;: 17, &#39;bottle&#39;: 4, &#39;chair&#39;: 8, &#39;cat&#39;: 7, &#39;cow&#39;: 9&#125;
+5011
+dict_keys([&#39;flipped&#39;, &#39;label&#39;, &#39;imname&#39;])
+data\pascal_voc\VOCdevkit\VOC2007\JPEGImages\002939.jpg
+(7, 7, 25)
+[&#39;aeroplane&#39;, &#39;bicycle&#39;, &#39;bird&#39;, &#39;boat&#39;, &#39;bottle&#39;, &#39;bus&#39;, &#39;car&#39;, &#39;cat&#39;, &#39;chair&#39;, &#39;cow&#39;, &#39;diningtable&#39;, &#39;dog&#39;, &#39;horse&#39;, &#39;motorbike&#39;, &#39;person&#39;, &#39;pottedplant&#39;, &#39;sheep&#39;, &#39;sofa&#39;, &#39;train&#39;, &#39;tvmonitor&#39;]
+</code></pre>
+<p><img src="https://kezunlin.me/images/posts/635233-20181126095114817-1975881555.png" alt="png"></p>
+<pre><code>========================DATA=================================
+0 , 0 =  [0. 0. 0. 0. 0.]
+0 , 1 =  [0. 0. 0. 0. 0.]
+0 , 2 =  [0. 0. 0. 0. 0.]
+0 , 3 =  [0. 0. 0. 0. 0.]
+0 , 4 =  [0. 0. 0. 0. 0.]
+0 , 5 =  [0. 0. 0. 0. 0.]
+0 , 6 =  [0. 0. 0. 0. 0.]
+1 , 0 =  [0. 0. 0. 0. 0.]
+1 , 1 =  [0. 0. 0. 0. 0.]
+1 , 2 =  [0. 0. 0. 0. 0.]
+1 , 3 =  [0. 0. 0. 0. 0.]
+1 , 4 =  [0. 0. 0. 0. 0.]
+1 , 5 =  [0. 0. 0. 0. 0.]
+1 , 6 =  [0. 0. 0. 0. 0.]
+2 , 0 =  [0. 0. 0. 0. 0.]
+2 , 1 =  [0. 0. 0. 0. 0.]
+2 , 2 =  [0. 0. 0. 0. 0.]
+2 , 3 =  [0. 0. 0. 0. 0.]
+2 , 4 =  [0. 0. 0. 0. 0.]
+2 , 5 =  [0. 0. 0. 0. 0.]
+2 , 6 =  [0. 0. 0. 0. 0.]
+3 , 0 =  [0. 0. 0. 0. 0.]
+3 , 1 =  [  1.          70.336      202.496       74.368      149.33333333]
+    class_one_hot =  [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
+    class_index =  19
+    class_name =  tvmonitor
+3 , 2 =  [0. 0. 0. 0. 0.]
+3 , 3 =  [0. 0. 0. 0. 0.]
+3 , 4 =  [  1.         267.456      229.97333333  29.568       77.65333333]
+    class_one_hot =  [0. 0. 0. 0. 1. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+    class_index =  4
+    class_name =  bottle
+3 , 5 =  [0. 0. 0. 0. 0.]
+3 , 6 =  [0. 0. 0. 0. 0.]
+4 , 0 =  [0. 0. 0. 0. 0.]
+4 , 1 =  [0. 0. 0. 0. 0.]
+4 , 2 =  [0. 0. 0. 0. 0.]
+4 , 3 =  [  1.         220.864      283.136      158.592      327.33866667]
+    class_one_hot =  [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 1. 0. 0. 0. 0. 0.]
+    class_index =  14
+    class_name =  person
+4 , 4 =  [0. 0. 0. 0. 0.]
+4 , 5 =  [0. 0. 0. 0. 0.]
+4 , 6 =  [0. 0. 0. 0. 0.]
+5 , 0 =  [0. 0. 0. 0. 0.]
+5 , 1 =  [0. 0. 0. 0. 0.]
+5 , 2 =  [0. 0. 0. 0. 0.]
+5 , 3 =  [0. 0. 0. 0. 0.]
+5 , 4 =  [  1.         283.584      337.49333333  92.288      185.17333333]
+    class_one_hot =  [0. 0. 0. 0. 0. 0. 0. 0. 1. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+    class_index =  8
+    class_name =  chair
+5 , 5 =  [0. 0. 0. 0. 0.]
+5 , 6 =  [0. 0. 0. 0. 0.]
+6 , 0 =  [0. 0. 0. 0. 0.]
+6 , 1 =  [0. 0. 0. 0. 0.]
+6 , 2 =  [0. 0. 0. 0. 0.]
+6 , 3 =  [0. 0. 0. 0. 0.]
+6 , 4 =  [0. 0. 0. 0. 0.]
+6 , 5 =  [0. 0. 0. 0. 0.]
+6 , 6 =  [0. 0. 0. 0. 0.]
+=========================FLIPPED================================
+0 , 0 =  [0. 0. 0. 0. 0.]
+0 , 1 =  [0. 0. 0. 0. 0.]
+0 , 2 =  [0. 0. 0. 0. 0.]
+0 , 3 =  [0. 0. 0. 0. 0.]
+0 , 4 =  [0. 0. 0. 0. 0.]
+0 , 5 =  [0. 0. 0. 0. 0.]
+0 , 6 =  [0. 0. 0. 0. 0.]
+1 , 0 =  [0. 0. 0. 0. 0.]
+1 , 1 =  [0. 0. 0. 0. 0.]
+1 , 2 =  [0. 0. 0. 0. 0.]
+1 , 3 =  [0. 0. 0. 0. 0.]
+1 , 4 =  [0. 0. 0. 0. 0.]
+1 , 5 =  [0. 0. 0. 0. 0.]
+1 , 6 =  [0. 0. 0. 0. 0.]
+2 , 0 =  [0. 0. 0. 0. 0.]
+2 , 1 =  [0. 0. 0. 0. 0.]
+2 , 2 =  [0. 0. 0. 0. 0.]
+2 , 3 =  [0. 0. 0. 0. 0.]
+2 , 4 =  [0. 0. 0. 0. 0.]
+2 , 5 =  [0. 0. 0. 0. 0.]
+2 , 6 =  [0. 0. 0. 0. 0.]
+3 , 0 =  [0. 0. 0. 0. 0.]
+3 , 1 =  [0. 0. 0. 0. 0.]
+3 , 2 =  [  1.         179.544      229.97333333  29.568       77.65333333]
+    class_one_hot =  [0. 0. 0. 0. 1. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+    class_index =  4
+    class_name =  bottle
+3 , 3 =  [0. 0. 0. 0. 0.]
+3 , 4 =  [0. 0. 0. 0. 0.]
+3 , 5 =  [  1.         376.664      202.496       74.368      149.33333333]
+    class_one_hot =  [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
+    class_index =  19
+    class_name =  tvmonitor
+3 , 6 =  [0. 0. 0. 0. 0.]
+4 , 0 =  [0. 0. 0. 0. 0.]
+4 , 1 =  [0. 0. 0. 0. 0.]
+4 , 2 =  [0. 0. 0. 0. 0.]
+4 , 3 =  [  1.         226.136      283.136      158.592      327.33866667]
+    class_one_hot =  [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 1. 0. 0. 0. 0. 0.]
+    class_index =  14
+    class_name =  person
+4 , 4 =  [0. 0. 0. 0. 0.]
+4 , 5 =  [0. 0. 0. 0. 0.]
+4 , 6 =  [0. 0. 0. 0. 0.]
+5 , 0 =  [0. 0. 0. 0. 0.]
+5 , 1 =  [0. 0. 0. 0. 0.]
+5 , 2 =  [  1.         163.416      337.49333333  92.288      185.17333333]
+    class_one_hot =  [0. 0. 0. 0. 0. 0. 0. 0. 1. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+    class_index =  8
+    class_name =  chair
+5 , 3 =  [0. 0. 0. 0. 0.]
+5 , 4 =  [0. 0. 0. 0. 0.]
+5 , 5 =  [0. 0. 0. 0. 0.]
+5 , 6 =  [0. 0. 0. 0. 0.]
+6 , 0 =  [0. 0. 0. 0. 0.]
+6 , 1 =  [0. 0. 0. 0. 0.]
+6 , 2 =  [0. 0. 0. 0. 0.]
+6 , 3 =  [0. 0. 0. 0. 0.]
+6 , 4 =  [0. 0. 0. 0. 0.]
+6 , 5 =  [0. 0. 0. 0. 0.]
+6 , 6 =  [0. 0. 0. 0. 0.]
+</code></pre>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20181126: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/object-detect/" rel="tag"># object detect</a>
+              <a href="/tags/yolov1/" rel="tag"># yolov1</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/yolov1-network-predict-output-data/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/compile-refinedet-on-ubuntu-16-04/" rel="next" title="compile and install refinedet on ubuntu 16.04">
+      compile and install refinedet on ubuntu 16.04 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#code-example"><span class="nav-number">1.</span> <span class="nav-text">code example</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

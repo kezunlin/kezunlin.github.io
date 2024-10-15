@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Guidesystems:  ubuntu 16.04 gnu gcc&#x2F;g++ 5.4.0 cmake cmake-gui  opencv 3.1.0  arm toolchain for cross-compiling  arm-linux-gnueabi-gcc 5.4.0 arm-linux-gnueabi-g++ 5.4.0  check 1234567891011which a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="how to cross compile opencv on nvidia xaiver arm platform">
+<meta property="og:url" content="https://kezunlin.me/blog/arm-cross-compiling/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Guidesystems:  ubuntu 16.04 gnu gcc&#x2F;g++ 5.4.0 cmake cmake-gui  opencv 3.1.0  arm toolchain for cross-compiling  arm-linux-gnueabi-gcc 5.4.0 arm-linux-gnueabi-g++ 5.4.0  check 1234567891011which a">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190118095159058-1876545079.png">
+<meta property="article:published_time" content="2019-01-18T01:44:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="arm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kezunlin.me/images/posts/635233-20190118095159058-1876545079.png">
+
+<link rel="canonical" href="https://kezunlin.me/blog/arm-cross-compiling/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>how to cross compile opencv on nvidia xaiver arm platform | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/arm-cross-compiling/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          how to cross compile opencv on nvidia xaiver arm platform
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-01-18 09:44:00" itemprop="dateCreated datePublished" datetime="2019-01-18T09:44:00+08:00">2019-01-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><p>systems:</p>
+<ul>
+<li>ubuntu 16.04</li>
+<li>gnu gcc&#x2F;g++ 5.4.0</li>
+<li>cmake</li>
+<li>cmake-gui </li>
+<li>opencv 3.1.0</li>
+</ul>
+<p>arm toolchain for cross-compiling</p>
+<ul>
+<li>arm-linux-gnueabi-gcc 5.4.0</li>
+<li>arm-linux-gnueabi-g++ 5.4.0</li>
+</ul>
+<p>check</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">which</span> arm-linux-gnueabi-gcc</span><br><span class="line">/usr/bin/arm-linux-gnueabi-gcc</span><br><span class="line"></span><br><span class="line"><span class="built_in">which</span> arm-linux-gnueabi-g++</span><br><span class="line">/usr/bin/arm-linux-gnueabi-g++</span><br><span class="line"></span><br><span class="line"><span class="built_in">which</span> gcc</span><br><span class="line">/usr/bin/gcc</span><br><span class="line"></span><br><span class="line"><span class="built_in">which</span> g++</span><br><span class="line">/usr/bin/g++</span><br></pre></td></tr></table></figure>
+
+<h3 id="compiling"><a href="#compiling" class="headerlink" title="compiling"></a>compiling</h3><p>Difference between Native and Cross compiler</p>
+<ul>
+<li>A native compiler is one that compiles programs for the same architecture or operating system that it is running on. For instance, a compiler running on an x86 processor and creating x86 binaries.</li>
+<li>A cross-compiler is one that compiles binaries for architectures other than its own, such as compiling ARM binaries on a Intel’s x86 processor.A “cross compiler” executes in one environment and generates code for another. A “native compiler” generates code for its own execution environment.</li>
+</ul>
+<p>2 types:</p>
+<ul>
+<li>native compiling: compile on x86 for x86 binaries, run on x86</li>
+<li>cross compiliing: compile on x86 for arm binaries, run on arm</li>
+</ul>
+<h3 id="install-gnu-tools"><a href="#install-gnu-tools" class="headerlink" title="install gnu tools"></a>install gnu tools</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install gcc g++ </span><br></pre></td></tr></table></figure>
+
+<h3 id="install-arm-toolchain"><a href="#install-arm-toolchain" class="headerlink" title="install arm toolchain"></a>install arm toolchain</h3><h4 id="apt-get"><a href="#apt-get" class="headerlink" title="apt-get"></a>apt-get</h4><p>Toolchains have a loose name convention like  <code>[arch] – [vendor] – [os] – [abi]</code></p>
+<ul>
+<li><code>arch</code> is for architecture: arm, mips, x86, i686…</li>
+<li><code>vendor</code> is tool chain supplier: apple,</li>
+<li><code>os</code> is for operating system: linux, none (bare metal)</li>
+<li><code>abi</code> is for application binary interface convention: eabi, gnueabi, gnueabihf</li>
+</ul>
+<p>install toolchains</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install gcc-arm-linux-gnueabi g++-arm-linux-gnueabi</span><br></pre></td></tr></table></figure>
+
+<p>install 32-bit libraries</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install lib32ncurses5 lib32z1</span><br></pre></td></tr></table></figure>
+
+<p>compile like gnu gcc&#x2F;g++</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arm-linux-gnueabi-gcc -o hello hello.c</span><br><span class="line">arm-linux-gnueabi-g++ -o hello hello.c</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>hello only run on arm</p>
+</blockquote>
+<h4 id="source"><a href="#source" class="headerlink" title="source"></a>source</h4><ul>
+<li>arm-linux-gnueabi-4.5.1.tar.bz2</li>
+</ul>
+<h3 id="cmake"><a href="#cmake" class="headerlink" title="cmake"></a>cmake</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> opencv-3.1.0</span><br><span class="line"><span class="built_in">mkdir</span> build &amp;&amp; <span class="built_in">cd</span> build &amp;&amp; cmake-gui ..</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://kezunlin.me/images/posts/635233-20190118095159058-1876545079.png" alt="opencv cross compiling"></p>
+<p>config<br>page 1</p>
+<ul>
+<li>Unix Makefiles </li>
+<li>Specify options for cross-compiling</li>
+</ul>
+<p>page 2 </p>
+<ul>
+<li>operating system: <code>arm-linux</code></li>
+<li>c compiler: <code>/usr/bin/arm-linux-gnueabi-gcc</code></li>
+<li>c++ compiler:<code>/usr/bin/arm-linux-gnueabi-g++</code></li>
+<li>Target ROot: <code>/usr/bin</code></li>
+</ul>
+<p>common cmake options:</p>
+<pre><code>CMAKE_INSTALL_PREFIX /usr/local/arm/opencv-arm
+</code></pre>
+<p>Generate and Configure. </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make -j8</span><br></pre></td></tr></table></figure>
+
+<h3 id="view-file"><a href="#view-file" class="headerlink" title="view file"></a>view file</h3><p>x86-64</p>
+<pre><code>file /usr/local/lib/libgtest.so     
+/usr/local/lib/libgtest.so: ELF 64-bit LSB shared object, x86-64, version 1 (GNU/Linux), dynamically linked, BuildID[sha1]=3d9e1f42d0584435a3e6aadb11eabfe620a8d52a, not stripped
+</code></pre>
+<p>arm </p>
+<pre><code>file libopencv_core.so 
+libopencv_core.so: ELF 32-bit LSB shared object, ARM, EABI5 version 1 (GNU/Linux), dynamically linked, BuildID[sha1]=ce2523820bc6a80972c49e465436d8220abf632c, not stripped
+</code></pre>
+<h3 id="install-to-arm"><a href="#install-to-arm" class="headerlink" title="install to arm"></a>install to arm</h3><p>copy libs and executables to arm</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://developer.arm.com/open-source/gnu-toolchain/gnu-rm">gnu arm</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_30155503/article/details/79983630">ubuntu 交叉编译opencv并移植到arm</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/14564978/compiling-a-linux-program-for-arm-architecture-running-on-a-host-os">compiling-a-linux-program-for-arm-architecture-running-on-a-host-os</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.firmcodes.com/how-to-cross-compile-for-arm/">how-to-cross-compile-for-arm</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20190119: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/arm/" rel="tag"># arm</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/protobuf-usage/" rel="prev" title="protobuf tutorial">
+      <i class="fa fa-chevron-left"></i> protobuf tutorial
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/xaiver-guide/" rel="next" title="how to configure deep learning environment on nvidia xaiver arm platform">
+      how to configure deep learning environment on nvidia xaiver arm platform <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#compiling"><span class="nav-number">1.1.</span> <span class="nav-text">compiling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-gnu-tools"><span class="nav-number">1.2.</span> <span class="nav-text">install gnu tools</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-arm-toolchain"><span class="nav-number">1.3.</span> <span class="nav-text">install arm toolchain</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#apt-get"><span class="nav-number">1.3.1.</span> <span class="nav-text">apt-get</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#source"><span class="nav-number">1.3.2.</span> <span class="nav-text">source</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cmake"><span class="nav-number">1.4.</span> <span class="nav-text">cmake</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#view-file"><span class="nav-number">1.5.</span> <span class="nav-text">view file</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-to-arm"><span class="nav-number">1.6.</span> <span class="nav-text">install to arm</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

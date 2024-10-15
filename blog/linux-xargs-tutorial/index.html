@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Guideparam input &amp;&amp; stdinlinux命令可以从两个地方读取要处理的内容  通过命令行参数输入,通过main函数的argc,argv获取 标准输入stdin,通过scanf或者cin获取  然后产生输出  标准输出stdout,通过printf或者cout输出  命令类型  部分命令可以接受参数输入＋标准输入stdin，比如cat、grep等。 部分命令只接受">
+<meta property="og:type" content="article">
+<meta property="og:title" content="how to use linux xargs command">
+<meta property="og:url" content="https://kezunlin.me/blog/linux-xargs-tutorial/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Guideparam input &amp;&amp; stdinlinux命令可以从两个地方读取要处理的内容  通过命令行参数输入,通过main函数的argc,argv获取 标准输入stdin,通过scanf或者cin获取  然后产生输出  标准输出stdout,通过printf或者cout输出  命令类型  部分命令可以接受参数输入＋标准输入stdin，比如cat、grep等。 部分命令只接受">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-09-20T08:44:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="xargs">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/linux-xargs-tutorial/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>how to use linux xargs command | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/linux-xargs-tutorial/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          how to use linux xargs command
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-09-20 16:44:00" itemprop="dateCreated datePublished" datetime="2018-09-20T16:44:00+08:00">2018-09-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="param-input-stdin"><a href="#param-input-stdin" class="headerlink" title="param input &amp;&amp; stdin"></a>param input &amp;&amp; stdin</h3><p>linux命令可以从两个地方读取要处理的内容</p>
+<ul>
+<li>通过命令行参数输入,通过main函数的argc,argv获取</li>
+<li>标准输入stdin,通过scanf或者cin获取</li>
+</ul>
+<p>然后产生输出</p>
+<ul>
+<li>标准输出stdout,通过printf或者cout输出</li>
+</ul>
+<p>命令类型</p>
+<ul>
+<li>部分命令可以接受参数输入＋标准输入stdin，比如cat、grep等。</li>
+<li>部分命令只接受参数输入，不接受标准输入stdin，比如kill、rm等。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>*argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// argc, argv</span></span><br><span class="line">    <span class="comment">// cin, scanf </span></span><br><span class="line">    <span class="comment">// cout printf</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>指定参数输入，则从参数输入读取内容;<br>未指定或者在命令的最后使用 <code>-</code>则从标准输入读取内容;<br>管道<code>｜</code>将stdout重定向到后续命令的stdin;</p>
+</blockquote>
+<h3 id="cat-grep"><a href="#cat-grep" class="headerlink" title="cat&#x2F;grep"></a>cat&#x2F;grep</h3><h4 id="cat"><a href="#cat" class="headerlink" title="cat"></a>cat</h4><ul>
+<li><p>指定参数输入1.txt，文件存在【从参数输入读取】</p>
+<pre><code>cat 1.txt
+hello world 
+</code></pre>
+</li>
+<li><p>指定参数输入1.txt，文件不存在【从参数输入读取】</p>
+<pre><code>cat 1.txt2
+cat: 1.txt2: No such file or directory
+</code></pre>
+</li>
+<li><p>未指定参数输入【从stdin读取】</p>
+<pre><code>cat
+hello
+hello
+^C
+</code></pre>
+</li>
+<li><p>使用<code>-</code>【从stdin读取】</p>
+<pre><code>cat -
+hello
+hello
+^C
+</code></pre>
+</li>
+<li><p>指定参数输入1.txt，文件存在+使用<code>-</code>【从参数输入读取+stdin读取】</p>
+<pre><code>cat 1.txt -
+hello world 
+hello
+hello
+^C
+</code></pre>
+</li>
+</ul>
+<h4 id="cat-pipe"><a href="#cat-pipe" class="headerlink" title="cat + pipe"></a>cat + pipe</h4><ul>
+<li><p>指定参数输入1.txt，文件存在 + stdin【only从参数输入读取】</p>
+<pre><code>echo &#39;hello&#39; | cat 1.txt
+hello world 
+</code></pre>
+</li>
+<li><p>指定参数输入1.txt，文件不存在【only从参数输入读取】</p>
+<pre><code>echo &#39;hello&#39; | cat 1.txt2
+cat: 1.txt2: No such file or directory
+</code></pre>
+</li>
+<li><p>未指定参数输入【从stdin读取】</p>
+<pre><code>echo &#39;hello&#39; |　cat
+hello
+</code></pre>
+</li>
+<li><p>使用<code>-</code>【从stdin读取】</p>
+<pre><code>echo &#39;hello&#39; |　cat -
+hello
+</code></pre>
+</li>
+<li><p>指定参数输入1.txt，文件存在+使用<code>-</code>【从参数输入读取+stdin读取】</p>
+<pre><code>echo &#39;hello&#39; |　cat 1.txt -
+hello world 
+hello
+</code></pre>
+</li>
+</ul>
+<h4 id="grep-pipe"><a href="#grep-pipe" class="headerlink" title="grep + pipe"></a>grep + pipe</h4><ul>
+<li><p>指定参数输入1.txt，文件存在 + stdin【only从参数输入读取】</p>
+<pre><code>echo &#39;hello&#39; | grep &#39;hello&#39; 1.txt
+hello world 
+</code></pre>
+</li>
+<li><p>指定参数输入1.txt，文件存在+使用<code>-</code>【从参数输入读取+stdin读取】</p>
+<pre><code>echo &#39;hello&#39; | grep &#39;hello&#39; 1.txt -
+1.txt:hello world
+(standard input):hello
+</code></pre>
+</li>
+</ul>
+<h3 id="kill-rm"><a href="#kill-rm" class="headerlink" title="kill&#x2F;rm"></a>kill&#x2F;rm</h3><ul>
+<li><p>kill不接受stdin</p>
+<pre><code>echo &#39;516&#39; | kill
+kill: usage: kill [-s sigspec | -n signum | -sigspec] pid | jobspec ... or kill -l [sigspec]
+</code></pre>
+</li>
+<li><p>rm 不接受stdin</p>
+<pre><code>  echo &#39;test&#39; | rm -f
+</code></pre>
+</li>
+</ul>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+<h3 id="xargs"><a href="#xargs" class="headerlink" title="xargs"></a>xargs</h3><p>如何实现<code>echo &#39;516&#39; | kill</code>类似的效果?</p>
+<ul>
+<li><p>method 1</p>
+<pre><code>  kill `ps -ef | grep &#39;xxx&#39;`  # same as   kill $pid
+</code></pre>
+</li>
+<li><p>method 2</p>
+<pre><code>  for pid in $(ps -aux | grep &quot;some search&quot; | awk &#39;&#123;print $2&#125;&#39;); 				do kill -9 $pid; 
+  done 
+</code></pre>
+</li>
+<li><p>method 3</p>
+<pre><code>  ps -ef | grep &#39;xxx&#39; | xargs kill
+</code></pre>
+</li>
+</ul>
+<p>xargs命令可以通过管道接受字符串，并将接收到的字符串通过空格分割成许多参数(默认情况下是通过空格分割) 然后将参数传递给其后面的命令，作为后面命令的命令行参数输入</p>
+<blockquote>
+<p>xargs可以实现命令的参数输入</p>
+</blockquote>
+<h3 id="xargs-vs-pipe"><a href="#xargs-vs-pipe" class="headerlink" title="xargs vs pipe"></a>xargs vs pipe</h3><ul>
+<li><p>pipe 使得–help成为cat的stdin</p>
+<pre><code>$ echo &#39;--help&#39; | cat 
+--help
+</code></pre>
+</li>
+<li><p>xargs使得–help成为cat的命令行参数输入,等价于 <code>cat --help</code></p>
+<pre><code>$ echo &#39;--help&#39; | xargs cat 
+Usage: cat [OPTION]... [FILE]...
+Concatenate FILE(s) to standard output.
+
+With no FILE, or when FILE is -, read standard input.
+
+  -A, --show-all           equivalent to -vET
+  -b, --number-nonblank    number nonempty output lines, overrides -n
+  -e                       equivalent to -vE
+  -E, --show-ends          display $ at end of each line
+  -n, --number             number all output lines
+  -s, --squeeze-blank      suppress repeated empty output lines
+  -t                       equivalent to -vT
+  -T, --show-tabs          display TAB characters as ^I
+  -u                       (ignored)
+  -v, --show-nonprinting   use ^ and M- notation, except for LFD and TAB
+      --help     display this help and exit
+      --version  output version information and exit
+
+Examples:
+  cat f - g  Output f&#39;s contents, then standard input, then g&#39;s contents.
+  cat        Copy standard input to standard output.
+
+GNU coreutils online help: &lt;http://www.gnu.org/software/coreutils/&gt;
+Full documentation at: &lt;http://www.gnu.org/software/coreutils/cat&gt;
+or available locally via: info &#39;(coreutils) cat invocation&#39;
+</code></pre>
+</li>
+</ul>
+<p><code>echo &#39;1.txt 2.txt&#39; | xargs cat</code> 等价于 <code>cat 1.txt 2.txt</code></p>
+<h3 id="xargs-options"><a href="#xargs-options" class="headerlink" title="xargs options"></a>xargs options</h3><h4 id="d-选项"><a href="#d-选项" class="headerlink" title="-d 选项"></a>-d 选项</h4><p>默认情况下xargs将其标准输入中的内容以空白(包括空格、Tab、回车换行等)分割成多个之后当作命令行参数传递给其后面的命令，并运行之，我们可以使用 -d 命令指定分隔符</p>
+<pre><code>  echo &#39;11@22@33&#39; | xargs echo 
+  11@22@33
+
+  echo &#39;11@22@33&#39; | xargs -d &#39;@&#39; echo 
+  11 22 33
+</code></pre>
+<p>等价于 </p>
+<pre><code>echo 11 22 33
+</code></pre>
+<h4 id="p-选项"><a href="#p-选项" class="headerlink" title="-p 选项"></a>-p 选项</h4><p>使用该选项之后xargs并不会马上执行其后面的命令，而是输出即将要执行的完整的命令(包括命令以及传递给命令的命令行参数)，询问是否执行，输入 y 才继续执行，否则不执行。这种方式可以清楚的看到执行的命令是什么样子，也就是xargs传递给命令的参数是什么</p>
+<pre><code>  echo &#39;11@22@33&#39; | xargs -p -d &#39;@&#39;  echo 
+  echo 11 22 33
+   ?...yes
+  11 22 33
+</code></pre>
+<h4 id="n-选项"><a href="#n-选项" class="headerlink" title="-n 选项"></a>-n 选项</h4><p>该选项表示将xargs生成的命令行参数，每次传递几个参数给其后面的命令执行，例如如果xargs从标准输入中读入内容，然后以分隔符分割之后生成的命令行参数有10个，使用 -n 3 之后表示一次传递给xargs后面的命令是3个参数，因为一共有10个参数，所以要执行4次，才能将参数用完。</p>
+<pre><code>  echo &#39;11@22@33@44@55@66@77@88@99@00&#39; | xargs -d &#39;@&#39; -n 3 echo 
+  11 22 33
+  44 55 66
+  77 88 99
+  00
+</code></pre>
+<p>等价于</p>
+<pre><code>echo 11 22 33
+echo 44 55 66
+echo 77 88 99
+echo 00
+</code></pre>
+<p>使用<code>-n 1</code>得到类似于对循环处理的结果。</p>
+<p>默认一次送入n个参数，一次处理完毕</p>
+<pre><code>ls *.txt | xargs -p cat 
+cat 1.txt 2.txt 3.txt ?...y
+111
+222
+333
+
+
+等价与
+cat 1.txt 2.txt 3.txt
+111
+222
+333
+</code></pre>
+<p><code>-n 1</code>一次送入１个参数，相当于循环处理了３次，每次处理一个文件</p>
+<pre><code>ls *.txt | xargs -n 1 -p cat 
+cat 1.txt ?...y
+111
+cat 2.txt ?...y
+222
+cat 3.txt ?...y
+333
+
+
+ 
+等价与
+cat 1.txt
+111
+
+cat ２.txt
+222
+
+cat ３.txt
+333
+</code></pre>
+<h4 id="E-选项"><a href="#E-选项" class="headerlink" title="-E 选项"></a>-E 选项</h4><p>有的系统的xargs版本可能是<code>-e  eof-str</code>,该选项指定一个字符串，当xargs解析出多个命令行参数的时候，如果搜索到-e指定的命令行参数，则只会将-e指定的命令行参数之前的参数(不包括-e指定的这个参数)传递给xargs后面的命令</p>
+<pre><code>echo &#39;11 22 33 44&#39; | xargs -E &#39;33&#39; echo 
+11 22 
+</code></pre>
+<blockquote>
+<p>-E只有在xargs不指定-d或者-0的时候有效<br>-0 选项表示以 ‘\0’ 为分隔符，一般与find结合使用<br>-0 等同于 -d ‘\0’</p>
+</blockquote>
+<p>使用<code>-d</code> </p>
+<pre><code>  echo &#39;11@22@33@44@55@66@77@88@99@00 aa 33 bb&#39; | xargs -E &#39;33&#39; -d &#39;@&#39; -p  echo
+  xargs: warning: the -E option has no effect if -0 or -d is used.
+
+  echo 11 22 33 44 55 66 77 88 99 00 aa 33 bb
+   ?...y
+  11 22 33 44 55 66 77 88 99 00 aa 33 bb
+</code></pre>
+<p>不使用<code>-d</code></p>
+<pre><code>  echo &#39;11@22@33@44@55@66@77@88@99@00 aa 33 bb&#39; | xargs -E &#39;33&#39; -p  echo
+  echo 11@22@33@44@55@66@77@88@99@00 aa ?...y
+  11@22@33@44@55@66@77@88@99@00 aa
+</code></pre>
+<h4 id="0-find"><a href="#0-find" class="headerlink" title="-0 &amp;&amp; find"></a>-0 &amp;&amp; find</h4><pre><code>find . -name &quot;*.txt&quot;
+./2.txt
+./3.txt
+./1.txt     =&gt; 默认情况下find的输出结果是每条记录后面加上换行，也就是每条记录是一个新行
+
+find . -name &quot;*.txt&quot; -print0
+./2.txt./3.txt./1.txt     =&gt; 加上 -print0 参数表示find输出的每条结果后面加上 &#39;\0&#39; 而不是换行
+
+find . -name &quot;*.txt&quot; -print0 | xargs -0 echo 
+./2.txt ./3.txt ./1.txt
+
+等同于
+find . -name &quot;*.txt&quot; -print0 | xargs -d &#39;\0&#39; echo 
+./2.txt ./3.txt ./1.txt
+
+默认使用空白分隔符(换行符也是)
+find . -name &quot;*.txt&quot;  | xargs  echo 
+./2.txt ./3.txt ./1.txt
+</code></pre>
+<h3 id="xargs-as-loop"><a href="#xargs-as-loop" class="headerlink" title="xargs as loop"></a>xargs as loop</h3><p>one image at once </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python text_recognition.py  --east frozen_east_text_detection.pb --image 1.jpg</span><br></pre></td></tr></table></figure>
+
+<p>for loop </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">find roi/ -name <span class="string">&quot;*.jpg&quot;</span> | xargs -n 1 python text_recognition.py  --east frozen_east_text_detection.pb --image </span><br><span class="line"></span><br><span class="line"><span class="built_in">ls</span> roi/*.jpg | xargs -n 1 python text_recognition.py  --east frozen_east_text_detection.pb --image </span><br></pre></td></tr></table></figure>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/wangqiguo/p/6464234.html">xargs命令详解，xargs与管道的区别</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180920:  created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/xargs/" rel="tag"># xargs</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/OpenCV-OCR-and-text-recognition-with-Tesseract-on-ubuntu-16-04/" rel="prev" title="OpenCV OCR and text recognition with Tesseract on ubuntu 16.04">
+      <i class="fa fa-chevron-left"></i> OpenCV OCR and text recognition with Tesseract on ubuntu 16.04
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/compile-cryptopp-7-0-on-windows-10/" rel="next" title="compile and install cryptopp 7.0 on windows 10">
+      compile and install cryptopp 7.0 on windows 10 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#param-input-stdin"><span class="nav-number">1.1.</span> <span class="nav-text">param input &amp;&amp; stdin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cat-grep"><span class="nav-number">1.2.</span> <span class="nav-text">cat&#x2F;grep</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#cat"><span class="nav-number">1.2.1.</span> <span class="nav-text">cat</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cat-pipe"><span class="nav-number">1.2.2.</span> <span class="nav-text">cat + pipe</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#grep-pipe"><span class="nav-number">1.2.3.</span> <span class="nav-text">grep + pipe</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#kill-rm"><span class="nav-number">1.3.</span> <span class="nav-text">kill&#x2F;rm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#xargs"><span class="nav-number">1.4.</span> <span class="nav-text">xargs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#xargs-vs-pipe"><span class="nav-number">1.5.</span> <span class="nav-text">xargs vs pipe</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#xargs-options"><span class="nav-number">1.6.</span> <span class="nav-text">xargs options</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#d-%E9%80%89%E9%A1%B9"><span class="nav-number">1.6.1.</span> <span class="nav-text">-d 选项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#p-%E9%80%89%E9%A1%B9"><span class="nav-number">1.6.2.</span> <span class="nav-text">-p 选项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#n-%E9%80%89%E9%A1%B9"><span class="nav-number">1.6.3.</span> <span class="nav-text">-n 选项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#E-%E9%80%89%E9%A1%B9"><span class="nav-number">1.6.4.</span> <span class="nav-text">-E 选项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0-find"><span class="nav-number">1.6.5.</span> <span class="nav-text">-0 &amp;&amp; find</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#xargs-as-loop"><span class="nav-number">1.7.</span> <span class="nav-text">xargs as loop</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

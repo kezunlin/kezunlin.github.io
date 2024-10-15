@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Series Part 1: Install and Configure Caffe on windows 10 Part 2: Install and Configure Caffe on ubuntu 16.04  Guiderequirements:  windows: 10 caffe: caffe-windows nvidia driver: gtx 1060  382.05  (gtx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Install and Configure Caffe on windows 10">
+<meta property="og:url" content="https://kezunlin.me/blog/guide-to-compile-and-install-caffe-on-windows-10/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Series Part 1: Install and Configure Caffe on windows 10 Part 2: Install and Configure Caffe on ubuntu 16.04  Guiderequirements:  windows: 10 caffe: caffe-windows nvidia driver: gtx 1060  382.05  (gtx">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180713154640730-1596631581.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180712160043489-1770218269.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180712160049037-759459538.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180712160105370-829401166.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180712160109898-486036158.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180713154357801-1661993833.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180713163802216-1876923474.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180413142258286-2028896876.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180719170526770-1424061706.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180713144410454-1109091781.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180717155916505-289733281.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180713144923141-1235214101.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180717161558656-1884924338.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20181211162156217-51747698.png">
+<meta property="article:published_time" content="2018-04-13T05:59:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="caffe">
+<meta property="article:tag" content="cuda">
+<meta property="article:tag" content="cudnn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kezunlin.me/images/posts/635233-20180713154640730-1596631581.png">
+
+<link rel="canonical" href="https://kezunlin.me/blog/guide-to-compile-and-install-caffe-on-windows-10/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Install and Configure Caffe on windows 10 | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/guide-to-compile-and-install-caffe-on-windows-10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Install and Configure Caffe on windows 10
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-04-13 13:59:00" itemprop="dateCreated datePublished" datetime="2018-04-13T13:59:00+08:00">2018-04-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deep-learning/" itemprop="url" rel="index"><span itemprop="name">deep learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h2><ul>
+<li><strong><a href="https://kezunlin.me/post/1739694c/">Part 1: Install and Configure Caffe on windows 10</a></strong></li>
+<li><a href="https://kezunlin.me/post/b90033a9/">Part 2: Install and Configure Caffe on ubuntu 16.04</a></li>
+</ul>
+<h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><p>requirements:</p>
+<ul>
+<li>windows: 10</li>
+<li>caffe: <code>caffe-windows</code></li>
+<li>nvidia driver: gtx 1060  382.05  (gtx 970m)</li>
+<li>GPU arch(s): sm_61  (sm_52)</li>
+<li>cuda: 8.0 </li>
+<li>cudnn: 5.0.5</li>
+<li>opencv: 3.1.0 WITH_CUDA (compiled from source)</li>
+<li>other libs: <code>libraries_v140_x64_py27_1.1.0.tar.bz2</code></li>
+</ul>
+<h3 id="cuda-cudnn"><a href="#cuda-cudnn" class="headerlink" title="cuda+cudnn"></a>cuda+cudnn</h3><ol>
+<li>download and install driver by standalone for <code>GTX 970</code> or <code>GTX 1060</code> from <a target="_blank" rel="noopener" href="https://www.nvidia.com/drivers">here</a>.</li>
+<li>download and install <code>cuda_8.0.61_win10.exe</code>, skip install nvidia driver and install toolkit only.</li>
+<li>download and install <code>cudnn-8.0-windows10-x64-v5.0-ga.zip</code>.</li>
+</ol>
+<h4 id="nvidia-driver"><a href="#nvidia-driver" class="headerlink" title="nvidia driver"></a>nvidia driver</h4><blockquote>
+<p>driver can be installed by standalone or from <code>cuda_xxx_win10.exe</code>.<br>we choose to install by standalone</p>
+</blockquote>
+<p>download proper driver for <code>GTX 970</code> or <code>GTX 1060</code> eg: <code>398.36-notebook-win10-64bit-international-whql.exe</code> from <a target="_blank" rel="noopener" href="https://www.nvidia.com/Download/index.aspx">here</a></p>
+<p><img src="https://kezunlin.me/images/posts/635233-20180713154640730-1596631581.png" alt="download driver"></p>
+<h4 id="cuda-toolkit"><a href="#cuda-toolkit" class="headerlink" title="cuda toolkit"></a>cuda toolkit</h4><blockquote>
+<p>ref: <a target="_blank" rel="noopener" href="https://developer.download.nvidia.com/compute/cuda/9.2/Prod2/docs/sidebar/CUDA_Installation_Guide_Windows.pdf">cuda install guides for windows</a></p>
+</blockquote>
+<p>download <code>cuda_8.0.61_win10.exe</code> from <a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-downloads?target_os=Windows&target_arch=x86_64&target_version=10&target_type=exelocal">here</a></p>
+<blockquote>
+<p>The CUDA Toolkit installs the CUDA driver and tools needed to create, build and run a CUDA application as well as libraries, header files, CUDA samples source code, and other resources</p>
+<p><code>cuda_8.0.61_win10.exe</code> includes: Nvidia driver +  toolkit.</p>
+</blockquote>
+<p>install to </p>
+<ul>
+<li>driver install to <code>C:/Program Files/NVIDIA Corporation</code> and <code>C:/ProgramData/NVIDIA Corporation</code></li>
+<li>tookit install to <code>C:/Program Files/NVIDIA GPU Computing Toolkit</code>,which contains headers,libs,tools for compiling CUDA applications. <code>C:/ProgramData/NVIDIA GPU Computing Toolkit</code> contains cuda plugins for Visual Studio.</li>
+</ul>
+<p><img src="https://kezunlin.me/images/posts/635233-20180712160043489-1770218269.png" alt="cuda driver"></p>
+<p><img src="https://kezunlin.me/images/posts/635233-20180712160049037-759459538.png" alt="cuda toolkit"></p>
+<p><img src="https://kezunlin.me/images/posts/635233-20180712160105370-829401166.png" alt="cuda driver data"></p>
+<p><img src="https://kezunlin.me/images/posts/635233-20180712160109898-486036158.png" alt="cuda toolkit data"></p>
+<p>verify </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> C:\ProgramData\NVIDIA Corporation\CUDA Samples\v9.2\bin\win64\Release</span><br><span class="line">./deviceQuery.exe</span><br></pre></td></tr></table></figure>
+
+<h4 id="cudnn"><a href="#cudnn" class="headerlink" title="cudnn"></a>cudnn</h4><p>extract <code>cudnn-8.0-windows10-x64-v5.0-ga.zip</code> and copy <code>include</code>,<code>lib</code>and <code>bin</code> to <code>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0</code></p>
+<p><img src="https://kezunlin.me/images/posts/635233-20180713154357801-1661993833.png" alt="cudnn"></p>
+<h4 id="check-cuda"><a href="#check-cuda" class="headerlink" title="check cuda"></a>check cuda</h4><p><img src="https://kezunlin.me/images/posts/635233-20180713163802216-1876923474.png" alt="nvidia driver and cuda software installation"></p>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+<h3 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h3><h4 id="download"><a href="#download" class="headerlink" title="download"></a>download</h4><ul>
+<li><a target="_blank" rel="noopener" href="https://codeload.github.com/BVLC/caffe/zip/windows">caffe-windows</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/willyd/caffe-builder/releases/download/v1.0.1/libraries_v140_x64_py27_1.1.0.tar.bz2">caffe depencencies</a></li>
+</ul>
+<ol>
+<li>place <code>caffe-windows</code> at <code>C:/compile/caffe-windows</code></li>
+<li>extract <code>libraries_v140_x64_py27_1.1.0.tar.bz2</code> to <code>C:\Users\zunli\.caffe\dependencies\libraries_v140_x64_py27_1.1.0\libraries</code></li>
+</ol>
+<h4 id="config"><a href="#config" class="headerlink" title="config"></a>config</h4><p>edit <code>C:\Users\zunli\.caffe\dependencies\libraries_v140_x64_py27_1.1.0\libraries\caffe-builder-config.cmake</code></p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># BOOST config</span></span><br><span class="line"><span class="keyword">set</span>(BOOST_ROOT <span class="string">&quot;C:/Boost/&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(BOOST_INCLUDEDIR <span class="variable">$&#123;BOOST_ROOT&#125;</span>/<span class="keyword">include</span>/boost-<span class="number">1</span>_64 CACHE PATH <span class="string">&quot;&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(BOOST_LIBRARYDIR <span class="variable">$&#123;BOOST_ROOT&#125;</span>/lib CACHE PATH <span class="string">&quot;&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(Boost_USE_MULTITHREADED <span class="keyword">ON</span> CACHE BOOL <span class="string">&quot;&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(Boost_USE_STATIC_LIBS <span class="keyword">ON</span> CACHE BOOL <span class="string">&quot;&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(Boost_USE_STATIC_RUNTIME <span class="keyword">OFF</span> CACHE BOOL <span class="string">&quot;&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>edit <code>caffe-windows/cmake/Dependencies.cmake</code></p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span>(Boost_USE_STATIC_LIBS <span class="keyword">ON</span>)</span><br><span class="line"><span class="keyword">find_package</span>(Boost <span class="number">1.64</span> REQUIRED COMPONENTS system thread filesystem)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Tips:<br>(1) we use <code>C:\Boost\</code> 1.64 to replace caffe dependencies <code>C:\Users\zunli\.caffe\dependencies\libraries_v140_x64_py27_1.1.0\libraries\</code> 1.61, because we have compile <code>PCL 1.8.1</code> with <code>Boost 1.64 static</code>.<br>(2) we use caffe <code>C:\Users\zunli\.caffe\dependencies\libraries_v140_x64_py27_1.1.0\libraries\x64\vc14\lib</code> to replace <code>C:/Program Files/opencv</code>. (opencv3.1 &lt;&#x3D;&#x3D;&#x3D;&#x3D;opencv3.4)</p>
+</blockquote>
+<p>configure caffe with </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> caffe</span><br><span class="line"><span class="built_in">mkdir</span> build &amp;&amp; <span class="built_in">cd</span> build &amp;&amp; cmake-gui ..</span><br></pre></td></tr></table></figure>
+
+<p>with options </p>
+<pre><code>BLAS                 Open # Atlas, Open, MKL
+BUILD_SHARED_LIBS        OFF # build static library
+CMAKE_CONFIGURATION_TYPES   Release
+CMAKE_CXX_RELEASE_FLAGS    /MD /O2 /Ob2 /DNDEBUG /MP
+
+CUDA_ARCH_BIN  3.0 3.5 5.0 5.2 6.0 6.1 # very time-consuming
+CUDA_ARCH_NAME Manual
+CUDA_ARCH_PTX 3.0
+</code></pre>
+<p><img src="https://kezunlin.me/images/posts/635233-20180413142258286-2028896876.png" alt="Use Boost 1.64"></p>
+<p><img src="https://kezunlin.me/images/posts/635233-20180719170526770-1424061706.png" alt="caffe cuda arch"></p>
+<p><img src="https://kezunlin.me/images/posts/635233-20180713144410454-1109091781.png" alt="cudnn"></p>
+<p><img src="https://kezunlin.me/images/posts/635233-20180717155916505-289733281.png" alt="opencv with cuda"></p>
+<p>configure and output </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">Selecting Windows SDK version 10.0.14393.0 to target Windows 10.0.15063.</span><br><span class="line">Boost version: 1.64.0</span><br><span class="line">Found the following Boost libraries:</span><br><span class="line">  system</span><br><span class="line">  thread</span><br><span class="line">  filesystem</span><br><span class="line">  chrono</span><br><span class="line">  date_time</span><br><span class="line">  atomic</span><br><span class="line">Found gflags  (include: C:/Users/zunli/.caffe/dependencies/libraries_v140_x64_py27_1.1.0/libraries/include, library: gflags_shared)</span><br><span class="line">Found glog    (include: C:/Users/zunli/.caffe/dependencies/libraries_v140_x64_py27_1.1.0/libraries/include, library: glog)</span><br><span class="line">Found PROTOBUF Compiler: C:/Users/zunli/.caffe/dependencies/libraries_v140_x64_py27_1.1.0/libraries/bin/protoc.exe</span><br><span class="line">Found lmdb    (include: C:/Users/zunli/.caffe/dependencies/libraries_v140_x64_py27_1.1.0/libraries/include, library: lmdb)</span><br><span class="line">Found LevelDB (include: C:/Users/zunli/.caffe/dependencies/libraries_v140_x64_py27_1.1.0/libraries/include, library: leveldb)</span><br><span class="line">Found Snappy  (include: C:/Users/zunli/.caffe/dependencies/libraries_v140_x64_py27_1.1.0/libraries/include, library: snappy_static;optimized;C:/Users/zunli/.caffe/dependencies/libraries_v140_x64_py27_1.1.0/libraries/lib/caffezlib.lib;debug;C:/Users/zunli/.caffe/dependencies/libraries_v140_x64_py27_1.1.0/libraries/lib/caffezlibd.lib)</span><br><span class="line">CUDA detected: 8.0</span><br><span class="line">Found cuDNN: ver. 5.0.5 found (include: C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0/include, library: C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0/lib/x64/cudnn.lib)</span><br><span class="line">Added CUDA NVCC flags <span class="keyword">for</span>: sm_61</span><br><span class="line">OpenCV found (C:/Users/zunli/.caffe/dependencies/libraries_v140_x64_py27_1.1.0/libraries)</span><br><span class="line">Found OpenBLAS libraries: C:/Users/zunli/.caffe/dependencies/libraries_v140_x64_py27_1.1.0/libraries/lib/libopenblas.dll.a</span><br><span class="line">Found OpenBLAS include: C:/Users/zunli/.caffe/dependencies/libraries_v140_x64_py27_1.1.0/libraries/include</span><br><span class="line">NumPy ver. 1.11.3 found (include: C:/Python27/lib/site-packages/numpy/core/include)</span><br><span class="line">Boost version: 1.64.0</span><br><span class="line">Found the following Boost libraries:</span><br><span class="line">  python</span><br><span class="line"></span><br><span class="line">******************* Caffe Configuration Summary *******************</span><br><span class="line">General:</span><br><span class="line">  Version           :   1.0.0</span><br><span class="line">  Git               :   unknown</span><br><span class="line">  System            :   Windows</span><br><span class="line">  C++ compiler      :   C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/bin/x86_amd64/cl.exe</span><br><span class="line">  Release CXX flags :   /MD /O2 /Ob2 /DNDEBUG /MP /DWIN32 /D_WINDOWS /W3 /GR /EHsc</span><br><span class="line">  Debug CXX flags   :   /MDd /Zi /Ob0 /Od /RTC1 /DWIN32 /D_WINDOWS /W3 /GR /EHsc</span><br><span class="line">  Build <span class="built_in">type</span>        :   Release</span><br><span class="line"></span><br><span class="line">  BUILD_SHARED_LIBS :   OFF</span><br><span class="line">  BUILD_python      :   ON</span><br><span class="line">  BUILD_matlab      :   OFF</span><br><span class="line">  BUILD_docs        :   </span><br><span class="line">  CPU_ONLY          :   OFF</span><br><span class="line">  USE_OPENCV        :   ON</span><br><span class="line">  USE_LEVELDB       :   ON</span><br><span class="line">  USE_LMDB          :   ON</span><br><span class="line">  USE_NCCL          :   OFF</span><br><span class="line">  ALLOW_LMDB_NOLOCK :   OFF</span><br><span class="line"></span><br><span class="line">Dependencies:</span><br><span class="line">  BLAS              :   Yes (Open)</span><br><span class="line">  Boost             :   Yes (ver. 1.64)</span><br><span class="line">  glog              :   Yes</span><br><span class="line">  gflags            :   Yes</span><br><span class="line">  protobuf          :   Yes (ver. 3.1.0)</span><br><span class="line">  lmdb              :   Yes (ver. 0.9.70)</span><br><span class="line">  LevelDB           :   Yes (ver. 1.18)</span><br><span class="line">  Snappy            :   Yes (ver. 1.1.1)</span><br><span class="line">  OpenCV            :   Yes (ver. 3.1.0)</span><br><span class="line">  CUDA              :   Yes (ver. 8.0)</span><br><span class="line"></span><br><span class="line">NVIDIA CUDA:</span><br><span class="line">  Target GPU(s)     :   Auto</span><br><span class="line">  GPU <span class="built_in">arch</span>(s)       :   sm_61</span><br><span class="line">  cuDNN             :   Yes (ver. 5.0.5)</span><br><span class="line"></span><br><span class="line">Python:</span><br><span class="line">  Interpreter       :   C:/Python27/python.exe (ver. 2.7.13)</span><br><span class="line">  Libraries         :   C:/Python27/libs/python27.lib (ver 2.7.13)</span><br><span class="line">  NumPy             :   C:/Python27/lib/site-packages/numpy/core/include (ver 1.11.3)</span><br><span class="line"></span><br><span class="line">Install:</span><br><span class="line">  Install path      :   C:/car_libs/caffe</span><br><span class="line"></span><br><span class="line">Configuring <span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="build-and-install"><a href="#build-and-install" class="headerlink" title="build and install"></a>build and install</h4><blockquote>
+<p>tips: Visual Studio 2015 can not generate shared library. So we build static caffe library.</p>
+</blockquote>
+<pre><code>CMake Error at CMakeLists.txt:66 (message):
+  The Visual Studio generator cannot build a shared library.  Use the Ninja
+  generator instead.
+  
+</code></pre>
+<p>Build with <code>Release x64</code> with <code>Visual Studio 2015</code> and 38 modules will be generated and We <code>Install</code> to <code>C:/car_libs/caffe/</code>.<br><img src="https://kezunlin.me/images/posts/635233-20180713144923141-1235214101.png" alt="build with vs"></p>
+<p>build result.<br><img src="https://kezunlin.me/images/posts/635233-20180717161558656-1884924338.png" alt="build result"></p>
+<p>install to <code>C:/car_libs/caffe</code>.</p>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+<h3 id="caffe-usage"><a href="#caffe-usage" class="headerlink" title="caffe usage"></a>caffe usage</h3><h4 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h4><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Boost</span></span><br><span class="line"><span class="keyword">if</span>(MSVC)</span><br><span class="line">	<span class="comment"># use static boost on windows</span></span><br><span class="line">	<span class="keyword">set</span>(Boost_USE_STATIC_LIBS <span class="keyword">ON</span>) <span class="comment"># </span></span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line">	<span class="comment"># use release boost on linux</span></span><br><span class="line">	<span class="keyword">set</span>(Boost_USE_STATIC_LIBS <span class="keyword">OFF</span>)</span><br><span class="line"><span class="keyword">endif</span>(MSVC)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(Boost_USE_MULTITHREAD <span class="keyword">ON</span>)</span><br><span class="line"><span class="comment"># Find Boost package 1.64 (caffe also use Boost 1.64)</span></span><br><span class="line"><span class="keyword">find_package</span>(Boost <span class="number">1.64</span> REQUIRED COMPONENTS serialization date_time system filesystem thread timer math_tr1)</span><br><span class="line"></span><br><span class="line"><span class="comment"># opencv </span></span><br><span class="line"><span class="keyword">SET</span>(OpenCV_DIR <span class="string">&quot;C:/Users/zunli/.caffe/dependencies/libraries_v140_x64_py27_1.1.0/libraries/&quot;</span>)</span><br><span class="line"><span class="keyword">find_package</span>(OpenCV REQUIRED COMPONENTS core highgui imgproc features2d calib3d) <span class="comment"># nofree for 2.4</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># caffe</span></span><br><span class="line"><span class="keyword">set</span>(Caffe_DIR <span class="string">&quot;C:/car_libs/caffe/share/Caffe/&quot;</span>)</span><br><span class="line"><span class="keyword">find_package</span>(Caffe)</span><br></pre></td></tr></table></figure>
+
+<p>when we use <code>caffe</code> lib in our program, errors will occur. And we need to fix <code>CaffeTargets-release.cmake</code> file。</p>
+<h4 id="usage-error-fix"><a href="#usage-error-fix" class="headerlink" title="usage error fix"></a>usage error fix</h4><p>(1) error with shared.lib</p>
+<pre><code>LNK1181	unable to open“gflags_shared.lib” 
+</code></pre>
+<p>solution:</p>
+<pre><code>vim C:/car_libs/caffe/share/Caffe/CaffeTargets-release.cmake
+
+# remove _shared -shared
+:1,$s/_shared//g
+:1,$s/-shared//g
+</code></pre>
+<p> (2) error with <code>hdf5</code></p>
+<p> <code>hdf5.lib</code>&#x3D;&#x3D;&#x3D;&gt;<code>libcaffehdf5.lib</code><br> <code>hdf5_hl.lib</code>&#x3D;&#x3D;&#x3D;&gt;<code>libcaffehdf5_hl.lib</code></p>
+<pre><code> :1,$s/hdf5/libcaffehdf5/g
+</code></pre>
+<p>(3) error with libopenblas</p>
+<pre><code>LNK1181	unable to open“libopenblas.dll.a.lib”
+</code></pre>
+<p>solution: </p>
+<p>cd <code>C:\Users\zunli\.caffe\dependencies\libraries_v140_x64_py27_1.1.0\libraries\lib</code> and </p>
+<ul>
+<li>copy <code>libopenblas.a</code> &#x3D;&#x3D;&#x3D;&gt; <code>libopenblas.a.lib</code></li>
+<li>copy <code>libopenblas.dll.a</code> &#x3D;&#x3D;&#x3D;&gt; <code>libopenblas.dll.a.lib</code></li>
+</ul>
+<p>(4) error NtClose</p>
+<pre><code>error LNK2019: 无法解析的外部符号 NtClose，该符号在函数 mdb_env_map 中被引用
+</code></pre>
+<p>solution: </p>
+<pre><code>copy `C:/Program Files (x86)/Windows Kits/10/Lib/10.0.14393.0/um/x64/ntdll.lib` to `C:\Users\zunli\.caffe\dependencies\libraries_v140_x64_py27_1.1.0\libraries\lib`
+copy `C:\Windows\SysWOW64\ntdll.dll` to `C:\Users\zunli\.caffe\dependencies\libraries_v140_x64_py27_1.1.0\libraries\bin`
+</code></pre>
+<h4 id="CaffeTargets-release-cmake"><a href="#CaffeTargets-release-cmake" class="headerlink" title="CaffeTargets-release.cmake"></a>CaffeTargets-release.cmake</h4><p>edit <code>C:\car_libs\caffe\share\Caffe\CaffeTargets-release.cmake</code></p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#----------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># Generated CMake target import file for configuration &quot;Release&quot;.</span></span><br><span class="line"><span class="comment">#----------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Commands may need to know the format version.</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_IMPORT_FILE_VERSION <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Import target &quot;caffe&quot; for configuration &quot;Release&quot;</span></span><br><span class="line"><span class="keyword">set_property</span>(<span class="keyword">TARGET</span> caffe APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)</span><br><span class="line"><span class="keyword">set_target_properties</span>(caffe PROPERTIES</span><br><span class="line">  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE <span class="string">&quot;CXX&quot;</span></span><br><span class="line">  IMPORTED_LINK_INTERFACE_LIBRARIES_RELEASE </span><br><span class="line"><span class="string">&quot;caffeproto;C:/Boost/lib/libboost_system-vc140-mt-1_64.lib;C:/Boost/lib/libboost_thread-vc140-mt-1_64.lib;C:/Boost/lib/libboost_filesystem-vc140-mt-1_64.lib;C:/Boost/lib/libboost_chrono-vc140-mt-1_64.lib;C:/Boost/lib/libboost_date_time-vc140-mt-1_64.lib;C:/Boost/lib/libboost_atomic-vc140-mt-1_64.lib;C:/Boost/lib/libboost_python-vc140-mt-1_64.lib;caffehdf5.lib;caffehdf5_cpp.lib;caffehdf5_hl.lib;caffehdf5_hl_cpp.lib;caffezlib.lib;caffezlibstatic.lib;gflags;glog;leveldb.lib;libcaffehdf5.lib;libcaffehdf5_cpp.lib;libcaffehdf5_hl.lib;libcaffehdf5_hl_cpp.lib;libprotobuf.lib;libprotoc.lib;lmdb.lib;snappy.lib;snappy_static.lib;libopenblas.dll.a.lib;ntdll.lib;C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0/lib/x64/cudart.lib;C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0/lib/x64/curand.lib;C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0/lib/x64/cublas.lib;C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0/lib/x64/cublas_device.lib;C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0/lib/x64/cudnn.lib;opencv_core;opencv_highgui;opencv_imgproc;opencv_imgcodecs;C:/Python27/libs/python27.lib;&quot;</span></span><br><span class="line">  IMPORTED_LOCATION_RELEASE <span class="string">&quot;$&#123;_IMPORT_PREFIX&#125;/lib/caffe.lib&quot;</span></span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line"><span class="keyword">list</span>(APPEND _IMPORT_CHECK_TARGETS caffe )</span><br><span class="line"><span class="keyword">list</span>(APPEND _IMPORT_CHECK_FILES_FOR_caffe <span class="string">&quot;$&#123;_IMPORT_PREFIX&#125;/lib/caffe.lib&quot;</span> )</span><br><span class="line"></span><br><span class="line"><span class="comment"># Import target &quot;caffeproto&quot; for configuration &quot;Release&quot;</span></span><br><span class="line"><span class="keyword">set_property</span>(<span class="keyword">TARGET</span> caffeproto APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)</span><br><span class="line"><span class="keyword">set_target_properties</span>(caffeproto PROPERTIES</span><br><span class="line">  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE <span class="string">&quot;CXX&quot;</span></span><br><span class="line">  IMPORTED_LINK_INTERFACE_LIBRARIES_RELEASE <span class="string">&quot;C:/Users/zunli/.caffe/dependencies/libraries_v140_x64_py27_1.1.0/libraries/lib/libprotobuf.lib&quot;</span></span><br><span class="line">  IMPORTED_LOCATION_RELEASE <span class="string">&quot;$&#123;_IMPORT_PREFIX&#125;/lib/caffeproto.lib&quot;</span></span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line"><span class="keyword">list</span>(APPEND _IMPORT_CHECK_TARGETS caffeproto )</span><br><span class="line"><span class="keyword">list</span>(APPEND _IMPORT_CHECK_FILES_FOR_caffeproto <span class="string">&quot;$&#123;_IMPORT_PREFIX&#125;/lib/caffeproto.lib&quot;</span> )</span><br><span class="line"></span><br><span class="line"><span class="comment"># Commands beyond this point should not need to know the version.</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_IMPORT_FILE_VERSION)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="comiple-errors-with-caffe-pb-h"><a href="#comiple-errors-with-caffe-pb-h" class="headerlink" title="comiple errors with caffe.pb.h"></a><del>comiple errors with caffe.pb.h</del></h4><blockquote>
+<p>tips: sometimes we not need to do this.</p>
+</blockquote>
+<p>CMakeLists.txt</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">add_definitions</span>( -DGLOG_NO_ABBREVIATED_SEVERITIES ) </span><br><span class="line"><span class="keyword">add_definitions</span>( -DNOMINMAX )  <span class="comment"># for pcl min,max</span></span><br><span class="line"><span class="keyword">add_definitions</span>( -DWIN32_LEAN_AND_MEAN ) </span><br><span class="line"><span class="comment">#add_definitions( -DNO_STRICT ) # no use for caffe.pb.h</span></span><br></pre></td></tr></table></figure>
+
+<p>vim <code>C:\car_libs\caffe\include\caffe\proto\caffe.pb.h</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> ParamSpec_DimCheckMode DimCheckMode;</span><br><span class="line"><span class="type">static</span> <span class="type">const</span> DimCheckMode STRICT = ParamSpec_DimCheckMode_STRICT;</span><br><span class="line"><span class="type">static</span> <span class="type">const</span> DimCheckMode PERMISSIVE = ParamSpec_DimCheckMode_PERMISSIVE;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> V1LayerParameter_DimCheckMode DimCheckMode;</span><br><span class="line"><span class="type">static</span> <span class="type">const</span> DimCheckMode STRICT = V1LayerParameter_DimCheckMode_STRICT;</span><br><span class="line"><span class="type">static</span> <span class="type">const</span> DimCheckMode PERMISSIVE = V1LayerParameter_DimCheckMode_PERMISSIVE;</span><br></pre></td></tr></table></figure>
+
+<p>replace <code>STRICT</code> and <code>PERMISSIVE</code> to <code>_STRICT</code> and <code>_PERMISSIVE</code>. </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> ParamSpec_DimCheckMode DimCheckMode;</span><br><span class="line"><span class="type">static</span> <span class="type">const</span> DimCheckMode _STRICT = ParamSpec_DimCheckMode_STRICT;</span><br><span class="line"><span class="type">static</span> <span class="type">const</span> DimCheckMode _PERMISSIVE = ParamSpec_DimCheckMode_PERMISSIVE;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> V1LayerParameter_DimCheckMode DimCheckMode;</span><br><span class="line"><span class="type">static</span> <span class="type">const</span> DimCheckMode _STRICT = V1LayerParameter_DimCheckMode_STRICT;</span><br><span class="line"><span class="type">static</span> <span class="type">const</span> DimCheckMode _PERMISSIVE = V1LayerParameter_DimCheckMode_PERMISSIVE;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://github.com/BVLC/caffe/issues/5043">caffe.pb.h compile errors</a></p>
+<h4 id="run-exe"><a href="#run-exe" class="headerlink" title="run exe"></a>run exe</h4><ul>
+<li>copy <code>C:/car_libs/caffe/bin/*.dll</code> dlls to <code>bin/release</code> folder.</li>
+<li>copy <code>Opencv</code> dlls to <code>bin/release</code> folder.</li>
+</ul>
+<h2 id="Errors-and-Solutions"><a href="#Errors-and-Solutions" class="headerlink" title="Errors and Solutions"></a>Errors and Solutions</h2><h3 id="nvidia-driver-not-compatible-with-windows-10"><a href="#nvidia-driver-not-compatible-with-windows-10" class="headerlink" title="nvidia driver not compatible with windows 10"></a>nvidia driver not compatible with windows 10</h3><p>problem: install nvidia driver failed on windows 10<br><img src="https://kezunlin.me/images/posts/635233-20181211162156217-51747698.png" alt="nvidia driver not compatible with windows 10"></p>
+<p>solution</p>
+<ol>
+<li>download <a target="_blank" rel="noopener" href="https://go.microsoft.com/fwlink/?linkid=846364">Windows10Upgrade</a></li>
+<li>run <code>Windows10Upgrade.exe</code> to upgrade windows 10 to latest.</li>
+<li>install nvidia driver again.</li>
+<li>OK.</li>
+</ol>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/BVLC/caffe/tree/windows">caffe windows</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180413 created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/caffe/" rel="tag"># caffe</a>
+              <a href="/tags/cuda/" rel="tag"># cuda</a>
+              <a href="/tags/cudnn/" rel="tag"># cudnn</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/guide-to-install-and-configure-mago3d-on-windows-10/" rel="prev" title="guide to install and configure mago3d on windows 10">
+      <i class="fa fa-chevron-left"></i> guide to install and configure mago3d on windows 10
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/boost-mutex-and-lock/" rel="next" title="boost mutex and lock">
+      boost mutex and lock <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Series"><span class="nav-number">1.</span> <span class="nav-text">Series</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">2.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cuda-cudnn"><span class="nav-number">2.1.</span> <span class="nav-text">cuda+cudnn</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#nvidia-driver"><span class="nav-number">2.1.1.</span> <span class="nav-text">nvidia driver</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cuda-toolkit"><span class="nav-number">2.1.2.</span> <span class="nav-text">cuda toolkit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cudnn"><span class="nav-number">2.1.3.</span> <span class="nav-text">cudnn</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#check-cuda"><span class="nav-number">2.1.4.</span> <span class="nav-text">check cuda</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#compile"><span class="nav-number">2.2.</span> <span class="nav-text">compile</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#download"><span class="nav-number">2.2.1.</span> <span class="nav-text">download</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#config"><span class="nav-number">2.2.2.</span> <span class="nav-text">config</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#build-and-install"><span class="nav-number">2.2.3.</span> <span class="nav-text">build and install</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#caffe-usage"><span class="nav-number">2.3.</span> <span class="nav-text">caffe usage</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">2.3.1.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#usage-error-fix"><span class="nav-number">2.3.2.</span> <span class="nav-text">usage error fix</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CaffeTargets-release-cmake"><span class="nav-number">2.3.3.</span> <span class="nav-text">CaffeTargets-release.cmake</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#comiple-errors-with-caffe-pb-h"><span class="nav-number">2.3.4.</span> <span class="nav-text">comiple errors with caffe.pb.h</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#run-exe"><span class="nav-number">2.3.5.</span> <span class="nav-text">run exe</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Errors-and-Solutions"><span class="nav-number">3.</span> <span class="nav-text">Errors and Solutions</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nvidia-driver-not-compatible-with-windows-10"><span class="nav-number">3.1.</span> <span class="nav-text">nvidia driver not compatible with windows 10</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

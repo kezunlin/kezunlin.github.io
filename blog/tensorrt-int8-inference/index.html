@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Series Part 1: install and configure tensorrt 4 on ubuntu 16.04 Part 2: tensorrt fp32 fp16 tutorial Part 3: tensorrt int8 tutorial  GuideFP32&#x2F;FP16&#x2F;INT8 rangeINT8 has significantly lower prec">
+<meta property="og:type" content="article">
+<meta property="og:title" content="how to use tensorrt int8 to do network calibration">
+<meta property="og:url" content="https://kezunlin.me/blog/tensorrt-int8-inference/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Series Part 1: install and configure tensorrt 4 on ubuntu 16.04 Part 2: tensorrt fp32 fp16 tutorial Part 3: tensorrt int8 tutorial  GuideFP32&#x2F;FP16&#x2F;INT8 rangeINT8 has significantly lower prec">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20181119142909032-2033014099.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20181119150611865-1044627462.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20181119145909461-564925193.png">
+<meta property="article:published_time" content="2018-11-19T06:27:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="inference framework">
+<meta property="article:tag" content="tensorrt">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kezunlin.me/images/posts/635233-20181119142909032-2033014099.png">
+
+<link rel="canonical" href="https://kezunlin.me/blog/tensorrt-int8-inference/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>how to use tensorrt int8 to do network calibration | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/tensorrt-int8-inference/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          how to use tensorrt int8 to do network calibration
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-11-19 14:27:00" itemprop="dateCreated datePublished" datetime="2018-11-19T14:27:00+08:00">2018-11-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deep-learning/" itemprop="url" rel="index"><span itemprop="name">deep learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h2><ul>
+<li><a href="https://kezunlin.me/post/dacc4196/">Part 1: install and configure tensorrt 4 on ubuntu 16.04</a></li>
+<li><a href="https://kezunlin.me/post/bcdfb73c/">Part 2: tensorrt fp32 fp16 tutorial</a></li>
+<li><strong><a href="https://kezunlin.me/post/30e0cb19/">Part 3: tensorrt int8 tutorial</a></strong></li>
+</ul>
+<h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="FP32-FP16-INT8-range"><a href="#FP32-FP16-INT8-range" class="headerlink" title="FP32&#x2F;FP16&#x2F;INT8 range"></a>FP32&#x2F;FP16&#x2F;INT8 range</h3><p>INT8 has significantly lower precision and dynamic range compared to FP32.</p>
+<p><img src="https://kezunlin.me/images/posts/635233-20181119142909032-2033014099.png" alt="png"></p>
+<p>High-throughput INT8 math<br><img src="https://kezunlin.me/images/posts/635233-20181119150611865-1044627462.png" alt="png"></p>
+<blockquote>
+<p>DP4A: int8 dot product Requires <code>sm_61+</code> (Pascal TitanX, GTX 1080, Tesla P4, P40 and others).</p>
+</blockquote>
+<h3 id="Calibration-Dataset"><a href="#Calibration-Dataset" class="headerlink" title="Calibration Dataset"></a>Calibration Dataset</h3><blockquote>
+<p>When preparing the calibration dataset, you should capture the expected distribution of data in typical inference scenarios. You want to make sure that the calibration dataset covers all the expected scenarios; for example, clear weather, rainy day, night scenes, etc. If you are creating your own dataset, we recommend creating a separate calibration dataset. The calibration dataset shouldn’t overlap with the training, validation or test datasets, in order to avoid a situation where the calibrated model only works well on the these datasets.<br>具有代表性，最好是val set的子集。</p>
+</blockquote>
+<h3 id="result"><a href="#result" class="headerlink" title="result"></a>result</h3><p>caffe &#x2F; tensorrt FP32 &#x2F; tensorrt INT8</p>
+<p><img src="https://kezunlin.me/images/posts/635233-20181119145909461-564925193.png" alt="png"></p>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+<h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><h3 id="fp32"><a href="#fp32" class="headerlink" title="fp32"></a>fp32</h3><p>by default.</p>
+<h3 id="fp16"><a href="#fp16" class="headerlink" title="fp16"></a>fp16</h3><ul>
+<li><p>cpp</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">builder-&gt;<span class="built_in">setFp16Mode</span>(<span class="literal">true</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>python</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">builder.set_fp16_mode(<span class="literal">True</span>)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="int8"><a href="#int8" class="headerlink" title="int8"></a>int8</h3><ul>
+<li><p>cpp usage</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">builder-&gt;<span class="built_in">setInt8Mode</span>(<span class="literal">true</span>);</span><br><span class="line">builder-&gt;<span class="built_in">setInt8Calibrator</span>(calibrator);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>python usage</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorrt <span class="keyword">as</span> trt</span><br><span class="line"></span><br><span class="line">NUM_IMAGES_PER_BATCH = <span class="number">5</span></span><br><span class="line">batchstream = ImageBatchStream(NUM_IMAGES_PER_BATCH，calibration_files)</span><br><span class="line"></span><br><span class="line">Int8_calibrator = trt.infer.EntropyCalibrator([“input_node_name”]，batchstream)</span><br><span class="line"></span><br><span class="line">trt_builder = trt.infer.create_infer_builder(G_LOGGER)</span><br><span class="line">trt_builder.set_int8_mode(<span class="literal">True</span>)</span><br><span class="line">trt_builder.set_int8_calibrator(Int8_calibrator)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Int8-Calibrator"><a href="#Int8-Calibrator" class="headerlink" title="Int8 Calibrator"></a>Int8 Calibrator</h2><p>see <a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-developer-guide/index.html">5.1.3.2. INT8 Calibration Using C++</a></p>
+<p>Calibration can be slow, therefore, the <code>IInt8Calibrator</code> interface provides methods for caching intermediate data. Using these methods effectively requires a more detailed understanding of calibration.</p>
+<p>When building an INT8 engine, the builder performs the following steps:</p>
+<ol>
+<li>Builds a 32-bit engine, runs it on the calibration set, and records a histogram for each tensor of the distribution of activation values.</li>
+<li>Builds a calibration table from the histograms.</li>
+<li>Builds the INT8 engine from the calibration table and the network definition.</li>
+</ol>
+<p>The calibration table can be cached. Caching is useful when building the same network multiple times, for example, on multiple platforms. It captures data derived from the network and the calibration set. The parameters are recorded in the table. If the network or calibration set changes, it is the application’s responsibility to invalidate the cache.</p>
+<p>The cache is used as follows:</p>
+<ol>
+<li>if a calibration table is found, calibration is skipped, otherwise:<br>the calibration table is built from the histograms and parameters</li>
+<li>then the INT8 network is built from the network definition and the calibration table.</li>
+</ol>
+<p>Cached data is passed as a pointer and length.<br>After you have implemented the calibrator, you can configure the builder to use it:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">builder-&gt;<span class="built_in">setInt8Calibrator</span>(calibrator);</span><br></pre></td></tr></table></figure>
+
+<p>The <code>make_plan</code> program must run on the target system in order for the TensorRT engine to be optimized correctly for that system. However, if an INT8 calibration cache was produced on the host, the cache may be re-used by the builder on the target when generating the engine (in other words, there is no need to do INT8 calibration on the target system itself).</p>
+<blockquote>
+<p>INT8 calibration cache can be re-used, while engine can not.</p>
+</blockquote>
+<h3 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h3><h4 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h4><p>cpp:  </p>
+<ul>
+<li><p>see <a target="_blank" rel="noopener" href="https://github.com/NVIDIA-AI-IOT/deepstream_reference_apps/blob/master/sources/lib/calibrator.h">calibrator.h</a></p>
+</li>
+<li><p>and <a target="_blank" rel="noopener" href="https://github.com/NVIDIA-AI-IOT/deepstream_reference_apps/blob/master/sources/lib/calibrator.cpp">calibrator.cpp</a></p>
+</li>
+</ul>
+<p>calibrator.h </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _CALIBRATOR_H_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _CALIBRATOR_H_</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;NvInfer.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;ds_image.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;trt_utils.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Int8EntropyCalibrator</span> : <span class="keyword">public</span> nvinfer1::IInt8EntropyCalibrator</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Int8EntropyCalibrator</span>(<span class="type">const</span> uint&amp; batchSize, <span class="type">const</span> std::string&amp; calibrationSetPath,</span><br><span class="line">                          <span class="type">const</span> std::string&amp; calibTableFilePath, <span class="type">const</span> <span class="type">uint64_t</span>&amp; inputSize,</span><br><span class="line">                          <span class="type">const</span> uint&amp; inputH, <span class="type">const</span> uint&amp; inputW, <span class="type">const</span> std::string&amp; inputBlobName);</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">Int8EntropyCalibrator</span>() &#123; <span class="built_in">NV_CUDA_CHECK</span>(<span class="built_in">cudaFree</span>(m_DeviceInput)); &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">getBatchSize</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span> </span>&#123; <span class="keyword">return</span> m_BatchSize; &#125;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">getBatch</span><span class="params">(<span class="type">void</span>* bindings[], <span class="type">const</span> <span class="type">char</span>* names[], <span class="type">int</span> nbBindings)</span> <span class="keyword">override</span></span>;</span><br><span class="line">    <span class="function"><span class="type">const</span> <span class="type">void</span>* <span class="title">readCalibrationCache</span><span class="params">(<span class="type">size_t</span>&amp; length)</span> <span class="keyword">override</span></span>;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">writeCalibrationCache</span><span class="params">(<span class="type">const</span> <span class="type">void</span>* cache, <span class="type">size_t</span> length)</span> <span class="keyword">override</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">const</span> uint m_BatchSize;</span><br><span class="line">    <span class="type">const</span> uint m_InputH;</span><br><span class="line">    <span class="type">const</span> uint m_InputW;</span><br><span class="line">    <span class="type">const</span> <span class="type">uint64_t</span> m_InputSize;</span><br><span class="line">    <span class="type">const</span> <span class="type">uint64_t</span> m_InputCount;</span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* m_InputBlobName;</span><br><span class="line">    <span class="type">const</span> std::string m_CalibTableFilePath&#123;<span class="literal">nullptr</span>&#125;;</span><br><span class="line">    uint m_ImageIndex;</span><br><span class="line">    <span class="type">bool</span> m_ReadCache&#123;<span class="literal">true</span>&#125;;</span><br><span class="line">    <span class="type">void</span>* m_DeviceInput&#123;<span class="literal">nullptr</span>&#125;;</span><br><span class="line">    std::vector&lt;std::string&gt; m_ImageList;</span><br><span class="line">    std::vector&lt;<span class="type">char</span>&gt; m_CalibrationCache;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<p>calibrator.cpp </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;calibrator.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iterator&gt;</span></span></span><br><span class="line"></span><br><span class="line">Int8EntropyCalibrator::<span class="built_in">Int8EntropyCalibrator</span>(<span class="type">const</span> uint&amp; batchSize,</span><br><span class="line">                                             <span class="type">const</span> std::string&amp; calibrationSetPath,</span><br><span class="line">                                             <span class="type">const</span> std::string&amp; calibTableFilePath,</span><br><span class="line">                                             <span class="type">const</span> <span class="type">uint64_t</span>&amp; inputSize, <span class="type">const</span> uint&amp; inputH,</span><br><span class="line">                                             <span class="type">const</span> uint&amp; inputW, <span class="type">const</span> std::string&amp; inputBlobName) :</span><br><span class="line">    <span class="built_in">m_BatchSize</span>(batchSize),</span><br><span class="line">    <span class="built_in">m_InputH</span>(inputH),</span><br><span class="line">    <span class="built_in">m_InputW</span>(inputW),</span><br><span class="line">    <span class="built_in">m_InputSize</span>(inputSize),</span><br><span class="line">    <span class="built_in">m_InputCount</span>(batchSize * inputSize),</span><br><span class="line">    <span class="built_in">m_InputBlobName</span>(inputBlobName.<span class="built_in">c_str</span>()),</span><br><span class="line">    <span class="built_in">m_CalibTableFilePath</span>(calibTableFilePath),</span><br><span class="line">    <span class="built_in">m_ImageIndex</span>(<span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">    m_ImageList = <span class="built_in">loadListFromTextFile</span>(calibrationSetPath);</span><br><span class="line">    m_ImageList.<span class="built_in">resize</span>(<span class="built_in">static_cast</span>&lt;<span class="type">int</span>&gt;(m_ImageList.<span class="built_in">size</span>() / m_BatchSize) * m_BatchSize);</span><br><span class="line">    std::<span class="built_in">random_shuffle</span>(m_ImageList.<span class="built_in">begin</span>(), m_ImageList.<span class="built_in">end</span>(), [](<span class="type">int</span> i) &#123; <span class="keyword">return</span> <span class="built_in">rand</span>() % i; &#125;);</span><br><span class="line">    <span class="built_in">NV_CUDA_CHECK</span>(<span class="built_in">cudaMalloc</span>(&amp;m_DeviceInput, m_InputCount * <span class="built_in">sizeof</span>(<span class="type">float</span>)));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">Int8EntropyCalibrator::getBatch</span><span class="params">(<span class="type">void</span>* bindings[], <span class="type">const</span> <span class="type">char</span>* names[], <span class="type">int</span> nbBindings)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (m_ImageIndex + m_BatchSize &gt;= m_ImageList.<span class="built_in">size</span>()) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Load next batch</span></span><br><span class="line">    <span class="function">std::vector&lt;DsImage&gt; <span class="title">dsImages</span><span class="params">(m_BatchSize)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (uint j = m_ImageIndex; j &lt; m_ImageIndex + m_BatchSize; ++j)</span><br><span class="line">    &#123;</span><br><span class="line">        dsImages.<span class="built_in">at</span>(j - m_ImageIndex) = <span class="built_in">DsImage</span>(m_ImageList.<span class="built_in">at</span>(j), m_InputH, m_InputW);</span><br><span class="line">    &#125;</span><br><span class="line">    m_ImageIndex += m_BatchSize;</span><br><span class="line"></span><br><span class="line">    cv::Mat trtInput = <span class="built_in">blobFromDsImages</span>(dsImages, m_InputH, m_InputW);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">NV_CUDA_CHECK</span>(<span class="built_in">cudaMemcpy</span>(m_DeviceInput, trtInput.<span class="built_in">ptr</span>&lt;<span class="type">float</span>&gt;(<span class="number">0</span>), m_InputCount * <span class="built_in">sizeof</span>(<span class="type">float</span>),</span><br><span class="line">                             cudaMemcpyHostToDevice));</span><br><span class="line">    <span class="built_in">assert</span>(!<span class="built_in">strcmp</span>(names[<span class="number">0</span>], m_InputBlobName));</span><br><span class="line">    bindings[<span class="number">0</span>] = m_DeviceInput;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">const</span> <span class="type">void</span>* <span class="title">Int8EntropyCalibrator::readCalibrationCache</span><span class="params">(<span class="type">size_t</span>&amp; length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">void</span>* output;</span><br><span class="line">    m_CalibrationCache.<span class="built_in">clear</span>();</span><br><span class="line">    <span class="built_in">assert</span>(!m_CalibTableFilePath.<span class="built_in">empty</span>());</span><br><span class="line">    <span class="function">std::ifstream <span class="title">input</span><span class="params">(m_CalibTableFilePath, std::ios::binary)</span></span>;</span><br><span class="line">    input &gt;&gt; std::noskipws;</span><br><span class="line">    <span class="keyword">if</span> (m_ReadCache &amp;&amp; input.<span class="built_in">good</span>())</span><br><span class="line">        std::<span class="built_in">copy</span>(std::<span class="built_in">istream_iterator</span>&lt;<span class="type">char</span>&gt;(input), std::<span class="built_in">istream_iterator</span>&lt;<span class="type">char</span>&gt;(),</span><br><span class="line">                  std::<span class="built_in">back_inserter</span>(m_CalibrationCache));</span><br><span class="line"></span><br><span class="line">    length = m_CalibrationCache.<span class="built_in">size</span>();</span><br><span class="line">    <span class="keyword">if</span> (length)</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Using cached calibration table to build the engine&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        output = &amp;m_CalibrationCache[<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;New calibration table will be created to build the engine&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        output = <span class="literal">nullptr</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> output;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Int8EntropyCalibrator::writeCalibrationCache</span><span class="params">(<span class="type">const</span> <span class="type">void</span>* cache, <span class="type">size_t</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">assert</span>(!m_CalibTableFilePath.<span class="built_in">empty</span>());</span><br><span class="line">    <span class="function">std::ofstream <span class="title">output</span><span class="params">(m_CalibTableFilePath, std::ios::binary)</span></span>;</span><br><span class="line">    output.<span class="built_in">write</span>(<span class="built_in">reinterpret_cast</span>&lt;<span class="type">const</span> <span class="type">char</span>*&gt;(cache), length);</span><br><span class="line">    output.<span class="built_in">close</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="c-v2"><a href="#c-v2" class="headerlink" title="c++ v2"></a>c++ v2</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Int8CacheCalibrator</span> : <span class="keyword">public</span> IInt8EntropyCalibrator &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">Int8CacheCalibrator</span>(std::string cacheFile)</span><br><span class="line">    : <span class="built_in">mCacheFile</span>(cacheFile) &#123;&#125;</span><br><span class="line">  <span class="keyword">virtual</span> ~<span class="built_in">Int8CacheCalibrator</span>() &#123;&#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">getBatchSize</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span> </span>&#123;<span class="keyword">return</span> <span class="number">1</span>;&#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">getBatch</span><span class="params">(<span class="type">void</span>* bindings[], <span class="type">const</span> <span class="type">char</span>* names[], <span class="type">int</span> nbBindings)</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="type">const</span> <span class="type">void</span>* <span class="title">readCalibrationCache</span><span class="params">(<span class="type">size_t</span>&amp; length)</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    mCalibrationCache.<span class="built_in">clear</span>();</span><br><span class="line">    <span class="function">std::ifstream <span class="title">input</span><span class="params">(mCacheFile, std::ios::binary)</span></span>;</span><br><span class="line">    input &gt;&gt; std::noskipws;</span><br><span class="line">    <span class="keyword">if</span> (input.<span class="built_in">good</span>()) &#123;</span><br><span class="line">      std::<span class="built_in">copy</span>(std::<span class="built_in">istream_iterator</span>(input),</span><br><span class="line">      std::<span class="built_in">istream_iterator</span>&lt;<span class="type">char</span>&gt;(),</span><br><span class="line">      std::<span class="built_in">back_inserter</span>&lt;<span class="type">char</span>&gt;(mCalibrationCache));</span><br><span class="line">    &#125;</span><br><span class="line">    length = mCalibrationCache.<span class="built_in">size</span>();</span><br><span class="line">    <span class="keyword">return</span> length ? &amp;mCalibrationCache[<span class="number">0</span>] : <span class="literal">nullptr</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  std::string mCacheFile;</span><br><span class="line">  std::vector&lt;<span class="type">char</span>&gt; mCalibrationCache;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="python"><a href="#python" class="headerlink" title="python"></a>python</h4><ul>
+<li>see <a target="_blank" rel="noopener" href="https://devblogs.nvidia.com/int8-inference-autonomous-vehicles-tensorrt/">calibrator.py</a></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pycuda.driver <span class="keyword">as</span> cuda</span><br><span class="line"><span class="keyword">import</span> pycuda.autoinit</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="keyword">import</span> ctypes</span><br><span class="line"><span class="keyword">import</span> tensorrt <span class="keyword">as</span> trt</span><br><span class="line"></span><br><span class="line">CHANNEL = <span class="number">3</span></span><br><span class="line">HEIGHT = <span class="number">512</span></span><br><span class="line">WIDTH = <span class="number">1024</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PythonEntropyCalibrator</span>(trt.infer.EntropyCalibrator):</span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, input_layers, stream</span>):</span><br><span class="line">    trt.infer.EntropyCalibrator.__init__(<span class="variable language_">self</span>)       </span><br><span class="line">    <span class="variable language_">self</span>.input_layers = input_layers</span><br><span class="line">    <span class="variable language_">self</span>.stream = stream</span><br><span class="line">  <span class="variable language_">self</span>.d_input = cuda.mem_alloc(<span class="variable language_">self</span>.stream.calibration_data.nbytes)</span><br><span class="line">    stream.reset()</span><br><span class="line"></span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">get_batch_size</span>(<span class="params">self</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">self</span>.stream.batch_size</span><br><span class="line"></span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">get_batch</span>(<span class="params">self, bindings, names</span>):</span><br><span class="line">    batch = <span class="variable language_">self</span>.stream.next_batch()</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> batch.size:   </span><br><span class="line">      <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">      </span><br><span class="line">    cuda.memcpy_htod(<span class="variable language_">self</span>.d_input, batch)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="variable language_">self</span>.input_layers[<span class="number">0</span>]:</span><br><span class="line">      <span class="keyword">assert</span> names[<span class="number">0</span>] != i</span><br><span class="line"></span><br><span class="line">    bindings[<span class="number">0</span>] = <span class="built_in">int</span>(<span class="variable language_">self</span>.d_input)</span><br><span class="line">    <span class="keyword">return</span> bindings</span><br><span class="line"></span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">read_calibration_cache</span>(<span class="params">self, length</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">write_calibration_cache</span>(<span class="params">self, ptr, size</span>):</span><br><span class="line">    cache = ctypes.c_char_p(<span class="built_in">int</span>(ptr))</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;calibration_cache.bin&#x27;</span>, <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">      f.write(cache.value)</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://devblogs.nvidia.com/int8-inference-autonomous-vehicles-tensorrt/">int8-inference-autonomous-vehicles-tensorrt</a></li>
+<li><a target="_blank" rel="noopener" href="http://on-demand.gputechconf.com/gtc/2017/presentation/s7310-8-bit-inference-with-tensorrt.pdf">8-bit-inference-with-tensorrt</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_32043199/article/details/81119357">8-bit-inference-with-tensorrt 中文翻译版</a></li>
+<li><a target="_blank" rel="noopener" href="https://note.youdao.com/share/?id=829ba6cabfde990e2832b048a4f492b3&type=note#/">基于tensorRT方案的INT8量化实现</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20181119: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/inference-framework/" rel="tag"># inference framework</a>
+              <a href="/tags/tensorrt/" rel="tag"># tensorrt</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/install-apache-httpd-server-2-2-on-windows-10/" rel="prev" title="install apache httpd server 2.2 on windows 10">
+      <i class="fa fa-chevron-left"></i> install apache httpd server 2.2 on windows 10
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/c-cuda-programming-tutorial/" rel="next" title="tutorial to cuda programming with C++">
+      tutorial to cuda programming with C++ <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Series"><span class="nav-number">1.</span> <span class="nav-text">Series</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">2.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FP32-FP16-INT8-range"><span class="nav-number">2.1.</span> <span class="nav-text">FP32&#x2F;FP16&#x2F;INT8 range</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Calibration-Dataset"><span class="nav-number">2.2.</span> <span class="nav-text">Calibration Dataset</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#result"><span class="nav-number">2.3.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Code"><span class="nav-number">3.</span> <span class="nav-text">Code</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fp32"><span class="nav-number">3.1.</span> <span class="nav-text">fp32</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fp16"><span class="nav-number">3.2.</span> <span class="nav-text">fp16</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#int8"><span class="nav-number">3.3.</span> <span class="nav-text">int8</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Int8-Calibrator"><span class="nav-number">4.</span> <span class="nav-text">Int8 Calibrator</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#demo"><span class="nav-number">4.1.</span> <span class="nav-text">demo</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#c"><span class="nav-number">4.1.1.</span> <span class="nav-text">c++</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#c-v2"><span class="nav-number">4.1.2.</span> <span class="nav-text">c++ v2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#python"><span class="nav-number">4.1.3.</span> <span class="nav-text">python</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">6.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

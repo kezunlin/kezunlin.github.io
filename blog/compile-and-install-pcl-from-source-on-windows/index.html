@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Series Part-1: Install and Configure Qt5 on Ubuntu 16.04 Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04 Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Part-4: Install PCL with vtk qt support on windows 10">
+<meta property="og:url" content="https://kezunlin.me/blog/compile-and-install-pcl-from-source-on-windows/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Series Part-1: Install and Configure Qt5 on Ubuntu 16.04 Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04 Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubu">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180211194409045-927426521.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180112145011910-995769793.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180112145039222-1499154536.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180112233204410-2114402383.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180208210623795-1984024029.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180114210710582-1020157530.png">
+<meta property="article:published_time" content="2018-01-22T08:26:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="qt">
+<meta property="article:tag" content="vtk">
+<meta property="article:tag" content="pcl">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kezunlin.me/images/posts/635233-20180211194409045-927426521.png">
+
+<link rel="canonical" href="https://kezunlin.me/blog/compile-and-install-pcl-from-source-on-windows/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Part-4: Install PCL with vtk qt support on windows 10 | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/compile-and-install-pcl-from-source-on-windows/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Part-4: Install PCL with vtk qt support on windows 10
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-01-22 16:26:00" itemprop="dateCreated datePublished" datetime="2018-01-22T16:26:00+08:00">2018-01-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h2><ul>
+<li><a href="https://kezunlin.me/post/91842b71/">Part-1: Install and Configure Qt5 on Ubuntu 16.04</a></li>
+<li><a href="https://kezunlin.me/post/b901735e/">Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04</a></li>
+<li><a href="https://kezunlin.me/post/137aa5fc/">Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubuntu 16.04 from source</a></li>
+<li><a href="https://kezunlin.me/post/2d809f92/"><strong>Part-4: Install and Configure PCL 1.8.1 with vtk qt support on windows 10 from source</strong></a></li>
+</ul>
+<h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><p>Tips</p>
+<blockquote>
+<p>we’d better to use SSD to compile source code instead HDD. So put source code in C folder on windows.<br>use multiple processor to compile with <code>/MP</code> options.</p>
+</blockquote>
+<h3 id="prepare"><a href="#prepare" class="headerlink" title="prepare"></a>prepare</h3><h4 id="software"><a href="#software" class="headerlink" title="software"></a>software</h4><ul>
+<li>vs: vs2015 installer</li>
+<li>qt: <a target="_blank" rel="noopener" href="http://mirrors.tuna.tsinghua.edu.cn/qt/archive/qt/5.7/5.7.1/qt-opensource-windows-x86-msvc2015_64-5.7.1.exe">http://mirrors.tuna.tsinghua.edu.cn/qt/archive/qt/5.7/5.7.1/qt-opensource-windows-x86-msvc2015_64-5.7.1.exe</a></li>
+<li>qt vs tools: <a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/qt/archive/vsaddin/qt-vs-tools-msvc2015-2.1.1.vsix">https://mirrors.tuna.tsinghua.edu.cn/qt/archive/vsaddin/qt-vs-tools-msvc2015-2.1.1.vsix</a></li>
+<li>pcl installer: <a target="_blank" rel="noopener" href="https://github.com/PointCloudLibrary/pcl/releases/download/pcl-1.8.1/PCL-1.8.1-AllInOne-msvc2015-win64.exe">https://github.com/PointCloudLibrary/pcl/releases/download/pcl-1.8.1/PCL-1.8.1-AllInOne-msvc2015-win64.exe</a></li>
+<li>vtk source:    <a target="_blank" rel="noopener" href="https://www.vtk.org/files/release/8.1/VTK-8.1.0.zip">https://www.vtk.org/files/release/8.1/VTK-8.1.0.zip</a></li>
+<li>vtk data:     <a target="_blank" rel="noopener" href="https://www.vtk.org/files/release/8.1/VTKData-8.1.0.zip">https://www.vtk.org/files/release/8.1/VTKData-8.1.0.zip</a></li>
+<li>pcl source:    <a target="_blank" rel="noopener" href="https://github.com/PointCloudLibrary/pcl/archive/pcl-1.8.1.zip">https://github.com/PointCloudLibrary/pcl/archive/pcl-1.8.1.zip</a></li>
+</ul>
+<p>download </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget https://www.vtk.org/files/release/8.1/VTK-8.1.0.zip</span><br><span class="line">wget https://www.vtk.org/files/release/8.1/VTKData-8.1.0.zip</span><br><span class="line">wget https://github.com/PointCloudLibrary/pcl/archive/pcl-1.8.1.zip</span><br></pre></td></tr></table></figure>
+
+<h4 id="version"><a href="#version" class="headerlink" title="version"></a>version</h4><pre><code>window: 10
+qt: 5.7.1
+qmake: 3.0 based on Qt 5.7.1
+qtcreator: 4.2.0 based on Qt 5.7.1
+
+qt-vs-tools: 2.2.1 
+cmake/gui: 3.10.0
+
+vtk: 8.1.0 (source)
+vtk data: 8.1.0
+pcl: 1.8.1 (source)
+
+$ qmake -v
+QMake version 3.0
+Using Qt version 5.7.1 in C:/Qt/Qt5.7.1/5.7/msvc2015_64/lib
+
+$ qtcreator -version
+Qt Creator 4.2.0 based on Qt 5.7.1
+
+$ cmake -version
+cmake version 3.10.0
+</code></pre>
+<h4 id="install-vs2015"><a href="#install-vs2015" class="headerlink" title="install vs2015"></a>install vs2015</h4><p>skip.</p>
+<h4 id="configure-vs2015-with-admin"><a href="#configure-vs2015-with-admin" class="headerlink" title="configure vs2015 with admin"></a>configure vs2015 with admin</h4><p>when we compile pcl by vs2015 and install to folder <code>C:/Program Files/PCL</code> , we need administrative priviledges.<br>follow steps：</p>
+<pre><code>cmd+r 
+regeidt
+HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers
+
+# new string entry
+key: C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe
+value: ~ RUNASADMIN
+</code></pre>
+<p><img src="https://kezunlin.me/images/posts/635233-20180211194409045-927426521.png" alt="vs2015 regedit for runasadmin"></p>
+<h4 id="install-qt"><a href="#install-qt" class="headerlink" title="install qt"></a>install qt</h4><p>install qt to path <code>C:\Qt\Qt5.7.1</code></p>
+<p>add the following to system path.</p>
+<pre><code>C:\Qt\Qt5.7.1\5.7\msvc2015_64\bin
+C:\Qt\Qt5.7.1\Tools\QtCreator\bin
+</code></pre>
+<h4 id="install-qt-vs-tools"><a href="#install-qt-vs-tools" class="headerlink" title="install qt-vs-tools"></a>install qt-vs-tools</h4><h5 id="online-install-by-vs2015"><a href="#online-install-by-vs2015" class="headerlink" title="online install by vs2015"></a>online install by vs2015</h5><p>start vs2015, install <code>Qt Visual Sutido Tools</code> by:</p>
+<pre><code>Tools---&gt; Extensions and Update... ---&gt; online search qt ---&gt; install Qt Visual Sutido Tools ---&gt; OK
+</code></pre>
+<p>restart vs2015 and new menu <code>Qt VS Tools</code> will be added to VS Main menu.</p>
+<h5 id="offline-install-by-vsix"><a href="#offline-install-by-vsix" class="headerlink" title="offline install by vsix"></a>offline install by vsix</h5><pre><code>wget https://mirrors.tuna.tsinghua.edu.cn/qt/archive/vsaddin/qt-vs-tools-msvc2015-2.1.1.vsix
+</code></pre>
+<p>double click <code>qt-vs-tools-msvc2015-2.1.1.vsix</code> and install.</p>
+<h4 id="configure-qt-for-vs"><a href="#configure-qt-for-vs" class="headerlink" title="configure qt for vs"></a>configure qt for vs</h4><p>follow steps</p>
+<pre><code>Qt VS Tools ---&gt; Qt Options ---&gt; Add name and path
+</code></pre>
+<p>Add qt path for vs2015 so that we can find <code>%PATH%\bin\qmake.exe</code></p>
+<pre><code>Name: Qt 5.7.1
+Path: C:\Qt\Qt5.7.1\5.7\msvc2015_64\
+</code></pre>
+<p><img src="https://kezunlin.me/images/posts/635233-20180112145011910-995769793.png" alt="qt options"></p>
+<h4 id="new-qt-project-from-vs"><a href="#new-qt-project-from-vs" class="headerlink" title="new qt project from vs"></a>new qt project from vs</h4><p>start vs2015, and new <code>Qt Gui Application</code>. </p>
+<p><img src="https://kezunlin.me/images/posts/635233-20180112145039222-1499154536.png" alt="new qt gui application"></p>
+<p>Compile and run first qt program.<br>Success. </p>
+<h3 id="install-pcl-third-parties"><a href="#install-pcl-third-parties" class="headerlink" title="install pcl third parties"></a>install pcl third parties</h3><h4 id="install-pcl-by-installer"><a href="#install-pcl-by-installer" class="headerlink" title="install pcl by installer"></a>install pcl by installer</h4><p>install pcl to <code>C:\Program Files\PCL 1.8.1\</code></p>
+<p>choose to install OpenNI2 to <code>C:\Program Files\PCL 1.8.1\3rdParty\OpenNI2\</code></p>
+<p>this process will add 4 system env.</p>
+<pre><code>PCL_ROOT          C:\Program Files\PCL 1.8.1
+OPENNI2_INCLUDE64 C:\Program Files\PCL 1.8.1\3rdParty\OpenNI2\Include\
+OPENNI2_LIB64     C:\Program Files\PCL 1.8.1\3rdParty\OpenNI2\Lib\ 
+OPENNI2_REDIST64  C:\Program Files\PCL 1.8.1\3rdParty\OpenNI2\Redist\
+</code></pre>
+<h4 id="configure-env"><a href="#configure-env" class="headerlink" title="configure env"></a>configure env</h4><p>add env to <code>Path</code>.</p>
+<pre><code>%PCL_ROOT\bin
+%PCL_ROOT%\3rdParty\FLANN\bin
+%PCL_ROOT%\3rdParty\OpenNI2\Redist
+%PCL_ROOT%\3rdParty\OpenNI2\Tools
+%PCL_ROOT%\3rdParty\Qhull\bin
+%PCL_ROOT%\3rdParty\VTK\bin
+</code></pre>
+<h4 id="copy-winpap-package"><a href="#copy-winpap-package" class="headerlink" title="copy winpap package"></a>copy winpap package</h4><p>copy winpap to <code>C:\Program Files\PCL 1.8.1\3rdParty\</code>, and 3rdParty folder looks like this:</p>
+<pre><code>$ ls -al
+
+total 16
+drwxr-xr-x 1 zunli 197609 0 1月  11 12:47 ./
+drwxr-xr-x 1 zunli 197609 0 1月  11 08:03 ../
+drwxr-xr-x 1 zunli 197609 0 1月  11 08:02 Boost/
+drwxr-xr-x 1 zunli 197609 0 1月  11 08:01 Eigen/
+drwxr-xr-x 1 zunli 197609 0 1月  11 08:02 FLANN/
+drwxr-xr-x 1 zunli 197609 0 1月  11 08:04 OpenNI2/
+drwxr-xr-x 1 zunli 197609 0 1月  11 08:02 Qhull/
+drwxr-xr-x 1 zunli 197609 0 1月  11 08:03 VTK/
+drwxr-xr-x 1 zunli 197609 0 1月  11 12:47 winpcap/
+</code></pre>
+<h2 id="compile-vtk"><a href="#compile-vtk" class="headerlink" title="compile vtk"></a>compile vtk</h2><h3 id="download-vtk-and-data"><a href="#download-vtk-and-data" class="headerlink" title="download vtk and data"></a>download vtk and data</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://www.vtk.org/files/release/8.1/VTK-8.1.0.zip</span><br><span class="line">wget https://www.vtk.org/files/release/8.1/VTKData-8.1.0.zip</span><br></pre></td></tr></table></figure>
+
+<h3 id="configure-source"><a href="#configure-source" class="headerlink" title="configure source"></a>configure source</h3><p>we need to compile vtk to replace <code>C:\Program Files\PCL 1.8.1\3rdParty\VTK\</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> c:/compile/VTK-8.1.0</span><br><span class="line"><span class="built_in">mkdir</span> build &amp;&amp; <span class="built_in">cd</span> build </span><br><span class="line">cmake-gui ..</span><br></pre></td></tr></table></figure>
+
+<p>configure generator to <code>Visual Studio 14 2015 Win64</code> with options </p>
+<pre><code>VTK_Group_Qt  ON
+VTK_QT_VERSION     5  # by default 4
+VTK_RENDERING_BACKEND OpenGL2 # by default OpenGL
+Qt5_DIR  C:/Qt/Qt5.7.1/5.7/msvc2015_64/lib/cmake/Qt5
+
+CMAKE_INSTALL_PREFIX  C:/Program Files/VTK  # by default
+BUILD_SHARED_LIBS  ON
+CMAKE_CONFIGURATION_TYPES Release # Release
+CMAKE_CXX_FLAGS_RELEASE /MD /O2 /Ob2 /DNDEBUG /MP # for multiple processor
+</code></pre>
+<blockquote>
+<p>unzip <code>VTKData-8.1.0.zip</code> and copy <code>MD5</code> to <code>VTK-8.1.0/build/ExternalData/Objects/MD5</code></p>
+</blockquote>
+<p>Detailed steps as follows: </p>
+<ol>
+<li><p>With VTK &#x3D; 8.1.0:</p>
+<pre><code> VTK_Group_Qt  ON
+</code></pre>
+<p> configure again, and then <code>QT_QMAKE_EXECUTABLE</code> and <code>VTK_QT_VERSION</code>  will appear.</p>
+</li>
+<li><p>we need to change <code>VTK_QT_VERSION</code> from 4 to 5.</p>
+<pre><code> VTK_QT_VERSION     5  # by default 4
+</code></pre>
+</li>
+<li><p>change <code>VTK_RENDERING_BACKEND</code> from OpenGL to OpenGL2.</p>
+<pre><code> VTK_RENDERING_BACKEND OpenGL2 # by default OpenGL
+</code></pre>
+</li>
+<li><p>set install path <code>C:\Program Files\VTK\</code></p>
+<pre><code> CMAKE_INSTALL_PREFIX  C:/Program Files/VTK  
+</code></pre>
+<blockquote>
+<p>we need write privileges to install to <code>C:\Program Files\VTK\</code></p>
+</blockquote>
+</li>
+<li><p>we should also notice <code>BUILD_SHARED_LIBS </code></p>
+<pre><code> BUILD_SHARED_LIBS  ON
+</code></pre>
+</li>
+<li><p>add <code>/MP</code> for multiple processor compile </p>
+<pre><code> CMAKE_CXX_FLAGS_RELEASE /MD /O2 /Ob2 /DNDEBUG /MP # for multiple processor
+ 
+ CMAKE_CXX_MP_FLAG ON
+ CMAKE_CXX_MP_NUM_PROCESSORS 8
+</code></pre>
+</li>
+<li><p>Configure</p>
+</li>
+</ol>
+<h3 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h3><p>If everything goes well, then generate <code>VTK.sln</code>.</p>
+<p>Open <code>VTK.sln</code> in vs2015 and build with <code>Release X64</code>.</p>
+<blockquote>
+<p>NOTICE: this build process will take about 10 minutes.(10:35-10:45)</p>
+</blockquote>
+<h3 id="install-vtk"><a href="#install-vtk" class="headerlink" title="install vtk"></a>install vtk</h3><p>choose <code>INSTALL</code> and generate , and VTK will be installed to <code>C:\Program Files\VTK\</code>.</p>
+<p>Notice for <code>QVTKWidgetPlugin</code> and copy dll and lib to <code>C:\Program Files\VTK\</code>.</p>
+<ul>
+<li>dll: copy <code>C:\compile\VTK-8.1.0\build\bin\Release\QVTKWidgetPlugin.dll</code> to <code>C:\Program Files\VTK\bin\QVTKWidgetPlugin.dll</code></li>
+<li>lib:  copy <code>C:\compile\VTK-8.1.0\build\lib\Release\QVTKWidgetPlugin.lib</code>to <code>C:\Program Files\VTK\lib\QVTKWidgetPlugin.lib</code></li>
+</ul>
+<p>we should also notice that dll has been copied to <code>C:\Program Files\VTK\plugins\designer\QVTKWidgetPlugin.dll</code></p>
+<h3 id="copy-vtk-to-pcl"><a href="#copy-vtk-to-pcl" class="headerlink" title="copy vtk to pcl"></a>copy vtk to pcl</h3><p>copy vtk from  <code>C:\Program Files\VTK\</code> to <code>C:/Program Files/PCL 1.8.1/3rdParty/VTK</code> to replace old one.</p>
+<h3 id="install-QVTKWidgetPlugin"><a href="#install-QVTKWidgetPlugin" class="headerlink" title="install QVTKWidgetPlugin"></a>install QVTKWidgetPlugin</h3><p>copy <code>C:\Program Files\VTK\plugins\designer\QVTKWidgetPlugin.dll</code> to<br><code>C:\Qt\Qt5.7.1\5.7\msvc2015_64\plugins\designer</code></p>
+<p>start vs2015 again, view <code>mainwindow.ui</code> in <code>Qt Designer</code>.</p>
+<p>Now <code>QVTKWidget</code> will occur.</p>
+<p><img src="https://kezunlin.me/images/posts/635233-20180112233204410-2114402383.png" alt="qvtkwidget_in_qt_designer"></p>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+<h2 id="compile-pcl"><a href="#compile-pcl" class="headerlink" title="compile pcl"></a>compile pcl</h2><h3 id="3rdParty"><a href="#3rdParty" class="headerlink" title="3rdParty"></a>3rdParty</h3><p>install pcl to get 3rdparty libraries and copy to proper folder.</p>
+<ul>
+<li>Boost:  C:&#x2F;Boost&#x2F;include lib  version: 1.64        (auto find by cmake)</li>
+<li>eigen3: C:&#x2F;Program Files&#x2F;Eigen&#x2F;eigen3, version: 3.3.4 (auto find by cmake)</li>
+<li>FLANN:  C:&#x2F;Program Files&#x2F;FLANN&#x2F;include lib bin      (auto find by cmake)</li>
+<li>OpenNI2: C:&#x2F;Program Files&#x2F;OpenNI2&#x2F;Include Lib Redist  (<strong>user input</strong>)</li>
+<li>Qhull:  C:&#x2F;Program Files&#x2F;Qhull&#x2F;include lib bin      (auto find by cmake)</li>
+<li>winpcap: C:&#x2F;Program Files&#x2F;winpcap&#x2F;Include Lib      (<strong>user input</strong>)</li>
+</ul>
+<p>cmake options </p>
+<pre><code>OpenNI2 include: C:/Program Files/OpenNI2/Include
+OpenNI2 LIBRARY: C:/Program Files/OpenNI2/Lib/OpenNI2.lib
+
+pcap  include: C:/Program Files/winpcap/Include
+pcap  library: C:/Program Files/winpcap/Lib/x64/wpcap.lib
+</code></pre>
+<h3 id="configure"><a href="#configure" class="headerlink" title="configure"></a>configure</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd c:/compile/pcl-<span class="number">1.8</span>.<span class="number">1</span></span><br><span class="line">mkdir build &amp;&amp; cd build</span><br><span class="line">cmake-gui ..</span><br></pre></td></tr></table></figure>
+
+<p>with options </p>
+<pre><code>QT_USE_FILE C:/compile/pcl-1.8.1/build/use-qt5.cmake
+VTK_DIR  C:/Program Files/VTK/lib/cmake/vtk-8.1
+CMAKE_INSTALL_PREFIX  C:/Program Files/PCL 
+
+PCL_SHARED_LIBS       ON
+PCL_QT_VERSION        5
+PCL_ENABLE_SSE        ON
+
+CMAKE_BUILD_TYPE       Release
+CMAKE_CONFIGURATION_TYPES Release
+CMAKE_INSTALL_PREFIX  C:/Program Files/PCL
+CMAKE_CXX_FLAGS_RELEASE /MD /O2 /Ob2 /DNDEBUG /MP # for multiple processor
+
+Build_visualization ON
+Build_apps OFF
+Build_examples OFF # error may occur
+
+# Fix zlib and png
+zlib include: C:/Program Files/VTK/include/vtk-8.1/vtkzlib
+zlib library: C:/Program Files/VTK/lib/vtkzlib-8.1.lib
+
+png include:  C:/Program Files/VTK/include/vtk-8.1/vtkpng
+png library:  C:/Program Files/VTK/lib/vtkpng-8.1.lib
+</code></pre>
+<p>configure output </p>
+<pre><code>code;arch=compute_53,code=sm_53;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_61,code=sm_61
+...
+Boost version: 1.64.0
+Found the following Boost libraries:
+  system
+  filesystem
+  thread
+  date_time
+  iostreams
+  chrono
+  atomic
+  regex
+DOXYGEN_FOUND 
+HTML_HELP_COMPILER 
+Found CPack generators: NSIS
+The following subsystems will be built:
+  common
+  octree
+  io
+  kdtree
+  search
+  sample_consensus
+  filters
+  2d
+  geometry
+  features
+  ml
+  segmentation
+  surface
+  registration
+  keypoints
+  tracking
+  recognition
+  stereo
+  tools
+The following subsystems will not be built:
+  visualization: Disabled manually.
+  apps: Disabled: visualization missing.
+  outofcore: Requires visualization.
+  examples: Code examples are disabled by default.
+  people: Requires visualization.
+  simulation: Disabled: visualization missing.
+  global_tests: No reason
+Configuring done
+</code></pre>
+<p>OK. </p>
+<h3 id="compile-1"><a href="#compile-1" class="headerlink" title="compile"></a>compile</h3><p>If everything goes well, then generate <code>PCL.sln</code></p>
+<p>Open <code>PCL.sln</code> in vs2015 and build with <code>Release X64</code>.</p>
+<p>NOTICE: this build process will take about 30 minutes.</p>
+<h3 id="install-pcl"><a href="#install-pcl" class="headerlink" title="install pcl"></a>install pcl</h3><blockquote>
+<p>by default install need administrator privilidges to write to <code>C:/Program Files/PCL/</code>.</p>
+</blockquote>
+<p>choose <code>INSTALL</code> and generate , and PCL will be installed to <code>C:/Program Files/PCL</code>.</p>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><h3 id="pcl-only"><a href="#pcl-only" class="headerlink" title="pcl only"></a>pcl only</h3><h4 id="pcd-write-cpp"><a href="#pcd-write-cpp" class="headerlink" title="pcd_write.cpp"></a>pcd_write.cpp</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pcl/io/pcd_io.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pcl/point_types.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span> <span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  pcl::PointCloud&lt;pcl::PointXYZ&gt; cloud;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Fill in the cloud data</span></span><br><span class="line">  cloud.width    = <span class="number">5</span>;</span><br><span class="line">  cloud.height   = <span class="number">1</span>;</span><br><span class="line">  cloud.is_dense = <span class="literal">false</span>;</span><br><span class="line">  cloud.points.<span class="built_in">resize</span> (cloud.width * cloud.height);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; cloud.points.<span class="built_in">size</span> (); ++i)</span><br><span class="line">  &#123;</span><br><span class="line">    cloud.points[i].x = <span class="number">1024</span> * <span class="built_in">rand</span> () / (RAND_MAX + <span class="number">1.0f</span>);</span><br><span class="line">    cloud.points[i].y = <span class="number">1024</span> * <span class="built_in">rand</span> () / (RAND_MAX + <span class="number">1.0f</span>);</span><br><span class="line">    cloud.points[i].z = <span class="number">1024</span> * <span class="built_in">rand</span> () / (RAND_MAX + <span class="number">1.0f</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  pcl::io::<span class="built_in">savePCDFileASCII</span> (<span class="string">&quot;test_pcd.pcd&quot;</span>, cloud);</span><br><span class="line">  std::cerr &lt;&lt; <span class="string">&quot;Saved &quot;</span> &lt;&lt; cloud.points.<span class="built_in">size</span> () &lt;&lt; <span class="string">&quot; data points to test_pcd.pcd.&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; cloud.points.<span class="built_in">size</span> (); ++i)</span><br><span class="line">    std::cerr &lt;&lt; <span class="string">&quot;    &quot;</span> &lt;&lt; cloud.points[i].x &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; cloud.points[i].y &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; cloud.points[i].z &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 2.8 FATAL_ERROR)</span><br><span class="line">project(pcd_write_test)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Set the output folder where your program will be created</span></span><br><span class="line"><span class="built_in">set</span>(CMAKE_BINARY_DIR <span class="variable">$&#123;CMAKE_SOURCE_DIR&#125;</span>/bin)</span><br><span class="line"><span class="built_in">set</span>(EXECUTABLE_OUTPUT_PATH <span class="variable">$&#123;CMAKE_BINARY_DIR&#125;</span>)</span><br><span class="line"><span class="built_in">set</span>(LIBRARY_OUTPUT_PATH <span class="variable">$&#123;CMAKE_BINARY_DIR&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#set(PCL_DIR &quot;/path/to/PCLConfig.cmake&quot;)</span></span><br><span class="line"><span class="comment">#find_package(PCL 1.8.1 REQUIRED)</span></span><br><span class="line">find_package(PCL 1.8.1 REQUIRED COMPONENTS common io)</span><br><span class="line"></span><br><span class="line">include_directories(<span class="variable">$&#123;PCL_INCLUDE_DIRS&#125;</span>)</span><br><span class="line">link_directories(<span class="variable">$&#123;PCL_LIBRARY_DIRS&#125;</span>)</span><br><span class="line">add_definitions(<span class="variable">$&#123;PCL_DEFINITIONS&#125;</span>)</span><br><span class="line"></span><br><span class="line">message ([main] <span class="string">&quot;PCL_DIR = <span class="variable">$&#123;PCL_DIR&#125;</span>&quot;</span>)</span><br><span class="line">message ([main] <span class="string">&quot;PCL_FOUND = <span class="variable">$&#123;PCL_FOUND&#125;</span>&quot;</span>)</span><br><span class="line">message ([main] <span class="string">&quot;PCL_INCLUDE_DIRS = <span class="variable">$&#123;PCL_INCLUDE_DIRS&#125;</span>&quot;</span>)</span><br><span class="line">message ([main] <span class="string">&quot;PCL_LIBRARIES = <span class="variable">$&#123;PCL_LIBRARIES&#125;</span>&quot;</span>)</span><br><span class="line">message ([main] <span class="string">&quot;PCL_COMMON_LIBRARIES = <span class="variable">$&#123;PCL_COMMON_LIBRARIES&#125;</span>&quot;</span>)</span><br><span class="line">message ([main] <span class="string">&quot;PCL_IO_LIBRARIES = <span class="variable">$&#123;PCL_IO_LIBRARIES&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">add_executable(pcd_write_test pcd_write.cpp)</span><br><span class="line">target_link_libraries(pcd_write_test <span class="variable">$&#123;PCL_COMMON_LIBRARIES&#125;</span> <span class="variable">$&#123;PCL_IO_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="run-demo"><a href="#run-demo" class="headerlink" title="run demo"></a>run demo</h4><p>compile to <code>pcd_write_test.exe</code> and run, errors may occur:</p>
+<pre><code>pcd_write_test.exe: error while loading shared libraries: ?: cannot open shared object file: No such file or directory
+</code></pre>
+<p>we need to find out which dlls are imported by exe.</p>
+<pre><code>wget http://www.dependencywalker.com/depends22_x64.zip
+</code></pre>
+<blockquote>
+<p>Tips: use <code>dependency walker</code> to check which dlls are imported, and then copy dll to exe folder.<br>copy <code>pcl/bin/*.dll</code> and <code>vtk/bin/*.dll</code> to exe folder.</p>
+</blockquote>
+<p>run exe and output </p>
+<pre><code>$ ./pcd_write_test.exe   
+
+Saved 5 data points to test_pcd.pcd.
+    1.28125 577.094 197.938
+    828.125 599.031 491.375
+    358.688 917.438 842.563
+    764.5 178.281 879.531
+    727.531 525.844 311.281
+</code></pre>
+<h4 id="cat-pcd"><a href="#cat-pcd" class="headerlink" title="cat pcd"></a>cat pcd</h4><pre><code>$ cat test_pcd.pcd    
+
+# .PCD v0.7 - Point Cloud Data file format
+VERSION 0.7
+FIELDS x y z
+SIZE 4 4 4
+TYPE F F F
+COUNT 1 1 1
+WIDTH 5
+HEIGHT 1
+VIEWPOINT 0 0 0 1 0 0 0
+POINTS 5
+DATA ascii
+1.28125 577.09375 197.9375
+828.125 599.03125 491.375
+358.6875 917.4375 842.5625
+764.5 178.28125 879.53125
+727.53125 525.84375 311.28125
+</code></pre>
+<p>create pcl project with vtk and qt support.</p>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+<h3 id="pcl-vtk-qt-PointCloud-Viewer-RECOMMEND"><a href="#pcl-vtk-qt-PointCloud-Viewer-RECOMMEND" class="headerlink" title="pcl+vtk+qt PointCloud Viewer (RECOMMEND)"></a>pcl+vtk+qt PointCloud Viewer (RECOMMEND)</h3><p>This project use <code>QVTKWidgetPlugin</code> to display point cloud data.</p>
+<ul>
+<li>mainwindow.h</li>
+<li>mainwindow.cpp</li>
+<li>mainwindow.ui  (Contains QVTKWidgetPlugin)</li>
+<li>main.cpp</li>
+<li>CMakeLists.txt</li>
+</ul>
+<h4 id="mainwindow-h"><a href="#mainwindow-h" class="headerlink" title="mainwindow.h"></a>mainwindow.h</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> MAINWINDOW_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAINWINDOW_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QMainWindow&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// PCL</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pcl/point_cloud.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pcl/point_types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pcl/visualization/pcl_visualizer.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> pcl::PointXYZRGB PointT;</span><br><span class="line"><span class="keyword">typedef</span> pcl::PointCloud&lt;PointT&gt; PointCloudT;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Boost</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;boost/math/special_functions/round.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> Ui &#123;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MainWindow</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MainWindow</span> : <span class="keyword">public</span> QMainWindow</span><br><span class="line">&#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">MainWindow</span><span class="params">(QWidget *parent = <span class="number">0</span>)</span></span>;</span><br><span class="line">    ~<span class="built_in">MainWindow</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> slots:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">on_pushButtonOK_clicked</span><span class="params">()</span></span>; <span class="comment">// method1</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">pushButtonCancel_clicked</span><span class="params">()</span></span>; <span class="comment">// method2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    Ui::MainWindow *ui;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	boost::shared_ptr&lt;pcl::visualization::PCLVisualizer&gt; viewer;</span><br><span class="line">	PointCloudT::Ptr cloud;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">initCloud</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">initialVtkWidget</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="type">unsigned</span> <span class="type">int</span> red;</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">int</span> green;</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">int</span> blue;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> <span class="comment">// MAINWINDOW_H</span></span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="mainwindow-cpp"><a href="#mainwindow-cpp" class="headerlink" title="mainwindow.cpp"></a>mainwindow.cpp</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;mainwindow.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;ui_mainwindow.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// qt</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QMessageBox&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QFileDialog&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// vtk</span></span><br><span class="line"><span class="comment">//#include &lt;vtkAutoInit.h&gt; </span></span><br><span class="line"><span class="comment">//VTK_MODULE_INIT(vtkRenderingOpenGL2);</span></span><br><span class="line"><span class="comment">//VTK_MODULE_INIT(vtkInteractionStyle);</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vtkRenderWindow.h&gt;</span> <span class="comment">// must include</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// pcl </span></span><br><span class="line"><span class="comment">//#include &lt;pcl/io/ply_io.h&gt;</span></span><br><span class="line"><span class="comment">//#include &lt;pcl/io/pcd_io.h&gt;</span></span><br><span class="line"><span class="comment">//#include &lt;pcl/filters/filter.h&gt;</span></span><br><span class="line"></span><br><span class="line">MainWindow::<span class="built_in">MainWindow</span>(QWidget *parent) :</span><br><span class="line">    <span class="built_in">QMainWindow</span>(parent),</span><br><span class="line">    <span class="built_in">ui</span>(<span class="keyword">new</span> Ui::MainWindow)</span><br><span class="line">&#123;</span><br><span class="line">    ui-&gt;<span class="built_in">setupUi</span>(<span class="keyword">this</span>);</span><br><span class="line">	<span class="keyword">this</span>-&gt;<span class="built_in">setWindowTitle</span>(<span class="string">&quot;PCL viewer&quot;</span>);</span><br><span class="line"></span><br><span class="line">   <span class="comment">// init point cloud data</span></span><br><span class="line">	<span class="built_in">initCloud</span>();</span><br><span class="line"></span><br><span class="line">	<span class="comment">// set up the QVTK window</span></span><br><span class="line">	<span class="built_in">initialVtkWidget</span>();</span><br><span class="line"></span><br><span class="line">	<span class="comment">// connect</span></span><br><span class="line">	<span class="built_in">connect</span>(ui-&gt;pushButtonCancel, <span class="built_in">SIGNAL</span>(<span class="built_in">clicked</span>()), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">pushButtonCancel_clicked</span>()));</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">MainWindow::~<span class="built_in">MainWindow</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">delete</span> ui;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">MainWindow::initCloud</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// Setup the cloud pointer</span></span><br><span class="line">	cloud.<span class="built_in">reset</span>(<span class="keyword">new</span> PointCloudT);</span><br><span class="line">	<span class="comment">// The number of points in the cloud</span></span><br><span class="line">	cloud-&gt;points.<span class="built_in">resize</span>(<span class="number">200</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// The default color</span></span><br><span class="line">	red = <span class="number">128</span>;</span><br><span class="line">	green = <span class="number">128</span>;</span><br><span class="line">	blue = <span class="number">128</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Fill the cloud with some points</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; cloud-&gt;points.<span class="built_in">size</span>(); ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		cloud-&gt;points[i].x = <span class="number">1024</span> * <span class="built_in">rand</span>() / (RAND_MAX + <span class="number">1.0f</span>);</span><br><span class="line">		cloud-&gt;points[i].y = <span class="number">1024</span> * <span class="built_in">rand</span>() / (RAND_MAX + <span class="number">1.0f</span>);</span><br><span class="line">		cloud-&gt;points[i].z = <span class="number">1024</span> * <span class="built_in">rand</span>() / (RAND_MAX + <span class="number">1.0f</span>);</span><br><span class="line"></span><br><span class="line">		cloud-&gt;points[i].r = red;</span><br><span class="line">		cloud-&gt;points[i].g = green;</span><br><span class="line">		cloud-&gt;points[i].b = blue;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">MainWindow::initialVtkWidget</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	viewer.<span class="built_in">reset</span>(<span class="keyword">new</span> pcl::visualization::<span class="built_in">PCLVisualizer</span>(<span class="string">&quot;viewer&quot;</span>, <span class="literal">false</span>));</span><br><span class="line">	viewer-&gt;<span class="built_in">addPointCloud</span>(cloud, <span class="string">&quot;cloud&quot;</span>);</span><br><span class="line">	viewer-&gt;<span class="built_in">resetCamera</span>();</span><br><span class="line"></span><br><span class="line">	ui-&gt;qvtkWidget-&gt;<span class="built_in">SetRenderWindow</span>(viewer-&gt;<span class="built_in">getRenderWindow</span>());</span><br><span class="line">	viewer-&gt;<span class="built_in">setupInteractor</span>(ui-&gt;qvtkWidget-&gt;<span class="built_in">GetInteractor</span>(), ui-&gt;qvtkWidget-&gt;<span class="built_in">GetRenderWindow</span>());</span><br><span class="line">	ui-&gt;qvtkWidget-&gt;<span class="built_in">update</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">MainWindow::on_pushButtonOK_clicked</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    QString text = ui-&gt;lineEditName-&gt;<span class="built_in">text</span>();</span><br><span class="line">    QMessageBox::<span class="built_in">information</span>(<span class="keyword">this</span>, <span class="string">&quot;OK&quot;</span>, text);</span><br><span class="line">    ui-&gt;pushButtonOK-&gt;<span class="built_in">setText</span>( <span class="built_in">tr</span>(<span class="string">&quot;(OK. click me)&quot;</span>) );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">MainWindow::pushButtonCancel_clicked</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    QString text = ui-&gt;lineEditName-&gt;<span class="built_in">text</span>();</span><br><span class="line">    QMessageBox::<span class="built_in">information</span>(<span class="keyword">this</span>, <span class="string">&quot;Cancel&quot;</span>, text);</span><br><span class="line">    ui-&gt;pushButtonCancel-&gt;<span class="built_in">setText</span>( <span class="built_in">tr</span>(<span class="string">&quot;(Cancel.click me)&quot;</span>) );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="main-cpp"><a href="#main-cpp" class="headerlink" title="main.cpp"></a>main.cpp</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;mainwindow.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QApplication&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">QApplication <span class="title">a</span><span class="params">(argc, argv)</span></span>;</span><br><span class="line">    MainWindow w;</span><br><span class="line">    w.<span class="built_in">show</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> a.<span class="built_in">exec</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="mainwindow-ui"><a href="#mainwindow-ui" class="headerlink" title="mainwindow.ui"></a>mainwindow.ui</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span><br><span class="line">&lt;ui version=<span class="string">&quot;4.0&quot;</span>&gt;</span><br><span class="line"> &lt;<span class="keyword">class</span>&gt;MainWindow&lt;/<span class="keyword">class</span>&gt;</span><br><span class="line"> &lt;widget <span class="keyword">class</span>=<span class="string">&quot;QMainWindow&quot;</span> name=<span class="string">&quot;MainWindow&quot;</span>&gt;</span><br><span class="line">  &lt;property name=<span class="string">&quot;geometry&quot;</span>&gt;</span><br><span class="line">   &lt;rect&gt;</span><br><span class="line">    &lt;x&gt;<span class="number">0</span>&lt;/x&gt;</span><br><span class="line">    &lt;y&gt;<span class="number">0</span>&lt;/y&gt;</span><br><span class="line">    &lt;width&gt;<span class="number">553</span>&lt;/width&gt;</span><br><span class="line">    &lt;height&gt;<span class="number">372</span>&lt;/height&gt;</span><br><span class="line">   &lt;/rect&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;property name=<span class="string">&quot;windowTitle&quot;</span>&gt;</span><br><span class="line">   &lt;string&gt;MainWindow&lt;/string&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;widget <span class="keyword">class</span>=<span class="string">&quot;QWidget&quot;</span> name=<span class="string">&quot;centralWidget&quot;</span>&gt;</span><br><span class="line">   &lt;widget <span class="keyword">class</span>=<span class="string">&quot;QLabel&quot;</span> name=<span class="string">&quot;labelName&quot;</span>&gt;</span><br><span class="line">    &lt;property name=<span class="string">&quot;geometry&quot;</span>&gt;</span><br><span class="line">     &lt;rect&gt;</span><br><span class="line">      &lt;x&gt;<span class="number">30</span>&lt;/x&gt;</span><br><span class="line">      &lt;y&gt;<span class="number">20</span>&lt;/y&gt;</span><br><span class="line">      &lt;width&gt;<span class="number">67</span>&lt;/width&gt;</span><br><span class="line">      &lt;height&gt;<span class="number">17</span>&lt;/height&gt;</span><br><span class="line">     &lt;/rect&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property name=<span class="string">&quot;text&quot;</span>&gt;</span><br><span class="line">     &lt;string&gt;Name&lt;/string&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">   &lt;/widget&gt;</span><br><span class="line">   &lt;widget <span class="keyword">class</span>=<span class="string">&quot;QPushButton&quot;</span> name=<span class="string">&quot;pushButtonOK&quot;</span>&gt;</span><br><span class="line">    &lt;property name=<span class="string">&quot;geometry&quot;</span>&gt;</span><br><span class="line">     &lt;rect&gt;</span><br><span class="line">      &lt;x&gt;<span class="number">20</span>&lt;/x&gt;</span><br><span class="line">      &lt;y&gt;<span class="number">250</span>&lt;/y&gt;</span><br><span class="line">      &lt;width&gt;<span class="number">99</span>&lt;/width&gt;</span><br><span class="line">      &lt;height&gt;<span class="number">27</span>&lt;/height&gt;</span><br><span class="line">     &lt;/rect&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property name=<span class="string">&quot;text&quot;</span>&gt;</span><br><span class="line">     &lt;string&gt;OK&lt;/string&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property name=<span class="string">&quot;icon&quot;</span>&gt;</span><br><span class="line">     &lt;iconset resource=<span class="string">&quot;resource.qrc&quot;</span>&gt;</span><br><span class="line">      &lt;normaloff&gt;:/prefix/images/kezunlin_logo.png&lt;/normaloff&gt;:/prefix/images/kezunlin_logo.png&lt;/iconset&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">   &lt;/widget&gt;</span><br><span class="line">   &lt;widget <span class="keyword">class</span>=<span class="string">&quot;QLineEdit&quot;</span> name=<span class="string">&quot;lineEditName&quot;</span>&gt;</span><br><span class="line">    &lt;property name=<span class="string">&quot;geometry&quot;</span>&gt;</span><br><span class="line">     &lt;rect&gt;</span><br><span class="line">      &lt;x&gt;<span class="number">90</span>&lt;/x&gt;</span><br><span class="line">      &lt;y&gt;<span class="number">20</span>&lt;/y&gt;</span><br><span class="line">      &lt;width&gt;<span class="number">71</span>&lt;/width&gt;</span><br><span class="line">      &lt;height&gt;<span class="number">27</span>&lt;/height&gt;</span><br><span class="line">     &lt;/rect&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">   &lt;/widget&gt;</span><br><span class="line">   &lt;widget <span class="keyword">class</span>=<span class="string">&quot;QPushButton&quot;</span> name=<span class="string">&quot;pushButtonCancel&quot;</span>&gt;</span><br><span class="line">    &lt;property name=<span class="string">&quot;geometry&quot;</span>&gt;</span><br><span class="line">     &lt;rect&gt;</span><br><span class="line">      &lt;x&gt;<span class="number">330</span>&lt;/x&gt;</span><br><span class="line">      &lt;y&gt;<span class="number">250</span>&lt;/y&gt;</span><br><span class="line">      &lt;width&gt;<span class="number">99</span>&lt;/width&gt;</span><br><span class="line">      &lt;height&gt;<span class="number">27</span>&lt;/height&gt;</span><br><span class="line">     &lt;/rect&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property name=<span class="string">&quot;text&quot;</span>&gt;</span><br><span class="line">     &lt;string&gt;Cancel&lt;/string&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">   &lt;/widget&gt;</span><br><span class="line">   &lt;widget <span class="keyword">class</span>=<span class="string">&quot;QVTKWidget&quot;</span> name=<span class="string">&quot;qvtkWidget&quot;</span>&gt;</span><br><span class="line">    &lt;property name=<span class="string">&quot;geometry&quot;</span>&gt;</span><br><span class="line">     &lt;rect&gt;</span><br><span class="line">      &lt;x&gt;<span class="number">240</span>&lt;/x&gt;</span><br><span class="line">      &lt;y&gt;<span class="number">10</span>&lt;/y&gt;</span><br><span class="line">      &lt;width&gt;<span class="number">261</span>&lt;/width&gt;</span><br><span class="line">      &lt;height&gt;<span class="number">201</span>&lt;/height&gt;</span><br><span class="line">     &lt;/rect&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">   &lt;/widget&gt;</span><br><span class="line">  &lt;/widget&gt;</span><br><span class="line">  &lt;widget <span class="keyword">class</span>=<span class="string">&quot;QMenuBar&quot;</span> name=<span class="string">&quot;menuBar&quot;</span>&gt;</span><br><span class="line">   &lt;property name=<span class="string">&quot;geometry&quot;</span>&gt;</span><br><span class="line">    &lt;rect&gt;</span><br><span class="line">     &lt;x&gt;<span class="number">0</span>&lt;/x&gt;</span><br><span class="line">     &lt;y&gt;<span class="number">0</span>&lt;/y&gt;</span><br><span class="line">     &lt;width&gt;<span class="number">553</span>&lt;/width&gt;</span><br><span class="line">     &lt;height&gt;<span class="number">25</span>&lt;/height&gt;</span><br><span class="line">    &lt;/rect&gt;</span><br><span class="line">   &lt;/property&gt;</span><br><span class="line">   &lt;widget <span class="keyword">class</span>=<span class="string">&quot;QMenu&quot;</span> name=<span class="string">&quot;menuHello_MainWIndow&quot;</span>&gt;</span><br><span class="line">    &lt;property name=<span class="string">&quot;title&quot;</span>&gt;</span><br><span class="line">     &lt;string&gt;File&lt;/string&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;addaction name=<span class="string">&quot;separator&quot;</span>/&gt;</span><br><span class="line">    &lt;addaction name=<span class="string">&quot;actionOpen&quot;</span>/&gt;</span><br><span class="line">   &lt;/widget&gt;</span><br><span class="line">   &lt;widget <span class="keyword">class</span>=<span class="string">&quot;QMenu&quot;</span> name=<span class="string">&quot;menuHelp&quot;</span>&gt;</span><br><span class="line">    &lt;property name=<span class="string">&quot;title&quot;</span>&gt;</span><br><span class="line">     &lt;string&gt;Help&lt;/string&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;addaction name=<span class="string">&quot;actionHelp&quot;</span>/&gt;</span><br><span class="line">   &lt;/widget&gt;</span><br><span class="line">   &lt;addaction name=<span class="string">&quot;menuHello_MainWIndow&quot;</span>/&gt;</span><br><span class="line">   &lt;addaction name=<span class="string">&quot;menuHelp&quot;</span>/&gt;</span><br><span class="line">  &lt;/widget&gt;</span><br><span class="line">  &lt;widget <span class="keyword">class</span>=<span class="string">&quot;QToolBar&quot;</span> name=<span class="string">&quot;mainToolBar&quot;</span>&gt;</span><br><span class="line">   &lt;attribute name=<span class="string">&quot;toolBarArea&quot;</span>&gt;</span><br><span class="line">    &lt;<span class="keyword">enum</span>&gt;TopToolBarArea&lt;/<span class="keyword">enum</span>&gt;</span><br><span class="line">   &lt;/attribute&gt;</span><br><span class="line">   &lt;attribute name=<span class="string">&quot;toolBarBreak&quot;</span>&gt;</span><br><span class="line">    &lt;<span class="type">bool</span>&gt;<span class="literal">false</span>&lt;/<span class="type">bool</span>&gt;</span><br><span class="line">   &lt;/attribute&gt;</span><br><span class="line">  &lt;/widget&gt;</span><br><span class="line">  &lt;widget <span class="keyword">class</span>=<span class="string">&quot;QStatusBar&quot;</span> name=<span class="string">&quot;statusBar&quot;</span>/&gt;</span><br><span class="line">  &lt;action name=<span class="string">&quot;actionFile&quot;</span>&gt;</span><br><span class="line">   &lt;property name=<span class="string">&quot;text&quot;</span>&gt;</span><br><span class="line">    &lt;string&gt;Open&lt;/string&gt;</span><br><span class="line">   &lt;/property&gt;</span><br><span class="line">  &lt;/action&gt;</span><br><span class="line">  &lt;action name=<span class="string">&quot;actionSave&quot;</span>&gt;</span><br><span class="line">   &lt;property name=<span class="string">&quot;text&quot;</span>&gt;</span><br><span class="line">    &lt;string&gt;Save&lt;/string&gt;</span><br><span class="line">   &lt;/property&gt;</span><br><span class="line">  &lt;/action&gt;</span><br><span class="line">  &lt;action name=<span class="string">&quot;actionExit&quot;</span>&gt;</span><br><span class="line">   &lt;property name=<span class="string">&quot;text&quot;</span>&gt;</span><br><span class="line">    &lt;string&gt;Exit&lt;/string&gt;</span><br><span class="line">   &lt;/property&gt;</span><br><span class="line">  &lt;/action&gt;</span><br><span class="line">  &lt;action name=<span class="string">&quot;actionHelp&quot;</span>&gt;</span><br><span class="line">   &lt;property name=<span class="string">&quot;text&quot;</span>&gt;</span><br><span class="line">    &lt;string&gt;Help&lt;/string&gt;</span><br><span class="line">   &lt;/property&gt;</span><br><span class="line">  &lt;/action&gt;</span><br><span class="line">  &lt;action name=<span class="string">&quot;actionOpen&quot;</span>&gt;</span><br><span class="line">   &lt;property name=<span class="string">&quot;text&quot;</span>&gt;</span><br><span class="line">    &lt;string&gt;Open&lt;/string&gt;</span><br><span class="line">   &lt;/property&gt;</span><br><span class="line">  &lt;/action&gt;</span><br><span class="line"> &lt;/widget&gt;</span><br><span class="line"> &lt;layoutdefault spacing=<span class="string">&quot;6&quot;</span> margin=<span class="string">&quot;11&quot;</span>/&gt;</span><br><span class="line"> &lt;customwidgets&gt;</span><br><span class="line">  &lt;customwidget&gt;</span><br><span class="line">   &lt;<span class="keyword">class</span>&gt;QVTKWidget&lt;/<span class="keyword">class</span>&gt;</span><br><span class="line">   &lt;extends&gt;QWidget&lt;/extends&gt;</span><br><span class="line">   &lt;header&gt;QVTKWidget.h&lt;/header&gt;</span><br><span class="line">  &lt;/customwidget&gt;</span><br><span class="line"> &lt;/customwidgets&gt;</span><br><span class="line"> &lt;resources&gt;</span><br><span class="line">  &lt;include location=<span class="string">&quot;resource.qrc&quot;</span>/&gt;</span><br><span class="line"> &lt;/resources&gt;</span><br><span class="line"> &lt;connections/&gt;</span><br><span class="line">&lt;/ui&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="CMakeLists-txt-1"><a href="#CMakeLists-txt-1" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h4><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">2.8</span>.<span class="number">8</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">project</span>(point_cloud_viewer)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Set the output folder where your program will be created</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_BINARY_DIR <span class="variable">$&#123;CMAKE_SOURCE_DIR&#125;</span>/bin)</span><br><span class="line"><span class="keyword">set</span>(EXECUTABLE_OUTPUT_PATH <span class="variable">$&#123;CMAKE_BINARY_DIR&#125;</span>)</span><br><span class="line"><span class="keyword">set</span>(LIBRARY_OUTPUT_PATH <span class="variable">$&#123;CMAKE_BINARY_DIR&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Find includes in corresponding build directories</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_INCLUDE_CURRENT_DIR <span class="keyword">ON</span>)</span><br><span class="line"><span class="comment"># Instruct CMake to run moc automatically when needed.</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_AUTOMOC <span class="keyword">ON</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(GFLAGS REQUIRED) <span class="comment"># user-defined</span></span><br><span class="line"><span class="keyword">find_package</span>(GLOG REQUIRED) <span class="comment"># user-defined</span></span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;GFLAGS_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;GLOG_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># add macro GLOG_NO_ABBREVIATED_SEVERITIES</span></span><br><span class="line"><span class="keyword">add_definitions</span>( -DGLOG_NO_ABBREVIATED_SEVERITIES ) </span><br><span class="line"></span><br><span class="line"><span class="comment">#==============================================================</span></span><br><span class="line"><span class="comment"># PCL (include qt+vtk)</span></span><br><span class="line"><span class="comment">#==============================================================</span></span><br><span class="line"><span class="comment"># better not use $&#123;PCL_LIBRARIES&#125;, use what we need:</span></span><br><span class="line"><span class="comment"># e.g. $&#123;PCL_COMMON_LIBRARIES&#125; $&#123;PCL_VISUALIZATION_LIBRARIES&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#find_package(PCL 1.8.1 REQUIRED)</span></span><br><span class="line"><span class="keyword">find_package</span>(PCL <span class="number">1.8</span>.<span class="number">1</span> REQUIRED COMPONENTS common io filters visualization)</span><br><span class="line"></span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;PCL_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"><span class="comment">#link_directories($&#123;PCL_LIBRARY_DIRS&#125;)</span></span><br><span class="line"><span class="keyword">add_definitions</span>(<span class="variable">$&#123;PCL_DEFINITIONS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">message</span> ([main] <span class="string">&quot;PCL_DIR = $&#123;PCL_DIR&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span> ([main] <span class="string">&quot;PCL_FOUND = $&#123;PCL_FOUND&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span> ([main] <span class="string">&quot;PCL_INCLUDE_DIRS = $&#123;PCL_INCLUDE_DIRS&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span> ([main] <span class="string">&quot;PCL_LIBRARY_DIRS = $&#123;PCL_LIBRARY_DIRS&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span> ([main] <span class="string">&quot;PCL_LIBRARIES = $&#123;PCL_LIBRARIES&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span> ([main] <span class="string">&quot;PCL_COMMON_LIBRARIES = $&#123;PCL_COMMON_LIBRARIES&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span> ([main] <span class="string">&quot;PCL_IO_LIBRARIES = $&#123;PCL_IO_LIBRARIES&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span> ([main] <span class="string">&quot;PCL_FILTERS_LIBRARIES = $&#123;PCL_FILTERS_LIBRARIES&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span> ([main] <span class="string">&quot;PCL_VISUALIZATION_LIBRARIES = $&#123;PCL_VISUALIZATION_LIBRARIES&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#==============================================================</span></span><br><span class="line"><span class="comment"># Boost</span></span><br><span class="line"><span class="comment">#==============================================================</span></span><br><span class="line"><span class="keyword">set</span>(Boost_USE_RELEASE_LIBS <span class="keyword">ON</span>)</span><br><span class="line"><span class="keyword">set</span>(Boost_USE_MULTITHREAD <span class="keyword">ON</span>)</span><br><span class="line"><span class="keyword">find_package</span>(Boost <span class="number">1.5</span>.<span class="number">8</span> REQUIRED COMPONENTS math_tr1)</span><br><span class="line"><span class="comment">#include_directories($&#123;Boost_INCLUDE_DIRS&#125;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#==============================================================</span></span><br><span class="line"><span class="comment"># cpp,ui,resource files</span></span><br><span class="line"><span class="comment">#==============================================================</span></span><br><span class="line"><span class="comment"># cpp files</span></span><br><span class="line"><span class="comment">#aux_source_directory(. SRC_LIST)</span></span><br><span class="line"><span class="keyword">set</span>(SRC_LIST </span><br><span class="line">	main.cpp</span><br><span class="line">	mainwindow.h</span><br><span class="line">	mainwindow.cpp</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># ui files</span></span><br><span class="line">qt5_wrap_ui(ui_FILES mainwindow.ui)</span><br><span class="line"></span><br><span class="line"><span class="comment"># resource files</span></span><br><span class="line">qt5_add_resources(qrc_FILES resource.qrc)</span><br><span class="line"></span><br><span class="line"><span class="keyword">message</span>( [Main] <span class="variable">$&#123;SRC_LIST&#125;</span> ) <span class="comment"># ./main.cpp./mainwindow.cpp</span></span><br><span class="line"><span class="keyword">message</span>( [Main] <span class="variable">$&#123;ui_FILES&#125;</span> ) <span class="comment"># build/ui_mainwindow.h</span></span><br><span class="line"><span class="keyword">message</span>( [Main] <span class="variable">$&#123;qrc_FILES&#125;</span> )<span class="comment"># build/qrc_resource.cpp</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#==============================================================</span></span><br><span class="line"><span class="comment"># generate and link target</span></span><br><span class="line"><span class="comment">#==============================================================</span></span><br><span class="line"><span class="keyword">add_executable</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span> <span class="variable">$&#123;SRC_LIST&#125;</span> <span class="variable">$&#123;ui_FILES&#125;</span> <span class="variable">$&#123;qrc_FILES&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># link qt libraries</span></span><br><span class="line"><span class="keyword">qt5_use_modules</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span> Core Widgets OpenGL Xml Gui Sql)</span><br><span class="line"></span><br><span class="line"><span class="comment"># link vtk and pcl libraries</span></span><br><span class="line"><span class="keyword">target_link_libraries</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span> </span><br><span class="line">	<span class="variable">$&#123;GLOG_LIBRARIES&#125;</span></span><br><span class="line"></span><br><span class="line">	<span class="variable">$&#123;PCL_COMMON_LIBRARIES&#125;</span></span><br><span class="line">	<span class="variable">$&#123;PCL_IO_LIBRARIES&#125;</span></span><br><span class="line">	<span class="variable">$&#123;PCL_FILTERS_LIBRARIES&#125;</span></span><br><span class="line">	<span class="variable">$&#123;PCL_VISUALIZATION_LIBRARIES&#125;</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">#$&#123;PCL_LIBRARIES&#125; # lead to error when build target (no error now)</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># test_pcd</span></span><br><span class="line"><span class="keyword">add_executable</span>(test_pcd test_pcd.cpp)</span><br><span class="line"><span class="keyword">target_link_libraries</span>(test_pcd</span><br><span class="line">	<span class="variable">$&#123;PCL_COMMON_LIBRARIES&#125;</span></span><br><span class="line">	<span class="variable">$&#123;PCL_IO_LIBRARIES&#125;</span></span><br><span class="line">	<span class="variable">$&#123;PCL_FILTERS_LIBRARIES&#125;</span></span><br><span class="line">	<span class="variable">$&#123;PCL_VISUALIZATION_LIBRARIES&#125;</span></span><br><span class="line">)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="snapshot"><a href="#snapshot" class="headerlink" title="snapshot"></a>snapshot</h4><pre><code>./point_cloud_viewer.exe
+</code></pre>
+<p><img src="https://kezunlin.me/images/posts/635233-20180208210623795-1984024029.png" alt="Point Cloud Viewer for pcd file"></p>
+<h4 id="errors"><a href="#errors" class="headerlink" title="errors"></a><del>errors</del></h4><p>when run example, errors may occur: (which has been fixed by now.)<br><img src="https://kezunlin.me/images/posts/635233-20180114210710582-1020157530.png" alt="vtkOutputWindow error: no overide found for &#39;vtkPolyDataMapper&#39;"></p>
+<h3 id="fix-error"><a href="#fix-error" class="headerlink" title="fix error"></a>fix error</h3><p>fix pcl min,max conflict with windows.h macro</p>
+<h4 id="error"><a href="#error" class="headerlink" title="error"></a>error</h4><blockquote>
+<p>C:\Boost\include\boost-1_64\boost\asio\detail\socket_types.hpp(37):#   include &lt;windows.h&gt;<br>we use boost which includes <code>&lt;windows.h&gt;</code> and import macro <code>min/max</code>.<br>in pcl, <code>std::numeric_limits&lt;int&gt;::max</code> conflict with <code>min/max</code>.</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> PointT&gt; <span class="function"><span class="type">static</span> std::string</span></span><br><span class="line"><span class="function"><span class="title">generateHeader</span> <span class="params">(<span class="type">const</span> pcl::PointCloud&lt;PointT&gt; &amp;cloud,</span></span></span><br><span class="line"><span class="params"><span class="function"><span class="type">const</span> <span class="type">int</span> nr_points = std::numeric_limits&lt;<span class="type">int</span>&gt;::max())</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> m = std::numeric_limits&lt;<span class="type">float</span>&gt;::<span class="built_in">max</span>();</span><br></pre></td></tr></table></figure>
+
+<h4 id="solution"><a href="#solution" class="headerlink" title="solution"></a>solution</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// method(1): put this befor pcl headers</span></span><br><span class="line"><span class="meta">#<span class="keyword">undef</span> max</span></span><br><span class="line"><span class="meta">#<span class="keyword">undef</span> min </span></span><br><span class="line"></span><br><span class="line"><span class="comment">// method(2):</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> NOMINMAX</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// pcl headers</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pcl/point_cloud.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pcl/point_types.h&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000007125502">good pcl tutorials</a></li>
+<li><a target="_blank" rel="noopener" href="https://gist.github.com/UnaNancyOwen/59319050d53c137ca8f3#file-pcl1-8-0-md">Building PCL 1.7.2 with Visual Studio</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.pointclouds.org/documentation/tutorials/compiling_pcl_windows.php">offical: compile pcl on windows</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.pointclouds.org/documentation/tutorials/using_pcl_pcl_config.php#using-pcl-pcl-config">offical: using pcl example</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.pointclouds.org/documentation/tutorials/writing_pcd.php#writing-pcd">offical: writing pcd</a></li>
+<li><a target="_blank" rel="noopener" href="http://pointclouds.org/documentation/tutorials/qt_visualizer.php">offical pcl with qt visualizer</a></li>
+<li><a target="_blank" rel="noopener" href="http://wiki.ros.org/pcl/Overview">offical: pcl with ros</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.eaglevi.com/archives/27">install pcl by isstallers</a></li>
+<li><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000012719850">pcl point cloud realtime viewer</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/18642155/no-override-found-for-vtkpolydatamapper">no-override-found-for-vtkpolydatamappe</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.vtk.org/Wiki/VTK/VTK_6_Migration/Factories_now_require_defines">VTK 6 Migration&#x2F;Factories now require defines</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180112: created.</li>
+<li>20180208: add DependencyWalker,add pcl pcd demo, pcl+vtk+qt demo.</li>
+<li>20180211: add vs2015 regedit for runasadmin.</li>
+<li>20180301: change VTK-8.0.1 to VTK-8.1.0.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/qt/" rel="tag"># qt</a>
+              <a href="/tags/vtk/" rel="tag"># vtk</a>
+              <a href="/tags/pcl/" rel="tag"># pcl</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/singleton-class-and-usage-in-cpp/" rel="prev" title="how to implement singleton class in cpp">
+      <i class="fa fa-chevron-left"></i> how to implement singleton class in cpp
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/cmake-with-user-defined-entry/" rel="next" title="compile cmake from source on ubuntu and write your own user defined FindXXX.cmake">
+      compile cmake from source on ubuntu and write your own user defined FindXXX.cmake <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Series"><span class="nav-number">1.</span> <span class="nav-text">Series</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">2.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#prepare"><span class="nav-number">2.1.</span> <span class="nav-text">prepare</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#software"><span class="nav-number">2.1.1.</span> <span class="nav-text">software</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#version"><span class="nav-number">2.1.2.</span> <span class="nav-text">version</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#install-vs2015"><span class="nav-number">2.1.3.</span> <span class="nav-text">install vs2015</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#configure-vs2015-with-admin"><span class="nav-number">2.1.4.</span> <span class="nav-text">configure vs2015 with admin</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#install-qt"><span class="nav-number">2.1.5.</span> <span class="nav-text">install qt</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#install-qt-vs-tools"><span class="nav-number">2.1.6.</span> <span class="nav-text">install qt-vs-tools</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#online-install-by-vs2015"><span class="nav-number">2.1.6.1.</span> <span class="nav-text">online install by vs2015</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#offline-install-by-vsix"><span class="nav-number">2.1.6.2.</span> <span class="nav-text">offline install by vsix</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#configure-qt-for-vs"><span class="nav-number">2.1.7.</span> <span class="nav-text">configure qt for vs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#new-qt-project-from-vs"><span class="nav-number">2.1.8.</span> <span class="nav-text">new qt project from vs</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-pcl-third-parties"><span class="nav-number">2.2.</span> <span class="nav-text">install pcl third parties</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#install-pcl-by-installer"><span class="nav-number">2.2.1.</span> <span class="nav-text">install pcl by installer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#configure-env"><span class="nav-number">2.2.2.</span> <span class="nav-text">configure env</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#copy-winpap-package"><span class="nav-number">2.2.3.</span> <span class="nav-text">copy winpap package</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile-vtk"><span class="nav-number">3.</span> <span class="nav-text">compile vtk</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#download-vtk-and-data"><span class="nav-number">3.1.</span> <span class="nav-text">download vtk and data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#configure-source"><span class="nav-number">3.2.</span> <span class="nav-text">configure source</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#compile"><span class="nav-number">3.3.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-vtk"><span class="nav-number">3.4.</span> <span class="nav-text">install vtk</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#copy-vtk-to-pcl"><span class="nav-number">3.5.</span> <span class="nav-text">copy vtk to pcl</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-QVTKWidgetPlugin"><span class="nav-number">3.6.</span> <span class="nav-text">install QVTKWidgetPlugin</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile-pcl"><span class="nav-number">4.</span> <span class="nav-text">compile pcl</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3rdParty"><span class="nav-number">4.1.</span> <span class="nav-text">3rdParty</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#configure"><span class="nav-number">4.2.</span> <span class="nav-text">configure</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#compile-1"><span class="nav-number">4.3.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-pcl"><span class="nav-number">4.4.</span> <span class="nav-text">install pcl</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">5.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pcl-only"><span class="nav-number">5.1.</span> <span class="nav-text">pcl only</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#pcd-write-cpp"><span class="nav-number">5.1.1.</span> <span class="nav-text">pcd_write.cpp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">5.1.2.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#run-demo"><span class="nav-number">5.1.3.</span> <span class="nav-text">run demo</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cat-pcd"><span class="nav-number">5.1.4.</span> <span class="nav-text">cat pcd</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pcl-vtk-qt-PointCloud-Viewer-RECOMMEND"><span class="nav-number">5.2.</span> <span class="nav-text">pcl+vtk+qt PointCloud Viewer (RECOMMEND)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#mainwindow-h"><span class="nav-number">5.2.1.</span> <span class="nav-text">mainwindow.h</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mainwindow-cpp"><span class="nav-number">5.2.2.</span> <span class="nav-text">mainwindow.cpp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#main-cpp"><span class="nav-number">5.2.3.</span> <span class="nav-text">main.cpp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mainwindow-ui"><span class="nav-number">5.2.4.</span> <span class="nav-text">mainwindow.ui</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CMakeLists-txt-1"><span class="nav-number">5.2.5.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#snapshot"><span class="nav-number">5.2.6.</span> <span class="nav-text">snapshot</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#errors"><span class="nav-number">5.2.7.</span> <span class="nav-text">errors</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fix-error"><span class="nav-number">5.3.</span> <span class="nav-text">fix error</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#error"><span class="nav-number">5.3.1.</span> <span class="nav-text">error</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#solution"><span class="nav-number">5.3.2.</span> <span class="nav-text">solution</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">6.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">7.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

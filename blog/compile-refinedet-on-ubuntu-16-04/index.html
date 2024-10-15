@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="GuideRefineDet is based on Caffe. See Install and Configure Caffe on ubuntu 16.04  ubuntu 16.04  CUDA 9.2 + cudnn 7.1.4  (for caffe&#x2F;tensorrt&#x2F;anakin) opencv 3.3.0 python 2.7 caffe (from refin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="compile and install refinedet on ubuntu 16.04">
+<meta property="og:url" content="https://kezunlin.me/blog/compile-refinedet-on-ubuntu-16-04/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="GuideRefineDet is based on Caffe. See Install and Configure Caffe on ubuntu 16.04  ubuntu 16.04  CUDA 9.2 + cudnn 7.1.4  (for caffe&#x2F;tensorrt&#x2F;anakin) opencv 3.3.0 python 2.7 caffe (from refin">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-11-27T06:59:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="object detect">
+<meta property="article:tag" content="refinedet">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/compile-refinedet-on-ubuntu-16-04/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>compile and install refinedet on ubuntu 16.04 | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/compile-refinedet-on-ubuntu-16-04/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          compile and install refinedet on ubuntu 16.04
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-11-27 14:59:00" itemprop="dateCreated datePublished" datetime="2018-11-27T14:59:00+08:00">2018-11-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deep-learning/" itemprop="url" rel="index"><span itemprop="name">deep learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><p>RefineDet is based on Caffe.</p>
+<p>See <a href="https://kezunlin.me/post/b90033a9/">Install and Configure Caffe on ubuntu 16.04</a></p>
+<ul>
+<li>ubuntu 16.04 </li>
+<li>CUDA 9.2 + cudnn 7.1.4  (for caffe&#x2F;tensorrt&#x2F;anakin)</li>
+<li>opencv 3.3.0</li>
+<li>python 2.7</li>
+<li>caffe (from refinedet)</li>
+</ul>
+<h3 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/sfzhang15/RefineDet.git</span><br><span class="line"><span class="built_in">cd</span> RefineDet </span><br><span class="line"><span class="built_in">mkdir</span> build &amp;&amp; <span class="built_in">cd</span> build &amp;&amp; cmake-gui ..</span><br><span class="line"></span><br><span class="line">make -j8 &amp;&amp; make pycaffe</span><br></pre></td></tr></table></figure>
+
+<p>options </p>
+<pre><code>USE_CUDNN True
+USE_OPENCV True
+WITH_PYTHON_LAYER True
+BLAS atlas
+
+CMAKE_INSTALL_PREFIX /home/kezunlin/program/refinedet/build/install
+</code></pre>
+<blockquote>
+<p>tips: vim CMakeLists.txt and comment out examples and docs</p>
+</blockquote>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#add_subdirectory(examples)</span></span><br><span class="line"><span class="keyword">add_subdirectory</span>(python)</span><br><span class="line"><span class="keyword">add_subdirectory</span>(matlab)</span><br><span class="line"><span class="comment">#add_subdirectory(docs)</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="fix-gflags-error"><a href="#fix-gflags-error" class="headerlink" title="fix gflags error"></a>fix gflags error</h4><ul>
+<li>caffe&#x2F;include&#x2F;caffe&#x2F;common.hpp</li>
+<li>caffe&#x2F;examples&#x2F;mnist&#x2F;convert_mnist_data.cpp</li>
+</ul>
+<p>Comment out the ifndef</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// #ifndef GFLAGS_GFLAGS_H_</span></span><br><span class="line"><span class="keyword">namespace</span> gflags = google;</span><br><span class="line"><span class="comment">// #endif  // GFLAGS_GFLAGS_H_</span></span><br></pre></td></tr></table></figure>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+<h3 id="example"><a href="#example" class="headerlink" title="example"></a>example</h3><p>two version:</p>
+<ul>
+<li>single version</li>
+<li>batch version</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">In this example, we will load a RefineDet model and use it to detect objects.</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> skimage.io <span class="keyword">as</span> io</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="comment"># Make sure that caffe is on the python path:</span></span><br><span class="line">caffe_root = <span class="string">&#x27;./&#x27;</span></span><br><span class="line">os.chdir(caffe_root)</span><br><span class="line">sys.path.insert(<span class="number">0</span>, os.path.join(caffe_root, <span class="string">&#x27;python&#x27;</span>))</span><br><span class="line"><span class="keyword">import</span> caffe</span><br><span class="line"></span><br><span class="line">classes = [<span class="string">&#x27;background&#x27;</span>, <span class="string">&#x27;person&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">filter_boxs</span>(<span class="params">boxs, threshold=<span class="number">0.4</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    boxs: 500*6  (xmin,ymin,xmax,ymax,confidence,class_index) </span></span><br><span class="line"><span class="string">                class_index: 0 background, 1 person</span></span><br><span class="line"><span class="string">                confidence: 0-1</span></span><br><span class="line"><span class="string">    return: </span></span><br><span class="line"><span class="string">            new_boxs  `list`  [b1,b2,b3,...]</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    new_boxs = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, boxs.shape[<span class="number">0</span>]):</span><br><span class="line">        xmin,ymin,xmax,ymax,confidence,class_index = boxs[i]</span><br><span class="line">        <span class="comment">#print(type(class_index)) # float32</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">int</span>(class_index)&gt;<span class="number">0</span> <span class="keyword">and</span> confidence &gt;= threshold:</span><br><span class="line">            box = [<span class="built_in">int</span>(xmin),<span class="built_in">int</span>(ymin),<span class="built_in">int</span>(xmax),<span class="built_in">int</span>(ymax),confidence, <span class="built_in">int</span>(class_index)]</span><br><span class="line">            new_boxs.append(box)</span><br><span class="line">    <span class="keyword">return</span> new_boxs <span class="comment"># list [b1,b2,b3,...]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">save_results</span>(<span class="params">counter, image_file, boxs, save_fig=<span class="literal">False</span></span>):</span><br><span class="line"></span><br><span class="line">    img = cv2.imread(image_file)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(boxs)):</span><br><span class="line">        xmin,ymin,xmax,ymax,confidence,class_index = boxs[i]</span><br><span class="line"></span><br><span class="line">        name = classes[class_index]</span><br><span class="line">        coords = (xmin, ymin), xmax - xmin, ymax - ymin</span><br><span class="line"></span><br><span class="line">        cv2.rectangle(img, (xmin, ymin), (xmax, ymax), (<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>), <span class="number">3</span>) <span class="comment"># bgr</span></span><br><span class="line">        <span class="comment">#display_text = &#x27;%s: %.2f&#x27; % (name, confidence)</span></span><br><span class="line">        display_text = <span class="string">&#x27;%.2f&#x27;</span> % (confidence)</span><br><span class="line">        cv2.putText(img, display_text, (xmin, ymin-<span class="number">5</span>), cv2.FONT_HERSHEY_SIMPLEX, <span class="number">1</span>, color=(<span class="number">0</span>,<span class="number">0</span>,<span class="number">255</span>), thickness=<span class="number">2</span>)</span><br><span class="line">            </span><br><span class="line">    <span class="keyword">if</span> save_fig:</span><br><span class="line">        image_filepath = <span class="string">&#x27;output/&#123;0&#125;_results.jpg&#x27;</span>.<span class="built_in">format</span>(counter)</span><br><span class="line">        cv2.imwrite(image_filepath, img)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;Saved: &#x27;</span> + image_filepath)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">single</span>():</span><br><span class="line">    caffe.set_device(<span class="number">0</span>)</span><br><span class="line">    caffe.set_mode_gpu()</span><br><span class="line"></span><br><span class="line">    save_dir = <span class="string">&quot;./output&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(save_dir):</span><br><span class="line">        os.mkdir(save_dir)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># load model</span></span><br><span class="line">    model_def = <span class="string">&#x27;models/ResNet/coco/refinedet_resnet101_512x512/deploy.prototxt&#x27;</span></span><br><span class="line">    model_weights = <span class="string">&#x27;models/ResNet/coco/refinedet_resnet101_512x512/coco_refinedet_resnet101_512x512_iter_75000.caffemodel&#x27;</span></span><br><span class="line">    net = caffe.Net(model_def, model_weights, caffe.TEST)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># image preprocessing</span></span><br><span class="line">    img_resize = <span class="number">512</span></span><br><span class="line">    net.blobs[<span class="string">&#x27;data&#x27;</span>].reshape(<span class="number">1</span>, <span class="number">3</span>, img_resize, img_resize)</span><br><span class="line">    data_shape = net.blobs[<span class="string">&#x27;data&#x27;</span>].data.shape</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;data_shape=&quot;</span>, data_shape) <span class="comment"># 1, 3, 512, 512</span></span><br><span class="line">    <span class="comment"># by default, caffe use chw, bgr, 0-255, image-[104, 117, 123] </span></span><br><span class="line">    transformer = caffe.io.Transformer(&#123;<span class="string">&#x27;data&#x27;</span>:data_shape&#125;)</span><br><span class="line">    transformer.set_transpose(<span class="string">&#x27;data&#x27;</span>, (<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>)) <span class="comment"># hwc ===&gt; chw</span></span><br><span class="line">    transformer.set_channel_swap(<span class="string">&#x27;data&#x27;</span>, (<span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>))  <span class="comment"># rgb===&gt;bgr</span></span><br><span class="line">    transformer.set_raw_scale(<span class="string">&#x27;data&#x27;</span>, <span class="number">255</span>)  <span class="comment"># [0-1]===&gt; [0,255]</span></span><br><span class="line">    transformer.set_mean(<span class="string">&#x27;data&#x27;</span>, np.array([<span class="number">104</span>, <span class="number">117</span>, <span class="number">123</span>]))  <span class="comment"># bgr mean pixel</span></span><br><span class="line">    </span><br><span class="line">    files = [<span class="string">&quot;./images/1.png&quot;</span>, <span class="string">&quot;./images/2.png&quot;</span>]<span class="comment"># 500,7  + 384,7 === 500,7 + 500,7 </span></span><br><span class="line">    <span class="keyword">for</span> index,image_file <span class="keyword">in</span> <span class="built_in">enumerate</span>(files):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;image_file=&quot;</span>, image_file)</span><br><span class="line">        image = caffe.io.load_image(image_file) <span class="comment"># hwc, rgb, 0-1 </span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;image.shape=&quot;</span>, image.shape)</span><br><span class="line"></span><br><span class="line">        transformed_image = transformer.preprocess(<span class="string">&#x27;data&#x27;</span>, image)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;transformed_image.shape=&quot;</span>, transformed_image.shape)</span><br><span class="line"></span><br><span class="line">        net.blobs[<span class="string">&#x27;data&#x27;</span>].data[...] = transformed_image</span><br><span class="line"></span><br><span class="line">        detections = net.forward()[<span class="string">&#x27;detection_out&#x27;</span>]</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;detections.shape = &quot;</span>,detections.shape) <span class="comment"># 1, 1, 500, 7</span></span><br><span class="line">        det_label = detections[<span class="number">0</span>, <span class="number">0</span>, :, <span class="number">1</span>] <span class="comment"># 0 back, 1 -person (now only ==1)</span></span><br><span class="line">        det_conf = detections[<span class="number">0</span>, <span class="number">0</span>, :, <span class="number">2</span>] <span class="comment"># 0-1 </span></span><br><span class="line">        det_xmin = detections[<span class="number">0</span>, <span class="number">0</span>, :, <span class="number">3</span>] * image.shape[<span class="number">1</span>]</span><br><span class="line">        det_ymin = detections[<span class="number">0</span>, <span class="number">0</span>, :, <span class="number">4</span>] * image.shape[<span class="number">0</span>]</span><br><span class="line">        det_xmax = detections[<span class="number">0</span>, <span class="number">0</span>, :, <span class="number">5</span>] * image.shape[<span class="number">1</span>]</span><br><span class="line">        det_ymax = detections[<span class="number">0</span>, <span class="number">0</span>, :, <span class="number">6</span>] * image.shape[<span class="number">0</span>]</span><br><span class="line">        boxs = np.column_stack([det_xmin, det_ymin, det_xmax, det_ymax, det_conf, det_label])</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;boxs = &quot;</span>, boxs.shape) <span class="comment"># 500,6</span></span><br><span class="line"></span><br><span class="line">        new_boxs = filter_boxs(boxs)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;new_boxs = &quot;</span>, <span class="built_in">len</span>(new_boxs)) <span class="comment"># 3 boxs</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># show result</span></span><br><span class="line">        save_results(index, image_file, new_boxs, save_fig=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">batch</span>():</span><br><span class="line">    caffe.set_device(<span class="number">0</span>)</span><br><span class="line">    caffe.set_mode_gpu()</span><br><span class="line"></span><br><span class="line">    save_dir = <span class="string">&quot;./output&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(save_dir):</span><br><span class="line">        os.mkdir(save_dir)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># load model</span></span><br><span class="line">    model_def = <span class="string">&#x27;models/ResNet/coco/refinedet_resnet101_512x512/deploy.prototxt&#x27;</span></span><br><span class="line">    model_weights = <span class="string">&#x27;models/ResNet/coco/refinedet_resnet101_512x512/coco_refinedet_resnet101_512x512_iter_75000.caffemodel&#x27;</span></span><br><span class="line">    net = caffe.Net(model_def, model_weights, caffe.TEST)</span><br><span class="line"></span><br><span class="line">    box_count_per_image = <span class="number">500</span> </span><br><span class="line">    <span class="comment">#files = [&quot;./images/2.png&quot;]</span></span><br><span class="line">    files = [<span class="string">&quot;./images/1.png&quot;</span>, <span class="string">&quot;./images/2.png&quot;</span>]<span class="comment"># 500,7  + 384,7 === 500,7 + 500,7 </span></span><br><span class="line">    <span class="comment"># update detection_output_layer.cpp and cu to keep 500 box results</span></span><br><span class="line">    batch_size = <span class="built_in">len</span>(files) </span><br><span class="line">    <span class="comment"># image preprocessing</span></span><br><span class="line">    img_resize = <span class="number">512</span></span><br><span class="line">    net.blobs[<span class="string">&#x27;data&#x27;</span>].reshape(batch_size, <span class="number">3</span>, img_resize, img_resize)</span><br><span class="line">    data_shape = net.blobs[<span class="string">&#x27;data&#x27;</span>].data.shape</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;data_shape=&quot;</span>, data_shape) <span class="comment"># 1, 3, 512, 512</span></span><br><span class="line">    <span class="comment"># by default, caffe use chw, bgr, 0-255, image-[104, 117, 123] </span></span><br><span class="line">    transformer = caffe.io.Transformer(&#123;<span class="string">&#x27;data&#x27;</span>:data_shape&#125;)</span><br><span class="line">    transformer.set_transpose(<span class="string">&#x27;data&#x27;</span>, (<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>)) <span class="comment"># hwc ===&gt; chw</span></span><br><span class="line">    transformer.set_channel_swap(<span class="string">&#x27;data&#x27;</span>, (<span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>))  <span class="comment"># rgb===&gt;bgr</span></span><br><span class="line">    transformer.set_raw_scale(<span class="string">&#x27;data&#x27;</span>, <span class="number">255</span>)  <span class="comment"># [0-1]===&gt; [0,255]</span></span><br><span class="line">    transformer.set_mean(<span class="string">&#x27;data&#x27;</span>, np.array([<span class="number">104</span>, <span class="number">117</span>, <span class="number">123</span>]))  <span class="comment"># bgr mean pixel</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(files)):</span><br><span class="line">        <span class="comment">#image_file = &quot;./images/1.png&quot;</span></span><br><span class="line">        image_file = files[i]</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;image_file=&quot;</span>, image_file)</span><br><span class="line">        image = caffe.io.load_image(image_file) <span class="comment"># hwc, rgb, 0-1 </span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;image.shape=&quot;</span>, image.shape)</span><br><span class="line"></span><br><span class="line">        transformed_image = transformer.preprocess(<span class="string">&#x27;data&#x27;</span>, image)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;transformed_image.shape=&quot;</span>, transformed_image.shape)</span><br><span class="line"></span><br><span class="line">        net.blobs[<span class="string">&#x27;data&#x27;</span>].data[i,:,:,:] = transformed_image</span><br><span class="line"></span><br><span class="line">    detections = net.forward()[<span class="string">&#x27;detection_out&#x27;</span>]</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;detections.shape = &quot;</span>,detections.shape) <span class="comment"># 1, 1, 500+384, 7 ===&gt; 1,1, 1000,7</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(batch_size):</span><br><span class="line">        start = i * box_count_per_image</span><br><span class="line">        end = (i+<span class="number">1</span>) * box_count_per_image</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;start-end: &quot;</span>,start, end)</span><br><span class="line">    </span><br><span class="line">        det_label = detections[<span class="number">0</span>, <span class="number">0</span>, start:end, <span class="number">1</span>] <span class="comment"># 0 back, 1 -person (now only ==1)</span></span><br><span class="line">        <span class="built_in">print</span>(det_label[:<span class="number">10</span>])</span><br><span class="line">        det_conf = detections[<span class="number">0</span>, <span class="number">0</span>, start:end, <span class="number">2</span>] <span class="comment"># 0-1 </span></span><br><span class="line">        det_xmin = detections[<span class="number">0</span>, <span class="number">0</span>, start:end, <span class="number">3</span>] * image.shape[<span class="number">1</span>]</span><br><span class="line">        det_ymin = detections[<span class="number">0</span>, <span class="number">0</span>, start:end, <span class="number">4</span>] * image.shape[<span class="number">0</span>]</span><br><span class="line">        det_xmax = detections[<span class="number">0</span>, <span class="number">0</span>, start:end, <span class="number">5</span>] * image.shape[<span class="number">1</span>]</span><br><span class="line">        det_ymax = detections[<span class="number">0</span>, <span class="number">0</span>, start:end, <span class="number">6</span>] * image.shape[<span class="number">0</span>]</span><br><span class="line">        boxs = np.column_stack([det_xmin, det_ymin, det_xmax, det_ymax, det_conf, det_label])</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;boxs = &quot;</span>, boxs.shape) <span class="comment"># 500,6</span></span><br><span class="line"></span><br><span class="line">        new_boxs = filter_boxs(boxs)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;new_boxs = &quot;</span>, <span class="built_in">len</span>(new_boxs)) <span class="comment"># 3 boxs</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># show result</span></span><br><span class="line">        save_results(i, image_file, new_boxs, save_fig=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">   <span class="comment">#single()</span></span><br><span class="line">   batch()</span><br></pre></td></tr></table></figure>
+
+<p>output </p>
+<pre><code>(&#39;data_shape=&#39;, (2, 3, 512, 512))
+(&#39;image_file=&#39;, &#39;./images/1.png&#39;)
+(&#39;image.shape=&#39;, (1080, 1920, 3))
+(&#39;transformed_image.shape=&#39;, (3, 512, 512))
+(&#39;image_file=&#39;, &#39;./images/2.png&#39;)
+(&#39;image.shape=&#39;, (1080, 1920, 3))
+(&#39;transformed_image.shape=&#39;, (3, 512, 512))
+(&#39;detections.shape = &#39;, (1, 1, 1000, 7))
+(&#39;start-end: &#39;, 0, 500)
+[ 1.  1.  1.  1.  1.  1.  1.  1.  1.  1.]
+(&#39;boxs = &#39;, (500, 6))
+(&#39;new_boxs = &#39;, 3)
+Saved: output/0_results.jpg
+(&#39;start-end: &#39;, 500, 1000)
+[ 0.  0.  0.  0.  0.  0.  0.  0.  0.  0.]
+(&#39;boxs = &#39;, (500, 6))
+(&#39;new_boxs = &#39;, 6)
+Saved: output/1_results.jpg
+</code></pre>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/sfzhang15/RefineDet">RefineDet offical</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20181127: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/object-detect/" rel="tag"># object detect</a>
+              <a href="/tags/refinedet/" rel="tag"># refinedet</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/yolov1-pascal-label-data/" rel="prev" title="yolov1 pascal label data">
+      <i class="fa fa-chevron-left"></i> yolov1 pascal label data
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/install-pybind11-on-ubuntu-16-04/" rel="next" title="Interfacing C++ and Python with pybind11 on ubuntu 16.04">
+      Interfacing C++ and Python with pybind11 on ubuntu 16.04 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#compile"><span class="nav-number">1.1.</span> <span class="nav-text">compile</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#fix-gflags-error"><span class="nav-number">1.1.1.</span> <span class="nav-text">fix gflags error</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#example"><span class="nav-number">1.2.</span> <span class="nav-text">example</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

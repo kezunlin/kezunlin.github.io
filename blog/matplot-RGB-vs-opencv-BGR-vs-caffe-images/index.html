@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="GuideMatplot (skimage&#x2F; PIL Image)123456789# Matplot: dims: (height,width,channels),order: RGB,range: [0,255] dtype: uint8import matplotlib.pyplot as pltimport matplotlib.image as imgimage &#x3D; img.i">
+<meta property="og:type" content="article">
+<meta property="og:title" content="matplot RGB vs opencv BGR vs caffe images">
+<meta property="og:url" content="https://kezunlin.me/blog/matplot-RGB-vs-opencv-BGR-vs-caffe-images/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="GuideMatplot (skimage&#x2F; PIL Image)123456789# Matplot: dims: (height,width,channels),order: RGB,range: [0,255] dtype: uint8import matplotlib.pyplot as pltimport matplotlib.image as imgimage &#x3D; img.i">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180816102819164-727852617.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180816102819164-727852617.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180816102822472-37116830.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180816102827030-476523183.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180816102829804-2136984998.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180816102832577-885538468.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180816102837178-881579112.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180816102840423-899986139.png">
+<meta property="article:published_time" content="2018-08-16T02:27:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="opencv">
+<meta property="article:tag" content="rgb">
+<meta property="article:tag" content="bgr">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kezunlin.me/images/posts/635233-20180816102819164-727852617.png">
+
+<link rel="canonical" href="https://kezunlin.me/blog/matplot-RGB-vs-opencv-BGR-vs-caffe-images/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>matplot RGB vs opencv BGR vs caffe images | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/matplot-RGB-vs-opencv-BGR-vs-caffe-images/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          matplot RGB vs opencv BGR vs caffe images
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-08-16 10:27:00" itemprop="dateCreated datePublished" datetime="2018-08-16T10:27:00+08:00">2018-08-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="Matplot-skimage-PIL-Image"><a href="#Matplot-skimage-PIL-Image" class="headerlink" title="Matplot (skimage&#x2F; PIL Image)"></a>Matplot (skimage&#x2F; PIL Image)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Matplot: dims: (height,width,channels),order: RGB,range: [0,255] dtype: uint8</span></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> matplotlib.image <span class="keyword">as</span> img</span><br><span class="line">image = img.imread(<span class="string">&quot;images/cat.jpg&quot;</span>)</span><br><span class="line"><span class="built_in">print</span> image.shape <span class="comment"># (360, 480, 3)</span></span><br><span class="line"><span class="built_in">print</span> image[:<span class="number">5</span>,:<span class="number">5</span>,<span class="number">0</span>]</span><br><span class="line"><span class="comment">#plt.axis(&quot;off&quot;)</span></span><br><span class="line">plt.imshow(image)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<pre><code>(360, 480, 3)
+[[26 27 25 28 30]
+ [26 27 25 26 28]
+ [26 26 26 26 27]
+ [27 26 27 28 29]
+ [29 27 26 26 29]]
+</code></pre>
+<p><img src="https://kezunlin.me/images/posts/635233-20180816102819164-727852617.png" alt="png"></p>
+<h3 id="PIL-Image"><a href="#PIL-Image" class="headerlink" title="PIL.Image"></a>PIL.Image</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># PIL Image.open: dims: hwc,order: RGB, ??( range: [0,255] dtype: uint8)??</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line">image = Image.<span class="built_in">open</span>(<span class="string">&quot;images/cat.jpg&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(image)</span><br><span class="line"><span class="comment"># &lt;PIL.JpegImagePlugin.JpegImageFile image mode=RGB size=480x360 at 0x7F258E0B8410&gt;</span></span><br><span class="line">plt.imshow(image)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://kezunlin.me/images/posts/635233-20180816102819164-727852617.png" alt="png"></p>
+<h3 id="skimage"><a href="#skimage" class="headerlink" title="skimage"></a>skimage</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> skimage</span><br><span class="line">image = skimage.io.imread(image_filepath) <span class="comment"># RGB  (608, 606, 3)</span></span><br></pre></td></tr></table></figure>
+
+
+<h3 id="OpenCV"><a href="#OpenCV" class="headerlink" title="OpenCV"></a>OpenCV</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># OpenCV: dims: (height,width,channels),order: BGR,range: [0,255] dtype: uint8</span></span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line">image = cv2.imread(<span class="string">&quot;images/cat.jpg&quot;</span>)</span><br><span class="line"><span class="built_in">print</span> image.shape <span class="comment"># (360, 480, 3)</span></span><br><span class="line"><span class="built_in">print</span> image[:<span class="number">5</span>,:<span class="number">5</span>,<span class="number">0</span>]</span><br><span class="line"><span class="comment">#plt.axis(&quot;off&quot;)</span></span><br><span class="line">plt.imshow(image)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<pre><code>(360, 480, 3)
+[[49 50 47 48 50]
+ [51 52 48 48 50]
+ [51 51 49 48 49]
+ [50 49 49 48 49]
+ [52 50 49 48 49]]
+</code></pre>
+<p><img src="https://kezunlin.me/images/posts/635233-20180816102822472-37116830.png" alt="png"></p>
+<p>The colors of our image are clearly wrong! Why is this?</p>
+<p>The answer lies as a caveat with OpenCV.OpenCV represents RGB images as multi-dimensional NumPy arrays…but in reverse order! This means that <strong>OpenCV images are actually represented in BGR order rather than RGB</strong>!</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line">image = cv2.imread(<span class="string">&quot;images/cat.jpg&quot;</span>)</span><br><span class="line"><span class="comment"># convert from BGR to RGB</span></span><br><span class="line">rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)</span><br><span class="line">plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">plt.imshow(rgb_image)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://kezunlin.me/images/posts/635233-20180816102827030-476523183.png" alt="png"></p>
+<h3 id="Matplot-VS-OpenCV"><a href="#Matplot-VS-OpenCV" class="headerlink" title="Matplot VS. OpenCV"></a>Matplot VS. OpenCV</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> matplotlib.image <span class="keyword">as</span> img</span><br><span class="line">image1 = img.imread(<span class="string">&quot;images/cat.jpg&quot;</span>) <span class="comment"># rgb</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line">image = cv2.imread(<span class="string">&quot;images/cat.jpg&quot;</span>)</span><br><span class="line"><span class="comment"># convert from BGR to RGB</span></span><br><span class="line">image2 = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) <span class="comment"># rgb</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#image1 and image2 are same at all.</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> image1.dtype</span><br><span class="line"><span class="built_in">print</span> image1[:<span class="number">5</span>,:<span class="number">5</span>,<span class="number">0</span>] </span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> </span><br><span class="line"><span class="built_in">print</span> image2.dtype</span><br><span class="line"><span class="built_in">print</span> image2[:<span class="number">5</span>,:<span class="number">5</span>,<span class="number">0</span>] </span><br><span class="line"></span><br><span class="line">equal_count = np.<span class="built_in">sum</span>( np.equal(image1[:,:,:],image2[:,:,:]) )</span><br><span class="line"><span class="built_in">print</span> equal_count</span><br><span class="line"><span class="built_in">print</span> equal_count == <span class="number">360</span>*<span class="number">480</span>*<span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<pre><code>uint8
+[[26 27 25 28 30]
+ [26 27 25 26 28]
+ [26 26 26 26 27]
+ [27 26 27 28 29]
+ [29 27 26 26 29]]
+
+uint8
+[[26 27 25 28 30]
+ [26 27 25 26 28]
+ [26 26 26 26 27]
+ [27 26 27 28 29]
+ [29 27 26 26 29]]
+518400
+True
+</code></pre>
+<h3 id="caffe-io-load-image"><a href="#caffe-io-load-image" class="headerlink" title="caffe.io.load_image"></a>caffe.io.load_image</h3><p><code>caffe.io.load_image</code> loads data in a normalized form (0-1)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># caffe.io.load_image: dims: (height,width,channels),order: RGB,range: [0,1] dtype: float32</span></span><br><span class="line"><span class="comment"># matplot: caffe_image = matplot_image/255.0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">%matplotlib inline</span><br><span class="line"></span><br><span class="line"><span class="comment"># configure plotting</span></span><br><span class="line"><span class="comment">#plt.rcParams[&#x27;figure.figsize&#x27;] = (10, 10)</span></span><br><span class="line">plt.rcParams[<span class="string">&#x27;image.interpolation&#x27;</span>] = <span class="string">&#x27;nearest&#x27;</span></span><br><span class="line"><span class="comment">#plt.rcParams[&#x27;image.cmap&#x27;] = &#x27;gray&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">caffe_root = <span class="string">&#x27;../&#x27;</span>  <span class="comment"># this file should be run from &#123;caffe_root&#125;/examples (otherwise change this line)</span></span><br><span class="line">sys.path.insert(<span class="number">0</span>, caffe_root + <span class="string">&#x27;python&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> caffe</span><br><span class="line"><span class="comment">#======================================================================</span></span><br><span class="line"><span class="comment"># load image</span></span><br><span class="line"><span class="comment">#======================================================================</span></span><br><span class="line">image = caffe.io.load_image(caffe_root + <span class="string">&#x27;examples/images/cat.jpg&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> image.shape,image.dtype <span class="comment"># (360, 480, 3) float32</span></span><br><span class="line"><span class="built_in">print</span> image[:<span class="number">5</span>,:<span class="number">5</span>,<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.imshow(image) <span class="comment"># (360, 480, 3) RGB</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#======================================================================</span></span><br><span class="line"><span class="comment"># load color image with color=False</span></span><br><span class="line"><span class="comment">#======================================================================</span></span><br><span class="line">image2 = caffe.io.load_image(caffe_root + <span class="string">&#x27;examples/images/cat.jpg&#x27;</span>,color=<span class="literal">False</span>)</span><br><span class="line"><span class="built_in">print</span> image2.shape  <span class="comment">#(360, 480, 1)</span></span><br><span class="line">gray_image2 = image2.squeeze()</span><br><span class="line"><span class="built_in">print</span> gray_image2.shape,gray_image2.dtype <span class="comment"># (360, 480) float32</span></span><br><span class="line"><span class="built_in">print</span> gray_image2[:<span class="number">5</span>,:<span class="number">5</span>]</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.imshow(gray_image2) <span class="comment"># (360, 480) gray</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#======================================================================</span></span><br><span class="line"><span class="comment"># load color image with color=False</span></span><br><span class="line"><span class="comment">#======================================================================</span></span><br><span class="line">image3 = caffe.io.load_image(caffe_root + <span class="string">&#x27;examples/images/cat_gray.jpg&#x27;</span>,color=<span class="literal">False</span>)</span><br><span class="line"><span class="built_in">print</span> image3.shape  <span class="comment">#(360, 480, 1)</span></span><br><span class="line">gray_image3 = image3.squeeze()</span><br><span class="line"><span class="built_in">print</span> gray_image3.shape,gray_image3.dtype <span class="comment"># (360, 480) float32</span></span><br><span class="line"><span class="built_in">print</span> gray_image3[:<span class="number">5</span>,:<span class="number">5</span>]</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.imshow(gray_image3) <span class="comment"># (360, 480) gray</span></span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<pre><code>(360, 480, 3) float32
+[[ 0.10196079  0.10588235  0.09803922  0.10980392  0.11764706]
+ [ 0.10196079  0.10588235  0.09803922  0.10196079  0.10980392]
+ [ 0.10196079  0.10196079  0.10196079  0.10196079  0.10588235]
+ [ 0.10588235  0.10196079  0.10588235  0.10980392  0.11372549]
+ [ 0.11372549  0.10588235  0.10196079  0.10196079  0.11372549]]
+(360, 480, 1)
+(360, 480) float32
+[[ 0.19543412  0.19935569  0.18842432  0.19120707  0.1990502 ]
+ [ 0.19599961  0.19992118  0.19151255  0.19234589  0.20018902]
+ [ 0.19599961  0.19599961  0.19543412  0.19234589  0.19626746]
+ [ 0.19935569  0.19543412  0.19626746  0.19120707  0.19512863]
+ [ 0.20719883  0.19935569  0.19543412  0.19234589  0.19512863]]
+(360, 480, 1)
+(360, 480) float32
+[[ 0.10196079  0.10588235  0.09803922  0.10980392  0.11372549]
+ [ 0.10196079  0.10588235  0.09803922  0.10196079  0.10980392]
+ [ 0.10196079  0.10588235  0.10196079  0.10196079  0.10588235]
+ [ 0.10588235  0.10196079  0.10588235  0.10980392  0.11372549]
+ [ 0.11764706  0.10196079  0.10196079  0.10588235  0.10980392]]
+</code></pre>
+<p><img src="https://kezunlin.me/images/posts/635233-20180816102829804-2136984998.png" alt="png"></p>
+<p><img src="https://kezunlin.me/images/posts/635233-20180816102832577-885538468.png" alt="png"></p>
+<p><img src="https://kezunlin.me/images/posts/635233-20180816102837178-881579112.png" alt="png"></p>
+<h3 id="caffe-io-Transformer"><a href="#caffe-io-Transformer" class="headerlink" title="caffe.io.Transformer"></a>caffe.io.Transformer</h3><p><code>caffe.io.Transformer</code> for Network input blob(m,c,h,w):</p>
+<ul>
+<li><strong>caffe Network default use BGR image format just as OpenCV format</strong>.</li>
+<li>caffe mean files use BGR ordering, which is calculated from <strong>trainning images</strong> instead of test images. <code>mu = np.array([104, 117, 123] # BGR</code></li>
+<li>pixel range in <strong>[0,255] with dtype float32.</strong></li>
+<li>(m,c,h,w), BGR order,[0,255] range,float32</li>
+</ul>
+<h4 id="caffe-io-load-image-1"><a href="#caffe-io-load-image-1" class="headerlink" title="caffe.io.load_image"></a>caffe.io.load_image</h4><p><code>caffe.io.Transformer</code>: </p>
+<ul>
+<li>input image: caffe.io.load_image: (h,w,c),RGB,[0,1],float32 </li>
+<li>transformed image: (c,h,w), BGR,[0,255] float32</li>
+</ul>
+<p><code>caffe.io.Transformer</code> steps: </p>
+<p>Note that the mean subtraction is always carried out before scaling. </p>
+<ul>
+<li>transformer.set_transpose(‘data’, (2,0,1))  #(h,w,c)-&gt;(c,h,w)</li>
+<li>transformer.set_channel_swap(‘data’, (2,1,0)) # RGB-&gt;BGR</li>
+<li>transformer.set_raw_scale(‘data’, 255) # [0,1]-&gt;[0,255] float32</li>
+<li>transformer.set_mean(‘data’, mu) #  subtract BGR</li>
+</ul>
+<p>keep in mind that <strong>the Transformer is only required when using a deploy.prototxt</strong>-like network definition, so without the Data Layer. When using a Data Layer, things get easier to understand.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">caffe_root = <span class="string">&#x27;../&#x27;</span>  <span class="comment"># this file should be run from &#123;caffe_root&#125;/examples (otherwise change this line)</span></span><br><span class="line">sys.path.insert(<span class="number">0</span>, caffe_root + <span class="string">&#x27;python&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> caffe</span><br><span class="line">image = caffe.io.load_image(caffe_root + <span class="string">&#x27;examples/images/cat.jpg&#x27;</span>)</span><br><span class="line"><span class="comment"># caffe.io.load_image: dims: (height,width,channels),order: RGB,range: [0,1] dtype: float32</span></span><br><span class="line"><span class="built_in">print</span> image.shape,image.dtype <span class="comment"># (360, 480, 3) float32</span></span><br><span class="line"><span class="built_in">print</span> image[:<span class="number">5</span>,:<span class="number">5</span>,<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#plt.imshow(image)</span></span><br><span class="line"><span class="comment">#plt.show()</span></span><br><span class="line"></span><br><span class="line">mu = np.load(caffe_root + <span class="string">&#x27;python/caffe/imagenet/ilsvrc_2012_mean.npy&#x27;</span>) </span><br><span class="line">mu = mu.mean(<span class="number">1</span>).mean(<span class="number">1</span>)  <span class="comment"># # BGR</span></span><br><span class="line"></span><br><span class="line">data_shape = (<span class="number">10</span>, <span class="number">3</span>, <span class="number">227</span>, <span class="number">227</span>)</span><br><span class="line">transformer = caffe.io.Transformer(&#123;<span class="string">&#x27;data&#x27;</span>: data_shape&#125;)</span><br><span class="line"></span><br><span class="line">transformer.set_transpose(<span class="string">&#x27;data&#x27;</span>, (<span class="number">2</span>,<span class="number">0</span>,<span class="number">1</span>)) <span class="comment"># h,w,c-&gt;c,h,w(012-&gt;201) move image channels to outermost dimension</span></span><br><span class="line">transformer.set_channel_swap(<span class="string">&#x27;data&#x27;</span>, (<span class="number">2</span>,<span class="number">1</span>,<span class="number">0</span>))  <span class="comment"># swap channels from RGB to BGR</span></span><br><span class="line">transformer.set_raw_scale(<span class="string">&#x27;data&#x27;</span>, <span class="number">255</span>)      <span class="comment"># rescale from [0, 1] to [0, 255]</span></span><br><span class="line">transformer.set_mean(<span class="string">&#x27;data&#x27;</span>, mu)            <span class="comment"># subtract the dataset-mean value(BGR) in each channel</span></span><br><span class="line"></span><br><span class="line">transformed_image = transformer.preprocess(<span class="string">&#x27;data&#x27;</span>, image) </span><br><span class="line"><span class="built_in">print</span> </span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;original  image: &#x27;</span>,image.shape,image.dtype             <span class="comment"># (360, 480, 3) float32</span></span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;transform image: &#x27;</span>,transformed_image.shape,transformed_image.dtype <span class="comment">#(3, 227, 227) float32</span></span><br><span class="line"><span class="built_in">print</span> transformed_image[<span class="number">0</span>,:<span class="number">5</span>,:<span class="number">5</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># By default, using CaffeNet, your net.blobs[&#x27;data&#x27;].data.shape == (10, 3, 227, 227). </span></span><br><span class="line"><span class="comment"># This is because 10 random 227x227 crops are supposed to be extracted from a 256x256 image </span></span><br><span class="line"><span class="comment"># and passed through the net.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># net.blobs[&#x27;data&#x27;].reshape(50,3,227,227) # we can change network input mini-batch to 50 as we like</span></span><br><span class="line"><span class="comment"># net.blobs[&#x27;data&#x27;].data[...] = transformed_image # ---&gt;(50,3,227,227) 50 images</span></span><br></pre></td></tr></table></figure>
+
+<pre><code>(360, 480, 3) float32
+[[ 0.10196079  0.10588235  0.09803922  0.10980392  0.11764706]
+ [ 0.10196079  0.10588235  0.09803922  0.10196079  0.10980392]
+ [ 0.10196079  0.10196079  0.10196079  0.10196079  0.10588235]
+ [ 0.10588235  0.10196079  0.10588235  0.10980392  0.11372549]
+ [ 0.11372549  0.10588235  0.10196079  0.10196079  0.11372549]]
+
+original  image:  (360, 480, 3) float32
+transform image:  (3, 227, 227) float32
+[[-53.86381531 -56.23903656 -53.54626465 -53.14715195 -51.32625961]
+ [-52.93947601 -55.71855164 -54.00423813 -54.76469803 -52.88771057]
+ [-53.89373398 -55.67879486 -55.4278717  -55.22265625 -53.47174454]
+ [-50.98455811 -51.3506012  -54.06866074 -52.09104156 -52.94168854]
+ [-49.92769241 -49.85874176 -52.08575439 -52.50840759 -51.3900528 ]]
+</code></pre>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+<h4 id="cv2-imread"><a href="#cv2-imread" class="headerlink" title="cv2.imread"></a>cv2.imread</h4><p><code>caffe.io.Transformer</code>: </p>
+<ul>
+<li>input image: cv2.imread: (h,w,c),BGR,[0,255],float32 </li>
+<li>transformed image: (c,h,w), BGR order,[0,255] float32</li>
+</ul>
+<p><code>caffe.io.Transformer</code> steps: </p>
+<p>Note that the mean subtraction is always carried out before scaling. </p>
+<ul>
+<li>transformer.set_transpose(‘data’, (2,0,1))  #(h,w,c)-&gt;(c,h,w)</li>
+<li>transformer.set_mean(‘data’, mu) #  subtract BGR</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line">image = cv2.imread(<span class="string">&quot;test/cat.jpg&quot;</span>)</span><br><span class="line"></span><br><span class="line">data_shape = (<span class="number">10</span>, <span class="number">3</span>, <span class="number">227</span>, <span class="number">227</span>)</span><br><span class="line"></span><br><span class="line">transformer = caffe.io.Transformer(&#123;<span class="string">&#x27;data&#x27;</span>: data_shape&#125;)</span><br><span class="line">transformer.set_transpose(<span class="string">&#x27;data&#x27;</span>, (<span class="number">2</span>,<span class="number">0</span>,<span class="number">1</span>)) </span><br><span class="line">transformer.set_mean(<span class="string">&#x27;data&#x27;</span>, mu)     </span><br><span class="line"></span><br><span class="line">transformed_image = transformer.preprocess(<span class="string">&#x27;data&#x27;</span>, image) </span><br><span class="line"><span class="built_in">print</span> </span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;original  image: &#x27;</span>,image.shape,image.dtype             <span class="comment"># (360, 480, 3) float32</span></span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;transform image: &#x27;</span>,transformed_image.shape,transformed_image.dtype <span class="comment">#(3, 227, 227) float32</span></span><br><span class="line"><span class="built_in">print</span> transformed_image[<span class="number">0</span>,:<span class="number">5</span>,:<span class="number">5</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># By default, using CaffeNet, your net.blobs[&#x27;data&#x27;].data.shape == (10, 3, 227, 227). </span></span><br><span class="line"><span class="comment"># This is because 10 random 227x227 crops are supposed to be extracted from a 256x256 image </span></span><br><span class="line"><span class="comment"># and passed through the net.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># net.blobs[&#x27;data&#x27;].reshape(50,3,227,227) # we can change network input mini-batch to 50 as we like</span></span><br><span class="line"><span class="comment"># net.blobs[&#x27;data&#x27;].data[...] = transformed_image # ---&gt;(50,3,227,227) 50 </span></span><br></pre></td></tr></table></figure>
+
+<h4 id="deprocess-transformed-image"><a href="#deprocess-transformed-image" class="headerlink" title="deprocess transformed_image"></a>deprocess transformed_image</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Helper function for deprocessing preprocessed images, e.g., for display.</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">deprocess_net_image</span>(<span class="params">image</span>):</span><br><span class="line">    <span class="comment"># [(&#x27;B&#x27;, 104.0069879317889), (&#x27;G&#x27;, 116.66876761696767), (&#x27;R&#x27;, 122.6789143406786)]</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># input: (c,h,w), BGR,[lower,upper],float32</span></span><br><span class="line">    <span class="comment"># output: (h,w,c), RGB,[0,255],      uint8</span></span><br><span class="line">    image = image.copy()              <span class="comment"># don&#x27;t modify destructively</span></span><br><span class="line">    image = image[::-<span class="number">1</span>]               <span class="comment"># BGR -&gt; RGB</span></span><br><span class="line">    image = image.transpose(<span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>)  <span class="comment"># CHW -&gt; HWC</span></span><br><span class="line">    image += [<span class="number">123</span>, <span class="number">117</span>, <span class="number">104</span>]          <span class="comment"># (approximately) undo mean subtraction  RGB</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># clamp values in [0, 255]</span></span><br><span class="line">    image[image &lt; <span class="number">0</span>], image[image &gt; <span class="number">255</span>] = <span class="number">0</span>, <span class="number">255</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># round and cast from float32 to uint8</span></span><br><span class="line">    image = np.<span class="built_in">round</span>(image)</span><br><span class="line">    image = np.require(image, dtype=np.uint8)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> image</span><br><span class="line"></span><br><span class="line">image = deprocess_net_image(transformed_image)</span><br><span class="line"><span class="comment">#(h,w,c), RGB,[0,255],      uint8</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> image.shape,image.dtype <span class="comment"># (227, 227, 3) uint8</span></span><br><span class="line"><span class="built_in">print</span> image[:<span class="number">5</span>,:<span class="number">5</span>,<span class="number">0</span>]</span><br><span class="line">plt.imshow(image)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<pre><code>(227, 227, 3) uint8
+[[27 27 29 29 30]
+ [26 26 28 27 28]
+ [27 27 27 26 28]
+ [27 28 25 28 27]
+ [26 29 28 28 28]]
+</code></pre>
+<p><img src="https://kezunlin.me/images/posts/635233-20180816102840423-899986139.png" alt="png"></p>
+<h4 id="set-3-dim-image-to-4-dim-input-blob-data"><a href="#set-3-dim-image-to-4-dim-input-blob-data" class="headerlink" title="set 3-dim image to 4-dim input blob data"></a>set 3-dim image to 4-dim input blob data</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">data = np.zeros((<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">4</span>))</span><br><span class="line"><span class="built_in">print</span> data</span><br><span class="line">image = np.arange(<span class="number">48</span>).reshape(<span class="number">3</span>,<span class="number">4</span>,<span class="number">4</span>) </span><br><span class="line"><span class="built_in">print</span> </span><br><span class="line"><span class="built_in">print</span> image</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;set image to data&#x27;</span></span><br><span class="line">data[...] = image <span class="comment"># auto broadcasting from 3-dims to 4-dims</span></span><br><span class="line"><span class="built_in">print</span> data</span><br></pre></td></tr></table></figure>
+
+<pre><code>[[[[ 0.  0.  0.  0.]
+   [ 0.  0.  0.  0.]
+   [ 0.  0.  0.  0.]
+   [ 0.  0.  0.  0.]]
+
+  [[ 0.  0.  0.  0.]
+   [ 0.  0.  0.  0.]
+   [ 0.  0.  0.  0.]
+   [ 0.  0.  0.  0.]]
+
+  [[ 0.  0.  0.  0.]
+   [ 0.  0.  0.  0.]
+   [ 0.  0.  0.  0.]
+   [ 0.  0.  0.  0.]]]
+
+
+ [[[ 0.  0.  0.  0.]
+   [ 0.  0.  0.  0.]
+   [ 0.  0.  0.  0.]
+   [ 0.  0.  0.  0.]]
+
+  [[ 0.  0.  0.  0.]
+   [ 0.  0.  0.  0.]
+   [ 0.  0.  0.  0.]
+   [ 0.  0.  0.  0.]]
+
+  [[ 0.  0.  0.  0.]
+   [ 0.  0.  0.  0.]
+   [ 0.  0.  0.  0.]
+   [ 0.  0.  0.  0.]]]]
+
+[[[ 0  1  2  3]
+  [ 4  5  6  7]
+  [ 8  9 10 11]
+  [12 13 14 15]]
+
+ [[16 17 18 19]
+  [20 21 22 23]
+  [24 25 26 27]
+  [28 29 30 31]]
+
+ [[32 33 34 35]
+  [36 37 38 39]
+  [40 41 42 43]
+  [44 45 46 47]]]
+set image to data
+[[[[  0.   1.   2.   3.]
+   [  4.   5.   6.   7.]
+   [  8.   9.  10.  11.]
+   [ 12.  13.  14.  15.]]
+
+  [[ 16.  17.  18.  19.]
+   [ 20.  21.  22.  23.]
+   [ 24.  25.  26.  27.]
+   [ 28.  29.  30.  31.]]
+
+  [[ 32.  33.  34.  35.]
+   [ 36.  37.  38.  39.]
+   [ 40.  41.  42.  43.]
+   [ 44.  45.  46.  47.]]]
+
+
+ [[[  0.   1.   2.   3.]
+   [  4.   5.   6.   7.]
+   [  8.   9.  10.  11.]
+   [ 12.  13.  14.  15.]]
+
+  [[ 16.  17.  18.  19.]
+   [ 20.  21.  22.  23.]
+   [ 24.  25.  26.  27.]
+   [ 28.  29.  30.  31.]]
+
+  [[ 32.  33.  34.  35.]
+   [ 36.  37.  38.  39.]
+   [ 40.  41.  42.  43.]
+   [ 44.  45.  46.  47.]]]]
+</code></pre>
+<h3 id="transformer-vs-python-code"><a href="#transformer-vs-python-code" class="headerlink" title="transformer vs. python code"></a>transformer vs. python code</h3><h4 id="caffe-io-load-image-2"><a href="#caffe-io-load-image-2" class="headerlink" title="caffe.io.load_image"></a>caffe.io.load_image</h4><h5 id="transformer"><a href="#transformer" class="headerlink" title="transformer"></a>transformer</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">import cv2</span><br><span class="line">import numpy as np</span><br><span class="line"># Make sure that caffe is on the python path:</span><br><span class="line">caffe_root = &#x27;./&#x27;</span><br><span class="line">os.chdir(caffe_root)</span><br><span class="line">sys.path.insert(0, os.path.join(caffe_root, &#x27;python&#x27;))</span><br><span class="line">import caffe</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># caffe.io.load_image: transformer  + python code</span><br><span class="line">data_shape = [1,3,512,512]</span><br><span class="line"></span><br><span class="line">transformer = caffe.io.Transformer(&#123;&#x27;data&#x27;:data_shape&#125;) # resize</span><br><span class="line">transformer.set_transpose(&#x27;data&#x27;, (2, 0, 1)) # hwc ===&gt; chw</span><br><span class="line">transformer.set_channel_swap(&#x27;data&#x27;, (2, 1, 0))  # rgb===&gt;bgr</span><br><span class="line">transformer.set_raw_scale(&#x27;data&#x27;, 255)  # [0-1]===&gt; [0,255]</span><br><span class="line">transformer.set_mean(&#x27;data&#x27;, np.array([104, 117, 123]))  # bgr mean pixel</span><br><span class="line"></span><br><span class="line">image_file = &quot;./images/1.png&quot;</span><br><span class="line">print(&quot;image_file=&quot;, image_file)</span><br><span class="line">image = caffe.io.load_image(image_file) # hwc, rgb, 0-1 </span><br><span class="line">print(&quot;image.shape=&quot;, image.shape)</span><br><span class="line"></span><br><span class="line">transformed_image = transformer.preprocess(&#x27;data&#x27;, image) #</span><br><span class="line">print(&quot;transformed_image.shape=&quot;, transformed_image.shape) # 3,512,512</span><br><span class="line">b,g,r = transformed_image </span><br><span class="line">print(b.shape) # 512,512</span><br><span class="line">print(g.shape)</span><br><span class="line">print(r.shape)</span><br><span class="line"></span><br><span class="line">print(&quot;&quot;)</span><br><span class="line">print(transformed_image[:,:5,:5])</span><br></pre></td></tr></table></figure>
+
+<p>output </p>
+<pre><code>(&#39;image_file=&#39;, &#39;./images/1.png&#39;)
+(&#39;image.shape=&#39;, (1080, 1920, 3))
+(&#39;transformed_image.shape=&#39;, (3, 512, 512))
+(512, 512)
+(512, 512)
+(512, 512)
+
+[[[ -98.          -98.          -98.          -98.          -98.        ]
+  [ -98.          -98.          -98.          -98.          -98.        ]
+  [ -23.96776581  -28.58105469  -31.359375    -25.08592987  -28.90721893]
+  [  -8.21874237  -12.71092987  -15.46875     -15.27832031  -10.57226562]
+  [  -7.75        -12.12499237  -15.          -15.          -10.984375  ]]
+
+ [[-117.         -117.         -117.         -117.         -117.        ]
+  [-117.         -117.         -117.         -117.         -117.        ]
+  [ -43.96776581  -48.58105469  -51.359375    -45.08592987  -48.90721893]
+  [ -26.21874237  -30.71092987  -33.46875     -33.27832031  -33.57226562]
+  [ -24.75        -29.12499237  -32.          -32.          -31.984375  ]]
+
+ [[-123.         -123.         -123.         -123.         -123.        ]
+  [-123.         -123.         -123.         -123.         -123.        ]
+  [ -52.96776581  -57.58105469  -60.359375    -54.08592987  -57.90721893]
+  [ -40.21874237  -44.71092987  -47.46875     -47.27832031  -44.572258  ]
+  [ -40.75        -45.12499237  -48.          -48.          -47.984375  ]]]
+</code></pre>
+<h5 id="python-code"><a href="#python-code" class="headerlink" title="python code"></a>python code</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">print(image.shape) # hwc,rgb,0-1   (1080, 1920, 3)</span><br><span class="line">print(image.dtype) # float32</span><br><span class="line"></span><br><span class="line"># resize</span><br><span class="line">image = cv2.resize(image, (512,512)) </span><br><span class="line">print(&quot;image resize = &quot;,image.shape) # (512, 512, 3)</span><br><span class="line"></span><br><span class="line"># hwc,rgb ===&gt; chw, bgr</span><br><span class="line">r,g,b = image[:,:,0],image[:,:,1],image[:,:,2]</span><br><span class="line"></span><br><span class="line">print(b.shape) # (512, 512)</span><br><span class="line">print(g.shape) # (512, 512)</span><br><span class="line">print(r.shape) # (512, 512)</span><br><span class="line"></span><br><span class="line">bgr = np.zeros([3,b.shape[0],b.shape[1]])</span><br><span class="line">print(bgr.shape)</span><br><span class="line">bgr[0,:,:] = b </span><br><span class="line">bgr[1,:,:] = g </span><br><span class="line">bgr[2,:,:] = r </span><br><span class="line"></span><br><span class="line"># 0-1 ===&gt;0-255</span><br><span class="line">bgr = bgr *255.</span><br><span class="line"></span><br><span class="line"># -mean</span><br><span class="line">print(&quot;&quot;)</span><br><span class="line">bgr[0] -= 104</span><br><span class="line">bgr[1] -= 117</span><br><span class="line">bgr[2] -= 123</span><br><span class="line">print(bgr[:,:5,:5])</span><br></pre></td></tr></table></figure>
+
+<p>output </p>
+<pre><code>(1080, 1920, 3)
+float32
+(&#39;image resize = &#39;, (512, 512, 3))
+float32
+(512, 512)
+(512, 512)
+(512, 512)
+(3, 512, 512)
+
+[[[ -97.99999988  -97.99999988  -97.99999988  -97.99999988  -97.99999988]
+  [ -97.99999988  -97.99999988  -97.99999988  -97.99999988  -97.99999988]
+  [ -23.9677673   -28.58105415  -31.35937387  -25.0859333   -28.90722105]
+  [  -8.21874478  -12.71093214  -15.46874815  -15.27831757  -10.5722701 ]
+  [  -7.74999434  -12.12499598  -14.99999771  -14.99999771  -10.98437318]]
+
+ [[-117.         -117.         -117.         -117.         -117.        ]
+  [-117.         -117.         -117.         -117.         -117.        ]
+  [ -43.96776688  -48.58105373  -51.35937345  -45.08593288  -48.90722823]
+  [ -26.21874449  -30.71093184  -33.46874785  -33.27831727  -33.5722695 ]
+  [ -24.7499941   -29.12499574  -31.99999747  -31.99999747  -31.98437271]]
+
+ [[-123.         -123.         -123.         -123.         -123.        ]
+  [-123.         -123.         -123.         -123.         -123.        ]
+  [ -52.9677667   -57.58105356  -60.35937327  -54.0859327   -57.90722805]
+  [ -40.21874401  -44.71093136  -47.46874738  -47.2783168   -44.5722692 ]
+  [ -40.7499935   -45.12499514  -47.99999687  -47.99999687  -47.98437211]]]
+</code></pre>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+<h4 id="cv2-imread-1"><a href="#cv2-imread-1" class="headerlink" title="cv2.imread"></a>cv2.imread</h4><h5 id="transformer-1"><a href="#transformer-1" class="headerlink" title="transformer"></a>transformer</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cv2.imread: transformer  + python code</span></span><br><span class="line">data_shape = [<span class="number">1</span>,<span class="number">3</span>,<span class="number">512</span>,<span class="number">512</span>]</span><br><span class="line"></span><br><span class="line">transformer = caffe.io.Transformer(&#123;<span class="string">&#x27;data&#x27;</span>:data_shape&#125;) <span class="comment"># resize</span></span><br><span class="line">transformer.set_transpose(<span class="string">&#x27;data&#x27;</span>, (<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>)) <span class="comment"># hwc ===&gt; chw</span></span><br><span class="line"><span class="comment">#transformer.set_channel_swap(&#x27;data&#x27;, (2, 1, 0))  # rgb===&gt;bgr</span></span><br><span class="line"><span class="comment">#transformer.set_raw_scale(&#x27;data&#x27;, 255)  # [0-1]===&gt; [0,255]</span></span><br><span class="line">transformer.set_mean(<span class="string">&#x27;data&#x27;</span>, np.array([<span class="number">104</span>, <span class="number">117</span>, <span class="number">123</span>]))  <span class="comment"># bgr mean pixel</span></span><br><span class="line"></span><br><span class="line">image_file = <span class="string">&quot;./images/1.png&quot;</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;image_file=&quot;</span>, image_file)</span><br><span class="line">image = cv2.imread(image_file) <span class="comment"># hwc, bgr, 0-255</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;image.shape=&quot;</span>, image.shape)</span><br><span class="line"></span><br><span class="line">transformed_image = transformer.preprocess(<span class="string">&#x27;data&#x27;</span>, image) <span class="comment">#</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;transformed_image.shape=&quot;</span>, transformed_image.shape) <span class="comment"># 3,512,512</span></span><br><span class="line">b,g,r = transformed_image </span><br><span class="line"><span class="built_in">print</span>(b.shape) <span class="comment"># 512,512</span></span><br><span class="line"><span class="built_in">print</span>(g.shape)</span><br><span class="line"><span class="built_in">print</span>(r.shape)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(transformed_image[:,:<span class="number">5</span>,:<span class="number">5</span>])</span><br></pre></td></tr></table></figure>
+
+<p>output </p>
+<pre><code>(&#39;image_file=&#39;, &#39;./images/1.png&#39;)
+(&#39;image.shape=&#39;, (1080, 1920, 3))
+(&#39;transformed_image.shape=&#39;, (3, 512, 512))
+(512, 512)
+(512, 512)
+(512, 512)
+
+[[[ -98.          -98.          -98.          -98.          -98.        ]
+  [ -98.          -98.          -98.          -98.          -98.        ]
+  [ -23.96777344  -28.58105469  -31.359375    -25.0859375   -28.90722656]
+  [  -8.21875     -12.7109375   -15.46875     -15.27832031  -10.57226562]
+  [  -7.75        -12.125       -15.          -15.          -10.984375  ]]
+
+ [[-117.         -117.         -117.         -117.         -117.        ]
+  [-117.         -117.         -117.         -117.         -117.        ]
+  [ -43.96777344  -48.58105469  -51.359375    -45.0859375   -48.90722656]
+  [ -26.21875     -30.7109375   -33.46875     -33.27832031  -33.57226562]
+  [ -24.75        -29.125       -32.          -32.          -31.984375  ]]
+
+ [[-123.         -123.         -123.         -123.         -123.        ]
+  [-123.         -123.         -123.         -123.         -123.        ]
+  [ -52.96777344  -57.58105469  -60.35937119  -54.0859375   -57.90722656]
+  [ -40.21875     -44.7109375   -47.46875     -47.27832031  -44.57226562]
+  [ -40.75        -45.125       -48.          -48.          -47.984375  ]]]
+</code></pre>
+<h5 id="python-code-1"><a href="#python-code-1" class="headerlink" title="python code"></a>python code</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">print(image.shape) # hwc,bgr,0-255   (1080, 1920, 3)</span><br><span class="line">print(image.dtype) # uint8</span><br><span class="line"></span><br><span class="line"># int8 ===&gt;float32</span><br><span class="line">image = image.astype(&#x27;float32&#x27;) # key steps</span><br><span class="line">print(image.dtype) # float32</span><br><span class="line"></span><br><span class="line"># resize</span><br><span class="line">image = cv2.resize(image, (512,512)) </span><br><span class="line">print(&quot;image resize = &quot;,image.shape) # (512, 512, 3)</span><br><span class="line">print(image.dtype) # float32</span><br><span class="line"></span><br><span class="line"># hwc ===&gt; chw</span><br><span class="line">b,g,r = image[:,:,0],image[:,:,1],image[:,:,2]</span><br><span class="line"></span><br><span class="line">print(b.shape) # (512, 512)</span><br><span class="line">print(g.shape) # (512, 512)</span><br><span class="line">print(r.shape) # (512, 512)</span><br><span class="line"></span><br><span class="line">bgr = np.zeros([3,b.shape[0],b.shape[1]])</span><br><span class="line">print(bgr.shape)</span><br><span class="line"></span><br><span class="line"># -mean</span><br><span class="line">b -= 104</span><br><span class="line">g -= 117</span><br><span class="line">r -= 123</span><br><span class="line"></span><br><span class="line">bgr[0,:,:] = b </span><br><span class="line">bgr[1,:,:] = g </span><br><span class="line">bgr[2,:,:] = r </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">print(bgr[:,:5,:5])</span><br></pre></td></tr></table></figure>
+
+<h5 id="python-code-v2"><a href="#python-code-v2" class="headerlink" title="python code v2"></a>python code v2</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">image = cv2.imread(filepath) # hwc, bgr,0-255</span><br><span class="line">print(image.dtype) # uint8</span><br><span class="line">        </span><br><span class="line">image = image.astype(&#x27;float32&#x27;) # key steps</span><br><span class="line">image = cv2.resize(image, (512,512)) </span><br><span class="line">print(&quot;image resize = &quot;,image.shape) # (512, 512, 3)</span><br><span class="line">print(image.dtype) # float32</span><br><span class="line"></span><br><span class="line">image -= np.array((104.00698793,116.66876762,122.67891434)) # bgr mean</span><br><span class="line">image = image.transpose((2,0,1)) # hwc ===&gt;chw</span><br><span class="line"></span><br><span class="line">print(image[:,:5,:5])</span><br></pre></td></tr></table></figure>
+
+<p>output </p>
+<pre><code>(1080, 1920, 3)
+uint8
+float32
+(&#39;image resize = &#39;, (512, 512, 3))
+float32
+(512, 512)
+(512, 512)
+(512, 512)
+(3, 512, 512)
+
+[[[ -98.          -98.          -98.          -98.          -98.        ]
+  [ -98.          -98.          -98.          -98.          -98.        ]
+  [ -23.96777344  -28.58105469  -31.359375    -25.0859375   -28.90722656]
+  [  -8.21875     -12.7109375   -15.46875     -15.27832031  -10.57226562]
+  [  -7.75        -12.125       -15.          -15.          -10.984375  ]]
+
+ [[-117.         -117.         -117.         -117.         -117.        ]
+  [-117.         -117.         -117.         -117.         -117.        ]
+  [ -43.96777344  -48.58105469  -51.359375    -45.0859375   -48.90722656]
+  [ -26.21875     -30.7109375   -33.46875     -33.27832031  -33.57226562]
+  [ -24.75        -29.125       -32.          -32.          -31.984375  ]]
+
+ [[-123.         -123.         -123.         -123.         -123.        ]
+  [-123.         -123.         -123.         -123.         -123.        ]
+  [ -52.96777344  -57.58105469  -60.359375    -54.0859375   -57.90722656]
+  [ -40.21875     -44.7109375   -47.46875     -47.27832031  -44.57226562]
+  [ -40.75        -45.125       -48.          -48.          -47.984375  ]]]
+</code></pre>
+<h3 id="Conclusions"><a href="#Conclusions" class="headerlink" title="Conclusions"></a>Conclusions</h3><ul>
+<li><strong>Matplot.imread</strong>:        dims: (height,width,channels),order: RGB,range: [0,255] dtype: uint8, plot</li>
+<li><strong>OpenCV.imread</strong>:         dims: (height,width,channels),order: <strong>BGR</strong>,range: [0,255] dtype: uint8, plot</li>
+<li><strong>caffe.io.load_image</strong>:   dims: (height,width,channels),order: RGB,range: <strong>[0,1]</strong>   dtype: float32 (caffe_io_image &#x3D; matplot_image&#x2F;255.0) ,plot</li>
+<li><strong>caffe Network Input(Transformer)</strong>:   dims: (m,c,h,w), order: <strong>BGR</strong>, range [0,255],dtype: float32, <strong>PLOT ERROR</strong></li>
+</ul>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.pyimagesearch.com/2014/11/03/display-matplotlib-rgb-image/">display-matplotlib-rgb-image</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.bogotobogo.com/python/OpenCV_Python/python_opencv3_matplotlib_rgb_brg_image_load_display_save.php">python_opencv3_matplotlib_rgb_brg_image_load_display_save</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180816: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/opencv/" rel="tag"># opencv</a>
+              <a href="/tags/rgb/" rel="tag"># rgb</a>
+              <a href="/tags/bgr/" rel="tag"># bgr</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/rcnn-tutorial/" rel="prev" title="a quick guide to rcnn">
+      <i class="fa fa-chevron-left"></i> a quick guide to rcnn
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/py-faster-rcnn-tutorials/" rel="next" title="a quick guide to py-faster-rcnn">
+      a quick guide to py-faster-rcnn <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Matplot-skimage-PIL-Image"><span class="nav-number">1.1.</span> <span class="nav-text">Matplot (skimage&#x2F; PIL Image)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PIL-Image"><span class="nav-number">1.2.</span> <span class="nav-text">PIL.Image</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#skimage"><span class="nav-number">1.3.</span> <span class="nav-text">skimage</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OpenCV"><span class="nav-number">1.4.</span> <span class="nav-text">OpenCV</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Matplot-VS-OpenCV"><span class="nav-number">1.5.</span> <span class="nav-text">Matplot VS. OpenCV</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#caffe-io-load-image"><span class="nav-number">1.6.</span> <span class="nav-text">caffe.io.load_image</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#caffe-io-Transformer"><span class="nav-number">1.7.</span> <span class="nav-text">caffe.io.Transformer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#caffe-io-load-image-1"><span class="nav-number">1.7.1.</span> <span class="nav-text">caffe.io.load_image</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cv2-imread"><span class="nav-number">1.7.2.</span> <span class="nav-text">cv2.imread</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#deprocess-transformed-image"><span class="nav-number">1.7.3.</span> <span class="nav-text">deprocess transformed_image</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#set-3-dim-image-to-4-dim-input-blob-data"><span class="nav-number">1.7.4.</span> <span class="nav-text">set 3-dim image to 4-dim input blob data</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#transformer-vs-python-code"><span class="nav-number">1.8.</span> <span class="nav-text">transformer vs. python code</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#caffe-io-load-image-2"><span class="nav-number">1.8.1.</span> <span class="nav-text">caffe.io.load_image</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#transformer"><span class="nav-number">1.8.1.1.</span> <span class="nav-text">transformer</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#python-code"><span class="nav-number">1.8.1.2.</span> <span class="nav-text">python code</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cv2-imread-1"><span class="nav-number">1.8.2.</span> <span class="nav-text">cv2.imread</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#transformer-1"><span class="nav-number">1.8.2.1.</span> <span class="nav-text">transformer</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#python-code-1"><span class="nav-number">1.8.2.2.</span> <span class="nav-text">python code</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#python-code-v2"><span class="nav-number">1.8.2.3.</span> <span class="nav-text">python code v2</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Conclusions"><span class="nav-number">1.9.</span> <span class="nav-text">Conclusions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

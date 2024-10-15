@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="crontabsyntaxsudo crontab -e  12# every 5 minutes*&#x2F;5 * * * * &#x2F;home&#x2F;user&#x2F;git&#x2F;repo&#x2F;python-demo&#x2F;run.sh    * * * * * command to be executed   - - - - -   | | | | |   | | | | ----- Day of week (0 - 7) (Sun">
+<meta property="og:type" content="article">
+<meta property="og:title" content="running cronjob using crontab on ubuntu linux">
+<meta property="og:url" content="https://kezunlin.me/blog/running-cronjob-using-crontab-on-ubuntu-linux/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="crontabsyntaxsudo crontab -e  12# every 5 minutes*&#x2F;5 * * * * &#x2F;home&#x2F;user&#x2F;git&#x2F;repo&#x2F;python-demo&#x2F;run.sh    * * * * * command to be executed   - - - - -   | | | | |   | | | | ----- Day of week (0 - 7) (Sun">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-01-17T00:17:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.667Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="cronjob">
+<meta property="article:tag" content="crontab">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/running-cronjob-using-crontab-on-ubuntu-linux/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>running cronjob using crontab on ubuntu linux | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/running-cronjob-using-crontab-on-ubuntu-linux/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          running cronjob using crontab on ubuntu linux
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-01-17 08:17:00" itemprop="dateCreated datePublished" datetime="2020-01-17T08:17:00+08:00">2020-01-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="crontab"><a href="#crontab" class="headerlink" title="crontab"></a>crontab</h2><h3 id="syntax"><a href="#syntax" class="headerlink" title="syntax"></a>syntax</h3><pre><code>sudo crontab -e
+</code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># every 5 minutes</span></span><br><span class="line">*/5 * * * * /home/user/git/repo/python-demo/run.sh</span><br></pre></td></tr></table></figure>
+
+<pre><code>  * * * * * command to be executed
+  - - - - -
+  | | | | |
+  | | | | ----- Day of week (0 - 7) (Sunday=0 or 7)
+  | | | ------- Month (1 - 12)
+  | | --------- Day of month (1 - 31)
+  | ----------- Hour (0 - 23)
+  ------------- Minute (0 - 59)
+</code></pre>
+<h3 id="crontab-FAQs"><a href="#crontab-FAQs" class="headerlink" title="crontab FAQs"></a>crontab FAQs</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># (1) how to edit crontab file ?</span></span><br><span class="line"><span class="built_in">sudo</span> crontab -e </span><br><span class="line"><span class="built_in">sudo</span> crontab -l </span><br><span class="line"></span><br><span class="line"><span class="comment"># (2) how to enable crontab log </span></span><br><span class="line"><span class="built_in">sudo</span> vim /etc/rsyslog.d/50-default.conf</span><br><span class="line">cron.*              /var/log/cron.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># restart rsyslog</span></span><br><span class="line"><span class="built_in">sudo</span> service rsyslog restart</span><br><span class="line"><span class="comment"># now we can see </span></span><br><span class="line"><span class="built_in">tail</span> -f /var/log/cron.log</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># (3) how to run a crontab job and see ENVS</span></span><br><span class="line"><span class="built_in">sudo</span> crontab -e </span><br><span class="line"></span><br><span class="line">* * * * * <span class="built_in">env</span> &gt; /home/kezunlin/env.log  </span><br><span class="line"><span class="comment"># 由root用户生成</span></span><br><span class="line"><span class="comment"># -rw-r--r-- 1 root root 411 3月  17 17:37 /home/kezunlin/env.log</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#结果如下</span></span><br><span class="line">LC_TIME=zh_CN.UTF-8</span><br><span class="line"><span class="comment">#MYFB_ROOT=/home/kezunlin/git/repo/myproject/</span></span><br><span class="line"><span class="comment">#HOME=/root</span></span><br><span class="line"><span class="comment">#PYTHON_BIN=/home/kezunlin/anaconda3/bin/python</span></span><br><span class="line">LC_MONETARY=zh_CN.UTF-8</span><br><span class="line">LOGNAME=root</span><br><span class="line"><span class="comment">#PATH=/usr/bin:/bin</span></span><br><span class="line">LC_ADDRESS=zh_CN.UTF-8</span><br><span class="line">LANG=en_US.UTF-8</span><br><span class="line">LC_TELEPHONE=zh_CN.UTF-8</span><br><span class="line">LC_NAME=zh_CN.UTF-8</span><br><span class="line">SHELL=/bin/sh</span><br><span class="line">LC_MEASUREMENT=zh_CN.UTF-8</span><br><span class="line">LC_IDENTIFICATION=zh_CN.UTF-8</span><br><span class="line">PWD=/root</span><br><span class="line"><span class="comment">#PYTHONPATH=$PYHONPATH:$MYFB_ROOT../</span></span><br><span class="line">LC_NUMERIC=zh_CN.UTF-8</span><br><span class="line">LC_PAPER=zh_CN.UTF-8</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可以看到,系统执行crontab job则只会加载默认的ENVS+ /etc/environment中的ENVS，不会设置任何用户ENVS</span></span><br><span class="line"><span class="comment"># 如果scripts中使用了来自.bashrc, .profile中的ENVs，肯定会导致导致scripts执行失败</span></span><br><span class="line"><span class="comment"># **方案**</span></span><br><span class="line"><span class="comment"># 将用户自定义ENVS放置在/etc/environment</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 其他示例</span></span><br><span class="line"><span class="comment"># crontab 中最好使用绝对路径 (不能使用~等,  可以使用$HOME,  source需要用.代替)</span></span><br><span class="line">* * * * * <span class="built_in">sleep</span> 5s &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;yo&quot;</span></span><br><span class="line">* * * * * <span class="built_in">env</span> &gt;&gt; <span class="variable">$HOME</span>/env.log </span><br><span class="line">* * * * * <span class="built_in">export</span> LC_ALL=nb_NO.UTF-8; <span class="built_in">sleep</span> 5s &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;yo&quot;</span></span><br><span class="line">*/5 * * * * /home/ubuntu/scripts/run5.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># (5) 既然crontab可以加载/etc/environment中的ENVS，那么可以在crontab中使用来自/etc/environment中的ENVS，比如</span></span><br><span class="line">*/1 * * * * <span class="variable">$MYFB_ROOT</span>/scripts/run5.sh  <span class="comment">#OK 可以替换下面的路径</span></span><br><span class="line">*/1 * * * * /home/ubuntu/project/scripts/run5.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># (6) crontab和手动运行scripts的区别</span></span><br><span class="line"><span class="comment"># A: 手动运行,开启terminal,除了加载系统/etc/environment中的ENVS,</span></span><br><span class="line"><span class="comment"># 还会加载当前user的.bashrc .profile文件,设置好ENVS,可以在scripts中使用</span></span><br><span class="line"><span class="comment"># B: 然而crontab则不会加载用户ENVS</span></span><br><span class="line"><span class="comment"># ***所以crontab执行的scripts中最好使用绝对路径，不要使用用户ENVS，否则执行失败***</span></span><br><span class="line"><span class="comment"># 或者将用户ENVS写入到/etc/environment中</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="crontab-终极方案"><a href="#crontab-终极方案" class="headerlink" title="crontab 终极方案"></a>crontab 终极方案</h3><h4 id="ENVS"><a href="#ENVS" class="headerlink" title="ENVS"></a>ENVS</h4><p>vim <code>/etc/environment</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># vim /etc/environment （可以被crontab加载,.bashrc则不行) </span></span><br><span class="line"><span class="comment"># ~/git会被crontab替换为/root/git/repo/myproject，所以使用/home/kezunlin代替</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># (1) ubuntu 16.04</span></span><br><span class="line">MYFB_ROOT=/home/kezunlin/git/repo/myproject/</span><br><span class="line">PYTHONPATH=<span class="variable">$PYHONPATH</span>:<span class="variable">$MYFB_ROOT</span>../</span><br><span class="line">PYTHON_BIN=/home/kezunlin/anaconda3/bin/python</span><br><span class="line"></span><br><span class="line"><span class="comment"># (2) WSL   </span></span><br><span class="line">MYFB_ROOT=/home/ubuntu/git/myproject/</span><br><span class="line">PYTHONPATH=<span class="variable">$PYHONPATH</span>:<span class="variable">$MYFB_ROOT</span>../</span><br><span class="line">PYTHON_BIN=/usr/bin/python3</span><br><span class="line"></span><br><span class="line"><span class="comment"># (3) cloud server </span></span><br><span class="line">MYFB_ROOT=/home/ubuntu/git/myproject/</span><br><span class="line">PYTHONPATH=<span class="variable">$PYHONPATH</span>:<span class="variable">$MYFB_ROOT</span>../</span><br><span class="line">PYTHON_BIN=/usr/bin/python3</span><br></pre></td></tr></table></figure>
+
+<h4 id="crontab-e"><a href="#crontab-e" class="headerlink" title="crontab -e"></a>crontab -e</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># scripts的路径可以使用来自/etc/environment的ENVS</span></span><br><span class="line"><span class="comment"># 可以统一各个不同平台的写法</span></span><br><span class="line"><span class="comment"># for ubuntu 16.04 / WSL / cloud server</span></span><br><span class="line">* * * * * <span class="built_in">env</span> &gt; <span class="variable">$MYFB_ROOT</span>/scripts/env.log</span><br><span class="line">*/5 * * * * <span class="variable">$MYFB_ROOT</span>/scripts/run5.sh  </span><br><span class="line">*/10 * * * * <span class="variable">$MYFB_ROOT</span>/scripts/run10.sh</span><br></pre></td></tr></table></figure>
+
+<h4 id="Scripts"><a href="#Scripts" class="headerlink" title="Scripts"></a>Scripts</h4><p><code>scripts/run5.sh</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line">. /etc/environment</span><br><span class="line"><span class="comment"># MYFB_ROOT  PYTHONPATH  PYTHON_BIN</span></span><br><span class="line"><span class="comment">#env &gt; $MYFB_ROOT/env_test.log</span></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$MYFB_ROOT</span>  <span class="comment"># 代码中使用了.flag.txt必须cd到此目录</span></span><br><span class="line"><span class="variable">$PYTHON_BIN</span> run5.py &gt;&gt; <span class="built_in">log</span>/log5.txt</span><br></pre></td></tr></table></figure>
+
+<p><code>scripts/run10.sh</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line">. /etc/environment</span><br><span class="line"><span class="comment">##env &gt; $MYFB_ROOT/env_test.log</span></span><br><span class="line"><span class="comment"># MYFB_ROOT  PYTHONPATH  PYTHON_BIN</span></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$MYFB_ROOT</span>  <span class="comment"># 代码中使用了.flag.txt必须cd到此目录</span></span><br><span class="line"><span class="variable">$PYTHON_BIN</span> run10.py &gt;&gt; <span class="built_in">log</span>/log10.txt</span><br></pre></td></tr></table></figure>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/22743548/cronjob-not-running">cronjob-not-running</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>2020&#x2F;1&#x2F;17: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/cronjob/" rel="tag"># cronjob</a>
+              <a href="/tags/crontab/" rel="tag"># crontab</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/python-requests-exceptions-proxyerror/" rel="prev" title="python requests exceptions proxyerror and solution">
+      <i class="fa fa-chevron-left"></i> python requests exceptions proxyerror and solution
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/crate-graph-with-dot-file-using-graphviz-on-linux/" rel="next" title="crate graph with dot file using graphviz on linux">
+      crate graph with dot file using graphviz on linux <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#crontab"><span class="nav-number">1.</span> <span class="nav-text">crontab</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#syntax"><span class="nav-number">1.1.</span> <span class="nav-text">syntax</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#crontab-FAQs"><span class="nav-number">1.2.</span> <span class="nav-text">crontab FAQs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#crontab-%E7%BB%88%E6%9E%81%E6%96%B9%E6%A1%88"><span class="nav-number">1.3.</span> <span class="nav-text">crontab 终极方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ENVS"><span class="nav-number">1.3.1.</span> <span class="nav-text">ENVS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#crontab-e"><span class="nav-number">1.3.2.</span> <span class="nav-text">crontab -e</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Scripts"><span class="nav-number">1.3.3.</span> <span class="nav-text">Scripts</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

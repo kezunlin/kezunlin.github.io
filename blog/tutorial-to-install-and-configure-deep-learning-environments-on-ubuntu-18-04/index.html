@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Guideprepare ubuntu 18.04 主机支持8个口才能使用GeForce RTX 2080 Ti(11GB显存)Ubuntu 18.04(刻录Ubuntu 18.04系统并通过U盘安装.)Mem: 64GBCPU: 2 core 10GPU: RTX 2080 Ti  download Anaconda3-2019.03-Linux-x86_64.sh  ssh1234sudo a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tutorial to install and configure deep learning environments on ubuntu 18.04">
+<meta property="og:url" content="https://kezunlin.me/blog/tutorial-to-install-and-configure-deep-learning-environments-on-ubuntu-18-04/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Guideprepare ubuntu 18.04 主机支持8个口才能使用GeForce RTX 2080 Ti(11GB显存)Ubuntu 18.04(刻录Ubuntu 18.04系统并通过U盘安装.)Mem: 64GBCPU: 2 core 10GPU: RTX 2080 Ti  download Anaconda3-2019.03-Linux-x86_64.sh  ssh1234sudo a">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-06-04T02:34:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.667Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="deep learning">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/tutorial-to-install-and-configure-deep-learning-environments-on-ubuntu-18-04/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>tutorial to install and configure deep learning environments on ubuntu 18.04 | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/tutorial-to-install-and-configure-deep-learning-environments-on-ubuntu-18-04/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          tutorial to install and configure deep learning environments on ubuntu 18.04
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-06-04 10:34:00" itemprop="dateCreated datePublished" datetime="2020-06-04T10:34:00+08:00">2020-06-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ubuntu/" itemprop="url" rel="index"><span itemprop="name">ubuntu</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h2 id="prepare-ubuntu-18-04"><a href="#prepare-ubuntu-18-04" class="headerlink" title="prepare ubuntu 18.04"></a>prepare ubuntu 18.04</h2><blockquote>
+<p>主机支持8个口才能使用GeForce RTX 2080 Ti(11GB显存)<br>Ubuntu 18.04(刻录Ubuntu 18.04系统并通过U盘安装.)<br>Mem: 64GB<br>CPU: 2 core 10<br>GPU: RTX 2080 Ti</p>
+</blockquote>
+<h2 id="download"><a href="#download" class="headerlink" title="download"></a>download</h2><ul>
+<li>Anaconda3-2019.03-Linux-x86_64.sh</li>
+</ul>
+<h2 id="ssh"><a href="#ssh" class="headerlink" title="ssh"></a>ssh</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get -y install openssh-server</span><br><span class="line"><span class="built_in">sudo</span> ap-get -y install net-tools</span><br><span class="line"><span class="built_in">sudo</span> ifconfig</span><br><span class="line"><span class="comment"># 192.168.0.114</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="install-packages"><a href="#install-packages" class="headerlink" title="install packages"></a>install packages</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt -y install git vim tree build-essential cmake-gui</span><br><span class="line"><span class="built_in">sudo</span> apt-get -y install libleveldb-dev liblmdb-dev libsnappy-dev libhdf5-serial-dev </span><br><span class="line"><span class="built_in">sudo</span> apt-get -y install libopenblas-dev liblapack-dev libatlas-base-dev</span><br><span class="line">apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libhdf5-serial-dev protobuf-compiler</span><br><span class="line">apt-get install --no-install-recommends libboost-all-dev</span><br><span class="line"><span class="built_in">sudo</span> apt-get install libgflags-dev libgoogle-glog-dev liblmdb-dev</span><br></pre></td></tr></table></figure>
+
+<h2 id="Nvidia-driver"><a href="#Nvidia-driver" class="headerlink" title="Nvidia driver"></a>Nvidia driver</h2><ul>
+<li>see <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#runfile-nouveau">nvidia driver</a></li>
+<li>see <a href="https://kezunlin.me/post/3f33896b/">install and configure cuda 9.2 with cudnn 7.1 on ubuntu 16.04</a></li>
+</ul>
+<h3 id="Disable-the-Nouveau-drivers"><a href="#Disable-the-Nouveau-drivers" class="headerlink" title="Disable the Nouveau drivers"></a>Disable the Nouveau drivers</h3><p>To install the Display Driver, the Nouveau drivers must first be disabled. </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># nouveau is loaded</span></span><br><span class="line">lsmod | grep nouveau</span><br><span class="line"></span><br><span class="line">vim /etc/modprobe.d/blacklist-nouveau.conf </span><br><span class="line">blacklist nouveau</span><br><span class="line">options nouveau modeset=0</span><br><span class="line"></span><br><span class="line"><span class="comment">#Regenerate the kernel initramfs:</span></span><br><span class="line"><span class="built_in">sudo</span> update-initramfs -u</span><br><span class="line"><span class="built_in">sudo</span> reboot </span><br><span class="line"></span><br><span class="line"><span class="comment"># reboot and verify that the Nouveau drivers are not loaded.</span></span><br><span class="line">lsmod | grep nouveau</span><br></pre></td></tr></table></figure>
+
+<h3 id="install-driver-by-CUDA-linux-run-not"><a href="#install-driver-by-CUDA-linux-run-not" class="headerlink" title="install driver by CUDA_linux.run(not)"></a><del>install driver by CUDA_linux.run(not)</del></h3><p>The Runfile installation installs the NVIDIA Driver, the CUDA Toolkit, and CUDA Samples, via an interactive ncurses-based interface.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get purge nvidia-*</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> ./cuda_10.1.243_418.87.00_linux.run --<span class="built_in">help</span></span><br><span class="line"><span class="built_in">sudo</span> ./cuda_10.1.243_418.87.00_linux.run --driver</span><br><span class="line"></span><br><span class="line"><span class="comment"># test </span></span><br><span class="line">nvidia-smi</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>&#x2F;var&#x2F;log&#x2F;nvidia-installer.log<br>&#x2F;var&#x2F;log&#x2F;cuda-installer.log</p>
+</blockquote>
+<blockquote>
+<p>ERROR: The Nouveau kernel driver is currently in use by your system.  This driver is incompatible with the NVIDIA driver, and must be disabled before proceeding. </p>
+</blockquote>
+<h3 id="install-driver-by-PPA-推荐"><a href="#install-driver-by-PPA-推荐" class="headerlink" title="install driver by PPA(推荐)"></a>install driver by PPA(推荐)</h3><p>see <a target="_blank" rel="noopener" href="https://linuxhint.com/ubuntu_nvidia_ppa/">ubuntu_nvidia_ppa</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> add-apt-repository ppa:graphics-drivers/ppa</span><br><span class="line">sudp apt-get update</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt-cache search nvidia-driver-*</span><br><span class="line"><span class="comment"># nvidia-driver-418</span></span><br><span class="line"><span class="comment"># nvidia-driver-440</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt-get -y install nvidia-driver-440</span><br><span class="line"><span class="built_in">sudo</span> reboot</span><br></pre></td></tr></table></figure>
+
+<h3 id="check-dirver"><a href="#check-dirver" class="headerlink" title="check dirver"></a>check dirver</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">nvidia-smi</span><br><span class="line">Thu Jun  4 17:12:59 2020       </span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">| NVIDIA-SMI 440.82       Driver Version: 440.82       CUDA Version: 10.2     |</span><br><span class="line">|-------------------------------+----------------------+----------------------+</span><br><span class="line">| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |</span><br><span class="line">| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |</span><br><span class="line">|===============================+======================+======================|</span><br><span class="line">|   0  GeForce RTX 208...  Off  | 00000000:17:00.0 Off |                  N/A |</span><br><span class="line">| 30%   42C    P8    19W / 250W |      1MiB / 11019MiB |      0%      Default |</span><br><span class="line">+-------------------------------+----------------------+----------------------+</span><br><span class="line">|   1  GeForce RTX 208...  Off  | 00000000:65:00.0  On |                  N/A |</span><br><span class="line">| 31%   44C    P8    10W / 250W |     80MiB / 11018MiB |      0%      Default |</span><br><span class="line">+-------------------------------+----------------------+----------------------+</span><br><span class="line">                                                                               </span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">| Processes:                                                       GPU Memory |</span><br><span class="line">|  GPU       PID   Type   Process name                             Usage      |</span><br><span class="line">|=============================================================================|</span><br><span class="line">|    1      1309      G   /usr/lib/xorg/Xorg                            21MiB |</span><br><span class="line">|    1      1399      G   /usr/bin/gnome-shell                          56MiB |</span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="cuda-toolkit-9-1"><a href="#cuda-toolkit-9-1" class="headerlink" title="cuda-toolkit(9.1)"></a><del>cuda-toolkit(9.1)</del></h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install nvidia-cuda-toolkit</span><br><span class="line"></span><br><span class="line">nvcc -V</span><br><span class="line">nvcc: NVIDIA (R) Cuda compiler driver</span><br><span class="line">Copyright (c) 2005-2017 NVIDIA Corporation</span><br><span class="line">Built on Fri_Nov__3_21:07:56_CDT_2017</span><br><span class="line">Cuda compilation tools, release 9.1, V9.1.85</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="conda"><a href="#conda" class="headerlink" title="conda"></a>conda</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./Anaconda3-2019.03-Linux-x86_64.sh </span><br><span class="line">[<span class="built_in">yes</span>]</span><br><span class="line">[<span class="built_in">yes</span>]</span><br></pre></td></tr></table></figure>
+
+<h3 id="install-torch"><a href="#install-torch" class="headerlink" title="install torch"></a>install torch</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">conda create -n py37 python==3.7</span><br><span class="line">conda activate py37</span><br><span class="line"></span><br><span class="line">conda install -y pytorch torchvision</span><br></pre></td></tr></table></figure>
+
+<h3 id="opencv"><a href="#opencv" class="headerlink" title="opencv"></a>opencv</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">pip install opencv-contrib-python</span><br><span class="line"></span><br><span class="line">python</span><br><span class="line">Python 3.7.0 (default, Oct  9 2018, 10:31:47) </span><br><span class="line">[GCC 7.3.0] :: Anaconda, Inc. on linux</span><br><span class="line">Type <span class="string">&quot;help&quot;</span>, <span class="string">&quot;copyright&quot;</span>, <span class="string">&quot;credits&quot;</span> or <span class="string">&quot;license&quot;</span> <span class="keyword">for</span> more information.</span><br><span class="line">&gt;&gt;&gt; import cv2</span><br><span class="line">&gt;&gt;&gt; cv2.__version__</span><br><span class="line"><span class="string">&#x27;4.2.0&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="qt"><a href="#qt" class="headerlink" title="qt"></a>qt</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install pyqt</span><br></pre></td></tr></table></figure>
+
+<h2 id="other-libraries"><a href="#other-libraries" class="headerlink" title="other libraries"></a>other libraries</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>2020&#x2F;06&#x2F;04: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/deep-learning/" rel="tag"># deep learning</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/enable-WSL-on-Windows-10-and-install-Ubuntu-16-04-Ubuntu-18-04/" rel="prev" title="enable WSL on Windows 10 and install Ubuntu 16.04 Ubuntu 18.04">
+      <i class="fa fa-chevron-left"></i> enable WSL on Windows 10 and install Ubuntu 16.04 Ubuntu 18.04
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/install-windows-wechat-on-ubuntu-16-04/" rel="next" title="install windows wechat on ubuntu 16.04">
+      install windows wechat on ubuntu 16.04 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#prepare-ubuntu-18-04"><span class="nav-number">2.</span> <span class="nav-text">prepare ubuntu 18.04</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#download"><span class="nav-number">3.</span> <span class="nav-text">download</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ssh"><span class="nav-number">4.</span> <span class="nav-text">ssh</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-packages"><span class="nav-number">5.</span> <span class="nav-text">install packages</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nvidia-driver"><span class="nav-number">6.</span> <span class="nav-text">Nvidia driver</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Disable-the-Nouveau-drivers"><span class="nav-number">6.1.</span> <span class="nav-text">Disable the Nouveau drivers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-driver-by-CUDA-linux-run-not"><span class="nav-number">6.2.</span> <span class="nav-text">install driver by CUDA_linux.run(not)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-driver-by-PPA-%E6%8E%A8%E8%8D%90"><span class="nav-number">6.3.</span> <span class="nav-text">install driver by PPA(推荐)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#check-dirver"><span class="nav-number">6.4.</span> <span class="nav-text">check dirver</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cuda-toolkit-9-1"><span class="nav-number">7.</span> <span class="nav-text">cuda-toolkit(9.1)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#conda"><span class="nav-number">8.</span> <span class="nav-text">conda</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#install-torch"><span class="nav-number">8.1.</span> <span class="nav-text">install torch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#opencv"><span class="nav-number">8.2.</span> <span class="nav-text">opencv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#qt"><span class="nav-number">8.3.</span> <span class="nav-text">qt</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#other-libraries"><span class="nav-number">9.</span> <span class="nav-text">other libraries</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">10.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">11.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

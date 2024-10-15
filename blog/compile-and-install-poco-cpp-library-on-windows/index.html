@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Series how to compile and install poco cpp library on windows how to compile and install poco cpp library on ubuntu 16.04  Guidedownload12wget https:&#x2F;&#x2F;pocoproject.org&#x2F;releases&#x2F;poco-1.8.1&#x2F;poco-1.8.1.zi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="how to compile and install poco cpp library on windows">
+<meta property="og:url" content="https://kezunlin.me/blog/compile-and-install-poco-cpp-library-on-windows/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Series how to compile and install poco cpp library on windows how to compile and install poco cpp library on ubuntu 16.04  Guidedownload12wget https:&#x2F;&#x2F;pocoproject.org&#x2F;releases&#x2F;poco-1.8.1&#x2F;poco-1.8.1.zi">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-01-24T17:53:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="poco">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/compile-and-install-poco-cpp-library-on-windows/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>how to compile and install poco cpp library on windows | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/compile-and-install-poco-cpp-library-on-windows/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          how to compile and install poco cpp library on windows
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-01-25 01:53:00" itemprop="dateCreated datePublished" datetime="2018-01-25T01:53:00+08:00">2018-01-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h2><ul>
+<li><strong><a href="https://kezunlin.me/post/9587bb47/">how to compile and install poco cpp library on windows</a></strong></li>
+<li><a href="https://kezunlin.me/post/281dd8cd/">how to compile and install poco cpp library on ubuntu 16.04</a></li>
+</ul>
+<h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="download"><a href="#download" class="headerlink" title="download"></a>download</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://pocoproject.org/releases/poco-1.8.1/poco-1.8.1.zip</span><br><span class="line">wget https://pocoproject.org/releases/poco-1.8.1/poco-1.8.1.tar.gz</span><br></pre></td></tr></table></figure>
+
+<h3 id="build"><a href="#build" class="headerlink" title="build"></a>build</h3><h4 id="build-options"><a href="#build-options" class="headerlink" title="build options"></a>build options</h4><p>buildwin.cmd</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">rem Usage:</span></span><br><span class="line"><span class="comment">rem ------</span></span><br><span class="line"><span class="comment">rem buildwin VS_VERSION [ACTION] [LINKMODE] [CONFIGURATION] [PLATFORM] [SAMPLES] [TESTS] [TOOL]</span></span><br><span class="line"><span class="comment">rem VS_VERSION:    90|100|110|120|140|150</span></span><br><span class="line"><span class="comment">rem ACTION:        build|rebuild|clean</span></span><br><span class="line"><span class="comment">rem LINKMODE:      static_mt|static_md|shared|all</span></span><br><span class="line"><span class="comment">rem CONFIGURATION: release|debug|both</span></span><br><span class="line"><span class="comment">rem PLATFORM:      Win32|x64|WinCE|WEC2013</span></span><br><span class="line"><span class="comment">rem SAMPLES:       samples|nosamples</span></span><br><span class="line"><span class="comment">rem TESTS:         tests|notests</span></span><br><span class="line"><span class="comment">rem TOOL:          devenv|vcexpress|wdexpress|msbuild</span></span><br></pre></td></tr></table></figure>
+
+<p>we choose to build with <code>visual studio 2015</code></p>
+<p>build_vs140.cmd</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line">buildwin <span class="number">140</span> build shared release x64 samples</span><br></pre></td></tr></table></figure>
+
+<h4 id="build-1"><a href="#build-1" class="headerlink" title="build"></a>build</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./build_vs140.cmd</span><br></pre></td></tr></table></figure>
+
+<p>or </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake-gui ..</span><br></pre></td></tr></table></figure>
+
+<p><code>cmake-gui</code> and open <code>sln</code> to build with <code>release x64</code>and install to <code>C:/Program Files/Poco</code> so that <code>find_package(Poco REQURIED)</code> take effect.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">ls</span> Poco</span><br><span class="line"></span><br><span class="line">bin  include  lib</span><br><span class="line"></span><br><span class="line">$ ll Poco/lib</span><br><span class="line"></span><br><span class="line">total 3.5M</span><br><span class="line">drwxr-xr-x 1 zunli zunli     0 Jan 25 07:39 cmake</span><br><span class="line">-rw-r--r-- 1 zunli zunli  1.5M Jan 25 06:59 PocoFoundation.lib</span><br><span class="line">-rw-r--r-- 1 zunli zunli  111K Jan 25 06:59 PocoJSON.lib</span><br><span class="line">-rw-r--r-- 1 zunli zunli 1007K Jan 25 07:00 PocoNet.lib</span><br><span class="line">-rw-r--r-- 1 zunli zunli  320K Jan 25 07:00 PocoUtil.lib</span><br><span class="line">-rw-r--r-- 1 zunli zunli  595K Jan 25 07:00 PocoXML.lib</span><br></pre></td></tr></table></figure>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+<h2 id="Poco-Example"><a href="#Poco-Example" class="headerlink" title="Poco Example"></a>Poco Example</h2><h3 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span> (VERSION <span class="number">2.6</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">project</span> (event_demo)</span><br><span class="line"><span class="keyword">enable_language</span>(C)</span><br><span class="line"><span class="keyword">enable_language</span>(CXX)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Always include the source and build directories in the include path.</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_INCLUDE_CURRENT_DIR <span class="keyword">ON</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Set the output folder where your program will be created</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_BINARY_DIR <span class="variable">$&#123;CMAKE_SOURCE_DIR&#125;</span>/bin)</span><br><span class="line"><span class="keyword">set</span>(EXECUTABLE_OUTPUT_PATH <span class="variable">$&#123;CMAKE_BINARY_DIR&#125;</span>)</span><br><span class="line"><span class="keyword">set</span>(LIBRARY_OUTPUT_PATH <span class="variable">$&#123;CMAKE_BINARY_DIR&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(Poco REQUIRED COMPONENTS Foundation Util Net XML JSON)</span><br><span class="line"></span><br><span class="line"><span class="comment"># no Poco_INCLUDE_DIRS, we have to set by hand </span></span><br><span class="line"><span class="keyword">if</span>(MSVC) <span class="comment"># WIN32</span></span><br><span class="line">	<span class="keyword">SET</span>(Poco_INCLUDE_DIRS <span class="string">&quot;C:/Program Files/Poco/include&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line">	<span class="keyword">SET</span>(Poco_INCLUDE_DIRS <span class="string">&quot;/usr/local/include/Poco&quot;</span>)</span><br><span class="line"><span class="keyword">endif</span>(MSVC)</span><br><span class="line"></span><br><span class="line"><span class="keyword">MESSAGE</span>( [Main] <span class="string">&quot; Poco_INCLUDE_DIRS = $&#123;Poco_INCLUDE_DIRS&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">MESSAGE</span>( [Main] <span class="string">&quot; Poco_LIBRARIES = $&#123;Poco_LIBRARIES&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># The following folder will be included</span></span><br><span class="line"><span class="keyword">include_directories</span>(</span><br><span class="line">    <span class="variable">$&#123;MY_SRC_INCLUDE&#125;</span>  </span><br><span class="line">	<span class="variable">$&#123;Poco_INCLUDE_DIRS&#125;</span> </span><br><span class="line">    )   </span><br><span class="line"></span><br><span class="line"><span class="keyword">link_directories</span>(<span class="variable">$&#123;CMAKE_BINARY_DIR&#125;</span>) </span><br><span class="line"></span><br><span class="line"><span class="keyword">add_executable</span>(event_demo event_demo.cpp)</span><br><span class="line"><span class="keyword">target_link_libraries</span>(event_demo <span class="variable">$&#123;Poco_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Notice 1: <code>find_package(Poco REQUIRED COMPONENTS Foundation Util Net XML JSON)</code> and use <code>$&#123;Poco_INCLUDE_DIRS&#125;</code>, <code>$&#123;Poco_LIBRARIES&#125;</code>.</p>
+</blockquote>
+<blockquote>
+<p>Notice 2: we have to set <code>SET(Poco_INCLUDE_DIRS &quot;C:/Program Files/Poco/include&quot;)</code> by hand.</p>
+</blockquote>
+<h3 id="event"><a href="#event" class="headerlink" title="event"></a>event</h3><h4 id="event-demo-cpp"><a href="#event-demo-cpp" class="headerlink" title="event_demo.cpp"></a>event_demo.cpp</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/BasicEvent.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Delegate.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> Poco::BasicEvent;</span><br><span class="line"><span class="keyword">using</span> Poco::Delegate;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Source</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    BasicEvent&lt;<span class="type">int</span>&gt; theEvent;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">fireEvent</span><span class="params">(<span class="type">int</span> n)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="built_in">theEvent</span>(<span class="keyword">this</span>, n);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Target</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">onEvent</span><span class="params">(<span class="type">const</span> <span class="type">void</span>* pSender, <span class="type">int</span>&amp; arg)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;onEvent: &quot;</span> &lt;&lt; arg &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Source source;</span><br><span class="line">    Target target;</span><br><span class="line"></span><br><span class="line">    source.theEvent += <span class="built_in">Delegate</span>&lt;Target, <span class="type">int</span>&gt;(</span><br><span class="line">        &amp;target, &amp;Target::onEvent);</span><br><span class="line"></span><br><span class="line">    source.<span class="built_in">fireEvent</span>(<span class="number">42</span>);</span><br><span class="line"></span><br><span class="line">    source.theEvent -= <span class="built_in">Delegate</span>&lt;Target, <span class="type">int</span>&gt;(</span><br><span class="line">        &amp;target, &amp;Target::onEvent);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="active-method"><a href="#active-method" class="headerlink" title="active method"></a>active method</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/ActiveMethod.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/ActiveResult.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;utility&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> Poco::ActiveMethod;</span><br><span class="line"><span class="keyword">using</span> Poco::ActiveResult;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ActiveAdder</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">ActiveAdder</span>() : <span class="built_in">add</span>(<span class="keyword">this</span>, &amp;ActiveAdder::addImpl)</span><br><span class="line">	&#123;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	ActiveMethod&lt;<span class="type">int</span>, std::pair&lt;<span class="type">int</span>, <span class="type">int</span>&gt;, ActiveAdder&gt; add;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="function"><span class="type">int</span> <span class="title">addImpl</span><span class="params">(<span class="type">const</span> std::pair&lt;<span class="type">int</span>, <span class="type">int</span>&gt;&amp; args)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> args.first + args.second;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	ActiveAdder adder;</span><br><span class="line"></span><br><span class="line">	ActiveResult&lt;<span class="type">int</span>&gt; sum = adder.<span class="built_in">add</span>(std::<span class="built_in">make_pair</span>(<span class="number">1</span>, <span class="number">2</span>));</span><br><span class="line">	<span class="comment">// do other things</span></span><br><span class="line">	sum.<span class="built_in">wait</span>();</span><br><span class="line">	std::cout &lt;&lt; sum.<span class="built_in">data</span>() &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="http-server"><a href="#http-server" class="headerlink" title="http server"></a>http server</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Net/HTTPServer.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Net/HTTPRequestHandler.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Net/HTTPRequestHandlerFactory.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Net/HTTPServerParams.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Net/HTTPServerRequest.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Net/HTTPServerResponse.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Net/HTTPServerParams.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Net/ServerSocket.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Timestamp.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/DateTimeFormatter.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/DateTimeFormat.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Exception.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/ThreadPool.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Util/ServerApplication.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Util/Option.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Util/OptionSet.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Util/HelpFormatter.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> Poco::Net::ServerSocket;</span><br><span class="line"><span class="keyword">using</span> Poco::Net::HTTPRequestHandler;</span><br><span class="line"><span class="keyword">using</span> Poco::Net::HTTPRequestHandlerFactory;</span><br><span class="line"><span class="keyword">using</span> Poco::Net::HTTPServer;</span><br><span class="line"><span class="keyword">using</span> Poco::Net::HTTPServerRequest;</span><br><span class="line"><span class="keyword">using</span> Poco::Net::HTTPServerResponse;</span><br><span class="line"><span class="keyword">using</span> Poco::Net::HTTPServerParams;</span><br><span class="line"><span class="keyword">using</span> Poco::Timestamp;</span><br><span class="line"><span class="keyword">using</span> Poco::DateTimeFormatter;</span><br><span class="line"><span class="keyword">using</span> Poco::DateTimeFormat;</span><br><span class="line"><span class="keyword">using</span> Poco::ThreadPool;</span><br><span class="line"><span class="keyword">using</span> Poco::Util::ServerApplication;</span><br><span class="line"><span class="keyword">using</span> Poco::Util::Application;</span><br><span class="line"><span class="keyword">using</span> Poco::Util::Option;</span><br><span class="line"><span class="keyword">using</span> Poco::Util::OptionSet;</span><br><span class="line"><span class="keyword">using</span> Poco::Util::OptionCallback;</span><br><span class="line"><span class="keyword">using</span> Poco::Util::HelpFormatter;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TimeRequestHandler</span> : <span class="keyword">public</span> HTTPRequestHandler</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">TimeRequestHandler</span>(<span class="type">const</span> std::string&amp; format) : _format(format)</span><br><span class="line">	&#123;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">handleRequest</span><span class="params">(HTTPServerRequest&amp; request,</span></span></span><br><span class="line"><span class="params"><span class="function">		HTTPServerResponse&amp; response)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		Application&amp; app = Application::<span class="built_in">instance</span>();</span><br><span class="line">		app.<span class="built_in">logger</span>().<span class="built_in">information</span>(<span class="string">&quot;[LOG] Request from &quot;</span></span><br><span class="line">			+ request.<span class="built_in">clientAddress</span>().<span class="built_in">toString</span>());</span><br><span class="line"></span><br><span class="line">		Timestamp now;</span><br><span class="line">		<span class="function">std::string <span class="title">dt</span><span class="params">(DateTimeFormatter::format(now, _format))</span></span>;</span><br><span class="line"></span><br><span class="line">		response.<span class="built_in">setChunkedTransferEncoding</span>(<span class="literal">true</span>);</span><br><span class="line">		response.<span class="built_in">setContentType</span>(<span class="string">&quot;text/html&quot;</span>);</span><br><span class="line"></span><br><span class="line">		std::ostream&amp; ostr = response.<span class="built_in">send</span>();</span><br><span class="line">		ostr &lt;&lt; <span class="string">&quot;&lt;html&gt;&lt;head&gt;&lt;title&gt;HTTPTimeServer powered by &quot;</span></span><br><span class="line">			<span class="string">&quot;POCO C++ Libraries&lt;/title&gt;&quot;</span>;</span><br><span class="line">		ostr &lt;&lt; <span class="string">&quot;&lt;meta http-equiv=\&quot;refresh\&quot; content=\&quot;1\&quot;&gt;&lt;/head&gt;&quot;</span>;</span><br><span class="line">		ostr &lt;&lt; <span class="string">&quot;&lt;body&gt;&lt;p style=\&quot;text-align: center; &quot;</span></span><br><span class="line">			<span class="string">&quot;font-size: 48px;\&quot;&gt;&quot;</span>;</span><br><span class="line">		ostr &lt;&lt; dt;</span><br><span class="line">		ostr &lt;&lt; <span class="string">&quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	std::string _format;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TimeRequestHandlerFactory</span> : <span class="keyword">public</span> HTTPRequestHandlerFactory</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">TimeRequestHandlerFactory</span>(<span class="type">const</span> std::string&amp; format) :</span><br><span class="line">		_format(format)</span><br><span class="line">	&#123;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">HTTPRequestHandler* <span class="title">createRequestHandler</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">		<span class="type">const</span> HTTPServerRequest&amp; request)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (request.<span class="built_in">getURI</span>() == <span class="string">&quot;/&quot;</span>)</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">TimeRequestHandler</span>(_format);</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	std::string _format;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">HTTPTimeServer</span> : <span class="keyword">public</span> Poco::Util::ServerApplication</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">HTTPTimeServer</span>() : _helpRequested(<span class="literal">false</span>)</span><br><span class="line">	&#123;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	~<span class="built_in">HTTPTimeServer</span>()</span><br><span class="line">	&#123;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">initialize</span><span class="params">(Application&amp; self)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		Application&amp; app = Application::<span class="built_in">instance</span>();</span><br><span class="line">		app.<span class="built_in">logger</span>().<span class="built_in">information</span>(<span class="string">&quot;[HTTPTimeServer] initialize port=9980 &quot;</span>);</span><br><span class="line"></span><br><span class="line">		<span class="built_in">loadConfiguration</span>();</span><br><span class="line">		ServerApplication::<span class="built_in">initialize</span>(self);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">uninitialize</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		Application&amp; app = Application::<span class="built_in">instance</span>();</span><br><span class="line">		app.<span class="built_in">logger</span>().<span class="built_in">information</span>(<span class="string">&quot;[HTTPTimeServer] uninitialize &quot;</span>);</span><br><span class="line"></span><br><span class="line">		ServerApplication::<span class="built_in">uninitialize</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">defineOptions</span><span class="params">(OptionSet&amp; options)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		ServerApplication::<span class="built_in">defineOptions</span>(options);</span><br><span class="line"></span><br><span class="line">		options.<span class="built_in">addOption</span>(</span><br><span class="line">			<span class="built_in">Option</span>(<span class="string">&quot;help&quot;</span>, <span class="string">&quot;h&quot;</span>, <span class="string">&quot;display argument help information&quot;</span>)</span><br><span class="line">			.<span class="built_in">required</span>(<span class="literal">false</span>)</span><br><span class="line">			.<span class="built_in">repeatable</span>(<span class="literal">false</span>)</span><br><span class="line">			.<span class="built_in">callback</span>(<span class="built_in">OptionCallback</span>&lt;HTTPTimeServer&gt;(</span><br><span class="line">				<span class="keyword">this</span>, &amp;HTTPTimeServer::handleHelp)));</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">handleHelp</span><span class="params">(<span class="type">const</span> std::string&amp; name,</span></span></span><br><span class="line"><span class="params"><span class="function">		<span class="type">const</span> std::string&amp; value)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="function">HelpFormatter <span class="title">helpFormatter</span><span class="params">(options())</span></span>;</span><br><span class="line">		helpFormatter.<span class="built_in">setCommand</span>(<span class="built_in">commandName</span>());</span><br><span class="line">		helpFormatter.<span class="built_in">setUsage</span>(<span class="string">&quot;OPTIONS&quot;</span>);</span><br><span class="line">		helpFormatter.<span class="built_in">setHeader</span>(</span><br><span class="line">			<span class="string">&quot;A web server that serves the current date and time.&quot;</span>);</span><br><span class="line">		helpFormatter.format(std::cout);</span><br><span class="line">		<span class="built_in">stopOptionsProcessing</span>();</span><br><span class="line">		_helpRequested = <span class="literal">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">const</span> std::vector&lt;std::string&gt;&amp; args)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		Application&amp; app = Application::<span class="built_in">instance</span>();</span><br><span class="line">		app.<span class="built_in">logger</span>().<span class="built_in">information</span>(<span class="string">&quot;[HTTPTimeServer] main &quot;</span>);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (!_helpRequested)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="type">unsigned</span> <span class="type">short</span> port = (<span class="type">unsigned</span> <span class="type">short</span>)</span><br><span class="line">				<span class="built_in">config</span>().<span class="built_in">getInt</span>(<span class="string">&quot;HTTPTimeServer.port&quot;</span>, <span class="number">9980</span>);</span><br><span class="line">			<span class="function">std::string <span class="title">format</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">				config().getString(<span class="string">&quot;HTTPTimeServer.format&quot;</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">					DateTimeFormat::SORTABLE_FORMAT))</span></span>;</span><br><span class="line"></span><br><span class="line">			<span class="function">ServerSocket <span class="title">svs</span><span class="params">(port)</span></span>;</span><br><span class="line">			<span class="function">HTTPServer <span class="title">srv</span><span class="params">(<span class="keyword">new</span> TimeRequestHandlerFactory(format),</span></span></span><br><span class="line"><span class="params"><span class="function">				svs, <span class="keyword">new</span> HTTPServerParams)</span></span>;</span><br><span class="line">			srv.<span class="built_in">start</span>();</span><br><span class="line">			<span class="built_in">waitForTerminationRequest</span>();</span><br><span class="line">			srv.<span class="built_in">stop</span>();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> Application::EXIT_OK;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="type">bool</span> _helpRequested;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	HTTPTimeServer app;</span><br><span class="line">	<span class="keyword">return</span> app.<span class="built_in">run</span>(argc, argv);</span><br><span class="line">	<span class="comment">//visit http://localhost:9980</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="tcp-server-client"><a href="#tcp-server-client" class="headerlink" title="tcp server&#x2F;client"></a>tcp server&#x2F;client</h3><h4 id="tcpserver"><a href="#tcpserver" class="headerlink" title="tcpserver"></a>tcpserver</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// TimeServer.cpp</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// This sample demonstrates the TCPServer and ServerSocket classes.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Copyright (c) 2005-2006, Applied Informatics Software Engineering GmbH.</span></span><br><span class="line"><span class="comment">// and Contributors.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// SPDX-License-Identifier:	BSL-1.0</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Net/TCPServer.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Net/TCPServerConnection.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Net/TCPServerConnectionFactory.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Net/TCPServerParams.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Net/StreamSocket.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Net/ServerSocket.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Timestamp.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/DateTimeFormatter.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/DateTimeFormat.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Exception.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Util/ServerApplication.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Util/Option.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Util/OptionSet.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Util/HelpFormatter.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> Poco::Net::ServerSocket;</span><br><span class="line"><span class="keyword">using</span> Poco::Net::StreamSocket;</span><br><span class="line"><span class="keyword">using</span> Poco::Net::TCPServerConnection;</span><br><span class="line"><span class="keyword">using</span> Poco::Net::TCPServerConnectionFactory;</span><br><span class="line"><span class="keyword">using</span> Poco::Net::TCPServer;</span><br><span class="line"><span class="keyword">using</span> Poco::Timestamp;</span><br><span class="line"><span class="keyword">using</span> Poco::DateTimeFormatter;</span><br><span class="line"><span class="keyword">using</span> Poco::DateTimeFormat;</span><br><span class="line"><span class="keyword">using</span> Poco::Util::ServerApplication;</span><br><span class="line"><span class="keyword">using</span> Poco::Util::Application;</span><br><span class="line"><span class="keyword">using</span> Poco::Util::Option;</span><br><span class="line"><span class="keyword">using</span> Poco::Util::OptionSet;</span><br><span class="line"><span class="keyword">using</span> Poco::Util::HelpFormatter;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TimeServerConnection</span> : <span class="keyword">public</span> TCPServerConnection</span><br><span class="line">	<span class="comment">/// This class handles all client connections.</span></span><br><span class="line">	<span class="comment">///</span></span><br><span class="line">	<span class="comment">/// A string with the current date and time is sent back to the client.</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">TimeServerConnection</span>(<span class="type">const</span> StreamSocket&amp; s, <span class="type">const</span> std::string&amp; format) :</span><br><span class="line">		<span class="built_in">TCPServerConnection</span>(s),</span><br><span class="line">		_format(format)</span><br><span class="line">	&#123;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">run</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		Application&amp; app = Application::<span class="built_in">instance</span>();</span><br><span class="line">		app.<span class="built_in">logger</span>().<span class="built_in">information</span>(<span class="string">&quot;Request from &quot;</span> + <span class="keyword">this</span>-&gt;<span class="built_in">socket</span>().<span class="built_in">peerAddress</span>().<span class="built_in">toString</span>());</span><br><span class="line">		<span class="keyword">try</span></span><br><span class="line">		&#123;</span><br><span class="line">			Timestamp now;</span><br><span class="line">			<span class="comment">//std::string dt(DateTimeFormatter::format(now, _format));</span></span><br><span class="line">			<span class="comment">//dt.append(&quot;\r\n&quot;);</span></span><br><span class="line">			<span class="function">std::string <span class="title">dt</span><span class="params">(<span class="string">&quot;hello world&quot;</span>)</span></span>;</span><br><span class="line">			<span class="function">std::string <span class="title">info</span><span class="params">(<span class="string">&quot;sending:  [&quot;</span> + dt + <span class="string">&quot;] with length=&quot;</span>+std::to_string(dt.length()) )</span></span>;</span><br><span class="line">			app.<span class="built_in">logger</span>().<span class="built_in">information</span>(info);</span><br><span class="line">			<span class="built_in">socket</span>().<span class="built_in">sendBytes</span>(dt.<span class="built_in">data</span>(), (<span class="type">int</span>)dt.<span class="built_in">length</span>());</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">catch</span> (Poco::Exception&amp; exc)</span><br><span class="line">		&#123;</span><br><span class="line">			app.<span class="built_in">logger</span>().<span class="built_in">log</span>(exc);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	std::string _format;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TimeServerConnectionFactory</span> : <span class="keyword">public</span> TCPServerConnectionFactory</span><br><span class="line">	<span class="comment">/// A factory for TimeServerConnection.</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">TimeServerConnectionFactory</span>(<span class="type">const</span> std::string&amp; format) :</span><br><span class="line">		_format(format)</span><br><span class="line">	&#123;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">TCPServerConnection* <span class="title">createConnection</span><span class="params">(<span class="type">const</span> StreamSocket&amp; socket)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">TimeServerConnection</span>(socket, _format);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	std::string _format;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TimeServer</span> : <span class="keyword">public</span> Poco::Util::ServerApplication</span><br><span class="line">	<span class="comment">/// The main application class.</span></span><br><span class="line">	<span class="comment">///</span></span><br><span class="line">	<span class="comment">/// This class handles command-line arguments and</span></span><br><span class="line">	<span class="comment">/// configuration files.</span></span><br><span class="line">	<span class="comment">/// Start the TimeServer executable with the help</span></span><br><span class="line">	<span class="comment">/// option (/help on Windows, --help on Unix) for</span></span><br><span class="line">	<span class="comment">/// the available command line options.</span></span><br><span class="line">	<span class="comment">///</span></span><br><span class="line">	<span class="comment">/// To use the sample configuration file (TimeServer.properties),</span></span><br><span class="line">	<span class="comment">/// copy the file to the directory where the TimeServer executable</span></span><br><span class="line">	<span class="comment">/// resides. If you start the debug version of the TimeServer</span></span><br><span class="line">	<span class="comment">/// (TimeServerd[.exe]), you must also create a copy of the configuration</span></span><br><span class="line">	<span class="comment">/// file named TimeServerd.properties. In the configuration file, you</span></span><br><span class="line">	<span class="comment">/// can specify the port on which the server is listening (default</span></span><br><span class="line">	<span class="comment">/// 9911) and the format of the date/time string sent back to the client.</span></span><br><span class="line">	<span class="comment">///</span></span><br><span class="line">	<span class="comment">/// To test the TimeServer you can use any telnet client (telnet localhost 9911).</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">TimeServer</span>() : _helpRequested(<span class="literal">false</span>)</span><br><span class="line">	&#123;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	~<span class="built_in">TimeServer</span>()</span><br><span class="line">	&#123;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">initialize</span><span class="params">(Application&amp; self)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="built_in">loadConfiguration</span>(); <span class="comment">// load default configuration files, if present</span></span><br><span class="line">		ServerApplication::<span class="built_in">initialize</span>(self);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">uninitialize</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		ServerApplication::<span class="built_in">uninitialize</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">defineOptions</span><span class="params">(OptionSet&amp; options)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		ServerApplication::<span class="built_in">defineOptions</span>(options);</span><br><span class="line"></span><br><span class="line">		options.<span class="built_in">addOption</span>(</span><br><span class="line">			<span class="built_in">Option</span>(<span class="string">&quot;help&quot;</span>, <span class="string">&quot;h&quot;</span>, <span class="string">&quot;display help information on command line arguments&quot;</span>)</span><br><span class="line">			.<span class="built_in">required</span>(<span class="literal">false</span>)</span><br><span class="line">			.<span class="built_in">repeatable</span>(<span class="literal">false</span>));</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">handleOption</span><span class="params">(<span class="type">const</span> std::string&amp; name, <span class="type">const</span> std::string&amp; value)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		ServerApplication::<span class="built_in">handleOption</span>(name, value);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (name == <span class="string">&quot;help&quot;</span>)</span><br><span class="line">			_helpRequested = <span class="literal">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">displayHelp</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="function">HelpFormatter <span class="title">helpFormatter</span><span class="params">(options())</span></span>;</span><br><span class="line">		helpFormatter.<span class="built_in">setCommand</span>(<span class="built_in">commandName</span>());</span><br><span class="line">		helpFormatter.<span class="built_in">setUsage</span>(<span class="string">&quot;OPTIONS&quot;</span>);</span><br><span class="line">		helpFormatter.<span class="built_in">setHeader</span>(<span class="string">&quot;A server application that serves the current date and time.&quot;</span>);</span><br><span class="line">		helpFormatter.format(std::cout);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">const</span> std::vector&lt;std::string&gt;&amp; args)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (_helpRequested)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">displayHelp</span>();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">// get parameters from configuration file</span></span><br><span class="line">			<span class="type">unsigned</span> <span class="type">short</span> port = (<span class="type">unsigned</span> <span class="type">short</span>)<span class="built_in">config</span>().<span class="built_in">getInt</span>(<span class="string">&quot;TimeServer.port&quot;</span>, <span class="number">9911</span>);</span><br><span class="line">			<span class="function">std::string <span class="title">format</span><span class="params">(config().getString(<span class="string">&quot;TimeServer.format&quot;</span>, DateTimeFormat::ISO8601_FORMAT))</span></span>;</span><br><span class="line"></span><br><span class="line">			<span class="comment">// set-up a server socket</span></span><br><span class="line">			<span class="function">ServerSocket <span class="title">svs</span><span class="params">(port)</span></span>;</span><br><span class="line">			<span class="comment">// set-up a TCPServer instance</span></span><br><span class="line">			<span class="function">TCPServer <span class="title">srv</span><span class="params">(<span class="keyword">new</span> TimeServerConnectionFactory(format), svs)</span></span>;</span><br><span class="line">			<span class="comment">// start the TCPServer</span></span><br><span class="line">			srv.<span class="built_in">start</span>();</span><br><span class="line">			<span class="comment">// wait for CTRL-C or kill</span></span><br><span class="line">			<span class="built_in">waitForTerminationRequest</span>();</span><br><span class="line">			<span class="comment">// Stop the TCPServer</span></span><br><span class="line">			srv.<span class="built_in">stop</span>();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> Application::EXIT_OK;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="type">bool</span> _helpRequested;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	TimeServer app; <span class="comment">// 9911</span></span><br><span class="line">	<span class="keyword">return</span> app.<span class="built_in">run</span>(argc, argv);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>start tcpserver.</p>
+<h4 id="tcpclient"><a href="#tcpclient" class="headerlink" title="tcpclient"></a>tcpclient</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// TimeClient.cpp</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Net/SocketAddress.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Poco/Net/StreamSocket.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> Poco::Net::SocketAddress;</span><br><span class="line"><span class="keyword">using</span> Poco::Net::StreamSocket;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">SocketAddress <span class="title">sa</span><span class="params">(<span class="string">&quot;127.0.0.1&quot;</span>,<span class="number">9911</span>)</span></span>;</span><br><span class="line">	<span class="function">StreamSocket <span class="title">ss</span><span class="params">(sa)</span></span>;</span><br><span class="line">	<span class="type">int</span> n;</span><br><span class="line">	<span class="type">char</span> buffer[<span class="number">256</span>];</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//n = 11 , s[0,1,2,....10] = hello world s[11]=&#x27;\0&#x27;</span></span><br><span class="line">	n = ss.<span class="built_in">receiveBytes</span>(buffer, <span class="built_in">sizeof</span>(buffer)<span class="number">-1</span>);</span><br><span class="line">	buffer[n] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line"></span><br><span class="line">	std::cout &lt;&lt; buffer &lt;&lt; std::endl;</span><br><span class="line">	std::cout &lt;&lt; n &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>start tcpclient to receive data from tcpserver.</p>
+<h4 id="telnet-as-tcpclient"><a href="#telnet-as-tcpclient" class="headerlink" title="telnet as tcpclient"></a>telnet as tcpclient</h4><p>install <code>telnet</code> on windows by contron panel.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">telnet localhost 9911</span><br></pre></td></tr></table></figure>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://pocoproject.org/docs/99150-WindowsPlatformNotes.html">poco windows</a></li>
+<li><a target="_blank" rel="noopener" href="https://pocoproject.org/docs/00100-GuidedTour.html">poco guide</a></li>
+<li><a target="_blank" rel="noopener" href="https://pocoproject.org/slides/200-Network.pdf">poco newwork pdf</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/pocoproject/poco/tree/develop/Net/samples">poco net samples</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180125: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/poco/" rel="tag"># poco</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/mysql-user-guide-on-ubuntu-16-04/" rel="prev" title="mysql user guide on ubuntu 16.04 and windows 10">
+      <i class="fa fa-chevron-left"></i> mysql user guide on ubuntu 16.04 and windows 10
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/serialize-and-deserialize-a-class-in-cpp/" rel="next" title="serialize and deserialize a class in cpp with boost">
+      serialize and deserialize a class in cpp with boost <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Series"><span class="nav-number">1.</span> <span class="nav-text">Series</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">2.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#download"><span class="nav-number">2.1.</span> <span class="nav-text">download</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#build"><span class="nav-number">2.2.</span> <span class="nav-text">build</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#build-options"><span class="nav-number">2.2.1.</span> <span class="nav-text">build options</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#build-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">build</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Poco-Example"><span class="nav-number">3.</span> <span class="nav-text">Poco Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">3.1.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#event"><span class="nav-number">3.2.</span> <span class="nav-text">event</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#event-demo-cpp"><span class="nav-number">3.2.1.</span> <span class="nav-text">event_demo.cpp</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#active-method"><span class="nav-number">3.3.</span> <span class="nav-text">active method</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#http-server"><span class="nav-number">3.4.</span> <span class="nav-text">http server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tcp-server-client"><span class="nav-number">3.5.</span> <span class="nav-text">tcp server&#x2F;client</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#tcpserver"><span class="nav-number">3.5.1.</span> <span class="nav-text">tcpserver</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tcpclient"><span class="nav-number">3.5.2.</span> <span class="nav-text">tcpclient</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#telnet-as-tcpclient"><span class="nav-number">3.5.3.</span> <span class="nav-text">telnet as tcpclient</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

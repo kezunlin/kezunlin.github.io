@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Guidehow to serialize stringsize + data  The easiest serialization method for strings or other blobs with variable size is to serialize first the size as you serialize integers, then just copy the con">
+<meta property="og:type" content="article">
+<meta property="og:title" content="serialize and deserialize a class in cpp with boost">
+<meta property="og:url" content="https://kezunlin.me/blog/serialize-and-deserialize-a-class-in-cpp/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Guidehow to serialize stringsize + data  The easiest serialization method for strings or other blobs with variable size is to serialize first the size as you serialize integers, then just copy the con">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-01-27T19:28:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="boost">
+<meta property="article:tag" content="poco">
+<meta property="article:tag" content="serialize">
+<meta property="article:tag" content="deserialize">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/serialize-and-deserialize-a-class-in-cpp/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>serialize and deserialize a class in cpp with boost | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/serialize-and-deserialize-a-class-in-cpp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          serialize and deserialize a class in cpp with boost
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-01-28 03:28:00" itemprop="dateCreated datePublished" datetime="2018-01-28T03:28:00+08:00">2018-01-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="how-to-serialize-string"><a href="#how-to-serialize-string" class="headerlink" title="how to serialize string"></a>how to serialize string</h3><p>size + data</p>
+<blockquote>
+<p>The easiest serialization method for strings or other blobs with variable size is to serialize first the size as you serialize integers, then just copy the content to the output stream.</p>
+</blockquote>
+<blockquote>
+<p>When reading you first read the size, then allocate the string and then fill it by reading the correct number of bytes from the stream.</p>
+</blockquote>
+<h3 id="with-ostream-istream"><a href="#with-ostream-istream" class="headerlink" title="with ostream&#x2F;istream"></a>with ostream&#x2F;istream</h3><p>native way with ostream&#x2F;istream for example class <code>MyClass</code> with <code>height,width,name</code> fields.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="type">int</span> height;</span><br><span class="line">   <span class="type">int</span> width;</span><br><span class="line">   std::string name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">std::ostream&amp; <span class="title">MyClass::serialize</span><span class="params">(std::ostream &amp;out)</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">    out &lt;&lt; height;</span><br><span class="line">    out &lt;&lt; <span class="string">&#x27;,&#x27;</span> <span class="comment">//number seperator</span></span><br><span class="line">    out &lt;&lt; width;</span><br><span class="line">    out &lt;&lt; <span class="string">&#x27;,&#x27;</span> <span class="comment">//number seperator</span></span><br><span class="line">    out &lt;&lt; name.<span class="built_in">size</span>(); <span class="comment">//serialize size of string</span></span><br><span class="line">    out &lt;&lt; <span class="string">&#x27;,&#x27;</span> <span class="comment">//number seperator</span></span><br><span class="line">    out &lt;&lt; name; <span class="comment">//serialize characters of string</span></span><br><span class="line">    <span class="keyword">return</span> out;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">std::istream&amp; <span class="title">MyClass::deserialize</span><span class="params">(std::istream &amp;in)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (in) &#123;</span><br><span class="line">        <span class="type">int</span> len=<span class="number">0</span>;</span><br><span class="line">        <span class="type">char</span> comma;</span><br><span class="line">        in &gt;&gt; height;</span><br><span class="line">        in &gt;&gt; comma; <span class="comment">//read in the seperator</span></span><br><span class="line">        in &gt;&gt; width;</span><br><span class="line">        in &gt;&gt; comma; <span class="comment">//read in the seperator</span></span><br><span class="line">        in &gt;&gt; len;  <span class="comment">//deserialize size of string</span></span><br><span class="line">        in &gt;&gt; comma; <span class="comment">//read in the seperator</span></span><br><span class="line">        <span class="keyword">if</span> (in &amp;&amp; len) &#123;</span><br><span class="line">            <span class="function">std::vector&lt;<span class="type">char</span>&gt; <span class="title">tmp</span><span class="params">(len)</span></span>;</span><br><span class="line">            in.<span class="built_in">read</span>(tmp.<span class="built_in">data</span>() , len); <span class="comment">//deserialize characters of string</span></span><br><span class="line">            name.<span class="built_in">assign</span>(tmp.<span class="built_in">data</span>(), len);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> in;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>overload for <code>operator&lt;&lt;</code> and <code>operator&gt;&gt;</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">std::ostream&amp; <span class="keyword">operator</span>&lt;&lt;(std::ostream&amp; out, <span class="type">const</span> MyClass &amp;obj)</span><br><span class="line">&#123;</span><br><span class="line">    obj.<span class="built_in">serialize</span>(out); </span><br><span class="line">    <span class="keyword">return</span> out;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">std::istream&amp; <span class="keyword">operator</span>&gt;&gt;(std::istream&amp; in, MyClass &amp;obj)</span><br><span class="line">&#123;</span><br><span class="line">    obj.<span class="built_in">deserialize</span>(in); </span><br><span class="line">    <span class="keyword">return</span> in;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+<h3 id="with-boost-serialization"><a href="#with-boost-serialization" class="headerlink" title="with boost serialization"></a>with boost serialization</h3><p>archive file format</p>
+<ul>
+<li>text: text_iarchive,text_oarchive <code>field</code></li>
+<li>xml: xml_iarchive,xml_oarchive, with <code>BOOST_SERIALIZATION_NVP(field)</code></li>
+<li>binary: binary_iarchive,binary_oarchive with <code>stringstream</code> or <code>fstream</code>.</li>
+</ul>
+<h4 id="text-archive"><a href="#text-archive" class="headerlink" title="text archive"></a>text archive</h4><p>change <code>BOOST_SERIALIZATION_NVP(field)</code> to <code>field</code></p>
+<h4 id="xml-archive"><a href="#xml-archive" class="headerlink" title="xml archive"></a>xml archive</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;boost/archive/text_iarchive.hpp&gt;</span> </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;boost/archive/text_oarchive.hpp&gt;</span> </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;boost/archive/xml_iarchive.hpp&gt;</span> </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;boost/archive/xml_oarchive.hpp&gt;</span> </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;boost/archive/binary_iarchive.hpp&gt;</span> </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;boost/archive/binary_oarchive.hpp&gt;</span> </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span> </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fstream&gt;</span> </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sstream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Camera</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="type">int</span> id;</span><br><span class="line">	std::string name;</span><br><span class="line">	<span class="type">double</span> pos;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> boost &#123;</span><br><span class="line">	<span class="keyword">namespace</span> serialization &#123;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">template</span>&lt;<span class="keyword">class</span> Archive&gt;</span></span><br><span class="line"><span class="function">		<span class="type">void</span> <span class="title">serialize</span><span class="params">(Archive&amp; archive, Camera&amp; cam, <span class="type">const</span> <span class="type">unsigned</span> <span class="type">int</span> version)</span></span></span><br><span class="line"><span class="function">		</span>&#123;</span><br><span class="line">			<span class="function">archive &amp; <span class="title">BOOST_SERIALIZATION_NVP</span><span class="params">(cam.id)</span></span>;</span><br><span class="line">			<span class="function">archive &amp; <span class="title">BOOST_SERIALIZATION_NVP</span><span class="params">(cam.name)</span></span>;</span><br><span class="line">			<span class="function">archive &amp; <span class="title">BOOST_SERIALIZATION_NVP</span><span class="params">(cam.pos)</span></span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125; <span class="comment">// namespace serialization</span></span><br><span class="line">&#125; <span class="comment">// namespace boost</span></span><br><span class="line"></span><br><span class="line">std::ostream&amp; <span class="keyword">operator</span>&lt;&lt;(std::ostream&amp; cout, <span class="type">const</span> Camera&amp; cam)</span><br><span class="line">&#123;</span><br><span class="line">	cout &lt;&lt; cam.id &lt;&lt; std::endl</span><br><span class="line">		&lt;&lt; cam.name &lt;&lt; std::endl</span><br><span class="line">		&lt;&lt; cam.pos &lt;&lt; std::endl;</span><br><span class="line">	<span class="keyword">return</span> cout;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">save</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">std::ofstream <span class="title">file</span><span class="params">(<span class="string">&quot;archive.xml&quot;</span>)</span></span>;</span><br><span class="line">	boost::<span class="function">archive::xml_oarchive <span class="title">oa</span><span class="params">(file)</span></span>;</span><br><span class="line">	</span><br><span class="line">	Camera cam;</span><br><span class="line">	cam.id = <span class="number">100</span>;</span><br><span class="line">	cam.name = <span class="string">&quot;new camera&quot;</span>;</span><br><span class="line">	cam.pos = <span class="number">99.88</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function">oa &amp; <span class="title">BOOST_SERIALIZATION_NVP</span><span class="params">(cam)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">load</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">std::ifstream <span class="title">file</span><span class="params">(<span class="string">&quot;archive.xml&quot;</span>)</span></span>;</span><br><span class="line">	boost::<span class="function">archive::xml_iarchive <span class="title">ia</span><span class="params">(file)</span></span>;</span><br><span class="line">	Camera cam;</span><br><span class="line">	<span class="function">ia &amp; <span class="title">BOOST_SERIALIZATION_NVP</span><span class="params">(cam)</span></span>;</span><br><span class="line">	std::cout &lt;&lt; cam &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test_camera</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">save</span>();</span><br><span class="line">	<span class="built_in">load</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">test_camera</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="binary-archive"><a href="#binary-archive" class="headerlink" title="binary archive"></a>binary archive</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">save_load_with_binary_archive</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// binary archive with stringstream</span></span><br><span class="line">	std::ostringstream oss;</span><br><span class="line">	boost::<span class="function">archive::binary_oarchive <span class="title">oa</span><span class="params">(oss)</span></span>;</span><br><span class="line"></span><br><span class="line">	Camera cam;</span><br><span class="line">	cam.id = <span class="number">100</span>;</span><br><span class="line">	cam.name = <span class="string">&quot;new camera&quot;</span>;</span><br><span class="line">	cam.pos = <span class="number">99.88</span>;</span><br><span class="line"></span><br><span class="line">	oa &amp; (cam);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// get binary content</span></span><br><span class="line">	std::string str_data = oss.<span class="built_in">str</span>();</span><br><span class="line">	<span class="function">std::istringstream <span class="title">iss</span><span class="params">(str_data)</span></span>;</span><br><span class="line">	boost::<span class="function">archive::binary_iarchive <span class="title">ia</span><span class="params">(iss)</span></span>;</span><br><span class="line">	Camera new_cam;</span><br><span class="line">	ia &amp; (new_cam);</span><br><span class="line">	std::cout &lt;&lt; new_cam &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<h4 id="binary-archive-with-poco-SocketStream"><a href="#binary-archive-with-poco-SocketStream" class="headerlink" title="binary archive with poco SocketStream"></a>binary archive with poco SocketStream</h4><p>client.cpp</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test_client</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">SocketAddress <span class="title">address</span><span class="params">(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">9911</span>)</span></span>;</span><br><span class="line">	<span class="function">StreamSocket <span class="title">socket</span><span class="params">(address)</span></span>;</span><br><span class="line">	<span class="function">SocketStream <span class="title">stream</span><span class="params">(socket)</span></span>;</span><br><span class="line">	<span class="comment">//Poco::StreamCopier::copyStream(stream, std::cout);</span></span><br><span class="line"></span><br><span class="line">	boost::<span class="function">archive::binary_oarchive <span class="title">oa</span><span class="params">(stream)</span></span>;</span><br><span class="line">	Camera cam;</span><br><span class="line">	cam.id = <span class="number">100</span>;</span><br><span class="line">	cam.name = <span class="string">&quot;new camera&quot;</span>;</span><br><span class="line">	cam.pos = <span class="number">99.88</span>;</span><br><span class="line"></span><br><span class="line">	oa &amp; (cam);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>server.cpp</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">run</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		Application&amp; app = Application::<span class="built_in">instance</span>();</span><br><span class="line">		app.<span class="built_in">logger</span>().<span class="built_in">information</span>(<span class="string">&quot;Request from &quot;</span> + <span class="keyword">this</span>-&gt;<span class="built_in">socket</span>().<span class="built_in">peerAddress</span>().<span class="built_in">toString</span>());</span><br><span class="line">		<span class="keyword">try</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="function">SocketStream <span class="title">stream</span><span class="params">(<span class="keyword">this</span>-&gt;socket())</span></span>;</span><br><span class="line">			<span class="comment">//Poco::StreamCopier::copyStream(stream, std::cout);</span></span><br><span class="line"></span><br><span class="line">			boost::<span class="function">archive::binary_iarchive <span class="title">ia</span><span class="params">(stream)</span></span>;</span><br><span class="line">			Camera new_cam;</span><br><span class="line">			ia &amp; (new_cam);</span><br><span class="line">			std::cout &lt;&lt; new_cam &lt;&lt; std::endl;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">catch</span> (Poco::Exception&amp; exc)</span><br><span class="line">		&#123;</span><br><span class="line">			app.<span class="built_in">logger</span>().<span class="built_in">log</span>(exc);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="notes-on-std-string"><a href="#notes-on-std-string" class="headerlink" title="notes on std::string"></a>notes on std::string</h4><p>Even know you have seen that they do the same, or that <code>.data()</code> calls <code>.c_str()</code>, it is not correct to assume that this will be the case for other compilers. It is also possible that your compiler will change with a future release.</p>
+<p>2 reasons to use <code>std::string</code>:</p>
+<p><code>std::string</code> can be used for both <code>text</code> and <code>arbitrary binary data</code>.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Example 1</span></span><br><span class="line"><span class="comment">//Plain text:</span></span><br><span class="line">std::string s1;</span><br><span class="line">s1 = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">s<span class="number">1.</span><span class="built_in">c_str</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">//Example 2</span></span><br><span class="line"><span class="comment">//Arbitrary binary data:</span></span><br><span class="line">std::string s2;</span><br><span class="line">s<span class="number">2.</span><span class="built_in">append</span>(<span class="string">&quot;a\0b\0b\0&quot;</span>, <span class="number">6</span>);</span><br><span class="line">s<span class="number">2.</span><span class="built_in">data</span>();</span><br></pre></td></tr></table></figure>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+<h3 id="boost-archive-style"><a href="#boost-archive-style" class="headerlink" title="boost archive style"></a>boost archive style</h3><h4 id="intrusive"><a href="#intrusive" class="headerlink" title="intrusive"></a>intrusive</h4><ul>
+<li><code>private template&lt;class Archive&gt;   void serialize(Archive&amp; archive, const unsigned int version)</code></li>
+<li><code>friend class boost::serialization::access;</code></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Camera</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="type">int</span> id;</span><br><span class="line">	std::string name;</span><br><span class="line">	<span class="type">double</span> pos;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">friend</span> <span class="keyword">class</span> <span class="title class_">boost</span>::serialization::access;</span><br><span class="line">	<span class="function"><span class="keyword">template</span>&lt;<span class="keyword">class</span> Archive&gt;</span></span><br><span class="line"><span class="function">	<span class="type">void</span> <span class="title">serialize</span><span class="params">(Archive&amp; archive, <span class="type">const</span> <span class="type">unsigned</span> <span class="type">int</span> version)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="function">archive &amp; <span class="title">BOOST_SERIALIZATION_NVP</span><span class="params">(id)</span></span>;</span><br><span class="line">		<span class="function">archive &amp; <span class="title">BOOST_SERIALIZATION_NVP</span><span class="params">(name)</span></span>;</span><br><span class="line">		<span class="function">archive &amp; <span class="title">BOOST_SERIALIZATION_NVP</span><span class="params">(pos)</span></span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="non-intrusive"><a href="#non-intrusive" class="headerlink" title="non-intrusive"></a>non-intrusive</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Camera</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="type">int</span> id;</span><br><span class="line">	std::string name;</span><br><span class="line">	<span class="type">double</span> pos;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> boost &#123;</span><br><span class="line">	<span class="keyword">namespace</span> serialization &#123;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">template</span>&lt;<span class="keyword">class</span> Archive&gt;</span></span><br><span class="line"><span class="function">		<span class="type">void</span> <span class="title">serialize</span><span class="params">(Archive&amp; archive, Camera&amp; cam, <span class="type">const</span> <span class="type">unsigned</span> <span class="type">int</span> version)</span></span></span><br><span class="line"><span class="function">		</span>&#123;</span><br><span class="line">			<span class="function">archive &amp; <span class="title">BOOST_SERIALIZATION_NVP</span><span class="params">(cam.id)</span></span>;</span><br><span class="line">			<span class="function">archive &amp; <span class="title">BOOST_SERIALIZATION_NVP</span><span class="params">(cam.name)</span></span>;</span><br><span class="line">			<span class="function">archive &amp; <span class="title">BOOST_SERIALIZATION_NVP</span><span class="params">(cam.pos)</span></span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125; <span class="comment">// namespace serialization</span></span><br><span class="line">&#125; <span class="comment">// namespace boost</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="boost-archive-type"><a href="#boost-archive-type" class="headerlink" title="boost archive type"></a>boost archive type</h3><h4 id="shared-ptr"><a href="#shared-ptr" class="headerlink" title="shared_ptr"></a>shared_ptr</h4><p><code>boost::shared_ptr&lt;T&gt;</code> instead of <code>std::shared_prt&lt;T&gt;</code><br>and </p>
+<pre><code>#include &lt;boost/serialization/shared_ptr.hpp&gt;
+</code></pre>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/7046244/serializing-a-class-which-contains-a-stdstring">serializing-a-class-which-contains-a-stdstring</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/234724/is-it-possible-to-serialize-and-deserialize-a-class-in-c">is-it-possible-to-serialize-and-deserialize-a-class-in-c</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/234724/is-it-possible-to-serialize-and-deserialize-a-class-in-c">boost serialization</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.boost.org/doc/libs/1_36_0/libs/serialization/example/demo.cpp">boost serialization demo</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.ibm.com/developerworks/cn/aix/library/au-boostserialization/">ibm boostserialization</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/6815039/fast-data-image-transfer-server-client-using-boost-asio">fast-data-image-transfer-server-client-using-boost-asio</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180128: created.</li>
+<li>20180129: add intrusive,non-intrusive part.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/boost/" rel="tag"># boost</a>
+              <a href="/tags/poco/" rel="tag"># poco</a>
+              <a href="/tags/serialize/" rel="tag"># serialize</a>
+              <a href="/tags/deserialize/" rel="tag"># deserialize</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/compile-and-install-poco-cpp-library-on-windows/" rel="prev" title="how to compile and install poco cpp library on windows">
+      <i class="fa fa-chevron-left"></i> how to compile and install poco cpp library on windows
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/compile-and-use-boost-on-ubuntu/" rel="next" title="compile boost 1.66.0 from source on ubuntu 16.04">
+      compile boost 1.66.0 from source on ubuntu 16.04 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#how-to-serialize-string"><span class="nav-number">1.1.</span> <span class="nav-text">how to serialize string</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#with-ostream-istream"><span class="nav-number">1.2.</span> <span class="nav-text">with ostream&#x2F;istream</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#with-boost-serialization"><span class="nav-number">1.3.</span> <span class="nav-text">with boost serialization</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#text-archive"><span class="nav-number">1.3.1.</span> <span class="nav-text">text archive</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#xml-archive"><span class="nav-number">1.3.2.</span> <span class="nav-text">xml archive</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#binary-archive"><span class="nav-number">1.3.3.</span> <span class="nav-text">binary archive</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#binary-archive-with-poco-SocketStream"><span class="nav-number">1.3.4.</span> <span class="nav-text">binary archive with poco SocketStream</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#notes-on-std-string"><span class="nav-number">1.3.5.</span> <span class="nav-text">notes on std::string</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#boost-archive-style"><span class="nav-number">1.4.</span> <span class="nav-text">boost archive style</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#intrusive"><span class="nav-number">1.4.1.</span> <span class="nav-text">intrusive</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#non-intrusive"><span class="nav-number">1.4.2.</span> <span class="nav-text">non-intrusive</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#boost-archive-type"><span class="nav-number">1.5.</span> <span class="nav-text">boost archive type</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#shared-ptr"><span class="nav-number">1.5.1.</span> <span class="nav-text">shared_ptr</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

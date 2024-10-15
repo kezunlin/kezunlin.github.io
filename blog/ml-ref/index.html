@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Linear Algebradeterminantbasic   matrix determinant minor&#x2F;cofactor&#x2F;adjugate&#x2F;inverse matrix   determinant properties  determinant properties  online calculator   determinant inverse  inv">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pratical machine learning with python">
+<meta property="og:url" content="https://kezunlin.me/blog/ml-ref/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Linear Algebradeterminantbasic   matrix determinant minor&#x2F;cofactor&#x2F;adjugate&#x2F;inverse matrix   determinant properties  determinant properties  online calculator   determinant inverse  inv">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D343/sign=03ae18e90133874498c52978620ed937/30adcbef76094b3659255d54aecc7cd98c109dd0.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190522085451958-700851246.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190522085910140-397214367.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190522094931003-1160367822.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190522095110460-710218536.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190619144201298-517495811.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190619144446758-1310784151.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190619143945820-1738438241.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190619144127155-2135913752.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190522101222659-268099901.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190619152011901-168373230.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190618144928732-1997507318.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190618151318062-715784222.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190618151018159-318786418.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190618150355651-1546386024.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190618150814474-536646125.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190618150657897-1643602084.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190618151558587-282770481.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190619175451921-1801584977.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190618152757010-799129444.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190618152840294-1313788780.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190618154249813-1152275745.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190618154036170-139572525.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190618154158157-1063351244.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190618152717377-1272500102.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190618153341598-798705751.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190618154805753-557196140.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190618154934289-438670456.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190618155106519-791597666.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190618155404644-386109044.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190613100645927-2086416697.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190613102402855-1112676399.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190613102853720-421135885.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190613094519733-545867820.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190617144321205-573073220.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190617145208765-175981783.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190617113523952-599571664.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190617113542212-995572923.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190617145954684-427188783.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190617163953017-375911658.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190617164254843-277788876.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190617165054902-66957836.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190617165115901-1683267423.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190619170531866-2007371735.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190619172323472-1369002181.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190619172620343-1105158442.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190617172129437-38352695.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190617172758390-616098962.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190613163856662-2107028438.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190613163654197-1290389410.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190620094807673-860707178.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190620094700378-2134283575.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190620094713232-826398055.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190620095026602-495994008.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190619163426323-438972719.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190618093024515-262889608.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190618141557519-155852148.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190618165330230-815144975.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190618170045470-955987317.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190618170418412-1948436415.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190620144813357-729179583.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190620144830190-1685149186.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190620144849854-1119859739.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190620153656632-1809021630.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190620153716968-1600019675.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190621164523138-274852883.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190621171312867-1233129563.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190621171410960-353658517.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190621171441978-1844678361.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190621171504882-1622081726.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190621172513678-1126519018.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190621172850470-1417181261.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190621173532633-594452091.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190621173607256-348222903.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190621173631098-1609541895.png">
+<meta property="article:published_time" content="2019-05-14T09:56:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="notes">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D343/sign=03ae18e90133874498c52978620ed937/30adcbef76094b3659255d54aecc7cd98c109dd0.jpg">
+
+<link rel="canonical" href="https://kezunlin.me/blog/ml-ref/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>pratical machine learning with python | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/ml-ref/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          pratical machine learning with python
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-05-14 17:56:00" itemprop="dateCreated datePublished" datetime="2019-05-14T17:56:00+08:00">2019-05-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Linear-Algebra"><a href="#Linear-Algebra" class="headerlink" title="Linear Algebra"></a>Linear Algebra</h2><h3 id="determinant"><a href="#determinant" class="headerlink" title="determinant"></a>determinant</h3><p>basic </p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/51ec2d87b5f3">matrix determinant</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/f84157116683">minor&#x2F;cofactor&#x2F;adjugate&#x2F;inverse matrix</a></li>
+</ul>
+<p><img src="https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D343/sign=03ae18e90133874498c52978620ed937/30adcbef76094b3659255d54aecc7cd98c109dd0.jpg" alt="determinant formula"></p>
+<p>determinant properties</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/seniusen/p/10023231.html">determinant properties</a></li>
+</ul>
+<p>online calculator </p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://ncalculators.com/matrix/matrix-determinant-calculator.htm">determinant</a></li>
+<li><a target="_blank" rel="noopener" href="https://ncalculators.com/matrix/2x2-inverse-matrix-calculator.htm">inverse</a></li>
+</ul>
+<h3 id="inverse-adjoint-adjugate-matrix"><a href="#inverse-adjoint-adjugate-matrix" class="headerlink" title="inverse&#x2F;adjoint(adjugate) matrix"></a>inverse&#x2F;adjoint(adjugate) matrix</h3><p>Only non-singular matrices have inverses. (det(A) !&#x3D; 0)</p>
+<ul>
+<li>minor matrix</li>
+<li>cofactor matrix</li>
+<li>adjoint&#x2F;adjugate matrix</li>
+<li>inverse matrix</li>
+<li>conjugate matrix</li>
+</ul>
+<h3 id="eigenvalue-eigenvector"><a href="#eigenvalue-eigenvector" class="headerlink" title="eigenvalue&#x2F;eigenvector"></a>eigenvalue&#x2F;eigenvector</h3><p>An*n<br>graph demo<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/alvinlyb/article/details/78892486">eigenvector</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.wikihow.com/Find-Eigenvalues-and-Eigenvectors">eigenvector steps</a></p>
+<h3 id="svd"><a href="#svd" class="headerlink" title="svd"></a>svd</h3><p>singular value decomposition<br>Am*n (m!&#x3D;n)<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6251584.html">svd</a></p>
+<h2 id="Probability-Theory"><a href="#Probability-Theory" class="headerlink" title="Probability Theory"></a>Probability Theory</h2><p>random variable: discrete&#x2F;continuous</p>
+<ul>
+<li>probability mass function: pmf (possion, binomial distribution ) for <strong>discrete random variable</strong></li>
+<li>probability density function: pdf (normal,uniform) for <strong>contiunous random variable</strong></li>
+<li>cumulative distribution function: cdf  for <strong>discrete+contiunous random variable</strong></li>
+</ul>
+<p>see <a target="_blank" rel="noopener" href="http://blog.dyingbleed.com/pmf-cdf-pdf/">pmf-cdf-pdf</a><br><a target="_blank" rel="noopener" href="https://stats.stackexchange.com/questions/242465/distribution-function-terminology-pdf-cdf-pmf-etc">distribution-function-terminology-pdf-cdf-pmf-etc</a></p>
+<blockquote>
+<p>binomial: n times Bernoulli trial, P(x&#x3D;k)&#x3D;C(n,k)* p^k * (1-p)^(n-k)</p>
+</blockquote>
+<ul>
+<li>marginal probability</li>
+<li>joint probability</li>
+<li>conditional probability</li>
+<li>bayes theorem</li>
+</ul>
+<p>see <a target="_blank" rel="noopener" href="https://sites.nicholas.duke.edu/statsreview/jmc/">here</a></p>
+<blockquote>
+<p>Marginal probability: the probability of an event occurring (p(A)), it may be thought of as an unconditional probability.  It is not conditioned on another event.  Example:  the probability that a card drawn is red (p(red) &#x3D; 0.5).  Another example:  the probability that a card drawn is a 4  (p(four)&#x3D;1&#x2F;13).</p>
+</blockquote>
+<blockquote>
+<p>Joint probability:  p(A and B).  The probability of event A and event B occurring.  It is the probability of the intersection of two or more events.  The probability of the intersection of A and B may be written p(A ∩ B). Example:  the probability that a card is a four and red &#x3D;p(four and red) &#x3D; 2&#x2F;52&#x3D;1&#x2F;26.  (There are two red fours in a deck of 52, the 4 of hearts and the 4 of diamonds).</p>
+</blockquote>
+<blockquote>
+<p>Conditional probability:  p(A|B) is the probability of event A occurring, given that event B occurs. Example:  given that you drew a red card, what’s the probability that it’s a four (p(four|red))&#x3D;2&#x2F;26&#x3D;1&#x2F;13.  So out of the 26 red cards (given a red card), there are two fours so 2&#x2F;26&#x3D;1&#x2F;13.</p>
+</blockquote>
+<blockquote>
+<p>bayes theorem:  p(cancer)&#x3D;0.01, p(positive test|cancer)&#x3D;0.9, p(positive test|no cancer)&#x3D;0.08<br>p(cancer|positive test)?</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="http://tinyheero.github.io/2016/03/20/basic-prob.html">basic-prob</a></p>
+<h2 id="Statistics"><a href="#Statistics" class="headerlink" title="Statistics"></a>Statistics</h2><p>2 types of statistics</p>
+<ul>
+<li>descriptive statistics 描述性统计值</li>
+<li>inferential statistics　推理性统计值</li>
+</ul>
+<h3 id="descriptive-statistics"><a href="#descriptive-statistics" class="headerlink" title="descriptive statistics"></a>descriptive statistics</h3><h4 id="basic"><a href="#basic" class="headerlink" title="basic"></a>basic</h4><ul>
+<li>n, sum, min,max, range &#x3D;max-min,</li>
+<li>mean,median,mode</li>
+<li>variance,standard deviation </li>
+<li>skewness,kurtosis<blockquote>
+<p>from <a target="_blank" rel="noopener" href="https://www.purplemath.com/modules/meanmode.htm">mean,median,mode</a></p>
+</blockquote>
+</li>
+</ul>
+<p>mean&#x2F;median&#x2F;mode</p>
+<ul>
+<li>mean: regular meaning of “average”</li>
+<li>median: middle value</li>
+<li>mode: most often</li>
+</ul>
+<p>2 types of data set: <a target="_blank" rel="noopener" href="https://stattrek.com/sampling/populations-and-samples.aspx">here</a></p>
+<ul>
+<li>population: u,sigma^2, sigma —&gt; parameter</li>
+<li>sample:  x, s^2, s —&gt;  statistic</li>
+</ul>
+<blockquote>
+<p>population是总体,总体的数据是不变的,u就代表总体真实的均值；<br>sample是样本,我们总体的数据很难得到,必须借助样本猜测总体的情况,但是每次采样的时候会有不同,因此x拔表示一次采样的均值；<br>不同采样的均值x往往不同,但是总体均值u一定是不变的。</p>
+</blockquote>
+<p>population<br><img src="https://kezunlin.me/images/posts/635233-20190522085451958-700851246.png" alt="population"></p>
+<p>sample<br><img src="https://kezunlin.me/images/posts/635233-20190522085910140-397214367.png" alt="sample"></p>
+<blockquote>
+<p>see <a target="_blank" rel="noopener" href="https://cn.bing.com/search?q=mean%20median%20&qs=n&form=QBRE&sp=-1&pq=mean%20median%20&sc=8-12&sk=&cvid=4161BAB55A18491594A005523AEDF298">example</a></p>
+</blockquote>
+<h4 id="skewness-vs-kurtosis"><a href="#skewness-vs-kurtosis" class="headerlink" title="skewness vs kurtosis"></a>skewness vs kurtosis</h4><ul>
+<li>skewness: 偏度  the degree of symmetry</li>
+<li>kurtosis: 峰度　the degree of peakedness&#x2F;flatness</li>
+</ul>
+<p><img src="https://kezunlin.me/images/posts/635233-20190522094931003-1160367822.jpg" alt="image"></p>
+<p><img src="https://kezunlin.me/images/posts/635233-20190522095110460-710218536.jpg" alt="image"></p>
+<p>formula see <a target="_blank" rel="noopener" href="https://itl.nist.gov/div898/handbook/eda/section3/eda35b.htm">skewness kurtosis formula</a></p>
+<h3 id="inferential-statistics"><a href="#inferential-statistics" class="headerlink" title="inferential statistics"></a>inferential statistics</h3><p><img src="https://kezunlin.me/images/posts/635233-20190619144201298-517495811.jpg" alt="inferential statistics"><br><img src="https://kezunlin.me/images/posts/635233-20190619144446758-1310784151.jpg" alt="inferential statistics"><br>Each hypothesis: null hypothesis +  an alternative hypothesis.  </p>
+<ul>
+<li>H0: u1&#x3D;u2&#x3D;u3&#x3D;…&#x3D;un.  it indicates that the group means for the various groups are NOT very different from each other based on statistical significance levels.</li>
+<li>Ha: there exists at least two group means that are statistically significantly different from each other.</li>
+</ul>
+<p>significance tests　显著性检验</p>
+<ul>
+<li>H0: there is NO real difference</li>
+<li>Ha: there is a difference<blockquote>
+<p>Reject H0 at 5% significant level if p-value&lt;5%, statistical significant<br>Reject H0 at 1% significant level if p-value&lt;1%, highly significant<br>one-tailed tests vs two-tailed tests</p>
+</blockquote>
+</li>
+</ul>
+<p>one-way ANOVA test: </p>
+<ul>
+<li>if p-value&lt;&#x3D;5%, the result is statistically significant different, we reject the null hypothesis in favor of the alternative hypothesis. (Ha was correct)</li>
+<li>Otherwise, if the results is not statistically significant, we conclude that our null hypothesis was correct. (H0 was correct)</li>
+</ul>
+<p>demo<br><img src="https://kezunlin.me/images/posts/635233-20190619143945820-1738438241.png" alt="anova test"></p>
+<blockquote>
+<p>F-stat&gt;4.737 or p-value&lt;0.05, then reject H0</p>
+</blockquote>
+<p><img src="https://kezunlin.me/images/posts/635233-20190619144127155-2135913752.png" alt="boxplot for anova test"></p>
+<p>parametric tests vs nonparametric tests 参数检验　vs 非参数检验</p>
+<h2 id="Data-Mining"><a href="#Data-Mining" class="headerlink" title="Data Mining"></a>Data Mining</h2><ul>
+<li>KDD: knowledge discovery of dataset </li>
+<li>CRISP-DM: cross-industry standard process for data mining 跨行业数据挖掘标准流程</li>
+</ul>
+<p><img src="https://kezunlin.me/images/posts/635233-20190522101222659-268099901.png" alt="CRISP-DM_Process_Diagram.png"></p>
+<h2 id="Machine-Learning-methods"><a href="#Machine-Learning-methods" class="headerlink" title="Machine Learning methods"></a>Machine Learning methods</h2><p>with&#x2F;without labels</p>
+<ul>
+<li>supervised learning: <ul>
+<li>classification</li>
+<li>regression</li>
+</ul>
+</li>
+<li>unsupervised learning<ul>
+<li>clustering</li>
+<li>dimensionality reduction</li>
+<li>anomaly detection</li>
+<li>assiciation rule-mining&#x2F;market basket analysis(购物篮分析)</li>
+</ul>
+</li>
+<li>semi-supervised learning</li>
+<li>reinforcement learning</li>
+</ul>
+<p>online&#x2F;offline</p>
+<ul>
+<li>batch learning&#x2F;offline learning</li>
+<li>online learning</li>
+</ul>
+<p>instance&#x2F;model</p>
+<ul>
+<li>instance based learning</li>
+<li>model based learning</li>
+</ul>
+<h2 id="EDA"><a href="#EDA" class="headerlink" title="EDA"></a>EDA</h2><h3 id="statistics"><a href="#statistics" class="headerlink" title="statistics"></a>statistics</h3><ul>
+<li>descriptive statistics</li>
+<li>inferential statistics</li>
+</ul>
+<h3 id="analysis"><a href="#analysis" class="headerlink" title="analysis"></a>analysis</h3><p>3 types</p>
+<ul>
+<li>univariate analysis: n&#x3D;1</li>
+<li>bivariate analysis: n&#x3D;2</li>
+<li>multivariate analysis: n&gt;&#x3D;3</li>
+</ul>
+<p><img src="https://kezunlin.me/images/posts/635233-20190619152011901-168373230.jpg" alt="3 types of analysis"></p>
+<ul>
+<li>use histogram to visualize data</li>
+<li>correlation matrix&#x2F;heatmap</li>
+</ul>
+<h2 id="Model-Evaluation"><a href="#Model-Evaluation" class="headerlink" title="Model Evaluation"></a>Model Evaluation</h2><h3 id="Classification"><a href="#Classification" class="headerlink" title="Classification"></a>Classification</h3><p>confusion matrix</p>
+<ul>
+<li>accuracy</li>
+<li>precision</li>
+<li>recall</li>
+<li>F1-score: harmonic mean 调和平均值</li>
+</ul>
+<p>value range (0-1), the bigger, the better.</p>
+<p><img src="https://kezunlin.me/images/posts/635233-20190618144928732-1997507318.png" alt="confusion matrix"></p>
+<p>precision vs recall curve<br><img src="https://kezunlin.me/images/posts/635233-20190618151318062-715784222.png" alt="precision vs recall"></p>
+<p>another curve</p>
+<ul>
+<li>roc: receiver operating characteristic 接受者操作特征.  TPR vs FPR curve</li>
+<li>auc: area under curve.  value range (0-1), the bigger, the better.</li>
+</ul>
+<p><img src="https://kezunlin.me/images/posts/635233-20190618151018159-318786418.png" alt="roc basic"><br><img src="https://kezunlin.me/images/posts/635233-20190618150355651-1546386024.png" alt="roc"><br><img src="https://kezunlin.me/images/posts/635233-20190618150814474-536646125.jpg" alt="auc"><br><img src="https://kezunlin.me/images/posts/635233-20190618150657897-1643602084.png" alt="roc demo"></p>
+<p>all in one<br><img src="https://kezunlin.me/images/posts/635233-20190618151558587-282770481.png" alt="roc, precision recall, f1-score"></p>
+<p>multi-class classification for ROC</p>
+<ul>
+<li>micro-averaging: treat as binary </li>
+<li>macro-averaging:  equal weight<br><img src="https://kezunlin.me/images/posts/635233-20190619175451921-1801584977.png" alt="roc for multi-class classification"></li>
+</ul>
+<h3 id="Clustering"><a href="#Clustering" class="headerlink" title="Clustering"></a>Clustering</h3><p>types</p>
+<ul>
+<li>partition&#x2F;centroid based clustering: k-means,k-medoids</li>
+<li>hierachical clustering: AgglomerativeClustering, affinity propagation<ul>
+<li>ward&#x2F;single linkage</li>
+<li>averate linkage</li>
+<li>complete linkage</li>
+</ul>
+</li>
+<li>distribution based clustering: gaussian mixture models</li>
+<li>densitity based clustering: DBSCAN, OPTICS</li>
+</ul>
+<p><img src="https://kezunlin.me/images/posts/635233-20190618152757010-799129444.png" alt="clustering"><br><img src="https://kezunlin.me/images/posts/635233-20190618152840294-1313788780.png" alt="clustering"></p>
+<p><img src="https://kezunlin.me/images/posts/635233-20190618154249813-1152275745.jpg" alt="partition based clustering"><br><img src="https://kezunlin.me/images/posts/635233-20190618154036170-139572525.jpg" alt="hierachical clustering dendrogram"><br><img src="https://kezunlin.me/images/posts/635233-20190618154158157-1063351244.png" alt="linkages"></p>
+<h4 id="external-validation"><a href="#external-validation" class="headerlink" title="external validation"></a>external validation</h4><p>with labels</p>
+<ul>
+<li>homogeneity</li>
+<li>completeness</li>
+<li>v-measure: harmonic mean 调和平均值<br>value range (0-1), the bigger, the better.</li>
+</ul>
+<p><img src="https://kezunlin.me/images/posts/635233-20190618152717377-1272500102.jpg" alt="homogeneity completeness"><br><img src="https://kezunlin.me/images/posts/635233-20190618153341598-798705751.jpg" alt="v-measure"></p>
+<h4 id="internal-validation"><a href="#internal-validation" class="headerlink" title="internal validation"></a>internal validation</h4><p>no labels<br>2 most important traits:</p>
+<ul>
+<li>compact groups</li>
+<li>well seperated groups</li>
+</ul>
+<p>metric</p>
+<ul>
+<li>silhouette coefficient: SC轮廓系数. value range (-1-1), the bigger, the better.</li>
+<li>calinski-harabaz index: chi指数   value range &gt;0 , the bigger, the better.</li>
+</ul>
+<p><img src="https://kezunlin.me/images/posts/635233-20190618154805753-557196140.jpg" alt="sc"><br><img src="https://kezunlin.me/images/posts/635233-20190618154934289-438670456.jpg" alt="sc"><br><img src="https://kezunlin.me/images/posts/635233-20190618155106519-791597666.png" alt="sc vs number of clusters"><br><img src="https://kezunlin.me/images/posts/635233-20190618155404644-386109044.png" alt="sc and chi"></p>
+<h3 id="Regression"><a href="#Regression" class="headerlink" title="Regression"></a>Regression</h3><p>metric:</p>
+<ul>
+<li>mean squared error: MSE</li>
+<li>root mean squared error: RMSE</li>
+<li>coefficient of determination (R^2):判定系数</li>
+<li>coefficient of correlation (r):相关系数  value range (-1,1)</li>
+</ul>
+<p>R2: value range (0,1), the bigger, the better.</p>
+<blockquote>
+<p>for simple linear regression, R^2 &#x3D; r^2</p>
+</blockquote>
+<p>formula:<br><img src="https://kezunlin.me/images/posts/635233-20190613100645927-2086416697.png" alt="r2 formula"></p>
+<p>correlation coefficient<br><img src="https://kezunlin.me/images/posts/635233-20190613102402855-1112676399.png" alt="r demo"></p>
+<p>r2 demo<br><img src="https://kezunlin.me/images/posts/635233-20190613102853720-421135885.jpg" alt="r2"><br><img src="https://kezunlin.me/images/posts/635233-20190613094519733-545867820.jpg" alt="r2 demo"></p>
+<blockquote>
+<p>images from bing search.</p>
+</blockquote>
+<h4 id="regression-analysis"><a href="#regression-analysis" class="headerlink" title="regression analysis"></a>regression analysis</h4><p>types</p>
+<ul>
+<li>simple linear regression</li>
+<li>multiple linear regression</li>
+<li>nonlinear regression</li>
+</ul>
+<p>assumptions</p>
+<ul>
+<li>training dataset(sample) is representative of the population being modeled</li>
+<li>x1,x2,…,xn are linearly independent. no multicollinearity 非多重共线性 </li>
+<li>homoscedasticity of error 同方差性:  residuals being random and no any patterns</li>
+</ul>
+<blockquote>
+<p>multicollinearity 多重共线性:  correlation matrix<br>variance inflation factor (VIF)方差膨胀因子　VIFi &#x3D; 1&#x2F;(1-Ri^2). VIF越大，显示共线性越严重。经验判断方法表明：当0&lt;VIF&lt;10，不存在多重共线性；当10≤VIF&lt;100，存在较强的多重共线性；当VIF≥100，存在严重多重共线性。<br>homo-scedastic(同方差) vs hetero-scedastic (异方差性): residual plot<br>homogeneous vs heterogeneous 同质的vs异质的</p>
+</blockquote>
+<p><img src="https://kezunlin.me/images/posts/635233-20190617144321205-573073220.png" alt="correlation matrix/heatmap"></p>
+<p><img src="https://kezunlin.me/images/posts/635233-20190617145208765-175981783.jpg" alt="VIF"></p>
+<p><img src="https://kezunlin.me/images/posts/635233-20190617113523952-599571664.png" alt="homoscedasticity"><br><img src="https://kezunlin.me/images/posts/635233-20190617113542212-995572923.png" alt="homoscedasticity"></p>
+<p>evaluation analysis</p>
+<ul>
+<li>residual analysis</li>
+<li>normality tests (Q-Q plot）正态分布检验</li>
+<li>R^2</li>
+</ul>
+<p><img src="https://kezunlin.me/images/posts/635233-20190617145954684-427188783.png" alt="QQ-plot"></p>
+<h5 id="linear-regression"><a href="#linear-regression" class="headerlink" title="linear regression"></a>linear regression</h5><blockquote>
+<p>y &#x3D; kx + b, use OLS </p>
+</blockquote>
+<h5 id="decision-tree-based-regression"><a href="#decision-tree-based-regression" class="headerlink" title="decision tree based regression"></a>decision tree based regression</h5><p>linear vs non-linear regression:</p>
+<ul>
+<li>linear regression</li>
+<li>decision tree based regression (non-linear)</li>
+</ul>
+<blockquote>
+<p>decision tree can be used for both classification and regression. CART</p>
+</blockquote>
+<p>node splitting<br>for regression:</p>
+<ul>
+<li>MSE: mean squared error  </li>
+<li>RMSE: root mean squared error  </li>
+<li>MAE: mean absolute error </li>
+<li>MAPE: mean absolute percentage error</li>
+</ul>
+<p><img src="https://kezunlin.me/images/posts/635233-20190617163953017-375911658.jpg" alt="regression"><br><img src="https://kezunlin.me/images/posts/635233-20190617164254843-277788876.jpg" alt="mse and mae"></p>
+<p>for classification</p>
+<ul>
+<li>information gain(entropy): 信息增益(熵) </li>
+<li>gini impurity&#x2F;index: GINI 基尼不纯度</li>
+<li>misclassification error:</li>
+</ul>
+<p><img src="https://kezunlin.me/images/posts/635233-20190617165054902-66957836.png" alt="ig and gini"><br><img src="https://kezunlin.me/images/posts/635233-20190617165115901-1683267423.png" alt="bad vs good split"></p>
+<p>stoppint criteria</p>
+<ul>
+<li>max depth</li>
+<li>min samples to split internal nodes</li>
+<li>max leaf nodes<blockquote>
+<p>use GridSearch to search for optimal hyperparameters</p>
+</blockquote>
+</li>
+</ul>
+<p>decesion tree algorithms</p>
+<ul>
+<li>CART</li>
+<li>ID3</li>
+<li>C4.5</li>
+</ul>
+<h3 id="ensemble-learning"><a href="#ensemble-learning" class="headerlink" title="ensemble learning"></a>ensemble learning</h3><p>3 major families:</p>
+<ul>
+<li>bagging: boostrap aggregating, boostrap sampling(自助采样法) eg. RandomForest</li>
+<li>boosting: eg. Gradient Boosting Machine(GBM), AdaBoost<ul>
+<li>GBM variant: LightGBM, Extreme Gradient Boosting(XGBoost)</li>
+</ul>
+</li>
+<li>stacking</li>
+</ul>
+<p>others</p>
+<ul>
+<li>binning</li>
+<li>blending</li>
+<li>averaging</li>
+<li>voting</li>
+</ul>
+<blockquote>
+<p>see <a target="_blank" rel="noopener" href="https://www.kdnuggets.com/2017/11/difference-bagging-boosting.html">What is the difference between Bagging and Boosting?</a><br>see <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/39920405">集成学习-Boosting,Bagging与Stacking</a></p>
+</blockquote>
+<p>boostrap aggregating&#x2F;bagging<br><img src="https://kezunlin.me/images/posts/635233-20190619170531866-2007371735.png" alt="boostrap aggregating/bagging"></p>
+<p>boosting<br><img src="https://kezunlin.me/images/posts/635233-20190619172323472-1369002181.png" alt="boosting"><br><img src="https://kezunlin.me/images/posts/635233-20190619172620343-1105158442.jpg" alt="boosting"></p>
+<p>model stacking<br><img src="https://kezunlin.me/images/posts/635233-20190617172129437-38352695.png" alt="stacking"><br><img src="https://kezunlin.me/images/posts/635233-20190617172758390-616098962.png" alt="stacking"></p>
+<h2 id="Model-Tuning"><a href="#Model-Tuning" class="headerlink" title="Model Tuning"></a>Model Tuning</h2><h3 id="decision-trees"><a href="#decision-trees" class="headerlink" title="decision trees"></a>decision trees</h3><ul>
+<li>information gain: IG 信息增益</li>
+<li>gini impurity: GI 基尼不纯度</li>
+</ul>
+<h3 id="bias-variance-tradeoff"><a href="#bias-variance-tradeoff" class="headerlink" title="bias-variance tradeoff"></a>bias-variance tradeoff</h3><p>The main causes of error in learning are due to <strong>noise, bias and variance</strong>.</p>
+<p>extreme cases of bias-variance</p>
+<ul>
+<li>underfitting: higt bias, low variance</li>
+<li>overfitting: lower bias, high vairance</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="http://scott.fortmann-roe.com/docs/BiasVariance.html">bias-variance tradeoff</a></p>
+<p><img src="https://kezunlin.me/images/posts/635233-20190613163856662-2107028438.png" alt="bias-variance"></p>
+<p><img src="https://kezunlin.me/images/posts/635233-20190613163654197-1290389410.png" alt="bias-variance model complexity"></p>
+<p>see <a target="_blank" rel="noopener" href="https://www.learnopencv.com/bias-variance-tradeoff-in-machine-learning/">learnopencv</a></p>
+<h3 id="cross-validation"><a href="#cross-validation" class="headerlink" title="cross validation"></a>cross validation</h3><p>train&#x2F;validation&#x2F;test </p>
+<p>cross validation strategies:</p>
+<ul>
+<li>leave one out CV: n-1 samples as train, 1 sample as validate</li>
+<li>k-fold CV: split into k equal subsets. k-1 subsets as train, 1 subset as validate<blockquote>
+<p>5-fold, 10-fold in pratice</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="hyperparameter-tuning-strategies"><a href="#hyperparameter-tuning-strategies" class="headerlink" title="hyperparameter tuning strategies"></a>hyperparameter tuning strategies</h3><ul>
+<li>grid search: manually specifying the grid,  parallelizable</li>
+<li>randomized search: automatic</li>
+</ul>
+<h2 id="Model-Interpertation"><a href="#Model-Interpertation" class="headerlink" title="Model Interpertation"></a>Model Interpertation</h2><p>tools </p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/marcotcr/lime">lime</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/oracle/Skater">skater</a></li>
+</ul>
+<p>global vs local interpertation</p>
+<ul>
+<li>global interpertation: based on the whole dataset (feature_importance, partial_dependence plot)</li>
+<li>local interpertation: based on a single prediction</li>
+</ul>
+<p>global interpertation<br><img src="https://kezunlin.me/images/posts/635233-20190620094807673-860707178.png" alt="feature_importance"></p>
+<p><img src="https://kezunlin.me/images/posts/635233-20190620094700378-2134283575.png" alt="one-way partial_dependence plot"></p>
+<p><img src="https://kezunlin.me/images/posts/635233-20190620094713232-826398055.png" alt="two-way partial_dependence plot"></p>
+<p>local interpertation<br><img src="https://kezunlin.me/images/posts/635233-20190620095026602-495994008.png" alt="local interpertation"></p>
+<p>model decision surface&#x2F; hypersurface<br><img src="https://kezunlin.me/images/posts/635233-20190619163426323-438972719.png" alt="model decision surface"></p>
+<h2 id="Model-Deployment"><a href="#Model-Deployment" class="headerlink" title="Model Deployment"></a>Model Deployment</h2><ul>
+<li>rest api </li>
+<li>micro service</li>
+<li>model deployment as a service, anything as a service(XAAS)</li>
+</ul>
+<h2 id="Real-world-case-studies"><a href="#Real-world-case-studies" class="headerlink" title="Real-world case studies"></a>Real-world case studies</h2><h3 id="customer-segmentation"><a href="#customer-segmentation" class="headerlink" title="customer segmentation"></a>customer segmentation</h3><p>clustering problem</p>
+<p>factors</p>
+<ul>
+<li>geographic　地理因素</li>
+<li>demographic 人口统计因素</li>
+<li>psychographic 心理因素</li>
+<li>behavioural 行为因素</li>
+</ul>
+<p><img src="https://kezunlin.me/images/posts/635233-20190618093024515-262889608.jpg" alt="customer segmentation"></p>
+<p>RFM Model for customer value</p>
+<ul>
+<li>recency</li>
+<li>frequency</li>
+<li>monetary value</li>
+</ul>
+<p><img src="https://kezunlin.me/images/posts/635233-20190618141557519-155852148.jpg" alt="RFM Model"></p>
+<h3 id="association-rule-mining"><a href="#association-rule-mining" class="headerlink" title="association-rule mining"></a>association-rule mining</h3><p>assiciation rule-mining&#x2F;market basket analysis(购物篮分析)</p>
+<p>basics</p>
+<ul>
+<li>association rule: {item1,item2,item3 —&gt; itemK}</li>
+<li>itemset:  {milk,bread} {beer,diaper}</li>
+<li>frequent itemset: {milk,bread}</li>
+</ul>
+<p>metrics</p>
+<ul>
+<li>support &#x3D; frq(X,Y)&#x2F;N</li>
+<li>confidence &#x3D; support(X,Y)&#x2F;support(X) &#x3D; frq(X,Y)&#x2F;frq(X)</li>
+<li>lift &#x3D; support(X,Y)&#x2F;(support(X)*support(Y)) &#x3D; N*frq(X,Y)&#x2F;(frq(X)*frq(Y))</li>
+</ul>
+<p>good rules: large confidence, large support, lift &gt;1</p>
+<blockquote>
+<p>lift(X-&gt;Y) &#x3D; 0　means X and Y not occur at the same time<br>lift(X-&gt;Y) &#x3D; 1　means X and Y are independent of each other.<br><img src="https://kezunlin.me/images/posts/635233-20190618165330230-815144975.jpg" alt="support"><br><img src="https://kezunlin.me/images/posts/635233-20190618170045470-955987317.png" alt="support"><br><img src="https://kezunlin.me/images/posts/635233-20190618170418412-1948436415.jpg" alt="demo">        </p>
+</blockquote>
+<p>algorithms</p>
+<ul>
+<li>apriori algorithm: generate all 2^k itemsets, TOO EXPENSIVE</li>
+<li>FP growth: no need to generate all 2^k itemsets, use special structure FP-tree, divide-and-conquer stragety</li>
+</ul>
+<p>k unique products, then 2^k itemsets.</p>
+<h3 id="recommender-system"><a href="#recommender-system" class="headerlink" title="recommender system"></a>recommender system</h3><p>recommender systems&#x2F; recommendation engines</p>
+<h4 id="big-data-with-pandas"><a href="#big-data-with-pandas" class="headerlink" title="big data with pandas"></a>big data with pandas</h4><p>how to process big data with pandas ?</p>
+<pre><code>import pandas as pd
+for chunk in pd.read_csv(&lt;filepath&gt;, chunksize=&lt;your_chunksize_here&gt;)
+    do_processing()
+    train_algorithm()
+</code></pre>
+<blockquote>
+<p>read by chunk<br>see <a target="_blank" rel="noopener" href="https://datascience.stackexchange.com/questions/27767/opening-a-20gb-file-for-analysis-with-pandas">opening-a-20gb-file-for-analysis-with-pandas</a></p>
+</blockquote>
+<p>other tools</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.dask.org/en/latest/">dask</a></li>
+<li><a target="_blank" rel="noopener" href="https://ml.dask.org/">dask-ml</a></li>
+</ul>
+<p>other refs</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/8a1956a86c0c">dask+numba</a></li>
+<li><a target="_blank" rel="noopener" href="http://blog.itpub.net/31509949/viewspace-2212324/">dask parallize feature engineering</a></li>
+</ul>
+<h4 id="types-of-recommendation-engines"><a href="#types-of-recommendation-engines" class="headerlink" title="types of recommendation engines"></a>types of recommendation engines</h4><p>3 types</p>
+<ul>
+<li>user-based recommendation engines</li>
+<li>content-based recommendation engines</li>
+<li>hybrid&#x2F;collaborative filtering(协同过滤) recommendation engines<blockquote>
+<p>based on similarity</p>
+</blockquote>
+</li>
+</ul>
+<p>different cases</p>
+<ul>
+<li>popularity-based: most liked songs by all users </li>
+<li>similarity-based: similar songs for given user</li>
+<li>matrix factorization based: use svd to get low rand approximation of the utility matrix</li>
+</ul>
+<h4 id="similarity"><a href="#similarity" class="headerlink" title="similarity"></a>similarity</h4><ul>
+<li>Jaccard Index&#x2F;Jaccard similarity coefficient, (0-1)</li>
+<li>cosine similarity</li>
+</ul>
+<blockquote>
+<p>Jaccard Distance &#x3D; 1 - Jaccard Index<br><img src="https://kezunlin.me/images/posts/635233-20190620144813357-729179583.png" alt="Jaccard Index"><br><img src="https://kezunlin.me/images/posts/635233-20190620144830190-1685149186.jpg" alt="Jaccard Index"><br><img src="https://kezunlin.me/images/posts/635233-20190620144849854-1119859739.png" alt="demo"></p>
+</blockquote>
+<h4 id="matrix-factorization"><a href="#matrix-factorization" class="headerlink" title="matrix factorization"></a>matrix factorization</h4><p>矩阵分解<br>use matrix factorization to discover latent features between two different kinds of entities</p>
+<p><img src="https://kezunlin.me/images/posts/635233-20190620153656632-1809021630.png" alt="utility matrix"></p>
+<blockquote>
+<p>sparse matrix</p>
+</blockquote>
+<p><img src="https://kezunlin.me/images/posts/635233-20190620153716968-1600019675.png" alt="matrix factorization"></p>
+<blockquote>
+<p>use SVD: matrix factorization, PCA </p>
+</blockquote>
+<p>implicit feedback 隐式反馈: song play count—&gt; likeness</p>
+<h4 id="recommendation-engine-libraries"><a href="#recommendation-engine-libraries" class="headerlink" title="recommendation engine libraries"></a>recommendation engine libraries</h4><ul>
+<li>scikit-surprise (Simple Python Recommendation System Engine)</li>
+<li>lightfm</li>
+<li>crab</li>
+<li>rec_sys</li>
+</ul>
+<h3 id="time-series-forecasting"><a href="#time-series-forecasting" class="headerlink" title="time series forecasting"></a>time series forecasting</h3><h4 id="basics"><a href="#basics" class="headerlink" title="basics"></a>basics</h4><p>predictive modeling</p>
+<p>time series analysis&#x2F;forecasting:</p>
+<ul>
+<li>traditional approaches<ul>
+<li>Moving Average: MV</li>
+<li>Exponential Smoothing: EWMA</li>
+<li>Holt-Winter EWMA</li>
+<li>Box-jenkins methodologies: AR, MA, ARIMA, S-ARIMA</li>
+</ul>
+</li>
+<li>deep learning approaches: RNN, eg. LSTM <ul>
+<li>regression modeling (x1,x2,..x6,—&gt;x7): many-to-one</li>
+<li>sequence modeling: squence -&gt; sequence</li>
+</ul>
+</li>
+</ul>
+<p>two domains</p>
+<ul>
+<li>frequency domain: spectral and wavelet analysis</li>
+<li>time domain: auto- and cross-correlation analysis</li>
+</ul>
+<p>where to get data ?</p>
+<ul>
+<li>Yahho</li>
+<li>quandl:</li>
+</ul>
+<p>tools to fetch data:</p>
+<ul>
+<li>quandl: register for key first</li>
+<li>pandas-datareader</li>
+</ul>
+<h4 id="time-series-components"><a href="#time-series-components" class="headerlink" title="time series components"></a>time series components</h4><p>3 major components:</p>
+<ul>
+<li>seasonality</li>
+<li>trend</li>
+<li>residual</li>
+</ul>
+<p><img src="https://kezunlin.me/images/posts/635233-20190621164523138-274852883.png" alt="major components"></p>
+<p>smoothing techniques</p>
+<ul>
+<li>Moving Average: MV</li>
+<li>Exponential Smoothing: EWMA</li>
+</ul>
+<h4 id="ARIMA"><a href="#ARIMA" class="headerlink" title="ARIMA"></a>ARIMA</h4><p>AR vs MV</p>
+<ul>
+<li>auto regressive</li>
+<li>moving average<blockquote>
+<p>ARIMA: auto regressive integrated moving average</p>
+</blockquote>
+</li>
+</ul>
+<p>key concepts</p>
+<ul>
+<li>Stationarity(平稳性):  One the key assumptions behind the ARIMA models. Stationarity refers to the property where for a time series its mean, variance, and autocorrelation are time invariant. <strong>In other words, mean, variance,and autocorrelation do not change with time</strong></li>
+<li>Differencing(差分): differencing is widely used to stabilize the mean of a time series.　We can then apply different tests to confirm if the resulting series is stationary　or not.</li>
+<li>Unit Root Tests: Statistical tests that help us understand if a given series is stationary<br>or not. <ul>
+<li><code>ad_fuller_test</code>: The Augmented Dickey Fuller test begins with a null hypothesis of series being non-stationary</li>
+<li><code>kpss_test</code>: while Kwiatkowski-Phillips-Schmidt-Shin test or KPSS has a null hypothesis that the series is stationary.</li>
+</ul>
+</li>
+</ul>
+<p>ad_fuller_test<br><img src="https://kezunlin.me/images/posts/635233-20190621171312867-1233129563.png" alt="ad_fuller_test 1"></p>
+<blockquote>
+<p>not statistically significant, accpet H0: non-stationary<br><img src="https://kezunlin.me/images/posts/635233-20190621171410960-353658517.png" alt="validate 1"></p>
+</blockquote>
+<p><img src="https://kezunlin.me/images/posts/635233-20190621171441978-1844678361.png" alt="ad_fuller_test 2"></p>
+<blockquote>
+<p>statistically significant, reject H0 and accept Ha: stationary<br><img src="https://kezunlin.me/images/posts/635233-20190621171504882-1622081726.png" alt="validate 2"></p>
+</blockquote>
+<p><code>ARIMA(p,d,q)</code> model<br>where,</p>
+<ul>
+<li>p is the order of Autoregression</li>
+<li>q is the order of Moving average</li>
+<li>d is the order of differencing</li>
+</ul>
+<p>how to choose p and q?</p>
+<ul>
+<li>ACF or Auto Correlation Function plot —&gt; q &#x3D; 1</li>
+<li>PACF or the Partial Auto Correlation Function plot —&gt; p &#x3D; 1</li>
+</ul>
+<p><img src="https://kezunlin.me/images/posts/635233-20190621172513678-1126519018.png" alt="ACF PACF"></p>
+<p>use grid search to choose p and q based on AIC</p>
+<blockquote>
+<p>AIC or Akaike Information Criterion measures the<br>goodness of fit and parsimony.<br><img src="https://kezunlin.me/images/posts/635233-20190621172850470-1417181261.png" alt="auto ARIMA"></p>
+</blockquote>
+<h4 id="LSTM"><a href="#LSTM" class="headerlink" title="LSTM"></a>LSTM</h4><p>Efficient Market Hypothesis: which says that it is almost impossible to beat the market consistently and there<br>are others which disagree with it.</p>
+<p>modeling</p>
+<ul>
+<li>regression modeling</li>
+<li>sequence modeling</li>
+</ul>
+<p><img src="https://kezunlin.me/images/posts/635233-20190621173532633-594452091.png" alt="regression modeling"></p>
+<p><code>(N,W,F)</code> format as input</p>
+<ul>
+<li>number of sequence</li>
+<li>window: length of sequence</li>
+<li>features per timestamp</li>
+</ul>
+<p>for regression<br><img src="https://kezunlin.me/images/posts/635233-20190621173607256-348222903.png" alt="regression"></p>
+<p>for sequence<br><img src="https://kezunlin.me/images/posts/635233-20190621173631098-1609541895.png" alt="sequence"></p>
+<blockquote>
+<p>we need to pad test sequence to match input shape.</p>
+</blockquote>
+<p>other time series tools</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/facebook/prophet">facebook prophet</a></li>
+</ul>
+<h2 id="New-Concepts"><a href="#New-Concepts" class="headerlink" title="New Concepts"></a>New Concepts</h2><ul>
+<li>Linear Discriminant Analysis(LDA)线性判别分析</li>
+<li>Quadratic Discriminant Analysis(QDA)线性判别分析</li>
+</ul>
+<p>sklearn code</p>
+<pre><code>from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
+</code></pre>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://cn.bing.com/images/search">bing images</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/dipanjanS/practical-machine-learning-with-python">pratical machine learning with python</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Apress/practical-ml-w-python">code for practical-ml-w-python</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20190516: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/notes/" rel="tag"># notes</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/live-video-streaming-over-network-with-opencv-and-imagezmq/" rel="prev" title="stream live video over network with opencv and imagezmq ">
+      <i class="fa fa-chevron-left"></i> stream live video over network with opencv and imagezmq 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/mplack-tutorial-on-ubuntu-16-04/" rel="next" title="compile and install mplack on ubuntu 16.04">
+      compile and install mplack on ubuntu 16.04 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Linear-Algebra"><span class="nav-number">1.</span> <span class="nav-text">Linear Algebra</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#determinant"><span class="nav-number">1.1.</span> <span class="nav-text">determinant</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inverse-adjoint-adjugate-matrix"><span class="nav-number">1.2.</span> <span class="nav-text">inverse&#x2F;adjoint(adjugate) matrix</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#eigenvalue-eigenvector"><span class="nav-number">1.3.</span> <span class="nav-text">eigenvalue&#x2F;eigenvector</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#svd"><span class="nav-number">1.4.</span> <span class="nav-text">svd</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Probability-Theory"><span class="nav-number">2.</span> <span class="nav-text">Probability Theory</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Statistics"><span class="nav-number">3.</span> <span class="nav-text">Statistics</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#descriptive-statistics"><span class="nav-number">3.1.</span> <span class="nav-text">descriptive statistics</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#basic"><span class="nav-number">3.1.1.</span> <span class="nav-text">basic</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#skewness-vs-kurtosis"><span class="nav-number">3.1.2.</span> <span class="nav-text">skewness vs kurtosis</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inferential-statistics"><span class="nav-number">3.2.</span> <span class="nav-text">inferential statistics</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Data-Mining"><span class="nav-number">4.</span> <span class="nav-text">Data Mining</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Machine-Learning-methods"><span class="nav-number">5.</span> <span class="nav-text">Machine Learning methods</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EDA"><span class="nav-number">6.</span> <span class="nav-text">EDA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#statistics"><span class="nav-number">6.1.</span> <span class="nav-text">statistics</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#analysis"><span class="nav-number">6.2.</span> <span class="nav-text">analysis</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Model-Evaluation"><span class="nav-number">7.</span> <span class="nav-text">Model Evaluation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Classification"><span class="nav-number">7.1.</span> <span class="nav-text">Classification</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Clustering"><span class="nav-number">7.2.</span> <span class="nav-text">Clustering</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#external-validation"><span class="nav-number">7.2.1.</span> <span class="nav-text">external validation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#internal-validation"><span class="nav-number">7.2.2.</span> <span class="nav-text">internal validation</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Regression"><span class="nav-number">7.3.</span> <span class="nav-text">Regression</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#regression-analysis"><span class="nav-number">7.3.1.</span> <span class="nav-text">regression analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#linear-regression"><span class="nav-number">7.3.1.1.</span> <span class="nav-text">linear regression</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#decision-tree-based-regression"><span class="nav-number">7.3.1.2.</span> <span class="nav-text">decision tree based regression</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ensemble-learning"><span class="nav-number">7.4.</span> <span class="nav-text">ensemble learning</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Model-Tuning"><span class="nav-number">8.</span> <span class="nav-text">Model Tuning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#decision-trees"><span class="nav-number">8.1.</span> <span class="nav-text">decision trees</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bias-variance-tradeoff"><span class="nav-number">8.2.</span> <span class="nav-text">bias-variance tradeoff</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cross-validation"><span class="nav-number">8.3.</span> <span class="nav-text">cross validation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hyperparameter-tuning-strategies"><span class="nav-number">8.4.</span> <span class="nav-text">hyperparameter tuning strategies</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Model-Interpertation"><span class="nav-number">9.</span> <span class="nav-text">Model Interpertation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Model-Deployment"><span class="nav-number">10.</span> <span class="nav-text">Model Deployment</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Real-world-case-studies"><span class="nav-number">11.</span> <span class="nav-text">Real-world case studies</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#customer-segmentation"><span class="nav-number">11.1.</span> <span class="nav-text">customer segmentation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#association-rule-mining"><span class="nav-number">11.2.</span> <span class="nav-text">association-rule mining</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#recommender-system"><span class="nav-number">11.3.</span> <span class="nav-text">recommender system</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#big-data-with-pandas"><span class="nav-number">11.3.1.</span> <span class="nav-text">big data with pandas</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#types-of-recommendation-engines"><span class="nav-number">11.3.2.</span> <span class="nav-text">types of recommendation engines</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#similarity"><span class="nav-number">11.3.3.</span> <span class="nav-text">similarity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#matrix-factorization"><span class="nav-number">11.3.4.</span> <span class="nav-text">matrix factorization</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#recommendation-engine-libraries"><span class="nav-number">11.3.5.</span> <span class="nav-text">recommendation engine libraries</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#time-series-forecasting"><span class="nav-number">11.4.</span> <span class="nav-text">time series forecasting</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#basics"><span class="nav-number">11.4.1.</span> <span class="nav-text">basics</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#time-series-components"><span class="nav-number">11.4.2.</span> <span class="nav-text">time series components</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ARIMA"><span class="nav-number">11.4.3.</span> <span class="nav-text">ARIMA</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LSTM"><span class="nav-number">11.4.4.</span> <span class="nav-text">LSTM</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#New-Concepts"><span class="nav-number">12.</span> <span class="nav-text">New Concepts</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">13.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">14.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

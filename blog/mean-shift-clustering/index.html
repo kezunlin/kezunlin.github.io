@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="GuideMeanShift python:	git clone https:&#x2F;&#x2F;github.com&#x2F;mattnedrich&#x2F;MeanShift_py.git cpp:  git https:&#x2F;&#x2F;github.com&#x2F;mattnedrich&#x2F;MeanShift_cpp.git  cpp compile  1234cd MeanShfit_cpp mkdir build &amp;&amp; cd">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mean shift clustering">
+<meta property="og:url" content="https://kezunlin.me/blog/mean-shift-clustering/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="GuideMeanShift python:	git clone https:&#x2F;&#x2F;github.com&#x2F;mattnedrich&#x2F;MeanShift_py.git cpp:  git https:&#x2F;&#x2F;github.com&#x2F;mattnedrich&#x2F;MeanShift_cpp.git  cpp compile  1234cd MeanShfit_cpp mkdir build &amp;&amp; cd">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190419173554794-823758488.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190419173551648-1533882819.png">
+<meta property="article:published_time" content="2019-03-18T06:44:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="meanshift">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kezunlin.me/images/posts/635233-20190419173554794-823758488.png">
+
+<link rel="canonical" href="https://kezunlin.me/blog/mean-shift-clustering/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>mean shift clustering | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/mean-shift-clustering/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          mean shift clustering
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-03-18 14:44:00" itemprop="dateCreated datePublished" datetime="2019-03-18T14:44:00+08:00">2019-03-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="MeanShift"><a href="#MeanShift" class="headerlink" title="MeanShift"></a>MeanShift</h3><ul>
+<li>python:	<code>git clone https://github.com/mattnedrich/MeanShift_py.git</code></li>
+<li>cpp:  <code>git https://github.com/mattnedrich/MeanShift_cpp.git</code></li>
+</ul>
+<p>cpp compile </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> MeanShfit_cpp </span><br><span class="line"><span class="built_in">mkdir</span> build &amp;&amp; <span class="built_in">cd</span> build &amp;&amp; cmake .. &amp;&amp; make -j8</span><br><span class="line"></span><br><span class="line">./MeanShift_cpp </span><br></pre></td></tr></table></figure>
+
+<h4 id="Visualization-for-linux"><a href="#Visualization-for-linux" class="headerlink" title="Visualization for linux"></a>Visualization for linux</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install gnuplot gnuplot-qt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>gnuplot<br>plot ‘test.csv’ with points, ‘result.csv’ with points</p>
+</blockquote>
+<h3 id="python-demo"><a href="#python-demo" class="headerlink" title="python demo"></a>python demo</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> mean_shift <span class="keyword">as</span> ms</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">ms_cluster</span>(<span class="params">data</span>):</span><br><span class="line">        <span class="comment"># case(1) demo:     kernel_bandwidth = 3.0, cluster_epsilon = 6</span></span><br><span class="line">        <span class="comment"># case(2) laneseg:  kernel_bandwidth = 0.5, cluster_epsilon = 2</span></span><br><span class="line">        mean_shifter = ms.MeanShift()</span><br><span class="line">        mean_shift_result = mean_shifter.cluster(data, kernel_bandwidth = <span class="number">3</span>, cluster_epsilon= <span class="number">6</span>)</span><br><span class="line">        <span class="keyword">return</span> mean_shift_result</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sklearn_cluster</span>(<span class="params">data</span>):</span><br><span class="line">        <span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> MeanShift</span><br><span class="line">        <span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> estimate_bandwidth</span><br><span class="line"></span><br><span class="line">        bandwidth = estimate_bandwidth(data, quantile=<span class="number">0.2</span>, n_samples=data.shape[<span class="number">0</span>])</span><br><span class="line">        <span class="comment">#print(&quot;bandwidth=&quot;,bandwidth) # 3</span></span><br><span class="line">        mean_shifter = MeanShift(bandwidth, bin_seeding=<span class="literal">True</span>)</span><br><span class="line">        mean_shifter.fit(data)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># get same results</span></span><br><span class="line">        original_points = data</span><br><span class="line">        cluster_centers = mean_shifter.cluster_centers_</span><br><span class="line">        cluster_ids = mean_shifter.labels_</span><br><span class="line"></span><br><span class="line">        mean_shift_result = ms.MeanShiftResult(original_points, cluster_centers, cluster_ids)</span><br><span class="line">        <span class="keyword">return</span> mean_shift_result</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">cluster_api</span>(<span class="params">data, use_sklearn=<span class="literal">True</span></span>):</span><br><span class="line">        <span class="keyword">if</span> use_sklearn:</span><br><span class="line">                <span class="keyword">return</span> sklearn_cluster(data)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">return</span> ms_cluster(data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">print_cluster_result</span>(<span class="params">mean_shift_result</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Original Point     Shifted Point  Cluster ID&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;============================================&quot;</span>)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(mean_shift_result.original_points)): <span class="comment"># 125</span></span><br><span class="line">                original_point = mean_shift_result.original_points[i] <span class="comment"># 125</span></span><br><span class="line">                cluster_id = mean_shift_result.cluster_ids[i] <span class="comment"># 125  value=0,1,2</span></span><br><span class="line">                cluster_center = mean_shift_result.cluster_centers[cluster_id] <span class="comment"># 3   </span></span><br><span class="line">                </span><br><span class="line">                <span class="built_in">print</span>( </span><br><span class="line">                        <span class="string">&quot;(%5.2f,%5.2f) -&gt;  (%5.2f,%5.2f) cluster %i&quot;</span> % </span><br><span class="line">                        (original_point[<span class="number">0</span>], original_point[<span class="number">1</span>], </span><br><span class="line">                        cluster_center[<span class="number">0</span>], cluster_center[<span class="number">1</span>], </span><br><span class="line">                        cluster_id)</span><br><span class="line">                ) </span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;============================================&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line"></span><br><span class="line">        use_sklearn = <span class="literal">True</span></span><br><span class="line">        data = np.genfromtxt(<span class="string">&#x27;data.csv&#x27;</span>, delimiter=<span class="string">&#x27;,&#x27;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;data.shape=&quot;</span>,data.shape)</span><br><span class="line"></span><br><span class="line">        mean_shift_result = cluster_api(data,use_sklearn)</span><br><span class="line">        <span class="comment">#print_cluster_result(mean_shift_result)</span></span><br><span class="line"></span><br><span class="line">        original_points =  mean_shift_result.original_points <span class="comment"># (125, 2)</span></span><br><span class="line">        cluster_centers = mean_shift_result.cluster_centers  <span class="comment"># (3, 2)</span></span><br><span class="line">        cluster_ids = mean_shift_result.cluster_ids <span class="comment"># (125,)   value=[0,1,2]</span></span><br><span class="line"></span><br><span class="line">        unique_ids = np.unique(cluster_ids) <span class="comment"># (3,)  value=[0,1,2]</span></span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;original_points.shape=&quot;</span>,original_points.shape) <span class="comment"># (125, 2)</span></span><br><span class="line">        <span class="built_in">print</span>(original_points[:<span class="number">10</span>])</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;cluster_centers.shape=&quot;</span>,cluster_centers.shape) <span class="comment"># (3, 2)</span></span><br><span class="line">        <span class="built_in">print</span>(cluster_centers)</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;cluster_ids.shape=&quot;</span>,cluster_ids.shape) <span class="comment"># (125,)</span></span><br><span class="line">        <span class="built_in">print</span>(cluster_ids) <span class="comment"># [0,0,0,...1,1,1,...,2,2,2,...] 0,1,2 cluster ids</span></span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;unique_ids.shape=&quot;</span>,unique_ids.shape) <span class="comment"># (3,)</span></span><br><span class="line">        <span class="built_in">print</span>(unique_ids)  <span class="comment"># 0,1,2</span></span><br><span class="line"></span><br><span class="line">        x = original_points[:,<span class="number">0</span>]</span><br><span class="line">        y = original_points[:,<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">        fig = plt.figure()</span><br><span class="line">        ax = fig.add_subplot(<span class="number">111</span>)</span><br><span class="line">        scatter = ax.scatter(x,y,c=cluster_ids,s=<span class="number">50</span>)</span><br><span class="line">        <span class="keyword">for</span> cx,cy <span class="keyword">in</span> cluster_centers:</span><br><span class="line">                ax.scatter(cx,cy,s=<span class="number">50</span>,c=<span class="string">&#x27;red&#x27;</span>,marker=<span class="string">&#x27;+&#x27;</span>)</span><br><span class="line">                ax.set_xlabel(<span class="string">&#x27;x&#x27;</span>)</span><br><span class="line">                ax.set_ylabel(<span class="string">&#x27;y&#x27;</span>)</span><br><span class="line">                plt.colorbar(scatter)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> use_sklearn:</span><br><span class="line">                filename = <span class="string">&quot;1_sklearn&quot;</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">                filename = <span class="string">&quot;2_ms&quot;</span></span><br><span class="line"></span><br><span class="line">        fig.savefig(filename)</span><br><span class="line">        plt.show()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;OK &quot;</span>+filename)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">        main()</span><br></pre></td></tr></table></figure>
+
+<h4 id="meanshift-py"><a href="#meanshift-py" class="headerlink" title="meanshift_py"></a>meanshift_py</h4><pre><code>#===============================
+# ms 
+#===============================
+(&#39;data.shape=&#39;, (125, 2))
+(&#39;original_points.shape=&#39;, (125, 2))
+[[10.91079039  8.38941202]
+ [ 9.87500165  9.9092509 ]
+ [ 7.8481223  10.4317483 ]
+ [ 8.53412293  9.55908561]
+ [10.38316846  9.61879086]
+ [ 8.11061595  9.77471761]
+ [10.02119468  9.53877962]
+ [ 9.37705852  9.70853991]
+ [ 7.67017034  9.60315231]
+ [10.94308287 11.76207349]]
+(&#39;cluster_centers.shape=&#39;, (3, 2))
+[[-3.45216026  5.28851174]
+ [ 5.02926925  3.56548696]
+ [ 8.63149568  9.25488818]]
+(&#39;cluster_ids.shape=&#39;, (125,))
+[2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 1 0 0 0]
+(&#39;unique_ids.shape=&#39;, (3,))
+[0 1 2]
+OK 2_ms
+</code></pre>
+<p><img src="https://kezunlin.me/images/posts/635233-20190419173554794-823758488.png" alt="ms"></p>
+<h4 id="sklearn"><a href="#sklearn" class="headerlink" title="sklearn"></a>sklearn</h4><pre><code>#===============================
+# sklearn 
+#===============================
+
+(&#39;data.shape=&#39;, (125, 2))
+(&#39;original_points.shape=&#39;, (125, 2))
+[[10.91079039  8.38941202]
+ [ 9.87500165  9.9092509 ]
+ [ 7.8481223  10.4317483 ]
+ [ 8.53412293  9.55908561]
+ [10.38316846  9.61879086]
+ [ 8.11061595  9.77471761]
+ [10.02119468  9.53877962]
+ [ 9.37705852  9.70853991]
+ [ 7.67017034  9.60315231]
+ [10.94308287 11.76207349]]
+(&#39;cluster_centers.shape=&#39;, (3, 2))
+[[ 4.79792283  3.01140269]
+ [ 9.2548292  10.11312163]
+ [-4.11368202  5.44826076]]
+(&#39;cluster_ids.shape=&#39;, (125,))
+[1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 0 2 2 2]
+(&#39;unique_ids.shape=&#39;, (3,))
+[0 1 2]
+OK 1_sklearn
+</code></pre>
+<p><img src="https://kezunlin.me/images/posts/635233-20190419173551648-1533882819.png" alt="sklearn"></p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/mattnedrich/MeanShift_py">MeanShift_py</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/mattnedrich/MeanShift_cpp">MeanShift_cpp</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/google19890102/article/details/51030884">mean shift clustering intro</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/lwx309025167/article/details/78434930">opencv mean shift</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20190318: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/meanshift/" rel="tag"># meanshift</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/use-eigen3-on-ubuntu-16-04/" rel="prev" title="install and use eigen3 on ubuntu 16.04">
+      <i class="fa fa-chevron-left"></i> install and use eigen3 on ubuntu 16.04
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/nvidia-management-library-nvml/" rel="next" title="install and use nvidia management library (nvml)">
+      install and use nvidia management library (nvml) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MeanShift"><span class="nav-number">1.1.</span> <span class="nav-text">MeanShift</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Visualization-for-linux"><span class="nav-number">1.1.1.</span> <span class="nav-text">Visualization for linux</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python-demo"><span class="nav-number">1.2.</span> <span class="nav-text">python demo</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#meanshift-py"><span class="nav-number">1.2.1.</span> <span class="nav-text">meanshift_py</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sklearn"><span class="nav-number">1.2.2.</span> <span class="nav-text">sklearn</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

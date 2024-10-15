@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="R-CNNintroductionR-CNN is a state-of-the-art detector that classifies region proposals by a finetuned Caffe model. For the full details of the R-CNN system and model, refer to its project site and the">
+<meta property="og:type" content="article">
+<meta property="og:title" content="a quick guide to rcnn">
+<meta property="og:url" content="https://kezunlin.me/blog/rcnn-tutorial/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="R-CNNintroductionR-CNN is a state-of-the-art detector that classifies region proposals by a finetuned Caffe model. For the full details of the R-CNN system and model, refer to its project site and the">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180822101918577-1947950229.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180822102036279-1691824045.jpg">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180822101930740-496243953.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180816101220026-1212221400.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180816101222714-1713668340.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180816101225186-628963131.png">
+<meta property="article:published_time" content="2018-08-16T02:11:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="caffe">
+<meta property="article:tag" content="rcnn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kezunlin.me/images/posts/635233-20180822101918577-1947950229.png">
+
+<link rel="canonical" href="https://kezunlin.me/blog/rcnn-tutorial/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>a quick guide to rcnn | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/rcnn-tutorial/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          a quick guide to rcnn
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-08-16 10:11:00" itemprop="dateCreated datePublished" datetime="2018-08-16T10:11:00+08:00">2018-08-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deep-learning/" itemprop="url" rel="index"><span itemprop="name">deep learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="R-CNN"><a href="#R-CNN" class="headerlink" title="R-CNN"></a>R-CNN</h2><h3 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h3><p><a target="_blank" rel="noopener" href="https://github.com/rbgirshick/rcnn">R-CNN</a> is a state-of-the-art detector that classifies region proposals by a finetuned Caffe model. For the full details of the R-CNN system and model, refer to its project site and the paper:</p>
+<blockquote>
+<p><em>Rich feature hierarchies for accurate object detection and semantic segmentation</em>. Ross Girshick, Jeff Donahue, Trevor Darrell, Jitendra Malik. CVPR 2014. <a target="_blank" rel="noopener" href="http://arxiv.org/abs/1311.2524">Arxiv 2013</a>.</p>
+</blockquote>
+<p>In this example, we do detection by a pure Caffe edition of the R-CNN model for ImageNet. The R-CNN detector outputs class scores for the 200 detection classes of ILSVRC13. Keep in mind that these are raw one vs. all SVM scores, so they are not probabilistically calibrated or exactly comparable across classes. Note that this off-the-shelf model is simply for convenience, and is not the full R-CNN model.</p>
+<p>Let’s run detection on an image of a bicyclist riding a fish bike in the desert (from the ImageNet challenge—no joke).</p>
+<h3 id="selective-search"><a href="#selective-search" class="headerlink" title="selective search"></a>selective search</h3><p>First, we’ll need region proposals and the Caffe R-CNN ImageNet model:</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://koen.me/research/selectivesearch/">Selective Search</a> is the region proposer used by R-CNN. The <a target="_blank" rel="noopener" href="https://github.com/sergeyk/selective_search_ijcv_with_python">selective_search_ijcv_with_python</a> Python module takes care of extracting proposals through the selective search MATLAB implementation. </p>
+</blockquote>
+<h4 id="clone-repo"><a href="#clone-repo" class="headerlink" title="clone repo"></a>clone repo</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="variable">$CAFFE_ROOT</span>/caffe/python</span><br><span class="line">git <span class="built_in">clone</span> https://github.com/sergeyk/selective_search_ijcv_with_python.git`</span><br><span class="line"></span><br><span class="line">pip install tables</span><br></pre></td></tr></table></figure>
+
+<h4 id="install-matlab"><a href="#install-matlab" class="headerlink" title="install matlab"></a>install matlab</h4><p>Install <code>matlab</code> and run <code>demo.m</code> file to compile functions</p>
+<p>see <a href="https://kezunlin.me/post/deab4886/">here</a></p>
+<p><strong>Notice: Restart computer for Solving Errors</strong>: </p>
+<pre><code>OSError: [Errno 2] No such file or directory
+</code></pre>
+<h4 id="compile-matlab-functions"><a href="#compile-matlab-functions" class="headerlink" title="compile matlab functions"></a>compile matlab functions</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> caffe/python/caffe/selective_search_ijcv_with_python</span><br><span class="line"><span class="built_in">which</span> matlab</span><br><span class="line"><span class="comment">#/opt/MATLAB/R2016b/bin/matlab</span></span><br><span class="line"></span><br><span class="line">matlab demo.m</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>run demo in matlab<br><img src="https://kezunlin.me/images/posts/635233-20180822101918577-1947950229.png" alt="png"></p>
+</li>
+<li><p>origin image<br><img src="https://kezunlin.me/images/posts/635233-20180822102036279-1691824045.jpg" alt="png"></p>
+</li>
+<li><p>region results<br><img src="https://kezunlin.me/images/posts/635233-20180822101930740-496243953.png" alt="png"></p>
+</li>
+</ul>
+<h3 id="detect-regions"><a href="#detect-regions" class="headerlink" title="detect regions"></a>detect regions</h3><p>Run scripts to get the Caffe R-CNN ImageNet model.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./scripts/download_model_binary.py models/bvlc_reference_rcnn_ilsvrc13</span><br></pre></td></tr></table></figure>
+
+<p>With that done, we’ll call the bundled <code>detect.py</code> to generate the region proposals and run the network. For an explanation of the arguments, do <code>./detect.py --help</code>.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> caffe/examples/</span><br><span class="line"><span class="built_in">mkdir</span> -p _temp</span><br><span class="line"><span class="built_in">echo</span> `<span class="built_in">pwd</span>`/images/fish-bike.jpg &gt; _temp/det_input.txt</span><br><span class="line">../python/detect.py --crop_mode=selective_search --pretrained_model=../models/bvlc_reference_rcnn_ilsvrc13/bvlc_reference_rcnn_ilsvrc13.caffemodel --model_def=../models/bvlc_reference_rcnn_ilsvrc13/deploy.prototxt --gpu --raw_scale=255 _temp/det_input.txt _temp/det_output.h5</span><br></pre></td></tr></table></figure>
+
+<pre><code>...
+I1129 15:02:22.498908  3483 net.cpp:242] This network produces output fc-rcnn
+I1129 15:02:22.498919  3483 net.cpp:255] Network initialization done.
+I1129 15:02:22.577332  3483 upgrade_proto.cpp:53] Attempting to upgrade input file specified using deprecated V1LayerParameter: ../models/bvlc_reference_rcnn_ilsvrc13/bvlc_reference_rcnn_ilsvrc13.caffemodel
+I1129 15:02:22.685262  3483 upgrade_proto.cpp:61] Successfully upgraded file specified using deprecated V1LayerParameter
+I1129 15:02:22.685796  3483 upgrade_proto.cpp:67] Attempting to upgrade input file specified using deprecated input fields: ../models/bvlc_reference_rcnn_ilsvrc13/bvlc_reference_rcnn_ilsvrc13.caffemodel
+I1129 15:02:22.685804  3483 upgrade_proto.cpp:70] Successfully upgraded file specified using deprecated input fields.
+W1129 15:02:22.685809  3483 upgrade_proto.cpp:72] Note that future Caffe releases will only support input layers and not input fields.
+Loading input...
+selective_search_rcnn(&#123;&#39;/home/kezunlin/program/caffe/examples/images/fish-bike.jpg&#39;&#125;, &#39;/tmp/tmpkOe6J0.mat&#39;)
+/home/kezunlin/program/caffe/python/caffe/detector.py:140: VisibleDeprecationWarning: using a non-integer number instead of an integer will result in an error in the future
+  crop = im[window[0]:window[2], window[1]:window[3]]
+/home/kezunlin/program/caffe/python/caffe/detector.py:174: VisibleDeprecationWarning: using a non-integer number instead of an integer will result in an error in the future
+  context_crop = im[box[0]:box[2], box[1]:box[3]]
+/usr/local/lib/python2.7/dist-packages/skimage/transform/_warps.py:84: UserWarning: The default mode, &#39;constant&#39;, will be changed to &#39;reflect&#39; in skimage 0.15.
+  warn(&quot;The default mode, &#39;constant&#39;, will be changed to &#39;reflect&#39; in &quot;
+/home/kezunlin/program/caffe/python/caffe/detector.py:177: VisibleDeprecationWarning: using a non-integer number instead of an integer will result in an error in the future
+  crop[pad_y:(pad_y + crop_h), pad_x:(pad_x + crop_w)] = context_crop
+Processed 1565 windows in 15.899 s.
+/usr/local/lib/python2.7/dist-packages/pandas/core/generic.py:1299: PerformanceWarning: 
+your performance may suffer as PyTables will pickle object types that it cannot
+map directly to c-types [inferred_type-&gt;mixed,key-&gt;block1_values] [items-&gt;[&#39;prediction&#39;]]
+
+  return pytables.to_hdf(path_or_buf, key, self, **kwargs)
+Saved to _temp/det_output.h5 in 0.082 s.
+</code></pre>
+<p>This run was in GPU mode. For CPU mode detection, call <code>detect.py</code> without the <code>--gpu</code> argument.</p>
+<h3 id="process-regions"><a href="#process-regions" class="headerlink" title="process regions"></a>process regions</h3><p>Running this outputs a DataFrame with the filenames, selected windows, and their detection scores to an HDF5 file.<br>(We only ran on one image, so the filenames will all be the same.)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">%matplotlib inline</span><br><span class="line"></span><br><span class="line">df = pd.read_hdf(<span class="string">&#x27;_temp/det_output.h5&#x27;</span>, <span class="string">&#x27;df&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(df.shape)</span><br><span class="line">row = df.iloc[<span class="number">0</span>] <span class="comment"># prediction(200,), bbox as input image</span></span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;row &#x27;</span>,row.shape</span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;prediction &#x27;</span>,row[<span class="number">0</span>].shape</span><br><span class="line"><span class="built_in">print</span> <span class="built_in">type</span>(row)  <span class="comment"># class &#x27;pandas.core.series.Series</span></span><br><span class="line"><span class="built_in">print</span> row</span><br></pre></td></tr></table></figure>
+
+<pre><code>(1565, 5)
+row  (5,)
+prediction  (200,)
+&lt;class &#39;pandas.core.series.Series&#39;&gt;
+prediction    [-2.60202, -2.87814, -3.0061, -2.77251, -2.077...
+ymin                                                    152.958
+xmin                                                    159.692
+ymax                                                    261.702
+xmax                                                    340.586
+Name: /home/kezunlin/program/caffe/examples/images/fish-bike.jpg, dtype: object
+</code></pre>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+<p>1570 regions were proposed with the R-CNN configuration of selective search. The number of proposals will vary from image to image based on its contents and size – selective search isn’t scale invariant.</p>
+<p>In general, <code>detect.py</code> is most efficient when running on a lot of images: it first extracts window proposals for all of them, batches the windows for efficient GPU processing, and then outputs the results.<br>Simply list an image per line in the <code>images_file</code>, and it will process all of them.</p>
+<p>Although this guide gives an example of R-CNN ImageNet detection, <code>detect.py</code> is clever enough to adapt to different Caffe models’ input dimensions, batch size, and output categories. You can switch the model definition and pretrained model as desired. Refer to <code>python detect.py --help</code> for the parameters to describe your data set. There’s no need for hardcoding.</p>
+<p>Anyway, let’s now load the ILSVRC13 detection class names and make a DataFrame of the predictions. Note you’ll need the auxiliary ilsvrc2012 data fetched by <code>data/ilsvrc12/get_ilsvrc12_aux.sh</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">%matplotlib inline</span><br><span class="line"></span><br><span class="line"><span class="comment">#n01443537 goldfish</span></span><br><span class="line"><span class="comment">#n03445777 golf ball</span></span><br><span class="line"><span class="comment">#...</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;../data/ilsvrc12/det_synset_words.txt&#x27;</span>) <span class="keyword">as</span> f: <span class="comment"># 200 classes from 1000 imagenet classes</span></span><br><span class="line">    labels_df = pd.DataFrame([</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">&#x27;synset_id&#x27;</span>: l.strip().split(<span class="string">&#x27; &#x27;</span>)[<span class="number">0</span>],</span><br><span class="line">            <span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27; &#x27;</span>.join(l.strip().split(<span class="string">&#x27; &#x27;</span>)[<span class="number">1</span>:]).split(<span class="string">&#x27;,&#x27;</span>)[<span class="number">0</span>]</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> l <span class="keyword">in</span> f.readlines()</span><br><span class="line">    ])</span><br><span class="line">labels_df.sort_values(by=<span class="string">&#x27;synset_id&#x27;</span>) <span class="comment"># from a... to z</span></span><br><span class="line"><span class="built_in">print</span> labels_df.shape <span class="comment"># (200, 2)</span></span><br><span class="line"><span class="built_in">print</span> labels_df.head(<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>(200, 2)
+        name  synset_id
+0  accordion  n02672831
+1   airplane  n02691156
+2        ant  n02219486
+3   antelope  n02419796
+4      apple  n07739125
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#print type(df.prediction) # &lt;class &#x27;pandas.core.series.Series&#x27;&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> df.prediction.values.shape <span class="comment"># numpy.ndarray (1565,)</span></span><br><span class="line"><span class="built_in">print</span> df.prediction.values[<span class="number">0</span>].shape <span class="comment"># numpy.ndarray (200,)</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> np.vstack(df.prediction.values).shape <span class="comment"># (1565, 200)</span></span><br><span class="line"></span><br><span class="line">predictions_df = pd.DataFrame(np.vstack(df.prediction.values), columns=labels_df[<span class="string">&#x27;name&#x27;</span>])</span><br><span class="line"><span class="comment">#print predictions_df.values.shape # (1565, 200)</span></span><br><span class="line"><span class="built_in">print</span>(predictions_df.iloc[:<span class="number">5</span>,:<span class="number">7</span>])</span><br></pre></td></tr></table></figure>
+
+<pre><code>(1565,)
+(200,)
+(1565, 200)
+name  accordion  airplane       ant  antelope     apple  armadillo  artichoke
+0     -2.602018 -2.878137 -3.006104 -2.772514 -2.077227  -2.590448  -2.414262
+1     -2.997767 -3.312270 -2.878942 -3.434367 -2.227469  -2.492260  -2.383878
+2     -2.476110 -3.145484 -2.377191 -2.684406 -2.289587  -2.428077  -2.390187
+3     -2.362699 -2.784188 -1.981096 -2.664146 -2.207042  -2.299127  -2.181105
+4     -2.929469 -2.323617 -2.755007 -3.165601 -2.188648  -2.486410  -2.505435
+</code></pre>
+<p>Let’s look at the activations.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">plt.gray()</span><br><span class="line">plt.matshow(predictions_df.values) <span class="comment"># (1565, 200)</span></span><br><span class="line">plt.xlabel(<span class="string">&#x27;Classes&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Windows&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://kezunlin.me/images/posts/635233-20180816101220026-1212221400.png" alt="png"></p>
+<p>Now let’s take max across all windows and plot the top classes.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">max_s = predictions_df.<span class="built_in">max</span>(<span class="number">0</span>)</span><br><span class="line">max_s = max_s.sort_values(ascending=<span class="literal">False</span>)</span><br><span class="line"><span class="built_in">print</span>(max_s[:<span class="number">10</span>])</span><br></pre></td></tr></table></figure>
+
+<pre><code>name
+person          1.839882
+bicycle         0.855625
+unicycle        0.085192
+motorcycle      0.003604
+turtle         -0.030388
+banjo          -0.114999
+electric fan   -0.220595
+cart           -0.225192
+lizard         -0.365949
+helmet         -0.477555
+dtype: float32
+</code></pre>
+<p>The top detections are in fact a person and bicycle.<br>Picking good localizations is a work in progress; we pick the top-scoring person and bicycle detections.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">i = predictions_df[<span class="string">&#x27;person&#x27;</span>].argmax() <span class="comment"># 70  rect</span></span><br><span class="line">j = predictions_df[<span class="string">&#x27;bicycle&#x27;</span>].argmax()<span class="comment"># 262 rect</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Show top predictions for top detection.</span></span><br><span class="line">f = pd.Series(df[<span class="string">&#x27;prediction&#x27;</span>].iloc[i], index=labels_df[<span class="string">&#x27;name&#x27;</span>]) <span class="comment"># (200,)</span></span><br><span class="line"><span class="comment">#print f.head(5)</span></span><br><span class="line"><span class="comment">#print </span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Top detection:&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(f.sort_values(ascending=<span class="literal">False</span>)[:<span class="number">5</span>])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Show top predictions for second-best detection.</span></span><br><span class="line">f = pd.Series(df[<span class="string">&#x27;prediction&#x27;</span>].iloc[j], index=labels_df[<span class="string">&#x27;name&#x27;</span>]) <span class="comment"># (200,)</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Second-best detection:&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(f.sort_values(ascending=<span class="literal">False</span>)[:<span class="number">5</span>])</span><br></pre></td></tr></table></figure>
+
+<pre><code>Top detection:
+name
+person             1.839882
+swimming trunks   -1.157806
+turtle            -1.168884
+tie               -1.217267
+rubber eraser     -1.246662
+dtype: float32
+
+Second-best detection:
+name
+bicycle     0.855625
+unicycle   -0.334367
+scorpion   -0.824552
+lobster    -0.965544
+lamp       -1.076224
+dtype: float32
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Find, print, and display the top detections: person and bicycle.</span></span><br><span class="line">i = predictions_df[<span class="string">&#x27;person&#x27;</span>].argmax()</span><br><span class="line">j = predictions_df[<span class="string">&#x27;bicycle&#x27;</span>].argmax()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Show top predictions for top detection.</span></span><br><span class="line">f = pd.Series(df[<span class="string">&#x27;prediction&#x27;</span>].iloc[i], index=labels_df[<span class="string">&#x27;name&#x27;</span>])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Top detection:&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(f.sort_values(ascending=<span class="literal">False</span>)[:<span class="number">5</span>])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Show top predictions for second-best detection.</span></span><br><span class="line">f = pd.Series(df[<span class="string">&#x27;prediction&#x27;</span>].iloc[j], index=labels_df[<span class="string">&#x27;name&#x27;</span>])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Second-best detection:&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(f.sort_values(ascending=<span class="literal">False</span>)[:<span class="number">5</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># Show top detection in red, second-best top detection in blue.</span></span><br><span class="line">im = plt.imread(<span class="string">&#x27;images/fish-bike.jpg&#x27;</span>)</span><br><span class="line">plt.imshow(im)</span><br><span class="line">currentAxis = plt.gca()</span><br><span class="line"></span><br><span class="line">det = df.iloc[i]</span><br><span class="line">coords = (det[<span class="string">&#x27;xmin&#x27;</span>], det[<span class="string">&#x27;ymin&#x27;</span>]), det[<span class="string">&#x27;xmax&#x27;</span>] - det[<span class="string">&#x27;xmin&#x27;</span>], det[<span class="string">&#x27;ymax&#x27;</span>] - det[<span class="string">&#x27;ymin&#x27;</span>]</span><br><span class="line"><span class="built_in">print</span> coords <span class="comment"># ((207.792, 7.6959999999999997), 134.71799999999999, 155.88200000000001)</span></span><br><span class="line">currentAxis.add_patch(plt.Rectangle(*coords, fill=<span class="literal">False</span>, edgecolor=<span class="string">&#x27;r&#x27;</span>, linewidth=<span class="number">5</span>))</span><br><span class="line"></span><br><span class="line">det = df.iloc[j]</span><br><span class="line">coords = (det[<span class="string">&#x27;xmin&#x27;</span>], det[<span class="string">&#x27;ymin&#x27;</span>]), det[<span class="string">&#x27;xmax&#x27;</span>] - det[<span class="string">&#x27;xmin&#x27;</span>], det[<span class="string">&#x27;ymax&#x27;</span>] - det[<span class="string">&#x27;ymin&#x27;</span>]</span><br><span class="line"><span class="built_in">print</span> coords <span class="comment"># ((108.706, 184.70400000000001), 284.78999999999996, 127.98399999999998)</span></span><br><span class="line">currentAxis.add_patch(plt.Rectangle(*coords, fill=<span class="literal">False</span>, edgecolor=<span class="string">&#x27;b&#x27;</span>, linewidth=<span class="number">5</span>))</span><br></pre></td></tr></table></figure>
+
+<pre><code>Top detection:
+name
+person             1.839882
+swimming trunks   -1.157806
+turtle            -1.168884
+tie               -1.217267
+rubber eraser     -1.246662
+dtype: float32
+
+Second-best detection:
+name
+bicycle     0.855625
+unicycle   -0.334367
+scorpion   -0.824552
+lobster    -0.965544
+lamp       -1.076224
+dtype: float32
+((207.792, 7.6959999999999997), 134.71799999999999, 155.88200000000001)
+((108.706, 184.70400000000001), 284.78999999999996, 127.98399999999998)
+</code></pre>
+<p><img src="https://kezunlin.me/images/posts/635233-20180816101222714-1713668340.png" alt="png"></p>
+<p>That’s cool. Let’s take all ‘bicycle’ detections and NMS them to get rid of overlapping windows.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">nms_detections</span>(<span class="params">dets, overlap=<span class="number">0.3</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Non-maximum suppression: Greedily select high-scoring detections and</span></span><br><span class="line"><span class="string">    skip detections that are significantly covered by a previously</span></span><br><span class="line"><span class="string">    selected detection.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    This version is translated from Matlab code by Tomasz Malisiewicz,</span></span><br><span class="line"><span class="string">    who sped up Pedro Felzenszwalb&#x27;s code.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Parameters</span></span><br><span class="line"><span class="string">    ----------</span></span><br><span class="line"><span class="string">    dets: ndarray</span></span><br><span class="line"><span class="string">        each row is [&#x27;xmin&#x27;, &#x27;ymin&#x27;, &#x27;xmax&#x27;, &#x27;ymax&#x27;, &#x27;score&#x27;]</span></span><br><span class="line"><span class="string">    overlap: float</span></span><br><span class="line"><span class="string">        minimum overlap ratio (0.3 default)  &gt;iou,then drop rect</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Output</span></span><br><span class="line"><span class="string">    ------</span></span><br><span class="line"><span class="string">    dets: ndarray</span></span><br><span class="line"><span class="string">        remaining after suppression.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    x1 = dets[:, <span class="number">0</span>]</span><br><span class="line">    y1 = dets[:, <span class="number">1</span>]</span><br><span class="line">    x2 = dets[:, <span class="number">2</span>]</span><br><span class="line">    y2 = dets[:, <span class="number">3</span>]</span><br><span class="line">    ind = np.argsort(dets[:, <span class="number">4</span>]) <span class="comment"># current ind set (min---&gt;max)</span></span><br><span class="line"></span><br><span class="line">    w = x2 - x1</span><br><span class="line">    h = y2 - y1</span><br><span class="line">    area = (w * h).astype(<span class="built_in">float</span>)</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    dets</span></span><br><span class="line"><span class="string">    pick = []</span></span><br><span class="line"><span class="string">    ind = [a,b,c,d,e,f]</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    while not ind.empty:</span></span><br><span class="line"><span class="string">        f, pick=[f],    ind=[a,b,c,d,e], o=[0.1,0.2,0.5,0.9,0.2],keep_ind=[0,1,4],ind=[a,b,e]</span></span><br><span class="line"><span class="string">        e, pick=[f,e],  ind=[a,b],       o=[0.4,0.1],keep_ind=[1],ind=[b]</span></span><br><span class="line"><span class="string">        b, pick=[f,e,b],ind=[],          o=[],       keep_ind=[], ind=[]</span></span><br><span class="line"><span class="string">    return dets[pick]</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    pick = [] <span class="comment"># pick index</span></span><br><span class="line">    <span class="keyword">while</span> <span class="built_in">len</span>(ind) &gt; <span class="number">0</span>:</span><br><span class="line">        i = ind[-<span class="number">1</span>] <span class="comment"># choose last best index</span></span><br><span class="line">        pick.append(i)</span><br><span class="line">        ind = ind[:-<span class="number">1</span>] <span class="comment"># remove last one</span></span><br><span class="line"></span><br><span class="line">        xx1 = np.maximum(x1[i], x1[ind])</span><br><span class="line">        yy1 = np.maximum(y1[i], y1[ind])</span><br><span class="line">        xx2 = np.minimum(x2[i], x2[ind])</span><br><span class="line">        yy2 = np.minimum(y2[i], y2[ind])</span><br><span class="line"></span><br><span class="line">        w = np.maximum(<span class="number">0.</span>, xx2 - xx1)</span><br><span class="line">        h = np.maximum(<span class="number">0.</span>, yy2 - yy1)</span><br><span class="line"></span><br><span class="line">        wh = w * h</span><br><span class="line">        o = wh / (area[i] + area[ind] - wh) <span class="comment"># [0.1,0.2,0.5,0.9,0.2]</span></span><br><span class="line"></span><br><span class="line">        keep_ind = np.nonzero(o &lt;= overlap)[<span class="number">0</span>] <span class="comment"># (array([0, 1, 4]),) ===&gt;[0 1 4]</span></span><br><span class="line">        ind = ind[keep_ind]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> dets[pick, :]</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">scores = predictions_df[<span class="string">&#x27;bicycle&#x27;</span>] <span class="comment"># (1565,)</span></span><br><span class="line">windows = df[[<span class="string">&#x27;xmin&#x27;</span>, <span class="string">&#x27;ymin&#x27;</span>, <span class="string">&#x27;xmax&#x27;</span>, <span class="string">&#x27;ymax&#x27;</span>]].values <span class="comment"># (1565, 4)</span></span><br><span class="line">dets = np.hstack((windows, scores[:, np.newaxis])) <span class="comment"># (1565, 4) (1565,1)===&gt;(1565,5) xmin,ymin,xmax,ymax,score</span></span><br><span class="line">nms_dets = nms_detections(dets,<span class="number">0.3</span>)</span><br><span class="line"><span class="built_in">print</span> dets.shape <span class="comment"># (1565, 5)</span></span><br><span class="line"><span class="built_in">print</span> nms_dets.shape <span class="comment"># (181, 5)</span></span><br></pre></td></tr></table></figure>
+
+<pre><code>(1565, 5)
+(181, 5)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> nms_dets[:<span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+
+<pre><code>[[ 108.706       184.704       393.496       312.688         0.85562503]
+ [   0.           14.43        397.344       323.27         -0.73134482]
+ [ 131.794       202.982       249.196       290.562        -1.26836455]]
+</code></pre>
+<p>Show top 3 NMS’d detections for ‘bicycle’ in the image and note the gap between the top scoring box (red) and the remaining boxes.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">plt.imshow(im)</span><br><span class="line">currentAxis = plt.gca()</span><br><span class="line">colors = [<span class="string">&#x27;r&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;y&#x27;</span>]</span><br><span class="line"><span class="keyword">for</span> c, det <span class="keyword">in</span> <span class="built_in">zip</span>(colors, nms_dets[:<span class="number">3</span>]):</span><br><span class="line">    currentAxis.add_patch(</span><br><span class="line">        plt.Rectangle((det[<span class="number">0</span>], det[<span class="number">1</span>]), det[<span class="number">2</span>]-det[<span class="number">0</span>], det[<span class="number">3</span>]-det[<span class="number">1</span>],</span><br><span class="line">        fill=<span class="literal">False</span>, edgecolor=c, linewidth=<span class="number">5</span>)</span><br><span class="line">    )</span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;scores:&#x27;</span>, nms_dets[:<span class="number">3</span>, <span class="number">4</span>]</span><br></pre></td></tr></table></figure>
+
+<pre><code>scores: [ 0.85562503 -0.73134482 -1.26836455]
+</code></pre>
+<p><img src="https://kezunlin.me/images/posts/635233-20180816101225186-628963131.png" alt="png"></p>
+<p>This was an easy instance for bicycle as it was in the class’s training set. However, the person result is a true detection since this was not in the set for that class.</p>
+<p>You should try out detection on an image of your own next!</p>
+<p>(Remove the temp directory to clean up, and we’re done.)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!rm -rf _temp</span><br></pre></td></tr></table></figure>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://demo.vislab.berkeleyvision.org/">demo</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/BVLC/caffe">caffe git</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180816: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/caffe/" rel="tag"># caffe</a>
+              <a href="/tags/rcnn/" rel="tag"># rcnn</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/Multilabel-classification-on-PASCAL-using-python-data-layers/" rel="prev" title="Multilabel classification on PASCAL using python data-layers">
+      <i class="fa fa-chevron-left"></i> Multilabel classification on PASCAL using python data-layers
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/matplot-RGB-vs-opencv-BGR-vs-caffe-images/" rel="next" title="matplot RGB vs opencv BGR vs caffe images">
+      matplot RGB vs opencv BGR vs caffe images <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#R-CNN"><span class="nav-number">1.</span> <span class="nav-text">R-CNN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#introduction"><span class="nav-number">1.1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#selective-search"><span class="nav-number">1.2.</span> <span class="nav-text">selective search</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#clone-repo"><span class="nav-number">1.2.1.</span> <span class="nav-text">clone repo</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#install-matlab"><span class="nav-number">1.2.2.</span> <span class="nav-text">install matlab</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#compile-matlab-functions"><span class="nav-number">1.2.3.</span> <span class="nav-text">compile matlab functions</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#detect-regions"><span class="nav-number">1.3.</span> <span class="nav-text">detect regions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#process-regions"><span class="nav-number">1.4.</span> <span class="nav-text">process regions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

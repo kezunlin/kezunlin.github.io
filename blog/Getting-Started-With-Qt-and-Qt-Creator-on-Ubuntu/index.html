@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Series Part-1: Install and Configure Qt5 on Ubuntu 16.04 Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04 Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Part-1: Install and Configure Qt5 on Ubuntu 16.04">
+<meta property="og:url" content="https://kezunlin.me/blog/Getting-Started-With-Qt-and-Qt-Creator-on-Ubuntu/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Series Part-1: Install and Configure Qt5 on Ubuntu 16.04 Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04 Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubu">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180108163402269-37644849.png">
+<meta property="article:published_time" content="2018-01-08T03:43:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="qt">
+<meta property="article:tag" content="qtcreator">
+<meta property="article:tag" content="qt5">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kezunlin.me/images/posts/635233-20180108163402269-37644849.png">
+
+<link rel="canonical" href="https://kezunlin.me/blog/Getting-Started-With-Qt-and-Qt-Creator-on-Ubuntu/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Part-1: Install and Configure Qt5 on Ubuntu 16.04 | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/Getting-Started-With-Qt-and-Qt-Creator-on-Ubuntu/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Part-1: Install and Configure Qt5 on Ubuntu 16.04
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-01-08 11:43:00" itemprop="dateCreated datePublished" datetime="2018-01-08T11:43:00+08:00">2018-01-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h2><ul>
+<li><a href="https://kezunlin.me/post/91842b71/"><strong>Part-1: Install and Configure Qt5 on Ubuntu 16.04</strong></a></li>
+<li><a href="https://kezunlin.me/post/b901735e/">Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04</a></li>
+<li><a href="https://kezunlin.me/post/137aa5fc/">Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubuntu 16.04 from source</a></li>
+<li><a href="https://kezunlin.me/post/2d809f92/">Part-4: Install and Configure PCL 1.8.1 with vtk qt support on windows 10 from source</a></li>
+</ul>
+<h2 id="Tutorial"><a href="#Tutorial" class="headerlink" title="Tutorial"></a>Tutorial</h2><ul>
+<li>qt: 5.7.0</li>
+<li>qmake: 3.0 based on Qt 5.7.0</li>
+<li>qtcreator: 3.5.1 based on Qt 5.5.1</li>
+</ul>
+<h3 id="purge-existing-qt"><a href="#purge-existing-qt" class="headerlink" title="purge existing qt"></a>purge existing qt</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get purge qt5-default qtcreator </span><br><span class="line"><span class="built_in">sudo</span> apt-get purge qt4-designer qt4-dev-tools</span><br></pre></td></tr></table></figure>
+
+<h3 id="install-qt57"><a href="#install-qt57" class="headerlink" title="install qt57"></a>install qt57</h3><p>In addition, building graphical Qt applications requires OpenGL libraries and headers installed. On Ubuntu and other Debian-based Linux systems you can get OpenGL and the minimal set of development tools by installing the packages  <strong>libgl1-mesa-dev</strong> and <strong>build-essential</strong>, i.e. by running this command:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install build-essential libgl1-mesa-dev</span><br></pre></td></tr></table></figure>
+
+<p>Download qt and install.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install build-essential libgl1-mesa-dev</span><br><span class="line">wget http://download.qt.io/official_releases/qt/5.7/5.7.0/qt-opensource-linux-x64-5.7.0.run</span><br><span class="line"><span class="built_in">chmod</span> +x qt-opensource-linux-x64-5.7.0.run</span><br><span class="line">./qt-opensource-linux-x64-5.7.0.run</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>install to <code>/opt/Qt5.7.0</code></p>
+</blockquote>
+<p>create links to <code>/opt/qt/</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">ln</span> -s /opt/Qt5.7.0 qt</span><br></pre></td></tr></table></figure>
+
+<h3 id="qtchooser"><a href="#qtchooser" class="headerlink" title="qtchooser"></a>qtchooser</h3><h4 id="add-qt57-conf"><a href="#add-qt57-conf" class="headerlink" title="add qt57.conf"></a>add qt57.conf</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /usr/share/qtchooser/qt57.conf </span><br><span class="line"></span><br><span class="line">/opt/qt/5.7/gcc_64/bin</span><br><span class="line">/opt/qt/5.7/gcc_64/lib</span><br><span class="line"></span><br><span class="line"><span class="comment"># link to qt57</span></span><br><span class="line"><span class="built_in">cd</span> /usr/lib/x86_64-linux-gnu/qtchooser</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">ln</span> -s /usr/share/qtchooser/qt57.conf qt57.conf</span><br></pre></td></tr></table></figure>
+
+<h4 id="link-to-default"><a href="#link-to-default" class="headerlink" title="link to default"></a>link to default</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/lib/x86_64-linux-gnu/qt-default/qtchooser</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">rm</span> default.conf</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">ln</span> -s /usr/share/qtchooser/qt57.conf default.conf</span><br><span class="line"><span class="built_in">ls</span> -l default.conf</span><br><span class="line">default.conf -&gt; /usr/share/qtchooser/qt57.conf</span><br></pre></td></tr></table></figure>
+
+<h4 id="qt-conf"><a href="#qt-conf" class="headerlink" title="qt conf"></a>qt conf</h4><p><code>/usr/share/qtchooser/</code></p>
+<ul>
+<li>qt4-x86_64-linux-gnu.conf   (FILE)</li>
+<li>qt5-x86_64-linux-gnu.conf   (FILE)</li>
+<li>qt57.conf                   (FILE)</li>
+</ul>
+<p><code>/usr/lib/x86_64-linux-gnu/qtchooser/</code></p>
+<ul>
+<li>4.conf      (link)</li>
+<li>5.conf      (link)</li>
+<li>qt4.conf    (link)</li>
+<li>qt5.conf    (link)</li>
+<li>qt57.conf   (link)</li>
+</ul>
+<p><code>/usr/lib/x86_64-linux-gnu/qt-default/qtchooser/</code></p>
+<ul>
+<li>default.conf (link) qt57.conf</li>
+</ul>
+<h4 id="qtchooser-1"><a href="#qtchooser-1" class="headerlink" title="qtchooser"></a>qtchooser</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">which</span> qtchooser </span><br><span class="line">/usr/bin/qtchooser</span><br><span class="line"></span><br><span class="line">qtchooser -l</span><br><span class="line"></span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">default</span><br><span class="line">qt4-x86_64-linux-gnu</span><br><span class="line">qt4</span><br><span class="line">qt5-x86_64-linux-gnu</span><br><span class="line">qt5</span><br></pre></td></tr></table></figure>
+
+<h4 id="qtchooser-env"><a href="#qtchooser-env" class="headerlink" title="qtchooser env"></a>qtchooser env</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">qtchooser -print-env</span><br><span class="line">QT_SELECT=<span class="string">&quot;default&quot;</span></span><br><span class="line">QTTOOLDIR=<span class="string">&quot;/opt/qt/5.7/gcc_64/bin&quot;</span></span><br><span class="line">QTLIBDIR=<span class="string">&quot;/opt/qt/5.7/gcc_64/lib&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="export-QT-QPA-PLATFORM-PLUGIN-PATH"><a href="#export-QT-QPA-PLATFORM-PLUGIN-PATH" class="headerlink" title="export QT_QPA_PLATFORM_PLUGIN_PATH"></a>export QT_QPA_PLATFORM_PLUGIN_PATH</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim .bashrc</span><br><span class="line"><span class="built_in">export</span> QT_QPA_PLATFORM_PLUGIN_PATH=/opt/qt/5.7/gcc_64/plugins/platforms</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>otherwise,errors may occur. <code>Failed to load platform plugin &quot;xcb&quot;.</code></p>
+</blockquote>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+<h2 id="QtCreator-Tutorial"><a href="#QtCreator-Tutorial" class="headerlink" title="QtCreator Tutorial"></a>QtCreator Tutorial</h2><h3 id="install-qtcreator"><a href="#install-qtcreator" class="headerlink" title="install qtcreator"></a>install qtcreator</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get -y install qtcreator</span><br><span class="line"></span><br><span class="line">qtcreator -version</span><br><span class="line">Qt Creator 3.5.1 based on Qt 5.5.1</span><br></pre></td></tr></table></figure>
+
+<h3 id="create-application"><a href="#create-application" class="headerlink" title="create application"></a>create application</h3><ol>
+<li><p>Start <code>qtcreator</code> and create a <code>Qt Widget Application</code> named <code>hello</code>.</p>
+</li>
+<li><p>Add a resource file named <code>resource.qrc</code>.</p>
+<pre><code> hello--&gt;right click--&gt; Add New... ---&gt;qt---&gt; qt resource file---&gt; name resource---&gt; generate resource.qrc
+</code></pre>
+</li>
+<li><p>and then import images to resource.qrc</p>
+<pre><code> Resources | resource.qrt---&gt;right click---&gt; Add Prefix...---&gt; name /prefix
+ Resources | resource.qrt | /prefix---&gt;right click ---&gt; Add Existing Files... ---&gt; choose images ---&gt; OK
+</code></pre>
+</li>
+<li><p>use resource in <code>mainwindow.ui</code></p>
+<pre><code> button ---&gt; property page ---&gt; icon ---&gt; Choose Resource... ---&gt; select image ---&gt; OK
+</code></pre>
+</li>
+</ol>
+<h3 id="qt-slots"><a href="#qt-slots" class="headerlink" title="qt slots"></a>qt slots</h3><h4 id="method-1"><a href="#method-1" class="headerlink" title="method 1"></a>method 1</h4><p>steps: </p>
+<pre><code>mainwindow.ui ---&gt; choose button ---&gt; right click ---&gt; Go to slot... ---&gt; choose clicked() ---&gt; OK
+</code></pre>
+<p>will add slots in <code>mainwindow.h</code> automatically</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> slots:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">on_pushButtonOK_clicked</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>and in <code>mainwindow.cpp</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">MainWindow::on_pushButtonOK_clicked</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Tips: if we use <code>on_pushButtonOK_clicked</code> style, there is no need to connect with slots in <code>MainWindow</code> constructor by hand.</p>
+</blockquote>
+<h4 id="method-2-OK"><a href="#method-2-OK" class="headerlink" title="method 2 (OK)"></a>method 2 (OK)</h4><p>add slots in <code>mainwindow.h</code> by hand</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> slots:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">pushButtonCancel_clicked</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>and in <code>mainwindow.cpp</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">MainWindow::pushButtonCancel_clicked</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>connect button with slot in <code>mainwindow.cpp</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">MainWindow::<span class="built_in">MainWindow</span>(QWidget *parent) :</span><br><span class="line">    <span class="built_in">QMainWindow</span>(parent),</span><br><span class="line">    <span class="built_in">ui</span>(<span class="keyword">new</span> Ui::MainWindow)</span><br><span class="line">&#123;</span><br><span class="line">    ui-&gt;<span class="built_in">setupUi</span>(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// connect</span></span><br><span class="line">    <span class="built_in">connect</span>(ui-&gt;pushButtonCancel, <span class="built_in">SIGNAL</span>(<span class="built_in">clicked</span>()), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">pushButtonCancel_clicked</span>()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+<h2 id="Code-Example"><a href="#Code-Example" class="headerlink" title="Code Example"></a>Code Example</h2><h3 id="folder"><a href="#folder" class="headerlink" title="folder"></a>folder</h3><p>folder structure like this:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ tree hello/</span><br><span class="line"></span><br><span class="line">hello/</span><br><span class="line">├── CMakeLists.txt</span><br><span class="line">├── hello.pro</span><br><span class="line">├── hello.pro.user</span><br><span class="line">├── images</span><br><span class="line">│   ├── kezunlin_logo.png</span><br><span class="line">│   ├── logo.svg</span><br><span class="line">│   └── searchicon.png</span><br><span class="line">├── main.cpp</span><br><span class="line">├── mainwindow.cpp</span><br><span class="line">├── mainwindow.h</span><br><span class="line">├── mainwindow.ui</span><br><span class="line">└── resource.qrc</span><br><span class="line"></span><br><span class="line">1 directory, 11 files</span><br></pre></td></tr></table></figure>
+
+<h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><h4 id="mainwinow-h"><a href="#mainwinow-h" class="headerlink" title="mainwinow.h"></a>mainwinow.h</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> MAINWINDOW_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAINWINDOW_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QMainWindow&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> Ui &#123;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MainWindow</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MainWindow</span> : <span class="keyword">public</span> QMainWindow</span><br><span class="line">&#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">MainWindow</span><span class="params">(QWidget *parent = <span class="number">0</span>)</span></span>;</span><br><span class="line">    ~<span class="built_in">MainWindow</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> slots:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">on_pushButtonOK_clicked</span><span class="params">()</span></span>; <span class="comment">// method1</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">pushButtonCancel_clicked</span><span class="params">()</span></span>; <span class="comment">// method2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    Ui::MainWindow *ui;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> <span class="comment">// MAINWINDOW_H</span></span></span><br></pre></td></tr></table></figure>
+
+<h4 id="mainwindow-cpp"><a href="#mainwindow-cpp" class="headerlink" title="mainwindow.cpp"></a>mainwindow.cpp</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;mainwindow.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;ui_mainwindow.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QMessageBox&gt;</span></span></span><br><span class="line"></span><br><span class="line">MainWindow::<span class="built_in">MainWindow</span>(QWidget *parent) :</span><br><span class="line">    <span class="built_in">QMainWindow</span>(parent),</span><br><span class="line">    <span class="built_in">ui</span>(<span class="keyword">new</span> Ui::MainWindow)</span><br><span class="line">&#123;</span><br><span class="line">    ui-&gt;<span class="built_in">setupUi</span>(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// connect</span></span><br><span class="line">    <span class="built_in">connect</span>(ui-&gt;pushButtonCancel, <span class="built_in">SIGNAL</span>(<span class="built_in">clicked</span>()), <span class="keyword">this</span>, <span class="built_in">SLOT</span>(<span class="built_in">pushButtonCancel_clicked</span>()));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">MainWindow::~<span class="built_in">MainWindow</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">delete</span> ui;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">MainWindow::on_pushButtonOK_clicked</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    QString text = ui-&gt;lineEditName-&gt;<span class="built_in">text</span>();</span><br><span class="line">    QMessageBox::<span class="built_in">information</span>(<span class="keyword">this</span>, <span class="string">&quot;OK&quot;</span>, text);</span><br><span class="line">    ui-&gt;pushButtonOK-&gt;<span class="built_in">setText</span>( <span class="built_in">tr</span>(<span class="string">&quot;(OK. click me)&quot;</span>) );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">MainWindow::pushButtonCancel_clicked</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    QString text = ui-&gt;lineEditName-&gt;<span class="built_in">text</span>();</span><br><span class="line">    QMessageBox::<span class="built_in">information</span>(<span class="keyword">this</span>, <span class="string">&quot;Cancel&quot;</span>, text);</span><br><span class="line">    ui-&gt;pushButtonCancel-&gt;<span class="built_in">setText</span>( <span class="built_in">tr</span>(<span class="string">&quot;(Cancel.click me)&quot;</span>) );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="main-cpp"><a href="#main-cpp" class="headerlink" title="main.cpp"></a>main.cpp</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;mainwindow.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QApplication&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">QApplication <span class="title">a</span><span class="params">(argc, argv)</span></span>;</span><br><span class="line">    MainWindow w;</span><br><span class="line">    w.<span class="built_in">show</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> a.<span class="built_in">exec</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">2.8</span>.<span class="number">8</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">project</span>(helloworld)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Find includes in corresponding build directories</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_INCLUDE_CURRENT_DIR <span class="keyword">ON</span>)</span><br><span class="line"><span class="comment"># Instruct CMake to run moc automatically when needed.</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_AUTOMOC <span class="keyword">ON</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># $&#123;QT_INCLUDE_DIRS&#125; $&#123;QT_LIBRARIES&#125; and so on are all Qt4 Macro Definitions!!!!!</span></span><br><span class="line"><span class="comment"># Find the QtWidgets library</span></span><br><span class="line"><span class="keyword">find_package</span>(Qt5Core)</span><br><span class="line"><span class="keyword">find_package</span>(Qt5Widgets)</span><br><span class="line"><span class="keyword">find_package</span>(Qt5Gui)</span><br><span class="line"><span class="keyword">find_package</span>(Qt5OpenGL)</span><br><span class="line"><span class="keyword">find_package</span>(Qt5Xml)</span><br><span class="line"></span><br><span class="line"><span class="comment">#message( [qt] $&#123;Qt5Core_INCLUDE_DIRS&#125; )</span></span><br><span class="line"><span class="comment">#message( [qt] $&#123;Qt5Core_LIBRARIES&#125; )</span></span><br><span class="line"><span class="comment">#message( [qt] $&#123;Qt5Widgets_INCLUDE_DIRS&#125; )</span></span><br><span class="line"><span class="comment">#message( [qt] $&#123;Qt5Widgets_LIBRARIES&#125; )</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># cpp files</span></span><br><span class="line"><span class="keyword">aux_source_directory</span>(. SRC_LIST)</span><br><span class="line"></span><br><span class="line"><span class="comment"># ui files</span></span><br><span class="line">qt5_wrap_ui(ui_FILES mainwindow.ui)</span><br><span class="line"><span class="comment"># resource files</span></span><br><span class="line">qt5_add_resources(qrc_FILES resource.qrc)</span><br><span class="line"></span><br><span class="line"><span class="keyword">message</span>( [Main] <span class="variable">$&#123;SRC_LIST&#125;</span> ) <span class="comment"># ./main.cpp./mainwindow.cpp</span></span><br><span class="line"><span class="keyword">message</span>( [Main] <span class="variable">$&#123;ui_FILES&#125;</span> ) <span class="comment"># build/ui_mainwindow.h</span></span><br><span class="line"><span class="keyword">message</span>( [Main] <span class="variable">$&#123;qrc_FILES&#125;</span> )<span class="comment"># build/qrc_resource.cpp</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Tell CMake to create the helloworld executable</span></span><br><span class="line"><span class="keyword">add_executable</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span> <span class="variable">$&#123;SRC_LIST&#125;</span> <span class="variable">$&#123;ui_FILES&#125;</span> <span class="variable">$&#123;qrc_FILES&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">qt5_use_modules</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span> Core Widgets OpenGL Xml Gui)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Use the Widgets module from Qt 5.</span></span><br><span class="line"><span class="comment">#qt5_use_modules(helloworld Widgets)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># link other libraries</span></span><br><span class="line"><span class="comment">#target_link_libraries ($&#123;PROJECT_NAME&#125; $&#123;SPEC_OPENCV_LIBS&#125;)</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="CMakeLists-txt-2"><a href="#CMakeLists-txt-2" class="headerlink" title="CMakeLists.txt 2"></a>CMakeLists.txt 2</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(PROJECT_NAME demo)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_BINARY_DIR <span class="variable">$&#123;CMAKE_SOURCE_DIR&#125;</span>/bin)  <span class="comment"># bin/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(EXECUTABLE_OUTPUT_PATH <span class="variable">$&#123;CMAKE_BINARY_DIR&#125;</span>)</span><br><span class="line"><span class="keyword">set</span>(LIBRARY_OUTPUT_PATH <span class="variable">$&#123;CMAKE_BINARY_DIR&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_STANDARD <span class="number">11</span>)</span><br><span class="line"><span class="comment">#set(CMAKE_PREFIX_PATH $&#123;QTDIR&#125;)</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_AUTOMOC <span class="keyword">ON</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_AUTOUIC <span class="keyword">ON</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_AUTORCC <span class="keyword">ON</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># QT5_DIR /opt/Qt5.7.0/5.7/gcc_64/lib/cmake/Qt5</span></span><br><span class="line"><span class="keyword">find_package</span>(Qt5 REQUIRED Widgets Core Gui Network OpenGL)</span><br><span class="line"><span class="keyword">find_package</span>(OpenCV REQUIRED COMPONENTS core highgui imgproc features2d calib3d )</span><br><span class="line"><span class="keyword">find_package</span>(Protobuf REQUIRED) <span class="comment"># 3.6.1</span></span><br><span class="line"><span class="keyword">find_package</span>(VTK REQUIRED) <span class="comment"># 8.1.2</span></span><br><span class="line"><span class="keyword">include</span>(<span class="variable">$&#123;VTK_USE_FILE&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">MESSAGE</span>( [Main] <span class="string">&quot; VTK_INCLUDE_DIRS = $&#123;VTK_INCLUDE_DIRS&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">MESSAGE</span>( [Main] <span class="string">&quot; VTK_LIBRARIES = $&#123;VTK_LIBRARIES&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(PCL REQUIRED) <span class="comment"># 1.9.1</span></span><br><span class="line"><span class="comment">#find_package(PCL REQUIRED COMPONENTS common io filters visualization)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">link_directories</span>(<span class="variable">$&#123;PCL_LIBRARY_DIRS&#125;</span>)</span><br><span class="line"><span class="keyword">add_definitions</span>(<span class="variable">$&#123;PCL_DEFINITIONS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">message</span> ([main] <span class="string">&quot;PCL_DIR = $&#123;PCL_DIR&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span> ([main] <span class="string">&quot;PCL_FOUND = $&#123;PCL_FOUND&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span> ([main] <span class="string">&quot;PCL_INCLUDE_DIRS = $&#123;PCL_INCLUDE_DIRS&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span> ([main] <span class="string">&quot;PCL_LIBRARIES = $&#123;PCL_LIBRARIES&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">message</span> ([main] <span class="string">&quot;PCL_LIBRARY_DIRS = $&#123;PCL_LIBRARY_DIRS&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span> ([main] <span class="string">&quot;PCL_COMMON_LIBRARIES = $&#123;PCL_COMMON_LIBRARIES&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span> ([main] <span class="string">&quot;PCL_IO_LIBRARIES = $&#123;PCL_IO_LIBRARIES&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span> ([main] <span class="string">&quot;PCL_FILTERS_LIBRARIES = $&#123;PCL_FILTERS_LIBRARIES&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span> ([main] <span class="string">&quot;PCL_VISUALIZATION_LIBRARIES = $&#123;PCL_VISUALIZATION_LIBRARIES&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">include_directories</span>(</span><br><span class="line">	./ <span class="comment"># current folder</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#	$&#123;GFLAGS_INCLUDE_DIRS&#125;</span></span><br><span class="line"><span class="comment">#	$&#123;GLOG_INCLUDE_DIRS&#125;</span></span><br><span class="line"><span class="comment">#	$&#123;GTEST_INCLUDE_DIRS&#125;</span></span><br><span class="line">	<span class="variable">$&#123;PROTOBUF_INCLUDE_DIRS&#125;</span></span><br><span class="line">	<span class="variable">$&#123;Boost_INCLUDE_DIRS&#125;</span> </span><br><span class="line">	<span class="variable">$&#123;OpenCV_INCLUDE_DIRS&#125;</span></span><br><span class="line">	<span class="variable">$&#123;VTK_INCLUDE_DIRS&#125;</span></span><br><span class="line">	<span class="variable">$&#123;PCL_INCLUDE_DIRS&#125;</span></span><br><span class="line">) </span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(SOURCE_FILES</span><br><span class="line">    main.cpp</span><br><span class="line">    MainWindow.cpp</span><br><span class="line">    ./proto/camera_image.pb.cc</span><br><span class="line">    ./proto/point_cloud.pb.cc</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(RESOURCE_FILE resource.qrc)</span><br><span class="line"></span><br><span class="line"><span class="keyword">add_executable</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span> <span class="variable">$&#123;SOURCE_FILES&#125;</span> <span class="variable">$&#123;RESOURCE_FILE&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">target_link_libraries</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span> </span><br><span class="line">    Qt5::Widgets Qt5::Gui Qt5::Core Qt5::OpenGL Qt5::Network</span><br><span class="line">	<span class="variable">$&#123;Boost_LIBRARIES&#125;</span></span><br><span class="line">	<span class="variable">$&#123;PROTOBUF_LIBRARIES&#125;</span></span><br><span class="line">	<span class="variable">$&#123;OpenCV_LIBRARIES&#125;</span></span><br><span class="line">	<span class="variable">$&#123;VTK_LIBRARIES&#125;</span></span><br><span class="line">	<span class="variable">$&#123;PCL_LIBRARIES&#125;</span>    </span><br><span class="line">    pthread</span><br><span class="line">    rt</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="cmake"><a href="#cmake" class="headerlink" title="cmake"></a>cmake</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> hello</span><br><span class="line"><span class="built_in">mkdir</span> build</span><br><span class="line"><span class="built_in">cd</span> build</span><br><span class="line">cmake ..</span><br><span class="line">make</span><br></pre></td></tr></table></figure>
+
+<h3 id="run"><a href="#run" class="headerlink" title="run"></a>run</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./helloworld</span><br></pre></td></tr></table></figure>
+
+<p>screen snapshot like this:</p>
+<p><img src="https://kezunlin.me/images/posts/635233-20180108163402269-37644849.png" alt="qt demo window"></p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://wiki.qt.io/Install_Qt_5_on_Ubuntu">Install_Qt_5_on_Ubuntu</a></li>
+<li><a target="_blank" rel="noopener" href="http://sourcedigit.com/20623-how-to-install-qt-creator-on-ubuntu-16-04/">install-qt-creator-on-ubuntu-16-04</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.ics.com/blog/getting-started-qt-and-qt-creator-linux">getting-started-qt-and-qt-creator-linux</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/17106315/failed-to-load-platform-plugin-xcb-while-launching-qt5-app-on-linux-without">failed-to-load-platform-plugin-xcb</a></li>
+<li><a target="_blank" rel="noopener" href="https://lemirep.wordpress.com/2013/06/01/deploying-qt-applications-on-linux-and-windows-3/">deploying-qt-applications-on-linux-and-windows-3</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180108: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/qt/" rel="tag"># qt</a>
+              <a href="/tags/qtcreator/" rel="tag"># qtcreator</a>
+              <a href="/tags/qt5/" rel="tag"># qt5</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/ubuntu-network-proxy/" rel="prev" title="Ubuntu Network Configuration">
+      <i class="fa fa-chevron-left"></i> Ubuntu Network Configuration
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/guide-to-build-qt-library-and-use-in-another-project/" rel="next" title="How to Build and Use user-defined QT Library">
+      How to Build and Use user-defined QT Library <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Series"><span class="nav-number">1.</span> <span class="nav-text">Series</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tutorial"><span class="nav-number">2.</span> <span class="nav-text">Tutorial</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#purge-existing-qt"><span class="nav-number">2.1.</span> <span class="nav-text">purge existing qt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-qt57"><span class="nav-number">2.2.</span> <span class="nav-text">install qt57</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#qtchooser"><span class="nav-number">2.3.</span> <span class="nav-text">qtchooser</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#add-qt57-conf"><span class="nav-number">2.3.1.</span> <span class="nav-text">add qt57.conf</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#link-to-default"><span class="nav-number">2.3.2.</span> <span class="nav-text">link to default</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#qt-conf"><span class="nav-number">2.3.3.</span> <span class="nav-text">qt conf</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#qtchooser-1"><span class="nav-number">2.3.4.</span> <span class="nav-text">qtchooser</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#qtchooser-env"><span class="nav-number">2.3.5.</span> <span class="nav-text">qtchooser env</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#export-QT-QPA-PLATFORM-PLUGIN-PATH"><span class="nav-number">2.3.6.</span> <span class="nav-text">export QT_QPA_PLATFORM_PLUGIN_PATH</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QtCreator-Tutorial"><span class="nav-number">3.</span> <span class="nav-text">QtCreator Tutorial</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#install-qtcreator"><span class="nav-number">3.1.</span> <span class="nav-text">install qtcreator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#create-application"><span class="nav-number">3.2.</span> <span class="nav-text">create application</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#qt-slots"><span class="nav-number">3.3.</span> <span class="nav-text">qt slots</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#method-1"><span class="nav-number">3.3.1.</span> <span class="nav-text">method 1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#method-2-OK"><span class="nav-number">3.3.2.</span> <span class="nav-text">method 2 (OK)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Code-Example"><span class="nav-number">4.</span> <span class="nav-text">Code Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#folder"><span class="nav-number">4.1.</span> <span class="nav-text">folder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#code"><span class="nav-number">4.2.</span> <span class="nav-text">code</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#mainwinow-h"><span class="nav-number">4.2.1.</span> <span class="nav-text">mainwinow.h</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mainwindow-cpp"><span class="nav-number">4.2.2.</span> <span class="nav-text">mainwindow.cpp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#main-cpp"><span class="nav-number">4.2.3.</span> <span class="nav-text">main.cpp</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">4.3.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt-2"><span class="nav-number">4.4.</span> <span class="nav-text">CMakeLists.txt 2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cmake"><span class="nav-number">4.5.</span> <span class="nav-text">cmake</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#run"><span class="nav-number">4.6.</span> <span class="nav-text">run</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">6.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

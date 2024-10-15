@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Guiderequirements:  ubuntu: 16.04 python: 3.5.2 opencv: 3.4.2+ tesseract: v4 (binary) pytesseract: 0.2.4 (python bindings)  install python1234567891011121314apt-get install python3-dev python3-pip &#96;&#96;&#96;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenCV OCR and text recognition with Tesseract on ubuntu 16.04">
+<meta property="og:url" content="https://kezunlin.me/blog/OpenCV-OCR-and-text-recognition-with-Tesseract-on-ubuntu-16-04/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Guiderequirements:  ubuntu: 16.04 python: 3.5.2 opencv: 3.4.2+ tesseract: v4 (binary) pytesseract: 0.2.4 (python bindings)  install python1234567891011121314apt-get install python3-dev python3-pip &#96;&#96;&#96;">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-09-20T06:50:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="opencv">
+<meta property="article:tag" content="ocr">
+<meta property="article:tag" content="tesseract">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/OpenCV-OCR-and-text-recognition-with-Tesseract-on-ubuntu-16-04/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>OpenCV OCR and text recognition with Tesseract on ubuntu 16.04 | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/OpenCV-OCR-and-text-recognition-with-Tesseract-on-ubuntu-16-04/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OpenCV OCR and text recognition with Tesseract on ubuntu 16.04
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-09-20 14:50:00" itemprop="dateCreated datePublished" datetime="2018-09-20T14:50:00+08:00">2018-09-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><p>requirements:</p>
+<ul>
+<li>ubuntu: 16.04</li>
+<li>python: 3.5.2</li>
+<li>opencv: 3.4.2+</li>
+<li>tesseract: v4 (binary)</li>
+<li>pytesseract: 0.2.4 (python bindings)</li>
+</ul>
+<h3 id="install-python"><a href="#install-python" class="headerlink" title="install python"></a>install python</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">apt-get install python3-dev python3-pip </span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line"><span class="comment">### install opencv </span></span><br><span class="line">```bash</span><br><span class="line">workon py3 </span><br><span class="line">pip install opencv-contrib-python</span><br><span class="line">```   </span><br><span class="line"></span><br><span class="line"><span class="comment">### install tesseract</span></span><br><span class="line">```bash</span><br><span class="line"><span class="built_in">sudo</span> add-apt-repository ppa:alex-p/tesseract-ocr</span><br><span class="line"><span class="built_in">sudo</span> apt-get update</span><br><span class="line"><span class="built_in">sudo</span> apt install tesseract-ocr</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>The latest release of <code>Tesseract (v4)</code> supports deep learning-based OCR that is significantly more accurate.</p>
+</blockquote>
+<blockquote>
+<p>The underlying OCR engine itself utilizes a <code>Long Short-Term Memory (LSTM) network</code>, a kind of <code>Recurrent Neural Network (RNN)</code>.</p>
+</blockquote>
+<p>check </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">tesseract -v</span><br><span class="line">tesseract 4.0.0-beta.4-138-g2093</span><br><span class="line">  leptonica-1.76.0</span><br><span class="line">  libgif 5.1.4 : libjpeg 8d (libjpeg-turbo 1.4.2) : libpng 1.2.54 : libtiff 4.0.6 : zlib 1.2.8 : libwebp 0.4.4 : libopenjp2 2.1.2</span><br><span class="line">  Found AVX2</span><br><span class="line">  Found AVX</span><br><span class="line">  Found SSE</span><br></pre></td></tr></table></figure>
+
+<h3 id="install-Tesseract-Python-bindings"><a href="#install-Tesseract-Python-bindings" class="headerlink" title="install Tesseract + Python bindings"></a>install Tesseract + Python bindings</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">workon py3</span><br><span class="line">pip install pytesseract</span><br><span class="line">pip install pillow imutils</span><br></pre></td></tr></table></figure>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+<h2 id="tesseract"><a href="#tesseract" class="headerlink" title="tesseract"></a>tesseract</h2><h3 id="help"><a href="#help" class="headerlink" title="help"></a>help</h3><pre><code>tesseract --help
+Usage:
+  tesseract --help | --help-extra | --version
+  tesseract --list-langs
+  tesseract imagename outputbase [options...] [configfile...]
+
+OCR options:
+  -l LANG[+LANG]        Specify language(s) used for OCR.
+NOTE: These options must occur before any configfile.
+
+Single options:
+  --help                Show this help message.
+  --help-extra          Show extra help for advanced users.
+  --version             Show version information.
+  --list-langs          List available languages for tesseract engine.
+</code></pre>
+<h3 id="help-extra"><a href="#help-extra" class="headerlink" title="help-extra"></a>help-extra</h3><pre><code>tesseract --help-extra
+Usage:
+  tesseract --help | --help-extra | --help-psm | --help-oem | --version
+  tesseract --list-langs [--tessdata-dir PATH]
+  tesseract --print-parameters [options...] [configfile...]
+  tesseract imagename|imagelist|stdin outputbase|stdout [options...] [configfile...]
+
+OCR options:
+  --tessdata-dir PATH   Specify the location of tessdata path.
+  --user-words PATH     Specify the location of user words file.
+  --user-patterns PATH  Specify the location of user patterns file.
+  -l LANG[+LANG]        Specify language(s) used for OCR.
+  -c VAR=VALUE          Set value for config variables.
+                        Multiple -c arguments are allowed.
+  --psm NUM             Specify page segmentation mode.
+  --oem NUM             Specify OCR Engine mode.
+NOTE: These options must occur before any configfile.
+
+Page segmentation modes:
+  0    Orientation and script detection (OSD) only.
+  1    Automatic page segmentation with OSD.
+  2    Automatic page segmentation, but no OSD, or OCR.
+  3    Fully automatic page segmentation, but no OSD. (Default)
+  4    Assume a single column of text of variable sizes.
+  5    Assume a single uniform block of vertically aligned text.
+  6    Assume a single uniform block of text.
+  7    Treat the image as a single text line.
+  8    Treat the image as a single word.
+  9    Treat the image as a single word in a circle.
+ 10    Treat the image as a single character.
+ 11    Sparse text. Find as much text as possible in no particular order.
+ 12    Sparse text with OSD.
+ 13    Raw line. Treat the image as a single text line,
+       bypassing hacks that are Tesseract-specific.
+
+OCR Engine modes: (see https://github.com/tesseract-ocr/tesseract/wiki#linux)
+  0    Legacy engine only.
+  1    Neural nets LSTM engine only.
+  2    Legacy + LSTM engines.
+  3    Default, based on what is available.
+
+Single options:
+  -h, --help            Show minimal help message.
+  --help-extra          Show extra help for advanced users.
+  --help-psm            Show page segmentation modes.
+  --help-oem            Show OCR Engine modes.
+  -v, --version         Show version information.
+  --list-langs          List available languages for tesseract engine.
+  --print-parameters    Print tesseract parameters.
+</code></pre>
+<h3 id="run-script"><a href="#run-script" class="headerlink" title="run script"></a>run script</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">python text_recognition.py --east frozen_east_text_detection.pb \</span><br><span class="line">    --image images/example_01.jpg</span><br><span class="line">[INFO] loading EAST text detector...</span><br><span class="line">OCR TEXT</span><br><span class="line">========</span><br><span class="line">OH OK</span><br></pre></td></tr></table></figure>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.pyimagesearch.com/2018/09/17/opencv-ocr-and-text-recognition-with-tesseract/">OpenCV OCR and text recognition with Tesseract</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180920:  created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/opencv/" rel="tag"># opencv</a>
+              <a href="/tags/ocr/" rel="tag"># ocr</a>
+              <a href="/tags/tesseract/" rel="tag"># tesseract</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/python-virtualenv-tutorial/" rel="prev" title="python virtualenv tutorial">
+      <i class="fa fa-chevron-left"></i> python virtualenv tutorial
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/linux-xargs-tutorial/" rel="next" title="how to use linux xargs command">
+      how to use linux xargs command <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#install-python"><span class="nav-number">1.1.</span> <span class="nav-text">install python</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-Tesseract-Python-bindings"><span class="nav-number">1.2.</span> <span class="nav-text">install Tesseract + Python bindings</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tesseract"><span class="nav-number">2.</span> <span class="nav-text">tesseract</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#help"><span class="nav-number">2.1.</span> <span class="nav-text">help</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#help-extra"><span class="nav-number">2.2.</span> <span class="nav-text">help-extra</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#run-script"><span class="nav-number">2.3.</span> <span class="nav-text">run script</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

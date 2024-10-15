@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="TutorialCaffe networks can be transformed to your particular needs by editing the model parameters. The data, diffs, and parameters of a net are all exposed in pycaffe. Roll up your sleeves for net su">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Net Surgery with Caffe and Python">
+<meta property="og:url" content="https://kezunlin.me/blog/Net-Surgery/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="TutorialCaffe networks can be transformed to your particular needs by editing the model parameters. The data, diffs, and parameters of a net are all exposed in pycaffe. Roll up your sleeves for net su">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180816095053371-613196163.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180816095057441-58520598.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180816095102256-537112316.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180816095105836-233219882.png">
+<meta property="article:published_time" content="2018-08-16T01:48:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="caffe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kezunlin.me/images/posts/635233-20180816095053371-613196163.png">
+
+<link rel="canonical" href="https://kezunlin.me/blog/Net-Surgery/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Net Surgery with Caffe and Python | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/Net-Surgery/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Net Surgery with Caffe and Python
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-08-16 09:48:00" itemprop="dateCreated datePublished" datetime="2018-08-16T09:48:00+08:00">2018-08-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deep-learning/" itemprop="url" rel="index"><span itemprop="name">deep learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Tutorial"><a href="#Tutorial" class="headerlink" title="Tutorial"></a>Tutorial</h2><p>Caffe networks can be transformed to your particular needs by editing the model parameters. The data, diffs, and parameters of a net are all exposed in pycaffe.</p>
+<p>Roll up your sleeves for net surgery with pycaffe!</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">%matplotlib inline</span><br><span class="line"></span><br><span class="line"><span class="comment"># Make sure that caffe is on the python path:</span></span><br><span class="line">caffe_root = <span class="string">&#x27;../&#x27;</span>  <span class="comment"># this file is expected to be in &#123;caffe_root&#125;/examples</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.path.insert(<span class="number">0</span>, caffe_root + <span class="string">&#x27;python&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> caffe</span><br><span class="line"></span><br><span class="line"><span class="comment"># configure plotting</span></span><br><span class="line">plt.rcParams[<span class="string">&#x27;figure.figsize&#x27;</span>] = (<span class="number">10</span>, <span class="number">10</span>)</span><br><span class="line">plt.rcParams[<span class="string">&#x27;image.interpolation&#x27;</span>] = <span class="string">&#x27;nearest&#x27;</span></span><br><span class="line">plt.rcParams[<span class="string">&#x27;image.cmap&#x27;</span>] = <span class="string">&#x27;gray&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Designer-Filters"><a href="#Designer-Filters" class="headerlink" title="Designer Filters"></a>Designer Filters</h3><p>To show how to load, manipulate, and save parameters we’ll design our own filters into a simple network that’s only a single convolution layer. This net has two blobs, <code>data</code> for the input and <code>conv</code> for the convolution output and one parameter <code>conv</code> for the convolution filter weights and biases.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Load the net, list its data and params, and filter an example image.</span></span><br><span class="line">caffe.set_mode_cpu()</span><br><span class="line">net = caffe.Net(<span class="string">&#x27;net_surgery/conv.prototxt&#x27;</span>, caffe.TEST)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;blobs &#123;&#125;\nparams &#123;&#125;&quot;</span>.<span class="built_in">format</span>(net.blobs.keys(), net.params.keys()))</span><br><span class="line"></span><br><span class="line"><span class="comment"># load image and prepare as a single input batch for Caffe</span></span><br><span class="line">im = np.array(caffe.io.load_image(<span class="string">&#x27;images/cat_gray.jpg&#x27;</span>, color=<span class="literal">False</span>)).squeeze()</span><br><span class="line"><span class="comment"># caffe.io.load_image: dims: (height,width,channels),order: RGB,range: [0,1] dtype: float32</span></span><br><span class="line"><span class="comment">#(360, 480, 1)--&gt;(360, 480)  </span></span><br><span class="line"><span class="comment">#print im[:5,:5]</span></span><br><span class="line"></span><br><span class="line">plt.title(<span class="string">&quot;original image&quot;</span>)</span><br><span class="line">plt.imshow(im)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line"></span><br><span class="line">im_input = im[np.newaxis, np.newaxis, :, :] <span class="comment">#(1, 1, 360, 480) (c,h,w) [0,1] float32</span></span><br><span class="line"></span><br><span class="line">net.blobs[<span class="string">&#x27;data&#x27;</span>].reshape(*im_input.shape) <span class="comment"># (1, 1, 100, 100) ---&gt;(1, 1, 360, 480)</span></span><br><span class="line"><span class="built_in">print</span> net.blobs[<span class="string">&#x27;data&#x27;</span>].data.shape </span><br><span class="line">net.blobs[<span class="string">&#x27;data&#x27;</span>].data[...] = im_input</span><br></pre></td></tr></table></figure>
+
+<pre><code>blobs [&#39;data&#39;, &#39;conv&#39;]
+params [&#39;conv&#39;]
+[[ 0.10196079  0.10588235  0.09803922  0.10980392  0.11372549]
+ [ 0.10196079  0.10588235  0.09803922  0.10196079  0.10980392]
+ [ 0.10196079  0.10588235  0.10196079  0.10196079  0.10588235]
+ [ 0.10588235  0.10196079  0.10588235  0.10980392  0.11372549]
+ [ 0.11764706  0.10196079  0.10196079  0.10588235  0.10980392]]
+(1, 1, 360, 480)
+</code></pre>
+<p><img src="https://kezunlin.me/images/posts/635233-20180816095053371-613196163.png" alt="png"></p>
+<p>The convolution weights are initialized from Gaussian noise while the biases are initialized to zero. These random filters give output somewhat like edge detections.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># helper show filter outputs</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show_filters</span>(<span class="params">net</span>):</span><br><span class="line">    net.forward()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> name,blob <span class="keyword">in</span> net.blobs.iteritems():</span><br><span class="line">        <span class="built_in">print</span> name,blob.data.shape</span><br><span class="line">    <span class="comment"># data (1, 1, 360, 480)   o = (i+2*p-k)/s+1 -&gt;360-5+1=356, 480-5+1=476 </span></span><br><span class="line">    <span class="comment"># conv (1, 3, 356, 476)</span></span><br><span class="line">    <span class="built_in">print</span> </span><br><span class="line">    <span class="keyword">for</span> name,param <span class="keyword">in</span> net.params.iteritems():</span><br><span class="line">        <span class="built_in">print</span> name,param[<span class="number">0</span>].data.shape  <span class="comment"># conv (3, 1, 5, 5)</span></span><br><span class="line">        </span><br><span class="line">    plt.figure()</span><br><span class="line">    filt_count = <span class="number">3</span></span><br><span class="line">    filt_min, filt_max = net.blobs[<span class="string">&#x27;conv&#x27;</span>].data.<span class="built_in">min</span>(), net.blobs[<span class="string">&#x27;conv&#x27;</span>].data.<span class="built_in">max</span>()</span><br><span class="line">    <span class="built_in">print</span> filt_min,filt_max</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">        plt.subplot(<span class="number">1</span>,<span class="number">4</span>,i+<span class="number">2</span>)</span><br><span class="line">        plt.title(<span class="string">&quot;filter #&#123;&#125; output&quot;</span>.<span class="built_in">format</span>(i))</span><br><span class="line">        </span><br><span class="line">        plt.imshow(net.blobs[<span class="string">&#x27;conv&#x27;</span>].data[<span class="number">0</span>, i], vmin=filt_min, vmax=filt_max)</span><br><span class="line">        <span class="comment">#plt.imshow(net.blobs[&#x27;conv&#x27;].data[0, i])</span></span><br><span class="line">        <span class="comment">#cbar = plt.colorbar() # depends on vmin,vmax</span></span><br><span class="line">        </span><br><span class="line">        plt.tight_layout()</span><br><span class="line">        plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># filter the image with initial </span></span><br><span class="line">show_filters(net)</span><br></pre></td></tr></table></figure>
+
+<pre><code>data (1, 1, 360, 480)
+conv (1, 3, 356, 476)
+
+conv (3, 1, 5, 5)
+-0.0651154 0.097207
+</code></pre>
+<p><img src="https://kezunlin.me/images/posts/635233-20180816095057441-58520598.png" alt="png"></p>
+<p>Raising the bias of a filter will correspondingly raise its output:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># pick first filter output</span></span><br><span class="line">conv0 = net.blobs[<span class="string">&#x27;conv&#x27;</span>].data[<span class="number">0</span>, <span class="number">0</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;pre-surgery output mean &#123;:.2f&#125;&quot;</span>.<span class="built_in">format</span>(conv0.mean()))</span><br><span class="line"><span class="comment"># set first filter bias to 1</span></span><br><span class="line"><span class="comment">#print net.params[&#x27;conv&#x27;][1].data.shape</span></span><br><span class="line">net.params[<span class="string">&#x27;conv&#x27;</span>][<span class="number">1</span>].data[<span class="number">0</span>] = <span class="number">1.</span> <span class="comment">#(3,)</span></span><br><span class="line">net.forward()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;post-surgery output mean &#123;:.2f&#125;&quot;</span>.<span class="built_in">format</span>(conv0.mean()))</span><br><span class="line"><span class="comment"># for conv data,z = wx+b</span></span><br><span class="line"><span class="comment"># z = wx+0, z = wx+1</span></span><br></pre></td></tr></table></figure>
+
+<pre><code>pre-surgery output mean 0.04
+(3,)
+post-surgery output mean 1.04
+</code></pre>
+<p>Altering the filter weights is more exciting since we can assign any kernel like Gaussian blur, the Sobel operator for edges, and so on. The following surgery turns the 0th filter into a Gaussian blur and the 1st and 2nd filters into the horizontal and vertical gradient parts of the Sobel operator.</p>
+<p>See how the 0th output is blurred, the 1st picks up horizontal edges, and the 2nd picks up vertical edges.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">ksize = net.params[<span class="string">&#x27;conv&#x27;</span>][<span class="number">0</span>].data.shape[<span class="number">2</span>:] <span class="comment"># conv (3, 1, 5, 5)---&gt;(5,5)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># make Gaussian blur</span></span><br><span class="line">sigma = <span class="number">1.</span></span><br><span class="line">y, x = np.mgrid[-ksize[<span class="number">0</span>]//<span class="number">2</span> + <span class="number">1</span>:ksize[<span class="number">0</span>]//<span class="number">2</span> + <span class="number">1</span>, -ksize[<span class="number">1</span>]//<span class="number">2</span> + <span class="number">1</span>:ksize[<span class="number">1</span>]//<span class="number">2</span> + <span class="number">1</span>]</span><br><span class="line">g = np.exp(-((x**<span class="number">2</span> + y**<span class="number">2</span>)/(<span class="number">2.0</span>*sigma**<span class="number">2</span>)))</span><br><span class="line">gaussian = (g / g.<span class="built_in">sum</span>()).astype(np.float32)</span><br><span class="line"></span><br><span class="line">net.params[<span class="string">&#x27;conv&#x27;</span>][<span class="number">0</span>].data[<span class="number">0</span>] = gaussian</span><br><span class="line"></span><br><span class="line"><span class="comment"># make Sobel operator for edge detection</span></span><br><span class="line">net.params[<span class="string">&#x27;conv&#x27;</span>][<span class="number">0</span>].data[<span class="number">1</span>:] = <span class="number">0.</span></span><br><span class="line">sobel = np.array((-<span class="number">1</span>, -<span class="number">2</span>, -<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>), dtype=np.float32).reshape((<span class="number">3</span>,<span class="number">3</span>))</span><br><span class="line">net.params[<span class="string">&#x27;conv&#x27;</span>][<span class="number">0</span>].data[<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>:-<span class="number">1</span>, <span class="number">1</span>:-<span class="number">1</span>] = sobel  <span class="comment"># horizontal</span></span><br><span class="line">net.params[<span class="string">&#x27;conv&#x27;</span>][<span class="number">0</span>].data[<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>:-<span class="number">1</span>, <span class="number">1</span>:-<span class="number">1</span>] = sobel.T  <span class="comment"># vertical</span></span><br><span class="line">show_filters(net)</span><br></pre></td></tr></table></figure>
+
+<pre><code>data (1, 1, 360, 480)
+conv (1, 3, 356, 476)
+
+conv (3, 1, 5, 5)
+-3.67843 3.77647
+</code></pre>
+<p><img src="https://kezunlin.me/images/posts/635233-20180816095102256-537112316.png" alt="png"></p>
+<p>With net surgery, parameters can be transplanted across nets, regularized by custom per-parameter operations, and transformed according to your schemes.</p>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+<h3 id="Casting-a-Classifier-into-a-Fully-Convolutional-Network"><a href="#Casting-a-Classifier-into-a-Fully-Convolutional-Network" class="headerlink" title="Casting a Classifier into a Fully Convolutional Network"></a>Casting a Classifier into a Fully Convolutional Network</h3><p>Let’s take the standard Caffe Reference ImageNet model “CaffeNet” and transform it into a fully convolutional net for efficient, dense inference on large inputs. This model generates a classification map that covers a given input size instead of a single classification. In particular a 8 $\times$ 8 classification map on a 451 $\times$ 451 input gives 64x the output in only 3x the time. The computation exploits a natural efficiency of convolutional network (convnet) structure by amortizing the computation of overlapping receptive fields.</p>
+<p>To do so we translate the <code>InnerProduct</code> matrix multiplication layers of CaffeNet into <code>Convolutional</code> layers. This is the only change: the other layer types are agnostic to spatial size. Convolution is translation-invariant, activations are elementwise operations, and so on. The <code>fc6</code> inner product when carried out as convolution by <code>fc6-conv</code> turns into a 6 $\times$ 6 filter with stride 1 on <code>pool5</code>. Back in image space this gives a classification for each 227 $\times$ 227 box with stride 32 in pixels. Remember the equation for output map &#x2F; receptive field size, output &#x3D; (input - kernel_size) &#x2F; stride + 1, and work out the indexing details for a clear understanding.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!diff net_surgery/bvlc_caffenet_full_conv.prototxt ../models/bvlc_reference_caffenet/deploy.prototxt</span><br></pre></td></tr></table></figure>
+
+<pre><code>1,2c1
+&lt; # Fully convolutional network version of CaffeNet.
+&lt; name: &quot;CaffeNetConv&quot;
+---
+&gt; name: &quot;CaffeNet&quot;
+7,11c6
+&lt;   input_param &#123;
+&lt;     # initial shape for a fully convolutional network:
+&lt;     # the shape can be set for each input by reshape.
+&lt;     shape: &#123; dim: 1 dim: 3 dim: 451 dim: 451 &#125;
+&lt;   &#125;
+---
+&gt;   input_param &#123; shape: &#123; dim: 10 dim: 3 dim: 227 dim: 227 &#125; &#125;
+157,158c152,153
+&lt;   name: &quot;fc6-conv&quot;
+&lt;   type: &quot;Convolution&quot;
+---
+&gt;   name: &quot;fc6&quot;
+&gt;   type: &quot;InnerProduct&quot;
+160,161c155,156
+&lt;   top: &quot;fc6-conv&quot;
+&lt;   convolution_param &#123;
+---
+&gt;   top: &quot;fc6&quot;
+&gt;   inner_product_param &#123;
+163d157
+&lt;     kernel_size: 6
+169,170c163,164
+&lt;   bottom: &quot;fc6-conv&quot;
+&lt;   top: &quot;fc6-conv&quot;
+---
+&gt;   bottom: &quot;fc6&quot;
+&gt;   top: &quot;fc6&quot;
+175,176c169,170
+&lt;   bottom: &quot;fc6-conv&quot;
+&lt;   top: &quot;fc6-conv&quot;
+---
+&gt;   bottom: &quot;fc6&quot;
+&gt;   top: &quot;fc6&quot;
+182,186c176,180
+&lt;   name: &quot;fc7-conv&quot;
+&lt;   type: &quot;Convolution&quot;
+&lt;   bottom: &quot;fc6-conv&quot;
+&lt;   top: &quot;fc7-conv&quot;
+&lt;   convolution_param &#123;
+---
+&gt;   name: &quot;fc7&quot;
+&gt;   type: &quot;InnerProduct&quot;
+&gt;   bottom: &quot;fc6&quot;
+&gt;   top: &quot;fc7&quot;
+&gt;   inner_product_param &#123;
+188d181
+&lt;     kernel_size: 1
+194,195c187,188
+&lt;   bottom: &quot;fc7-conv&quot;
+&lt;   top: &quot;fc7-conv&quot;
+---
+&gt;   bottom: &quot;fc7&quot;
+&gt;   top: &quot;fc7&quot;
+200,201c193,194
+&lt;   bottom: &quot;fc7-conv&quot;
+&lt;   top: &quot;fc7-conv&quot;
+---
+&gt;   bottom: &quot;fc7&quot;
+&gt;   top: &quot;fc7&quot;
+207,211c200,204
+&lt;   name: &quot;fc8-conv&quot;
+&lt;   type: &quot;Convolution&quot;
+&lt;   bottom: &quot;fc7-conv&quot;
+&lt;   top: &quot;fc8-conv&quot;
+&lt;   convolution_param &#123;
+---
+&gt;   name: &quot;fc8&quot;
+&gt;   type: &quot;InnerProduct&quot;
+&gt;   bottom: &quot;fc7&quot;
+&gt;   top: &quot;fc8&quot;
+&gt;   inner_product_param &#123;
+213d205
+&lt;     kernel_size: 1
+219c211
+&lt;   bottom: &quot;fc8-conv&quot;
+---
+&gt;   bottom: &quot;fc8&quot;
+</code></pre>
+<p>The only differences needed in the architecture are to change the fully connected classifier inner product layers into convolutional layers with the right filter size – 6 x 6, since the reference model classifiers take the 36 elements of <code>pool5</code> as input – and stride 1 for dense classification. Note that the layers are renamed so that Caffe does not try to blindly load the old parameters when it maps layer names to the pretrained model.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Load the original network and extract the fully connected layers&#x27; parameters.</span></span><br><span class="line">net = caffe.Net(<span class="string">&#x27;../models/bvlc_reference_caffenet/deploy.prototxt&#x27;</span>, </span><br><span class="line">                <span class="string">&#x27;../models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel&#x27;</span>, </span><br><span class="line">                caffe.TEST)</span><br><span class="line">params = [<span class="string">&#x27;fc6&#x27;</span>, <span class="string">&#x27;fc7&#x27;</span>, <span class="string">&#x27;fc8&#x27;</span>]</span><br><span class="line"><span class="comment"># fc_params = &#123;name: (weights, biases)&#125;</span></span><br><span class="line">fc_params = &#123;pr: (net.params[pr][<span class="number">0</span>].data, net.params[pr][<span class="number">1</span>].data) <span class="keyword">for</span> pr <span class="keyword">in</span> params&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> pr <span class="keyword">in</span> params:</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&#x27;&#123;&#125; weights are &#123;&#125; dimensional and biases are &#123;&#125; dimensional&#x27;</span>.<span class="built_in">format</span>(pr, fc_params[pr][<span class="number">0</span>].shape, fc_params[pr][<span class="number">1</span>].shape)</span><br><span class="line">    </span><br><span class="line">pr = <span class="string">&#x27;fc6&#x27;</span></span><br><span class="line"><span class="built_in">print</span> net.params[pr][<span class="number">0</span>].data[<span class="number">0</span>,:<span class="number">6</span>*<span class="number">6</span>]  <span class="comment"># no weight_filler,loaded from weights file  </span></span><br><span class="line"><span class="built_in">print</span> net.params[pr][<span class="number">1</span>].data[<span class="number">0</span>]       <span class="comment"># no bias_filler,loaded from weights file  </span></span><br></pre></td></tr></table></figure>
+
+<pre><code>fc6 weights are (4096, 9216) dimensional and biases are (4096,) dimensional
+fc7 weights are (4096, 4096) dimensional and biases are (4096,) dimensional
+fc8 weights are (1000, 4096) dimensional and biases are (1000,) dimensional
+[ 0.00639847  0.00915686  0.00467043  0.00118941  0.00083305  0.00249258
+  0.00249609 -0.00354958 -0.00502381 -0.00660044 -0.00810635 -0.00120969
+ -0.00182751 -0.00181385 -0.00327348 -0.00657627 -0.01059825 -0.00223066
+  0.00023664  0.00040984 -0.00052619 -0.00124062 -0.00269398 -0.00051081
+  0.0014997   0.00123309 -0.00013806 -0.00111619  0.00321043  0.00284487
+  0.00051387 -0.00087142 -0.00038937 -0.0008678   0.0049024   0.00155215]
+0.983698
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> layer_name, blob <span class="keyword">in</span> net.blobs.iteritems():</span><br><span class="line">    <span class="built_in">print</span> layer_name + <span class="string">&#x27;\t&#x27;</span> + <span class="built_in">str</span>(blob.data.shape)</span><br></pre></td></tr></table></figure>
+
+<pre><code>data	(10, 3, 227, 227)
+conv1	(10, 96, 55, 55)
+pool1	(10, 96, 27, 27)
+norm1	(10, 96, 27, 27)
+conv2	(10, 256, 27, 27)
+pool2	(10, 256, 13, 13)
+norm2	(10, 256, 13, 13)
+conv3	(10, 384, 13, 13)
+conv4	(10, 384, 13, 13)
+conv5	(10, 256, 13, 13)
+pool5	(10, 256, 6, 6)
+fc6	(10, 4096)
+fc7	(10, 4096)
+fc8	(10, 1000)
+prob	(10, 1000)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> layer_name, param <span class="keyword">in</span> net.params.iteritems():</span><br><span class="line">    <span class="built_in">print</span> layer_name + <span class="string">&#x27;\t&#x27;</span> + <span class="built_in">str</span>(param[<span class="number">0</span>].data.shape), <span class="built_in">str</span>(param[<span class="number">1</span>].data.shape)</span><br></pre></td></tr></table></figure>
+
+<pre><code>conv1	(96, 3, 11, 11) (96,)
+conv2	(256, 48, 5, 5) (256,)
+conv3	(384, 256, 3, 3) (384,)
+conv4	(384, 192, 3, 3) (384,)
+conv5	(256, 192, 3, 3) (256,)
+fc6	(4096, 9216) (4096,)
+fc7	(4096, 4096) (4096,)
+fc8	(1000, 4096) (1000,)
+</code></pre>
+<p>Consider the shapes of the inner product parameters. The weight dimensions are the output and input sizes while the bias dimension is the output size.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Load the fully convolutional network to transplant the parameters.</span></span><br><span class="line">net_full_conv = caffe.Net(<span class="string">&#x27;net_surgery/bvlc_caffenet_full_conv.prototxt&#x27;</span>, </span><br><span class="line">                          <span class="string">&#x27;../models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel&#x27;</span>,</span><br><span class="line">                          caffe.TEST)</span><br><span class="line">params_full_conv = [<span class="string">&#x27;fc6-conv&#x27;</span>, <span class="string">&#x27;fc7-conv&#x27;</span>, <span class="string">&#x27;fc8-conv&#x27;</span>]</span><br><span class="line"><span class="comment"># conv_params = &#123;name: (weights, biases)&#125;</span></span><br><span class="line">conv_params = &#123;pr: (net_full_conv.params[pr][<span class="number">0</span>].data, net_full_conv.params[pr][<span class="number">1</span>].data) <span class="keyword">for</span> pr <span class="keyword">in</span> params_full_conv&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> pr <span class="keyword">in</span> params_full_conv:</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&#x27;&#123;&#125; weights are &#123;&#125; dimensional and biases are &#123;&#125; dimensional&#x27;</span>.<span class="built_in">format</span>(pr, conv_params[pr][<span class="number">0</span>].shape, conv_params[pr][<span class="number">1</span>].shape)</span><br><span class="line"></span><br><span class="line">pr = <span class="string">&#x27;fc6-conv&#x27;</span></span><br><span class="line"><span class="built_in">print</span> net_full_conv.params[pr][<span class="number">0</span>].data[<span class="number">0</span>,<span class="number">0</span>,:,:] <span class="comment"># no weight_filler,default to 0s</span></span><br><span class="line"><span class="built_in">print</span> net_full_conv.params[pr][<span class="number">1</span>].data[<span class="number">0</span>]      <span class="comment"># no bias_filler,default to 0s</span></span><br></pre></td></tr></table></figure>
+
+<pre><code>fc6-conv weights are (4096, 256, 6, 6) dimensional and biases are (4096,) dimensional
+fc7-conv weights are (4096, 4096, 1, 1) dimensional and biases are (4096,) dimensional
+fc8-conv weights are (1000, 4096, 1, 1) dimensional and biases are (1000,) dimensional
+[[ 0.  0.  0.  0.  0.  0.]
+ [ 0.  0.  0.  0.  0.  0.]
+ [ 0.  0.  0.  0.  0.  0.]
+ [ 0.  0.  0.  0.  0.  0.]
+ [ 0.  0.  0.  0.  0.  0.]
+ [ 0.  0.  0.  0.  0.  0.]]
+0.0
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> layer_name, blob <span class="keyword">in</span> net_full_conv.blobs.iteritems():</span><br><span class="line">    <span class="built_in">print</span> layer_name + <span class="string">&#x27;\t&#x27;</span> + <span class="built_in">str</span>(blob.data.shape)</span><br></pre></td></tr></table></figure>
+
+<pre><code>data	(1, 3, 451, 451)
+conv1	(1, 96, 111, 111)
+pool1	(1, 96, 55, 55)
+norm1	(1, 96, 55, 55)
+conv2	(1, 256, 55, 55)
+pool2	(1, 256, 27, 27)
+norm2	(1, 256, 27, 27)
+conv3	(1, 384, 27, 27)
+conv4	(1, 384, 27, 27)
+conv5	(1, 256, 27, 27)
+pool5	(1, 256, 13, 13)
+fc6-conv	(1, 4096, 8, 8)
+fc7-conv	(1, 4096, 8, 8)
+fc8-conv	(1, 1000, 8, 8)
+prob	(1, 1000, 8, 8)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> layer_name, param <span class="keyword">in</span> net_full_conv.params.iteritems():</span><br><span class="line">    <span class="built_in">print</span> layer_name + <span class="string">&#x27;\t&#x27;</span> + <span class="built_in">str</span>(param[<span class="number">0</span>].data.shape), <span class="built_in">str</span>(param[<span class="number">1</span>].data.shape)</span><br></pre></td></tr></table></figure>
+
+<pre><code>conv1	(96, 3, 11, 11) (96,)
+conv2	(256, 48, 5, 5) (256,)
+conv3	(384, 256, 3, 3) (384,)
+conv4	(384, 192, 3, 3) (384,)
+conv5	(256, 192, 3, 3) (256,)
+fc6-conv	(4096, 256, 6, 6) (4096,)
+fc7-conv	(4096, 4096, 1, 1) (4096,)
+fc8-conv	(1000, 4096, 1, 1) (1000,)
+</code></pre>
+<p>The convolution weights are arranged in output $\times$ input $\times$ height $\times$ width dimensions. To map the inner product weights to convolution filters, we could roll the flat inner product vectors into channel $\times$ height $\times$ width filter matrices, but actually these are identical in memory (as row major arrays) so we can assign them directly.</p>
+<p>The biases are identical to those of the inner product.</p>
+<p>Let’s transplant!</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">print_params</span>():</span><br><span class="line">    <span class="keyword">for</span> pr <span class="keyword">in</span> params:</span><br><span class="line">        <span class="built_in">print</span> pr, fc_params[pr][<span class="number">0</span>].shape, fc_params[pr][<span class="number">1</span>].shape</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> pr <span class="keyword">in</span> params_full_conv:</span><br><span class="line">        <span class="built_in">print</span> pr, conv_params[pr][<span class="number">0</span>].shape, conv_params[pr][<span class="number">1</span>].shape</span><br><span class="line">    </span><br><span class="line">    pr = <span class="string">&#x27;fc6-conv&#x27;</span></span><br><span class="line">    <span class="built_in">print</span> <span class="string">&#x27;params value for &#x27;</span>,pr</span><br><span class="line">    <span class="built_in">print</span> net_full_conv.params[pr][<span class="number">0</span>].data[<span class="number">0</span>,<span class="number">0</span>,:,:] </span><br><span class="line">    <span class="built_in">print</span> net_full_conv.params[pr][<span class="number">1</span>].data[<span class="number">0</span>] </span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;*&#x27;</span>*<span class="number">50</span></span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;(1) before updated by fc&#x27;</span></span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;*&#x27;</span>*<span class="number">50</span></span><br><span class="line">print_params()</span><br><span class="line"></span><br><span class="line"><span class="comment">#print type(conv_params[pr_conv][0]) # ndarray  ndarray.flat</span></span><br><span class="line"><span class="comment">#conv_params[pr_conv][0].flat = fc_params[pr][0].flat</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># set w6,w7,w8 of conv from fc w6,w7,w8</span></span><br><span class="line"><span class="keyword">for</span> pr, pr_conv <span class="keyword">in</span> <span class="built_in">zip</span>(params, params_full_conv):</span><br><span class="line">    conv_params[pr_conv][<span class="number">0</span>].flat = fc_params[pr][<span class="number">0</span>].flat  <span class="comment"># flat unrolls the arrays</span></span><br><span class="line">    conv_params[pr_conv][<span class="number">1</span>][...] = fc_params[pr][<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">print_conv_params = <span class="literal">True</span></span><br><span class="line">print_conv_params = <span class="literal">False</span></span><br><span class="line"><span class="keyword">if</span> print_conv_params:</span><br><span class="line">    pr = <span class="string">&#x27;fc6&#x27;</span></span><br><span class="line">    <span class="built_in">print</span> net.params[pr][<span class="number">0</span>].data[<span class="number">0</span>,:<span class="number">6</span>*<span class="number">6</span>]  <span class="comment"># no weight_filler,loaded from weights file  </span></span><br><span class="line">    <span class="built_in">print</span> net.params[pr][<span class="number">1</span>].data[<span class="number">0</span>]       <span class="comment"># no bias_filler,loaded from weights file  </span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span> </span><br><span class="line">    <span class="built_in">print</span> <span class="string">&#x27;after init from fc&#x27;</span></span><br><span class="line">    pr = <span class="string">&#x27;fc6-conv&#x27;</span></span><br><span class="line">    <span class="built_in">print</span> net_full_conv.params[pr][<span class="number">0</span>].data[<span class="number">0</span>,<span class="number">0</span>,:,:] <span class="comment"># no weight_filler,default to 0s, here updated by fc</span></span><br><span class="line">    <span class="built_in">print</span> net_full_conv.params[pr][<span class="number">1</span>].data[<span class="number">0</span>]      <span class="comment"># no bias_filler,default to 0s , here updated by fc</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;*&#x27;</span>*<span class="number">50</span></span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;(2) after updated by  fc&#x27;</span></span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;*&#x27;</span>*<span class="number">50</span></span><br><span class="line">print_params()</span><br></pre></td></tr></table></figure>
+
+<pre><code>**************************************************
+(1) before updated by fc
+**************************************************
+fc6 (4096, 9216) (4096,)
+fc7 (4096, 4096) (4096,)
+fc8 (1000, 4096) (1000,)
+fc6-conv (4096, 256, 6, 6) (4096,)
+fc7-conv (4096, 4096, 1, 1) (4096,)
+fc8-conv (1000, 4096, 1, 1) (1000,)
+params value for  fc6-conv
+[[ 0.  0.  0.  0.  0.  0.]
+ [ 0.  0.  0.  0.  0.  0.]
+ [ 0.  0.  0.  0.  0.  0.]
+ [ 0.  0.  0.  0.  0.  0.]
+ [ 0.  0.  0.  0.  0.  0.]
+ [ 0.  0.  0.  0.  0.  0.]]
+0.0
+**************************************************
+(2) after updated by  fc
+**************************************************
+fc6 (4096, 9216) (4096,)
+fc7 (4096, 4096) (4096,)
+fc8 (1000, 4096) (1000,)
+fc6-conv (4096, 256, 6, 6) (4096,)
+fc7-conv (4096, 4096, 1, 1) (4096,)
+fc8-conv (1000, 4096, 1, 1) (1000,)
+params value for  fc6-conv
+[[ 0.00639847  0.00915686  0.00467043  0.00118941  0.00083305  0.00249258]
+ [ 0.00249609 -0.00354958 -0.00502381 -0.00660044 -0.00810635 -0.00120969]
+ [-0.00182751 -0.00181385 -0.00327348 -0.00657627 -0.01059825 -0.00223066]
+ [ 0.00023664  0.00040984 -0.00052619 -0.00124062 -0.00269398 -0.00051081]
+ [ 0.0014997   0.00123309 -0.00013806 -0.00111619  0.00321043  0.00284487]
+ [ 0.00051387 -0.00087142 -0.00038937 -0.0008678   0.0049024   0.00155215]]
+0.983698
+</code></pre>
+<p>Next, save the new model weights.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net_full_conv.save(<span class="string">&#x27;net_surgery/bvlc_caffenet_full_conv.caffemodel&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>To conclude, let’s make a classification map from the example cat image and visualize the confidence of “tiger cat” as a probability heatmap. This gives an 8-by-8 prediction on overlapping regions of the 451 $\times$ 451 input.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">%matplotlib inline</span><br><span class="line"></span><br><span class="line"><span class="comment"># load input and configure preprocessing</span></span><br><span class="line">im = caffe.io.load_image(<span class="string">&#x27;images/cat.jpg&#x27;</span>)</span><br><span class="line">transformer = caffe.io.Transformer(&#123;<span class="string">&#x27;data&#x27;</span>: net_full_conv.blobs[<span class="string">&#x27;data&#x27;</span>].data.shape&#125;) <span class="comment"># (1,3,451,451)</span></span><br><span class="line">transformer.set_mean(<span class="string">&#x27;data&#x27;</span>, np.load(<span class="string">&#x27;../python/caffe/imagenet/ilsvrc_2012_mean.npy&#x27;</span>).mean(<span class="number">1</span>).mean(<span class="number">1</span>))</span><br><span class="line">transformer.set_transpose(<span class="string">&#x27;data&#x27;</span>, (<span class="number">2</span>,<span class="number">0</span>,<span class="number">1</span>))</span><br><span class="line">transformer.set_channel_swap(<span class="string">&#x27;data&#x27;</span>, (<span class="number">2</span>,<span class="number">1</span>,<span class="number">0</span>))</span><br><span class="line">transformer.set_raw_scale(<span class="string">&#x27;data&#x27;</span>, <span class="number">255.0</span>)</span><br><span class="line"></span><br><span class="line">transformed_image = transformer.preprocess(<span class="string">&#x27;data&#x27;</span>, im)</span><br><span class="line"><span class="comment">#print transformed_image.shape #(3, 451, 451)</span></span><br><span class="line">net_full_conv.blobs[<span class="string">&#x27;data&#x27;</span>].data[...] = transformed_image <span class="comment"># (1, 3, 451, 451)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#out = net_full_conv.forward_all(data=np.asarray([transformer.preprocess(&#x27;data&#x27;, im)]))</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># make classification map by forward and print prediction indices at each location</span></span><br><span class="line">out = net_full_conv.forward()</span><br><span class="line">prob = out[<span class="string">&#x27;prob&#x27;</span>][<span class="number">0</span>] <span class="comment"># (1, 1000, 8, 8)--&gt;(1000, 8, 8)</span></span><br><span class="line">classification_map = out[<span class="string">&#x27;prob&#x27;</span>][<span class="number">0</span>].argmax(axis=<span class="number">0</span>) </span><br><span class="line"><span class="built_in">print</span> classification_map <span class="comment"># (8,8)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># show net input and confidence map (probability of the top prediction at each location)</span></span><br><span class="line">plt.subplot(<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>)</span><br><span class="line">plt.imshow(transformer.deprocess(<span class="string">&#x27;data&#x27;</span>, net_full_conv.blobs[<span class="string">&#x27;data&#x27;</span>].data[<span class="number">0</span>]))</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">plt.imshow(out[<span class="string">&#x27;prob&#x27;</span>][<span class="number">0</span>,<span class="number">281</span>]) <span class="comment"># correct class = 281</span></span><br><span class="line">plt.colorbar()</span><br><span class="line"></span><br><span class="line">plt.tight_layout()</span><br></pre></td></tr></table></figure>
+
+<pre><code>[[282 282 281 281 281 281 277 282]
+ [281 283 283 281 281 281 281 282]
+ [283 283 283 283 283 283 287 282]
+ [283 283 283 281 283 283 283 259]
+ [283 283 283 283 283 283 283 259]
+ [283 283 283 283 283 283 259 259]
+ [283 283 283 283 259 259 259 277]
+ [335 335 283 259 263 263 263 277]]
+</code></pre>
+<p><img src="https://kezunlin.me/images/posts/635233-20180816095105836-233219882.png" alt="png"></p>
+<p>The classifications include various cats – 282 &#x3D; tiger cat, 281 &#x3D; tabby, 283 &#x3D; persian – and foxes and other mammals.</p>
+<p>In this way the fully connected layers can be extracted as dense features across an image (see <code>net_full_conv.blobs[&#39;fc6&#39;].data</code> for instance), which is perhaps more useful than the classification map itself.</p>
+<p>Note that this model isn’t totally appropriate for sliding-window detection since it was trained for whole-image classification. Nevertheless it can work just fine. Sliding-window training and finetuning can be done by defining a sliding-window ground truth and loss such that a loss map is made for every location and solving as usual. (This is an exercise for the reader.)</p>
+<p><em>A thank you to Rowland Depp for first suggesting this trick.</em></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net_full_conv.blobs[<span class="string">&#x27;fc6-conv&#x27;</span>].data[<span class="number">0</span>,<span class="number">176</span>,:,:] <span class="comment"># (1, 4096, 8, 8)</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([[  0.        ,   3.78561878,   4.91759014,  11.89788914,
+         14.29053116,  16.50216484,   3.7467947 ,   0.        ],
+       [  0.        ,  17.67206573,  25.0014534 ,  39.59349442,
+         39.08831787,  29.11470604,   9.98679352,   0.        ],
+       [  1.67216611,  18.15454102,  24.08405876,  39.18917847,
+         37.54191971,  15.41128445,   0.        ,   0.        ],
+       [  0.        ,   3.00706673,   5.87482309,  15.25675011,
+         12.55344582,   0.        ,   0.        ,   0.        ],
+       [  0.        ,   0.        ,   0.        ,   0.        ,
+          1.        ,   0.        ,   0.        ,   0.        ],
+       [  0.        ,   0.        ,   0.        ,   0.        ,
+          1.        ,   0.        ,   0.        ,   0.        ],
+       [  0.        ,   0.        ,   0.        ,   0.        ,
+          1.        ,   0.        ,   0.        ,   0.        ],
+       [  0.        ,   0.        ,   0.        ,   0.        ,
+          1.        ,   0.        ,   0.        ,   0.        ]], dtype=float32)
+</code></pre>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://demo.vislab.berkeleyvision.org/">demo</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/BVLC/caffe">caffe git</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180816: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/caffe/" rel="tag"># caffe</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/Fine-tuning-a-Pretrained-Network-for-Style-Recognition/" rel="prev" title="Fine-tuning a Pretrained Network for Style Recognition">
+      <i class="fa fa-chevron-left"></i> Fine-tuning a Pretrained Network for Style Recognition
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/Multilabel-classification-on-PASCAL-using-python-data-layers/" rel="next" title="Multilabel classification on PASCAL using python data-layers">
+      Multilabel classification on PASCAL using python data-layers <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Tutorial"><span class="nav-number">1.</span> <span class="nav-text">Tutorial</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Designer-Filters"><span class="nav-number">1.1.</span> <span class="nav-text">Designer Filters</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Casting-a-Classifier-into-a-Fully-Convolutional-Network"><span class="nav-number">1.2.</span> <span class="nav-text">Casting a Classifier into a Fully Convolutional Network</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

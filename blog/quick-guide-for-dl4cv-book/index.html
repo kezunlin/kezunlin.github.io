@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Quick Guidepreparetools MobaXterm (for windows) ssh + vscode   for windows:drop files to MobaXterm to upload to serveruse zip format  commandsview disk  du -d 1 -h df -h  gpu and cpu usage  watch -n 1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="install and configure deep learning environments on linux server">
+<meta property="og:url" content="https://kezunlin.me/blog/quick-guide-for-dl4cv-book/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Quick Guidepreparetools MobaXterm (for windows) ssh + vscode   for windows:drop files to MobaXterm to upload to serveruse zip format  commandsview disk  du -d 1 -h df -h  gpu and cpu usage  watch -n 1">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-08-21T09:07:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="nvidia-docker">
+<meta property="article:tag" content="dl4cv">
+<meta property="article:tag" content="kaggle">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/quick-guide-for-dl4cv-book/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>install and configure deep learning environments on linux server | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/quick-guide-for-dl4cv-book/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          install and configure deep learning environments on linux server
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-08-21 17:07:00" itemprop="dateCreated datePublished" datetime="2019-08-21T17:07:00+08:00">2019-08-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deep-learning/" itemprop="url" rel="index"><span itemprop="name">deep learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Quick-Guide"><a href="#Quick-Guide" class="headerlink" title="Quick Guide"></a>Quick Guide</h2><h3 id="prepare"><a href="#prepare" class="headerlink" title="prepare"></a>prepare</h3><h4 id="tools"><a href="#tools" class="headerlink" title="tools"></a>tools</h4><ul>
+<li>MobaXterm (for windows)</li>
+<li>ssh + vscode</li>
+</ul>
+<blockquote>
+<p>for windows:<br>drop files to MobaXterm to upload to server<br>use <code>zip</code> format</p>
+</blockquote>
+<h4 id="commands"><a href="#commands" class="headerlink" title="commands"></a>commands</h4><p>view disk </p>
+<pre><code>du -d 1 -h
+df -h
+</code></pre>
+<p>gpu and cpu usage </p>
+<pre><code>watch -n 1 nvidia-smi
+top 
+</code></pre>
+<p>view files and count </p>
+<pre><code>wc -l data.csv
+
+# count how many folders
+ls -lR | grep &#39;^d&#39; | wc -l
+17
+
+# count how many jpg files
+ls -lR | grep &#39;.jpg&#39; | wc -l
+1360
+
+# view 10 images 
+ls train | head
+ls test | head
+</code></pre>
+<p>link datasets</p>
+<pre><code># link 
+ln -s srt dest
+ln -s /data_1/kezunlin/datasets/ dl4cv/datasets
+</code></pre>
+<p>scp </p>
+<pre><code>scp -r node17:~/dl4cv  ~/git/
+scp -r node17:~/.keras ~/
+</code></pre>
+<p>tmux for background tasks</p>
+<pre><code>tmux new -s notebook
+tmux ls 
+tmux attach -t notebook
+tmux detach
+</code></pre>
+<p>wget download </p>
+<pre><code># wget 
+# continue donwload
+wget -c url 
+
+# background donwload for large file
+wget -b -c url
+tail -f wget-log
+
+# kill background wget
+pkill -9 wget
+</code></pre>
+<p><strong>tips about training large model</strong></p>
+<p>terminal 1:</p>
+<pre><code>tmux new -s train
+conda activate keras
+
+time python train_alexnet.py
+</code></pre>
+<p>terminal 2:</p>
+<pre><code>tmux detach
+
+tmux attach -t train
+</code></pre>
+<p>and then close vscode, otherwise bash training process will exit when we close vscode.</p>
+<h3 id="cuda-driver-and-toolkits"><a href="#cuda-driver-and-toolkits" class="headerlink" title="cuda driver and toolkits"></a>cuda driver and toolkits</h3><p>see <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html">cuda-toolkit for cuda driver version</a></p>
+<blockquote>
+<p>cudatookit version depends on cuda driver version.</p>
+</blockquote>
+<h4 id="install-nvidia-drivers"><a href="#install-nvidia-drivers" class="headerlink" title="install nvidia-drivers"></a><del>install nvidia-drivers</del></h4><pre><code>sudo add-apt-repository ppa:graphics-drivers/ppa
+sudp apt-get update
+
+sudo apt-cache search nvidia-*
+# nvidia-384
+# nvidia-396
+sudo apt-get -y install nvidia-418
+
+# test 
+nvidia-smi
+Failed to initialize NVML: Driver/library version mismatch
+</code></pre>
+<blockquote>
+<p>reboot to test again<br><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/43022843/nvidia-nvml-driver-library-version-mismatch">https://stackoverflow.com/questions/43022843/nvidia-nvml-driver-library-version-mismatch</a></p>
+</blockquote>
+<h4 id="install-cuda-toolkit-dirvers"><a href="#install-cuda-toolkit-dirvers" class="headerlink" title="install cuda-toolkit(dirvers)"></a>install cuda-toolkit(dirvers)</h4><p>remove all previous nvidia drivers</p>
+<pre><code>sudo apt-get -y pruge nvidia-*
+</code></pre>
+<p>go to <a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-toolkit-archive">here</a> and download <code>cuda_10.1</code></p>
+<pre><code>wget -b -c http://developer.download.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.243_418.87.00_linux.run
+sudo sh cuda_10.1.243_418.87.00_linux.run
+
+sudo ./cuda_10.1.243_418.87.00_linux.run
+
+vim .bashrc
+# for cuda and cudnn
+export PATH=/usr/local/cuda/bin:$PATH
+export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+</code></pre>
+<p>check cuda driver version </p>
+<pre><code>&gt; cat /proc/driver/nvidia/version
+NVRM version: NVIDIA UNIX x86_64 Kernel Module  418.87.00  Thu Aug  8 15:35:46 CDT 2019
+GCC version:  gcc version 5.4.0 20160609 (Ubuntu 5.4.0-6ubuntu1~16.04.11) 
+
+
+&gt;nvidia-smi
+Tue Aug 27 17:36:35 2019       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 418.87.00    Driver Version: 418.87.00    CUDA Version: 10.1     |
+|-------------------------------+----------------------+----------------------+
+
+
+&gt; nvidia-smi -L
+GPU 0: Quadro RTX 8000 (UUID: GPU-acb01c1b-776d-cafb-ea35-430b3580d123)
+GPU 1: Quadro RTX 8000 (UUID: GPU-df7f0fb8-1541-c9ce-e0f8-e92bccabf0ef)
+GPU 2: Quadro RTX 8000 (UUID: GPU-67024023-20fd-a522-dcda-261063332731)
+GPU 3: Quadro RTX 8000 (UUID: GPU-7f9d6a27-01ec-4ae5-0370-f0c356327913)
+
+&gt; nvcc -V
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2019 NVIDIA Corporation
+Built on Sun_Jul_28_19:07:16_PDT_2019
+Cuda compilation tools, release 10.1, V10.1.243
+</code></pre>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+<h3 id="install-conda"><a href="#install-conda" class="headerlink" title="install conda"></a>install conda</h3><pre><code>./Anaconda3-2019.03-Linux-x86_64.sh 
+[yes]
+[yes]
+</code></pre>
+<h3 id="config-channels"><a href="#config-channels" class="headerlink" title="config channels"></a>config channels</h3><pre><code>conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/msys2/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/menpo/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/
+
+conda config --set show_channel_urls yes
+</code></pre>
+<h3 id="install-libraries"><a href="#install-libraries" class="headerlink" title="install libraries"></a>install libraries</h3><p>conclusions:</p>
+<ul>
+<li>py37&#x2F;keras: conda install -y tensorflow-gpu keras&#x3D;&#x3D;2.2.5 </li>
+<li>py37&#x2F;torch: conda install -y pytorch torchvision</li>
+<li>py36&#x2F;mxnet: conda install -y mxnet</li>
+</ul>
+<blockquote>
+<p>keras 2.2.5 was released on 2019&#x2F;8&#x2F;23.<br>Add new Applications: ResNet101, ResNet152, ResNet50V2, ResNet101V2, ResNet152V2.</p>
+</blockquote>
+<p>common libraries </p>
+<pre><code>conda install -y scikit-learn scikit-image pandas matplotlib pillow opencv seaborn
+pip install imutils progressbar pydot pylint
+</code></pre>
+<blockquote>
+<p><code>pip install imutils</code>  to avoid downgrade for tensorflow-gpu </p>
+</blockquote>
+<h4 id="py37"><a href="#py37" class="headerlink" title="py37"></a>py37</h4><pre><code>cudatoolkit               10.0.130                  0    
+cudnn                     7.6.0                cuda10.0_0    
+tensorflow-gpu            1.13.1 
+</code></pre>
+<h4 id="py36"><a href="#py36" class="headerlink" title="py36"></a>py36</h4><pre><code>cudatoolkit        anaconda/pkgs/main/linux-64::cudatoolkit-10.1.168-0
+cudnn              anaconda/pkgs/main/linux-64::cudnn-7.6.0-cuda10.1_0
+tensorboard        anaconda/pkgs/main/linux-64::tensorboard-1.14.0-py36hf484d3e_0
+tensorflow         anaconda/pkgs/main/linux-64::tensorflow-1.14.0-gpu_py36h3fb9ad6_0
+tensorflow-base    anaconda/pkgs/main/linux-64::tensorflow-base-1.14.0-gpu_py36he45bfe2_0
+tensorflow-estima~ anaconda/cloud/conda-forge/linux-64::tensorflow-estimator-1.14.0-py36h5ca1d4c_0
+tensorflow-gpu     anaconda/pkgs/main/linux-64::tensorflow-gpu-1.14.0-h0d30ee6_0
+</code></pre>
+<blockquote>
+<p>imutils only support 36 and 37.<br>mxnet only support 35 and 36.</p>
+</blockquote>
+<h4 id="details"><a href="#details" class="headerlink" title="details"></a>details</h4><pre><code># remove py35
+conda remove -n py35 --all
+
+conda info --envs
+
+conda create -n py37 python==3.7
+conda activate py37
+
+# common libraries
+conda install -y scikit-learn pandas pillow opencv
+pip install imutils
+
+# imutils
+conda search imutils  
+# py36 and py37
+
+# Name                       Version           Build  Channel             
+imutils                        0.5.2          py27_0  anaconda/cloud/conda-forge
+imutils                        0.5.2          py36_0  anaconda/cloud/conda-forge
+imutils                        0.5.2          py37_0  anaconda/cloud/conda-forge
+
+# tensorflow-gpu and keras
+conda install -y tensorflow-gpu keras
+
+# install pytorch
+conda install -y pytorch torchvision
+
+# install mxnet
+# method 1: pip
+pip search mxnet
+mxnet-cu80[mkl]/mxnet-cu90[mkl]/mxnet-cu91[mkl]/mxnet-cu92[mkl]/mxnet-cu100[mkl]/mxnet-cu101[mkl]
+
+# method 2: conda
+conda install mxnet
+# py35 and py36
+</code></pre>
+<h4 id="TensorFlow-Object-Detection-API"><a href="#TensorFlow-Object-Detection-API" class="headerlink" title="TensorFlow Object Detection API"></a>TensorFlow Object Detection API</h4><p>home page: <a target="_blank" rel="noopener" href="https://github.com/tensorflow/models/tree/master/research/object_detection">home page</a></p>
+<p>download <a target="_blank" rel="noopener" href="https://github.com/tensorflow/models">tensorflow models</a> and rename <code>models-master</code> to <code>tfmodels</code></p>
+<p>vim ~&#x2F;.bashrc </p>
+<pre><code>export PYTHONPATH=/home/kezunlin/dl4cv:/data_1/kezunlin/tfmodels/research:$PYTHONPATH
+</code></pre>
+<p>source ~&#x2F;.bashrc</p>
+<h3 id="jupyter-notebook"><a href="#jupyter-notebook" class="headerlink" title="jupyter notebook"></a>jupyter notebook</h3><pre><code>conda activate py37
+conda install -y jupyter 
+</code></pre>
+<h4 id="install-kernels"><a href="#install-kernels" class="headerlink" title="install kernels"></a>install kernels</h4><pre><code>python -m ipykernel install --user --name=py37
+Installed kernelspec py37 in /home/kezunlin/.local/share/jupyter/kernels/py37
+</code></pre>
+<h4 id="config-for-server"><a href="#config-for-server" class="headerlink" title="config for server"></a>config for server</h4><pre><code>python -c &quot;import IPython;print(IPython.lib.passwd())&quot;
+Enter password: 
+Verify password: 
+sha1:ef2fb2aacff2:4ea2998699638e58d10d594664bd87f9c3381c04
+
+jupyter notebook --generate-config
+Writing default config to: /home/kezunlin/.jupyter/jupyter_notebook_config.py
+
+vim .jupyter/jupyter_notebook_config.py
+
+c.NotebookApp.ip = &#39;*&#39;  
+c.NotebookApp.password = u&#39;sha1:xxx:xxx&#39; 
+c.NotebookApp.open_browser = False 
+c.NotebookApp.port = 8888 
+c.NotebookApp.enable_mathjax = True
+</code></pre>
+<h4 id="run-jupyter-on-background"><a href="#run-jupyter-on-background" class="headerlink" title="run jupyter on background"></a>run jupyter on background</h4><pre><code>tmux new -s notebook
+jupyter notebook
+# ctlr+b+d exit session and DO NOT close session
+# ctlr+d exit session and close session
+</code></pre>
+<p>access <a target="_blank" rel="noopener" href="http://192.168.100.27:8888/">web</a> and input password</p>
+<h3 id="test"><a href="#test" class="headerlink" title="test"></a>test</h3><h4 id="py37-1"><a href="#py37-1" class="headerlink" title="py37"></a>py37</h4><pre><code>import cv2
+cv2.__version
+import tensorflow as tf
+import keras 
+import torch
+import torchvision
+</code></pre>
+<p>cat .keras&#x2F;keras.json</p>
+<pre><code>&#123;
+    &quot;epsilon&quot;: 1e-07,
+    &quot;floatx&quot;: &quot;float32&quot;,
+    &quot;backend&quot;: &quot;tensorflow&quot;,
+    &quot;image_data_format&quot;: &quot;channels_last&quot;
+&#125;
+</code></pre>
+<h4 id="py36-1"><a href="#py36-1" class="headerlink" title="py36"></a>py36</h4><pre><code>import mxnet
+</code></pre>
+<h3 id="train-demo"><a href="#train-demo" class="headerlink" title="train demo"></a>train demo</h3><h4 id="export"><a href="#export" class="headerlink" title="export"></a>export</h4><pre><code># use CPU only
+export CUDA_VISIBLE_DEVICES=&quot;&quot;
+
+# use gpu 0 1
+export CUDA_VISIBLE_DEVICES=&quot;0,1&quot;
+</code></pre>
+<h4 id="code"><a href="#code" class="headerlink" title="code"></a>code</h4><pre><code>import os
+os.environ[&#39;CUDA_VISIBLE_DEVICES&#39;] = &quot;0,1&quot;
+</code></pre>
+<p>start train </p>
+<pre><code>python train.py
+</code></pre>
+<h3 id="keras-folder"><a href="#keras-folder" class="headerlink" title=".&#x2F;keras folder"></a>.&#x2F;keras folder</h3><p>view keras models and datasets</p>
+<pre><code>ls .keras/
+datasets  keras.json  models
+</code></pre>
+<blockquote>
+<p>models saved to  <code>/home/kezunlin/.keras/models/</code><br>datasets saved to  <code>/home/kezunlin/.keras/datasets/</code></p>
+</blockquote>
+<p>models lists</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5">vgg16</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg19_weights_tf_dim_ordering_tf_kernels_notop.h5">vgg19</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/fchollet/deep-learning-models/releases/download/v0.2/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5">resnet50</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/fchollet/deep-learning-models/releases/download/v0.5/inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5">inceptionv3</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/fchollet/deep-learning-models/releases/download/v0.4/xception_weights_tf_dim_ordering_tf_kernels_notop.h5">xception</a></li>
+</ul>
+<blockquote>
+<p><code>xxx_kernels_notop.h5</code> for <code>include_top = False</code><br><code>xxx_kernels.h5</code> for <code>include_top = True</code></p>
+</blockquote>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+<h2 id="Datasets"><a href="#Datasets" class="headerlink" title="Datasets"></a>Datasets</h2><h3 id="mnist"><a href="#mnist" class="headerlink" title="mnist"></a>mnist</h3><h3 id="cifar10"><a href="#cifar10" class="headerlink" title="cifar10"></a>cifar10</h3><p>to skip download </p>
+<pre><code>wget http://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz
+mv ~/Download/cifar-10-python.tar.gz ~/.keras/datasets/cifar-10-batches-py.tar.gz
+</code></pre>
+<p>to load data </p>
+<pre><code>(x_train, y_train), (x_test, y_test) = cifar10.load_data()
+</code></pre>
+<h3 id="flowers-17"><a href="#flowers-17" class="headerlink" title="flowers-17"></a>flowers-17</h3><ul>
+<li><a target="_blank" rel="noopener" href="http://www.robots.ox.ac.uk/~vgg/data/flowers/17/">offical flowers-17</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/danqu130/classification_17flowers/tree/master/data">data</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/naoya3e/17flowers-classification/tree/master/data/train.csv">train.csv</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/naoya3e/17flowers-classification/blob/master/data/test.csv">test.csv</a></li>
+</ul>
+<h3 id="animals"><a href="#animals" class="headerlink" title="animals"></a>animals</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/shengqishi8787/Starter_Bundle/tree/master/datasets/animals">cat dog panda</a></li>
+</ul>
+<blockquote>
+<p>panda images are WRONG !!!</p>
+</blockquote>
+<p>counts </p>
+<pre><code>ls -lR animals/cat | grep &quot;.jpg&quot; | wc -l
+1000
+ls -lR animals/dog | grep &quot;.jpg&quot; | wc -l
+1000
+ls -lR animals/panda | grep &quot;.jpg&quot; | wc -l
+1000
+</code></pre>
+<h3 id="kaggle-cats-vs-dogs"><a href="#kaggle-cats-vs-dogs" class="headerlink" title="kaggle cats vs dogs"></a>kaggle cats vs dogs</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://www.kaggle.com/c/dogs-vs-cats/data">dogs-vs-cats</a></li>
+</ul>
+<h3 id="caltech101"><a href="#caltech101" class="headerlink" title="caltech101"></a>caltech101</h3><ul>
+<li><a target="_blank" rel="noopener" href="http://www.vision.caltech.edu/Image_Datasets/Caltech101/101_ObjectCategories.tar.gz">caltech101</a></li>
+</ul>
+<p>download background </p>
+<pre><code>wget -b -c http://www.vision.caltech.edu/Image_Datasets/Caltech101/101_ObjectCategories.tar.gz
+</code></pre>
+<h2 id="Kaggle-API"><a href="#Kaggle-API" class="headerlink" title="Kaggle API"></a>Kaggle API</h2><h3 id="install-and-config"><a href="#install-and-config" class="headerlink" title="install and config"></a>install and config</h3><p>see <a target="_blank" rel="noopener" href="https://github.com/Kaggle/kaggle-api">kaggle-api</a></p>
+<pre><code>conda activate keras
+conda install kaggle
+
+# download kaggle.json
+mv kaggle.json ~/.kaggle/kaggle.json
+chmod 600 ~/.kaggle/kaggle.json
+
+cat kaggle.json
+&#123;&quot;username&quot;:&quot;xxx&quot;,&quot;key&quot;:&quot;yyy&quot;&#125;
+</code></pre>
+<p>or by export </p>
+<pre><code>export KAGGLE_USERNAME=xxx
+export KAGGLE_KEY=yyy
+</code></pre>
+<blockquote>
+<p>tips</p>
+<ol>
+<li>go to <a target="_blank" rel="noopener" href="https://www.kaggle.com/xxx/account">account</a> and select ‘Create API Token’ and <code>keras.json</code> will be downloaded.</li>
+<li>Ensure <code>kaggle.json</code> is in the location <code>~/.kaggle/kaggle.json </code>to use the API.</li>
+</ol>
+</blockquote>
+<p>check version </p>
+<pre><code>kaggle --version
+Kaggle API 1.5.5
+</code></pre>
+<h3 id="commands-overview"><a href="#commands-overview" class="headerlink" title="commands overview"></a>commands overview</h3><p>commands </p>
+<pre><code>kaggle competitions &#123;list, files, download, submit, submissions, leaderboard&#125;
+kaggle datasets &#123;list, files, download, create, version, init&#125;
+kaggle kernels &#123;list, init, push, pull, output, status&#125;
+kaggle config &#123;view, set, unset&#125;
+</code></pre>
+<h3 id="download-datasets"><a href="#download-datasets" class="headerlink" title="download datasets"></a>download datasets</h3><pre><code>kaggle competitions download -c dogs-vs-cats
+</code></pre>
+<h3 id="show-leaderboard"><a href="#show-leaderboard" class="headerlink" title="show leaderboard"></a>show leaderboard</h3><pre><code>kaggle competitions leaderboard dogs-vs-cats --show
+teamId  teamName                           submissionDate       score    
+------  ---------------------------------  -------------------  -------  
+71046  Pierre Sermanet                    2014-02-01 21:43:19  0.98533  
+66623  Maxim Milakov                      2014-02-01 18:20:58  0.98293  
+72059  Owen                               2014-02-01 17:04:40  0.97973  
+74563  Paul Covington                     2014-02-01 23:05:20  0.97946  
+74298  we&#39;ve been in KAIST                2014-02-01 21:15:30  0.97840  
+71949  orchid                             2014-02-01 23:52:30  0.97733  
+</code></pre>
+<h3 id="set-default-competition"><a href="#set-default-competition" class="headerlink" title="set default competition"></a>set default competition</h3><pre><code>kaggle config set --name competition --value dogs-vs-cats
+- competition is now set to: dogs-vs-cats
+
+kaggle config set --name competition --value dogs-vs-cats-redux-kernels-edition
+</code></pre>
+<blockquote>
+<p>dogs-vs-cats<br>dogs-vs-cats-redux-kernels-edition</p>
+</blockquote>
+<h3 id="submit"><a href="#submit" class="headerlink" title="submit"></a>submit</h3><pre><code>kaggle c submissions
+- Using competition: dogs-vs-cats
+- No submissions found
+
+kaggle c submit -f ./submission.csv -m &quot;first submit&quot;
+</code></pre>
+<blockquote>
+<p>competition has already ended, so can not submit.</p>
+</blockquote>
+<h2 id="Nvidia-docker-and-containers"><a href="#Nvidia-docker-and-containers" class="headerlink" title="Nvidia-docker and containers"></a>Nvidia-docker and containers</h2><h3 id="install"><a href="#install" class="headerlink" title="install"></a>install</h3><pre><code>sudo apt-get -y install docker
+
+# Install nvidia-docker2 and reload the Docker daemon configuration
+sudo apt-get install -y nvidia-docker2
+sudo pkill -SIGHUP dockerd
+</code></pre>
+<h3 id="restart-optional"><a href="#restart-optional" class="headerlink" title="restart (optional)"></a>restart (optional)</h3><p>cat &#x2F;etc&#x2F;docker&#x2F;daemon.json</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;runtimes&quot;: &#123;</span><br><span class="line">        &quot;nvidia&quot;: &#123;</span><br><span class="line">            &quot;path&quot;: &quot;nvidia-container-runtime&quot;,</span><br><span class="line">            &quot;runtimeArgs&quot;: []</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<pre><code>sudo systemctl enable docker
+sudo systemctl start docker
+</code></pre>
+<blockquote>
+<p>if errors occur:<br>Job for docker.service failed because the control process exited with error code.<br>See “systemctl status docker.service” and “journalctl -xe” for details.<br>check <code>/etc/docker/daemon.json</code></p>
+</blockquote>
+<h3 id="test-1"><a href="#test-1" class="headerlink" title="test"></a>test</h3><pre><code>sudo docker run --runtime=nvidia --rm nvidia/cuda:10.1-base nvidia-smi
+sudo nvidia-docker run --rm nvidia/cuda:10.1-base nvidia-smi
+
+Thu Aug 29 00:11:32 2019       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 418.87.00    Driver Version: 418.87.00    CUDA Version: 10.1     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|===============================+======================+======================|
+|   0  Quadro RTX 8000     Off  | 00000000:02:00.0 Off |                  Off |
+| 43%   67C    P2   136W / 260W |  46629MiB / 48571MiB |     17%      Default |
++-------------------------------+----------------------+----------------------+
+|   1  Quadro RTX 8000     Off  | 00000000:03:00.0 Off |                  Off |
+| 34%   54C    P0    74W / 260W |      0MiB / 48571MiB |      0%      Default |
++-------------------------------+----------------------+----------------------+
+|   2  Quadro RTX 8000     Off  | 00000000:82:00.0 Off |                  Off |
+| 34%   49C    P0    73W / 260W |      0MiB / 48571MiB |      0%      Default |
++-------------------------------+----------------------+----------------------+
+|   3  Quadro RTX 8000     Off  | 00000000:83:00.0 Off |                  Off |
+| 33%   50C    P0    73W / 260W |      0MiB / 48571MiB |      3%      Default |
++-------------------------------+----------------------+----------------------+
+                                                                            
++-----------------------------------------------------------------------------+
+| Processes:                                                       GPU Memory |
+|  GPU       PID   Type   Process name                             Usage      |
+|=============================================================================|
++-----------------------------------------------------------------------------+
+</code></pre>
+<blockquote>
+<p>add user to <code>docker</code> group, and no need to use <code>sudo docker xxx</code></p>
+</blockquote>
+<h3 id="command-refs"><a href="#command-refs" class="headerlink" title="command refs"></a>command refs</h3><pre><code>sudo nvidia-docker run --rm nvidia/cuda:10.1-base nvidia-smi
+sudo nvidia-docker -t -i --privileged nvidia/cuda bash
+
+sudo docker run -it --name kzl -v /home/kezunlin/workspace/:/home/kezunlin/workspace nvidia/cuda
+</code></pre>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20190821: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/nvidia-docker/" rel="tag"># nvidia-docker</a>
+              <a href="/tags/dl4cv/" rel="tag"># dl4cv</a>
+              <a href="/tags/kaggle/" rel="tag"># kaggle</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/dl-notes/" rel="prev" title="dl notes">
+      <i class="fa fa-chevron-left"></i> dl notes
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/kaggle-competetions/" rel="next" title="kaggle image classification competitions and solutions">
+      kaggle image classification competitions and solutions <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-Guide"><span class="nav-number">1.</span> <span class="nav-text">Quick Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#prepare"><span class="nav-number">1.1.</span> <span class="nav-text">prepare</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#tools"><span class="nav-number">1.1.1.</span> <span class="nav-text">tools</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#commands"><span class="nav-number">1.1.2.</span> <span class="nav-text">commands</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cuda-driver-and-toolkits"><span class="nav-number">1.2.</span> <span class="nav-text">cuda driver and toolkits</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#install-nvidia-drivers"><span class="nav-number">1.2.1.</span> <span class="nav-text">install nvidia-drivers</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#install-cuda-toolkit-dirvers"><span class="nav-number">1.2.2.</span> <span class="nav-text">install cuda-toolkit(dirvers)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-conda"><span class="nav-number">1.3.</span> <span class="nav-text">install conda</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#config-channels"><span class="nav-number">1.4.</span> <span class="nav-text">config channels</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-libraries"><span class="nav-number">1.5.</span> <span class="nav-text">install libraries</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#py37"><span class="nav-number">1.5.1.</span> <span class="nav-text">py37</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#py36"><span class="nav-number">1.5.2.</span> <span class="nav-text">py36</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#details"><span class="nav-number">1.5.3.</span> <span class="nav-text">details</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TensorFlow-Object-Detection-API"><span class="nav-number">1.5.4.</span> <span class="nav-text">TensorFlow Object Detection API</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jupyter-notebook"><span class="nav-number">1.6.</span> <span class="nav-text">jupyter notebook</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#install-kernels"><span class="nav-number">1.6.1.</span> <span class="nav-text">install kernels</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#config-for-server"><span class="nav-number">1.6.2.</span> <span class="nav-text">config for server</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#run-jupyter-on-background"><span class="nav-number">1.6.3.</span> <span class="nav-text">run jupyter on background</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#test"><span class="nav-number">1.7.</span> <span class="nav-text">test</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#py37-1"><span class="nav-number">1.7.1.</span> <span class="nav-text">py37</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#py36-1"><span class="nav-number">1.7.2.</span> <span class="nav-text">py36</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#train-demo"><span class="nav-number">1.8.</span> <span class="nav-text">train demo</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#export"><span class="nav-number">1.8.1.</span> <span class="nav-text">export</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#code"><span class="nav-number">1.8.2.</span> <span class="nav-text">code</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#keras-folder"><span class="nav-number">1.9.</span> <span class="nav-text">.&#x2F;keras folder</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Datasets"><span class="nav-number">2.</span> <span class="nav-text">Datasets</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mnist"><span class="nav-number">2.1.</span> <span class="nav-text">mnist</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cifar10"><span class="nav-number">2.2.</span> <span class="nav-text">cifar10</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flowers-17"><span class="nav-number">2.3.</span> <span class="nav-text">flowers-17</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#animals"><span class="nav-number">2.4.</span> <span class="nav-text">animals</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#kaggle-cats-vs-dogs"><span class="nav-number">2.5.</span> <span class="nav-text">kaggle cats vs dogs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#caltech101"><span class="nav-number">2.6.</span> <span class="nav-text">caltech101</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kaggle-API"><span class="nav-number">3.</span> <span class="nav-text">Kaggle API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#install-and-config"><span class="nav-number">3.1.</span> <span class="nav-text">install and config</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#commands-overview"><span class="nav-number">3.2.</span> <span class="nav-text">commands overview</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#download-datasets"><span class="nav-number">3.3.</span> <span class="nav-text">download datasets</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#show-leaderboard"><span class="nav-number">3.4.</span> <span class="nav-text">show leaderboard</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set-default-competition"><span class="nav-number">3.5.</span> <span class="nav-text">set default competition</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#submit"><span class="nav-number">3.6.</span> <span class="nav-text">submit</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nvidia-docker-and-containers"><span class="nav-number">4.</span> <span class="nav-text">Nvidia-docker and containers</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#install"><span class="nav-number">4.1.</span> <span class="nav-text">install</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#restart-optional"><span class="nav-number">4.2.</span> <span class="nav-text">restart (optional)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#test-1"><span class="nav-number">4.3.</span> <span class="nav-text">test</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#command-refs"><span class="nav-number">4.4.</span> <span class="nav-text">command refs</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">6.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

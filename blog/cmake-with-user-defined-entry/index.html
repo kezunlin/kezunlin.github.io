@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Compile1234567891011sudo apt-get install build-essentialwget http:&#x2F;&#x2F;www.cmake.org&#x2F;files&#x2F;v3.2&#x2F;cmake-3.2.2.tar.gztar xf cmake-3.2.2.tar.gzcd cmake-3.2.2.&#x2F;configuremake &amp;&amp; make installwhich cmake">
+<meta property="og:type" content="article">
+<meta property="og:title" content="compile cmake from source on ubuntu and write your own user defined FindXXX.cmake">
+<meta property="og:url" content="https://kezunlin.me/blog/cmake-with-user-defined-entry/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Compile1234567891011sudo apt-get install build-essentialwget http:&#x2F;&#x2F;www.cmake.org&#x2F;files&#x2F;v3.2&#x2F;cmake-3.2.2.tar.gztar xf cmake-3.2.2.tar.gzcd cmake-3.2.2.&#x2F;configuremake &amp;&amp; make installwhich cmake">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180122172154084-46926416.png">
+<meta property="article:published_time" content="2018-01-22T08:47:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="cmake">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kezunlin.me/images/posts/635233-20180122172154084-46926416.png">
+
+<link rel="canonical" href="https://kezunlin.me/blog/cmake-with-user-defined-entry/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>compile cmake from source on ubuntu and write your own user defined FindXXX.cmake | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/cmake-with-user-defined-entry/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          compile cmake from source on ubuntu and write your own user defined FindXXX.cmake
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-01-22 16:47:00" itemprop="dateCreated datePublished" datetime="2018-01-22T16:47:00+08:00">2018-01-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Compile"><a href="#Compile" class="headerlink" title="Compile"></a>Compile</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install build-essential</span><br><span class="line">wget http://www.cmake.org/files/v3.2/cmake-3.2.2.tar.gz</span><br><span class="line">tar xf cmake-3.2.2.tar.gz</span><br><span class="line"><span class="built_in">cd</span> cmake-3.2.2</span><br><span class="line">./configure</span><br><span class="line">make &amp;&amp; make install</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">which</span> cmake</span><br><span class="line"><span class="comment">#/usr/local/bin/cmake</span></span><br><span class="line">cmake --version</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>or by <code>apt-get -y install cmake </code></p>
+</blockquote>
+<h2 id="User-defined-cmake"><a href="#User-defined-cmake" class="headerlink" title="User defined cmake"></a>User defined cmake</h2><ul>
+<li><code>FindXXX.cmake</code> in <code>CMAKE_MODULE_PATH</code></li>
+<li><code>xxx-config.cmake</code> in <code>CMAKE_PREFIX_PATH</code></li>
+</ul>
+<h3 id="cmake-default-package"><a href="#cmake-default-package" class="headerlink" title="cmake default package"></a>cmake default package</h3><h4 id="FindXXX-cmake"><a href="#FindXXX-cmake" class="headerlink" title="FindXXX.cmake"></a>FindXXX.cmake</h4><ol>
+<li><p>use <code>find_package</code> to find default package with name <code>XXX</code></p>
+</li>
+<li><p>and cmake file <code>C:\Program Files\CMake\share\cmake-3.10\Modules\FindXXX.cmake</code> </p>
+</li>
+<li><p>use <code>$&#123;XXX_INCLUDE_DIRS&#125;</code> in include, and <code>$&#123;XXX_LIBRARIES&#125;</code> in libraries</p>
+</li>
+</ol>
+<h4 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h4><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">find_package</span>(GTest REQUIRED)</span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;GTEST_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(Boost <span class="number">1.5</span>.<span class="number">8</span> REQUIRED COMPONENTS date_time system filesystem)</span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;Boost_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">target_link_libraries</span>(demo <span class="variable">$&#123;GTEST_LIBRARIES&#125;</span> <span class="variable">$&#123;Boost_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="user-defined-package"><a href="#user-defined-package" class="headerlink" title="user-defined package"></a>user-defined package</h3><h4 id="xxx-config-cmake"><a href="#xxx-config-cmake" class="headerlink" title="xxx-config.cmake"></a>xxx-config.cmake</h4><p>both names are ok.</p>
+<ul>
+<li>xxx-config.cmake</li>
+<li>XXXConfig.cmake, e.g.  OpenCVConfig.cmake</li>
+</ul>
+<p>mysqlcppconn-config.cmake</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Name: &lt;Name&gt;Config.cmake  or &lt;lower name&gt;-config.cmake</span></span><br><span class="line"><span class="comment"># mysqlcppconn-config.cmake or MYSQLCPPCONNConfig.cmake  </span></span><br><span class="line"><span class="comment"># similar to OpenCVConfig.cmake   </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Tips for MYSQLCPPCONN_ROOT_DIR</span></span><br><span class="line"><span class="comment"># use &quot;C:/Program Files/MySQL/Connector.C++ 1.1&quot;, otherwise cmake-gui can not auto find include and library</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(MYSQLCPPCONN_FOUND <span class="keyword">TRUE</span>) <span class="comment"># auto </span></span><br><span class="line"><span class="keyword">set</span>(MYSQLCPPCONN_ROOT_DIR <span class="string">&quot;C:/Program Files/MySQL/Connector.C++ 1.1&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_path</span>(MYSQLCPPCONN_INCLUDE_DIR NAMES cppconn/driver.h PATHS <span class="string">&quot;$&#123;MYSQLCPPCONN_ROOT_DIR&#125;/include&quot;</span>) </span><br><span class="line"><span class="keyword">mark_as_advanced</span>(MYSQLCPPCONN_INCLUDE_DIR) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">find_library</span>(MYSQLCPPCONN_LIBRARY NAMES mysqlcppconn.lib PATHS <span class="string">&quot;$&#123;MYSQLCPPCONN_ROOT_DIR&#125;/lib/opt&quot;</span>) </span><br><span class="line"><span class="keyword">mark_as_advanced</span>(MYSQLCPPCONN_LIBRARY) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># use xxx_INCLUDE_DIRS and xxx_LIBRARIES in CMakeLists.txt</span></span><br><span class="line"><span class="keyword">set</span>(MYSQLCPPCONN_INCLUDE_DIRS <span class="variable">$&#123;MYSQLCPPCONN_INCLUDE_DIR&#125;</span> )</span><br><span class="line"><span class="keyword">set</span>(MYSQLCPPCONN_LIBRARIES <span class="variable">$&#123;MYSQLCPPCONN_LIBRARY&#125;</span> )</span><br><span class="line"></span><br><span class="line"><span class="comment"># cmake entry will be saved to build/CMakeCache.txt </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">message</span>( <span class="string">&quot;mysqlcppconn-config.cmake &quot;</span> <span class="variable">$&#123;MYSQLCPPCONN_ROOT_DIR&#125;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>halcon-config.cmake</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># halcon-config.cmake or HALCONConfig.cmake  </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(HALCON_FOUND <span class="keyword">TRUE</span>) <span class="comment"># auto </span></span><br><span class="line"><span class="keyword">set</span>(HALCON_ROOT_DIR E:/git/car/windows/lib/halcon)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_path</span>(HALCON_INCLUDE_DIR NAMES halconcpp/HalconCpp.h PATHS <span class="string">&quot;$&#123;HALCON_ROOT_DIR&#125;/include&quot;</span>) </span><br><span class="line"><span class="keyword">mark_as_advanced</span>(HALCON_INCLUDE_DIR) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">find_library</span>(HALCON_LIBRARY NAMES halconcpp.lib PATHS <span class="string">&quot;$&#123;HALCON_ROOT_DIR&#125;/lib/x64-win64&quot;</span>) </span><br><span class="line"><span class="keyword">mark_as_advanced</span>(HALCON_LIBRARY) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># use xxx_INCLUDE_DIRS and xxx_LIBRARIES in CMakeLists.txt</span></span><br><span class="line"><span class="keyword">set</span>(HALCON_INCLUDE_DIRS <span class="variable">$&#123;HALCON_INCLUDE_DIR&#125;</span> )</span><br><span class="line"><span class="keyword">set</span>(HALCON_LIBRARIES <span class="variable">$&#123;HALCON_LIBRARY&#125;</span> )</span><br><span class="line"></span><br><span class="line"><span class="keyword">message</span>( <span class="string">&quot;halcon-config.cmake &quot;</span> <span class="variable">$&#123;HALCON_ROOT_DIR&#125;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="usage-1"><a href="#usage-1" class="headerlink" title="usage"></a>usage</h4><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">find_package</span>(HALCON REQUIRED) <span class="comment"># user-defined</span></span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;HALCON_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(MYSQLCPPCONN REQUIRED) <span class="comment"># user-defined</span></span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;MYSQLCPPCONN_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">target_link_libraries</span>(demo <span class="variable">$&#123;HALCON_LIBRARIES&#125;</span> <span class="variable">$&#123;MYSQLCPPCONN_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="cmake-gui-entry"><a href="#cmake-gui-entry" class="headerlink" title="cmake-gui entry"></a>cmake-gui entry</h4><ol>
+<li>start cmake-gui, and at first,we should set</li>
+</ol>
+<ul>
+<li><code>HALCON_DIR</code> &#x3D; <code>E:/git/car/share/cmake-3.10/Modules</code> </li>
+<li><code>MYSQLCPPCONN_DIR</code> &#x3D; <code>E:/git/car/share/cmake-3.10/Modules</code></li>
+</ul>
+<ol start="2">
+<li>then configure</li>
+</ol>
+<ul>
+<li><code>HALCON_INCLUDE_DIR</code> and <code>HALCON_LIBRARY</code> will be found.</li>
+<li><code>MYSQLCPPCONN_INCLUDE_DIR</code> and <code>MYSQLCPPCONN_LIBRARY</code> will be found.</li>
+</ul>
+<p><img src="https://kezunlin.me/images/posts/635233-20180122172154084-46926416.png" alt="cmake-gui user defined entry"></p>
+<h2 id="Advanced"><a href="#Advanced" class="headerlink" title="Advanced"></a>Advanced</h2><h3 id="execute-process"><a href="#execute-process" class="headerlink" title="execute_process"></a>execute_process</h3><p>CMakeLists.txt</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">execute_process</span>(</span><br><span class="line">    <span class="keyword">COMMAND</span> bash <span class="string">&quot;-c&quot;</span> <span class="string">&quot;echo -n hello | sed &#x27;s/hello/world/;&#x27;&quot;</span> </span><br><span class="line">    OUTPUT_VARIABLE VARIABLE</span><br><span class="line">)</span><br><span class="line"><span class="keyword">MESSAGE</span>( [Main] <span class="string">&quot; VARIABLE = $&#123;VARIABLE&#125;&quot;</span>) <span class="comment"># world</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">execute_process</span>(</span><br><span class="line">    <span class="keyword">COMMAND</span> bash <span class="string">&quot;-c&quot;</span> <span class="string">&quot;echo -n $(uname -p)&quot;</span> </span><br><span class="line">    OUTPUT_VARIABLE ARCH</span><br><span class="line">)</span><br><span class="line"><span class="keyword">MESSAGE</span>( [Main] <span class="string">&quot; ARCH = $&#123;ARCH&#125;&quot;</span>) <span class="comment"># aarch64 x86_64</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># glib   header only</span></span><br><span class="line"><span class="keyword">set</span>(GLIB_INCLUDE_DIRS <span class="string">&quot;/usr/include/glib-2.0/&quot;</span>) <span class="comment"># glib.h </span></span><br><span class="line"><span class="keyword">set</span>(GLIBCONFIG_INCLUDE_DIRS <span class="string">&quot;/usr/lib/$&#123;ARCH&#125;-linux-gnu/glib-2.0/include/&quot;</span>) <span class="comment"># glibconfig.h </span></span><br><span class="line"><span class="keyword">MESSAGE</span>( [Main] <span class="string">&quot; GLIB_INCLUDE_DIRS = $&#123;GLIB_INCLUDE_DIRS&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">MESSAGE</span>( [Main] <span class="string">&quot; GLIBCONFIG_INCLUDE_DIRS = $&#123;GLIBCONFIG_INCLUDE_DIRS&#125;&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="PIC-error"><a href="#PIC-error" class="headerlink" title="PIC error"></a>PIC error</h3><p>error</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/ld: /usr/local/lib/libdlib.a(test_for_odr_violations.cpp.o): relocation R_X86_64_32 against `.bss<span class="string">&#x27; can not be used when making a shared object; recompile with -fPIC</span></span><br><span class="line"><span class="string">/usr/local/lib/libdlib.a: error adding symbols: Bad value</span></span><br><span class="line"><span class="string">collect2: error: ld returned 1 exit status</span></span><br></pre></td></tr></table></figure>
+
+<p>solution</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span>(CMAKE_BUILD_TYPE <span class="string">&quot;Release&quot;</span>) <span class="comment"># release</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/35689501/cmakes-execute-process-and-arbitrary-shell-scripts">cmakes-execute-process-and-arbitrary-shell-scripts</a></li>
+<li><a target="_blank" rel="noopener" href="https://askubuntu.com/questions/610291/how-to-install-cmake-3-2-on-ubuntu-14-04">how-to-install-cmake-3-2-on-ubuntu-14-04</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/8474582/multiple-library-cmakelists-txt">multiple-library-cmakelists-txt</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180122: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/cmake/" rel="tag"># cmake</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/compile-and-install-pcl-from-source-on-windows/" rel="prev" title="Part-4: Install PCL with vtk qt support on windows 10">
+      <i class="fa fa-chevron-left"></i> Part-4: Install PCL with vtk qt support on windows 10
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/guide-to-store-time-t-with-mysql-cpp-connector-in-c/" rel="next" title="store time_t with mysql cpp connector in c++">
+      store time_t with mysql cpp connector in c++ <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Compile"><span class="nav-number">1.</span> <span class="nav-text">Compile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#User-defined-cmake"><span class="nav-number">2.</span> <span class="nav-text">User defined cmake</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cmake-default-package"><span class="nav-number">2.1.</span> <span class="nav-text">cmake default package</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#FindXXX-cmake"><span class="nav-number">2.1.1.</span> <span class="nav-text">FindXXX.cmake</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#usage"><span class="nav-number">2.1.2.</span> <span class="nav-text">usage</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#user-defined-package"><span class="nav-number">2.2.</span> <span class="nav-text">user-defined package</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#xxx-config-cmake"><span class="nav-number">2.2.1.</span> <span class="nav-text">xxx-config.cmake</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#usage-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">usage</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cmake-gui-entry"><span class="nav-number">2.2.3.</span> <span class="nav-text">cmake-gui entry</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Advanced"><span class="nav-number">3.</span> <span class="nav-text">Advanced</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#execute-process"><span class="nav-number">3.1.</span> <span class="nav-text">execute_process</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PIC-error"><span class="nav-number">3.2.</span> <span class="nav-text">PIC error</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

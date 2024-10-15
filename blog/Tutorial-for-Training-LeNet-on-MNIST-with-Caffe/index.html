@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="LeNetThe design of LeNet contains the essence of CNNs that are still used in larger models such as the ones in ImageNet. In general, it consists of a convolutional layer followed by a pooling layer, a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tutorial for Training LeNet on MNIST with Caffe">
+<meta property="og:url" content="https://kezunlin.me/blog/Tutorial-for-Training-LeNet-on-MNIST-with-Caffe/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="LeNetThe design of LeNet contains the essence of CNNs that are still used in larger models such as the ones in ImageNet. In general, it consists of a convolutional layer followed by a pooling layer, a">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-08-07T07:56:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="caffe">
+<meta property="article:tag" content="LeNet">
+<meta property="article:tag" content="mnist">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/Tutorial-for-Training-LeNet-on-MNIST-with-Caffe/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Tutorial for Training LeNet on MNIST with Caffe | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/Tutorial-for-Training-LeNet-on-MNIST-with-Caffe/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Tutorial for Training LeNet on MNIST with Caffe
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-08-07 15:56:00" itemprop="dateCreated datePublished" datetime="2018-08-07T15:56:00+08:00">2018-08-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deep-learning/" itemprop="url" rel="index"><span itemprop="name">deep learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="LeNet"><a href="#LeNet" class="headerlink" title="LeNet"></a>LeNet</h2><p>The design of LeNet contains the essence of CNNs that are still used in larger models such as the ones in ImageNet. In general, it consists of a convolutional layer followed by a pooling layer, another convolution layer followed by a pooling layer, and then two fully connected layers similar to the conventional multilayer perceptrons. </p>
+<p>经典LeNet结构:</p>
+<pre><code>input-&gt;conv1(20,)-pool1-conv2(50,)-pool2-f1(500,ReLU)-f2(10,softmax)-&gt;output
+</code></pre>
+<h3 id="lenet-train-test-prototxt"><a href="#lenet-train-test-prototxt" class="headerlink" title="lenet_train_test.prototxt"></a>lenet_train_test.prototxt</h3><ul>
+<li>batch size设置在net.prototxt中而不是solver.prototxt中,用以明确blob的dims</li>
+<li>bottom: layer的input blob; top: layer的output blob</li>
+<li>对于0-255区间的pixel，需要归一化到0-1区间，scale &#x3D; 1&#x2F;256. &#x3D; 0.00390625</li>
+<li>lr_mult: 1表示learning时，weight的learning rate需要x1;</li>
+<li>lr_mult: 2表示learning时，bias的learning rate需要x2 (this usually leads to better convergence rates)</li>
+<li>InnerProduct默认输出的是z,而不是a&#x3D;sigmoid(z)</li>
+<li>ReLU是Inplace操作，输入输出blob都是ip1,对于其他Layer,input和output的blob不能是相同的</li>
+</ul>
+<h3 id="Input-Layer-types"><a href="#Input-Layer-types" class="headerlink" title="Input Layer types"></a>Input Layer types</h3><h4 id="Input-Layer-types-for-train-val-prototxt"><a href="#Input-Layer-types-for-train-val-prototxt" class="headerlink" title="Input Layer types for train_val.prototxt"></a>Input Layer types for <strong>train_val.prototxt</strong></h4><p>&#96;&#96;python<br>solver.net.forward() # load mini-batch images from training data</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">**Data** </span><br><span class="line">```prototxt</span><br><span class="line">name: &quot;mnist&quot;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;mnist&quot;</span><br><span class="line">  type: &quot;Data&quot;</span><br><span class="line">  top: &quot;data&quot;</span><br><span class="line">  top: &quot;label&quot;</span><br><span class="line">  include &#123;</span><br><span class="line">    phase: TRAIN</span><br><span class="line">  &#125;</span><br><span class="line">  transform_param &#123;</span><br><span class="line">    scale: 0.00390625</span><br><span class="line">  &#125;</span><br><span class="line">  data_param &#123;</span><br><span class="line">    source: &quot;examples/mnist/mnist_train_lmdb&quot;</span><br><span class="line">    batch_size: 64</span><br><span class="line">    backend: LMDB</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">name: &quot;CaffeNet&quot;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;data&quot;</span><br><span class="line">  type: &quot;Data&quot;</span><br><span class="line">  top: &quot;data&quot;</span><br><span class="line">  top: &quot;label&quot;</span><br><span class="line">  include &#123;</span><br><span class="line">    phase: TRAIN</span><br><span class="line">  &#125;</span><br><span class="line">  transform_param &#123;</span><br><span class="line">    mirror: true</span><br><span class="line">    crop_size: 227</span><br><span class="line">    mean_file: &quot;data/ilsvrc12/imagenet_mean.binaryproto&quot;</span><br><span class="line">  &#125;</span><br><span class="line"># mean pixel / channel-wise mean instead of mean image</span><br><span class="line">#  transform_param &#123;</span><br><span class="line">#    crop_size: 227</span><br><span class="line">#    mean_value: 104</span><br><span class="line">#    mean_value: 117</span><br><span class="line">#    mean_value: 123</span><br><span class="line">#    mirror: true</span><br><span class="line">#  &#125;</span><br><span class="line">  data_param &#123;</span><br><span class="line">    source: &quot;examples/imagenet/ilsvrc12_train_lmdb&quot;</span><br><span class="line">    batch_size: 256</span><br><span class="line">    backend: LMDB</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>** ImageData**: read raw images.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">layer &#123;</span><br><span class="line">  name: &quot;data&quot;</span><br><span class="line">  type: &quot;ImageData&quot;</span><br><span class="line">  top: &quot;data&quot;</span><br><span class="line">  top: &quot;label&quot;</span><br><span class="line">  include &#123;</span><br><span class="line">    phase: TRAIN</span><br><span class="line">  &#125;</span><br><span class="line">  transform_param &#123;</span><br><span class="line">    mirror: true</span><br><span class="line">    crop_size: 227</span><br><span class="line">    mean_file: &quot;data/ilsvrc12/imagenet_mean.binaryproto&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  image_data_param &#123;</span><br><span class="line">    source: &quot;data/flickr_style/train.txt&quot;</span><br><span class="line">    batch_size: 50</span><br><span class="line">    new_height: 256</span><br><span class="line">    new_width: 256</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Input-Layer-types-for-deploy-prototxt"><a href="#Input-Layer-types-for-deploy-prototxt" class="headerlink" title="Input Layer types for deploy.prototxt"></a>Input Layer types for <strong>deploy.prototxt</strong></h4><p>** DummyData **: no labels, only for forward and get probs</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">layer &#123;</span><br><span class="line">  name: &quot;data&quot;</span><br><span class="line">  type: &quot;DummyData&quot;</span><br><span class="line">  top: &quot;data&quot;</span><br><span class="line">  dummy_data_param &#123;</span><br><span class="line">    shape &#123;</span><br><span class="line">      dim: 1</span><br><span class="line">      dim: 3</span><br><span class="line">      dim: 227</span><br><span class="line">      dim: 227</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>** Input** :  typically used for networks that are being deployed.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">layer &#123;</span><br><span class="line">  name: &quot;data&quot;</span><br><span class="line">  type: &quot;Input&quot;</span><br><span class="line">  top: &quot;data&quot;</span><br><span class="line">  input_param &#123; </span><br><span class="line">  shape &#123;</span><br><span class="line">      dim: 10</span><br><span class="line">      dim: 3</span><br><span class="line">      dim: 227</span><br><span class="line">      dim: 227</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="LeNet-train-val-prototxt"><a href="#LeNet-train-val-prototxt" class="headerlink" title="LeNet train_val.prototxt"></a>LeNet train_val.prototxt</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br></pre></td><td class="code"><pre><span class="line">name: &quot;LeNet&quot;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;mnist&quot;</span><br><span class="line">  type: &quot;Data&quot;</span><br><span class="line">  top: &quot;data&quot;</span><br><span class="line">  top: &quot;label&quot;</span><br><span class="line">  include &#123;</span><br><span class="line">    phase: TRAIN</span><br><span class="line">  &#125;</span><br><span class="line">  transform_param &#123;</span><br><span class="line">    scale: 0.00390625</span><br><span class="line">  &#125;</span><br><span class="line">  data_param &#123;</span><br><span class="line">    source: &quot;examples/mnist/mnist_train_lmdb&quot;</span><br><span class="line">    batch_size: 64</span><br><span class="line">    backend: LMDB</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;mnist&quot;</span><br><span class="line">  type: &quot;Data&quot;</span><br><span class="line">  top: &quot;data&quot;</span><br><span class="line">  top: &quot;label&quot;</span><br><span class="line">  include &#123;</span><br><span class="line">    phase: TEST</span><br><span class="line">  &#125;</span><br><span class="line">  transform_param &#123;</span><br><span class="line">    scale: 0.00390625</span><br><span class="line">  &#125;</span><br><span class="line">  data_param &#123;</span><br><span class="line">    source: &quot;examples/mnist/mnist_test_lmdb&quot;</span><br><span class="line">    batch_size: 100</span><br><span class="line">    backend: LMDB</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;conv1&quot;</span><br><span class="line">  type: &quot;Convolution&quot;</span><br><span class="line">  bottom: &quot;data&quot;</span><br><span class="line">  top: &quot;conv1&quot;</span><br><span class="line">  param &#123;</span><br><span class="line">    lr_mult: 1</span><br><span class="line">  &#125;</span><br><span class="line">  param &#123;</span><br><span class="line">    lr_mult: 2</span><br><span class="line">  &#125;</span><br><span class="line">  convolution_param &#123;</span><br><span class="line">    num_output: 20</span><br><span class="line">    kernel_size: 5</span><br><span class="line">    stride: 1</span><br><span class="line">    weight_filler &#123;</span><br><span class="line">      type: &quot;xavier&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    bias_filler &#123;</span><br><span class="line">      type: &quot;constant&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;pool1&quot;</span><br><span class="line">  type: &quot;Pooling&quot;</span><br><span class="line">  bottom: &quot;conv1&quot;</span><br><span class="line">  top: &quot;pool1&quot;</span><br><span class="line">  pooling_param &#123;</span><br><span class="line">    pool: MAX</span><br><span class="line">    kernel_size: 2</span><br><span class="line">    stride: 2</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;conv2&quot;</span><br><span class="line">  type: &quot;Convolution&quot;</span><br><span class="line">  bottom: &quot;pool1&quot;</span><br><span class="line">  top: &quot;conv2&quot;</span><br><span class="line">  param &#123;</span><br><span class="line">    lr_mult: 1</span><br><span class="line">  &#125;</span><br><span class="line">  param &#123;</span><br><span class="line">    lr_mult: 2</span><br><span class="line">  &#125;</span><br><span class="line">  convolution_param &#123;</span><br><span class="line">    num_output: 50</span><br><span class="line">    kernel_size: 5</span><br><span class="line">    stride: 1</span><br><span class="line">    weight_filler &#123;</span><br><span class="line">      type: &quot;xavier&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    bias_filler &#123;</span><br><span class="line">      type: &quot;constant&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;pool2&quot;</span><br><span class="line">  type: &quot;Pooling&quot;</span><br><span class="line">  bottom: &quot;conv2&quot;</span><br><span class="line">  top: &quot;pool2&quot;</span><br><span class="line">  pooling_param &#123;</span><br><span class="line">    pool: MAX</span><br><span class="line">    kernel_size: 2</span><br><span class="line">    stride: 2</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;ip1&quot;</span><br><span class="line">  type: &quot;InnerProduct&quot;</span><br><span class="line">  bottom: &quot;pool2&quot;</span><br><span class="line">  top: &quot;ip1&quot;</span><br><span class="line">  param &#123;</span><br><span class="line">    lr_mult: 1</span><br><span class="line">  &#125;</span><br><span class="line">  param &#123;</span><br><span class="line">    lr_mult: 2</span><br><span class="line">  &#125;</span><br><span class="line">  inner_product_param &#123;</span><br><span class="line">    num_output: 500</span><br><span class="line">    weight_filler &#123;</span><br><span class="line">      type: &quot;xavier&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    bias_filler &#123;</span><br><span class="line">      type: &quot;constant&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;relu1&quot;</span><br><span class="line">  type: &quot;ReLU&quot;</span><br><span class="line">  bottom: &quot;ip1&quot;</span><br><span class="line">  top: &quot;ip1&quot;</span><br><span class="line">&#125;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;ip2&quot;</span><br><span class="line">  type: &quot;InnerProduct&quot;</span><br><span class="line">  bottom: &quot;ip1&quot;</span><br><span class="line">  top: &quot;ip2&quot;</span><br><span class="line">  param &#123;</span><br><span class="line">    lr_mult: 1</span><br><span class="line">  &#125;</span><br><span class="line">  param &#123;</span><br><span class="line">    lr_mult: 2</span><br><span class="line">  &#125;</span><br><span class="line">  inner_product_param &#123;</span><br><span class="line">    num_output: 10</span><br><span class="line">    weight_filler &#123;</span><br><span class="line">      type: &quot;xavier&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    bias_filler &#123;</span><br><span class="line">      type: &quot;constant&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;accuracy&quot;</span><br><span class="line">  type: &quot;Accuracy&quot;</span><br><span class="line">  bottom: &quot;ip2&quot;</span><br><span class="line">  bottom: &quot;label&quot;</span><br><span class="line">  top: &quot;accuracy&quot;</span><br><span class="line">  include &#123;</span><br><span class="line">    phase: TEST</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">layer &#123;</span><br><span class="line">  name: &quot;loss&quot;</span><br><span class="line">  type: &quot;SoftmaxWithLoss&quot;</span><br><span class="line">  bottom: &quot;ip2&quot;</span><br><span class="line">  bottom: &quot;label&quot;</span><br><span class="line">  top: &quot;loss&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+<h3 id="LeNet-solver-prototxt"><a href="#LeNet-solver-prototxt" class="headerlink" title="LeNet solver.prototxt"></a>LeNet solver.prototxt</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"># The train/test net protocol buffer definition</span><br><span class="line">net: &quot;examples/mnist/lenet_train_test.prototxt&quot;</span><br><span class="line">    </span><br><span class="line"># batch_size定义在net.prototxt中,train_mini_batch_size = 64,test_mini_batch_size = 100</span><br><span class="line"></span><br><span class="line"># test_iter specifies how many forward passes the test should carry out.</span><br><span class="line"># In the case of MNIST, we have test batch size 100 and 100 test iterations,</span><br><span class="line"># covering the full 10,000 testing images.</span><br><span class="line">test_iter: 100 # test_iter = num_test_images/test_mini_batch_size = 10000/100</span><br><span class="line"># Carry out testing every 500 training iterations.</span><br><span class="line">test_interval: 500</span><br><span class="line"># The base learning rate, momentum and the weight decay of the network.</span><br><span class="line">base_lr: 0.01</span><br><span class="line">momentum: 0.9</span><br><span class="line">weight_decay: 0.0005</span><br><span class="line"># The learning rate policy</span><br><span class="line">lr_policy: &quot;inv&quot;</span><br><span class="line">gamma: 0.0001</span><br><span class="line">power: 0.75</span><br><span class="line"># Display every 100 iterations</span><br><span class="line">display: 100</span><br><span class="line"># The maximum number of iterations</span><br><span class="line">max_iter: 10000  # epoch = </span><br><span class="line"># snapshot intermediate results</span><br><span class="line">snapshot: 5000</span><br><span class="line">snapshot_prefix: &quot;examples/mnist/lenet&quot;</span><br><span class="line"># solver mode: CPU or GPU</span><br><span class="line">solver_mode: GPU</span><br></pre></td></tr></table></figure>
+
+<h4 id="learning-rate-policy-todo…"><a href="#learning-rate-policy-todo…" class="headerlink" title="learning rate policy (todo…)"></a>learning rate policy (todo…)</h4><p>This is the same policy as our default LeNet.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">s.lr_policy = &#x27;inv&#x27;</span><br><span class="line">s.gamma = 0.0001</span><br><span class="line">s.power = 0.75</span><br></pre></td></tr></table></figure>
+
+<p> EDIT HERE to try the fixed rate (and compare with adaptive solvers)<br><code>fixed</code> is the simplest policy that keeps the learning rate constant.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s.lr_policy = &#x27;fixed&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>Set <code>lr_policy</code> to define how the learning rate changes during training.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Here, we &#x27;step&#x27; the learning rate by multiplying it by a factor `gamma`</span><br><span class="line"># every `stepsize` iterations.</span><br><span class="line">s.lr_policy = &#x27;step&#x27;</span><br><span class="line">s.gamma = 0.1</span><br><span class="line">s.stepsize = 20000</span><br></pre></td></tr></table></figure>
+
+<h4 id="solver-types-todo…"><a href="#solver-types-todo…" class="headerlink" title="solver types (todo…)"></a>solver types (todo…)</h4><p>solver types include “SGD”, “Adam”, and “Nesterov” among others.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s.type = &quot;SGD&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Train-LeNet"><a href="#Train-LeNet" class="headerlink" title="Train LeNet"></a>Train LeNet</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="variable">$CAFFE_ROOT</span></span><br><span class="line">./examples/mnist/train_lenet.sh</span><br></pre></td></tr></table></figure>
+
+<pre><code>#!/usr/bin/env sh
+set -e
+
+./build/tools/caffe train --solver=examples/mnist/lenet_solver.prototxt $@
+</code></pre>
+<p>train output </p>
+<pre><code>I0807 16:15:29.555564  4273 solver.cpp:310] Iteration 10000, loss = 0.00251452
+I0807 16:15:29.555619  4273 solver.cpp:330] Iteration 10000, Testing net (#0)
+I0807 16:15:29.634243  4281 data_layer.cpp:73] Restarting data prefetching from start.
+I0807 16:15:29.635372  4273 solver.cpp:397]     Test net output #0: accuracy = 0.9909
+I0807 16:15:29.635409  4273 solver.cpp:397]     Test net output #1: loss = 0.0302912 (* 1 = 0.0302912 loss)
+I0807 16:15:29.635416  4273 solver.cpp:315] Optimization Done.
+I0807 16:15:29.635439  4273 caffe.cpp:259] Optimization Done.
+</code></pre>
+<h3 id="Deploy-model"><a href="#Deploy-model" class="headerlink" title="Deploy model"></a>Deploy model</h3><ul>
+<li>for train, <code>train_test.prototxt</code> + <code>solver.prototxt</code></li>
+<li>for deploy, <code>deploy.prototxt</code>+ <code>model.caffemodel</code></li>
+</ul>
+<blockquote>
+<p>depoly: no weight_filler,bias_filler, loaded from weights.caffemodel. if not set weights file, w,b default to 0s</p>
+</blockquote>
+<h3 id="PyCaffe"><a href="#PyCaffe" class="headerlink" title="PyCaffe"></a>PyCaffe</h3><p><a target="_blank" rel="noopener" href="http://caffe.berkeleyvision.org/tutorial/interfaces.html">pycaffe interfaces</a></p>
+<p>The Python interface – <code>pycaffe</code> – is the caffe module and its scripts in caffe&#x2F;python. import caffe to load models, do forward and backward, handle IO, visualize networks, and even instrument model solving. All model data, derivatives, and parameters are exposed for reading and writing.</p>
+<ul>
+<li><code>caffe.Net</code> is the central interface for loading, configuring, and running models. </li>
+<li><code>caffe.Classifier</code> and caffe.Detector provide convenience interfaces for common tasks.</li>
+<li><code>caffe.SGDSolver</code> exposes the solving interface.</li>
+<li><code>caffe.io</code> handles input &#x2F; output with preprocessing and protocol buffers.</li>
+<li><code>caffe.draw</code> visualizes network architectures.</li>
+<li>Caffe blobs are exposed as numpy ndarrays for ease-of-use and efficiency.</li>
+</ul>
+<p>Tutorial IPython notebooks are found in caffe&#x2F;examples: do <code>ipython notebook caffe/examples</code> to try them. For developer reference docstrings can be found throughout the code.</p>
+<p>Compile pycaffe by make pycaffe. Add the module directory to your <code>$PYTHONPATH</code> by <code>export PYTHONPATH=/path/to/caffe/python:$PYTHONPATH</code> or the like for <code>import caffe</code>.</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://caffe.berkeleyvision.org/gathered/examples/mnist.html">minist</a></li>
+<li><a target="_blank" rel="noopener" href="http://caffe.berkeleyvision.org/tutorial/layers.html">caffe layers</a></li>
+<li><a target="_blank" rel="noopener" href="http://caffe.berkeleyvision.org/tutorial/layers/python.html">caffe python layer</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180807: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/caffe/" rel="tag"># caffe</a>
+              <a href="/tags/LeNet/" rel="tag"># LeNet</a>
+              <a href="/tags/mnist/" rel="tag"># mnist</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/Install-and-Configure-Caffe-on-ubuntu-16-04/" rel="prev" title="Install and Configure Caffe on ubuntu 16.04">
+      <i class="fa fa-chevron-left"></i> Install and Configure Caffe on ubuntu 16.04
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/Classification-Instant-Recognition-with-Caffe/" rel="next" title="Classification: Instant Recognition with Caffe">
+      Classification: Instant Recognition with Caffe <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#LeNet"><span class="nav-number">1.</span> <span class="nav-text">LeNet</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lenet-train-test-prototxt"><span class="nav-number">1.1.</span> <span class="nav-text">lenet_train_test.prototxt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Input-Layer-types"><span class="nav-number">1.2.</span> <span class="nav-text">Input Layer types</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Input-Layer-types-for-train-val-prototxt"><span class="nav-number">1.2.1.</span> <span class="nav-text">Input Layer types for train_val.prototxt</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Input-Layer-types-for-deploy-prototxt"><span class="nav-number">1.2.2.</span> <span class="nav-text">Input Layer types for deploy.prototxt</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LeNet-train-val-prototxt"><span class="nav-number">1.3.</span> <span class="nav-text">LeNet train_val.prototxt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LeNet-solver-prototxt"><span class="nav-number">1.4.</span> <span class="nav-text">LeNet solver.prototxt</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#learning-rate-policy-todo%E2%80%A6"><span class="nav-number">1.4.1.</span> <span class="nav-text">learning rate policy (todo…)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#solver-types-todo%E2%80%A6"><span class="nav-number">1.4.2.</span> <span class="nav-text">solver types (todo…)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Train-LeNet"><span class="nav-number">1.5.</span> <span class="nav-text">Train LeNet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy-model"><span class="nav-number">1.6.</span> <span class="nav-text">Deploy model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PyCaffe"><span class="nav-number">1.7.</span> <span class="nav-text">PyCaffe</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

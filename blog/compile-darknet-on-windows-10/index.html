@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Series Part 1: compile darknet on ubuntu 16.04 Part 2: compile darknet on windows 10 Part 3: compile caffe-yolov3 on ubuntu 16.04  Guiderequirementsmy system requirements  windows 10 GeForce 1060 (6G)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="compile and install darknet on windows 10">
+<meta property="og:url" content="https://kezunlin.me/blog/compile-darknet-on-windows-10/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Series Part 1: compile darknet on ubuntu 16.04 Part 2: compile darknet on windows 10 Part 3: compile caffe-yolov3 on ubuntu 16.04  Guiderequirementsmy system requirements  windows 10 GeForce 1060 (6G)">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-11-01T01:18:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="object detect">
+<meta property="article:tag" content="yolo">
+<meta property="article:tag" content="darknet">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/compile-darknet-on-windows-10/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>compile and install darknet on windows 10 | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/compile-darknet-on-windows-10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          compile and install darknet on windows 10
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-11-01 09:18:00" itemprop="dateCreated datePublished" datetime="2018-11-01T09:18:00+08:00">2018-11-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deep-learning/" itemprop="url" rel="index"><span itemprop="name">deep learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://kezunline.me/post/e8f8aadd/">Part 1: compile darknet on ubuntu 16.04</a></li>
+<li><strong><a target="_blank" rel="noopener" href="http://kezunline.me/post/a5c428f1/">Part 2: compile darknet on windows 10</a></strong></li>
+<li><a href="https://kezunlin.me/post/cfeb28a4/">Part 3: compile caffe-yolov3 on ubuntu 16.04</a></li>
+</ul>
+<h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="requirements"><a href="#requirements" class="headerlink" title="requirements"></a>requirements</h3><p>my system requirements</p>
+<ul>
+<li>windows 10</li>
+<li>GeForce 1060 (6G)  sm_61</li>
+<li>VS: 2015 </li>
+<li>cuda: 8.0</li>
+<li>cudnn: 6.0.1</li>
+<li>opencv: <a target="_blank" rel="noopener" href="http://sourceforge.net/projects/opencvlibrary/files/opencv-win/3.3.0/opencv-3.3.0.exe/download">opencv-3.3.0-vc14.exe</a></li>
+</ul>
+<blockquote>
+<p>Tips:<br>Install Cuda after VS 2015. otherwise errors occur. (don’t know why)</p>
+</blockquote>
+<p>commands</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/AlexeyAB/darknet.git</span><br></pre></td></tr></table></figure>
+
+<h3 id="config"><a href="#config" class="headerlink" title="config"></a>config</h3><ul>
+<li>extract <code>opencv-3.3.0-vc14.exe</code> to <code>C:\opencv330\</code></li>
+<li>find <code>CUDA 8.0.props</code> from <code>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\extras\visual_studio_integration\MSBuildExtensions\CUDA 8.0.props</code></li>
+</ul>
+<p>vim <code>build/darknet/darknet.vcxproj</code></p>
+<ul>
+<li>replace <code>C:\opencv_2.4.9\</code> with <code>C:\opencv330\</code></li>
+<li>replace <code>CUDA 9.2.props</code> with <code>CUDA 8.0.props</code></li>
+<li>replace <code>CUDA 9.2.targets</code> with <code>CUDA 8.0.targets</code></li>
+<li>replace <code>compute_30,sm_30;</code> with <code>compute_61,sm_61;</code></li>
+</ul>
+<h3 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h3><p>open <code>build/darknet/darknet.sln</code> with <code>VS 2015</code></p>
+<p>include path</p>
+<pre><code>C:\opencv330\opencv\build\include
+..\..\3rdparty\include
+$(CUDA_PATH)\include
+</code></pre>
+<p>library path</p>
+<pre><code>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\lib\x64
+$(CUDA_PATH)\lib\$(PlatformName)  
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\lib\x64
+</code></pre>
+<p>linker input</p>
+<pre><code>    ..\..\3rdparty\lib\x64\pthreadVC2.lib;cublas.lib;curand.lib;cudart.lib;
+</code></pre>
+<p>build with <code>x64 Release</code>.</p>
+<h3 id="run"><a href="#run" class="headerlink" title="run"></a>run</h3><h4 id="darknet-exe"><a href="#darknet-exe" class="headerlink" title="darknet.exe"></a>darknet.exe</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./darknet.exe detector <span class="built_in">test</span> data/coco.data yolov3.cfg yolov3.weights -i 0 -thresh 0.25 dog.jpg -ext_output</span><br></pre></td></tr></table></figure>
+
+<h4 id="darknet-py"><a href="#darknet-py" class="headerlink" title="darknet.py"></a>darknet.py</h4><p>compile <code>yolo_cpp_dll.sln</code> and generate <code>yolo_cpp_dll.dll</code> for python usage.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python darknet.py</span><br></pre></td></tr></table></figure>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+<h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><h3 id="yolo-py"><a href="#yolo-py" class="headerlink" title="yolo.py"></a>yolo.py</h3><p>for linux and windows.<br>see <a target="_blank" rel="noopener" href="https://gist.github.com/kezunlin/01adb3c752072f36954ad1bb4f935c14">yolo.py</a></p>
+<h3 id="yolo-cpp-dll"><a href="#yolo-cpp-dll" class="headerlink" title="yolo_cpp_dll"></a>yolo_cpp_dll</h3><p>System Path</p>
+<pre><code>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\libnvvp
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\jre\bin
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\jre\bin\plugin2
+</code></pre>
+<p>cuda80+cudnn6 </p>
+<ul>
+<li>cuda_8.0.61_win10.exe: <code>cublas64_80.dll,curand64_80.dll,cudart64_80.dll</code></li>
+<li>cudnn-8.0-windows10-x64-v6.0.zip: <code>cudnn64_6.dll</code></li>
+</ul>
+<p>cuda90+cudnn7</p>
+<ul>
+<li>cuda_9.0.176_win10.exe: <code>cublas64_90.dll,curand64_90.dll,cudart64_90.dll</code></li>
+<li>cudnn-9.0-windows10-x64-v7.1.zip: <code>cudnn64_7.dll</code></li>
+</ul>
+<p>yolo dll</p>
+<ul>
+<li>cuda80_yolo_cpp_dll: <code>pthreadvc2.dll, cublas64_80.dll,curand64_80.dll,cudart64_80.dll,cudnn64_6.dll</code></li>
+<li>cuda90_yolo_cpp_dll: <code>pthreadvc2.dll, cublas64_90.dll,curand64_90.dll,cudart64_90.dll,cudnn64_7.dll</code><blockquote>
+<p>Tips: use <code>Dependency Walker</code> to list dlls.</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/pjreddie/darknet">pjreddie darknet yolo</a></li>
+<li><a target="_blank" rel="noopener" href="https://pjreddie.com/darknet/install/">darknet install</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/AlexeyAB/darknet">darknet for linux and windows</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20181101: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/object-detect/" rel="tag"># object detect</a>
+              <a href="/tags/yolo/" rel="tag"># yolo</a>
+              <a href="/tags/darknet/" rel="tag"># darknet</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/linux-nm-command/" rel="prev" title="linux program address space and nm command tutorial">
+      <i class="fa fa-chevron-left"></i> linux program address space and nm command tutorial
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/install-apache-httpd-server-2-2-on-windows-10/" rel="next" title="install apache httpd server 2.2 on windows 10">
+      install apache httpd server 2.2 on windows 10 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Series"><span class="nav-number">1.</span> <span class="nav-text">Series</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">2.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#requirements"><span class="nav-number">2.1.</span> <span class="nav-text">requirements</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#config"><span class="nav-number">2.2.</span> <span class="nav-text">config</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#compile"><span class="nav-number">2.3.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#run"><span class="nav-number">2.4.</span> <span class="nav-text">run</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#darknet-exe"><span class="nav-number">2.4.1.</span> <span class="nav-text">darknet.exe</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#darknet-py"><span class="nav-number">2.4.2.</span> <span class="nav-text">darknet.py</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Code"><span class="nav-number">3.</span> <span class="nav-text">Code</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#yolo-py"><span class="nav-number">3.1.</span> <span class="nav-text">yolo.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yolo-cpp-dll"><span class="nav-number">3.2.</span> <span class="nav-text">yolo_cpp_dll</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

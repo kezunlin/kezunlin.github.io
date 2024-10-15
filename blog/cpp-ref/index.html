@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Guidesizeof(array)12345678910111213141516171819202122232425int print_size1(int a[], int n)&#123;&#x2F;&#x2F; int add(int*, int)	std::cout&lt;&lt; sizeof(a) &lt;&lt; std::endl; 	&#x2F;&#x2F; we get sizeof(int*)&#125;int p">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cpp ref">
+<meta property="og:url" content="https://kezunlin.me/blog/cpp-ref/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Guidesizeof(array)12345678910111213141516171819202122232425int print_size1(int a[], int n)&#123;&#x2F;&#x2F; int add(int*, int)	std::cout&lt;&lt; sizeof(a) &lt;&lt; std::endl; 	&#x2F;&#x2F; we get sizeof(int*)&#125;int p">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-04-28T23:56:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="notes">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/cpp-ref/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>cpp ref | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/cpp-ref/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          cpp ref
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-04-29 07:56:00" itemprop="dateCreated datePublished" datetime="2019-04-29T07:56:00+08:00">2019-04-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="sizeof-array"><a href="#sizeof-array" class="headerlink" title="sizeof(array)"></a>sizeof(array)</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">print_size1</span><span class="params">(<span class="type">int</span> a[], <span class="type">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;<span class="comment">// int add(int*, int)</span></span><br><span class="line">	std::cout&lt;&lt; <span class="built_in">sizeof</span>(a) &lt;&lt; std::endl; </span><br><span class="line">	<span class="comment">// we get sizeof(int*)</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">print_size2</span><span class="params">(<span class="type">int</span> *a, <span class="type">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;<span class="comment">// int add(int*, int)</span></span><br><span class="line">	std::cout&lt;&lt; <span class="built_in">sizeof</span>(a) &lt;&lt; std::endl;</span><br><span class="line">	<span class="comment">// we get sizeof(int*)</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> N_ELEMENTS(array) (sizeof(array)/sizeof((array)[0])) </span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test_array</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> a[<span class="number">5</span>] = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;;</span><br><span class="line">	<span class="type">int</span> n = <span class="built_in">N_ELEMENTS</span>(a); </span><br><span class="line">	std::cout&lt;&lt;<span class="string">&quot;num  = &quot;</span>&lt;&lt; n &lt;&lt; std::endl; <span class="comment">// 5</span></span><br><span class="line">	std::cout&lt;&lt; <span class="built_in">sizeof</span>(<span class="type">int</span>) &lt;&lt; std::endl; <span class="comment">// int size</span></span><br><span class="line">	std::cout&lt;&lt; <span class="built_in">sizeof</span>(<span class="type">int</span>*) &lt;&lt; std::endl; <span class="comment">// pointer size</span></span><br><span class="line">	std::cout&lt;&lt; <span class="built_in">sizeof</span>(a) &lt;&lt; std::endl; <span class="comment">// 20</span></span><br><span class="line">	<span class="built_in">print_size1</span>(a, <span class="number">5</span>);</span><br><span class="line">	<span class="built_in">print_size2</span>(a, <span class="number">5</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>An array-type is implicitly converted into pointer type when you pass it in to a function.<br>int a[]作为函数参数，隐式的转换为int *a. </p>
+</blockquote>
+<p>编译会产生warning.</p>
+<pre><code>warning: ‘sizeof’ on array function parameter ‘a’ will return size of ‘int*’ [-Wsizeof-array-argument]
+  std::cout&lt;&lt; sizeof(a) &lt;&lt; std::endl; // pointer size
+</code></pre>
+<h3 id="char-string"><a href="#char-string" class="headerlink" title="char* string"></a>char* string</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test_str1</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]</span></span><br><span class="line">    <span class="type">char</span>* str = <span class="string">&quot;Hello&quot;</span>;  <span class="comment">//Warning</span></span><br><span class="line">  </span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* str1 = <span class="string">&quot;Hello&quot;</span>; <span class="comment">// No warning </span></span><br><span class="line">  </span><br><span class="line">    <span class="comment">// trying to modify const string literal </span></span><br><span class="line">    <span class="comment">// gives Runtime error  </span></span><br><span class="line">	<span class="comment">// segmentation fault (core dumped)</span></span><br><span class="line">    <span class="comment">//str[1] = &#x27;o&#x27;; </span></span><br><span class="line">  </span><br><span class="line">    cout &lt;&lt; str &lt;&lt; endl; </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Hello常量字符串，存放在静态数据区; 由于字符串常量无需改动，放在静态内存区会提高效率.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test_str2</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">char</span> str1[] = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">	<span class="type">char</span> str2[] = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">	<span class="type">const</span> <span class="type">char</span> str3[] = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">	<span class="type">const</span> <span class="type">char</span> str4[] = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">	<span class="type">const</span> <span class="type">char</span> *str5 = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">	<span class="type">const</span> <span class="type">char</span> *str6 = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">	cout &lt;&lt; ( str1 == str2 ) &lt;&lt; endl; <span class="comment">// 0</span></span><br><span class="line">	cout &lt;&lt; ( str3 == str4 ) &lt;&lt; endl; <span class="comment">// 0</span></span><br><span class="line">	cout &lt;&lt; ( str5 == str6 ) &lt;&lt; endl; <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line">	str1[<span class="number">1</span>] = <span class="string">&#x27;B&#x27;</span>; <span class="comment">// OK </span></span><br><span class="line">	<span class="comment">//str3[1] = &#x27;B&#x27;; // Compiler ERROR</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">str1,str2,str3,str4是数组变量。它们有各自的内存空间；</span></span><br><span class="line"><span class="comment">而str5,str6是指针，它们指向同样的常量字符串。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">const</span> <span class="type">char</span>* <span class="title">return_str</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> 	<span class="type">const</span> <span class="type">char</span> *p=<span class="string">&quot;abc&quot;</span>;</span><br><span class="line"> 	<span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test_str3</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> 	<span class="type">const</span> <span class="type">char</span> *str=<span class="literal">NULL</span>; </span><br><span class="line"> 	str= <span class="built_in">return_str</span>();</span><br><span class="line"> 	<span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, str); <span class="comment">// abc</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">由于&quot;abc&quot;是一个字符串常量，存放在静态数据区。把该字符串常量存放的静态数据区的首地址赋值给了指针。</span></span><br><span class="line"><span class="comment">所以return_str函数退出时，该字符串常量所在内存不会被回收。故可以通过指针顺利无误的訪问。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">char</span>* <span class="title">return_str2</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> 	<span class="type">char</span> p[] =<span class="string">&quot;abc&quot;</span>;</span><br><span class="line"> 	<span class="keyword">return</span> p; <span class="comment">// warning: address of local variable ‘p’ returned [-Wreturn-local-addr]</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test_str4</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> 	<span class="type">char</span> *str=<span class="literal">NULL</span>; </span><br><span class="line"> 	str= <span class="built_in">return_str2</span>();</span><br><span class="line"> 	<span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, str); <span class="comment">// null</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">&quot;abc&quot;是一个字符串常量，存放在静态数据区。</span></span><br><span class="line"><span class="comment">可是把一个字符串常量赋值给了一个局部变量(char []型数组)，该局部变量存放在栈中，该数组空间中也存储&quot;abc&quot;的一份拷贝。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">也就是说`char p[]=&quot;abc&quot;;`这条语句让&quot;abc&quot;这个字符串在内存中有两份拷贝，一份在动态分配的栈中，还有一份在静态存储区。</span></span><br><span class="line"><span class="comment">这是与前者return_str1最本质的差别，当return_str2函数退出时，栈要清空，局部变量的内存也被清空了。</span></span><br><span class="line"><span class="comment">所以这时的函数返回的是一个已被释放的内存地址。所以打印出来的是null。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">char</span>* <span class="title">return_str3</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> 	<span class="type">static</span> <span class="type">char</span> p[]=<span class="string">&quot;abc&quot;</span>; <span class="comment">//p存放在静态存储区，内容为abc</span></span><br><span class="line"> 	<span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test_str5</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> 	<span class="type">char</span> *str=<span class="literal">NULL</span>; </span><br><span class="line"> 	str= <span class="built_in">return_str3</span>();</span><br><span class="line"> 	<span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, str); <span class="comment">// abc</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">如果函数的返回值非要是一个局部变量的地址，那么该局部变量一定要申明为static类型。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/char-vs-stdstring-vs-char-c/">char*-vs-stdstring</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/gavanwanggw/p/7246880.html">const string</a></p>
+<h3 id="NULL-vs-nullptr"><a href="#NULL-vs-nullptr" class="headerlink" title="NULL vs nullptr"></a>NULL vs nullptr</h3><p><a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/understanding-nullptr-c/">nullptr</a><br>NULL  (void *)0 </p>
+<ul>
+<li>convert to integer</li>
+<li>pointer</li>
+</ul>
+<p>nullptr keyword</p>
+<ul>
+<li>pointer </li>
+<li>CAN NOT convert to integer</li>
+<li>nullptr is convertible to bool.</li>
+</ul>
+<h3 id="const-vs-non-const"><a href="#const-vs-non-const" class="headerlink" title="const vs non-const"></a>const vs non-const</h3><blockquote>
+<p>Use const whenever possible.</p>
+</blockquote>
+<blockquote>
+<p>将某些东西声明为const可以帮助编译器侦测出错误的用法。const可以被施加于任何作用域内的对象、函数参数、函数返回类型、成员函数本体。<br>当const和non-const成员函数有实质等价的实现时，令non-const版本去调用const版本可以避免代码重复。反之则不可。</p>
+</blockquote>
+<h4 id="code"><a href="#code" class="headerlink" title="code"></a>code</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">TextBlock</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">...</span><br><span class="line">    <span class="comment">//const：和原先一样</span></span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>&amp; <span class="keyword">operator</span>[] (std::<span class="type">size_t</span> position) <span class="type">const</span> </span><br><span class="line">    &#123; </span><br><span class="line">        ...</span><br><span class="line">        ...</span><br><span class="line">        ...</span><br><span class="line">        <span class="keyword">return</span> text[position]; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//non-const：发生区别，直接调用了const op[]</span></span><br><span class="line">    <span class="type">char</span>&amp; <span class="keyword">operator</span>[] (std::<span class="type">size_t</span> position)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span>   <span class="comment">//直接return</span></span><br><span class="line">            <span class="built_in">const_cast</span>&lt;<span class="type">char</span>&amp;&gt;(  <span class="comment">//(3)将op[]返回值的const移除</span></span><br><span class="line">                <span class="built_in">static_cast</span>&lt;<span class="type">const</span> TextBlock&amp;&gt;(*<span class="keyword">this</span>)    <span class="comment">//(1)为*this加上const</span></span><br><span class="line">                    [position]    <span class="comment">//(2)调用const op[]</span></span><br><span class="line">                );</span><br><span class="line">            &#125;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>两次转型:<br>第一次，用来为<em>this添加 const，将</em>this从其原始类型TextBlock&amp; 转换为const TextBlock&amp;，使得接下来调用operator[]是可以条用const的版本，使用<code>static_cast</code>。<br>第二次，则是从const operator[]的返回值中移除const，利用<code>const_cast</code>来完成。</p>
+</blockquote>
+<h3 id="static"><a href="#static" class="headerlink" title="static"></a>static</h3><ul>
+<li>static: internal linkage</li>
+<li>extern: external linkage</li>
+</ul>
+<h3 id="extern"><a href="#extern" class="headerlink" title="extern"></a>extern</h3><p><a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/understanding-extern-keyword-in-c/">extern</a></p>
+<blockquote>
+<p>extern is present by default with C functions.<br>Since the declaration can be done any number of times and definition can be done only once</p>
+</blockquote>
+<h3 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h3><p><a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/understanding-volatile-qualifier-c-set-1-introduction/">volatile</a><br><a target="_blank" rel="noopener" href="http://www.cnblogs.com/yc_sunniwell/archive/2010/06/24/1764231.html">volatile cnblogs</a></p>
+<blockquote>
+<p>volatile 异变的，告诉compiler这个值可能会在当前线程外部被改变，因此不要进行优化，每次都从ram地址读取，而不要从register读取缓存的副本。</p>
+</blockquote>
+<h3 id="Internal-Linkage-and-External-Linkage-in-C"><a href="#Internal-Linkage-and-External-Linkage-in-C" class="headerlink" title="Internal Linkage and External Linkage in C"></a>Internal Linkage and External Linkage in C</h3><p><a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/internal-linkage-external-linkage-c/">internal linkage and external linkage</a><br><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/1358400/what-is-external-linkage-and-internal-linkage">what-is-external-linkage-and-internal-linkage</a></p>
+<blockquote>
+<p>scope is a property handled by compiler, whereas linkage is a property handled by linker.<br>external linkage means the symbol (function or global variable) is accessible throughout your program and internal linkage means that it’s only accessible in one translation unit.<br>You can explicitly control the linkage of a symbol by using the extern and static keywords. If the linkage isn’t specified then the default linkage is extern for non-const symbols and static (internal) for const symbols.<br>The keyword static plays a double role. (1) When used in the definitions of global variables, it specifies internal linkage. (2) When used in the definitions of the local variables, it specifies that the lifetime of the variable is going to be the duration of the program instead of being the duration of the function.</p>
+</blockquote>
+<h3 id="constexpr"><a href="#constexpr" class="headerlink" title="constexpr"></a>constexpr</h3><p><a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/understanding-constexper-specifier-in-c/">constexper</a></p>
+<blockquote>
+<p>constexpr is a feature added in C++ 11. The main idea is performance improvement of programs by doing computations at compile time rather than run time.</p>
+</blockquote>
+<h4 id="constexpr-vs-inline-functions"><a href="#constexpr-vs-inline-functions" class="headerlink" title="constexpr vs inline functions"></a>constexpr vs inline functions</h4><blockquote>
+<p>Both are for performance improvements, inline functions are request to compiler to expand at compile time and save time of function call overheads. In inline functions, expressions are always evaluated at run time. constexpr is different, here expressions are evaluated at compile time.</p>
+</blockquote>
+<h3 id="vtable-and-vptr"><a href="#vtable-and-vptr" class="headerlink" title="vtable and vptr"></a>vtable and vptr</h3><p><a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/virtual-functions-and-runtime-polymorphism-in-c-set-1-introduction/">virtual-functions-and-runtime-polymorphism</a><br><a target="_blank" rel="noopener" href="https://practice.geeksforgeeks.org/problems/what-are-vtable-and-vptr">what-are-vtable-and-vptr</a><br><a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/calling-virtual-methods-in-constructordestructor-in-cpp/">calling-virtual-methods-in-constructordestructor-in-cpp</a></p>
+<blockquote>
+<p>It is highly recommended to avoid calling virtual methods from constructor&#x2F;destructor.</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/hellogiser/p/virtual-function-table.html">virtual-function-table</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/hellogiser/p/class-memory-layout.html">class-memory-layout</a></p>
+<h3 id="Virtual-Constructor"><a href="#Virtual-Constructor" class="headerlink" title="Virtual Constructor"></a>Virtual Constructor</h3><p><a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/advanced-c-virtual-constructor/">Virtual Constructor</a></p>
+<blockquote>
+<p>Virtual Constructor, NO<br>Can we make a class constructor virtual in C++ to create polymorphic objects? No. C++ being static typed (the purpose of RTTI is different) language, it is meaningless to the C++ compiler to create an object polymorphically. The compiler must be aware of the class type to create the object. In other words, what type of object to be created is a compile time decision from C++ compiler perspective. If we make constructor virtual, compiler flags an error.</p>
+</blockquote>
+<h3 id="Virtual-Destructor"><a href="#Virtual-Destructor" class="headerlink" title="Virtual Destructor"></a>Virtual Destructor</h3><p><a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/virtual-destructor/">Virtual Destructor</a></p>
+<blockquote>
+<p>Deleting a derived class object using a pointer to a base class that has a non-virtual destructor results in undefined behavior.</p>
+</blockquote>
+<h3 id="Advanced"><a href="#Advanced" class="headerlink" title="Advanced"></a>Advanced</h3><ul>
+<li><p><a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/order-constructor-destructor-call-c/">Order of Constructor&#x2F; Destructor Call in C++</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/make-class-whose-objects-can-dynamically-allocated/">How to make a C++ class whose objects can only be dynamically allocated?</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/possible-call-constructor-destructor-explicitly/">Is it possible to call constructor and destructor explicitly?</a></p>
+<blockquote>
+<p>Yes, it is possible to call special member functions explicitly by programmer.<br>When the constructor is called explicitly the compiler creates a nameless temporary object and it is immediately destroyed.<br>we should never call destructor explicitly on local (automatic) object, because really bad results can be acquired by doing that.<br>Local objects are automatically destroyed by compiler when they go out of scope and this is the guarantee of C++ language.</p>
+</blockquote>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/output-of-c-program-set-18-3/">Print 1 to 100 in C++, without loop and recursion</a></p>
+<blockquote>
+<p> Template Metaprogramming</p>
+</blockquote>
+</li>
+</ul>
+<p>thread </p>
+<ul>
+<li>pass by value by default</li>
+<li>pass by ref: <code>std::ref(variable)</code></li>
+</ul>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.tutorialspoint.com/cplusplus/cpp_overloading.htm">tutorialspoint full (easy)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/c-plus-plus/">geeksforgeeks full (medium)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/multithreading-in-cpp/">geeksforgeeks multithreading</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/container/unordered_map">cppreference</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20190429: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/notes/" rel="tag"># notes</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/cpp11-push-back-and-emplace-back/" rel="prev" title="difference between push_back and emplace_back with C++ 11">
+      <i class="fa fa-chevron-left"></i> difference between push_back and emplace_back with C++ 11
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/live-video-streaming-over-network-with-opencv-and-imagezmq/" rel="next" title="stream live video over network with opencv and imagezmq ">
+      stream live video over network with opencv and imagezmq  <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sizeof-array"><span class="nav-number">1.1.</span> <span class="nav-text">sizeof(array)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#char-string"><span class="nav-number">1.2.</span> <span class="nav-text">char* string</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NULL-vs-nullptr"><span class="nav-number">1.3.</span> <span class="nav-text">NULL vs nullptr</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#const-vs-non-const"><span class="nav-number">1.4.</span> <span class="nav-text">const vs non-const</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#code"><span class="nav-number">1.4.1.</span> <span class="nav-text">code</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#static"><span class="nav-number">1.5.</span> <span class="nav-text">static</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#extern"><span class="nav-number">1.6.</span> <span class="nav-text">extern</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile"><span class="nav-number">1.7.</span> <span class="nav-text">volatile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Internal-Linkage-and-External-Linkage-in-C"><span class="nav-number">1.8.</span> <span class="nav-text">Internal Linkage and External Linkage in C</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#constexpr"><span class="nav-number">1.9.</span> <span class="nav-text">constexpr</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#constexpr-vs-inline-functions"><span class="nav-number">1.9.1.</span> <span class="nav-text">constexpr vs inline functions</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vtable-and-vptr"><span class="nav-number">1.10.</span> <span class="nav-text">vtable and vptr</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Virtual-Constructor"><span class="nav-number">1.11.</span> <span class="nav-text">Virtual Constructor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Virtual-Destructor"><span class="nav-number">1.12.</span> <span class="nav-text">Virtual Destructor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Advanced"><span class="nav-number">1.13.</span> <span class="nav-text">Advanced</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

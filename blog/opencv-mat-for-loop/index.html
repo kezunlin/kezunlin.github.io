@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Series Part 1: compile opencv on ubuntu 16.04 Part 2: compile opencv with CUDA support on windows 10 Part 3: opencv mat for loop Part 4: speed up opencv image processing with openmp  GuideMat for gray">
+<meta property="og:type" content="article">
+<meta property="og:title" content="speed up opencv image mat for loop">
+<meta property="og:url" content="https://kezunlin.me/blog/opencv-mat-for-loop/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Series Part 1: compile opencv on ubuntu 16.04 Part 2: compile opencv with CUDA support on windows 10 Part 3: opencv mat for loop Part 4: speed up opencv image processing with openmp  GuideMat for gray">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180906105458661-1770351097.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180906105501938-701356597.png">
+<meta property="article:published_time" content="2018-08-23T03:19:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="opencv">
+<meta property="article:tag" content="cython">
+<meta property="article:tag" content="numba">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kezunlin.me/images/posts/635233-20180906105458661-1770351097.png">
+
+<link rel="canonical" href="https://kezunlin.me/blog/opencv-mat-for-loop/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>speed up opencv image mat for loop | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/opencv-mat-for-loop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          speed up opencv image mat for loop
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-08-23 11:19:00" itemprop="dateCreated datePublished" datetime="2018-08-23T11:19:00+08:00">2018-08-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h2><ul>
+<li><a href="https://kezunlin.me/post/15f5c3e8/">Part 1: compile opencv on ubuntu 16.04</a></li>
+<li><a href="https://kezunlin.me/post/6580691f/">Part 2: compile opencv with CUDA support on windows 10</a></li>
+<li><strong><a href="https://kezunlin.me/post/61d55ab4/">Part 3: opencv mat for loop</a></strong></li>
+<li><a href="https://kezunlin.me/post/7a6ba82e/">Part 4: speed up opencv image processing with openmp</a></li>
+</ul>
+<h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="Mat"><a href="#Mat" class="headerlink" title="Mat"></a>Mat</h3><ul>
+<li>for gray image,     use type <code>&lt;uchar&gt;</code></li>
+<li>for RGB color image，use type <code>&lt;Vec3b&gt;</code></li>
+</ul>
+<p>gray format storage<br><img src="https://kezunlin.me/images/posts/635233-20180906105458661-1770351097.png" alt="gray"></p>
+<p>color format storage: BGR<br><img src="https://kezunlin.me/images/posts/635233-20180906105501938-701356597.png" alt="BGR">  </p>
+<blockquote>
+<p>we can use method <code>isContinuous()</code> to judge whether the memory buffer is continuous or not.</p>
+</blockquote>
+<h3 id="color-space-reduction"><a href="#color-space-reduction" class="headerlink" title="color space reduction"></a>color space reduction</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">uchar <span class="title">color_space_reduction</span><span class="params">(uchar pixel)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	0-9 ===&gt;0</span></span><br><span class="line"><span class="comment">	10-19===&gt;10</span></span><br><span class="line"><span class="comment">	20-29===&gt;20</span></span><br><span class="line"><span class="comment">	...</span></span><br><span class="line"><span class="comment">	240-249===&gt;24</span></span><br><span class="line"><span class="comment">	250-255===&gt;25</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	map from 256*256*256===&gt;26*26*26</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line"></span><br><span class="line">	<span class="type">int</span> divideWith = <span class="number">10</span>;</span><br><span class="line">	uchar new_pixel = (pixel / divideWith)*divideWith;</span><br><span class="line">	<span class="keyword">return</span> new_pixel;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="color-table"><a href="#color-table" class="headerlink" title="color table"></a>color table</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">get_color_table</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// cache color value in table[256]</span></span><br><span class="line">	<span class="type">int</span> divideWith = <span class="number">10</span>;</span><br><span class="line">	uchar table[<span class="number">256</span>];</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">256</span>; ++i)</span><br><span class="line">		table[i] = divideWith* (i / divideWith);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+<h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><h3 id="ptr"><a href="#ptr" class="headerlink" title="ptr []"></a>ptr []</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// C ptr []: faster but not safe</span></span><br><span class="line"><span class="function">Mat&amp; <span class="title">ScanImageAndReduce_Cptr</span><span class="params">(Mat&amp; I, <span class="type">const</span> uchar* <span class="type">const</span> table)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// accept only char type matrices</span></span><br><span class="line">	<span class="built_in">CV_Assert</span>(I.<span class="built_in">depth</span>() != <span class="built_in">sizeof</span>(uchar));</span><br><span class="line">	<span class="type">int</span> channels = I.<span class="built_in">channels</span>();</span><br><span class="line">	<span class="type">int</span> nRows = I.rows;</span><br><span class="line">	<span class="type">int</span> nCols = I.cols* channels;</span><br><span class="line">	<span class="keyword">if</span> (I.<span class="built_in">isContinuous</span>())</span><br><span class="line">	&#123;</span><br><span class="line">		nCols *= nRows;</span><br><span class="line">		nRows = <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="type">int</span> i, j;</span><br><span class="line">	uchar* p;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; nRows; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		p = I.<span class="built_in">ptr</span>&lt;uchar&gt;(i);</span><br><span class="line">		<span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; nCols; ++j)</span><br><span class="line">		&#123;</span><br><span class="line">			p[j] = table[p[j]];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> I;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="ptr-1"><a href="#ptr-1" class="headerlink" title="ptr ++"></a>ptr ++</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// C ptr ++: faster but not safe</span></span><br><span class="line"><span class="function">Mat&amp; <span class="title">ScanImageAndReduce_Cptr2</span><span class="params">(Mat&amp; I, <span class="type">const</span> uchar* <span class="type">const</span> table)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// accept only char type matrices</span></span><br><span class="line">	<span class="built_in">CV_Assert</span>(I.<span class="built_in">depth</span>() != <span class="built_in">sizeof</span>(uchar));</span><br><span class="line">	<span class="type">int</span> channels = I.<span class="built_in">channels</span>();</span><br><span class="line">	<span class="type">int</span> nRows = I.rows;</span><br><span class="line">	<span class="type">int</span> nCols = I.cols* channels;</span><br><span class="line">	<span class="keyword">if</span> (I.<span class="built_in">isContinuous</span>())</span><br><span class="line">	&#123;</span><br><span class="line">		nCols *= nRows;</span><br><span class="line">		nRows = <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	uchar* start = I.<span class="built_in">ptr</span>&lt;uchar&gt;(<span class="number">0</span>); <span class="comment">// same as I.ptr&lt;uchar&gt;(0,0)</span></span><br><span class="line">	uchar* end = start + nRows * nCols;</span><br><span class="line">	<span class="keyword">for</span> (uchar* p=start; p &lt; end; ++p)</span><br><span class="line">	&#123;</span><br><span class="line">		*p = table[*p];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> I;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="at-i-j"><a href="#at-i-j" class="headerlink" title="at(i,j)"></a>at<uchar>(i,j)</h3> <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">// at&lt;uchar&gt;(i,j): random access, slow</span></span><br><span class="line"><span class="function">Mat&amp; <span class="title">ScanImageAndReduce_atRandomAccess</span><span class="params">(Mat&amp; I, <span class="type">const</span> uchar* <span class="type">const</span> table)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// accept only char type matrices</span></span><br><span class="line">	<span class="built_in">CV_Assert</span>(I.<span class="built_in">depth</span>() != <span class="built_in">sizeof</span>(uchar));</span><br><span class="line">	<span class="type">const</span> <span class="type">int</span> channels = I.<span class="built_in">channels</span>();</span><br><span class="line">	<span class="keyword">switch</span> (channels)</span><br><span class="line">	&#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; I.rows; ++i)</span><br><span class="line">			<span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; I.cols; ++j)</span><br><span class="line">				I.<span class="built_in">at</span>&lt;uchar&gt;(i, j) = table[I.<span class="built_in">at</span>&lt;uchar&gt;(i, j)];</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">	&#123;</span><br><span class="line">		Mat_&lt;Vec3b&gt; _I = I;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; I.rows; ++i)</span><br><span class="line">			<span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; I.cols; ++j)</span><br><span class="line">			&#123;</span><br><span class="line">				_I(i, j)[<span class="number">0</span>] = table[_I(i, j)[<span class="number">0</span>]];</span><br><span class="line">				_I(i, j)[<span class="number">1</span>] = table[_I(i, j)[<span class="number">1</span>]];</span><br><span class="line">				_I(i, j)[<span class="number">2</span>] = table[_I(i, j)[<span class="number">2</span>]];</span><br><span class="line">			&#125;</span><br><span class="line">		I = _I;</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> I;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="Iterator"><a href="#Iterator" class="headerlink" title="Iterator"></a>Iterator</h3> <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">// MatIterator_&lt;uchar&gt;: safe but slow</span></span><br><span class="line"><span class="function">Mat&amp; <span class="title">ScanImageAndReduce_Iterator</span><span class="params">(Mat&amp; I, <span class="type">const</span> uchar* <span class="type">const</span> table)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// accept only char type matrices</span></span><br><span class="line">	<span class="built_in">CV_Assert</span>(I.<span class="built_in">depth</span>() != <span class="built_in">sizeof</span>(uchar));</span><br><span class="line">	<span class="type">const</span> <span class="type">int</span> channels = I.<span class="built_in">channels</span>();</span><br><span class="line">	<span class="keyword">switch</span> (channels)</span><br><span class="line">	&#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">	&#123;</span><br><span class="line">		MatIterator_&lt;uchar&gt; it, end;</span><br><span class="line">		<span class="keyword">for</span> (it = I.<span class="built_in">begin</span>&lt;uchar&gt;(), end = I.<span class="built_in">end</span>&lt;uchar&gt;(); it != end; ++it)</span><br><span class="line">			*it = table[*it];</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">	&#123;</span><br><span class="line">		MatIterator_&lt;Vec3b&gt; it, end;</span><br><span class="line">		<span class="keyword">for</span> (it = I.<span class="built_in">begin</span>&lt;Vec3b&gt;(), end = I.<span class="built_in">end</span>&lt;Vec3b&gt;(); it != end; ++it)</span><br><span class="line">		&#123;</span><br><span class="line">			(*it)[<span class="number">0</span>] = table[(*it)[<span class="number">0</span>]];</span><br><span class="line">			(*it)[<span class="number">1</span>] = table[(*it)[<span class="number">1</span>]];</span><br><span class="line">			(*it)[<span class="number">2</span>] = table[(*it)[<span class="number">2</span>]];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> I;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="opencv-LUT"><a href="#opencv-LUT" class="headerlink" title="opencv LUT"></a>opencv LUT</h3> <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">// LUT</span></span><br><span class="line"><span class="function">Mat&amp; <span class="title">ScanImageAndReduce_LUT</span><span class="params">(Mat&amp; I, <span class="type">const</span> uchar* <span class="type">const</span> table)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">Mat <span class="title">lookUpTable</span><span class="params">(<span class="number">1</span>, <span class="number">256</span>, CV_8U)</span></span>;</span><br><span class="line">	uchar* p = lookUpTable.data;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">256</span>; ++i)</span><br><span class="line">		p[i] = table[i];</span><br><span class="line"></span><br><span class="line">	cv::<span class="built_in">LUT</span>(I, lookUpTable, I);</span><br><span class="line">	<span class="keyword">return</span> I;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+ <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+<h3 id="forEach"><a href="#forEach" class="headerlink" title="forEach"></a>forEach</h3><blockquote>
+<p><code>forEach</code> method of the <code>Mat</code> class that utilizes all the cores on your machine to apply any function at every pixel.</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Parallel execution with function object.</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">ForEachOperator</span></span><br><span class="line">&#123;</span><br><span class="line">	uchar m_table[<span class="number">256</span>];</span><br><span class="line">	<span class="built_in">ForEachOperator</span>(<span class="type">const</span> uchar* <span class="type">const</span> table)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; <span class="number">256</span>; i++)</span><br><span class="line">		&#123;</span><br><span class="line">			m_table[i] = table[i];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">operator</span> <span class="params">()</span><span class="params">(uchar&amp; p, <span class="type">const</span> <span class="type">int</span> * position)</span> <span class="type">const</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="comment">// Perform a simple operation</span></span><br><span class="line">		p = m_table[p];</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// forEach use multiple processors, very fast</span></span><br><span class="line"><span class="function">Mat&amp; <span class="title">ScanImageAndReduce_forEach</span><span class="params">(Mat&amp; I, <span class="type">const</span> uchar* <span class="type">const</span> table)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	I.forEach&lt;uchar&gt;(<span class="built_in">ForEachOperator</span>(table));</span><br><span class="line">	<span class="keyword">return</span> I;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="forEach-with-lambda"><a href="#forEach-with-lambda" class="headerlink" title="forEach with lambda"></a>forEach with lambda</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// forEach lambda use multiple processors, very fast (lambda slower than ForEachOperator)</span></span><br><span class="line"><span class="function">Mat&amp; <span class="title">ScanImageAndReduce_forEach_with_lambda</span><span class="params">(Mat&amp; I, <span class="type">const</span> uchar* <span class="type">const</span> table)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	I.forEach&lt;uchar&gt;</span><br><span class="line">	(</span><br><span class="line">		[=](uchar &amp;p, <span class="type">const</span> <span class="type">int</span> * position) -&gt; <span class="type">void</span></span><br><span class="line">		&#123;</span><br><span class="line">			p = table[p];</span><br><span class="line">		&#125;</span><br><span class="line">	);</span><br><span class="line">	<span class="keyword">return</span> I;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="time-cost"><a href="#time-cost" class="headerlink" title="time cost"></a>time cost</h3><h4 id="no-foreach"><a href="#no-foreach" class="headerlink" title="no foreach"></a>no foreach</h4><pre><code>[1 Cptr   ] times=5000, total_cost=988 ms, avg_cost=0.1976 ms
+[1 Cptr2  ] times=5000, total_cost=1704 ms, avg_cost=0.3408 ms
+[2 atRandom] times=5000, total_cost=9611 ms, avg_cost=1.9222 ms
+[3 Iterator] times=5000, total_cost=20195 ms, avg_cost=4.039 ms
+[4 LUT    ] times=5000, total_cost=899 ms, avg_cost=0.1798 ms
+
+[1 Cptr   ] times=10000, total_cost=2425 ms, avg_cost=0.2425 ms
+[1 Cptr2  ] times=10000, total_cost=3391 ms, avg_cost=0.3391 ms
+[2 atRandom] times=10000, total_cost=20024 ms, avg_cost=2.0024 ms
+[3 Iterator] times=10000, total_cost=39980 ms, avg_cost=3.998 ms
+[4 LUT    ] times=10000, total_cost=103 ms, avg_cost=0.0103 ms
+</code></pre>
+<h4 id="foreach"><a href="#foreach" class="headerlink" title="foreach"></a>foreach</h4><pre><code>[5 forEach     ] times=200000, total_cost=199 ms, avg_cost=0.000995 ms
+[5 forEach lambda] times=200000, total_cost=521 ms, avg_cost=0.002605 ms
+
+[5 forEach     ] times=20000, total_cost=17 ms, avg_cost=0.00085 ms
+[5 forEach lambda] times=20000, total_cost=23 ms, avg_cost=0.00115 ms
+</code></pre>
+<h4 id="results"><a href="#results" class="headerlink" title="results"></a>results</h4><p>Loop Type | Time Cost (us)<br>:—-:   |<br>ptr []   | 242<br>ptr ++   | 339<br>at<uchar> | 2002<br>iterator  | 3998<br>LUT     | 10<br>forEach   | 0.85<br>forEach lambda  | 1.15 </p>
+<p><code>forEach</code> is 10x times faster than <code>LUT</code>, 240<del>340x times faster than <code>ptr []</code> and <code>ptr ++</code>, and 2000</del>4000x times faster than <code>at</code> and <code>iterator</code>.</p>
+<h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><p><a target="_blank" rel="noopener" href="https://gist.github.com/kezunlin/8a8f1be7c0e101ce3f0e16e529288afc">code here</a></p>
+<h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><h3 id="pure-python"><a href="#pure-python" class="headerlink" title="pure python"></a>pure python</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># import the necessary packages</span></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="built_in">print</span>(cv2.__version__)</span><br><span class="line"></span><br><span class="line">%matplotlib inline</span><br></pre></td></tr></table></figure>
+
+<pre><code>3.4.2
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># load the original image, convert it to grayscale, and display</span></span><br><span class="line"><span class="comment"># it inline</span></span><br><span class="line">image = cv2.imread(<span class="string">&quot;cat.jpg&quot;</span>)</span><br><span class="line">image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)</span><br><span class="line"><span class="built_in">print</span>(image.shape)</span><br><span class="line"><span class="comment">#plt.imshow(image, cmap=&quot;gray&quot;)</span></span><br></pre></td></tr></table></figure>
+
+<pre><code>(360, 480)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%load_ext cython</span><br></pre></td></tr></table></figure>
+
+<pre><code>The cython extension is already loaded. To reload it, use:
+  %reload_ext cython
+</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">%%cython -a</span><br><span class="line"> </span><br><span class="line">def threshold_python(T, image):</span><br><span class="line">    # grab the image dimensions</span><br><span class="line">    h = image.shape[0]</span><br><span class="line">    w = image.shape[1]</span><br><span class="line">    </span><br><span class="line">    # loop over the image, pixel by pixel</span><br><span class="line">    for y in range(0, h):</span><br><span class="line">        for x in range(0, w):</span><br><span class="line">            # threshold the pixel</span><br><span class="line">            image[y, x] = 255 if image[y, x] &gt;= T else 0</span><br><span class="line">            </span><br><span class="line">    # return the thresholded image</span><br><span class="line">    return image</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%timeit threshold_python(<span class="number">5</span>, image)</span><br></pre></td></tr></table></figure>
+
+<pre><code>263 ms ± 20.2 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+</code></pre>
+<h3 id="cython"><a href="#cython" class="headerlink" title="cython"></a>cython</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">%%cython -a</span><br><span class="line"> </span><br><span class="line">import cython</span><br><span class="line"> </span><br><span class="line">@cython.boundscheck(False)</span><br><span class="line">cpdef unsigned char[:, :] threshold_cython(int T, unsigned char [:, :] image):</span><br><span class="line">    # set the variable extension types</span><br><span class="line">    cdef int x, y, w, h</span><br><span class="line">    </span><br><span class="line">    # grab the image dimensions</span><br><span class="line">    h = image.shape[0]</span><br><span class="line">    w = image.shape[1]</span><br><span class="line">    </span><br><span class="line">    # loop over the image</span><br><span class="line">    for y in range(0, h):</span><br><span class="line">        for x in range(0, w):</span><br><span class="line">            # threshold the pixel</span><br><span class="line">            image[y, x] = 255 if image[y, x] &gt;= T else 0</span><br><span class="line">    </span><br><span class="line">    # return the thresholded image</span><br><span class="line">    return image</span><br></pre></td></tr></table></figure>
+
+<h3 id="numba"><a href="#numba" class="headerlink" title="numba"></a>numba</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%timeit threshold_cython(<span class="number">5</span>, image)</span><br></pre></td></tr></table></figure>
+
+<pre><code>150 µs ± 7.14 µs per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> numba <span class="keyword">import</span> njit</span><br><span class="line"></span><br><span class="line"><span class="meta">@njit</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">threshold_njit</span>(<span class="params">T, image</span>):</span><br><span class="line">    <span class="comment"># grab the image dimensions</span></span><br><span class="line">    h = image.shape[<span class="number">0</span>]</span><br><span class="line">    w = image.shape[<span class="number">1</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># loop over the image, pixel by pixel</span></span><br><span class="line">    <span class="keyword">for</span> y <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, h):</span><br><span class="line">        <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, w):</span><br><span class="line">            <span class="comment"># threshold the pixel</span></span><br><span class="line">            image[y, x] = <span class="number">255</span> <span class="keyword">if</span> image[y, x] &gt;= T <span class="keyword">else</span> <span class="number">0</span></span><br><span class="line">            </span><br><span class="line">    <span class="comment"># return the thresholded image</span></span><br><span class="line">    <span class="keyword">return</span> image</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%timeit threshold_njit(<span class="number">5</span>, image)</span><br></pre></td></tr></table></figure>
+
+<pre><code>43.5 µs ± 142 ns per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+</code></pre>
+<h3 id="numpy"><a href="#numpy" class="headerlink" title="numpy"></a>numpy</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">threshold_numpy</span>(<span class="params">T, image</span>):</span><br><span class="line">    image[image &gt; T] = <span class="number">255</span></span><br><span class="line">    <span class="keyword">return</span> image</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%timeit threshold_numpy(<span class="number">5</span>, image)</span><br></pre></td></tr></table></figure>
+
+<pre><code>111 µs ± 334 ns per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+</code></pre>
+<h3 id="conclusions"><a href="#conclusions" class="headerlink" title="conclusions"></a>conclusions</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">image = cv2.imread(<span class="string">&quot;cat.jpg&quot;</span>)</span><br><span class="line">image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)</span><br><span class="line"><span class="built_in">print</span>(image.shape)</span><br><span class="line"></span><br><span class="line">%timeit threshold_python(<span class="number">5</span>, image)</span><br><span class="line">%timeit threshold_cython(<span class="number">5</span>, image)</span><br><span class="line">%timeit threshold_njit(<span class="number">5</span>, image)</span><br><span class="line">%timeit threshold_numpy(<span class="number">5</span>, image)</span><br></pre></td></tr></table></figure>
+
+<pre><code>(360, 480)
+251 ms ± 6.5 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+143 µs ± 1.19 µs per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+43.8 µs ± 284 ns per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+113 µs ± 957 ns per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">image = cv2.imread(<span class="string">&quot;big.jpg&quot;</span>)</span><br><span class="line">image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)</span><br><span class="line"><span class="built_in">print</span>(image.shape)</span><br><span class="line"></span><br><span class="line">%timeit threshold_python(<span class="number">5</span>, image)</span><br><span class="line">%timeit threshold_cython(<span class="number">5</span>, image)</span><br><span class="line">%timeit threshold_njit(<span class="number">5</span>, image)</span><br><span class="line">%timeit threshold_numpy(<span class="number">5</span>, image)</span><br></pre></td></tr></table></figure>
+
+<pre><code>(2880, 5120)
+21.8 s ± 460 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+12.3 ms ± 231 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+3.91 ms ± 66.1 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+10.3 ms ± 179 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+</code></pre>
+<p>60,480</p>
+<ul>
+<li>python: 251 ms</li>
+<li>cython: 143 us</li>
+<li>numba: 43 us</li>
+<li>numpy: 113 us</li>
+</ul>
+<p>2880, 5120</p>
+<ul>
+<li>python: 21 s</li>
+<li>cython: 12 ms</li>
+<li>numba: 4 ms</li>
+<li>numpy: 10 ms</li>
+</ul>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.learnopencv.com/parallel-pixel-access-in-opencv-using-foreach/">parallel-pixel-access-in-opencv-using-foreach</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.pyimagesearch.com/2017/08/28/fast-optimized-for-pixel-loops-with-opencv-and-python/">fast-optimized-for-pixel-loops-with-opencv-and-python</a></li>
+<li><a target="_blank" rel="noopener" href="https://wiki.python.org/moin/PythonSpeed/PerformanceTips">python performance tips</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180823: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/opencv/" rel="tag"># opencv</a>
+              <a href="/tags/cython/" rel="tag"># cython</a>
+              <a href="/tags/numba/" rel="tag"># numba</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/quick-guide-to-install-and-use-tensorflow-on-ubuntu-16-04/" rel="prev" title="install and use tensorflow on ubuntu 16.04">
+      <i class="fa fa-chevron-left"></i> install and use tensorflow on ubuntu 16.04
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/c-11-lambda/" rel="next" title="c++ 11 lambda">
+      c++ 11 lambda <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Series"><span class="nav-number">1.</span> <span class="nav-text">Series</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">2.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mat"><span class="nav-number">2.1.</span> <span class="nav-text">Mat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#color-space-reduction"><span class="nav-number">2.2.</span> <span class="nav-text">color space reduction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#color-table"><span class="nav-number">2.3.</span> <span class="nav-text">color table</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C"><span class="nav-number">3.</span> <span class="nav-text">C++</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ptr"><span class="nav-number">3.1.</span> <span class="nav-text">ptr []</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ptr-1"><span class="nav-number">3.2.</span> <span class="nav-text">ptr ++</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#at-i-j"><span class="nav-number">3.3.</span> <span class="nav-text">at(i,j)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Iterator"><span class="nav-number">3.4.</span> <span class="nav-text">Iterator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#opencv-LUT"><span class="nav-number">3.5.</span> <span class="nav-text">opencv LUT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#forEach"><span class="nav-number">3.6.</span> <span class="nav-text">forEach</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#forEach-with-lambda"><span class="nav-number">3.7.</span> <span class="nav-text">forEach with lambda</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#time-cost"><span class="nav-number">3.8.</span> <span class="nav-text">time cost</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#no-foreach"><span class="nav-number">3.8.1.</span> <span class="nav-text">no foreach</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#foreach"><span class="nav-number">3.8.2.</span> <span class="nav-text">foreach</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#results"><span class="nav-number">3.8.3.</span> <span class="nav-text">results</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#code"><span class="nav-number">3.9.</span> <span class="nav-text">code</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python"><span class="nav-number">4.</span> <span class="nav-text">Python</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pure-python"><span class="nav-number">4.1.</span> <span class="nav-text">pure python</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cython"><span class="nav-number">4.2.</span> <span class="nav-text">cython</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#numba"><span class="nav-number">4.3.</span> <span class="nav-text">numba</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#numpy"><span class="nav-number">4.4.</span> <span class="nav-text">numpy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#conclusions"><span class="nav-number">4.5.</span> <span class="nav-text">conclusions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">6.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

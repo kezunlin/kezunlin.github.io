@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Guide windows 10 64-bit crypto++ 7.0  vs 2015  compiledownload crypto++ 7.0 open cryptest.sln with Visual Studio 2015 change Windows SDK Version from 8.1 to 10.0  compile cryptodll with Release x64 an">
+<meta property="og:type" content="article">
+<meta property="og:title" content="compile and install cryptopp 7.0 on windows 10">
+<meta property="og:url" content="https://kezunlin.me/blog/compile-cryptopp-7-0-on-windows-10/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Guide windows 10 64-bit crypto++ 7.0  vs 2015  compiledownload crypto++ 7.0 open cryptest.sln with Visual Studio 2015 change Windows SDK Version from 8.1 to 10.0  compile cryptodll with Release x64 an">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20181018145051821-1901848873.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20181018150015903-521843035.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20181018151300297-2070989019.png">
+<meta property="article:published_time" content="2018-10-18T08:24:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="cryptopp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kezunlin.me/images/posts/635233-20181018145051821-1901848873.png">
+
+<link rel="canonical" href="https://kezunlin.me/blog/compile-cryptopp-7-0-on-windows-10/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>compile and install cryptopp 7.0 on windows 10 | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/compile-cryptopp-7-0-on-windows-10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          compile and install cryptopp 7.0 on windows 10
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-10-18 16:24:00" itemprop="dateCreated datePublished" datetime="2018-10-18T16:24:00+08:00">2018-10-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><ul>
+<li>windows 10 64-bit</li>
+<li>crypto++ 7.0 </li>
+<li>vs 2015</li>
+</ul>
+<h3 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h3><p>download <a target="_blank" rel="noopener" href="https://github.com/weidai11/cryptopp/archive/CRYPTOPP_7_0_0.zip">crypto++ 7.0</a></p>
+<p>open <code>cryptest.sln</code> with <code>Visual Studio 2015</code></p>
+<p>change <code>Windows SDK Version</code> from <code>8.1</code> to <code>10.0</code></p>
+<p><img src="https://kezunlin.me/images/posts/635233-20181018145051821-1901848873.png" alt="png"></p>
+<p>compile <code>cryptodll</code> with <code>Release x64</code> and we get <code>cryptopp.dll</code> and <code>cryptopp.lib</code><br><img src="https://kezunlin.me/images/posts/635233-20181018150015903-521843035.png" alt="png"></p>
+<h3 id="sdk"><a href="#sdk" class="headerlink" title="sdk"></a>sdk</h3><p>copy headers to <code>include</code>, copy libs to <code>lib</code> and dlls to <code>dll</code> like this:</p>
+<p><img src="https://kezunlin.me/images/posts/635233-20181018151300297-2070989019.png" alt="png"></p>
+<h3 id="cryptopp-config-cmake"><a href="#cryptopp-config-cmake" class="headerlink" title="cryptopp-config.cmake"></a>cryptopp-config.cmake</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span>(CRYPTOPP_FOUND <span class="keyword">TRUE</span>) <span class="comment"># auto </span></span><br><span class="line"><span class="keyword">set</span>(CRYPTOPP_VERSION <span class="number">7.0</span>.<span class="number">0</span>)</span><br><span class="line"><span class="keyword">set</span>(CRYPTOPP_ROOT_DIR <span class="string">&quot;C:/car_libs/cryptopp-7.0&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_path</span>(CRYPTOPP_INCLUDE_DIR NAMES cryptopp/aes.h PATHS <span class="string">&quot;$&#123;CRYPTOPP_ROOT_DIR&#125;/include&quot;</span>) </span><br><span class="line"><span class="keyword">mark_as_advanced</span>(CRYPTOPP_INCLUDE_DIR) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">find_library</span>(CRYPTOPP_LIBRARY NAMES cryptopp.lib PATHS <span class="string">&quot;$&#123;CRYPTOPP_ROOT_DIR&#125;/lib&quot;</span>) </span><br><span class="line"><span class="keyword">mark_as_advanced</span>(CRYPTOPP_LIBRARY) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># use xxx_INCLUDE_DIRS and xxx_LIBRARIES in CMakeLists.txt</span></span><br><span class="line"><span class="keyword">set</span>(CRYPTOPP_INCLUDE_DIRS <span class="variable">$&#123;CRYPTOPP_INCLUDE_DIR&#125;</span> )</span><br><span class="line"><span class="keyword">set</span>(CRYPTOPP_LIBRARIES <span class="variable">$&#123;CRYPTOPP_LIBRARY&#125;</span> )</span><br><span class="line"></span><br><span class="line"><span class="keyword">message</span>( <span class="string">&quot;cryptopp-config.cmake &quot;</span> <span class="variable">$&#123;CRYPTOPP_ROOT_DIR&#125;</span>)</span><br></pre></td></tr></table></figure>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><p>see <code>cryptopp-7.0/dlltest.cpp</code></p>
+<h3 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h3><h4 id="cipher-h"><a href="#cipher-h" class="headerlink" title="cipher.h"></a>cipher.h</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> <span class="keyword">warning</span>( disable: 4275 ) </span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> <span class="keyword">warning</span>( disable: 4819 )</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cryptopp/dll.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cryptopp/cryptlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cryptopp/aes.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cryptopp/filters.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cryptopp/modes.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="built_in">USING_NAMESPACE</span>(CryptoPP)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CipherApiImpl</span> </span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="keyword">enum</span> <span class="title class_">MODE</span></span><br><span class="line">	&#123;</span><br><span class="line">		AES,</span><br><span class="line">		DES</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">CipherApiImpl</span>(MODE mode = MODE::AES);</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">int</span> <span class="title">get_filesize</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *filename)</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">int</span> <span class="title">save</span><span class="params">(<span class="type">const</span> std::string&amp; filepath, <span class="type">const</span> std::string&amp; str)</span></span>;</span><br><span class="line">	<span class="function">std::string <span class="title">load</span><span class="params">(<span class="type">const</span> std::string&amp; filepath)</span></span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function">std::string <span class="title">encrypt_string</span><span class="params">(<span class="type">const</span> std::string&amp; plain_text)</span></span>;</span><br><span class="line">	<span class="function">std::string <span class="title">decrypt_string</span><span class="params">(<span class="type">const</span> std::string&amp; cipher_text)</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="function">std::string <span class="title">encrypt_file</span><span class="params">(<span class="type">const</span> std::string&amp; infile)</span></span>;</span><br><span class="line">	<span class="function">std::string <span class="title">decrypt_file</span><span class="params">(<span class="type">const</span> std::string&amp; infile)</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">int</span> <span class="title">encrypt_file</span><span class="params">(<span class="type">const</span> std::string&amp; infile, <span class="type">const</span> std::string&amp; outfile)</span></span>;</span><br><span class="line">	<span class="function"><span class="type">int</span> <span class="title">decrypt_file</span><span class="params">(<span class="type">const</span> std::string&amp; infile, <span class="type">const</span> std::string&amp; outfile)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="function">std::string <span class="title">tohex</span><span class="params">(<span class="type">const</span> <span class="type">char</span>&amp; c)</span></span>;</span><br><span class="line">	<span class="function">std::string <span class="title">tohexs</span><span class="params">(<span class="type">const</span> std::string&amp; str)</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">char</span> <span class="title">tochar</span><span class="params">(<span class="type">const</span> <span class="type">char</span>&amp; hex1, <span class="type">const</span> <span class="type">char</span>&amp; hex2)</span></span>;</span><br><span class="line">	<span class="function">std::string <span class="title">tochars</span><span class="params">(<span class="type">const</span> std::string&amp; hex)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="comment">// 32 + 16</span></span><br><span class="line">	<span class="type">const</span> byte aes_key[CryptoPP::AES::MAX_KEYLENGTH] = &#123;</span><br><span class="line">		<span class="number">0x01</span>,<span class="number">0x23</span>,<span class="number">0x45</span>,<span class="number">0x67</span>,<span class="number">0x89</span>,<span class="number">0xab</span>,<span class="number">0xcd</span>,<span class="number">0xef</span>,</span><br><span class="line">		<span class="number">0x01</span>,<span class="number">0x23</span>,<span class="number">0x45</span>,<span class="number">0x67</span>,<span class="number">0x89</span>,<span class="number">0xab</span>,<span class="number">0xcd</span>,<span class="number">0xef</span>,</span><br><span class="line">		<span class="number">0x01</span>,<span class="number">0x23</span>,<span class="number">0x45</span>,<span class="number">0x67</span>,<span class="number">0x89</span>,<span class="number">0xab</span>,<span class="number">0xcd</span>,<span class="number">0xef</span>,</span><br><span class="line">		<span class="number">0x01</span>,<span class="number">0x23</span>,<span class="number">0x45</span>,<span class="number">0x67</span>,<span class="number">0x89</span>,<span class="number">0xab</span>,<span class="number">0xcd</span>,<span class="number">0xef</span></span><br><span class="line">	&#125;;</span><br><span class="line">	<span class="type">const</span> byte aes_iv[CryptoPP::AES::BLOCKSIZE] = &#123;</span><br><span class="line">		<span class="number">0x12</span>,<span class="number">0x34</span>,<span class="number">0x56</span>,<span class="number">0x78</span>,<span class="number">0x90</span>,<span class="number">0xab</span>,<span class="number">0xcd</span>,<span class="number">0xef</span>,</span><br><span class="line">		<span class="number">0x12</span>,<span class="number">0x34</span>,<span class="number">0x56</span>,<span class="number">0x78</span>,<span class="number">0x90</span>,<span class="number">0xab</span>,<span class="number">0xcd</span>,<span class="number">0xef</span></span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 24+8</span></span><br><span class="line">	<span class="type">const</span> byte des_key[CryptoPP::DES_EDE3::MAX_KEYLENGTH] = &#123;</span><br><span class="line">		<span class="number">0x01</span>,<span class="number">0x23</span>,<span class="number">0x45</span>,<span class="number">0x67</span>,<span class="number">0x89</span>,<span class="number">0xab</span>,<span class="number">0xcd</span>,<span class="number">0xef</span>,</span><br><span class="line">		<span class="number">0x01</span>,<span class="number">0x23</span>,<span class="number">0x45</span>,<span class="number">0x67</span>,<span class="number">0x89</span>,<span class="number">0xab</span>,<span class="number">0xcd</span>,<span class="number">0xef</span>,</span><br><span class="line">		<span class="number">0x01</span>,<span class="number">0x23</span>,<span class="number">0x45</span>,<span class="number">0x67</span>,<span class="number">0x89</span>,<span class="number">0xab</span>,<span class="number">0xcd</span>,<span class="number">0xef</span></span><br><span class="line">	&#125;;</span><br><span class="line">	<span class="type">const</span> byte des_iv[CryptoPP::DES_EDE3::BLOCKSIZE] = &#123;</span><br><span class="line">		<span class="number">0x12</span>,<span class="number">0x34</span>,<span class="number">0x56</span>,<span class="number">0x78</span>,<span class="number">0x90</span>,<span class="number">0xab</span>,<span class="number">0xcd</span>,<span class="number">0xef</span></span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">	CryptoPP::CFB_FIPS_Mode&lt;CryptoPP::AES&gt;::Encryption aes_encryption;</span><br><span class="line">	CryptoPP::CFB_FIPS_Mode&lt;CryptoPP::AES&gt;::Decryption aes_decryption;</span><br><span class="line"></span><br><span class="line">	CryptoPP::CFB_FIPS_Mode&lt;CryptoPP::DES_EDE3&gt;::Encryption des_encryption;</span><br><span class="line">	CryptoPP::CFB_FIPS_Mode&lt;CryptoPP::DES_EDE3&gt;::Decryption des_decryption;</span><br><span class="line"></span><br><span class="line">	MODE m_mode;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="cipher-cpp"><a href="#cipher-cpp" class="headerlink" title="cipher.cpp"></a>cipher.cpp</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;cipher_api_impl.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">CipherApiImpl::<span class="built_in">CipherApiImpl</span>(MODE mode)</span><br><span class="line">&#123;</span><br><span class="line">	m_mode = mode;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// for des</span></span><br><span class="line">	des_encryption.<span class="built_in">SetKeyWithIV</span>(des_key, <span class="built_in">sizeof</span>(des_key), des_iv);</span><br><span class="line">	des_decryption.<span class="built_in">SetKeyWithIV</span>(des_key, <span class="built_in">sizeof</span>(des_key), des_iv);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// for aes</span></span><br><span class="line">	aes_encryption.<span class="built_in">SetKeyWithIV</span>(aes_key, <span class="built_in">sizeof</span>(aes_key), aes_iv);</span><br><span class="line">	aes_decryption.<span class="built_in">SetKeyWithIV</span>(aes_key, <span class="built_in">sizeof</span>(aes_key), aes_iv);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> region hex/char</span></span><br><span class="line"></span><br><span class="line"><span class="function">std::string <span class="title">CipherApiImpl::tohex</span><span class="params">(<span class="type">const</span> <span class="type">char</span>&amp; c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	00,01,02,...0F   [0,1,2,...15]</span></span><br><span class="line"><span class="comment">	10,11,12,...1F   [16,17,...31]</span></span><br><span class="line"><span class="comment">	...</span></span><br><span class="line"><span class="comment">	F0,F1,F2,...FF	[240,241,...255]</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	char ch[2] = &#123; 0 &#125;;</span></span><br><span class="line"><span class="comment">	sprintf(ch, &quot;%02x&quot;, static_cast&lt;byte&gt;(c)); //  char ---&gt; 16 hex</span></span><br><span class="line"><span class="comment">	return std::string(ch);</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	<span class="type">const</span> <span class="type">char</span> HEX[] = <span class="string">&quot;0123456789ABCDEF&quot;</span>;</span><br><span class="line">	<span class="type">const</span> <span class="type">int</span> HEX_BASE = <span class="number">16</span>;</span><br><span class="line"></span><br><span class="line">	std::string c_hex;</span><br><span class="line"></span><br><span class="line">	<span class="type">int</span> uc = (<span class="type">unsigned</span> <span class="type">char</span>)(c);</span><br><span class="line">	<span class="type">int</span> a = uc / HEX_BASE;</span><br><span class="line">	<span class="type">int</span> b = uc % HEX_BASE;</span><br><span class="line">	c_hex.<span class="built_in">push_back</span>(HEX[a]);</span><br><span class="line">	c_hex.<span class="built_in">push_back</span>(HEX[b]);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> c_hex;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">std::string <span class="title">CipherApiImpl::tohexs</span><span class="params">(<span class="type">const</span> std::string&amp; str)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">const</span> <span class="type">char</span> HEX[] = <span class="string">&quot;0123456789ABCDEF&quot;</span>;</span><br><span class="line">	<span class="type">const</span> <span class="type">int</span> HEX_BASE = <span class="number">16</span>;</span><br><span class="line"></span><br><span class="line">	std::string hex_result;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; str.<span class="built_in">size</span>(); i++)</span><br><span class="line">	&#123;</span><br><span class="line">		std::string c_hex;</span><br><span class="line">		<span class="type">int</span> uc = (<span class="type">unsigned</span> <span class="type">char</span>)(str[i]);</span><br><span class="line">		<span class="type">int</span> a = uc / HEX_BASE;</span><br><span class="line">		<span class="type">int</span> b = uc % HEX_BASE;</span><br><span class="line">		c_hex.<span class="built_in">push_back</span>(HEX[a]);</span><br><span class="line">		c_hex.<span class="built_in">push_back</span>(HEX[b]);</span><br><span class="line"></span><br><span class="line">		hex_result += c_hex;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> hex_result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">char</span> <span class="title">CipherApiImpl::tochar</span><span class="params">(<span class="type">const</span> <span class="type">char</span>&amp; hex1, <span class="type">const</span> <span class="type">char</span>&amp; hex2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">const</span> <span class="type">int</span> HEX_BASE = <span class="number">16</span>;</span><br><span class="line"></span><br><span class="line">	<span class="type">int</span> h1 = (<span class="type">int</span>)hex1;</span><br><span class="line">	<span class="type">int</span> h2 = (<span class="type">int</span>)hex2;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// F1 ===&gt; 16,1===&gt;15*16+1 = 241 ===&gt; char</span></span><br><span class="line">	<span class="type">char</span> uc = (<span class="type">char</span>)(h1*HEX_BASE + h2);</span><br><span class="line">	<span class="keyword">return</span> uc;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">std::string <span class="title">CipherApiImpl::tochars</span><span class="params">(<span class="type">const</span> std::string&amp; hex)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (hex.<span class="built_in">size</span>() % <span class="number">2</span> != <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">	std::map&lt;<span class="type">char</span>, <span class="type">int</span>&gt; hex_int = &#123;</span><br><span class="line">		&#123; <span class="string">&#x27;0&#x27;</span> , <span class="number">0</span> &#125;,</span><br><span class="line">		&#123; <span class="string">&#x27;1&#x27;</span>, <span class="number">1</span> &#125;,</span><br><span class="line">		&#123; <span class="string">&#x27;2&#x27;</span>, <span class="number">2</span> &#125;,</span><br><span class="line">		&#123; <span class="string">&#x27;3&#x27;</span>, <span class="number">3</span> &#125;,</span><br><span class="line">		&#123; <span class="string">&#x27;4&#x27;</span>, <span class="number">4</span> &#125;,</span><br><span class="line">		&#123; <span class="string">&#x27;5&#x27;</span>, <span class="number">5</span> &#125;,</span><br><span class="line">		&#123; <span class="string">&#x27;6&#x27;</span>, <span class="number">6</span> &#125;,</span><br><span class="line">		&#123; <span class="string">&#x27;7&#x27;</span>, <span class="number">7</span> &#125;,</span><br><span class="line">		&#123; <span class="string">&#x27;8&#x27;</span>, <span class="number">8</span> &#125;,</span><br><span class="line">		&#123; <span class="string">&#x27;9&#x27;</span>, <span class="number">9</span> &#125;,</span><br><span class="line">		&#123; <span class="string">&#x27;A&#x27;</span>, <span class="number">10</span> &#125;,</span><br><span class="line">		&#123; <span class="string">&#x27;B&#x27;</span>, <span class="number">11</span> &#125;,</span><br><span class="line">		&#123; <span class="string">&#x27;C&#x27;</span>, <span class="number">12</span> &#125;,</span><br><span class="line">		&#123; <span class="string">&#x27;D&#x27;</span>, <span class="number">13</span> &#125;,</span><br><span class="line">		&#123; <span class="string">&#x27;E&#x27;</span>, <span class="number">14</span> &#125;,</span><br><span class="line">		&#123; <span class="string">&#x27;F&#x27;</span>, <span class="number">15</span> &#125;,</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">	std::string char_result;</span><br><span class="line">	<span class="type">const</span> <span class="type">int</span> HEX_BASE = <span class="number">16</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; hex.<span class="built_in">size</span>(); i += <span class="number">2</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="type">int</span> h1 = hex_int.<span class="built_in">at</span>(hex[i]);   <span class="comment">// &#x27;F&#x27; ===&gt;15</span></span><br><span class="line">		<span class="type">int</span> h2 = hex_int.<span class="built_in">at</span>(hex[i + <span class="number">1</span>]); <span class="comment">// &#x27;1&#x27;===&gt;1</span></span><br><span class="line"></span><br><span class="line">										 <span class="comment">// F1 ===&gt; 15,1===&gt;15*16+1 = 241 ===&gt; char</span></span><br><span class="line">										 <span class="comment">//std::cout &lt;&lt; &quot;===============\n&quot;;</span></span><br><span class="line">		<span class="type">char</span> uc = (<span class="type">char</span>)(h1*HEX_BASE + h2);</span><br><span class="line">		<span class="comment">//std::cout &lt;&lt; h1 &lt;&lt;&quot;,&quot;&lt;&lt;h2 &lt;&lt; std::endl;</span></span><br><span class="line">		<span class="comment">//std::cout &lt;&lt; uc &lt;&lt; std::endl;</span></span><br><span class="line">		char_result += uc;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> char_result;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> endregion</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> region encrypt_string and decrypt_string</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">CipherApiImpl::get_filesize</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *filename)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">struct</span> <span class="title class_">stat</span> f_stat;</span><br><span class="line">	<span class="keyword">if</span> (<span class="built_in">stat</span>(filename, &amp;f_stat) == <span class="number">-1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> f_stat.st_size;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">std::string load_text_not_use(const std::string&amp; filepath)</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">std::string str;</span></span><br><span class="line"><span class="comment">ifstream in(filepath, ios::in | ios::binary);</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">std::string line;</span></span><br><span class="line"><span class="comment">std::string content;</span></span><br><span class="line"><span class="comment">while (getline(in, line))</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">//std::cout &lt;&lt; &quot;line.size()=&quot; &lt;&lt; line.size() &lt;&lt; std::endl;</span></span><br><span class="line"><span class="comment">if (line.size() &gt; 0) &#123;</span></span><br><span class="line"><span class="comment">content += line + &quot;\n&quot;;</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">line.clear();</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">in.close();</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">return content;</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">CipherApiImpl::save</span><span class="params">(<span class="type">const</span> std::string&amp; filepath, <span class="type">const</span> std::string&amp; str)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">ofstream <span class="title">out</span><span class="params">(filepath, ios::out | ios::binary)</span></span>; <span class="comment">// binary mode (default text mode)</span></span><br><span class="line">	out.<span class="built_in">write</span>(str.<span class="built_in">c_str</span>(), str.<span class="built_in">length</span>());</span><br><span class="line">	out.<span class="built_in">close</span>();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">std::string <span class="title">CipherApiImpl::load</span><span class="params">(<span class="type">const</span> std::string&amp; filepath)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> filesize = <span class="built_in">get_filesize</span>(filepath.<span class="built_in">c_str</span>());</span><br><span class="line"></span><br><span class="line">	<span class="type">char</span> *buffer = <span class="keyword">new</span> <span class="type">char</span>[filesize];</span><br><span class="line"></span><br><span class="line">	<span class="function">ifstream <span class="title">in</span><span class="params">(filepath, ios::in | ios::binary)</span></span>; <span class="comment">// binary mode (default text mode)</span></span><br><span class="line">	in.<span class="built_in">read</span>(buffer, filesize);</span><br><span class="line">	in.<span class="built_in">close</span>();</span><br><span class="line"></span><br><span class="line">	<span class="comment">// std::string content(buffer); // ERROR for binary file</span></span><br><span class="line">	std::string content;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; filesize; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		content.<span class="built_in">push_back</span>(buffer[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">delete</span>[] buffer;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> content;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">//==========================================================================</span></span><br><span class="line"><span class="comment">std::string cipher_text;</span></span><br><span class="line"><span class="comment">CryptoPP::AES::CipherApiImpl aesEncryption(key, CryptoPP::AES::MAX_KEYLENGTH);</span></span><br><span class="line"><span class="comment">CryptoPP::CBC_Mode_ExternalCipher::CipherApiImpl cbcEncryption(aesEncryption, iv);</span></span><br><span class="line"><span class="comment">CryptoPP::StreamTransformationFilter stfEncryptor(cbcEncryption, new CryptoPP::StringSink(cipher_text));</span></span><br><span class="line"><span class="comment">stfEncryptor.Put(reinterpret_cast&lt;const unsigned char*&gt;(plain_text.c_str()), plain_text.length());</span></span><br><span class="line"><span class="comment">stfEncryptor.MessageEnd();</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">std::string cipher_text_hex = tohexs(cipher_text);</span></span><br><span class="line"><span class="comment">return cipher_text_hex;</span></span><br><span class="line"><span class="comment">//==========================================================================</span></span><br><span class="line"><span class="comment">CryptoPP::AES::Decryption aesDecryption(key, CryptoPP::AES::MAX_KEYLENGTH);</span></span><br><span class="line"><span class="comment">CryptoPP::CBC_Mode_ExternalCipher::Decryption cbcDecryption(aesDecryption, iv);</span></span><br><span class="line"><span class="comment">CryptoPP::StreamTransformationFilter stfDecryptor(cbcDecryption, new CryptoPP::StringSink(decryptedText));</span></span><br><span class="line"><span class="comment">stfDecryptor.Put(reinterpret_cast&lt;const unsigned char*&gt;(cipher_text.c_str()), cipher_text.size());</span></span><br><span class="line"><span class="comment">stfDecryptor.MessageEnd();</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">return decrypted_text;</span></span><br><span class="line"><span class="comment">//==========================================================================</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">byte ciphertext[24];</span></span><br><span class="line"><span class="comment">byte decrypted[24];</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">CFB_FIPS_Mode&lt;DES_EDE3&gt;::Encryption encryption_DES_EDE3_CFB;</span></span><br><span class="line"><span class="comment">encryption_DES_EDE3_CFB.SetKeyWithIV(key, sizeof(key), iv);</span></span><br><span class="line"><span class="comment">encryption_DES_EDE3_CFB.ProcessString(ciphertext, plaintext, 24);</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">CFB_FIPS_Mode&lt;DES_EDE3&gt;::Decryption decryption_DES_EDE3_CFB;</span></span><br><span class="line"><span class="comment">decryption_DES_EDE3_CFB.SetKeyWithIV(key, sizeof(key), iv);</span></span><br><span class="line"><span class="comment">decryption_DES_EDE3_CFB.ProcessString(decrypted, ciphertext, 24);</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="function">std::string <span class="title">CipherApiImpl::encrypt_string</span><span class="params">(<span class="type">const</span> std::string&amp; plain_text)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">size_t</span> size = plain_text.<span class="built_in">size</span>();</span><br><span class="line">	<span class="type">const</span> byte* in_byte = (<span class="type">const</span> <span class="type">unsigned</span> <span class="type">char</span>*)(plain_text.<span class="built_in">c_str</span>());</span><br><span class="line"></span><br><span class="line">	byte* out_byte = <span class="keyword">new</span> byte[size];</span><br><span class="line"></span><br><span class="line">	des_encryption.<span class="built_in">ProcessString</span>(out_byte, in_byte, size);</span><br><span class="line"></span><br><span class="line">	std::string cipher_text;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		cipher_text.<span class="built_in">push_back</span>(out_byte[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">delete</span>[] out_byte;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> cipher_text;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">std::string <span class="title">CipherApiImpl::decrypt_string</span><span class="params">(<span class="type">const</span> std::string&amp; cipher_text)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">size_t</span> size = cipher_text.<span class="built_in">size</span>();</span><br><span class="line">	<span class="type">const</span> byte* in_byte = (<span class="type">const</span> <span class="type">unsigned</span> <span class="type">char</span>*)(cipher_text.<span class="built_in">c_str</span>());</span><br><span class="line">	byte* out_byte = <span class="keyword">new</span> byte[size];</span><br><span class="line"></span><br><span class="line">	des_decryption.<span class="built_in">ProcessString</span>(out_byte, in_byte, size);</span><br><span class="line"></span><br><span class="line">	std::string plain_text;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		plain_text.<span class="built_in">push_back</span>(out_byte[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">delete</span>[] out_byte;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> plain_text;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">std::string <span class="title">CipherApiImpl::encrypt_file</span><span class="params">(<span class="type">const</span> std::string&amp; infile)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	std::string plain_text = <span class="built_in">load</span>(infile);</span><br><span class="line">	std::string cipher_text = <span class="built_in">encrypt_string</span>(plain_text);</span><br><span class="line">	<span class="keyword">return</span> cipher_text;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">std::string <span class="title">CipherApiImpl::decrypt_file</span><span class="params">(<span class="type">const</span> std::string&amp; infile)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	std::string cipher_text = <span class="built_in">load</span>(infile);</span><br><span class="line">	std::string plain_text = <span class="built_in">decrypt_string</span>(cipher_text);</span><br><span class="line">	<span class="keyword">return</span> plain_text;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">CipherApiImpl::encrypt_file</span><span class="params">(<span class="type">const</span> std::string&amp; infile, <span class="type">const</span> std::string&amp; outfile)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	std::string cipher_text_hex = <span class="built_in">encrypt_file</span>(infile);</span><br><span class="line">	<span class="keyword">return</span> <span class="built_in">save</span>(outfile, cipher_text_hex);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">CipherApiImpl::decrypt_file</span><span class="params">(<span class="type">const</span> std::string&amp; infile, <span class="type">const</span> std::string&amp; outfile)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	std::string plain_text = <span class="built_in">decrypt_file</span>(infile);</span><br><span class="line">	<span class="keyword">return</span> <span class="built_in">save</span>(outfile, plain_text);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> endregion</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="test-cpp"><a href="#test-cpp" class="headerlink" title="test.cpp"></a>test.cpp</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;gtest/gtest.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;glog/logging.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> <span class="keyword">warning</span>( disable: 4819 ) </span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> <span class="keyword">warning</span>( disable: 4244 ) </span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> <span class="keyword">warning</span>( disable: 4267 ) </span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;cipher/cipher.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">test_cipher_api</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	CipherApi cipher;</span><br><span class="line"></span><br><span class="line">	std::string text = <span class="string">&quot;[hello zhuzhu dashen !]\n[1234567]\n[123]\n1\n&quot;</span>;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;text : &quot;</span> &lt;&lt; text &lt;&lt; endl;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;text size: &quot;</span> &lt;&lt; text.<span class="built_in">size</span>() &lt;&lt; endl;</span><br><span class="line">	cipher.<span class="built_in">save</span>(<span class="string">&quot;./tmp/text.txt&quot;</span>, text);</span><br><span class="line"></span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;==============encrypt/decrypt string======================\n&quot;</span>;</span><br><span class="line"></span><br><span class="line">	std::string cipherHex = cipher.<span class="built_in">encrypt_string</span>(text);</span><br><span class="line">	<span class="comment">//cout &lt;&lt; &quot;cipher : &quot; &lt;&lt; cipherHex &lt;&lt; endl;</span></span><br><span class="line">	cipher.<span class="built_in">save</span>(<span class="string">&quot;./tmp/cipherHex.txt&quot;</span>, cipherHex);</span><br><span class="line"></span><br><span class="line">	std::string text2 = cipher.<span class="built_in">decrypt_string</span>(cipherHex);</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;text2 : &quot;</span> &lt;&lt; text2 &lt;&lt; endl;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;text2 size: &quot;</span> &lt;&lt; text<span class="number">2.</span><span class="built_in">size</span>() &lt;&lt; endl;</span><br><span class="line">	cipher.<span class="built_in">save</span>(<span class="string">&quot;./tmp/text2.txt&quot;</span>, text2);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// load_text </span></span><br><span class="line">	std::string text_load = cipher.<span class="built_in">load</span>(<span class="string">&quot;./tmp/text2.txt&quot;</span>);</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;text_load : &quot;</span> &lt;&lt; text_load &lt;&lt; endl;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;text_load size: &quot;</span> &lt;&lt; text_load.<span class="built_in">size</span>() &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// encrypt/decrypt text file</span></span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;==============encrypt/decrypt text file======================\n&quot;</span>;</span><br><span class="line">	cipher.<span class="built_in">encrypt_file</span>(<span class="string">&quot;./tmp/text.txt&quot;</span>, <span class="string">&quot;./tmp/text_encryption.txt&quot;</span>);</span><br><span class="line">	cipher.<span class="built_in">decrypt_file</span>(<span class="string">&quot;./tmp/cipherHex.txt&quot;</span>, <span class="string">&quot;./tmp/cipherHex_decryption.txt&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// encrypt/decrypt prototxt </span></span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;==============encrypt/decrypt prototxt======================\n&quot;</span>;</span><br><span class="line">	cipher.<span class="built_in">encrypt_file</span>(<span class="string">&quot;./tmp/small/deploy.prototxt&quot;</span>, <span class="string">&quot;./tmp/small/deploy_encryption.prototxt&quot;</span>);</span><br><span class="line">	cipher.<span class="built_in">decrypt_file</span>(<span class="string">&quot;./tmp/small/deploy_encryption.prototxt&quot;</span>, <span class="string">&quot;./tmp/small/deploy_new.prototxt&quot;</span>);</span><br><span class="line"></span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;==============encrypt/decrypt caffemodel======================\n&quot;</span>;</span><br><span class="line">	cipher.<span class="built_in">encrypt_file</span>(<span class="string">&quot;./tmp/small/recon__iter_140000.caffemodel&quot;</span>, <span class="string">&quot;./tmp/small/recon__iter_140000_encryption.caffemodel&quot;</span>);</span><br><span class="line">	cipher.<span class="built_in">decrypt_file</span>(<span class="string">&quot;./tmp/small/recon__iter_140000_encryption.caffemodel&quot;</span>, <span class="string">&quot;./tmp/small/recon__iter_140000_new.caffemodel&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">TEST</span>(cipher_test, test_cipher_api) &#123;</span><br><span class="line">	<span class="built_in">test_cipher_api</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">find_package</span>(CRYPTOPP REQUIRED)</span><br><span class="line"></span><br><span class="line"><span class="keyword">MESSAGE</span>( [Main] <span class="string">&quot; CRYPTOPP_INCLUDE_DIRS = $&#123;CRYPTOPP_INCLUDE_DIRS&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">MESSAGE</span>( [Main] <span class="string">&quot; CRYPTOPP_LIBRARIES = $&#123;CRYPTOPP_LIBRARIES&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;CRYPTOPP_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"><span class="keyword">target_link_libraries</span> (demo  <span class="variable">$&#123;CRYPTOPP_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/weidai11/cryptopp/releases">cryptopp github</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20181018: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/cryptopp/" rel="tag"># cryptopp</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/linux-xargs-tutorial/" rel="prev" title="how to use linux xargs command">
+      <i class="fa fa-chevron-left"></i> how to use linux xargs command
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/Superdog-tutorial-on-windows-10/" rel="next" title="install and use Superdog to encrypt program on windows 10">
+      install and use Superdog to encrypt program on windows 10 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#compile"><span class="nav-number">1.1.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sdk"><span class="nav-number">1.2.</span> <span class="nav-text">sdk</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cryptopp-config-cmake"><span class="nav-number">1.3.</span> <span class="nav-text">cryptopp-config.cmake</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">2.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Code"><span class="nav-number">2.1.</span> <span class="nav-text">Code</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#cipher-h"><span class="nav-number">2.1.1.</span> <span class="nav-text">cipher.h</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cipher-cpp"><span class="nav-number">2.1.2.</span> <span class="nav-text">cipher.cpp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#test-cpp"><span class="nav-number">2.1.3.</span> <span class="nav-text">test.cpp</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">2.2.</span> <span class="nav-text">CMakeLists.txt</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

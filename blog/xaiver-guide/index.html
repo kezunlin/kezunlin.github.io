@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Guide device: JETSON AGX XAVIER ubuntu 18.04 aarch64 cmake: 3.10.2—&gt;3.13.3(手动升级) cmake-gui: 3.10.2 nvidia driver:  GPU arch(s): sm_72  cuda 10.0 cudnn 7.3.1 glog 0.35    (0.35) gflags 2.2.1 (2.2.1)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="how to configure deep learning environment on nvidia xaiver arm platform">
+<meta property="og:url" content="https://kezunlin.me/blog/xaiver-guide/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Guide device: JETSON AGX XAVIER ubuntu 18.04 aarch64 cmake: 3.10.2—&gt;3.13.3(手动升级) cmake-gui: 3.10.2 nvidia driver:  GPU arch(s): sm_72  cuda 10.0 cudnn 7.3.1 glog 0.35    (0.35) gflags 2.2.1 (2.2.1)">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20181211175146173-1373012531.png">
+<meta property="article:published_time" content="2019-01-18T03:33:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="xaiver">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kezunlin.me/images/posts/635233-20181211175146173-1373012531.png">
+
+<link rel="canonical" href="https://kezunlin.me/blog/xaiver-guide/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>how to configure deep learning environment on nvidia xaiver arm platform | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/xaiver-guide/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          how to configure deep learning environment on nvidia xaiver arm platform
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-01-18 11:33:00" itemprop="dateCreated datePublished" datetime="2019-01-18T11:33:00+08:00">2019-01-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deep-learning/" itemprop="url" rel="index"><span itemprop="name">deep learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><ul>
+<li>device: JETSON AGX XAVIER</li>
+<li>ubuntu 18.04 aarch64</li>
+<li>cmake: 3.10.2—&gt;3.13.3(手动升级)</li>
+<li>cmake-gui: 3.10.2</li>
+<li>nvidia driver: </li>
+<li>GPU arch(s): sm_72 </li>
+<li>cuda 10.0</li>
+<li>cudnn 7.3.1</li>
+<li>glog 0.35    (0.35)</li>
+<li>gflags 2.2.1 (2.2.1)</li>
+<li>gtest 1.8    (1.8)</li>
+<li>boost 1.66 (1.65.1)</li>
+<li>protobuf(编译为static库)  (3.6.1)</li>
+<li>opencv 3.4.0</li>
+</ul>
+<blockquote>
+<p>升级默认的<code>cmake 3.10.2</code>到最新版<code>3.13.3</code>解决<code>CUDA_cublas_device_LIBRARY</code>问题。<br><code>protobuf 3.0.0</code>会导致<code>trainpilot</code>编译出错，所以需要源码编译安装<code>protobuf 3.6.1</code>。</p>
+</blockquote>
+<h3 id="jetson-products"><a href="#jetson-products" class="headerlink" title="jetson products"></a>jetson products</h3><ul>
+<li>Jetson TX1   (fp32,fp16)</li>
+<li>Jetson TX2    (fp32,fp16)</li>
+<li>Jetson AGX Xavier (fp32,fp16,int8,dla)</li>
+<li>Jetson Nano (Jetbot)</li>
+</ul>
+<blockquote>
+<p>see <a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-gpus">cuda-gpus</a></p>
+</blockquote>
+<h3 id="xaiver-device"><a href="#xaiver-device" class="headerlink" title="xaiver device"></a>xaiver device</h3><p>see <a target="_blank" rel="noopener" href="https://blog.csdn.net/haoqimao_hard/article/details/83447597">xaiver</a><br>开机： 按下power键（3个按键依次为power,force recovery和reset建），板子后面的一个指示灯亮，发白光。系统启动。</p>
+<blockquote>
+<p>xaiver磁盘只有28G,在编译的过程中可以增加移动硬盘，在移动硬盘上编译opencv,caffe,sdklite,trainpilot等代码,安装到xaiver系统。</p>
+</blockquote>
+<h3 id="check-system"><a href="#check-system" class="headerlink" title="check system"></a>check system</h3><ul>
+<li><p>for desktop ubuntu</p>
+<pre><code>uname -a 
+Linux ke 4.13.0-36-generic #40~16.04.1-Ubuntu SMP Fri Feb 16 23:25:58 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux
+
+uname -p
+x86_64
+</code></pre>
+</li>
+<li><p>for xaiver</p>
+<pre><code>uname -a 
+Linux l4t 4.9.108-tegra #1 SMP PREEMPT Wed Oct 31 15:17:21 PDT 2018 aarch64 aarch64 aarch64 GNU/Linux
+
+uname -p
+aarch64
+</code></pre>
+</li>
+</ul>
+<blockquote>
+<p>AArch64是ARMv8 架构的一种执行状态。<br>xaiver默认安装 ubuntu 18.04 版本号为<code>bionic</code>, ubuntu 16.04的版本号为<code>xenial</code></p>
+</blockquote>
+<h3 id="install-packages"><a href="#install-packages" class="headerlink" title="install packages"></a>install packages</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install build-essential</span><br><span class="line"><span class="built_in">sudo</span> apt-get install libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev</span><br><span class="line"><span class="built_in">sudo</span> apt-get install python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt-get install git cmake cmake-gui</span><br></pre></td></tr></table></figure>
+
+<h4 id="cuda"><a href="#cuda" class="headerlink" title="cuda"></a>cuda</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install libleveldb-dev liblmdb-dev libsnappy-dev libhdf5-serial-dev </span><br><span class="line"><span class="built_in">sudo</span> apt-get install libopenblas-dev liblapack-dev libatlas-base-dev</span><br></pre></td></tr></table></figure>
+
+<h3 id="upgrade-cmake"><a href="#upgrade-cmake" class="headerlink" title="upgrade cmake"></a>upgrade cmake</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get -y purge cmake</span><br><span class="line"></span><br><span class="line">wget https://github.com/Kitware/CMake/releases/download/v3.13.3/cmake-3.13.3.tar.gz</span><br><span class="line"><span class="built_in">cd</span> cmake-3.13.3</span><br><span class="line">./configure</span><br><span class="line">make -j8</span><br><span class="line"><span class="built_in">sudo</span> make install</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>aarch64</code>架构默认安装到<code>/usr/local/lib</code>和<code>/usr/local/bin/cmake</code></p>
+</blockquote>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+<h2 id="Compile-Package"><a href="#Compile-Package" class="headerlink" title="Compile Package"></a>Compile Package</h2><h3 id="gflags-glog"><a href="#gflags-glog" class="headerlink" title="gflags &amp;&amp; glog"></a>gflags &amp;&amp; glog</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#wget https://github.com/schuhschuh/gflags/archive/v2.2.1.tar.gz</span></span><br><span class="line"><span class="comment">#wget https://github.com/google/glog/archive/v0.3.5.tar.gz</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt-get install libgflags-dev libgoogle-glog-dev </span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>gflags: 2.2.1; glog: 0.3.5<br><code>aarch64</code>架构默认安装到<code>/usr/include</code>和<code>/usr/lib/aarch64-linux-gnu/libgflags.so</code><br>对应<code>x86_64</code>架构是默认安装到<code>/usr/include</code>和<code>/usr/lib/x86_64-linux-gnu/libgflags.so</code></p>
+</blockquote>
+<h3 id="gtest"><a href="#gtest" class="headerlink" title="gtest"></a>gtest</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#wget https://github.com/google/googletest/archive/release-1.8.0.tar.gz</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt-get install libgtest-dev</span><br><span class="line"><span class="built_in">cd</span> /usr/src/gtest <span class="comment"># only source files</span></span><br><span class="line"><span class="built_in">mkdir</span> build &amp;&amp; <span class="built_in">cd</span> build </span><br><span class="line">cmake -DBUILD_SHARED_LIBS=ON ..</span><br><span class="line">make -j8 &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>gtest只是下载了源码1.8.0，需要compile,默认是static<br><code>aarch64</code>架构默认安装到<code>/usr/local/include/gtest</code>和<code>/usr/local/lib/libgtest.so</code>,<code>/usr/local/lib/libgtest_main.so</code></p>
+</blockquote>
+<h3 id="boost"><a href="#boost" class="headerlink" title="boost"></a>boost</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install --no-install-recommends libboost-all-dev</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>1.65.1<br><code>aarch64</code>架构默认安装到<code>/usr/include</code>和<code>/usr/lib/aarch64-linux-gnu/libboost_date_time.so</code>,<code>/usr/lib/aarch64-linux-gnu/libboost_filesystem.so</code></p>
+</blockquote>
+<h3 id="protobuf"><a href="#protobuf" class="headerlink" title="protobuf"></a>protobuf</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install libprotobuf-dev protobuf-compiler </span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>3.0.0<br><code>aarch64</code>架构默认安装到<code>/usr/include</code>和<code>/usr/lib/aarch64-linux-gnu/libprotobuf.so</code>,<code>/usr/lib/aarch64-linux-gnu/libprotobuf-lite.so</code><br><code>protoc</code>默认安装到<code>/usr/bin/protoc</code></p>
+</blockquote>
+<p>notice</p>
+<blockquote>
+<p><code>protobuf 3.0.0</code>会导致<code>trainpilot</code>编译出错，所以需要源码编译安装<code>protobuf 3.6.1</code>。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/protocolbuffers/protobuf/releases/download/v3.6.1/protobuf-cpp-3.6.1.tar.gz</span><br><span class="line"></span><br><span class="line">tar -xvf protobuf-cpp-3.6.1.tar.gz</span><br><span class="line"><span class="built_in">cd</span> protobuf-3.6.1 </span><br><span class="line">./configure --disable-shared CXXFLAGS=<span class="string">&quot;-fPIC&quot;</span></span><br><span class="line">./configure --disable-static CXXFLAGS=<span class="string">&quot;-fPIC&quot;</span></span><br><span class="line">make -j8 </span><br><span class="line"></span><br><span class="line">/usr/local/bin/protoc --version</span><br><span class="line">3.6.1</span><br></pre></td></tr></table></figure>
+
+<h3 id="opencv"><a href="#opencv" class="headerlink" title="opencv"></a>opencv</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/opencv/opencv/archive/3.4.0.zip</span><br></pre></td></tr></table></figure>
+<h4 id="ssl-error"><a href="#ssl-error" class="headerlink" title="ssl error"></a>ssl error</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/opencv/opencv.git</span><br><span class="line">Cloning into <span class="string">&#x27;opencv&#x27;</span>...</span><br><span class="line">fatal: unable to access <span class="string">&#x27;https://github.com/opencv/opencv.git/&#x27;</span>: server certificate verification failed. CAfile: /etc/ssl/certs/ca-certificates.crt CRLfile: none</span><br></pre></td></tr></table></figure>
+<p>solution </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global http.sslverify <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="cmake-gui-display-error"><a href="#cmake-gui-display-error" class="headerlink" title="cmake-gui display error"></a>cmake-gui display error</h4> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cmake-gui ..</span><br><span class="line">qt.qpa.screen: QXcbConnection: Could not connect to display </span><br><span class="line">Could not connect to any X display.</span><br></pre></td></tr></table></figure>
+<p>solution: </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> DISPLAY=<span class="string">&#x27;:0.0&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="clock"><a href="#clock" class="headerlink" title="clock"></a>clock</h4><blockquote>
+<p>see <a target="_blank" rel="noopener" href="https://www.cnblogs.com/jiu0821/p/6768473.html">here</a></p>
+</blockquote>
+<pre><code>make: warning: Clock skew detected. Your build may be incomplete
+</code></pre>
+<p>fix </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">date</span> -s 1/18/2019</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">date</span> -s 1/18/2019</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>系统时间有问题。</p>
+</blockquote>
+<h3 id="caffe"><a href="#caffe" class="headerlink" title="caffe"></a>caffe</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> caffe &amp;&amp; <span class="built_in">mkdir</span> build &amp;&amp; cmake ..</span><br></pre></td></tr></table></figure>
+
+<h4 id="errors"><a href="#errors" class="headerlink" title="errors"></a>errors</h4><pre><code>CMake Error: The following variables are used in this project, but they are set to NOTFOUND.
+Please set them or make sure they are set and tested correctly in the CMake files:
+CUDA_cublas_device_LIBRARY (ADVANCED)
+    linked by target &quot;caffe&quot; in directory /home/nvidia/workspace/caffe/src/caffe
+</code></pre>
+<blockquote>
+<p><code>CUDA_cublas_device_LIBRARY</code> error</p>
+</blockquote>
+<h4 id="fix"><a href="#fix" class="headerlink" title="fix"></a>fix</h4><p>see <a target="_blank" rel="noopener" href="https://github.com/clab/dynet/issues/1457">here</a></p>
+<blockquote>
+<p>I also got the problem when I compiled caffe with the latest CUDA 10.0, and after upgrading CMake from 3.12.1 to 3.12.2 it’s done @harumo11</p>
+</blockquote>
+<blockquote>
+<p>Confirmed: I had the same problem (Ubuntu 18.04, CUDA 10.0) and installing CMake 3.12.2 (instead of the distro’s 3.10.2) fixed it.</p>
+</blockquote>
+<blockquote>
+<p>升级默认的<code>cmake 3.10.2</code>到最新版<code>3.13.3</code>解决<code>CUDA_cublas_device_LIBRARY</code>问题。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cmake --version</span><br><span class="line">3.13.3</span><br><span class="line"></span><br><span class="line">cmake -DCMAKE_INSTALL_PREFIX=/usr/local/ ..</span><br></pre></td></tr></table></figure>
+
+<h2 id="nvpmodel"><a href="#nvpmodel" class="headerlink" title="nvpmodel"></a>nvpmodel</h2><h3 id="TX2-nvpmodel"><a href="#TX2-nvpmodel" class="headerlink" title="TX2 nvpmodel"></a>TX2 nvpmodel</h3><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1081166">Jetson TX2 nvpmodel</a></p>
+<p>Jetson Tegra系统的应用涵盖越来越广，相应用户对性能和功耗的要求也呈现多样化。为此NVIDIA提供一种新的命令行工具，可以方便地让用户配置CPU状态，以最大限度地提高不同场景下的性能和能耗。</p>
+<p>Jetson TX2由一个GPU和一个CPU集群组成。 CPU集群由双核丹佛2处理器和四核ARM Cortex-A57组成，通过高性能互连架构连接。 拥有6个CPU核心和一个GPU，您可以不必自行运行所有性能&#x2F;功耗来测试最佳的运行状态，因为NVIDIA的新的命令工具Nvpmodel，提供了5种模式。在Jetson TX2上。 下表列出了CPU内核的模式以及正在使用的CPU和GPU的最大频率。 </p>
+<p><img src="https://kezunlin.me/images/posts/635233-20181211175146173-1373012531.png" alt="6 cpu mode"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># nvpmodel</span></span><br><span class="line"><span class="comment"># /etc/nvpmodel.conf</span></span><br><span class="line"><span class="built_in">cat</span> /proc/cpuinfo</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> nvpmodel -q –-verbose <span class="comment"># 查看当前的模式</span></span><br><span class="line"><span class="built_in">sudo</span> nvpmodel -p –-verbose <span class="comment"># 打印支持的所有模式及其配置</span></span><br><span class="line"><span class="built_in">sudo</span> nvpmodel -m 0 <span class="comment"># 启动最高性能，此时所有CPU均已启动，但对应的主频还不是最高的</span></span><br><span class="line"><span class="built_in">sudo</span> ~/jetson_clocks.sh <span class="comment"># 开启最大频率</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="jetson-clocks"><a href="#jetson-clocks" class="headerlink" title="jetson_clocks"></a>jetson_clocks</h3><p>see <a target="_blank" rel="noopener" href="https://blog.csdn.net/xingdou520/article/details/84402638">here</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">jetson_clocks.sh --<span class="built_in">help</span>  </span><br><span class="line"><span class="built_in">sudo</span> ~/jetson_clocks.sh --show <span class="comment"># 查看当前System配置</span></span><br><span class="line"><span class="built_in">sudo</span> ~/jetson_clocks.sh <span class="comment"># 开启最大频率</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Checking GPU/DLA utilization/stats </span></span><br><span class="line"><span class="built_in">sudo</span> ~/tegrastats</span><br></pre></td></tr></table></figure>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/21181231/server-certificate-verification-failed-cafile-etc-ssl-certs-ca-certificates-c">server-certificate-verification-failed</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-gpus">cuda-gpus</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20190118: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/xaiver/" rel="tag"># xaiver</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/arm-cross-compiling/" rel="prev" title="how to cross compile opencv on nvidia xaiver arm platform">
+      <i class="fa fa-chevron-left"></i> how to cross compile opencv on nvidia xaiver arm platform
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/numpy-table-save-and-load-with-cpp/" rel="next" title="how to load python numpy table with C++">
+      how to load python numpy table with C++ <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jetson-products"><span class="nav-number">1.1.</span> <span class="nav-text">jetson products</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#xaiver-device"><span class="nav-number">1.2.</span> <span class="nav-text">xaiver device</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#check-system"><span class="nav-number">1.3.</span> <span class="nav-text">check system</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-packages"><span class="nav-number">1.4.</span> <span class="nav-text">install packages</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#cuda"><span class="nav-number">1.4.1.</span> <span class="nav-text">cuda</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#upgrade-cmake"><span class="nav-number">1.5.</span> <span class="nav-text">upgrade cmake</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Compile-Package"><span class="nav-number">2.</span> <span class="nav-text">Compile Package</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gflags-glog"><span class="nav-number">2.1.</span> <span class="nav-text">gflags &amp;&amp; glog</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gtest"><span class="nav-number">2.2.</span> <span class="nav-text">gtest</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#boost"><span class="nav-number">2.3.</span> <span class="nav-text">boost</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#protobuf"><span class="nav-number">2.4.</span> <span class="nav-text">protobuf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#opencv"><span class="nav-number">2.5.</span> <span class="nav-text">opencv</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ssl-error"><span class="nav-number">2.5.1.</span> <span class="nav-text">ssl error</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cmake-gui-display-error"><span class="nav-number">2.5.2.</span> <span class="nav-text">cmake-gui display error</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#clock"><span class="nav-number">2.5.3.</span> <span class="nav-text">clock</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#caffe"><span class="nav-number">2.6.</span> <span class="nav-text">caffe</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#errors"><span class="nav-number">2.6.1.</span> <span class="nav-text">errors</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#fix"><span class="nav-number">2.6.2.</span> <span class="nav-text">fix</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nvpmodel"><span class="nav-number">3.</span> <span class="nav-text">nvpmodel</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TX2-nvpmodel"><span class="nav-number">3.1.</span> <span class="nav-text">TX2 nvpmodel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jetson-clocks"><span class="nav-number">3.2.</span> <span class="nav-text">jetson_clocks</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

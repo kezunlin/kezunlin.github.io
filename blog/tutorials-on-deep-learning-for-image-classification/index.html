@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Getting StartedShared variables tipsWe encourage you to store the dataset into shared variables and access it based on the minibatch index, given a fixed and known batch size. The reason behind shared">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tutorials on deep learning for image classification">
+<meta property="og:url" content="https://kezunlin.me/blog/tutorials-on-deep-learning-for-image-classification/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Getting StartedShared variables tipsWe encourage you to store the dataset into shared variables and access it based on the minibatch index, given a fixed and known batch size. The reason behind shared">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180807105128016-1414614810.png">
+<meta property="article:published_time" content="2018-08-07T03:11:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="caffe">
+<meta property="article:tag" content="image classification">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kezunlin.me/images/posts/635233-20180807105128016-1414614810.png">
+
+<link rel="canonical" href="https://kezunlin.me/blog/tutorials-on-deep-learning-for-image-classification/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>tutorials on deep learning for image classification | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/tutorials-on-deep-learning-for-image-classification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          tutorials on deep learning for image classification
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-08-07 11:11:00" itemprop="dateCreated datePublished" datetime="2018-08-07T11:11:00+08:00">2018-08-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deep-learning/" itemprop="url" rel="index"><span itemprop="name">deep learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h2><h3 id="Shared-variables-tips"><a href="#Shared-variables-tips" class="headerlink" title="Shared variables tips"></a>Shared variables tips</h3><p>We encourage you to store the dataset into shared variables and access it based on the minibatch index, given a fixed and known batch size. The reason behind shared variables is related to using the GPU. There is a large overhead when copying data into the GPU memory. </p>
+<blockquote>
+<p>将数据存储在shared variable便于加速GPU计算，避免数据从CPU拷贝到GPU。</p>
+</blockquote>
+<p>If you have your data in Theano shared variables though, you give Theano the possibility to copy the entire data on the GPU in a single call when the shared variables are constructed.</p>
+<blockquote>
+<p>shared构建的时候，theano一次性讲所有数据拷贝至GPU.</p>
+</blockquote>
+<p>Because the datapoints and their labels are usually of different nature (labels are usually integers while datapoints are real numbers) we suggest to use different variables for label and data. Also we recommend using different variables for the training set, validation set and testing set to make the code more readable (resulting in 6 different shared variables).</p>
+<blockquote>
+<p>data,label使用２个shared variables，train,valid,test使用不同的shared variables，总计6个</p>
+</blockquote>
+<h3 id="Mini-batch-data"><a href="#Mini-batch-data" class="headerlink" title="Mini-batch data"></a>Mini-batch data</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">shared_dataset</span>(<span class="params">data_xy</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot; Function that loads the dataset into shared variables</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    The reason we store our dataset in shared variables is to allow</span></span><br><span class="line"><span class="string">    Theano to copy it into the GPU memory (when code is run on GPU).</span></span><br><span class="line"><span class="string">    Since copying data into the GPU is slow, copying a minibatch everytime</span></span><br><span class="line"><span class="string">    is needed (the default behaviour if the data is not in a shared</span></span><br><span class="line"><span class="string">    variable) would lead to a large decrease in performance.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    data_x, data_y = data_xy</span><br><span class="line">    shared_x = theano.shared(numpy.asarray(data_x, dtype=theano.config.floatX))</span><br><span class="line">    shared_y = theano.shared(numpy.asarray(data_y, dtype=theano.config.floatX))</span><br><span class="line">    <span class="comment"># shared变量中的数据在GPU上必须是float32类型，但是计算阶段可能需要int类型(y)，所以需要</span></span><br><span class="line">    <span class="comment"># 将float32---&gt;int.</span></span><br><span class="line">    <span class="comment"># When storing data on the GPU it has to be stored as floats</span></span><br><span class="line">    <span class="comment"># therefore we will store the labels as ``floatX`` as well</span></span><br><span class="line">    <span class="comment"># (``shared_y`` does exactly that). But during our computations</span></span><br><span class="line">    <span class="comment"># we need them as ints (we use labels as index, and if they are</span></span><br><span class="line">    <span class="comment"># floats it doesn&#x27;t make sense) therefore instead of returning</span></span><br><span class="line">    <span class="comment"># ``shared_y`` we will have to cast it to int. This little hack</span></span><br><span class="line">    <span class="comment"># lets us get around this issue</span></span><br><span class="line">    <span class="keyword">return</span> shared_x, T.cast(shared_y, <span class="string">&#x27;int32&#x27;</span>)</span><br><span class="line"></span><br><span class="line">test_set_x, test_set_y = shared_dataset(test_set)</span><br><span class="line">valid_set_x, valid_set_y = shared_dataset(valid_set)</span><br><span class="line">train_set_x, train_set_y = shared_dataset(train_set)</span><br><span class="line"></span><br><span class="line">batch_size = <span class="number">500</span>    <span class="comment"># size of the minibatch</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># accessing the third minibatch of the training set</span></span><br><span class="line"></span><br><span class="line">data  = train_set_x[<span class="number">2</span> * batch_size: <span class="number">3</span> * batch_size]</span><br><span class="line">label = train_set_y[<span class="number">2</span> * batch_size: <span class="number">3</span> * batch_size]</span><br></pre></td></tr></table></figure>
+
+<h3 id="SGD-pseudo-code-in-theano"><a href="#SGD-pseudo-code-in-theano" class="headerlink" title="SGD pseudo code in theano"></a>SGD pseudo code in theano</h3><h4 id="Traditional-GD-m-N"><a href="#Traditional-GD-m-N" class="headerlink" title="Traditional GD (m&#x3D;N)"></a>Traditional GD (m&#x3D;N)</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># GRADIENT DESCENT</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    loss = f(params)</span><br><span class="line">    d_loss_wrt_params = ... <span class="comment"># compute gradient</span></span><br><span class="line">    params -= learning_rate * d_loss_wrt_params</span><br><span class="line">    <span class="keyword">if</span> &lt;stopping condition <span class="keyword">is</span> met&gt;:</span><br><span class="line">        <span class="keyword">return</span> params</span><br></pre></td></tr></table></figure>
+
+<p>Stochastic gradient descent (SGD) works according to the same principles as ordinary gradient descent, but proceeds more quickly by estimating the gradient from just a few examples at a time instead of the entire training set. In its purest form, we estimate the gradient from just a single example at a time.</p>
+<h4 id="Online-Learning-SGD-m-1"><a href="#Online-Learning-SGD-m-1" class="headerlink" title="Online Learning SGD (m&#x3D;1)"></a>Online Learning SGD (m&#x3D;1)</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># STOCHASTIC GRADIENT DESCENT</span></span><br><span class="line"><span class="keyword">for</span> (x_i,y_i) <span class="keyword">in</span> training_set:</span><br><span class="line">                            <span class="comment"># imagine an infinite generator</span></span><br><span class="line">                            <span class="comment"># that may repeat examples (if there is only a finite training set)</span></span><br><span class="line">    loss = f(params, x_i, y_i)</span><br><span class="line">    d_loss_wrt_params = ... <span class="comment"># compute gradient</span></span><br><span class="line">    params -= learning_rate * d_loss_wrt_params</span><br><span class="line">    <span class="keyword">if</span> &lt;stopping condition <span class="keyword">is</span> met&gt;:</span><br><span class="line">        <span class="keyword">return</span> params</span><br></pre></td></tr></table></figure>
+
+<p>The variant that we recommend for deep learning is a further twist on stochastic gradient descent using so-called “minibatches”. Minibatch SGD (MSGD) works identically to SGD, except that we use more than one training example to make each estimate of the gradient. This technique reduces variance in the estimate of the gradient, and often makes better use of the hierarchical memory organization in modern computers.</p>
+<h4 id="Minibatch-SGD-m"><a href="#Minibatch-SGD-m" class="headerlink" title="Minibatch SGD (m)"></a>Minibatch SGD (m)</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (x_batch,y_batch) <span class="keyword">in</span> train_batches:</span><br><span class="line">                            <span class="comment"># imagine an infinite generator</span></span><br><span class="line">                            <span class="comment"># that may repeat examples</span></span><br><span class="line">    loss = f(params, x_batch, y_batch)</span><br><span class="line">    d_loss_wrt_params = ... <span class="comment"># compute gradient using theano</span></span><br><span class="line">    params -= learning_rate * d_loss_wrt_params</span><br><span class="line">    <span class="keyword">if</span> &lt;stopping condition <span class="keyword">is</span> met&gt;:</span><br><span class="line">        <span class="keyword">return</span> params</span><br></pre></td></tr></table></figure>
+
+<h4 id="Theano-pseudo-code-of-Minibatch-SGD"><a href="#Theano-pseudo-code-of-Minibatch-SGD" class="headerlink" title="Theano pseudo code of Minibatch SGD"></a>Theano pseudo code of Minibatch SGD</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Minibatch Stochastic Gradient Descent</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># assume loss is a symbolic description of the loss function given</span></span><br><span class="line"><span class="comment"># the symbolic variables params (shared variable), x_batch, y_batch;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># compute gradient of loss with respect to params</span></span><br><span class="line">d_loss_wrt_params = T.grad(loss, params)</span><br><span class="line"></span><br><span class="line"><span class="comment"># compile the MSGD step into a theano function</span></span><br><span class="line">updates = [(params, params - learning_rate * d_loss_wrt_params)]</span><br><span class="line">MSGD = theano.function([x_batch,y_batch], loss, updates=updates)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (x_batch, y_batch) <span class="keyword">in</span> train_batches:</span><br><span class="line">    <span class="comment"># here x_batch and y_batch are elements of train_batches and</span></span><br><span class="line">    <span class="comment"># therefore numpy arrays; function MSGD also updates the params</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Current loss is &#x27;</span>, MSGD(x_batch, y_batch))</span><br><span class="line">    <span class="keyword">if</span> stopping_condition_is_met:</span><br><span class="line">        <span class="keyword">return</span> params</span><br></pre></td></tr></table></figure>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+<h3 id="Regularization"><a href="#Regularization" class="headerlink" title="Regularization"></a>Regularization</h3><h4 id="L1-L2-regularization"><a href="#L1-L2-regularization" class="headerlink" title="L1&#x2F;L2 regularization"></a>L1&#x2F;L2 regularization</h4><p>L1&#x2F;L2 regularization and early-stopping.</p>
+<p>Commonly used values for p are 1 and 2, hence the L1&#x2F;L2 nomenclature. If p&#x3D;2, then the regularizer is also called “weight decay”.</p>
+<p> To follow Occam’s razor principle, this minimization should find us the simplest solution (as measured by our simplicity criterion) that fits the training data.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># symbolic Theano variable that represents the L1 regularization term</span></span><br><span class="line">L1  = T.<span class="built_in">sum</span>(<span class="built_in">abs</span>(param))</span><br><span class="line"></span><br><span class="line"><span class="comment"># symbolic Theano variable that represents the squared L2 term</span></span><br><span class="line">L2 = T.<span class="built_in">sum</span>(param ** <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># the loss</span></span><br><span class="line">loss = NLL + lambda_1 * L1 + lambda_2 * L2</span><br></pre></td></tr></table></figure>
+
+<h4 id="Early-Stopping"><a href="#Early-Stopping" class="headerlink" title="Early-Stopping"></a>Early-Stopping</h4><p>Early-stopping combats overfitting by monitoring the model’s performance on a validation set. A validation set is a set of examples that we never use for gradient descent, but which is also not a part of the test set. </p>
+<p>所谓early stopping，即在每一个epoch结束时（一个epoch即对所有训练数据的一轮遍历）计算 validation data的accuracy，当accuracy不再提高时，就停止训练。这是很自然的做法，因为accuracy不再提高了，训练下去也没用。另外，这样做还能防止overfitting。</p>
+<p>那么，怎么样才算是validation accuracy不再提高呢？并不是说validation accuracy一降下来，它就是“不再提高”，因为可能经过这个epoch后，accuracy降低了，但是随后的epoch又让accuracy升上去了，所以不能根据一两次的连续降低就判断“不再提高”。正确的做法是，在训练的过程中，记录最佳的validation accuracy，当连续10次epoch（或者更多次）没达到最佳accuracy时，你可以认为“不再提高”，此时使用early stopping。这个策略就叫“ no-improvement-in-n”，n即epoch的次数，可以根据实际情况取10、20、30….</p>
+<h4 id="Variable-learning-rate"><a href="#Variable-learning-rate" class="headerlink" title="Variable learning rate"></a>Variable learning rate</h4><ul>
+<li><p>Decreasing the learning rate over time is sometimes a good idea. eta &#x3D; eta0&#x2F;(1+d*epoch)  (d: eta decrease constant, d&#x3D;0.001)</p>
+</li>
+<li><p>Early stopping + decrease learning rate. eta &#x3D; eta0&#x2F;2 until eta&#x3D; eta0&#x2F;1024</p>
+</li>
+</ul>
+<p>一个简单有效的做法就是，当validation accuracy满足 no-improvement-in-n规则时，本来我们是要early stopping的，但是我们可以不stop，而是让learning rate减半，之后让程序继续跑。下一次validation accuracy又满足no-improvement-in-n规则时，我们同样再将learning rate减半（此时变为原始learni rate的四分之一）…继续这个过程，直到learning rate变为原来的1&#x2F;1024再终止程序。（1&#x2F;1024还是1&#x2F;512还是其他可以根据实际确定）。【PS：也可以选择每一次将learning rate除以10，而不是除以2.】</p>
+<p>实践中，eta&#x2F;2变化太快，eta0&#x2F;(1+d*epoch),d&#x3D;0.001比较合适。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># early-stopping parameters</span></span><br><span class="line">patience = <span class="number">5000</span>  <span class="comment"># look as this many examples regardless</span></span><br><span class="line">patience_increase = <span class="number">2</span>     <span class="comment"># wait this much longer when a new best is</span></span><br><span class="line">                              <span class="comment"># found</span></span><br><span class="line">improvement_threshold = <span class="number">0.995</span>  <span class="comment"># a relative improvement of this much is</span></span><br><span class="line">                               <span class="comment"># considered significant</span></span><br><span class="line">validation_frequency = <span class="built_in">min</span>(n_train_batches, patience/<span class="number">2</span>) = <span class="number">2500</span> <span class="comment"># for iters</span></span><br><span class="line">                              <span class="comment"># go through this many</span></span><br><span class="line">                              <span class="comment"># minibatches before checking the network</span></span><br><span class="line">                              <span class="comment"># on the validation set; in this case we</span></span><br><span class="line">                              <span class="comment"># check every epoch</span></span><br><span class="line"></span><br><span class="line">best_params = <span class="literal">None</span></span><br><span class="line">best_validation_loss = numpy.inf</span><br><span class="line">test_score = <span class="number">0.</span></span><br><span class="line">start_time = time.clock()</span><br><span class="line"></span><br><span class="line">done_looping = <span class="literal">False</span></span><br><span class="line">epoch = <span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> (epoch &lt; n_epochs) <span class="keyword">and</span> (<span class="keyword">not</span> done_looping):</span><br><span class="line">    <span class="comment"># Report &quot;1&quot; for first epoch, &quot;n_epochs&quot; for last epoch</span></span><br><span class="line">    epoch = epoch + <span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> minibatch_index <span class="keyword">in</span> <span class="built_in">range</span>(n_train_batches):</span><br><span class="line"></span><br><span class="line">        d_loss_wrt_params = ... <span class="comment"># compute gradient</span></span><br><span class="line">        params -= learning_rate * d_loss_wrt_params <span class="comment"># gradient descent</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># iteration number. We want it to start at 0.</span></span><br><span class="line">        <span class="built_in">iter</span> = (epoch - <span class="number">1</span>) * n_train_batches + minibatch_index</span><br><span class="line">        <span class="comment"># note that if we do `iter % validation_frequency` it will be</span></span><br><span class="line">        <span class="comment"># true for iter = 0 which we do not want. We want it true for</span></span><br><span class="line">        <span class="comment"># iter = validation_frequency - 1.</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">iter</span> + <span class="number">1</span>) % validation_frequency == <span class="number">0</span>:</span><br><span class="line"></span><br><span class="line">            this_validation_loss = ... <span class="comment"># compute zero-one loss on validation set</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> this_validation_loss &lt; best_validation_loss:</span><br><span class="line"></span><br><span class="line">                <span class="comment"># improve patience if loss improvement is good enough</span></span><br><span class="line">                <span class="keyword">if</span> this_validation_loss &lt; best_validation_loss * improvement_threshold:</span><br><span class="line">                    patience = <span class="built_in">max</span>(patience, <span class="built_in">iter</span> * patience_increase)</span><br><span class="line">                    </span><br><span class="line">                best_params = copy.deepcopy(params)</span><br><span class="line">                best_validation_loss = this_validation_loss</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> patience &lt;= <span class="built_in">iter</span>:</span><br><span class="line">            done_looping = <span class="literal">True</span></span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># POSTCONDITION:</span></span><br><span class="line"><span class="comment"># best_params refers to the best out-of-sample parameters observed during the optimization</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Theano-Python-Tips"><a href="#Theano-Python-Tips" class="headerlink" title="Theano&#x2F;Python Tips"></a>Theano&#x2F;Python Tips</h3><h4 id="Loading-and-Saving-Models"><a href="#Loading-and-Saving-Models" class="headerlink" title="Loading and Saving Models"></a>Loading and Saving Models</h4><ul>
+<li><p>DO: <strong>Pickle the numpy ndarrays from your shared variables</strong></p>
+</li>
+<li><p>DON’T: <strong>Do not pickle your training or test functions for long-term storage</strong></p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cPickle</span><br><span class="line">save_file = <span class="built_in">open</span>(<span class="string">&#x27;path&#x27;</span>, <span class="string">&#x27;wb&#x27;</span>)  <span class="comment"># this will overwrite current contents</span></span><br><span class="line">cPickle.dump(w.get_value(borrow=<span class="literal">True</span>), save_file, -<span class="number">1</span>)  <span class="comment"># the -1 is for HIGHEST_PROTOCOL</span></span><br><span class="line">cPickle.dump(v.get_value(borrow=<span class="literal">True</span>), save_file, -<span class="number">1</span>)  <span class="comment"># .. and it triggers much more efficient</span></span><br><span class="line">cPickle.dump(u.get_value(borrow=<span class="literal">True</span>), save_file, -<span class="number">1</span>)  <span class="comment"># .. storage than numpy&#x27;s default</span></span><br><span class="line">save_file.close()</span><br></pre></td></tr></table></figure>
+
+<p>Then later, you can load your data back like this:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">save_file = <span class="built_in">open</span>(<span class="string">&#x27;path&#x27;</span>)</span><br><span class="line">w.set_value(cPickle.load(save_file), borrow=<span class="literal">True</span>)</span><br><span class="line">v.set_value(cPickle.load(save_file), borrow=<span class="literal">True</span>)</span><br><span class="line">u.set_value(cPickle.load(save_file), borrow=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="Plotting-Intermediate-Results"><a href="#Plotting-Intermediate-Results" class="headerlink" title="Plotting Intermediate Results"></a>Plotting Intermediate Results</h4><p>If you have enough disk space, your training script should save intermediate models and a visualization script should process those saved models.</p>
+<h2 id="MLP"><a href="#MLP" class="headerlink" title="MLP"></a>MLP</h2><blockquote>
+<p>see <a target="_blank" rel="noopener" href="http://deeplearning.net/tutorial/mlp.html">here</a></p>
+</blockquote>
+<p>An MLP can be viewed as a logistic regression classifier where the input is first transformed using a learnt non-linear transformation sigmoid. This transformation projects the input data into a space where it becomes linearly separable. This intermediate layer is referred to as a hidden layer. A single hidden layer is sufficient to make MLPs a universal approximator. </p>
+<h3 id="weight-initializations"><a href="#weight-initializations" class="headerlink" title="weight initializations"></a>weight initializations</h3><ul>
+<li>old version: 1&#x2F;sqrt(n_in)</li>
+</ul>
+<p>The initial values for the weights of a hidden layer i should be uniformly sampled from a symmetric interval that depends on the activation function. weight的初始化依赖于activation</p>
+<ul>
+<li>tanh: uniformely sampled from -sqrt(6.&#x2F;(n_in+n_hidden)) and sqrt(6.&#x2F;(n_in+n_hidden)) </li>
+<li>sigmoid : use 4 times larger initial weights for sigmoid compared to tanh</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># `W` is initialized with `W_values` which is uniformely sampled</span></span><br><span class="line">        <span class="comment"># from sqrt(-6./(n_in+n_hidden)) and sqrt(6./(n_in+n_hidden))</span></span><br><span class="line">        <span class="comment"># for tanh activation function</span></span><br><span class="line">        <span class="comment"># the output of uniform if converted using asarray to dtype</span></span><br><span class="line">        <span class="comment"># theano.config.floatX so that the code is runable on GPU</span></span><br><span class="line">        <span class="comment"># Note : optimal initialization of weights is dependent on the</span></span><br><span class="line">        <span class="comment">#        activation function used (among other things).</span></span><br><span class="line">        <span class="comment">#        For example, results presented in [Xavier10] suggest that you</span></span><br><span class="line">        <span class="comment">#        should use 4 times larger initial weights for sigmoid</span></span><br><span class="line">        <span class="comment">#        compared to tanh</span></span><br><span class="line">        <span class="comment">#        We have no info for other function, so we use the same as</span></span><br><span class="line">        <span class="comment">#        tanh.</span></span><br><span class="line">        <span class="keyword">if</span> W <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            W_values = numpy.asarray(</span><br><span class="line">                rng.uniform(</span><br><span class="line">                    low=-numpy.sqrt(<span class="number">6.</span> / (n_in + n_out)),</span><br><span class="line">                    high=numpy.sqrt(<span class="number">6.</span> / (n_in + n_out)),</span><br><span class="line">                    size=(n_in, n_out)</span><br><span class="line">                ),</span><br><span class="line">                dtype=theano.config.floatX</span><br><span class="line">            )</span><br><span class="line">            <span class="keyword">if</span> activation == theano.tensor.nnet.sigmoid:</span><br><span class="line">                W_values *= <span class="number">4</span></span><br><span class="line"></span><br><span class="line">            W = theano.shared(value=W_values, name=<span class="string">&#x27;W&#x27;</span>, borrow=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> b <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            b_values = numpy.zeros((n_out,), dtype=theano.config.floatX)</span><br><span class="line">            b = theano.shared(value=b_values, name=<span class="string">&#x27;b&#x27;</span>, borrow=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.W = W</span><br><span class="line">        <span class="variable language_">self</span>.b = b</span><br></pre></td></tr></table></figure>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+<h3 id="Tips-and-Tricks-for-training-MLPs"><a href="#Tips-and-Tricks-for-training-MLPs" class="headerlink" title="Tips and Tricks for training MLPs"></a>Tips and Tricks for training MLPs</h3><h4 id="Nonlinearity"><a href="#Nonlinearity" class="headerlink" title="Nonlinearity"></a>Nonlinearity</h4><p>Two of the most common ones are the <strong>sigmoid</strong> and the <strong>tanh</strong> function. nonlinearities that are symmetric around the origin are preferred because they tend to produce zero-mean inputs to the next layer (which is a desirable property). Empirically, we have observed that the tanh has better convergence properties.</p>
+<h4 id="Weight-initialization"><a href="#Weight-initialization" class="headerlink" title="Weight initialization"></a>Weight initialization</h4><p>At initialization we want the weights to be small enough around the origin so that the activation function operates in its linear regime, where gradients are the largest. <strong>weight的初始化依赖于activation</strong></p>
+<h4 id="Learning-rate"><a href="#Learning-rate" class="headerlink" title="Learning rate"></a>Learning rate</h4><ul>
+<li><p>The simplest solution is to simply have a <strong>constant rate</strong>. Rule of thumb: try several log-spaced values (10^{-1},10^{-2},\ldots) and narrow the (logarithmic) grid search to the region where you obtain the lowest validation error.</p>
+</li>
+<li><p>Decreasing the learning rate over time is sometimes a good idea. eta &#x3D; eta0&#x2F;(1+d*epoch)  (d: decrease constant, 0.001)</p>
+</li>
+<li><p>Early stopping + decrease learning rate. eta &#x3D; eta0&#x2F;2 until eta&#x3D; eta0&#x2F;1024</p>
+</li>
+</ul>
+<h4 id="Regularization-parameter"><a href="#Regularization-parameter" class="headerlink" title="Regularization parameter"></a>Regularization parameter</h4><p>Typical values to try for the L1&#x2F;L2 regularization parameter \lambda are 10^{-2},10^{-3},\ldots. In the framework that we described so far, optimizing this parameter will not lead to significantly better solutions, but is worth exploring nonetheless.</p>
+<h4 id="Number-of-hidden-units"><a href="#Number-of-hidden-units" class="headerlink" title="Number of hidden units"></a>Number of hidden units</h4><p>This hyper-parameter is very much dataset-dependent. <strong>hidden neurons的数量依赖于具体的数据集</strong>。Unless we employ some regularization scheme (early stopping or L1&#x2F;L2 penalties), a typical number of hidden units vs. generalization performance graph will be U-shaped.</p>
+<h2 id="CNN"><a href="#CNN" class="headerlink" title="CNN"></a>CNN</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://deeplearning.net/tutorial/lenet.html">LeNet</a></li>
+</ul>
+<h3 id="The-Convolution-and-Pool-Operator"><a href="#The-Convolution-and-Pool-Operator" class="headerlink" title="The Convolution and Pool Operator"></a>The Convolution and Pool Operator</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> theano</span><br><span class="line"><span class="keyword">from</span> theano <span class="keyword">import</span> tensor <span class="keyword">as</span> T</span><br><span class="line"><span class="keyword">from</span> theano.tensor.nnet <span class="keyword">import</span> conv2d,sigmoid</span><br><span class="line"><span class="keyword">from</span> theano.tensor.signal.pool <span class="keyword">import</span> pool_2d</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt  </span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"></span><br><span class="line">rng = numpy.random.RandomState(<span class="number">23455</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># instantiate 4D tensor for input</span></span><br><span class="line"><span class="built_in">input</span> = T.tensor4(name=<span class="string">&#x27;input&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># initialize shared variable for weights.</span></span><br><span class="line">w_shp = (<span class="number">2</span>, <span class="number">3</span>, <span class="number">9</span>, <span class="number">9</span>)</span><br><span class="line">w_bound = numpy.sqrt(<span class="number">3</span> * <span class="number">9</span> * <span class="number">9</span>)</span><br><span class="line">W = theano.shared( numpy.asarray(</span><br><span class="line">            rng.uniform(</span><br><span class="line">                low=-<span class="number">1.0</span> / w_bound,</span><br><span class="line">                high=<span class="number">1.0</span> / w_bound,</span><br><span class="line">                size=w_shp),</span><br><span class="line">            dtype=<span class="built_in">input</span>.dtype), name =<span class="string">&#x27;W&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># initialize shared variable for bias (1D tensor) with random values</span></span><br><span class="line"><span class="comment"># IMPORTANT: biases are usually initialized to zero. However in this</span></span><br><span class="line"><span class="comment"># particular application, we simply apply the convolutional layer to</span></span><br><span class="line"><span class="comment"># an image without learning the parameters. We therefore initialize</span></span><br><span class="line"><span class="comment"># them to random values to &quot;simulate&quot; learning.</span></span><br><span class="line">b_shp = (<span class="number">2</span>,)</span><br><span class="line">b = theano.shared(numpy.asarray(</span><br><span class="line">            rng.uniform(low=-<span class="number">.5</span>, high=<span class="number">.5</span>, size=b_shp),</span><br><span class="line">            dtype=<span class="built_in">input</span>.dtype), name =<span class="string">&#x27;b&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># build symbolic expression that computes the convolution of input with filters in w</span></span><br><span class="line">conv_out = conv2d(<span class="built_in">input</span>, W)</span><br><span class="line"></span><br><span class="line">poolsize=(<span class="number">2</span>,<span class="number">2</span>)</span><br><span class="line">pooled_out = pool_2d( <span class="built_in">input</span>=conv_out, ws=poolsize, ignore_border=<span class="literal">True</span>) </span><br><span class="line"></span><br><span class="line">conv_activations = sigmoid(conv_out + b.dimshuffle(<span class="string">&#x27;x&#x27;</span>, <span class="number">0</span>, <span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;x&#x27;</span>))</span><br><span class="line"><span class="comment"># create theano function to compute filtered images</span></span><br><span class="line">f = theano.function([<span class="built_in">input</span>], conv_activations)</span><br><span class="line"></span><br><span class="line">pooled_activations = sigmoid(pooled_out + b.dimshuffle(<span class="string">&#x27;x&#x27;</span>, <span class="number">0</span>, <span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;x&#x27;</span>))</span><br><span class="line">f2 = theano.function([<span class="built_in">input</span>], pooled_activations)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#===========================================================</span></span><br><span class="line"><span class="comment"># processing image file</span></span><br><span class="line"><span class="comment">#===========================================================</span></span><br><span class="line"><span class="comment"># open random image of dimensions 639x516</span></span><br><span class="line">img = Image.<span class="built_in">open</span>(<span class="built_in">open</span>(<span class="string">&#x27;./3wolfmoon.jpg&#x27;</span>))</span><br><span class="line"><span class="comment"># dimensions are (height, width, channel)</span></span><br><span class="line">img = numpy.asarray(img, dtype=theano.config.floatX) / <span class="number">256.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># put image in 4D tensor of shape (1, 3, height, width)</span></span><br><span class="line">input_img_ = img.transpose(<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>).reshape(<span class="number">1</span>, <span class="number">3</span>, <span class="number">639</span>, <span class="number">516</span>)</span><br><span class="line">filtered_img = f(input_img_)</span><br><span class="line">pooled_img = f2(input_img_)</span><br><span class="line"><span class="built_in">print</span> filtered_img.shape <span class="comment"># (1, 2, 631, 508) 2 feature maps</span></span><br><span class="line"><span class="built_in">print</span> pooled_img.shape   <span class="comment"># (1, 2, 315, 254) 2 feature maps</span></span><br><span class="line"></span><br><span class="line">fig = plt.figure(figsize=(<span class="number">16</span>,<span class="number">8</span>))</span><br><span class="line"><span class="comment"># (1)</span></span><br><span class="line"><span class="comment"># plot original image and first and second components of output</span></span><br><span class="line">plt.subplot(<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>); plt.axis(<span class="string">&#x27;off&#x27;</span>); plt.imshow(img)</span><br><span class="line">plt.gray();</span><br><span class="line"><span class="comment"># recall that the convOp output (filtered image) is actually a &quot;minibatch&quot;,</span></span><br><span class="line"><span class="comment"># of size 1 here, so we take index 0 in the first dimension:</span></span><br><span class="line">plt.subplot(<span class="number">2</span>, <span class="number">3</span>, <span class="number">2</span>); plt.axis(<span class="string">&#x27;off&#x27;</span>); plt.imshow(filtered_img[<span class="number">0</span>, <span class="number">0</span>, :, :])</span><br><span class="line">plt.subplot(<span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>); plt.axis(<span class="string">&#x27;off&#x27;</span>); plt.imshow(filtered_img[<span class="number">0</span>, <span class="number">1</span>, :, :])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># (2)</span></span><br><span class="line"><span class="comment"># plot original image and first and second components of output</span></span><br><span class="line">plt.subplot(<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>); plt.axis(<span class="string">&#x27;off&#x27;</span>); plt.imshow(img)</span><br><span class="line">plt.gray();</span><br><span class="line"><span class="comment"># recall that the convOp output (filtered image) is actually a &quot;minibatch&quot;,</span></span><br><span class="line"><span class="comment"># of size 1 here, so we take index 0 in the first dimension:</span></span><br><span class="line">plt.subplot(<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>); plt.axis(<span class="string">&#x27;off&#x27;</span>); plt.imshow(pooled_img[<span class="number">0</span>, <span class="number">0</span>, :, :])</span><br><span class="line">plt.subplot(<span class="number">2</span>, <span class="number">3</span>, <span class="number">6</span>); plt.axis(<span class="string">&#x27;off&#x27;</span>); plt.imshow(pooled_img[<span class="number">0</span>, <span class="number">1</span>, :, :])</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Notice that a randomly initialized filter acts very much like an edge detector!</span></span><br></pre></td></tr></table></figure>
+
+<pre><code>WARNING (theano.sandbox.cuda): The cuda backend is deprecated and will be removed in the next release (v0.10).  Please switch to the gpuarray backend. You can get more information about how to switch at this URL:
+ https://github.com/Theano/Theano/wiki/Converting-to-the-new-gpu-back-end%28gpuarray%29
+
+Using gpu device 0: GeForce GTX 1060 (CNMeM is enabled with initial size: 80.0% of memory, cuDNN 5105)
+
+
+(1, 2, 631, 508)
+(1, 2, 315, 254)
+</code></pre>
+<p><img src="https://kezunlin.me/images/posts/635233-20180807105128016-1414614810.png" alt="png"></p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://deeplearning.net/tutorial/gettingstarted.html#gettingstarted">deeplearning getting started</a></li>
+<li><a target="_blank" rel="noopener" href="http://deeplearning.net/tutorial/mlp.html">mlp</a></li>
+<li><a target="_blank" rel="noopener" href="http://deeplearning.net/tutorial/lenet.html">lenet</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180807: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/caffe/" rel="tag"># caffe</a>
+              <a href="/tags/image-classification/" rel="tag"># image classification</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/theano-conv-pool-example/" rel="prev" title="theano conv pool example">
+      <i class="fa fa-chevron-left"></i> theano conv pool example
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/Install-and-Configure-Caffe-on-ubuntu-16-04/" rel="next" title="Install and Configure Caffe on ubuntu 16.04">
+      Install and Configure Caffe on ubuntu 16.04 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Getting-Started"><span class="nav-number">1.</span> <span class="nav-text">Getting Started</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Shared-variables-tips"><span class="nav-number">1.1.</span> <span class="nav-text">Shared variables tips</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mini-batch-data"><span class="nav-number">1.2.</span> <span class="nav-text">Mini-batch data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SGD-pseudo-code-in-theano"><span class="nav-number">1.3.</span> <span class="nav-text">SGD pseudo code in theano</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Traditional-GD-m-N"><span class="nav-number">1.3.1.</span> <span class="nav-text">Traditional GD (m&#x3D;N)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Online-Learning-SGD-m-1"><span class="nav-number">1.3.2.</span> <span class="nav-text">Online Learning SGD (m&#x3D;1)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Minibatch-SGD-m"><span class="nav-number">1.3.3.</span> <span class="nav-text">Minibatch SGD (m)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Theano-pseudo-code-of-Minibatch-SGD"><span class="nav-number">1.3.4.</span> <span class="nav-text">Theano pseudo code of Minibatch SGD</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Regularization"><span class="nav-number">1.4.</span> <span class="nav-text">Regularization</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#L1-L2-regularization"><span class="nav-number">1.4.1.</span> <span class="nav-text">L1&#x2F;L2 regularization</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Early-Stopping"><span class="nav-number">1.4.2.</span> <span class="nav-text">Early-Stopping</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Variable-learning-rate"><span class="nav-number">1.4.3.</span> <span class="nav-text">Variable learning rate</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Theano-Python-Tips"><span class="nav-number">1.5.</span> <span class="nav-text">Theano&#x2F;Python Tips</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Loading-and-Saving-Models"><span class="nav-number">1.5.1.</span> <span class="nav-text">Loading and Saving Models</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Plotting-Intermediate-Results"><span class="nav-number">1.5.2.</span> <span class="nav-text">Plotting Intermediate Results</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MLP"><span class="nav-number">2.</span> <span class="nav-text">MLP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#weight-initializations"><span class="nav-number">2.1.</span> <span class="nav-text">weight initializations</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tips-and-Tricks-for-training-MLPs"><span class="nav-number">2.2.</span> <span class="nav-text">Tips and Tricks for training MLPs</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Nonlinearity"><span class="nav-number">2.2.1.</span> <span class="nav-text">Nonlinearity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Weight-initialization"><span class="nav-number">2.2.2.</span> <span class="nav-text">Weight initialization</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Learning-rate"><span class="nav-number">2.2.3.</span> <span class="nav-text">Learning rate</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Regularization-parameter"><span class="nav-number">2.2.4.</span> <span class="nav-text">Regularization parameter</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Number-of-hidden-units"><span class="nav-number">2.2.5.</span> <span class="nav-text">Number of hidden units</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CNN"><span class="nav-number">3.</span> <span class="nav-text">CNN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-Convolution-and-Pool-Operator"><span class="nav-number">3.1.</span> <span class="nav-text">The Convolution and Pool Operator</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

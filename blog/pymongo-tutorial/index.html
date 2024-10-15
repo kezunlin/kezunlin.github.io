@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="pymongo and mongoengine tutorial on ubuntu 16.04">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pymongo and mongoengine tutorial on ubuntu 16.04">
+<meta property="og:url" content="https://kezunlin.me/blog/pymongo-tutorial/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="pymongo and mongoengine tutorial on ubuntu 16.04">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-09-26T06:31:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="mongodb">
+<meta property="article:tag" content="mongo">
+<meta property="article:tag" content="pymongo">
+<meta property="article:tag" content="mongoengine">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/pymongo-tutorial/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>pymongo and mongoengine tutorial on ubuntu 16.04 | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/pymongo-tutorial/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          pymongo and mongoengine tutorial on ubuntu 16.04
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-09-26 14:31:00" itemprop="dateCreated datePublished" datetime="2019-09-26T14:31:00+08:00">2019-09-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>pymongo and mongoengine tutorial on ubuntu 16.04</p>
+<span id="more"></span>
+<h1 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h1><p>version </p>
+<ul>
+<li>mongo 2.6.10</li>
+<li>mongo gui: robo3t-1.3.1</li>
+<li>pymongo 3.9.0</li>
+<li>MongoEngine  0.18.2</li>
+</ul>
+<h2 id="install-mongodb"><a href="#install-mongodb" class="headerlink" title="install mongodb"></a>install mongodb</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install -y mongodb</span><br></pre></td></tr></table></figure>
+
+<h2 id="allow-remote-access"><a href="#allow-remote-access" class="headerlink" title="allow remote access"></a>allow remote access</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># By default, MongoDB is listening on 127.0.0.1:27017 only:</span><br><span class="line"></span><br><span class="line">$ sudo netstat -tnlp</span><br><span class="line">Proto Recv-Q Send-Q Local Address   Foreign Address State  PID/Program name</span><br><span class="line">tcp        0      0 127.0.0.1:27017 0.0.0.0:*       LISTEN 1106/mongod</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">vim /etc/mongod.conf</span><br><span class="line">#bind_ip = 127.0.0.1</span><br><span class="line">bind_ip = 0.0.0.0</span><br><span class="line"></span><br><span class="line">sudo service mongodb restart</span><br><span class="line"></span><br><span class="line">$ sudo netstat -tnlp</span><br><span class="line">Proto Recv-Q Send-Q Local Address   Foreign Address State  PID/Program name</span><br><span class="line">tcp        0      0 0.0.0.0:27017   0.0.0.0:*       LISTEN 1107/mongod</span><br><span class="line">tcp        0      0 0.0.0.0:5000    0.0.0.0:*       LISTEN 2364/python  </span><br><span class="line">tcp        0      0 0.0.0.0:22      0.0.0.0:*       LISTEN 4365/sshd  </span><br></pre></td></tr></table></figure>
+
+<h2 id="mongo-shell"><a href="#mongo-shell" class="headerlink" title="mongo shell"></a>mongo shell</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mongo --host mongodb0.example.com --port 27017</span><br><span class="line">mongo 127.0.0.1:27017/myfb</span><br><span class="line"></span><br><span class="line">mongo --version</span><br><span class="line">MongoDB shell version: 2.6.10</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>see <a target="_blank" rel="noopener" href="https://docs.mongodb.com/manual/mongo/">mongo shell</a></p>
+</blockquote>
+<h3 id="show-dbs-and-collections"><a href="#show-dbs-and-collections" class="headerlink" title="show dbs and collections"></a>show dbs and collections</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&gt; mongo </span><br><span class="line"><span class="comment"># show all dbs</span></span><br><span class="line">&gt; show dbs</span><br><span class="line"></span><br><span class="line"><span class="comment"># display current db</span></span><br><span class="line">&gt;db</span><br><span class="line"><span class="built_in">test</span> (default database)</span><br><span class="line"></span><br><span class="line"><span class="comment"># switch or create db</span></span><br><span class="line">&gt; use mydb</span><br><span class="line">&gt; db.help()</span><br><span class="line"></span><br><span class="line">&gt; show collections</span><br><span class="line">posts</span><br><span class="line">system.indexes</span><br><span class="line"></span><br><span class="line">&gt; db.posts.help()</span><br><span class="line"></span><br><span class="line">&gt; db.posts.find()</span><br></pre></td></tr></table></figure>
+
+<h3 id="drop-db-and-collection"><a href="#drop-db-and-collection" class="headerlink" title="drop db and collection"></a>drop db and collection</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;db.dropDatabase()</span><br><span class="line">&gt;db.posts.drop()</span><br></pre></td></tr></table></figure>
+<h3 id="backup-copy-db"><a href="#backup-copy-db" class="headerlink" title="backup copy db"></a>backup copy db</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;db.copyDatabase(<span class="string">&quot;mydb&quot;</span>,<span class="string">&quot;backup_mydb&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="rename-field"><a href="#rename-field" class="headerlink" title="rename field"></a>rename field</h3><p>see <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/9254351/how-can-i-rename-a-field-for-all-documents-in-mongodb">here</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The `false, true` in the method above are: &#123; upsert:false, multi:true &#125;. </span></span><br><span class="line"><span class="comment"># You need the multi:true to update all your records.</span></span><br><span class="line"></span><br><span class="line">&gt; db.students.update(&#123;&#125;, &#123; <span class="variable">$rename</span>: &#123; <span class="string">&quot;oldname&quot;</span>: <span class="string">&quot;newname&quot;</span> &#125; &#125;, <span class="literal">false</span>, <span class="literal">true</span> )</span><br><span class="line">WriteResult(&#123; <span class="string">&quot;nMatched&quot;</span> : 48130, <span class="string">&quot;nUpserted&quot;</span> : 0, <span class="string">&quot;nModified&quot;</span> : 48130 &#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">#In MongoDB 3.2 you can also use</span></span><br><span class="line">&gt;db.students.updateMany( &#123;&#125;, &#123; <span class="variable">$rename</span>: &#123; <span class="string">&quot;oldname&quot;</span>: <span class="string">&quot;newname&quot;</span> &#125; &#125; )</span><br></pre></td></tr></table></figure>
+
+<h3 id="add-new-field"><a href="#add-new-field" class="headerlink" title="add new field"></a>add new field</h3><p>see <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/7714216/add-new-field-to-every-document-in-a-mongodb-collection">here</a></p>
+<blockquote>
+<p>Same as the updating existing collection field, <code>$set</code> will add a new fields if the specified field does not exist.</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The `false, true` in the method above are: &#123; upsert:false, multi:true &#125;. </span></span><br><span class="line"><span class="comment"># You need the multi:true to update all your records.</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">db.your_collection.update(&#123;&#125;,&#123; <span class="variable">$set</span>: &#123;<span class="string">&quot;new_field&quot;</span>: <span class="string">&quot;field_value&quot;</span>&#125; &#125;,<span class="literal">false</span>,<span class="literal">true</span>)</span><br><span class="line">WriteResult(&#123; <span class="string">&quot;nMatched&quot;</span> : 775471, <span class="string">&quot;nUpserted&quot;</span> : 0, <span class="string">&quot;nModified&quot;</span> : 775471 &#125;)</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="indexes"><a href="#indexes" class="headerlink" title="indexes"></a>indexes</h3><p>syntax</p>
+<pre><code>#db.collection_name.createIndex(&#123;field_name: 1 or -1&#125;)
+db.index_basic.createIndex(&#123;ts_code:1&#125;)
+
+db.index_basic.getIndexes()
+
+db.index_basic.dropIndex(&#123;ts_code:1&#125;)
+db.index_basic.dropIndexes() # can not drop default `_id` index
+</code></pre>
+<blockquote>
+<p>The value 1 is for ascending order and -1 is for descending order</p>
+</blockquote>
+<p>example</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">&gt; db.index_basic.createIndex(&#123;ts_code:1&#125;)</span><br><span class="line">&#123;</span><br><span class="line">        <span class="string">&quot;createdCollectionAutomatically&quot;</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="string">&quot;numIndexesBefore&quot;</span> : 1,</span><br><span class="line">        <span class="string">&quot;numIndexesAfter&quot;</span> : 2,</span><br><span class="line">        <span class="string">&quot;ok&quot;</span> : 1</span><br><span class="line">&#125;</span><br><span class="line">&gt; db.index_basic.getIndexes()</span><br><span class="line">[</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="string">&quot;v&quot;</span> : 1,</span><br><span class="line">                <span class="string">&quot;key&quot;</span> : &#123;</span><br><span class="line">                        <span class="string">&quot;_id&quot;</span> : 1</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="string">&quot;name&quot;</span> : <span class="string">&quot;_id_&quot;</span>,</span><br><span class="line">                <span class="string">&quot;ns&quot;</span> : <span class="string">&quot;stock.index_basic&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="string">&quot;v&quot;</span> : 1,</span><br><span class="line">                <span class="string">&quot;key&quot;</span> : &#123;</span><br><span class="line">                        <span class="string">&quot;ts_code&quot;</span> : 1</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="string">&quot;name&quot;</span> : <span class="string">&quot;ts_code_1&quot;</span>,</span><br><span class="line">                <span class="string">&quot;ns&quot;</span> : <span class="string">&quot;stock.index_basic&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">]</span><br><span class="line">&gt; </span><br><span class="line">&gt; </span><br><span class="line">&gt; db.index_basic.dropIndex(&#123;ts_code:1&#125;)</span><br><span class="line">&#123; <span class="string">&quot;nIndexesWas&quot;</span> : 2, <span class="string">&quot;ok&quot;</span> : 1 &#125;</span><br><span class="line">&gt; db.index_basic.getIndexes()</span><br><span class="line">[</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="string">&quot;v&quot;</span> : 1,</span><br><span class="line">                <span class="string">&quot;key&quot;</span> : &#123;</span><br><span class="line">                        <span class="string">&quot;_id&quot;</span> : 1</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="string">&quot;name&quot;</span> : <span class="string">&quot;_id_&quot;</span>,</span><br><span class="line">                <span class="string">&quot;ns&quot;</span> : <span class="string">&quot;stock.index_basic&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">]</span><br><span class="line">&gt; db.index_basic.<span class="function"><span class="title">dropIndexes</span></span>()</span><br><span class="line">&#123;</span><br><span class="line">        <span class="string">&quot;nIndexesWas&quot;</span> : 1,</span><br><span class="line">        <span class="string">&quot;msg&quot;</span> : <span class="string">&quot;non-_id indexes dropped for collection&quot;</span>,</span><br><span class="line">        <span class="string">&quot;ok&quot;</span> : 1</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="remove-field"><a href="#remove-field" class="headerlink" title="remove field"></a>remove field</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># remove field from all documents</span></span><br><span class="line">&gt; db.stock_basic</span><br><span class="line">&gt; db.stock_basic.findOne()</span><br><span class="line">&gt; db.stock_basic.update(&#123;&#125;,&#123;<span class="variable">$unset</span>: &#123;list_date_obj:1&#125;&#125;,&#123;multi: <span class="literal">true</span>&#125;);</span><br><span class="line">WriteResult(&#123; <span class="string">&quot;nMatched&quot;</span> : 3717, <span class="string">&quot;nUpserted&quot;</span> : 0, <span class="string">&quot;nModified&quot;</span> : 3717 &#125;)</span><br><span class="line">&gt; db.stock_basic.update(&#123;&#125;,&#123;<span class="variable">$unset</span>: &#123;_StockBasic__created:1&#125;&#125;,&#123;multi: <span class="literal">true</span>&#125;);</span><br><span class="line">&gt; db.stock_basic.update(&#123;&#125;,&#123;<span class="variable">$unset</span>: &#123;_StockBasic__updated:1&#125;&#125;,&#123;multi: <span class="literal">true</span>&#125;);</span><br><span class="line">&gt; db.stock_basic.findOne()</span><br></pre></td></tr></table></figure>
+
+<h2 id="mongo-command"><a href="#mongo-command" class="headerlink" title="mongo command"></a>mongo command</h2><h3 id="dump-and-restore-db"><a href="#dump-and-restore-db" class="headerlink" title="dump and restore db"></a>dump and restore db</h3><ul>
+<li>mongoexport &#x2F; mongoimport</li>
+<li>mongodump   &#x2F; mongorestore</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># export db to outdb on node1</span></span><br><span class="line">mongodump --db myfb --out outdb</span><br><span class="line">zip outdb.zip -r outdb/</span><br><span class="line">scp outdb.zip myfb:~/</span><br><span class="line"></span><br><span class="line"><span class="comment"># import db on node2</span></span><br><span class="line">unzip outdb.zip</span><br><span class="line">mongorestore outdb</span><br><span class="line"></span><br><span class="line"><span class="comment"># check db file size</span></span><br><span class="line"><span class="built_in">du</span> -h outdb.zip</span><br><span class="line">742M </span><br><span class="line"></span><br><span class="line"><span class="built_in">du</span> -h outdb</span><br><span class="line">9.1G </span><br><span class="line"></span><br><span class="line"><span class="comment"># check to see </span></span><br><span class="line">mongo</span><br><span class="line">&gt; show dbs;</span><br><span class="line">myfb 3.1G</span><br></pre></td></tr></table></figure>
+<h2 id="mongo-gui"><a href="#mongo-gui" class="headerlink" title="mongo gui"></a>mongo gui</h2><p>Robomongo offically changed it’s name and released two different products <code>Studio 3T</code> and <code>Robo 3T</code>. Old <code>robomongo</code> is now called <code>Robo 3T</code>. <code>Studio 3T</code> is for professionals.</p>
+<pre><code>wget https://download-test.robomongo.org/linux/robo3t-1.3.1-linux-x86_64-7419c406.tar.gz
+
+vim .bashrc
+export PATH=/home/kezunlin/program/robo3t/bin:$PATH
+</code></pre>
+<p>allow mongodb to access from remote.</p>
+<pre><code>vim /etc/mongodb.conf
+#bind_ip = 127.0.0.1
+bind_ip = 0.0.0.0
+</code></pre>
+<blockquote>
+<p>by default, mongodb only allow to access from local.</p>
+</blockquote>
+<p>restart mongodb again</p>
+<pre><code> &gt; sudo service mongodb status
+ mongodb.service - An object/document-oriented database
+   Loaded: loaded (/lib/systemd/system/mongodb.service; enabled; vendor preset: enabled)
+   Active: active (running) since 四 2019-09-26 16:11:03 CST; 7s ago
+     Docs: man:mongod(1)
+ Main PID: 4917 (mongod)
+    Tasks: 10
+   Memory: 3.0G
+      CPU: 70ms
+   CGroup: /system.slice/mongodb.service
+           └─4917 /usr/bin/mongod --config /etc/mongodb.conf
+
+9月 26 16:11:03 node17 systemd[1]: Started An object/document-oriented database.
+9月 26 16:11:03 node17 mongod[4917]: warning: bind_ip of 0.0.0.0 is unnecessary; listens on all ips by default
+</code></pre>
+<p>access from remote now </p>
+<pre><code>robo3t
+</code></pre>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+<h2 id="python-mongodb"><a href="#python-mongodb" class="headerlink" title="python mongodb"></a>python mongodb</h2><pre><code>pip install pymongo
+pip install mongoengine
+</code></pre>
+<blockquote>
+<p>One library that provides a higher abstraction on top of PyMongo is MongoEngine. MongoEngine is an object document mapper (<code>ODM</code>), which is roughly equivalent to a SQL-based object relational mapper (<code>ORM</code>). The abstraction provided by MongoEngine is class-based, so all of the models you create are classes.</p>
+</blockquote>
+<h3 id="pymongo"><a href="#pymongo" class="headerlink" title="pymongo"></a>pymongo</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">test_mongo_client</span>():</span><br><span class="line"></span><br><span class="line">    <span class="keyword">from</span> pymongo <span class="keyword">import</span> MongoClient</span><br><span class="line">    client = MongoClient(<span class="string">&#x27;localhost&#x27;</span>, <span class="number">27017</span>)</span><br><span class="line"></span><br><span class="line">    db = client[<span class="string">&#x27;mydb&#x27;</span>]</span><br><span class="line"></span><br><span class="line">    posts = db.posts</span><br><span class="line">    post_data = &#123;</span><br><span class="line">        <span class="string">&#x27;title&#x27;</span>: <span class="string">&#x27;Python and MongoDB&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;content&#x27;</span>: <span class="string">&#x27;PyMongo is fun, you guys&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;author&#x27;</span>: <span class="string">&#x27;Scott&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    result = posts.insert_one(post_data)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;One post: &#123;0&#125;&#x27;</span>.<span class="built_in">format</span>(result.inserted_id))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    post_1 = &#123;</span><br><span class="line">        <span class="string">&#x27;title&#x27;</span>: <span class="string">&#x27;Python and MongoDB&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;content&#x27;</span>: <span class="string">&#x27;PyMongo is fun, you guys&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;author&#x27;</span>: <span class="string">&#x27;Scott&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    post_2 = &#123;</span><br><span class="line">        <span class="string">&#x27;title&#x27;</span>: <span class="string">&#x27;Virtual Environments&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;content&#x27;</span>: <span class="string">&#x27;Use virtual environments, you guys&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;author&#x27;</span>: <span class="string">&#x27;Scott&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    post_3 = &#123;</span><br><span class="line">        <span class="string">&#x27;title&#x27;</span>: <span class="string">&#x27;Learning Python&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;content&#x27;</span>: <span class="string">&#x27;Learn Python, it is easy&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;author&#x27;</span>: <span class="string">&#x27;Bill&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    new_result = posts.insert_many([post_1, post_2, post_3])</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Multiple posts: &#123;0&#125;&#x27;</span>.<span class="built_in">format</span>(new_result.inserted_ids))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># find one </span></span><br><span class="line">    bills_post = posts.find_one(&#123;<span class="string">&#x27;author&#x27;</span>: <span class="string">&#x27;Bill&#x27;</span>&#125;)</span><br><span class="line">    <span class="built_in">print</span>(bills_post)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># fine many</span></span><br><span class="line">    scotts_posts = posts.find(&#123;<span class="string">&#x27;author&#x27;</span>: <span class="string">&#x27;Scott&#x27;</span>&#125;)</span><br><span class="line">    <span class="built_in">print</span>(scotts_posts)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> post <span class="keyword">in</span> scotts_posts:</span><br><span class="line">        <span class="built_in">print</span>(post)</span><br><span class="line"></span><br><span class="line">    client.close()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h3 id="mongoengine"><a href="#mongoengine" class="headerlink" title="mongoengine"></a>mongoengine</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mongoengine <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test_mongo_engine</span>():</span><br><span class="line">    <span class="comment"># define collection </span></span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">Post</span>(<span class="title class_ inherited__">Document</span>):</span><br><span class="line">        title = StringField(required=<span class="literal">True</span>, max_length=<span class="number">200</span>)</span><br><span class="line">        content = StringField(required=<span class="literal">True</span>)</span><br><span class="line">        author = StringField(required=<span class="literal">True</span>, max_length=<span class="number">50</span>)</span><br><span class="line">        published = DateTimeField(default=datetime.datetime.now)</span><br><span class="line"></span><br><span class="line">    connect(<span class="string">&#x27;mydb&#x27;</span>, </span><br><span class="line">        host=<span class="string">&#x27;localhost&#x27;</span>, </span><br><span class="line">        port=<span class="number">27017</span>, </span><br><span class="line">        alias=<span class="string">&quot;default&quot;</span> <span class="comment"># must be `default`</span></span><br><span class="line">    )</span><br><span class="line">    <span class="comment"># mongoengine.connection.MongoEngineConnectionError: You have not defined a default connection</span></span><br><span class="line"></span><br><span class="line">    post_1 = Post(</span><br><span class="line">        title=<span class="string">&#x27;Sample Post&#x27;</span>,</span><br><span class="line">        content=<span class="string">&#x27;Some engaging content&#x27;</span>,</span><br><span class="line">        author=<span class="string">&#x27;Scott&#x27;</span></span><br><span class="line">    )</span><br><span class="line">    post_1.save()       <span class="comment"># This will perform an insert</span></span><br><span class="line">    <span class="built_in">print</span>(post_1.title)</span><br><span class="line">    <span class="built_in">print</span>(post_1.<span class="built_in">id</span>)</span><br><span class="line"></span><br><span class="line">    post_1.title = <span class="string">&#x27;A Better Post Title&#x27;</span></span><br><span class="line">    post_1.save()       <span class="comment"># This will perform an atomic edit on &quot;title&quot;</span></span><br><span class="line">    <span class="built_in">print</span>(post_1.title)</span><br><span class="line">    <span class="built_in">print</span>(post_1.<span class="built_in">id</span>)</span><br><span class="line"></span><br><span class="line">    disconnect(alias=<span class="string">&#x27;default&#x27;</span>)</span><br><span class="line"></span><br><span class="line">test_mongo_engine()</span><br></pre></td></tr></table></figure>
+
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://docs.mongodb.com/manual/tutorial/">mongodb tutorial</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.mongodb.com/blog/post/getting-started-with-python-and-mongodb">getting-started-with-python-and-mongodb</a></li>
+<li><a target="_blank" rel="noopener" href="https://realpython.com/introduction-to-mongodb-and-python/">introduction-to-mongodb-and-python</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/2781682/mongodb-orm-for-python">mongodb-orm-for-python</a></li>
+<li><a target="_blank" rel="noopener" href="http://mongoengine.org/">mongoengine</a></li>
+<li><a target="_blank" rel="noopener" href="http://docs.mongoengine.org/tutorial.html">mongoengine tutorial</a></li>
+<li><a target="_blank" rel="noopener" href="https://robomongo.org/">robomongo</a></li>
+</ul>
+<h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
+<li>20190926: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/mongodb/" rel="tag"># mongodb</a>
+              <a href="/tags/mongo/" rel="tag"># mongo</a>
+              <a href="/tags/pymongo/" rel="tag"># pymongo</a>
+              <a href="/tags/mongoengine/" rel="tag"># mongoengine</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/csharp-key-press-event/" rel="prev" title="csharp key press event tutorial and app.config">
+      <i class="fa fa-chevron-left"></i> csharp key press event tutorial and app.config
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/flask-jinja-templates/" rel="next" title="tutorial to use python flask jinja templates and a realtime video demo">
+      tutorial to use python flask jinja templates and a realtime video demo <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#install-mongodb"><span class="nav-number">1.1.</span> <span class="nav-text">install mongodb</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#allow-remote-access"><span class="nav-number">1.2.</span> <span class="nav-text">allow remote access</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mongo-shell"><span class="nav-number">1.3.</span> <span class="nav-text">mongo shell</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#show-dbs-and-collections"><span class="nav-number">1.3.1.</span> <span class="nav-text">show dbs and collections</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#drop-db-and-collection"><span class="nav-number">1.3.2.</span> <span class="nav-text">drop db and collection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#backup-copy-db"><span class="nav-number">1.3.3.</span> <span class="nav-text">backup copy db</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rename-field"><span class="nav-number">1.3.4.</span> <span class="nav-text">rename field</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#add-new-field"><span class="nav-number">1.3.5.</span> <span class="nav-text">add new field</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#indexes"><span class="nav-number">1.3.6.</span> <span class="nav-text">indexes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#remove-field"><span class="nav-number">1.3.7.</span> <span class="nav-text">remove field</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mongo-command"><span class="nav-number">1.4.</span> <span class="nav-text">mongo command</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dump-and-restore-db"><span class="nav-number">1.4.1.</span> <span class="nav-text">dump and restore db</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mongo-gui"><span class="nav-number">1.5.</span> <span class="nav-text">mongo gui</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python-mongodb"><span class="nav-number">1.6.</span> <span class="nav-text">python mongodb</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pymongo"><span class="nav-number">1.6.1.</span> <span class="nav-text">pymongo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mongoengine"><span class="nav-number">1.6.2.</span> <span class="nav-text">mongoengine</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

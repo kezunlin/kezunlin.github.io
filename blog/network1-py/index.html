@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="network1.py123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899">
+<meta property="og:type" content="article">
+<meta property="og:title" content="network1.py">
+<meta property="og:url" content="https://kezunlin.me/blog/network1-py/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="network1.py123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-08-07T02:29:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="sgd">
+<meta property="article:tag" content="neural networks and deep learning">
+<meta property="article:tag" content="mlp">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/network1-py/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>network1.py | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/network1-py/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          network1.py
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-08-07 10:29:00" itemprop="dateCreated datePublished" datetime="2018-08-07T10:29:00+08:00">2018-08-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deep-learning/" itemprop="url" rel="index"><span itemprop="name">deep learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="network1-py"><a href="#network1-py" class="headerlink" title="network1.py"></a>network1.py</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">network.py</span></span><br><span class="line"><span class="string">~~~~~~~~~~</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">A module to implement the stochastic gradient descent learning</span></span><br><span class="line"><span class="string">algorithm for a feedforward neural network.  Gradients are calculated</span></span><br><span class="line"><span class="string">using backpropagation.  Note that I have focused on making the code</span></span><br><span class="line"><span class="string">simple, easily readable, and easily modifiable.  It is not optimized,</span></span><br><span class="line"><span class="string">and omits many desirable features.</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#### Libraries</span></span><br><span class="line"><span class="comment"># Standard library</span></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="comment"># Third-party libraries</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Network</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, sizes</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;The list ``sizes`` contains the number of neurons in the</span></span><br><span class="line"><span class="string">        respective layers of the network.  For example, if the list</span></span><br><span class="line"><span class="string">        was [2, 3, 1] then it would be a three-layer network, with the</span></span><br><span class="line"><span class="string">        first layer containing 2 neurons, the second layer 3 neurons,</span></span><br><span class="line"><span class="string">        and the third layer 1 neuron.  The biases and weights for the</span></span><br><span class="line"><span class="string">        network are initialized randomly, using a Gaussian</span></span><br><span class="line"><span class="string">        distribution with mean 0, and variance 1.  Note that the first</span></span><br><span class="line"><span class="string">        layer is assumed to be an input layer, and by convention we</span></span><br><span class="line"><span class="string">        won&#x27;t set any biases for those neurons, since biases are only</span></span><br><span class="line"><span class="string">        ever used in computing the outputs from later layers.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="variable language_">self</span>.num_layers = <span class="built_in">len</span>(sizes)</span><br><span class="line">        <span class="variable language_">self</span>.sizes = sizes</span><br><span class="line">        <span class="variable language_">self</span>.biases = [np.random.randn(y, <span class="number">1</span>) <span class="keyword">for</span> y <span class="keyword">in</span> sizes[<span class="number">1</span>:]]</span><br><span class="line">        <span class="variable language_">self</span>.weights = [np.random.randn(y, x)</span><br><span class="line">                        <span class="keyword">for</span> x, y <span class="keyword">in</span> <span class="built_in">zip</span>(sizes[:-<span class="number">1</span>], sizes[<span class="number">1</span>:])]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">feedforward</span>(<span class="params">self, a</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Return the output of the network if ``a`` is input.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">for</span> b, w <span class="keyword">in</span> <span class="built_in">zip</span>(<span class="variable language_">self</span>.biases, <span class="variable language_">self</span>.weights):</span><br><span class="line">            a = sigmoid(np.dot(w, a)+b)</span><br><span class="line">        <span class="keyword">return</span> a</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">SGD</span>(<span class="params">self, training_data, epochs, mini_batch_size, eta,</span></span><br><span class="line"><span class="params">            test_data=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Train the neural network using mini-batch stochastic</span></span><br><span class="line"><span class="string">        gradient descent.  The ``training_data`` is a list of tuples</span></span><br><span class="line"><span class="string">        ``(x, y)`` representing the training inputs and the desired</span></span><br><span class="line"><span class="string">        outputs.  The other non-optional parameters are</span></span><br><span class="line"><span class="string">        self-explanatory.  If ``test_data`` is provided then the</span></span><br><span class="line"><span class="string">        network will be evaluated against the test data after each</span></span><br><span class="line"><span class="string">        epoch, and partial progress printed out.  This is useful for</span></span><br><span class="line"><span class="string">        tracking progress, but slows things down substantially.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> test_data: n_test = <span class="built_in">len</span>(test_data)</span><br><span class="line">        n = <span class="built_in">len</span>(training_data)</span><br><span class="line">        num_batches = n/mini_batch_size</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> xrange(epochs):</span><br><span class="line">            random.shuffle(training_data)</span><br><span class="line">            <span class="keyword">for</span> k <span class="keyword">in</span> xrange(<span class="number">0</span>,num_batches):</span><br><span class="line">                mini_batch = training_data[k*mini_batch_size : (k+<span class="number">1</span>)*mini_batch_size]</span><br><span class="line">                <span class="variable language_">self</span>.update_mini_batch(mini_batch, eta)</span><br><span class="line">            <span class="keyword">if</span> test_data:</span><br><span class="line">                <span class="built_in">print</span> <span class="string">&quot;Epoch &#123;0&#125;: &#123;1&#125; / &#123;2&#125;&quot;</span>.<span class="built_in">format</span>(j, <span class="variable language_">self</span>.evaluate(test_data), n_test)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="built_in">print</span> <span class="string">&quot;Epoch &#123;0&#125; complete&quot;</span>.<span class="built_in">format</span>(j)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">calculate_sum_derivatives_of_mini_batch</span>(<span class="params">self,mini_batch</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        计算m个样本的总梯度和。</span></span><br><span class="line"><span class="string">        利用反向传播计算每一个样本(x,y)对应的梯度。</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        nabla_b = [np.zeros(b.shape) <span class="keyword">for</span> b <span class="keyword">in</span> <span class="variable language_">self</span>.biases]</span><br><span class="line">        nabla_w = [np.zeros(w.shape) <span class="keyword">for</span> w <span class="keyword">in</span> <span class="variable language_">self</span>.weights]</span><br><span class="line">        <span class="keyword">for</span> x, y <span class="keyword">in</span> mini_batch:</span><br><span class="line">            <span class="comment"># 给定一个样本X,利用反向传播算法计算对应w,b的梯度</span></span><br><span class="line">            delta_nabla_b, delta_nabla_w = <span class="variable language_">self</span>.backprop(x, y)</span><br><span class="line">            <span class="comment"># 对m个样本的梯度进行累计求和</span></span><br><span class="line">            nabla_b = [nb+dnb <span class="keyword">for</span> nb, dnb <span class="keyword">in</span> <span class="built_in">zip</span>(nabla_b, delta_nabla_b)]</span><br><span class="line">            nabla_w = [nw+dnw <span class="keyword">for</span> nw, dnw <span class="keyword">in</span> <span class="built_in">zip</span>(nabla_w, delta_nabla_w)]</span><br><span class="line">        <span class="keyword">return</span> nabla_b,nabla_w</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">update_mini_batch</span>(<span class="params">self, mini_batch, eta</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Update the network&#x27;s weights and biases by applying</span></span><br><span class="line"><span class="string">        gradient descent using backpropagation to a single mini batch.</span></span><br><span class="line"><span class="string">        The &quot;mini_batch&quot; is a list of tuples &quot;(x, y)&quot;, and &quot;eta&quot;</span></span><br><span class="line"><span class="string">        is the learning rate.&quot;&quot;&quot;</span></span><br><span class="line">        m = <span class="built_in">len</span>(mini_batch)</span><br><span class="line">        nabla_b,nabla_w = <span class="variable language_">self</span>.calculate_sum_derivatives_of_mini_batch(mini_batch)</span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">self</span>.weights = [w-(eta/m)*nw <span class="keyword">for</span> w, nw <span class="keyword">in</span> <span class="built_in">zip</span>(<span class="variable language_">self</span>.weights, nabla_w)]</span><br><span class="line">        <span class="variable language_">self</span>.biases =  [b-(eta/m)*nb <span class="keyword">for</span> b, nb <span class="keyword">in</span> <span class="built_in">zip</span>(<span class="variable language_">self</span>.biases,  nabla_b)]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">backprop</span>(<span class="params">self, x, y</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Return a tuple &quot;(nabla_b, nabla_w)&quot; representing the</span></span><br><span class="line"><span class="string">        gradient for the cost function C_x.  &quot;nabla_b&quot; and</span></span><br><span class="line"><span class="string">        &quot;nabla_w&quot; are layer-by-layer lists of numpy arrays, similar</span></span><br><span class="line"><span class="string">        to &quot;self.biases&quot; and &quot;self.weights&quot;.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment"># 初始化nb,nw,结构和b,w一样</span></span><br><span class="line">        nabla_b = [np.zeros(b.shape) <span class="keyword">for</span> b <span class="keyword">in</span> <span class="variable language_">self</span>.biases]</span><br><span class="line">        nabla_w = [np.zeros(w.shape) <span class="keyword">for</span> w <span class="keyword">in</span> <span class="variable language_">self</span>.weights]</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># feedforward</span></span><br><span class="line">        <span class="comment"># 执行算法的feedforward阶段</span></span><br><span class="line">        <span class="comment">#　(1)初始化x作为a_1</span></span><br><span class="line">        activation = x</span><br><span class="line">        activations = [x] <span class="comment"># list to store all the activations, layer by layer</span></span><br><span class="line">        zs = [] <span class="comment"># list to store all the z vectors, layer by layer</span></span><br><span class="line">        <span class="comment"># (2)l=2,....L层，分别计算z_l,a_l并且保存下来。</span></span><br><span class="line">        <span class="keyword">for</span> b, w <span class="keyword">in</span> <span class="built_in">zip</span>(<span class="variable language_">self</span>.biases, <span class="variable language_">self</span>.weights):</span><br><span class="line">            z = np.dot(w, activation)+b</span><br><span class="line">            zs.append(z)</span><br><span class="line">            activation = sigmoid(z)</span><br><span class="line">            activations.append(activation)</span><br><span class="line">        </span><br><span class="line">        <span class="comment">#========================================================================</span></span><br><span class="line">        <span class="comment"># 先计算所有的误差delta，最后计算所有层的梯度nb,nw，代码可读性更高一些</span></span><br><span class="line">        <span class="comment">#========================================================================</span></span><br><span class="line">        <span class="comment"># method2</span></span><br><span class="line">        <span class="comment"># backward pass</span></span><br><span class="line">        <span class="comment"># 执行算法的backward阶段</span></span><br><span class="line">        <span class="comment"># (3)初始化第L层的误差,delta_L　= cost(a_L,y) * sigmoid_prime(z_L)</span></span><br><span class="line">        l = -<span class="number">1</span></span><br><span class="line">        delta = <span class="variable language_">self</span>.cost_derivative_of_a_L(activations[l], y) * sigmoid_prime(zs[l])</span><br><span class="line">        deltas = [delta] <span class="comment"># list to store all the errors,layer by layer</span></span><br><span class="line">        <span class="comment"># (4)初始化l=L-1,....2层的误差,delta_l = np.dot(w_l+1^T,delta_l+1)* sigmoid_prime(z_l)</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> xrange(<span class="number">2</span>, <span class="variable language_">self</span>.num_layers):</span><br><span class="line">            l = -i <span class="comment">#(-２代表L-1,-3代表L-2,-(L-1)代表2)</span></span><br><span class="line">            delta = np.dot(<span class="variable language_">self</span>.weights[l+<span class="number">1</span>].transpose(), deltas[l+<span class="number">1</span>]) * sigmoid_prime(zs[l])</span><br><span class="line">            deltas.insert(<span class="number">0</span>,delta) <span class="comment"># 确保误差的顺序，从后往前计算，所以需要insert在数组的最前面</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">#(5)l=L,L-1,....2层，计算所有的梯度向量nb,nw</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> xrange(<span class="number">1</span>, <span class="variable language_">self</span>.num_layers):</span><br><span class="line">            l = -i <span class="comment">#(-1,-2,....-(L-1))</span></span><br><span class="line">            nabla_b[l] = deltas[l]</span><br><span class="line">            nabla_w[l] = np.dot(deltas[l], activations[l-<span class="number">1</span>].transpose())</span><br><span class="line">            </span><br><span class="line">        <span class="keyword">return</span> (nabla_b, nabla_w)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">evaluate</span>(<span class="params">self, test_data</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Return the number of test inputs for which the neural</span></span><br><span class="line"><span class="string">        network outputs the correct result. Note that the neural</span></span><br><span class="line"><span class="string">        network&#x27;s output is assumed to be the index of whichever</span></span><br><span class="line"><span class="string">        neuron in the final layer has the highest activation.&quot;&quot;&quot;</span></span><br><span class="line">        </span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        l = [0,1,0,0,0,0,0,0,0,0]</span></span><br><span class="line"><span class="string">        a = np.array(l).reshape(10,1)</span></span><br><span class="line"><span class="string">        np.argmax(a) #输出向量对应的数字１</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        test_results = [(1,1),(2,2),(3,3),(1,9)]</span></span><br><span class="line"><span class="string">        [int(x == y) for (x, y) in test_results] </span></span><br><span class="line"><span class="string">        #[1, 1, 1, 0]</span></span><br><span class="line"><span class="string">        sum([int(x == y) for (x, y) in test_results])</span></span><br><span class="line"><span class="string">        #3</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        </span><br><span class="line">        test_results = [(np.argmax(<span class="variable language_">self</span>.feedforward(x)), y)</span><br><span class="line">                        <span class="keyword">for</span> (x, y) <span class="keyword">in</span> test_data]</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">sum</span>(<span class="built_in">int</span>(x == y) <span class="keyword">for</span> (x, y) <span class="keyword">in</span> test_results)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">cost_derivative_of_a_L</span>(<span class="params">self, output_activations, y</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Return the vector of partial derivatives \partial C_x /</span></span><br><span class="line"><span class="string">        \partial a for the output activations.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> (output_activations-y)</span><br><span class="line"></span><br><span class="line"><span class="comment">#### Miscellaneous functions</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sigmoid</span>(<span class="params">z</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;The sigmoid function.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">1.0</span>/(<span class="number">1.0</span>+np.exp(-z))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sigmoid_prime</span>(<span class="params">z</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Derivative of the sigmoid function.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> sigmoid(z)*(<span class="number">1</span>-sigmoid(z))</span><br></pre></td></tr></table></figure>
+
+<h1 id="mnist-loader"><a href="#mnist-loader" class="headerlink" title="mnist_loader"></a>mnist_loader</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">mnist_loader</span></span><br><span class="line"><span class="string">~~~~~~~~~~~~</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">A library to load the MNIST image data.  For details of the data</span></span><br><span class="line"><span class="string">structures that are returned, see the doc strings for ``load_data``</span></span><br><span class="line"><span class="string">and ``load_data_wrapper``.  In practice, ``load_data_wrapper`` is the</span></span><br><span class="line"><span class="string">function usually called by our neural network code.</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#### Libraries</span></span><br><span class="line"><span class="comment"># Standard library</span></span><br><span class="line"><span class="keyword">import</span> cPickle</span><br><span class="line"><span class="keyword">import</span> gzip</span><br><span class="line"></span><br><span class="line"><span class="comment"># Third-party libraries</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">load_data</span>():</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Return the MNIST data as a tuple containing the training data,</span></span><br><span class="line"><span class="string">    the validation data, and the test data.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    The ``training_data`` is returned as a tuple with two entries.</span></span><br><span class="line"><span class="string">    The first entry contains the actual training images.  This is a</span></span><br><span class="line"><span class="string">    numpy ndarray with 50,000 entries.  Each entry is, in turn, a</span></span><br><span class="line"><span class="string">    numpy ndarray with 784 values, representing the 28 * 28 = 784</span></span><br><span class="line"><span class="string">    pixels in a single MNIST image.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    The second entry in the ``training_data`` tuple is a numpy ndarray</span></span><br><span class="line"><span class="string">    containing 50,000 entries.  Those entries are just the digit</span></span><br><span class="line"><span class="string">    values (0...9) for the corresponding images contained in the first</span></span><br><span class="line"><span class="string">    entry of the tuple.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    The ``validation_data`` and ``test_data`` are similar, except</span></span><br><span class="line"><span class="string">    each contains only 10,000 images.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    This is a nice data format, but for use in neural networks it&#x27;s</span></span><br><span class="line"><span class="string">    helpful to modify the format of the ``training_data`` a little.</span></span><br><span class="line"><span class="string">    That&#x27;s done in the wrapper function ``load_data_wrapper()``, see</span></span><br><span class="line"><span class="string">    below.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    f = gzip.<span class="built_in">open</span>(<span class="string">&#x27;../data/mnist.pkl.gz&#x27;</span>, <span class="string">&#x27;rb&#x27;</span>)</span><br><span class="line">    training_data, validation_data, test_data = cPickle.load(f)</span><br><span class="line">    f.close()</span><br><span class="line">    <span class="keyword">return</span> (training_data, validation_data, test_data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">load_data_wrapper</span>():</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Return a tuple containing ``(training_data, validation_data,</span></span><br><span class="line"><span class="string">    test_data)``. Based on ``load_data``, but the format is more</span></span><br><span class="line"><span class="string">    convenient for use in our implementation of neural networks.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    In particular, ``training_data`` is a list containing 50,000</span></span><br><span class="line"><span class="string">    2-tuples ``(x, y)``.  ``x`` is a 784-dimensional numpy.ndarray</span></span><br><span class="line"><span class="string">    containing the input image.  ``y`` is a 10-dimensional</span></span><br><span class="line"><span class="string">    numpy.ndarray representing the unit vector corresponding to the</span></span><br><span class="line"><span class="string">    correct digit for ``x``.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    ``validation_data`` and ``test_data`` are lists containing 10,000</span></span><br><span class="line"><span class="string">    2-tuples ``(x, y)``.  In each case, ``x`` is a 784-dimensional</span></span><br><span class="line"><span class="string">    numpy.ndarry containing the input image, and ``y`` is the</span></span><br><span class="line"><span class="string">    corresponding classification, i.e., the digit values (integers)</span></span><br><span class="line"><span class="string">    corresponding to ``x``.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Obviously, this means we&#x27;re using slightly different formats for</span></span><br><span class="line"><span class="string">    the training data and the validation / test data.  These formats</span></span><br><span class="line"><span class="string">    turn out to be the most convenient for use in our neural network</span></span><br><span class="line"><span class="string">    code.&quot;&quot;&quot;</span></span><br><span class="line">    tr_d, va_d, te_d = load_data()</span><br><span class="line">    <span class="comment"># train</span></span><br><span class="line">    training_inputs = [np.reshape(x, (<span class="number">784</span>, <span class="number">1</span>)) <span class="keyword">for</span> x <span class="keyword">in</span> tr_d[<span class="number">0</span>]]</span><br><span class="line">    <span class="comment"># vector train_y, while val and test y are integers.</span></span><br><span class="line">    training_results = [vectorized_result(y) <span class="keyword">for</span> y <span class="keyword">in</span> tr_d[<span class="number">1</span>]] </span><br><span class="line">    training_data = <span class="built_in">zip</span>(training_inputs, training_results)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># val</span></span><br><span class="line">    validation_inputs = [np.reshape(x, (<span class="number">784</span>, <span class="number">1</span>)) <span class="keyword">for</span> x <span class="keyword">in</span> va_d[<span class="number">0</span>]]</span><br><span class="line">    validation_data = <span class="built_in">zip</span>(validation_inputs, va_d[<span class="number">1</span>])</span><br><span class="line">    <span class="comment"># test</span></span><br><span class="line">    test_inputs = [np.reshape(x, (<span class="number">784</span>, <span class="number">1</span>)) <span class="keyword">for</span> x <span class="keyword">in</span> te_d[<span class="number">0</span>]]</span><br><span class="line">    test_data = <span class="built_in">zip</span>(test_inputs, te_d[<span class="number">1</span>])</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> (training_data, validation_data, test_data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">vectorized_result</span>(<span class="params">j</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Return a 10-dimensional unit vector with a 1.0 in the jth</span></span><br><span class="line"><span class="string">    position and zeroes elsewhere.  This is used to convert a digit</span></span><br><span class="line"><span class="string">    (0...9) into a corresponding desired output from the neural</span></span><br><span class="line"><span class="string">    network.&quot;&quot;&quot;</span></span><br><span class="line">    e = np.zeros((<span class="number">10</span>, <span class="number">1</span>))</span><br><span class="line">    e[j] = <span class="number">1.0</span></span><br><span class="line">    <span class="keyword">return</span> e</span><br></pre></td></tr></table></figure>
+
+<h1 id="test"><a href="#test" class="headerlink" title="test"></a>test</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> mnist_loader</span><br><span class="line"><span class="keyword">from</span> ke_network <span class="keyword">import</span> Network</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    train,val,test = mnist_loader.load_data_wrapper()</span><br><span class="line">    epoch = <span class="number">30</span></span><br><span class="line">    mini_batch_size  = <span class="number">10</span></span><br><span class="line">    eta = <span class="number">3.0</span></span><br><span class="line">    net = Network([<span class="number">784</span>,<span class="number">30</span>,<span class="number">10</span>])</span><br><span class="line">    net.SGD(train,epoch,mini_batch_size,eta,test_data=test)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    test()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<pre><code>Epoch 0: 9135 / 10000
+Epoch 1: 9238 / 10000
+Epoch 2: 9337 / 10000
+Epoch 3: 9345 / 10000
+Epoch 4: 9393 / 10000
+Epoch 5: 9389 / 10000
+Epoch 6: 9419 / 10000
+Epoch 7: 9410 / 10000
+</code></pre>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180807: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/sgd/" rel="tag"># sgd</a>
+              <a href="/tags/neural-networks-and-deep-learning/" rel="tag"># neural networks and deep learning</a>
+              <a href="/tags/mlp/" rel="tag"># mlp</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/numpy-random-shuffle-and-theano-shuffle/" rel="prev" title="python numpy random shuffle and theano shuffle">
+      <i class="fa fa-chevron-left"></i> python numpy random shuffle and theano shuffle
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/network2-py/" rel="next" title="network2.py">
+      network2.py <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#network1-py"><span class="nav-number">1.</span> <span class="nav-text">network1.py</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mnist-loader"><span class="nav-number"></span> <span class="nav-text">mnist_loader</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#test"><span class="nav-number"></span> <span class="nav-text">test</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">1.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">2.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="PyTorch for Pythoninstall pytorch from anaconda12345678910conda info --envsconda activate py35# newest version# 1.1.0 pytorch&#x2F;0.3.0 torchvisionconda install pytorch torchvision cudatoolkit&#x3D;9.0 -c pyto">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tutorial to compile and use pytorch on ubuntu 16.04">
+<meta property="og:url" content="https://kezunlin.me/blog/pytorch-tutorial-on-ubuntu-16-04/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="PyTorch for Pythoninstall pytorch from anaconda12345678910conda info --envsconda activate py35# newest version# 1.1.0 pytorch&#x2F;0.3.0 torchvisionconda install pytorch torchvision cudatoolkit&#x3D;9.0 -c pyto">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-06-26T08:13:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="pytorch">
+<meta property="article:tag" content="conda">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/pytorch-tutorial-on-ubuntu-16-04/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>tutorial to compile and use pytorch on ubuntu 16.04 | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/pytorch-tutorial-on-ubuntu-16-04/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          tutorial to compile and use pytorch on ubuntu 16.04
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-06-26 16:13:00" itemprop="dateCreated datePublished" datetime="2019-06-26T16:13:00+08:00">2019-06-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deep-learning/" itemprop="url" rel="index"><span itemprop="name">deep learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="PyTorch-for-Python"><a href="#PyTorch-for-Python" class="headerlink" title="PyTorch for Python"></a>PyTorch for Python</h2><h3 id="install-pytorch-from-anaconda"><a href="#install-pytorch-from-anaconda" class="headerlink" title="install pytorch from anaconda"></a><del>install pytorch from anaconda</del></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">conda info --envs</span><br><span class="line">conda activate py35</span><br><span class="line"></span><br><span class="line"><span class="comment"># newest version</span></span><br><span class="line"><span class="comment"># 1.1.0 pytorch/0.3.0 torchvision</span></span><br><span class="line">conda install pytorch torchvision cudatoolkit=9.0 -c pytorch</span><br><span class="line"></span><br><span class="line"><span class="comment"># old version [NOT]</span></span><br><span class="line"><span class="comment"># 0.4.1 pytorch/0.2.1 torchvision</span></span><br><span class="line">conda install pytorch=0.4.1 cuda90 -c pytorch</span><br></pre></td></tr></table></figure>
+
+<p>output </p>
+<pre><code>The following NEW packages will be INSTALLED:
+
+  pytorch            pytorch/linux-64::pytorch-1.1.0-py3.5_cuda9.0.176_cudnn7.5.1_0
+  torchvision        pytorch/linux-64::torchvision-0.3.0-py35_cu9.0.176_1
+</code></pre>
+<blockquote>
+<p>download from channel <code>pytorch</code> will cost much time!<br>下载<code>pytorch/linux-64::pytorch-1.1.0-py3.5_cuda9.0.176_cudnn7.5.1_0</code>速度非常慢！</p>
+</blockquote>
+<h3 id="install-pytorch-from-tsinghua"><a href="#install-pytorch-from-tsinghua" class="headerlink" title="install pytorch from tsinghua"></a>install pytorch from tsinghua</h3><h4 id="add-tsinghua-pytorch-channels"><a href="#add-tsinghua-pytorch-channels" class="headerlink" title="add tsinghua pytorch channels"></a>add tsinghua pytorch channels</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/</span><br><span class="line"><span class="comment"># for legacy win-64</span></span><br><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/peterjc123/</span><br><span class="line">conda config --<span class="built_in">set</span> show_channel_urls <span class="built_in">yes</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>使用anaconda官方pytorch源非常慢，用清华源代替。<br>see <a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/">tsinghua anaconda</a></p>
+</blockquote>
+<p><code>cat ～/.condarc</code></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">channels:</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/</span><br><span class="line">  - defaults</span><br></pre></td></tr></table></figure>
+
+<h4 id="install-pytorch-from-tsinghua-1"><a href="#install-pytorch-from-tsinghua-1" class="headerlink" title="install pytorch from tsinghua"></a>install pytorch from tsinghua</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">conda create --name torch python==3.7</span><br><span class="line">conda activate torch</span><br><span class="line"></span><br><span class="line">conda install -y pytorch torchvision</span><br><span class="line">conda install -y scikit-learn scikit-image pandas matplotlib pillow opencv</span><br></pre></td></tr></table></figure>
+
+<p>The following NEW packages will be INSTALLED:</p>
+<pre><code>  pytorch            anaconda/cloud/pytorch/linux-64::pytorch-1.1.0-py3.5_cuda9.0.176_cudnn7.5.1_0
+  torchvision        anaconda/cloud/pytorch/linux-64::torchvision-0.3.0-py35_cu9.0.176_1
+</code></pre>
+<h3 id="test-pytorch"><a href="#test-pytorch" class="headerlink" title="test pytorch"></a>test pytorch</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import torch</span><br><span class="line"><span class="built_in">print</span>(torch.__version__)</span><br><span class="line"><span class="string">&#x27;1.1.0&#x27;</span></span><br><span class="line">```   </span><br><span class="line">or </span><br><span class="line">```bash</span><br><span class="line">python -c <span class="string">&#x27;import torch; print(torch.cuda.is_available())&#x27;</span></span><br><span class="line"><span class="comment">#True</span></span><br></pre></td></tr></table></figure>
+<h3 id="pre-trained-models"><a href="#pre-trained-models" class="headerlink" title="pre-trained models"></a>pre-trained models</h3><p>pre-trained model saved to <code>/home/kezunlin/.cache/torch/checkpoints/</code></p>
+<p>Downloading: “<a target="_blank" rel="noopener" href="https://download.pytorch.org/models/shufflenetv2_x0.5-f707e7126e.pth">https://download.pytorch.org/models/shufflenetv2_x0.5-f707e7126e.pth</a>“ to &#x2F;home&#x2F;kezunlin&#x2F;.cache&#x2F;torch&#x2F;checkpoints&#x2F;shufflenetv2_x0.5-f707e7126e.pth</p>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+<h2 id="PyTorch-for-C"><a href="#PyTorch-for-C" class="headerlink" title="PyTorch for C++"></a>PyTorch for C++</h2><h3 id="download-LibTorch"><a href="#download-LibTorch" class="headerlink" title="download LibTorch"></a>download LibTorch</h3><p>download from <a target="_blank" rel="noopener" href="https://download.pytorch.org/libtorch/cu90/libtorch-shared-with-deps-latest.zip">LibTorch</a></p>
+<h3 id="compile-from-source"><a href="#compile-from-source" class="headerlink" title="compile from source"></a>compile from source</h3><h4 id="compile-pytorch"><a href="#compile-pytorch" class="headerlink" title="compile pytorch"></a>compile pytorch</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># method 1</span></span><br><span class="line">git <span class="built_in">clone</span> --recursive https://github.com/pytorch/pytorch</span><br><span class="line"><span class="built_in">cd</span> pytorch</span><br><span class="line"></span><br><span class="line"><span class="comment"># method 2, if you are updating an existing checkout</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/pytorch/pytorch</span><br><span class="line"><span class="built_in">cd</span> pytorch </span><br><span class="line">git submodule <span class="built_in">sync</span></span><br><span class="line">git submodule update --init --recursive</span><br><span class="line">```    </span><br><span class="line">check tags </span><br><span class="line">```bash</span><br><span class="line">git tag -l </span><br><span class="line"></span><br><span class="line">v0.4.0</span><br><span class="line">v0.4.1</span><br><span class="line">v1.0.0</span><br><span class="line">v1.0.1</span><br><span class="line">v1.0rc0</span><br><span class="line">v1.0rc1</span><br><span class="line">v1.1.0</span><br></pre></td></tr></table></figure>
+
+<p>now compile </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout v1.1.0</span><br><span class="line"><span class="built_in">mkdir</span> build &amp;&amp; <span class="built_in">cd</span> build &amp;&amp; cmake-gui ..</span><br></pre></td></tr></table></figure>
+
+<p>with configs</p>
+<pre><code>BUILD_PYTHON OFF
+</code></pre>
+<blockquote>
+<p>be sure to use <code>stable version 1.1.0</code> from <a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/tree/v1.1.0">here</a> instead of latest version 20190724 (<code>unstable version 1.2.0</code>)<br>because error will occurs when load models.</p>
+</blockquote>
+<ul>
+<li><p>for 1.1.0:  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">std::shared_ptr&lt;torch::jit::script::Module&gt; <span class="keyword">module</span> = torch::jit::<span class="built_in">load</span>(<span class="string">&quot;./model.pt&quot;</span>);</span><br></pre></td></tr></table></figure></li>
+<li><p>for latest 1.2.0</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch::jit::script::Module <span class="keyword">module</span> = torch::jit::<span class="built_in">load</span>(<span class="string">&quot;./model.pt&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>configure output </p>
+<p>  ******** Summary ********<br>  General:<br>CMake version         : 3.5.1<br>CMake command         : &#x2F;usr&#x2F;bin&#x2F;cmake<br>System                : Linux<br>C++ compiler          : &#x2F;usr&#x2F;bin&#x2F;c++<br>C++ compiler id       : GNU<br>C++ compiler version  : 5.4.0<br>BLAS                  : MKL<br>CXX flags             :  -fvisibility-inlines-hidden -fopenmp -O2 -fPIC -Wno-narrowing -Wall -Wextra -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-strict-overflow -Wno-strict-aliasing -Wno-error&#x3D;deprecated-declarations -Wno-error&#x3D;pedantic -Wno-error&#x3D;redundant-decls -Wno-error&#x3D;old-style-cast -fdiagnostics-color&#x3D;always -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math<br>Build type            : Release<br>Compile definitions   : ONNX_ML&#x3D;1;ONNX_NAMESPACE&#x3D;onnx_torch;USE_GCC_ATOMICS&#x3D;1;HAVE_MMAP&#x3D;1;_FILE_OFFSET_BITS&#x3D;64;HAVE_SHM_OPEN&#x3D;1;HAVE_SHM_UNLINK&#x3D;1;HAVE_MALLOC_USABLE_SIZE&#x3D;1<br>CMAKE_PREFIX_PATH     :<br>CMAKE_INSTALL_PREFIX  : &#x2F;usr&#x2F;local<br><br>TORCH_VERSION         : 1.1.0<br>CAFFE2_VERSION        : 1.1.0<br>BUILD_CAFFE2_MOBILE   : ON<br>BUILD_ATEN_ONLY       : OFF<br>BUILD_BINARY          : OFF<br>BUILD_CUSTOM_PROTOBUF : ON<br>  Link local protobuf : ON<br>BUILD_DOCS            : OFF<br>BUILD_PYTHON          : OFF<br>BUILD_CAFFE2_OPS      : ON<br>BUILD_SHARED_LIBS     : ON<br>BUILD_TEST            : OFF<br>INTERN_BUILD_MOBILE   :<br>USE_ASAN              : OFF<br>USE_CUDA              : ON<br>  CUDA static link    : OFF<br>  USE_CUDNN           : ON<br>  CUDA version        : 9.2<br>  cuDNN version       : 7.1.4<br>  CUDA root directory : &#x2F;usr&#x2F;local&#x2F;cuda<br>  CUDA library        : &#x2F;usr&#x2F;local&#x2F;cuda&#x2F;lib64&#x2F;stubs&#x2F;libcuda.so<br>  cudart library      : &#x2F;usr&#x2F;local&#x2F;cuda&#x2F;lib64&#x2F;libcudart.so<br>  cublas library      : &#x2F;usr&#x2F;local&#x2F;cuda&#x2F;lib64&#x2F;libcublas.so<br>  cufft library       : &#x2F;usr&#x2F;local&#x2F;cuda&#x2F;lib64&#x2F;libcufft.so<br>  curand library      : &#x2F;usr&#x2F;local&#x2F;cuda&#x2F;lib64&#x2F;libcurand.so<br>  cuDNN library       : &#x2F;usr&#x2F;local&#x2F;cuda&#x2F;lib64&#x2F;libcudnn.so<br>  nvrtc               : &#x2F;usr&#x2F;local&#x2F;cuda&#x2F;lib64&#x2F;libnvrtc.so<br>  CUDA include path   : &#x2F;usr&#x2F;local&#x2F;cuda&#x2F;include<br>  NVCC executable     : &#x2F;usr&#x2F;local&#x2F;cuda&#x2F;bin&#x2F;nvcc<br>  CUDA host compiler  : &#x2F;usr&#x2F;bin&#x2F;cc<br>  USE_TENSORRT        : OFF<br>USE_ROCM              : OFF<br>USE_EIGEN_FOR_BLAS    : ON<br>USE_FBGEMM            : OFF<br>USE_FFMPEG            : OFF<br>USE_GFLAGS            : OFF<br>USE_GLOG              : OFF<br>USE_LEVELDB           : OFF<br>USE_LITE_PROTO        : OFF<br>USE_LMDB              : OFF<br>USE_METAL             : OFF<br>USE_MKL               : OFF<br>USE_MKLDNN            : OFF<br>USE_NCCL              : ON<br>  USE_SYSTEM_NCCL     : OFF<br>USE_NNPACK            : ON<br>USE_NUMPY             : ON<br>USE_OBSERVERS         : ON<br>USE_OPENCL            : OFF<br>USE_OPENCV            : OFF<br>USE_OPENMP            : ON<br>USE_TBB               : OFF<br>USE_PROF              : OFF<br>USE_QNNPACK           : ON<br>USE_REDIS             : OFF<br>USE_ROCKSDB           : OFF<br>USE_ZMQ               : OFF<br>USE_DISTRIBUTED       : ON<br>  USE_MPI             : ON<br>  USE_GLOO            : ON<br>  USE_GLOO_IBVERBS    : OFF<br>NAMEDTENSOR_ENABLED   : OFF<br>Public Dependencies  : Threads::Threads<br>Private Dependencies : qnnpack;nnpack;cpuinfo;&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libnuma.so;fp16;&#x2F;usr&#x2F;lib&#x2F;openmpi&#x2F;lib&#x2F;libmpi_cxx.so;&#x2F;usr&#x2F;lib&#x2F;openmpi&#x2F;lib&#x2F;libmpi.so;gloo;aten_op_header_gen;foxi_loader;rt;gcc_s;gcc;dl<br>  Configuring done</p>
+</li>
+</ul>
+<h4 id="install-pytorch"><a href="#install-pytorch" class="headerlink" title="install pytorch"></a>install pytorch</h4><p>now compile and install </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make -j8</span><br><span class="line"><span class="built_in">sudo</span> make install</span><br></pre></td></tr></table></figure>
+
+<p>output </p>
+<pre><code>Install the project...
+-- Install configuration: &quot;Release&quot;
+-- Old export file &quot;/usr/local/share/cmake/Caffe2/Caffe2Targets.cmake&quot; will be replaced.  Removing files [/usr/local/share/cmake/Caffe2/Caffe2Targets-release.cmake].
+-- Set runtime path of &quot;/usr/local/bin/protoc&quot; to &quot;$ORIGIN&quot;
+-- Old export file &quot;/usr/local/share/cmake/Gloo/GlooTargets.cmake&quot; will be replaced.  Removing files [/usr/local/share/cmake/Gloo/GlooTargets-release.cmake].
+-- Set runtime path of &quot;/usr/local/lib/libonnxifi_dummy.so&quot; to &quot;$ORIGIN&quot;
+-- Set runtime path of &quot;/usr/local/lib/libonnxifi.so&quot; to &quot;$ORIGIN&quot;
+-- Set runtime path of &quot;/usr/local/lib/libfoxi_dummy.so&quot; to &quot;$ORIGIN&quot;
+-- Set runtime path of &quot;/usr/local/lib/libfoxi.so&quot; to &quot;$ORIGIN&quot;
+-- Set runtime path of &quot;/usr/local/lib/libc10.so&quot; to &quot;$ORIGIN&quot;
+-- Set runtime path of &quot;/usr/local/lib/libc10_cuda.so&quot; to &quot;$ORIGIN:/usr/local/cuda/lib64&quot;
+-- Set runtime path of &quot;/usr/local/lib/libthnvrtc.so&quot; to &quot;$ORIGIN:/usr/local/cuda/lib64/stubs:/usr/local/cuda/lib64&quot;
+-- Set runtime path of &quot;/usr/local/lib/libtorch.so&quot; to &quot;$ORIGIN:/usr/local/cuda/lib64:/usr/lib/openmpi/lib&quot;
+-- Set runtime path of &quot;/usr/local/lib/libcaffe2_detectron_ops_gpu.so&quot; to &quot;$ORIGIN:/usr/local/cuda/lib64&quot;
+-- Set runtime path of &quot;/usr/local/lib/libcaffe2_observers.so&quot; to &quot;$ORIGIN:/usr/local/cuda/lib64&quot;
+</code></pre>
+<blockquote>
+<p>pytorch 1.1.0<br><strong>compile and install will cost more than 2 hours</strong><br>lib install to <code>/usr/local/lib/libtorch.so</code><br>cmake install to <code>/usr/local/share/cmake/Torch</code></p>
+</blockquote>
+<h3 id="C-example"><a href="#C-example" class="headerlink" title="C++ example"></a>C++ example</h3><p>load pytorch model in c++<br>see <a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/advanced/cpp_export.html">load pytorch model in c++</a></p>
+<h4 id="cpp"><a href="#cpp" class="headerlink" title="cpp"></a>cpp</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;torch/script.h&gt;</span> <span class="comment">// One-stop header.</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;memory&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">const</span> <span class="type">char</span>* argv[])</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (argc != <span class="number">2</span>) &#123;</span><br><span class="line">    std::cerr &lt;&lt; <span class="string">&quot;usage: example-app &lt;path-to-exported-script-module&gt;\n&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Deserialize the ScriptModule from a file using torch::jit::load().</span></span><br><span class="line">  std::shared_ptr&lt;torch::jit::script::Module&gt; <span class="keyword">module</span> = torch::jit::<span class="built_in">load</span>(argv[<span class="number">1</span>]);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">assert</span>(<span class="keyword">module</span> != <span class="literal">nullptr</span>);</span><br><span class="line">  std::cout &lt;&lt; <span class="string">&quot;ok\n&quot;</span>;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// Create a vector of inputs.</span></span><br><span class="line">std::vector&lt;torch::jit::IValue&gt; inputs;</span><br><span class="line">inputs.<span class="built_in">push_back</span>(torch::<span class="built_in">ones</span>(&#123;<span class="number">1</span>, <span class="number">3</span>, <span class="number">224</span>, <span class="number">224</span>&#125;));</span><br><span class="line"></span><br><span class="line"><span class="comment">// Execute the model and turn its output into a tensor.</span></span><br><span class="line">at::Tensor output = <span class="keyword">module</span>-&gt;forward(inputs).<span class="built_in">toTensor</span>();</span><br><span class="line"></span><br><span class="line">std::cout &lt;&lt; output.<span class="built_in">slice</span>(<span class="comment">/*dim=*/</span><span class="number">1</span>, <span class="comment">/*start=*/</span><span class="number">0</span>, <span class="comment">/*end=*/</span><span class="number">5</span>) &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h4><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.0</span> FATAL_ERROR)</span><br><span class="line"><span class="keyword">project</span>(custom_ops)</span><br><span class="line"></span><br><span class="line"><span class="comment"># /usr/local/share/cmake/Torch</span></span><br><span class="line"><span class="keyword">find_package</span>(Torch REQUIRED)</span><br><span class="line"><span class="keyword">MESSAGE</span>( [Main] <span class="string">&quot; TORCH_INCLUDE_DIRS = $&#123;TORCH_INCLUDE_DIRS&#125;&quot;</span>) </span><br><span class="line"><span class="keyword">MESSAGE</span>( [Main] <span class="string">&quot; TORCH_LIBRARIES = $&#123;TORCH_LIBRARIES&#125;&quot;</span>)  </span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;TORCH_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">add_executable</span>(example-app example-app.cpp)</span><br><span class="line"><span class="keyword">target_link_libraries</span>(example-app <span class="string">&quot;$&#123;TORCH_LIBRARIES&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">set_property</span>(<span class="keyword">TARGET</span> example-app PROPERTY CXX_STANDARD <span class="number">11</span>)</span><br></pre></td></tr></table></figure>
+
+<p>output </p>
+<pre><code>Found torch: /usr/local/lib/libtorch.so  
+[Main] TORCH_INCLUDE_DIRS = /usr/local/include;/usr/local/include/torch/csrc/api/include
+[Main] TORCH_LIBRARIES = torch;torch_library;/usr/local/lib/libc10.so;/usr/local/cuda/lib64/stubs/libcuda.so;/usr/local/cuda/lib64/libnvrtc.so;/usr/local/cuda/lib64/libnvToolsExt.so;/usr/local/cuda/lib64/libcudart.so;/usr/local/lib/libc10_cuda.so
+[TOLOWER] ALGORITHM_TARGET = algorithm
+</code></pre>
+<h4 id="make"><a href="#make" class="headerlink" title="make"></a>make</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> build </span><br><span class="line"><span class="built_in">cd</span> build &amp;&amp; cmake-gui ..</span><br><span class="line">make -j8</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>set <code>Torch_DIR</code> to <code>/home/kezunlin/program/libtorch/share/cmake/Torch</code><br>auto-set <code>Torch_DIR</code> to <code>/usr/local/share/cmake/Torch</code></p>
+</blockquote>
+<h4 id="run"><a href="#run" class="headerlink" title="run"></a>run</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./example-app model.pt</span><br><span class="line">-0.2698 -0.0381  0.4023 -0.3010 -0.0448</span><br></pre></td></tr></table></figure>
+
+<h3 id="errors-and-solutions"><a href="#errors-and-solutions" class="headerlink" title="errors and solutions"></a>errors and solutions</h3><h4 id="compile-errors-with-libtorch"><a href="#compile-errors-with-libtorch" class="headerlink" title="compile errors with libtorch"></a>compile errors with libtorch</h4><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/issues/15138">Build simple c++ example-cpp using Libtorch fails on arm with undefined reference to c10::Error::Error</a></li>
+</ul>
+<blockquote>
+<p>@soumith<br>You might be building libtorch with a compiler that is incompatible with the compiler building your final app.<br>For example, you built libtorch with gcc 4.9.2 and your final app with gcc 5.1, and the C++ ABI between both of them is not the same, so you are seeing linker errors like these</p>
+</blockquote>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://discuss.pytorch.org/t/issues-linking-with-libtorch-c-11-abi/29510">issues-linking-with-libtorch-c-11-abi</a></li>
+</ul>
+<blockquote>
+<p>@christianperone</p>
+</blockquote>
+<pre><code>if (&quot;$&#123;CMAKE_CXX_COMPILER_ID&#125;&quot; STREQUAL &quot;GNU&quot;)
+  set(TORCH_CXX_FLAGS &quot;-D_GLIBCXX_USE_CXX11_ABI=0&quot;)
+endif()
+</code></pre>
+<blockquote>
+<p>Which forces GCC to use the old C++11 ABI.</p>
+</blockquote>
+<blockquote>
+<p>@ smth<br>we have that flag set because we build with gcc 4.9.x, which only has the old ABI.<br>In GCC 5.1, the ABI for std::string was changed, and binaries compiling with gcc &gt;&#x3D; 5.1 are not ABI-compatible with binaries build with gcc &lt; 5.1 (like pytorch) unless you set that flag.</p>
+</blockquote>
+<p>resons and solutions</p>
+<ul>
+<li>Reasons: ** LibTorch compiled with GCC-4.9.X (only has the old ABI), and binaries compiling with gcc &gt;&#x3D; 5.1 are not ABI-compatible**</li>
+<li>Solution: compile pytorch from source instead of using <code>LibTroch</code> downloaded from the website.</li>
+</ul>
+<h4 id="runtime-errors-with-pytorch"><a href="#runtime-errors-with-pytorch" class="headerlink" title="runtime errors with pytorch"></a>runtime errors with pytorch</h4><p>errors</p>
+<pre><code>/usr/local/lib/libopencv_imgcodecs.so.3.1.0: undefined reference to `TIFFReadRGBAStrip@LIBTIFF_4.0&#39;
+</code></pre>
+<p>which means opencv link against <code>libtiff 4.0.6</code></p>
+<p>ldd check </p>
+<pre><code>ldd /usr/local/lib/libopencv_imgcodecs.so.3.1.0
+    linux-vdso.so.1 =&gt;  (0x00007ffc92ffc000)
+    libopencv_imgproc.so.3.1 =&gt; /usr/local/lib/libopencv_imgproc.so.3.1 (0x00007f32afbca000)
+    libjpeg.so.8 =&gt; /usr/local/lib/libjpeg.so.8 (0x00007f32af948000)
+    libpng12.so.0 =&gt; /lib/x86_64-linux-gnu/libpng12.so.0 (0x00007f32af723000)
+    libtiff.so.5 =&gt; /usr/lib/x86_64-linux-gnu/libtiff.so.5 (0x00007f32af4ae000)
+    
+</code></pre>
+<blockquote>
+<p>when compile <code>opencv-3.1.0</code>, cmake find <code>/usr/lib/x86_64-linux-gnu/libtiff.so.5</code></p>
+</blockquote>
+<p>locate libtiff</p>
+<pre><code>locate libtiff.so
+
+/home/kezunlin/anaconda3/envs/py35/lib/libtiff.so
+/home/kezunlin/anaconda3/envs/py35/lib/libtiff.so.5
+/home/kezunlin/anaconda3/envs/py35/lib/libtiff.so.5.4.0
+/home/kezunlin/anaconda3/lib/libtiff.so
+/home/kezunlin/anaconda3/lib/libtiff.so.5
+/home/kezunlin/anaconda3/lib/libtiff.so.5.4.0
+/home/kezunlin/anaconda3/pkgs/libtiff-4.0.10-h2733197_2/lib/libtiff.so
+/home/kezunlin/anaconda3/pkgs/libtiff-4.0.10-h2733197_2/lib/libtiff.so.5
+/home/kezunlin/anaconda3/pkgs/libtiff-4.0.10-h2733197_2/lib/libtiff.so.5.4.0
+/opt/MATLAB/R2016b/bin/glnxa64/libtiff.so.5
+/opt/MATLAB/R2016b/bin/glnxa64/libtiff.so.5.0.5
+/usr/lib/x86_64-linux-gnu/libtiff.so
+/usr/lib/x86_64-linux-gnu/libtiff.so.5
+/usr/lib/x86_64-linux-gnu/libtiff.so.5.2.4
+</code></pre>
+<blockquote>
+<p>It seems that my OpenCV was compiled against libtiff 4, but I have libtiff 5, how to solve this problem?</p>
+</blockquote>
+<p>re-compile opencv-3.1.0 again, new errors occur<br>see <a target="_blank" rel="noopener" href="https://github.com/opencv/opencv_contrib/issues/1478">here</a></p>
+<pre><code>CMake Error: The following variables are used in this project, but they are set to NOTFOUND.
+Please set them or make sure they are set and tested correctly in the CMake files:
+CUDA_nppi_LIBRARY (ADVANCED)
+    linked by target &quot;opencv_cudev&quot; in directory /home/kezunlin/program/opencv-3.1.0/modules/cudev
+    linked by target &quot;opencv_cudev&quot; in directory /home/kezunlin/program/opencv-3.1.0/modules/cudev
+    linked by target &quot;opencv_test_cudev&quot; in directory /home/kezunlin/program/opencv-3.1.0/modules/cudev/test
+</code></pre>
+<p>solutions:</p>
+<pre><code>WITH_CUDA OFF
+</code></pre>
+<p>  WITH_VTK OFF<br>  WITH_TIFF OFF<br>  BUILD_PERF_TESTS OFF </p>
+<blockquote>
+<p>for python2, use default <code>/usr/bin/python2.7</code><br>for python3, NOT USE <code>anaconda</code> version<br>编译的过程中，尽量避免使用<code>anaconda</code>目录下的lib</p>
+</blockquote>
+<p>install libwebp</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get -y install libwebp-dev</span><br></pre></td></tr></table></figure>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://pytorch.org/">pytorch</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch">pytorch github</a></li>
+<li><a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html">deep_learning_60min_blitz</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/yunjey/pytorch-tutorial">pytorch-tutorial</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/MorvanZhou/PyTorch-Tutorial/tree/master/tutorial-contents-notebooks">pytorch notebooks</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/L1aoXingyu/pytorch-beginner">pytorch-beginner</a></li>
+<li><a target="_blank" rel="noopener" href="https://pytorch.org/cppdocs">pytorch cppdocs</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20190626: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/pytorch/" rel="tag"># pytorch</a>
+              <a href="/tags/conda/" rel="tag"># conda</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/speed-up-opencv-image-processing-with-OpenCL/" rel="prev" title="speed up opencv image processing with OpenCL">
+      <i class="fa fa-chevron-left"></i> speed up opencv image processing with OpenCL
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/deep-learning-for-computer-visoion-with-python-notes/" rel="next" title="deep learning for computer vision with python notes">
+      deep learning for computer vision with python notes <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#PyTorch-for-Python"><span class="nav-number">1.</span> <span class="nav-text">PyTorch for Python</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#install-pytorch-from-anaconda"><span class="nav-number">1.1.</span> <span class="nav-text">install pytorch from anaconda</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-pytorch-from-tsinghua"><span class="nav-number">1.2.</span> <span class="nav-text">install pytorch from tsinghua</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#add-tsinghua-pytorch-channels"><span class="nav-number">1.2.1.</span> <span class="nav-text">add tsinghua pytorch channels</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#install-pytorch-from-tsinghua-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">install pytorch from tsinghua</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#test-pytorch"><span class="nav-number">1.3.</span> <span class="nav-text">test pytorch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pre-trained-models"><span class="nav-number">1.4.</span> <span class="nav-text">pre-trained models</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PyTorch-for-C"><span class="nav-number">2.</span> <span class="nav-text">PyTorch for C++</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#download-LibTorch"><span class="nav-number">2.1.</span> <span class="nav-text">download LibTorch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#compile-from-source"><span class="nav-number">2.2.</span> <span class="nav-text">compile from source</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#compile-pytorch"><span class="nav-number">2.2.1.</span> <span class="nav-text">compile pytorch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#install-pytorch"><span class="nav-number">2.2.2.</span> <span class="nav-text">install pytorch</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-example"><span class="nav-number">2.3.</span> <span class="nav-text">C++ example</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#cpp"><span class="nav-number">2.3.1.</span> <span class="nav-text">cpp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">2.3.2.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#make"><span class="nav-number">2.3.3.</span> <span class="nav-text">make</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#run"><span class="nav-number">2.3.4.</span> <span class="nav-text">run</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#errors-and-solutions"><span class="nav-number">2.4.</span> <span class="nav-text">errors and solutions</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#compile-errors-with-libtorch"><span class="nav-number">2.4.1.</span> <span class="nav-text">compile errors with libtorch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#runtime-errors-with-pytorch"><span class="nav-number">2.4.2.</span> <span class="nav-text">runtime errors with pytorch</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Guidectypes intropython only support c api.   ctype usage1234# (1) get and set value for c_intfrom ctypes import *i &#x3D; c_int(45)i.value  45  12i.value &#x3D; 55i.value  55  123# (2) set and get value for c_">
+<meta property="og:type" content="article">
+<meta property="og:title" content="use python ctypes to load and use functions from C C++ DLL">
+<meta property="og:url" content="https://kezunlin.me/blog/python-ctypes-use-c-dll/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Guidectypes intropython only support c api.   ctype usage1234# (1) get and set value for c_intfrom ctypes import *i &#x3D; c_int(45)i.value  45  12i.value &#x3D; 55i.value  55  123# (2) set and get value for c_">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kezunlin.me/images/posts/429727-20151024205048099-526137943.png">
+<meta property="article:published_time" content="2019-03-08T03:12:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="ctypes">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kezunlin.me/images/posts/429727-20151024205048099-526137943.png">
+
+<link rel="canonical" href="https://kezunlin.me/blog/python-ctypes-use-c-dll/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>use python ctypes to load and use functions from C C++ DLL | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/python-ctypes-use-c-dll/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          use python ctypes to load and use functions from C C++ DLL
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-03-08 11:12:00" itemprop="dateCreated datePublished" datetime="2019-03-08T11:12:00+08:00">2019-03-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="ctypes-intro"><a href="#ctypes-intro" class="headerlink" title="ctypes intro"></a>ctypes intro</h3><p>python only support c api. </p>
+<p><img src="https://kezunlin.me/images/posts/429727-20151024205048099-526137943.png" alt="ctypes types, C type, Python type"></p>
+<h3 id="ctype-usage"><a href="#ctype-usage" class="headerlink" title="ctype usage"></a>ctype usage</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># (1) get and set value for c_int</span></span><br><span class="line"><span class="keyword">from</span> ctypes <span class="keyword">import</span> *</span><br><span class="line">i = c_int(<span class="number">45</span>)</span><br><span class="line">i.value</span><br></pre></td></tr></table></figure>
+
+<pre><code>45
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">i.value = <span class="number">55</span></span><br><span class="line">i.value</span><br></pre></td></tr></table></figure>
+
+<pre><code>55
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># (2) set and get value for c_char_Array_10  (c array)</span></span><br><span class="line">p = create_string_buffer(<span class="number">10</span>)</span><br><span class="line">p</span><br></pre></td></tr></table></figure>
+
+<pre><code>&lt;ctypes.c_char_Array_10 at 0x7fe008061170&gt;
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p.raw</span><br></pre></td></tr></table></figure>
+
+<pre><code>&#39;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#39;
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p.value = <span class="string">&quot;Student&quot;</span></span><br><span class="line">p.raw</span><br></pre></td></tr></table></figure>
+
+<pre><code>&#39;Student\x00\x00\x00&#39;
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p.value = <span class="string">&quot;Big&quot;</span> <span class="comment"># set 3 chars &quot;Big&quot; and 4-th char &quot;\0&quot;</span></span><br><span class="line">p.raw</span><br></pre></td></tr></table></figure>
+
+<pre><code>&#39;Big\x00ent\x00\x00\x00&#39;
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># (3) get and set value by pointer </span></span><br><span class="line">i = c_int(<span class="number">999</span>)     </span><br><span class="line">pi = pointer(i) <span class="comment"># pointer to c_int</span></span><br><span class="line">pi.contents</span><br></pre></td></tr></table></figure>
+
+<pre><code>c_int(999)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pi.contents = c_int(<span class="number">1000</span>)</span><br><span class="line">pi.contents</span><br></pre></td></tr></table></figure>
+
+<pre><code>c_int(1000)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># (4) use struct</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Point</span>(<span class="title class_ inherited__">Structure</span>):                </span><br><span class="line">    _fields_ = [(<span class="string">&quot;x&quot;</span>, c_int), (<span class="string">&quot;y&quot;</span>, c_int)] </span><br><span class="line">pt = Point(<span class="number">2</span>,<span class="number">5</span>)</span><br><span class="line"><span class="built_in">print</span>(pt.x, pt.y)</span><br><span class="line"></span><br><span class="line">pt2 = Point(y=<span class="number">5</span>) <span class="comment"># x default value = 0</span></span><br><span class="line"><span class="built_in">print</span>(pt2.x, pt2.y)</span><br></pre></td></tr></table></figure>
+
+<pre><code>(2, 5)
+(0, 5)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># (5.1) use c array  c_int_Array_10</span></span><br><span class="line">INT_ARRAY_10 = c_int *<span class="number">10</span></span><br><span class="line"><span class="built_in">print</span>(c_int)</span><br><span class="line"><span class="built_in">print</span>(INT_ARRAY_10)</span><br></pre></td></tr></table></figure>
+
+<pre><code>&lt;class &#39;ctypes.c_int&#39;&gt;
+&lt;class &#39;__main__.c_int_Array_10&#39;&gt;
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">i_array = INT_ARRAY_10() <span class="comment"># by default all 0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    i_array[i] = i</span><br><span class="line">    </span><br><span class="line"><span class="keyword">for</span> value <span class="keyword">in</span> i_array:</span><br><span class="line">    <span class="built_in">print</span>(value)    </span><br></pre></td></tr></table></figure>
+
+<pre><code>0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># (5.2) use c array  c_char_Array_10</span></span><br><span class="line">CHAR_ARRAY_10 = c_char * <span class="number">10</span></span><br><span class="line"><span class="built_in">print</span>(c_char)</span><br><span class="line"><span class="built_in">print</span>(CHAR_ARRAY_10)</span><br></pre></td></tr></table></figure>
+
+<pre><code>&lt;class &#39;ctypes.c_char&#39;&gt;
+&lt;class &#39;ctypes.c_char_Array_10&#39;&gt;
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">c_array = CHAR_ARRAY_10() <span class="comment"># by default all 0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    c_array[i] = <span class="string">&quot;a&quot;</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">for</span> value <span class="keyword">in</span> c_array:</span><br><span class="line">    <span class="built_in">print</span>(value) </span><br><span class="line"></span><br><span class="line"><span class="comment"># value and raw field for c_char_Array_10</span></span><br><span class="line"><span class="built_in">print</span>(c_array.value)</span><br><span class="line"><span class="built_in">print</span>(c_array.raw)</span><br><span class="line"></span><br><span class="line">c_array.value = <span class="string">&quot;Student&quot;</span></span><br><span class="line"><span class="built_in">print</span>(c_array.value)</span><br><span class="line"><span class="built_in">print</span>(c_array.raw)</span><br></pre></td></tr></table></figure>
+
+<pre><code>a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+aaaaaaaaaa
+aaaaaaaaaa
+Student
+Student\00aa
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># (6) pointer</span></span><br><span class="line"><span class="comment"># byref(x [, offset])   ---&gt; get address of x                                    `&amp;num` </span></span><br><span class="line"><span class="comment"># pointer(x)            ---&gt; create a pointer which points to x                  `int* p = &amp;num;`</span></span><br><span class="line"><span class="comment"># POINTER(type)         ---&gt; return a `new type` which points to type instance    `Point*`</span></span><br><span class="line">a = Point(<span class="number">2</span>,<span class="number">5</span>)</span><br><span class="line">b = pointer(a)</span><br><span class="line"><span class="built_in">print</span>(a)</span><br><span class="line"><span class="built_in">print</span>(a.x, a.y)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(b)</span><br><span class="line"><span class="built_in">print</span>(b.contents) <span class="comment"># a</span></span><br><span class="line"><span class="built_in">print</span>(b.contents.x, b.contents.y)</span><br><span class="line"></span><br><span class="line">c = POINTER(Point)(a)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(c)</span><br><span class="line"><span class="built_in">print</span>(c.contents) </span><br><span class="line"><span class="built_in">print</span>(c.contents.x, c.contents.y)</span><br></pre></td></tr></table></figure>
+
+<pre><code>&lt;__main__.Point object at 0x7fe00805d3b0&gt;
+(2, 5)
+
+
+&lt;__main__.LP_Point object at 0x7fe00805d710&gt;
+&lt;__main__.Point object at 0x7fe00805d5f0&gt;
+(2, 5)
+
+
+&lt;__main__.LP_Point object at 0x7fe00805d5f0&gt;
+&lt;__main__.Point object at 0x7fe00805d440&gt;
+(2, 5)
+</code></pre>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><h3 id="c-c-code"><a href="#c-c-code" class="headerlink" title="c++&#x2F;c code"></a>c++&#x2F;c code</h3><p>api.h</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;algorithm_shared_export.h&quot;</span> </span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/opencv.hpp&gt;</span>  <span class="comment">// Mat</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">SHARED_EXPORT</span> Point</span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">float</span> x, y;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> &#123;</span><br><span class="line">    <span class="type">int</span> H;</span><br><span class="line">	<span class="type">int</span> W;</span><br><span class="line">    <span class="type">int</span> C;</span><br><span class="line">    <span class="type">float</span> *data;</span><br><span class="line">&#125; <span class="type">image_float_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> &#123;</span><br><span class="line">    <span class="type">int</span> H;</span><br><span class="line">	<span class="type">int</span> W;</span><br><span class="line">    <span class="type">int</span> C;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> *data;</span><br><span class="line">&#125; <span class="type">image_char_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SHARED_EXPORT</span> MyClass</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="built_in">MyClass</span>(<span class="type">int</span> id);</span><br><span class="line">        <span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br><span class="line">        <span class="function"><span class="type">float</span> <span class="title">addf</span><span class="params">(<span class="type">float</span> a, <span class="type">float</span> b)</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">print_point</span><span class="params">(Point* p)</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">        <span class="type">int</span> id_;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> __cplusplus</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> &#123;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// pure C API (can not overload)</span></span><br><span class="line">    <span class="function">SHARED_EXPORT <span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br><span class="line">    <span class="function">SHARED_EXPORT <span class="type">float</span> <span class="title">addf</span><span class="params">(<span class="type">float</span> a, <span class="type">float</span> b)</span></span>;</span><br><span class="line">    <span class="function">SHARED_EXPORT <span class="type">void</span> <span class="title">print_point</span><span class="params">(Point* p)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// warpper for c++ class</span></span><br><span class="line">    <span class="function">SHARED_EXPORT <span class="type">void</span> <span class="title">wrapper_init_class</span><span class="params">(<span class="type">int</span> id)</span></span>;</span><br><span class="line">    <span class="function">SHARED_EXPORT <span class="type">void</span> <span class="title">wrapper_free_class</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">SHARED_EXPORT <span class="type">int</span> <span class="title">wrapper_add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br><span class="line">    <span class="function">SHARED_EXPORT <span class="type">float</span> <span class="title">wrapper_addf</span><span class="params">(<span class="type">float</span> a, <span class="type">float</span> b)</span></span>;</span><br><span class="line">    <span class="function">SHARED_EXPORT <span class="type">void</span> <span class="title">wrapper_print_point</span><span class="params">(Point* p)</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function">SHARED_EXPORT <span class="type">void</span> <span class="title">process_image_float</span><span class="params">(<span class="type">image_float_t</span> im)</span></span>;</span><br><span class="line">    <span class="function">SHARED_EXPORT <span class="type">void</span> <span class="title">process_image_char</span><span class="params">(<span class="type">image_char_t</span> im)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> __cplusplus	</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> </span></span><br></pre></td></tr></table></figure>
+
+<p>api.cpp</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;api.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// c++ class impl</span></span><br><span class="line"></span><br><span class="line">MyClass::<span class="built_in">MyClass</span>(<span class="type">int</span> id)</span><br><span class="line">	:<span class="built_in">id_</span>(id)</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">MyClass::add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">float</span> <span class="title">MyClass::addf</span><span class="params">(<span class="type">float</span> a, <span class="type">float</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">MyClass::print_point</span><span class="params">(Point* p)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (p)</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;position x %f y %f \n&quot;</span>, p-&gt;x, p-&gt;y);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;myclass id = %d \n&quot;</span>, id_);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> __cplusplus</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> &#123;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// pure C API impl</span></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a + b;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">float</span> <span class="title">addf</span><span class="params">(<span class="type">float</span> a, <span class="type">float</span> b)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a + b;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">print_point</span><span class="params">(Point* p)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (p)</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;position x %f y %f \n&quot;</span>, p-&gt;x, p-&gt;y);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">// warpper for c++ class</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">wrapper_init_class</span><span class="params">(<span class="type">int</span> id)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		my = <span class="keyword">new</span> <span class="built_in">MyClass</span>(id);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">wrapper_free_class</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (my)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">delete</span> my;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">wrapper_add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> my-&gt;<span class="built_in">add</span>(a,b);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">float</span> <span class="title">wrapper_addf</span><span class="params">(<span class="type">float</span> a, <span class="type">float</span> b)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> my-&gt;<span class="built_in">addf</span>(a,b);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">wrapper_print_point</span><span class="params">(Point* p)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> my-&gt;<span class="built_in">print_point</span>(p);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//(1) bgr, hwc, 0-255    h*W*C+w*C+c     int index = h*im.W*im.C + (w*im.C + c); </span></span><br><span class="line">	<span class="comment">//(2) bgr, chw, 0-255    c*H*W+h*W+w     int index = c*im.H*im.W + (h*im.W + w);</span></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">float</span> <span class="title">get_image_pixel_hwc</span><span class="params">(<span class="type">const</span> <span class="type">image_float_t</span>&amp; im, <span class="type">int</span> h, <span class="type">int</span> w, <span class="type">int</span> c)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="comment">//(1) bgr, hwc, 0-255    h*W*C+w*C+c     int index = h*im.W*im.C + (w*im.C + c); </span></span><br><span class="line">		<span class="type">int</span> index = h*im.W*im.C + (w*im.C + c); </span><br><span class="line">		<span class="keyword">return</span> im.data[index];</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">float</span> <span class="title">get_image_pixel_chw</span><span class="params">(<span class="type">const</span> <span class="type">image_float_t</span>&amp; im, <span class="type">int</span> h, <span class="type">int</span> w, <span class="type">int</span> c)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="comment">//(2) bgr, chw, 0-255    c*H*W+h*W+w     int index = c*im.H*im.W + (h*im.W + w);</span></span><br><span class="line">		<span class="type">int</span> index = c*im.H*im.W + (h*im.W + w);</span><br><span class="line">		<span class="keyword">return</span> im.data[index];</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">cv::Mat <span class="title">image_float_to_mat</span><span class="params">(<span class="type">const</span> <span class="type">image_float_t</span>&amp; im)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="comment">// bgr,hwc, 0-255</span></span><br><span class="line">		<span class="function">cv::Mat <span class="title">mat</span><span class="params">(im.H, im.W, CV_8UC3)</span></span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> h=<span class="number">0</span>; h&lt; im.H; ++h)</span><br><span class="line">		&#123;</span><br><span class="line">			cv::Vec3b *p = mat.<span class="built_in">ptr</span>&lt;cv::Vec3b&gt;(h);</span><br><span class="line">			<span class="keyword">for</span>(<span class="type">int</span> w=<span class="number">0</span>; w &lt; im.W; ++w)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">for</span>(<span class="type">int</span> c=<span class="number">0</span>; c&lt; im.C; ++c)</span><br><span class="line">				&#123;</span><br><span class="line">					<span class="comment">// b,g,r</span></span><br><span class="line">					(*p)[c] = (<span class="type">unsigned</span> <span class="type">char</span>)<span class="built_in">get_image_pixel_hwc</span>(im, h, w, c); </span><br><span class="line">				&#125;</span><br><span class="line">				p++;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> mat;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// same as image_float_to_mat, but faster</span></span><br><span class="line">	<span class="function">cv::Mat <span class="title">image_float_to_mat2</span><span class="params">(<span class="type">const</span> <span class="type">image_float_t</span>&amp; im)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="comment">// bgr,hwc, 0-255</span></span><br><span class="line">		<span class="function">cv::Mat <span class="title">mat</span><span class="params">(im.H, im.W, CV_8UC3)</span></span>;</span><br><span class="line">		<span class="type">const</span> <span class="type">float</span>* p_data = im.data;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">for</span>(<span class="type">int</span> h=<span class="number">0</span>; h&lt; im.H; ++h)</span><br><span class="line">		&#123;</span><br><span class="line">			cv::Vec3b *p = mat.<span class="built_in">ptr</span>&lt;cv::Vec3b&gt;(h);</span><br><span class="line">			<span class="keyword">for</span>(<span class="type">int</span> w=<span class="number">0</span>; w &lt; im.W; ++w)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">for</span>(<span class="type">int</span> c=<span class="number">0</span>; c&lt; im.C; ++c)</span><br><span class="line">				&#123;</span><br><span class="line">					<span class="comment">// b,g,r</span></span><br><span class="line">					(*p)[c] = (<span class="type">unsigned</span> <span class="type">char</span>)(*p_data++); </span><br><span class="line">				&#125;</span><br><span class="line">				p++; <span class="comment">// for width</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> mat;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="function">cv::Mat <span class="title">image_char_to_mat</span><span class="params">(<span class="type">const</span> <span class="type">image_char_t</span>&amp; im)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="comment">// bgr,hwc, 0-255</span></span><br><span class="line">		<span class="function">cv::Mat <span class="title">mat</span><span class="params">(im.H, im.W, CV_8UC3, im.data)</span></span>;</span><br><span class="line">		<span class="keyword">return</span> mat; <span class="comment">// data in python</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">process_image_float</span><span class="params">(<span class="type">image_float_t</span> im)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		cv::Mat mat = <span class="built_in">image_float_to_mat2</span>(im);</span><br><span class="line"></span><br><span class="line">		cv::<span class="built_in">imwrite</span>(<span class="string">&quot;result2.jpg&quot;</span>, mat);</span><br><span class="line">		std::cout&lt;&lt;<span class="string">&quot; saved image to result.jpg&quot;</span>&lt;&lt; std::endl;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">process_image_char</span><span class="params">(<span class="type">image_char_t</span> im)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		cv::Mat mat = <span class="built_in">image_char_to_mat</span>(im);</span><br><span class="line"></span><br><span class="line">		cv::<span class="built_in">imwrite</span>(<span class="string">&quot;result3.jpg&quot;</span>, mat);</span><br><span class="line">		std::cout&lt;&lt;<span class="string">&quot; saved image to result.jpg&quot;</span>&lt;&lt; std::endl;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> __cplusplus	</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> </span></span><br></pre></td></tr></table></figure>
+
+<h3 id="python"><a href="#python" class="headerlink" title="python"></a>python</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> ctypes <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#==================================================</span></span><br><span class="line"><span class="comment"># os.name   &quot;posix&quot; for linux, &quot;nt&quot; for windows</span></span><br><span class="line">lib = CDLL(<span class="string">&quot;./libcapi.so&quot;</span>, RTLD_GLOBAL)</span><br><span class="line"><span class="comment">#==================================================</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    // struct</span></span><br><span class="line"><span class="string">    struct Point&#123;</span></span><br><span class="line"><span class="string">        float x, y;</span></span><br><span class="line"><span class="string">    &#125;;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    // pure C API</span></span><br><span class="line"><span class="string">    SHARED_EXPORT int add(int a, int b);</span></span><br><span class="line"><span class="string">    SHARED_EXPORT float addf(float a, float b);</span></span><br><span class="line"><span class="string">    SHARED_EXPORT void print_point(Point* p);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    // warpper for c++ class</span></span><br><span class="line"><span class="string">    SHARED_EXPORT void wrapper_init_class(int id);</span></span><br><span class="line"><span class="string">    SHARED_EXPORT void wrapper_free_class();</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    SHARED_EXPORT int wrapper_add(int a, int b);</span></span><br><span class="line"><span class="string">    SHARED_EXPORT float wrapper_addf(float a, float b);</span></span><br><span class="line"><span class="string">    SHARED_EXPORT void wrapper_print_point(Point* p);</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># struct</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">POINT</span>(<span class="title class_ inherited__">Structure</span>):</span><br><span class="line">    _fields_ = [(<span class="string">&quot;x&quot;</span>, c_float),</span><br><span class="line">                (<span class="string">&quot;y&quot;</span>, c_float)]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># pure C API</span></span><br><span class="line">lib.add.argtypes = [c_int, c_int]</span><br><span class="line">lib.add.restype = c_int</span><br><span class="line"></span><br><span class="line">lib.addf.argtypes = [c_float, c_float]</span><br><span class="line">lib.addf.restype = c_float</span><br><span class="line"></span><br><span class="line">lib.print_point.argtypes = [POINTER(POINT)]</span><br><span class="line">lib.print_point.restype = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># warpper for c++ class</span></span><br><span class="line">lib.wrapper_init_class.argtypes = [c_int]</span><br><span class="line">lib.wrapper_init_class.restype = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">lib.wrapper_free_class.argtypes = <span class="literal">None</span></span><br><span class="line">lib.wrapper_free_class.restype = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">lib.wrapper_add.argtypes = [c_int, c_int]</span><br><span class="line">lib.wrapper_add.restype = c_int</span><br><span class="line"></span><br><span class="line">lib.wrapper_addf.argtypes = [c_float, c_float]</span><br><span class="line">lib.wrapper_addf.restype = c_float</span><br><span class="line"></span><br><span class="line">lib.wrapper_print_point.argtypes = [POINTER(POINT)]</span><br><span class="line">lib.wrapper_print_point.restype = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test_capi</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;test_capi&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(lib.add(<span class="number">3</span>,<span class="number">5</span>)) <span class="comment"># 8</span></span><br><span class="line">    <span class="built_in">print</span>(lib.addf(<span class="number">3.3</span>,<span class="number">5.5</span>)) <span class="comment"># 8.8</span></span><br><span class="line"></span><br><span class="line">    p = POINT(<span class="number">9.1</span>,<span class="number">9.2</span>)</span><br><span class="line">    <span class="built_in">print</span>(p)  <span class="comment"># POINT</span></span><br><span class="line">    <span class="built_in">print</span>(p.x, p.y) <span class="comment"># 9.1,9.2</span></span><br><span class="line">    lib.print_point(byref(p)) <span class="comment"># faster</span></span><br><span class="line">    lib.print_point(pointer(p))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test_wrapper_capi</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;test_wrapper_capi&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># init class wrapper </span></span><br><span class="line">    lib.wrapper_init_class(<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(lib.wrapper_add(<span class="number">3</span>,<span class="number">5</span>)) <span class="comment"># 8</span></span><br><span class="line">    <span class="built_in">print</span>(lib.wrapper_addf(<span class="number">3.3</span>,<span class="number">5.5</span>)) <span class="comment"># 8.8</span></span><br><span class="line"></span><br><span class="line">    p = POINT(<span class="number">9.1</span>,<span class="number">9.2</span>)</span><br><span class="line">    <span class="built_in">print</span>(p)  <span class="comment"># POINT</span></span><br><span class="line">    <span class="built_in">print</span>(p.x, p.y) <span class="comment"># 9.1,9.2</span></span><br><span class="line">    lib.wrapper_print_point(byref(p)) <span class="comment"># faster</span></span><br><span class="line">    lib.wrapper_print_point(pointer(p))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># free class wrapper</span></span><br><span class="line">    lib.wrapper_free_class()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#======================================</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># unsigned char* ===&gt; c_ubyte ===&gt; np.uint8</span></span><br><span class="line"><span class="comment"># float*         ===&gt; c_float ===&gt; np.float32</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">IMAGE_FLOAT</span>(<span class="title class_ inherited__">Structure</span>):</span><br><span class="line">    _fields_ = [(<span class="string">&quot;h&quot;</span>, c_int),</span><br><span class="line">                (<span class="string">&quot;w&quot;</span>, c_int),</span><br><span class="line">                (<span class="string">&quot;c&quot;</span>, c_int),</span><br><span class="line">                (<span class="string">&quot;data&quot;</span>, POINTER(c_float))]</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">IMAGE_CHAR</span>(<span class="title class_ inherited__">Structure</span>):</span><br><span class="line">    _fields_ = [(<span class="string">&quot;h&quot;</span>, c_int),</span><br><span class="line">                (<span class="string">&quot;w&quot;</span>, c_int),</span><br><span class="line">                (<span class="string">&quot;c&quot;</span>, c_int),</span><br><span class="line">                (<span class="string">&quot;data&quot;</span>, POINTER(c_ubyte))]</span><br><span class="line"></span><br><span class="line">lib.process_image_float.argtypes = [IMAGE_FLOAT]</span><br><span class="line">lib.process_image_float.restype = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">lib.process_image_char.argtypes = [IMAGE_CHAR]</span><br><span class="line">lib.process_image_char.restype = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mat_to_darknet_image_float</span>(<span class="params">bgr</span>):</span><br><span class="line">    <span class="comment"># BGR,hwc,[0,255] === &gt; RGB,chw,[0,1]</span></span><br><span class="line">    rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)</span><br><span class="line">    rgb = rgb.transpose(<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>) <span class="comment"># hwc ===&gt; chw</span></span><br><span class="line">    c = rgb.shape[<span class="number">0</span>]</span><br><span class="line">    h = rgb.shape[<span class="number">1</span>]</span><br><span class="line">    w = rgb.shape[<span class="number">2</span>]</span><br><span class="line">    arr = np.ascontiguousarray(rgb.flat, dtype=np.float32) / <span class="number">255.0</span> <span class="comment"># [0-1]</span></span><br><span class="line"></span><br><span class="line">    data = arr.ctypes.data_as(POINTER(c_float))</span><br><span class="line">    im = IMAGE_FLOAT(w, h, c, data)</span><br><span class="line">    <span class="keyword">return</span> im, arr <span class="comment">#  return `arr` to avoid python freeing memory</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mat_to_image_float</span>(<span class="params">bgr</span>):</span><br><span class="line">    <span class="comment"># BGR,hwc,[0,255]</span></span><br><span class="line">    <span class="built_in">print</span>(bgr.shape) <span class="comment"># height, width ,channel</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#bgr = bgr.transpose(2, 0, 1) # hwc ===&gt; chw</span></span><br><span class="line">    <span class="comment">#c = bgr.shape[0]</span></span><br><span class="line">    <span class="comment">#h = bgr.shape[1]</span></span><br><span class="line">    <span class="comment">#w = bgr.shape[2]</span></span><br><span class="line"></span><br><span class="line">    (h,w,c) = bgr.shape</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#factor = 1.0 </span></span><br><span class="line">    arr = np.ascontiguousarray(bgr.flat, dtype=np.float32)</span><br><span class="line"></span><br><span class="line">    data = arr.ctypes.data_as(POINTER(c_float))</span><br><span class="line">    im = IMAGE_FLOAT(h, w, c, data) <span class="comment"># bgr,hwc,0-255</span></span><br><span class="line">    <span class="keyword">return</span> im, arr <span class="comment">#  return `arr` to avoid python freeing memory</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mat_to_image_char</span>(<span class="params">bgr</span>):</span><br><span class="line">    <span class="comment"># BGR,hwc,[0,255]</span></span><br><span class="line">    <span class="built_in">print</span>(bgr.shape) <span class="comment"># height, width ,channel</span></span><br><span class="line"></span><br><span class="line">    (h,w,c) = bgr.shape</span><br><span class="line">    arr = np.ascontiguousarray(bgr.flat, dtype=np.uint8)</span><br><span class="line"></span><br><span class="line">    data = arr.ctypes.data_as(POINTER(c_ubyte))</span><br><span class="line">    im = IMAGE_CHAR(h, w, c, data) <span class="comment"># bgr,hwc,0-255</span></span><br><span class="line">    <span class="keyword">return</span> im, arr <span class="comment">#  return `arr` to avoid python freeing memory</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test_process_image_float</span>():</span><br><span class="line">    image_filepath = <span class="string">&quot;dog.jpg&quot;</span></span><br><span class="line">    bgr = cv2.imread(image_filepath)</span><br><span class="line">    im, arr = mat_to_image_float(bgr)</span><br><span class="line">    <span class="comment"># image memory allocated in Python with `arr`, `im` only point to `arr`</span></span><br><span class="line">    <span class="comment"># so there is no need to free_image(im), because python will free `arr` automatically</span></span><br><span class="line">    lib.process_image_float(im)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test_process_image_char</span>():</span><br><span class="line">    image_filepath = <span class="string">&quot;dog.jpg&quot;</span></span><br><span class="line">    bgr = cv2.imread(image_filepath)</span><br><span class="line">    im, arr = mat_to_image_char(bgr) </span><br><span class="line">    <span class="comment"># image memory allocated in Python with `arr`, `im` only point to `arr`</span></span><br><span class="line">    <span class="comment"># so there is no need to free_image(im), because python will free `arr` automatically</span></span><br><span class="line">    lib.process_image_char(im)</span><br><span class="line">   </span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    <span class="comment">#test_capi()</span></span><br><span class="line">    <span class="comment">#test_wrapper_capi()</span></span><br><span class="line">    test_process_image_float()</span><br><span class="line">    test_process_image_char()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+<h2 id="Python-OpenCV-Mat-to-CAPI"><a href="#Python-OpenCV-Mat-to-CAPI" class="headerlink" title="Python OpenCV Mat to CAPI"></a>Python OpenCV Mat to CAPI</h2><h3 id="C"><a href="#C" class="headerlink" title="C"></a>C</h3><h4 id="api-h"><a href="#api-h" class="headerlink" title="api.h"></a>api.h</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> &#123;</span><br><span class="line">    <span class="type">int</span> H;</span><br><span class="line">    <span class="type">int</span> W;</span><br><span class="line">    <span class="type">int</span> C;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> *data;</span><br><span class="line">&#125; <span class="type">image_char_t</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> __cplusplus</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> &#123;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">    <span class="function">SHARED_EXPORT <span class="type">void</span> <span class="title">process_image_char</span><span class="params">(<span class="type">image_char_t</span> im)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> __cplusplus	</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> </span></span><br></pre></td></tr></table></figure>
+
+<h4 id="api-cpp"><a href="#api-cpp" class="headerlink" title="api.cpp"></a>api.cpp</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;api.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/opencv.hpp&gt;</span>  <span class="comment">// Mat</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/imgproc.hpp&gt;</span> <span class="comment">// cvtColor</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/highgui.hpp&gt;</span> <span class="comment">// imdecode imshow</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> __cplusplus</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> &#123;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">process_image_char</span><span class="params">(<span class="type">image_char_t</span> im)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="function">cv::Mat <span class="title">mat</span><span class="params">(im.H, im.W, CV_8UC3, im.data)</span></span>;</span><br><span class="line"></span><br><span class="line">		cv::<span class="built_in">imwrite</span>(<span class="string">&quot;result.jpg&quot;</span>, mat);</span><br><span class="line">		std::cout&lt;&lt;<span class="string">&quot; saved image to result.jpg&quot;</span>&lt;&lt; std::endl;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> __cplusplus	</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> </span></span><br></pre></td></tr></table></figure>
+
+<h3 id="python-1"><a href="#python-1" class="headerlink" title="python"></a>python</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> ctypes <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#==================================================</span></span><br><span class="line"><span class="comment"># os.name   &quot;posix&quot; for linux, &quot;nt&quot; for windows</span></span><br><span class="line">lib = CDLL(<span class="string">&quot;./libcapi.so&quot;</span>, RTLD_GLOBAL)</span><br><span class="line"><span class="comment">#==================================================</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># unsigned char* ===&gt; c_ubyte ===&gt; np.uint8</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">IMAGE_CHAR</span>(<span class="title class_ inherited__">Structure</span>):</span><br><span class="line">    _fields_ = [(<span class="string">&quot;h&quot;</span>, c_int),</span><br><span class="line">                (<span class="string">&quot;w&quot;</span>, c_int),</span><br><span class="line">                (<span class="string">&quot;c&quot;</span>, c_int),</span><br><span class="line">                (<span class="string">&quot;data&quot;</span>, POINTER(c_ubyte))]</span><br><span class="line"></span><br><span class="line">lib.process_image_char.argtypes = [IMAGE_CHAR]</span><br><span class="line">lib.process_image_char.restype = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mat_to_image_char</span>(<span class="params">bgr</span>):</span><br><span class="line">    <span class="comment"># BGR,hwc,[0,255]</span></span><br><span class="line">    <span class="built_in">print</span>(bgr.shape) <span class="comment"># height, width ,channel</span></span><br><span class="line"></span><br><span class="line">    (h,w,c) = bgr.shape</span><br><span class="line">    arr = np.ascontiguousarray(bgr.flat, dtype=np.uint8)</span><br><span class="line"></span><br><span class="line">    data = arr.ctypes.data_as(POINTER(c_ubyte))</span><br><span class="line">    im = IMAGE_CHAR(h, w, c, data) <span class="comment"># bgr,hwc,0-255</span></span><br><span class="line">    <span class="keyword">return</span> im, arr <span class="comment">#  return `arr` to avoid python freeing memory</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test_process_image_char</span>():</span><br><span class="line">    image_filepath = <span class="string">&quot;dog.jpg&quot;</span></span><br><span class="line">    bgr = cv2.imread(image_filepath)</span><br><span class="line">    im, arr = mat_to_image_char(bgr) </span><br><span class="line">    <span class="comment"># image memory allocated in Python with `arr`, `im` only point to `arr`</span></span><br><span class="line">    <span class="comment"># so there is no need to free_image(im), because python will free `arr` automatically</span></span><br><span class="line">    lib.process_image_char(im)</span><br><span class="line">   </span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    test_process_image_char()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="Boost-python-extension"><a href="#Boost-python-extension" class="headerlink" title="Boost-python extension"></a>Boost-python extension</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/spillai/numpy-opencv-converter">numpy-opencv-converter</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Algomorph/pyboostcvconverter">pyboostcvconverter</a></li>
+</ul>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/night-ride-depart/p/4907613.html">ctypes usage</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.ibm.com/developerworks/cn/linux/l-cn-pythonandc/">ctypes tutorial</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/taiyang1987912/article/details/44779719">python call c++ and executable</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20190308: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ctypes/" rel="tag"># ctypes</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/numpy-table-save-and-load-with-cpp/" rel="prev" title="how to load python numpy table with C++">
+      <i class="fa fa-chevron-left"></i> how to load python numpy table with C++
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/linux-bash-tutorial/" rel="next" title="linux bash tutorial">
+      linux bash tutorial <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ctypes-intro"><span class="nav-number">1.1.</span> <span class="nav-text">ctypes intro</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ctype-usage"><span class="nav-number">1.2.</span> <span class="nav-text">ctype usage</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">2.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#c-c-code"><span class="nav-number">2.1.</span> <span class="nav-text">c++&#x2F;c code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python"><span class="nav-number">2.2.</span> <span class="nav-text">python</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-OpenCV-Mat-to-CAPI"><span class="nav-number">3.</span> <span class="nav-text">Python OpenCV Mat to CAPI</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#C"><span class="nav-number">3.1.</span> <span class="nav-text">C</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#api-h"><span class="nav-number">3.1.1.</span> <span class="nav-text">api.h</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#api-cpp"><span class="nav-number">3.1.2.</span> <span class="nav-text">api.cpp</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python-1"><span class="nav-number">3.2.</span> <span class="nav-text">python</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Boost-python-extension"><span class="nav-number">4.</span> <span class="nav-text">Boost-python extension</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">6.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

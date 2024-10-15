@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Install GuideversionROS release 	  ROS version	      Ubuntu version 2016.3	     ROS Kinetic Kame	Ubuntu 16.04(Xenial)&#x2F;Ubuntu 15.10  quick commands1234567891011121314151617sudo sh -c &#x27;. &#x2F;etc&#x2F;lsb-r">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Install and Configure ROS Kinetic on Ubuntu 16.04">
+<meta property="og:url" content="https://kezunlin.me/blog/Install-and-Configure-ROS-Kinetic-on-Ubuntu-16-04/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Install GuideversionROS release 	  ROS version	      Ubuntu version 2016.3	     ROS Kinetic Kame	Ubuntu 16.04(Xenial)&#x2F;Ubuntu 15.10  quick commands1234567891011121314151617sudo sh -c &#x27;. &#x2F;etc&#x2F;lsb-r">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-01-04T08:25:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="ros">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/Install-and-Configure-ROS-Kinetic-on-Ubuntu-16-04/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Install and Configure ROS Kinetic on Ubuntu 16.04 | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/Install-and-Configure-ROS-Kinetic-on-Ubuntu-16-04/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Install and Configure ROS Kinetic on Ubuntu 16.04
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-01-04 16:25:00" itemprop="dateCreated datePublished" datetime="2018-01-04T16:25:00+08:00">2018-01-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Install-Guide"><a href="#Install-Guide" class="headerlink" title="Install Guide"></a>Install Guide</h2><h3 id="version"><a href="#version" class="headerlink" title="version"></a>version</h3><pre><code>ROS release 	  ROS version	      Ubuntu version
+2016.3	     ROS Kinetic Kame	Ubuntu 16.04(Xenial)/Ubuntu 15.10
+</code></pre>
+<h3 id="quick-commands"><a href="#quick-commands" class="headerlink" title="quick commands"></a>quick commands</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> sh -c <span class="string">&#x27;. /etc/lsb-release &amp;&amp; echo &quot;deb [arch=amd64] http://mirrors.ustc.edu.cn/ros/ubuntu/ $DISTRIB_CODENAME main&quot; &gt; /etc/apt/sources.list.d/ros-latest.list&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt-get update</span><br><span class="line"><span class="built_in">sudo</span> apt-get install ros-kinetic-desktop-full</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt-get install python-rosinstall python-rosinstall-generator python-wstool build-essential</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> rosdep init</span><br><span class="line">rosdep update</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;source /opt/ros/kinetic/setup.bash&quot;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br><span class="line"></span><br><span class="line"><span class="comment"># test</span></span><br><span class="line">roscore</span><br></pre></td></tr></table></figure>
+
+<h3 id="update-source"><a href="#update-source" class="headerlink" title="update source"></a>update source</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>tinghua source<br><code>http://mirrors.tuna.tsinghua.edu.cn/ubuntu xenial</code></p>
+</blockquote>
+<h3 id="Configure-ros-source"><a href="#Configure-ros-source" class="headerlink" title="Configure ros source"></a>Configure ros source</h3><h4 id="ros-offical-NOT-RECOMMEND"><a href="#ros-offical-NOT-RECOMMEND" class="headerlink" title="ros offical(NOT RECOMMEND)"></a>ros offical(NOT RECOMMEND)</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> sh -c <span class="string">&#x27;echo &quot;deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main&quot; &gt; /etc/apt/sources.list.d/ros-latest.list&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>NOT RECOMMEND，when <code>apt-get update</code>, error will occur <code>Hash Sum mismatch</code></p>
+</blockquote>
+<h4 id="ros-china-RECOMMEND"><a href="#ros-china-RECOMMEND" class="headerlink" title="ros china(RECOMMEND)"></a>ros china(RECOMMEND)</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> sh -c <span class="string">&#x27;. /etc/lsb-release &amp;&amp; echo &quot;deb [arch=amd64] http://mirrors.ustc.edu.cn/ros/ubuntu/ $DISTRIB_CODENAME main&quot; &gt; /etc/apt/sources.list.d/ros-latest.list&#x27;</span></span><br><span class="line"><span class="built_in">sudo</span> apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116</span><br></pre></td></tr></table></figure>
+
+<p>cat <code>ros-latest.list</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deb [<span class="built_in">arch</span>=amd64] http://mirrors.ustc.edu.cn/ros/ubuntu/ xenial main</span><br></pre></td></tr></table></figure>
+
+<h3 id="Install-ros"><a href="#Install-ros" class="headerlink" title="Install ros"></a>Install ros</h3><p>ROS, rqt, rviz, robot-generic libraries, 2D&#x2F;3D simulators, navigation and 2D&#x2F;3D perception</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br><span class="line"><span class="built_in">sudo</span> apt-get install ros-kinetic-desktop-full</span><br><span class="line"></span><br><span class="line"><span class="comment">#sudo apt-get install ros-kinetic-desktop</span></span><br><span class="line"><span class="comment">#sudo apt-get install ros-kinetic-ros-base</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#sudo apt-get install ros-kinetic-&lt;PACKAGE&gt;</span></span><br><span class="line"><span class="comment">#sudo apt-get install ros-kinetic-slam-gmapping</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#apt-cache search ros-kinetic</span></span><br></pre></td></tr></table></figure>
+<h3 id="Initialize-rosdep"><a href="#Initialize-rosdep" class="headerlink" title="Initialize rosdep"></a>Initialize rosdep</h3><p>Before you can use ROS, you will need to initialize rosdep. rosdep enables you to easily install system dependencies for source you want to compile and is required to run some core components in ROS.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> rosdep init</span><br><span class="line">rosdep update</span><br></pre></td></tr></table></figure>
+
+<p>will output </p>
+<pre><code>reading in sources list data from /etc/ros/rosdep/sources.list.d
+Hit https://raw.githubusercontent.com/ros/rosdistro/master/rosdep/osx-homebrew.yaml
+Hit https://raw.githubusercontent.com/ros/rosdistro/master/rosdep/base.yaml
+Hit https://raw.githubusercontent.com/ros/rosdistro/master/rosdep/python.yaml
+Hit https://raw.githubusercontent.com/ros/rosdistro/master/rosdep/ruby.yaml
+Hit https://raw.githubusercontent.com/ros/rosdistro/master/releases/fuerte.yaml
+Query rosdistro index https://raw.githubusercontent.com/ros/rosdistro/master/index.yaml
+Add distro &quot;groovy&quot;
+Add distro &quot;hydro&quot;
+Add distro &quot;indigo&quot;
+Add distro &quot;jade&quot;
+Add distro &quot;kinetic&quot;
+Add distro &quot;lunar&quot;
+updated cache in /home/kezunlin/.ros/rosdep/sources.cache
+</code></pre>
+<h3 id="Environment-setup"><a href="#Environment-setup" class="headerlink" title="Environment setup"></a>Environment setup</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;source /opt/ros/kinetic/setup.bash&quot;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<h4 id="check-ROS"><a href="#check-ROS" class="headerlink" title="check  ROS"></a>check  ROS</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">env</span> | grep ROS</span><br><span class="line"><span class="built_in">export</span> | grep ROS</span><br><span class="line"><span class="built_in">declare</span> -x ROSLISP_PACKAGE_DIRECTORIES=<span class="string">&quot;&quot;</span></span><br><span class="line"><span class="built_in">declare</span> -x ROS_DISTRO=<span class="string">&quot;kinetic&quot;</span></span><br><span class="line"><span class="built_in">declare</span> -x ROS_ETC_DIR=<span class="string">&quot;/opt/ros/kinetic/etc/ros&quot;</span></span><br><span class="line"><span class="built_in">declare</span> -x ROS_MASTER_URI=<span class="string">&quot;http://localhost:11311&quot;</span></span><br><span class="line"><span class="built_in">declare</span> -x ROS_PACKAGE_PATH=<span class="string">&quot;/opt/ros/kinetic/share&quot;</span></span><br><span class="line"><span class="built_in">declare</span> -x ROS_ROOT=<span class="string">&quot;/opt/ros/kinetic/share/ros&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Dependencies-for-building-packages"><a href="#Dependencies-for-building-packages" class="headerlink" title="Dependencies for building packages"></a>Dependencies for building packages</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install python-rosinstall python-rosinstall-generator python-wstool build-essential</span><br></pre></td></tr></table></figure>
+
+<h3 id="Test-install"><a href="#Test-install" class="headerlink" title="Test install"></a>Test install</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">roscore</span><br></pre></td></tr></table></figure>
+<p>output </p>
+<pre><code>... logging to /home/kezunlin/.ros/log/b777db6c-ff85-11e8-93c2-80fa5b47928a/roslaunch-ke-17139.log
+Checking log directory for disk usage. This may take awhile.
+Press Ctrl-C to interrupt
+Done checking log file disk usage. Usage is &lt;1GB.
+
+started roslaunch server http://ke:36319/
+ros_comm version 1.12.14
+
+
+SUMMARY
+========
+
+PARAMETERS
+ * /rosdistro: kinetic
+ * /rosversion: 1.12.14
+
+NODES
+
+auto-starting new master
+process[master]: started with pid [17162]
+ROS_MASTER_URI=http://ke:11311/
+
+setting /run_id to b777db6c-ff85-11e8-93c2-80fa5b47928a
+process[rosout-1]: started with pid [17175]
+started core service [/rosout]
+^C[rosout-1] killing on exit
+[master] killing on exit
+shutting down processing monitor...
+... shutting down processing monitor complete
+done
+</code></pre>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<h2 id="Create-Workspace"><a href="#Create-Workspace" class="headerlink" title="Create Workspace"></a>Create Workspace</h2><h3 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h3><p>Let’s create and build a catkin workspace:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/catkin_ws/src</span><br><span class="line"><span class="built_in">cd</span> ~/catkin_ws/</span><br><span class="line">catkin_make</span><br><span class="line"></span><br><span class="line"><span class="built_in">ls</span> .</span><br><span class="line">build dist src</span><br></pre></td></tr></table></figure>
+
+<p><code>tree src</code> folder</p>
+<pre><code>src/
+└── CMakeLists.txt -&gt; /opt/ros/kinetic/share/catkin/cmake/toplevel.cmake
+
+0 directories, 1 file
+</code></pre>
+<p><code>tree devel</code> folder  </p>
+<pre><code>devel
+├── env.sh
+├── lib
+├── setup.bash
+├── setup.sh
+├── _setup_util.py
+└── setup.zsh
+
+1 directory, 5 files
+</code></pre>
+<p>The <code>catkin_make</code> command is a convenience tool for working with <code>catkin workspaces</code>. </p>
+<h3 id="source-devel-setup"><a href="#source-devel-setup" class="headerlink" title="source devel setup"></a>source devel setup</h3><p>before <code>source devel/setup.bash</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">env</span> | grep ROS</span><br><span class="line">ROS_ROOT=/opt/ros/kinetic/share/ros</span><br><span class="line">ROS_PACKAGE_PATH=/opt/ros/kinetic/share</span><br><span class="line">ROS_MASTER_URI=http://localhost:11311</span><br><span class="line">ROSLISP_PACKAGE_DIRECTORIES=</span><br><span class="line">ROS_DISTRO=kinetic</span><br><span class="line">ROS_ETC_DIR=/opt/ros/kinetic/etc/ros</span><br></pre></td></tr></table></figure>
+
+<p>after <code>source devel/setup.bash</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">env</span> | grep ROS</span><br><span class="line">ROS_ROOT=/opt/ros/kinetic/share/ros</span><br><span class="line">ROS_PACKAGE_PATH=/home/kezunlin/catkin_ws/src:/opt/ros/kinetic/share</span><br><span class="line">ROS_MASTER_URI=http://localhost:11311</span><br><span class="line">ROSLISP_PACKAGE_DIRECTORIES=/home/kezunlin/catkin_ws/devel/share/common-lisp</span><br><span class="line">ROS_DISTRO=kinetic</span><br><span class="line">ROS_ETC_DIR=/opt/ros/kinetic/etc/ros</span><br></pre></td></tr></table></figure>
+
+<p>To make sure your workspace is properly overlayed by the setup script, make sure <code>ROS_PACKAGE_PATH</code> environment variable includes the directory you’re in.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="variable">$ROS_PACKAGE_PATH</span></span><br><span class="line">/home/kezunlin/catkin_ws/src:/opt/ros/kinetic/share</span><br></pre></td></tr></table></figure>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://wiki.ros.org/kinetic/Installation/Ubuntu">Official Install Guide</a></li>
+<li><a target="_blank" rel="noopener" href="http://wiki.ros.org/ROS/Installation/UbuntuMirrors">Ubuntu ROS mirrors</a></li>
+<li><a target="_blank" rel="noopener" href="http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment">Configure ROS Environment</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>2018&#x2F;01&#x2F;04: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ros/" rel="tag"># ros</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/Brewing-Logistic-Regression-then-Going-Deeper/" rel="prev" title="Brewing Logistic Regression then Going Deeper">
+      <i class="fa fa-chevron-left"></i> Brewing Logistic Regression then Going Deeper
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/ubuntu-network-proxy/" rel="next" title="Ubuntu Network Configuration">
+      Ubuntu Network Configuration <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Install-Guide"><span class="nav-number">1.</span> <span class="nav-text">Install Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#version"><span class="nav-number">1.1.</span> <span class="nav-text">version</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#quick-commands"><span class="nav-number">1.2.</span> <span class="nav-text">quick commands</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#update-source"><span class="nav-number">1.3.</span> <span class="nav-text">update source</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Configure-ros-source"><span class="nav-number">1.4.</span> <span class="nav-text">Configure ros source</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ros-offical-NOT-RECOMMEND"><span class="nav-number">1.4.1.</span> <span class="nav-text">ros offical(NOT RECOMMEND)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ros-china-RECOMMEND"><span class="nav-number">1.4.2.</span> <span class="nav-text">ros china(RECOMMEND)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Install-ros"><span class="nav-number">1.5.</span> <span class="nav-text">Install ros</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Initialize-rosdep"><span class="nav-number">1.6.</span> <span class="nav-text">Initialize rosdep</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Environment-setup"><span class="nav-number">1.7.</span> <span class="nav-text">Environment setup</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#check-ROS"><span class="nav-number">1.7.1.</span> <span class="nav-text">check  ROS</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dependencies-for-building-packages"><span class="nav-number">1.8.</span> <span class="nav-text">Dependencies for building packages</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Test-install"><span class="nav-number">1.9.</span> <span class="nav-text">Test install</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Create-Workspace"><span class="nav-number">2.</span> <span class="nav-text">Create Workspace</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create"><span class="nav-number">2.1.</span> <span class="nav-text">Create</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#source-devel-setup"><span class="nav-number">2.2.</span> <span class="nav-text">source devel setup</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

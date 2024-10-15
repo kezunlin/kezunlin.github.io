@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Series Part-1: Install and Configure Qt5 on Ubuntu 16.04 Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04 Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04">
+<meta property="og:url" content="https://kezunlin.me/blog/Guide-to-compile-VTK-with-Qt-on-Ubuntu/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Series Part-1: Install and Configure Qt5 on Ubuntu 16.04 Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04 Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubu">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180109102359785-330027676.png">
+<meta property="article:published_time" content="2018-01-08T12:45:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="qt">
+<meta property="article:tag" content="vtk">
+<meta property="article:tag" content="pcl">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kezunlin.me/images/posts/635233-20180109102359785-330027676.png">
+
+<link rel="canonical" href="https://kezunlin.me/blog/Guide-to-compile-VTK-with-Qt-on-Ubuntu/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04 | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/Guide-to-compile-VTK-with-Qt-on-Ubuntu/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-01-08 20:45:00" itemprop="dateCreated datePublished" datetime="2018-01-08T20:45:00+08:00">2018-01-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h2><ul>
+<li><a href="https://kezunlin.me/post/91842b71/">Part-1: Install and Configure Qt5 on Ubuntu 16.04</a></li>
+<li><a href="https://kezunlin.me/post/b901735e/"><strong>Part-2: Install and Configure VTK 8.1.0 from source with Qt5 on Ubuntu 16.04</strong></a></li>
+<li><a href="https://kezunlin.me/post/137aa5fc/">Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubuntu 16.04 from source</a></li>
+<li><a href="https://kezunlin.me/post/2d809f92/">Part-4: Install and Configure PCL 1.8.1 with vtk qt support on windows 10 from source</a></li>
+</ul>
+<h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><ul>
+<li>qt: 5.7.0</li>
+<li>qmake: 3.0</li>
+<li>qtcreator: 3.5.1</li>
+<li>vtk: 8.1.0  (from source)</li>
+</ul>
+<h3 id="install-qt57"><a href="#install-qt57" class="headerlink" title="install qt57"></a>install qt57</h3><p>see <a href="https://kezunlin.me/post/91842b71/"><strong>Part-1: Install and Configure Qt5 on Ubuntu 16.04</strong></a></p>
+<blockquote>
+<p>install qt57 and qtcreator.</p>
+</blockquote>
+<h3 id="install-vtk"><a href="#install-vtk" class="headerlink" title="install vtk"></a>install vtk</h3><h4 id="download-source"><a href="#download-source" class="headerlink" title="download source"></a>download source</h4><p>Download vtk source</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://www.vtk.org/files/release/8.1/VTK-8.1.0.tar.gz</span><br><span class="line">wget https://www.vtk.org/files/release/8.1/VTKData-8.1.0.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>integrate VTK with Qt for a pretty graphical user interface, we need to turn on some options.</p>
+<h4 id="configure-vtk-with-qt"><a href="#configure-vtk-with-qt" class="headerlink" title="configure vtk with qt"></a>configure vtk with qt</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> VTK-8.1.0</span><br><span class="line"><span class="built_in">mkdir</span> build</span><br><span class="line"><span class="built_in">cd</span> build</span><br><span class="line">cmake-gui ..</span><br></pre></td></tr></table></figure>
+
+<p>with options:</p>
+<pre><code>VTK_Group_Qt       ON
+VTK_QT_VERSION     5 # default
+QT5_DIR            /opt/qt/5.7/gcc_64/lib/cmake/Qt5
+
+VTK_RENDERING_BACKEND OpenGL2 # default
+BUILD_SHARED_LIBS  ON
+CMAKE_BUILD_TYPE   Release
+CMAKE_INSTALL_PREFIX /usr/local
+</code></pre>
+<blockquote>
+<p>set <code>QT5_Dir</code> to <code>/opt/qt/5.7/gcc_64/lib/cmake/Qt5</code></p>
+</blockquote>
+<h4 id="download-MD5-VTKData"><a href="#download-MD5-VTKData" class="headerlink" title="download MD5 VTKData"></a>download MD5 VTKData</h4><p>tar <code>VTKData-8.1.0.tar.gz</code> and copy <code>MD5</code> to <code>VTK-8.1.0/build/ExternalData/Objects/MD5</code></p>
+<h4 id="make-and-install"><a href="#make-and-install" class="headerlink" title="make and install"></a>make and install</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make -j8</span><br><span class="line"><span class="built_in">sudo</span> make -j8 install</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>install to <code>/usr/local/include/vtk-8.1</code> and <code>/usr/local/lib/cmake/vtk-8.1</code></p>
+</blockquote>
+<h4 id="install-QVTKWidget-plugin"><a href="#install-QVTKWidget-plugin" class="headerlink" title="install QVTKWidget plugin"></a>install QVTKWidget plugin</h4><ol>
+<li>copy <code>libQVTKWidgetPlugin.so</code> to<br>install path: <code>/usr/lib/x86_64-linux-gnu/qt5/plugins/designer</code></li>
+</ol>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> build/lib</span><br><span class="line"><span class="built_in">ls</span> -al libQVTKWidgetPlugin.so </span><br><span class="line"></span><br><span class="line"><span class="comment"># copy to qt creator</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">cp</span> libQVTKWidgetPlugin.so /usr/lib/x86_64-linux-gnu/qt5/plugins/designer </span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>now list designer plugins</li>
+</ol>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> /usr/lib/x86_64-linux-gnu/qt5/plugins/designer</span><br><span class="line">libqquickwidget.so  libQVTKWidgetPlugin.so  libqwebview.so</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>if we start <code>qtcreator</code> we will see an <code>QVTKWidget</code> at the bottom of <code>VTK</code> container of <code>Design</code> layout.</li>
+</ol>
+<p><img src="https://kezunlin.me/images/posts/635233-20180109102359785-330027676.png" alt="QVTKWidget for qtcreator"></p>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+<h2 id="VTK-Example"><a href="#VTK-Example" class="headerlink" title="VTK Example"></a>VTK Example</h2><h3 id="CylinderRenderingProperties-cpp"><a href="#CylinderRenderingProperties-cpp" class="headerlink" title="CylinderRenderingProperties.cpp"></a>CylinderRenderingProperties.cpp</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vtkCylinderSource.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vtkPolyDataMapper.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vtkActor.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vtkRenderer.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vtkRenderWindow.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vtkRenderWindowInteractor.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vtkProperty.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vtkCamera.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vtkSmartPointer.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span>, <span class="type">char</span> *[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="comment">// This creates a polygonal cylinder model with eight circumferential facets</span></span><br><span class="line">  <span class="comment">// (i.e, in practice an octagonal prism).</span></span><br><span class="line">  vtkSmartPointer&lt;vtkCylinderSource&gt; cylinder =</span><br><span class="line">    vtkSmartPointer&lt;vtkCylinderSource&gt;::<span class="built_in">New</span>();</span><br><span class="line">  cylinder-&gt;<span class="built_in">SetResolution</span>(<span class="number">8</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// The mapper is responsible for pushing the geometry into the graphics library.</span></span><br><span class="line">  <span class="comment">// It may also do color mapping, if scalars or other attributes are defined.</span></span><br><span class="line">  vtkSmartPointer&lt;vtkPolyDataMapper&gt; cylinderMapper =</span><br><span class="line">    vtkSmartPointer&lt;vtkPolyDataMapper&gt;::<span class="built_in">New</span>();</span><br><span class="line">  cylinderMapper-&gt;<span class="built_in">SetInputConnection</span>(cylinder-&gt;<span class="built_in">GetOutputPort</span>());</span><br><span class="line"></span><br><span class="line">  <span class="comment">// The actor is a grouping mechanism: besides the geometry (mapper), it</span></span><br><span class="line">  <span class="comment">// also has a property, transformation matrix, and/or texture map.</span></span><br><span class="line">  <span class="comment">// Here we set its color and rotate it around the X and Y axes.</span></span><br><span class="line">  vtkSmartPointer&lt;vtkActor&gt; cylinderActor =</span><br><span class="line">    vtkSmartPointer&lt;vtkActor&gt;::<span class="built_in">New</span>();</span><br><span class="line">  cylinderActor-&gt;<span class="built_in">SetMapper</span>(cylinderMapper);</span><br><span class="line">  cylinderActor-&gt;<span class="built_in">GetProperty</span>()-&gt;<span class="built_in">SetColor</span>(<span class="number">1.0000</span>, <span class="number">0.3882</span>, <span class="number">0.2784</span>);</span><br><span class="line">  cylinderActor-&gt;<span class="built_in">RotateX</span>(<span class="number">30.0</span>);</span><br><span class="line">  cylinderActor-&gt;<span class="built_in">RotateY</span>(<span class="number">-45.0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// The renderer generates the image</span></span><br><span class="line">  <span class="comment">// which is then displayed on the render window.</span></span><br><span class="line">  <span class="comment">// It can be thought of as a scene to which the actor is added</span></span><br><span class="line">  vtkSmartPointer&lt;vtkRenderer&gt; renderer =</span><br><span class="line">    vtkSmartPointer&lt;vtkRenderer&gt;::<span class="built_in">New</span>();</span><br><span class="line">  renderer-&gt;<span class="built_in">AddActor</span>(cylinderActor);</span><br><span class="line">  renderer-&gt;<span class="built_in">SetBackground</span>(<span class="number">0.1</span>, <span class="number">0.2</span>, <span class="number">0.4</span>);</span><br><span class="line">  <span class="comment">// Zoom in a little by accessing the camera and invoking its &quot;Zoom&quot; method.</span></span><br><span class="line">  renderer-&gt;<span class="built_in">ResetCamera</span>();</span><br><span class="line">  renderer-&gt;<span class="built_in">GetActiveCamera</span>()-&gt;<span class="built_in">Zoom</span>(<span class="number">1.5</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// The render window is the actual GUI window</span></span><br><span class="line">  <span class="comment">// that appears on the computer screen</span></span><br><span class="line">  vtkSmartPointer&lt;vtkRenderWindow&gt; renderWindow =</span><br><span class="line">    vtkSmartPointer&lt;vtkRenderWindow&gt;::<span class="built_in">New</span>();</span><br><span class="line">  renderWindow-&gt;<span class="built_in">SetSize</span>(<span class="number">200</span>, <span class="number">200</span>);</span><br><span class="line">  renderWindow-&gt;<span class="built_in">AddRenderer</span>(renderer);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// The render window interactor captures mouse events</span></span><br><span class="line">  <span class="comment">// and will perform appropriate camera or actor manipulation</span></span><br><span class="line">  <span class="comment">// depending on the nature of the events.</span></span><br><span class="line">  vtkSmartPointer&lt;vtkRenderWindowInteractor&gt; renderWindowInteractor =</span><br><span class="line">    vtkSmartPointer&lt;vtkRenderWindowInteractor&gt;::<span class="built_in">New</span>();</span><br><span class="line">  renderWindowInteractor-&gt;<span class="built_in">SetRenderWindow</span>(renderWindow);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// This starts the event loop and as a side effect causes an initial render.</span></span><br><span class="line">  renderWindowInteractor-&gt;<span class="built_in">Start</span>();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> EXIT_SUCCESS;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 2.8)</span><br><span class="line"> </span><br><span class="line">PROJECT(CylinderRenderingProperties)</span><br><span class="line"> </span><br><span class="line">find_package(VTK REQUIRED)</span><br><span class="line">include(<span class="variable">$&#123;VTK_USE_FILE&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># /usr/local/lib/cmake/vtk-8.0/UseVTK.cmake</span></span><br><span class="line"><span class="comment"># C:/Program Files/PCL 1.8.1/3rdParty/VTK/lib/cmake/vtk-8.0/UseVTK.cmake</span></span><br><span class="line"></span><br><span class="line">message ([vtk] <span class="variable">$&#123;VTK_LIBRARIES&#125;</span>)</span><br><span class="line"></span><br><span class="line">add_executable(CylinderRenderingProperties MACOSX_BUNDLE CylinderRenderingProperties.cxx )</span><br><span class="line"> </span><br><span class="line">target_link_libraries(CylinderRenderingProperties <span class="variable">$&#123;VTK_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h3><pre><code class="bash">mkdir build &amp;&amp; cd build &amp;&amp; cmake-gui ..
+make -j8
+</code></pre>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.vtk.org/Wiki/VTK/Configure_and_Build">Configure_and_Build vtk</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.vtk.org/Wiki/VTK/Tutorials/QtSetup">vtk qt setup</a></li>
+</ul>
+<h1 id="History"><a href="#History" class="headerlink" title="History"></a>History</h1><ul>
+<li>20180108: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/qt/" rel="tag"># qt</a>
+              <a href="/tags/vtk/" rel="tag"># vtk</a>
+              <a href="/tags/pcl/" rel="tag"># pcl</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/guide-to-build-qt-library-and-use-in-another-project/" rel="prev" title="How to Build and Use user-defined QT Library">
+      <i class="fa fa-chevron-left"></i> How to Build and Use user-defined QT Library
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/Install-and-Configure-PCL-on-Ubuntu-16-04-from-source/" rel="next" title="Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubuntu 16.04 from source">
+      Part-3: Install and Configure PCL 1.8.1 with vtk qt support on Ubuntu 16.04 from source <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Series"><span class="nav-number">1.</span> <span class="nav-text">Series</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">2.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#install-qt57"><span class="nav-number">2.1.</span> <span class="nav-text">install qt57</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-vtk"><span class="nav-number">2.2.</span> <span class="nav-text">install vtk</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#download-source"><span class="nav-number">2.2.1.</span> <span class="nav-text">download source</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#configure-vtk-with-qt"><span class="nav-number">2.2.2.</span> <span class="nav-text">configure vtk with qt</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#download-MD5-VTKData"><span class="nav-number">2.2.3.</span> <span class="nav-text">download MD5 VTKData</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#make-and-install"><span class="nav-number">2.2.4.</span> <span class="nav-text">make and install</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#install-QVTKWidget-plugin"><span class="nav-number">2.2.5.</span> <span class="nav-text">install QVTKWidget plugin</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VTK-Example"><span class="nav-number">3.</span> <span class="nav-text">VTK Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CylinderRenderingProperties-cpp"><span class="nav-number">3.1.</span> <span class="nav-text">CylinderRenderingProperties.cpp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">3.2.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#compile"><span class="nav-number">3.3.</span> <span class="nav-text">compile</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#History"><span class="nav-number"></span> <span class="nav-text">History</span></a></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

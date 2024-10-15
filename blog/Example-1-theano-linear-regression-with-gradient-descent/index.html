@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Series Example 1-theano linear regression with gradient descent Example 2 - Linear Regression Example with Python and theano from MSDN Example 3- A Real Example Logistic Regression with theano  code e">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Example 1-theano linear regression with gradient descent">
+<meta property="og:url" content="https://kezunlin.me/blog/Example-1-theano-linear-regression-with-gradient-descent/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Series Example 1-theano linear regression with gradient descent Example 2 - Linear Regression Example with Python and theano from MSDN Example 3- A Real Example Logistic Regression with theano  code e">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-08-07T01:44:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="sgd">
+<meta property="article:tag" content="theano">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/Example-1-theano-linear-regression-with-gradient-descent/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Example 1-theano linear regression with gradient descent | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/Example-1-theano-linear-regression-with-gradient-descent/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Example 1-theano linear regression with gradient descent
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-08-07 09:44:00" itemprop="dateCreated datePublished" datetime="2018-08-07T09:44:00+08:00">2018-08-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h2><ul>
+<li><a href="https://kezunlin.me/post/3bee8fac/#more"><strong>Example 1-theano linear regression with gradient descent</strong></a></li>
+<li><a href="https://kezunlin.me/post/8d4707b6/#more">Example 2 - Linear Regression Example with Python and theano from MSDN</a></li>
+<li><a href="https://kezunlin.me/post/8ce3f979/#more">Example 3- A Real Example Logistic Regression with theano</a></li>
+</ul>
+<h2 id="code-example"><a href="#code-example" class="headerlink" title="code example"></a>code example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># https://blogs.msdn.microsoft.com/lukassteindl/2015/12/13/linear-regression-example-with-python-and-theano/</span></span><br><span class="line"><span class="comment"># http://blog.csdn.net/vins_napoleon/article/details/38057927</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> theano</span><br><span class="line"><span class="keyword">import</span> theano.tensor <span class="keyword">as</span> T</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Linear_Reg</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,x</span>):</span><br><span class="line">        <span class="comment">#x,y是scalar,vector(n,),matrix(m,n)</span></span><br><span class="line">        <span class="variable language_">self</span>.w = theano.shared(value = <span class="number">0.0</span>,name = <span class="string">&#x27;w&#x27;</span>)</span><br><span class="line">        <span class="variable language_">self</span>.b = theano.shared(value = <span class="number">0.0</span>,name = <span class="string">&#x27;b&#x27;</span>)</span><br><span class="line">        <span class="comment"># w,b is scalar,so x can be vector</span></span><br><span class="line">        <span class="variable language_">self</span>.y_pred = x * <span class="variable language_">self</span>.w + <span class="variable language_">self</span>.b</span><br><span class="line">        <span class="variable language_">self</span>.params = [<span class="variable language_">self</span>.w,<span class="variable language_">self</span>.b]</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">msl</span>(<span class="params">self,y</span>):</span><br><span class="line">        <span class="keyword">return</span> T.<span class="built_in">sum</span>((y - <span class="variable language_">self</span>.y_pred)**<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Linear_Reg2</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,x</span>):</span><br><span class="line">        <span class="comment">#x,y是scalar,vector(1,),matrix(m,1)</span></span><br><span class="line">        <span class="variable language_">self</span>.w = theano.shared(value = np.zeros((<span class="number">1</span>,),dtype=theano.config.floatX),name = <span class="string">&#x27;w&#x27;</span>)</span><br><span class="line">        <span class="variable language_">self</span>.b = theano.shared(value = np.zeros((<span class="number">1</span>,),dtype=theano.config.floatX),name = <span class="string">&#x27;b&#x27;</span>)</span><br><span class="line">        <span class="comment"># w,b is vector,so x cab be scalar</span></span><br><span class="line">        <span class="variable language_">self</span>.y_pred = x * <span class="variable language_">self</span>.w + <span class="variable language_">self</span>.b</span><br><span class="line">        <span class="variable language_">self</span>.params = [<span class="variable language_">self</span>.w,<span class="variable language_">self</span>.b]</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">msl</span>(<span class="params">self,y</span>):</span><br><span class="line">        <span class="keyword">return</span> T.<span class="built_in">sum</span>((y - <span class="variable language_">self</span>.y_pred)**<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test_type</span>():</span><br><span class="line">    <span class="comment"># x,y be scalar</span></span><br><span class="line">    points_x = [<span class="number">1.1</span>,<span class="number">2.2</span>] </span><br><span class="line">    points_y = [<span class="number">3.3</span>,<span class="number">4.4</span>]</span><br><span class="line">    X = theano.shared(np.asarray(points_x,dtype=theano.config.floatX),borrow = <span class="literal">True</span>)</span><br><span class="line">    Y = theano.shared(np.asarray(points_y,dtype=theano.config.floatX),borrow = <span class="literal">True</span>)</span><br><span class="line">    x = T.dscalar(<span class="string">&#x27;x&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span> x</span><br><span class="line">    <span class="built_in">print</span> x.<span class="built_in">type</span></span><br><span class="line">    <span class="built_in">print</span> X[<span class="number">0</span>]</span><br><span class="line">    <span class="built_in">print</span> X[<span class="number">0</span>].<span class="built_in">type</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">#x</span></span><br><span class="line">    <span class="comment">#TensorType(float64, scalar)</span></span><br><span class="line">    <span class="comment">#Subtensor&#123;int64&#125;.0</span></span><br><span class="line">    <span class="comment">#TensorType(float64, scalar)</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test_type2</span>():</span><br><span class="line">    <span class="comment"># x,y be vector</span></span><br><span class="line">    points_x = [<span class="number">1.1</span>,<span class="number">2.2</span>] </span><br><span class="line">    points_y = [<span class="number">3.3</span>,<span class="number">4.4</span>]</span><br><span class="line">    X = theano.shared(np.asarray(points_x,dtype=theano.config.floatX),borrow = <span class="literal">True</span>)</span><br><span class="line">    Y = theano.shared(np.asarray(points_y,dtype=theano.config.floatX),borrow = <span class="literal">True</span>)</span><br><span class="line">    x = T.dvector(<span class="string">&#x27;x&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span> x</span><br><span class="line">    <span class="built_in">print</span> x.<span class="built_in">type</span></span><br><span class="line">    <span class="built_in">print</span> X[<span class="number">0</span>:<span class="number">2</span>]</span><br><span class="line">    <span class="built_in">print</span> X[<span class="number">0</span>:<span class="number">2</span>].<span class="built_in">type</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">#x</span></span><br><span class="line">    <span class="comment">#TensorType(float64, vector)</span></span><br><span class="line">    <span class="comment">#Subtensor&#123;int64:int64:&#125;.0</span></span><br><span class="line">    <span class="comment">#TensorType(float64, vector)</span></span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">run_model1</span>(<span class="params">mode</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    [w,b be scalar]</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    mode = scalar(), set mini_batch_size = 1</span></span><br><span class="line"><span class="string">    mode = vector(m,),  reshape X,Y to vector  </span></span><br><span class="line"><span class="string">    mode = matrix(m,n), reshape X,Y to matrix</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    eta = <span class="number">0.000001</span></span><br><span class="line">    epochs = <span class="number">1000</span></span><br><span class="line">    points = genfromtxt(<span class="string">&quot;data.csv&quot;</span>, delimiter=<span class="string">&quot;,&quot;</span>)<span class="comment"># (100,2)</span></span><br><span class="line">    points_x = points[:,<span class="number">0</span>] <span class="comment"># (100,)   numpy.float64</span></span><br><span class="line">    points_y = points[:,<span class="number">1</span>] <span class="comment"># (100,)   numpy.float64</span></span><br><span class="line">    N = points_x.shape[<span class="number">0</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> mode == <span class="string">&quot;scalar&quot;</span>:</span><br><span class="line">        mini_batch_size = <span class="number">1</span>  <span class="comment"># must be 1 so that all X[i] are used</span></span><br><span class="line">        X = theano.shared(np.asarray(points_x,dtype=theano.config.floatX),borrow = <span class="literal">True</span>)</span><br><span class="line">        Y = theano.shared(np.asarray(points_y,dtype=theano.config.floatX),borrow = <span class="literal">True</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># so than we get X[0],X[1],...</span></span><br><span class="line">        x = T.dscalar(<span class="string">&#x27;tx&#x27;</span>)</span><br><span class="line">        y = T.dscalar(<span class="string">&#x27;ty&#x27;</span>)</span><br><span class="line">    <span class="keyword">elif</span> mode == <span class="string">&quot;vector&quot;</span>:</span><br><span class="line">        mini_batch_size = <span class="number">5</span></span><br><span class="line">        X = theano.shared(np.asarray(points_x,dtype=theano.config.floatX),borrow = <span class="literal">True</span>)</span><br><span class="line">        Y = theano.shared(np.asarray(points_y,dtype=theano.config.floatX),borrow = <span class="literal">True</span>)</span><br><span class="line">                      </span><br><span class="line">        <span class="comment"># so than we get X[0:5],X[5:10],...</span></span><br><span class="line">        x = T.dvector(<span class="string">&#x27;tx&#x27;</span>)</span><br><span class="line">        y = T.dvector(<span class="string">&#x27;ty&#x27;</span>)</span><br><span class="line">    <span class="keyword">elif</span> mode == <span class="string">&quot;matrix&quot;</span>:</span><br><span class="line">        mini_batch_size = <span class="number">5</span></span><br><span class="line">        X = theano.shared(np.asarray(points_x,dtype=theano.config.floatX).reshape(N,<span class="number">1</span>),borrow = <span class="literal">True</span>)</span><br><span class="line">        Y = theano.shared(np.asarray(points_y,dtype=theano.config.floatX).reshape(N,<span class="number">1</span>),borrow = <span class="literal">True</span>)</span><br><span class="line">                      </span><br><span class="line">        <span class="comment"># so than we get X[0:5],X[5:10],...</span></span><br><span class="line">        x = T.dmatrix(<span class="string">&#x27;tx&#x27;</span>)</span><br><span class="line">        y = T.dmatrix(<span class="string">&#x27;ty&#x27;</span>)             </span><br><span class="line">        </span><br><span class="line">    num_batches = N/mini_batch_size</span><br><span class="line">        </span><br><span class="line">    <span class="comment">#index = T.lscalar() # l int64</span></span><br><span class="line">    </span><br><span class="line">    reg = Linear_Reg(x = x)</span><br><span class="line">    cost = reg.msl(y)</span><br><span class="line"></span><br><span class="line">    w_g = T.grad(cost = cost, wrt = reg.w)</span><br><span class="line">    b_g = T.grad(cost = cost, wrt = reg.b)</span><br><span class="line"></span><br><span class="line">    updates=[(reg.w, reg.w - eta * w_g),</span><br><span class="line">             (reg.b, reg.b - eta * b_g)]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># use x,y as input (调用函数的时候，x,y的参数化必须是python数值，不能是theano variable)</span></span><br><span class="line">    train_model = theano.function(inputs=[x,y],</span><br><span class="line">                                  outputs = cost,</span><br><span class="line">                                  updates = updates,</span><br><span class="line">                                  )</span><br><span class="line"></span><br><span class="line">    cost_t = <span class="number">0.0</span></span><br><span class="line">    costs = []</span><br><span class="line">    start_time = time.clock()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> xrange(epochs):</span><br><span class="line">        <span class="comment"># 1个epoch,所有N个样本参与训练,mini = m,学习N/m次</span></span><br><span class="line">        cost_l = []</span><br><span class="line">        <span class="keyword">for</span> index <span class="keyword">in</span> <span class="built_in">range</span>(num_batches):</span><br><span class="line">            <span class="keyword">if</span> mode == <span class="string">&quot;scalar&quot;</span>:</span><br><span class="line">                x = X.get_value()[index]</span><br><span class="line">                y = Y.get_value()[index]</span><br><span class="line">            <span class="keyword">else</span>:  </span><br><span class="line">                x = X.get_value()[index*mini_batch_size:(index+<span class="number">1</span>)*mini_batch_size]</span><br><span class="line">                y = Y.get_value()[index*mini_batch_size:(index+<span class="number">1</span>)*mini_batch_size] </span><br><span class="line">            cost_l.append( train_model(x,y) )</span><br><span class="line"></span><br><span class="line">        cost_t = np.mean(cost_l)</span><br><span class="line">        costs.append(cost_t)</span><br><span class="line"></span><br><span class="line">    end_time = time.clock()</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&#x27;\nTotal time is ：&#x27;</span>,end_time -start_time,<span class="string">&#x27; s&#x27;</span> </span><br><span class="line">    <span class="built_in">print</span> <span class="string">&#x27;last cost :&#x27;</span>,cost_t</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&#x27;w value : &#x27;</span>,reg.w.get_value() </span><br><span class="line">    <span class="built_in">print</span> <span class="string">&#x27;b value : &#x27;</span>,reg.b.get_value() </span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">run_model2</span>(<span class="params">mode</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    [w,b be vector(1,)]</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    mode = scalar(),   set mini_batch_size = 1</span></span><br><span class="line"><span class="string">    mode = vector(1,), set mini_batch_size = 1, reshape X,Y to vector  </span></span><br><span class="line"><span class="string">    mode = matrix(m,1), reshape X,Y to matrix</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    eta = <span class="number">0.000001</span></span><br><span class="line">    epochs = <span class="number">1000</span></span><br><span class="line">    points = genfromtxt(<span class="string">&quot;data.csv&quot;</span>, delimiter=<span class="string">&quot;,&quot;</span>)<span class="comment"># (100,2)</span></span><br><span class="line">    points_x = points[:,<span class="number">0</span>] <span class="comment"># (100,)   numpy.float64</span></span><br><span class="line">    points_y = points[:,<span class="number">1</span>] <span class="comment"># (100,)   numpy.float64</span></span><br><span class="line">    N = points_x.shape[<span class="number">0</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> mode == <span class="string">&quot;scalar&quot;</span>:</span><br><span class="line">        mini_batch_size = <span class="number">1</span> </span><br><span class="line">        X = theano.shared(np.asarray(points_x,dtype=theano.config.floatX),borrow = <span class="literal">True</span>)</span><br><span class="line">        Y = theano.shared(np.asarray(points_y,dtype=theano.config.floatX),borrow = <span class="literal">True</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># so than we get X[0],X[1],...</span></span><br><span class="line">        x = T.dscalar(<span class="string">&#x27;tx&#x27;</span>)</span><br><span class="line">        y = T.dscalar(<span class="string">&#x27;ty&#x27;</span>)</span><br><span class="line">    <span class="keyword">elif</span> mode == <span class="string">&quot;vector&quot;</span>:</span><br><span class="line">        mini_batch_size = <span class="number">1</span> </span><br><span class="line">        X = theano.shared(np.asarray(points_x,dtype=theano.config.floatX),borrow = <span class="literal">True</span>)</span><br><span class="line">        Y = theano.shared(np.asarray(points_y,dtype=theano.config.floatX),borrow = <span class="literal">True</span>)</span><br><span class="line">                      </span><br><span class="line">        <span class="comment"># so than we get X[0:5],X[5:10],...</span></span><br><span class="line">        x = T.dvector(<span class="string">&#x27;tx&#x27;</span>)</span><br><span class="line">        y = T.dvector(<span class="string">&#x27;ty&#x27;</span>)</span><br><span class="line">    <span class="keyword">elif</span> mode == <span class="string">&quot;matrix&quot;</span>:</span><br><span class="line">        mini_batch_size = <span class="number">5</span></span><br><span class="line">        X = theano.shared(np.asarray(points_x,dtype=theano.config.floatX).reshape(N,<span class="number">1</span>),borrow = <span class="literal">True</span>)</span><br><span class="line">        Y = theano.shared(np.asarray(points_y,dtype=theano.config.floatX).reshape(N,<span class="number">1</span>),borrow = <span class="literal">True</span>)</span><br><span class="line">                      </span><br><span class="line">        <span class="comment"># so than we get X[0:5],X[5:10],...</span></span><br><span class="line">        x = T.dmatrix(<span class="string">&#x27;tx&#x27;</span>)</span><br><span class="line">        y = T.dmatrix(<span class="string">&#x27;ty&#x27;</span>)             </span><br><span class="line">        </span><br><span class="line">    num_batches = N/mini_batch_size</span><br><span class="line">        </span><br><span class="line">    index = T.lscalar() <span class="comment"># l int64</span></span><br><span class="line">    reg = Linear_Reg2(x = x)</span><br><span class="line">    cost = reg.msl(y)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#w_g,b_g = T.grad(cost,[reg.w,reg.b])</span></span><br><span class="line">    <span class="comment">#updates=[(reg.w, reg.w - eta * w_g), (reg.b, reg.b - eta * b_g)]</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#==========================================================================</span></span><br><span class="line">    <span class="comment"># use params and updates</span></span><br><span class="line">    <span class="comment">#==========================================================================</span></span><br><span class="line">    params = [reg.w,reg.b]       <span class="comment"># list of [w,b]</span></span><br><span class="line">    grads = T.grad(cost,params)  <span class="comment"># list of [w_g,b_g]</span></span><br><span class="line">    updates = [(param,param-eta*grad) </span><br><span class="line">               <span class="keyword">for</span> param,grad <span class="keyword">in</span> <span class="built_in">zip</span>(params,grads)]               </span><br><span class="line">                                <span class="comment"># list of [ (w,w-eta*w_g), (b, b-eta*b_g) ]</span></span><br><span class="line">        </span><br><span class="line">    <span class="comment"># updates必须是shared变量;</span></span><br><span class="line">    <span class="comment"># use x,y as input (调用函数的时候，x,y的参数化必须是python数值，不能是theano variable)</span></span><br><span class="line">    <span class="comment"># use index as input (调用函数的时候，index的参数化必须是python数值),</span></span><br><span class="line">    <span class="comment"># 通过givens替换掉x,y，X[index],Y[index]和x,y的类型必须一致，都是theano variable</span></span><br><span class="line">    <span class="comment"># 此处x,y，X[index],Y[index]都是  TensorType(float64, scalar)　</span></span><br><span class="line">    <span class="comment"># 或者是float64, vector,matrix类型</span></span><br><span class="line">    <span class="keyword">if</span> mode == <span class="string">&quot;scalar&quot;</span>:</span><br><span class="line">        train_model = theano.function(inputs=[index],</span><br><span class="line">                                      outputs = cost,</span><br><span class="line">                                      updates = updates,</span><br><span class="line">                                      givens = &#123;x:X[index],</span><br><span class="line">                                                y:Y[index]&#125;)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        train_model = theano.function(inputs=[index],</span><br><span class="line">                                      outputs = cost,</span><br><span class="line">                                      updates = updates,</span><br><span class="line">                                      givens = &#123;x:X[index*mini_batch_size:(index+<span class="number">1</span>)*mini_batch_size],</span><br><span class="line">                                                y:Y[index*mini_batch_size:(index+<span class="number">1</span>)*mini_batch_size]&#125;)</span><br><span class="line"></span><br><span class="line">    cost_t = <span class="number">0.0</span></span><br><span class="line">    costs = []</span><br><span class="line">    start_time = time.clock()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> xrange(epochs):</span><br><span class="line">        <span class="comment"># 1个epoch,所有N个样本参与训练,mini = m,学习N/m次</span></span><br><span class="line">        cost_l = []</span><br><span class="line">        <span class="keyword">for</span> index <span class="keyword">in</span> <span class="built_in">range</span>(num_batches):</span><br><span class="line">            cost_l.append( train_model(index) )</span><br><span class="line">            </span><br><span class="line">        cost_t = np.mean(cost_l)</span><br><span class="line">        costs.append(cost_t)</span><br><span class="line"></span><br><span class="line">    end_time = time.clock()</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&#x27;\nTotal time is ：&#x27;</span>,end_time -start_time,<span class="string">&#x27; s&#x27;</span> </span><br><span class="line">    <span class="built_in">print</span> <span class="string">&#x27;last cost :&#x27;</span>,cost_t</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&#x27;w value : &#x27;</span>,reg.w.get_value()  </span><br><span class="line">    <span class="built_in">print</span> <span class="string">&#x27;b value : &#x27;</span>,reg.b.get_value()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">run:</span></span><br><span class="line"><span class="string">Total time is ： 2.796644  s</span></span><br><span class="line"><span class="string">last cost : 113.178407322</span></span><br><span class="line"><span class="string">w value :  1.48497718432</span></span><br><span class="line"><span class="string">b value :  0.0890071567283</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">run2:</span></span><br><span class="line"><span class="string">Total time is ： 2.127487  s</span></span><br><span class="line"><span class="string">last cost : 113.178407322</span></span><br><span class="line"><span class="string">w value :  [ 1.48497718]</span></span><br><span class="line"><span class="string">b value :  [ 0.08900716]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">run3:</span></span><br><span class="line"><span class="string">Total time is ： 0.480144  s</span></span><br><span class="line"><span class="string">avg cost : 565.419900755</span></span><br><span class="line"><span class="string">w value :  [ 1.48492605]</span></span><br><span class="line"><span class="string">b value :  [ 0.08896923]</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">  </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    test_type()</span><br><span class="line">    test_type2()</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="comment">#test()</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">#run_model1(&quot;scalar&quot;)</span></span><br><span class="line">    <span class="comment">#run_model1(&quot;vector&quot;)   </span></span><br><span class="line">    <span class="comment">#run_model1(&quot;matrix&quot;)   </span></span><br><span class="line">    </span><br><span class="line">    run_model2(<span class="string">&quot;scalar&quot;</span>)</span><br><span class="line">    run_model2(<span class="string">&quot;vector&quot;</span>)   </span><br><span class="line">    run_model2(<span class="string">&quot;matrix&quot;</span>) </span><br></pre></td></tr></table></figure>
+
+<pre><code>Total time is ： 1.929041  s
+last cost : 113.178407322
+w value :  [ 1.48497718]
+b value :  [ 0.08900716]
+
+Total time is ： 2.040197  s
+last cost : 113.178407322
+w value :  [ 1.48497718]
+b value :  [ 0.08900716]
+
+Total time is ： 0.553913  s
+last cost : 565.419900755
+w value :  [ 1.48492605]
+b value :  [ 0.08896923]
+</code></pre>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blogs.msdn.microsoft.com/lukassteindl/2015/12/13/linear-regression-example-with-python-and-theano/">linear-regression-example-with-python-and-theano</a></li>
+<li><a target="_blank" rel="noopener" href="http://blog.csdn.net/vins_napoleon/article/details/38057927">theano regression exercise</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180807: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/sgd/" rel="tag"># sgd</a>
+              <a href="/tags/theano/" rel="tag"># theano</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/Example-2-Linear-Regression-Example-with-Python-and-theano-from-MSDN/" rel="prev" title="Example 2 - Linear Regression Example with Python and theano from MSDN">
+      <i class="fa fa-chevron-left"></i> Example 2 - Linear Regression Example with Python and theano from MSDN
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/Example-3-A-Real-Example-Logistic-Regression-with-theano/" rel="next" title="Example 3- A Real Example Logistic Regression with theano">
+      Example 3- A Real Example Logistic Regression with theano <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Series"><span class="nav-number">1.</span> <span class="nav-text">Series</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#code-example"><span class="nav-number">2.</span> <span class="nav-text">code example</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Guideinstall12pip3 install pywin32 pyinstallerpip3 install --upgrade setuptools  pyinstall -F demo.py error pyinstaller AttributeError: &#39;str&#39; object has no attribute &#39;items&#39;  solution:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="use pyinstaller to package executable on windows 10">
+<meta property="og:url" content="https://kezunlin.me/blog/pyinstaller-tutorial-on-windows-10/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Guideinstall12pip3 install pywin32 pyinstallerpip3 install --upgrade setuptools  pyinstall -F demo.py error pyinstaller AttributeError: &#39;str&#39; object has no attribute &#39;items&#39;  solution:">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190305155532641-1365664774.png">
+<meta property="article:published_time" content="2018-12-13T02:04:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="pyinstaller">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kezunlin.me/images/posts/635233-20190305155532641-1365664774.png">
+
+<link rel="canonical" href="https://kezunlin.me/blog/pyinstaller-tutorial-on-windows-10/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>use pyinstaller to package executable on windows 10 | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/pyinstaller-tutorial-on-windows-10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          use pyinstaller to package executable on windows 10
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-12-13 10:04:00" itemprop="dateCreated datePublished" datetime="2018-12-13T10:04:00+08:00">2018-12-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="install"><a href="#install" class="headerlink" title="install"></a>install</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip3 install pywin32 pyinstaller</span><br><span class="line">pip3 install --upgrade setuptools</span><br></pre></td></tr></table></figure>
+
+<p><code>pyinstall -F demo.py</code> error</p>
+<pre><code>pyinstaller AttributeError: &#39;str&#39; object has no attribute &#39;items&#39;
+</code></pre>
+<p>solution:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install --upgrade setuptools</span><br></pre></td></tr></table></figure>
+
+<h3 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pyinstaller -h </span><br></pre></td></tr></table></figure>
+
+<p>params:</p>
+<ul>
+<li><p>General Options</p>
+<p>  -y, –noconfirm<br>  Replace output directory (default: SPECPATH&#x2F;dist&#x2F;SPECNAME)<br>  without asking for confirmation<br>  –upx-dir UPX_DIR<br>  Path to UPX utility (default: search the execution path)<br><br>  –clean	<br>  Clean PyInstaller cache and remove temporary files before building.<br><br>  –log-level LEVEL<br>  Amount of detail in build-time console messages. LEVEL may be one of<br>  TRACE, DEBUG, INFO, WARN, ERROR, CRITICAL (default: INFO).</p>
+</li>
+<li><p>What to generate</p>
+<pre><code>-D, --onedir	
+    Create a one-folder bundle containing an executable (default)
+
+-F, --onefile	
+    Create a one-file bundled executable.
+</code></pre>
+</li>
+<li><p>What to bundle, where to search</p>
+<pre><code>--add-data &lt;SRC;DEST or SRC:DEST&gt;  
+    This option can be used multiple times.
+
+--add-binary &lt;SRC;DEST or SRC:DEST&gt; 
+    This option can be used multiple times.
+
+-p DIR, --paths DIR 
+    A path to search for imports (like using PYTHONPATH). 
+    Multiple paths are allowed, separated by ‘:’, or use 
+    this option multiple times
+
+--hidden-import MODULENAME, --hiddenimport MODULENAME 
+    Name an import not visible in the code of the script(s). 
+    This option can be used multiple times.
+</code></pre>
+</li>
+<li><p>Windows and Mac OS X specific options</p>
+<pre><code>-c, --console, --nowindowed
+    Open a console window for standard i/o (default)
+-w, --windowed, --noconsole
+    Windows and Mac OS X: do not provide a console window 
+    for standard i/o
+</code></pre>
+</li>
+</ul>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><h3 id="use-pyd"><a href="#use-pyd" class="headerlink" title="use pyd"></a>use pyd</h3><p>path related source code</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sys.path.append(<span class="string">&#x27;./sdk/superdog/&#x27;</span>)</span><br><span class="line"><span class="keyword">import</span> superdog <span class="comment"># superdog.pyd</span></span><br></pre></td></tr></table></figure>
+
+<p>pyinstaller commands</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pyinstaller -y -D --path=<span class="string">&quot;sdk/superdog&quot;</span> demo.py</span><br><span class="line"><span class="comment"># pyinstaller -y -D --add-binary &#x27;./sdk/superdog/superdog.pyd;.&#x27; </span></span><br><span class="line"><span class="comment"># --add-binary &#x27;./sdk/superdog/dog_windows_x64.dll;.&#x27; demo.py</span></span><br></pre></td></tr></table></figure>
+
+<p>generate <code>build</code> and <code>dist</code> folder, plus <code>demo.spec</code></p>
+<p>output </p>
+<pre><code>78 INFO: Extending PYTHONPATH with paths
+[&#39;E:\\git\\python\\helloworld&#39;,
+ &#39;E:\\git\\python\\helloworld\\sdk\\superdog&#39;,
+ &#39;E:\\git\\python\\helloworld&#39;]
+</code></pre>
+<p>demo.spec</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- mode: python -*-</span></span><br><span class="line"></span><br><span class="line">block_cipher = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">a = Analysis([<span class="string">&#x27;demo.py&#x27;</span>],</span><br><span class="line">             pathex=[<span class="string">&#x27;sdk/superdog&#x27;</span>, <span class="string">&#x27;E:\\git\\python\\helloworld&#x27;</span>],</span><br><span class="line">             binaries=[],</span><br><span class="line">             datas=[],</span><br><span class="line">             hiddenimports=[],</span><br><span class="line">             hookspath=[],</span><br><span class="line">             runtime_hooks=[],</span><br><span class="line">             excludes=[],</span><br><span class="line">             win_no_prefer_redirects=<span class="literal">False</span>,</span><br><span class="line">             win_private_assemblies=<span class="literal">False</span>,</span><br><span class="line">             cipher=block_cipher,</span><br><span class="line">             noarchive=<span class="literal">False</span>)</span><br><span class="line">pyz = PYZ(a.pure, a.zipped_data,</span><br><span class="line">             cipher=block_cipher)</span><br><span class="line">exe = EXE(pyz,</span><br><span class="line">          a.scripts,</span><br><span class="line">          [],</span><br><span class="line">          exclude_binaries=<span class="literal">True</span>,</span><br><span class="line">          name=<span class="string">&#x27;demo&#x27;</span>,</span><br><span class="line">          debug=<span class="literal">False</span>,</span><br><span class="line">          bootloader_ignore_signals=<span class="literal">False</span>,</span><br><span class="line">          strip=<span class="literal">False</span>,</span><br><span class="line">          upx=<span class="literal">True</span>,</span><br><span class="line">          console=<span class="literal">True</span> )</span><br><span class="line">coll = COLLECT(exe,</span><br><span class="line">               a.binaries,</span><br><span class="line">               a.zipfiles,</span><br><span class="line">               a.datas,</span><br><span class="line">               strip=<span class="literal">False</span>,</span><br><span class="line">               upx=<span class="literal">True</span>,</span><br><span class="line">               name=<span class="string">&#x27;demo&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>view <code>build/demo/xref-demo.html</code></p>
+<p>superdog found.</p>
+<blockquote>
+<p>Tips:<br>if we use <code>pyinstaller -y -D demo.py</code> don’t include <code>--path=&quot;sdk/superdog&quot;</code>,<br>package will be missing, and error occur when we run executable.</p>
+</blockquote>
+<p>run executable </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> dist/demo</span><br><span class="line">./demo.exe</span><br><span class="line"><span class="comment"># OK</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>all related dlls have been copied to <code>dist/demo/</code> folder,<br>eg. <code>cublas64_80.dll,curand64_80.dll,cudart64_80.dll,cudnn64_6.dll</code></p>
+</blockquote>
+<h3 id="use-ctype-DLLs"><a href="#use-ctype-DLLs" class="headerlink" title="use ctype DLLs"></a>use ctype DLLs</h3><p>path related source code </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sys.path.append(<span class="string">&#x27;./sdk/superdog/&#x27;</span>)</span><br><span class="line">sys.path.append(<span class="string">&#x27;./sdk/detect/&#x27;</span>)</span><br><span class="line"><span class="keyword">import</span> superdog <span class="comment"># superdog.pyd</span></span><br><span class="line"><span class="keyword">import</span> detect <span class="comment"># detect.py cuda80_detect.dll cuda90_detect.dll</span></span><br></pre></td></tr></table></figure>
+
+<p>CDLL related source code</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lib = CDLL(<span class="string">&quot;./sdk/detect/cuda80_detect_cpp_dll.dll&quot;</span>, RTLD_GLOBAL)</span><br></pre></td></tr></table></figure>
+
+<p>pyinstaller commands</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pyinstaller -y -D --path=<span class="string">&quot;sdk/superdog;sdk/detect&quot;</span> demo.py</span><br></pre></td></tr></table></figure>
+
+<p>warning</p>
+<pre><code>93 INFO: Extending PYTHONPATH with paths
+[&#39;E:\\git\\python\\helloworld&#39;,
+ &#39;E:\\git\\python\\helloworld\\sdk\\superdog&#39;,
+ &#39;E:\\git\\python\\helloworld\\sdk\\detect&#39;,
+ &#39;E:\\git\\python\\helloworld&#39;]
+  ...
+WARNING: Ignoring ./sdk/detect/cuda80_detect_cpp_dll.dll imported
+    from E:\git\python\helloworld\sdk\detect\detect.py -
+    ctypes imports are only supported using bare filenames
+</code></pre>
+<p>fix </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#lib = CDLL(&quot;./sdk/detect/cuda80_detect_cpp_dll.dll&quot;, RTLD_GLOBAL)</span></span><br><span class="line">lib = CDLL(<span class="string">&quot;cuda80_detect_cpp_dll.dll&quot;</span>, RTLD_GLOBAL)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Tips: <strong>for CDLL with pyinstaller, we must use bare filenames in python source</strong>.<br>see <a target="_blank" rel="noopener" href="https://pyinstaller.readthedocs.io/en/v3.3.1/feature-notes.html">here</a></p>
+</blockquote>
+<p>now we run pyintaller again</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pyinstaller -y -D --path=<span class="string">&quot;sdk/superdog;sdk/detect&quot;</span> demo.py</span><br></pre></td></tr></table></figure>
+
+<p>view <code>build/demo/xref-demo.html</code></p>
+<p>superdog and detect.</p>
+<p>run executable </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd dist/demo</span><br><span class="line">./demo.exe</span><br><span class="line"><span class="comment"># OK</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>all related dlls have been copied to <code>dist/demo/</code> folder,<br>eg. <code>cublas64_80.dll,curand64_80.dll,cudart64_80.dll,cudnn64_6.dll</code><br>and <code>cuda80_detect_cpp_dll.dll</code></p>
+</blockquote>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><h3 id="get-version"><a href="#get-version" class="headerlink" title="get version"></a>get version</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python grab_version.py <span class="string">&quot;/path/to/xxx.exe&quot;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>C:\Users\zunli\AppData\Local\Programs\Python\Python35\Lib\site-packages<br>PyInstaller\utils\cliutils\grab_version.py</p>
+</blockquote>
+<p><img src="https://kezunlin.me/images/posts/635233-20190305155532641-1365664774.png" alt="qq version info"></p>
+<p>file_version_info.txt</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"># UTF-8</span><br><span class="line">#</span><br><span class="line"># For more details about fixed file info &#x27;ffi&#x27; see:</span><br><span class="line"># http://msdn.microsoft.com/en-us/library/ms646997.aspx</span><br><span class="line">VSVersionInfo(</span><br><span class="line">  ffi=FixedFileInfo(</span><br><span class="line">    # filevers and prodvers should be always a tuple with four items: (1, 2, 3, 4)</span><br><span class="line">    # Set not needed items to zero 0.</span><br><span class="line">    filevers=(9, 0, 4, 23780),</span><br><span class="line">    prodvers=(9, 0, 4, 23780),</span><br><span class="line">    # Contains a bitmask that specifies the valid bits &#x27;flags&#x27;r</span><br><span class="line">    mask=0x3f,</span><br><span class="line">    # Contains a bitmask that specifies the Boolean attributes of the file.</span><br><span class="line">    flags=0x0,</span><br><span class="line">    # The operating system for which this file was designed.</span><br><span class="line">    # 0x4 - NT and there is no need to change it.</span><br><span class="line">    OS=0x40004,</span><br><span class="line">    # The general type of file.</span><br><span class="line">    # 0x1 - the file is an application.</span><br><span class="line">    fileType=0x1,</span><br><span class="line">    # The function of the file.</span><br><span class="line">    # 0x0 - the function is not defined for this fileType</span><br><span class="line">    subtype=0x0,</span><br><span class="line">    # Creation date and time stamp.</span><br><span class="line">    date=(0, 0)</span><br><span class="line">    ),</span><br><span class="line">  kids=[</span><br><span class="line">    StringFileInfo(</span><br><span class="line">      [</span><br><span class="line">      StringTable(</span><br><span class="line">        u&#x27;080404b0&#x27;,</span><br><span class="line">        [StringStruct(u&#x27;CompanyName&#x27;, u&#x27;Tencent&#x27;),</span><br><span class="line">        StringStruct(u&#x27;FileDescription&#x27;, u&#x27;腾讯QQ&#x27;),</span><br><span class="line">        StringStruct(u&#x27;FileVersion&#x27;, u&#x27;9.0.4.23780&#x27;),</span><br><span class="line">        StringStruct(u&#x27;LegalCopyright&#x27;, u&#x27;Copyright (C) 1999-2018 Tencent. All Rights Reserved&#x27;),</span><br><span class="line">        StringStruct(u&#x27;ProductName&#x27;, u&#x27;腾讯QQ&#x27;),</span><br><span class="line">        StringStruct(u&#x27;ProductVersion&#x27;, u&#x27;9.0.4.23780&#x27;)])</span><br><span class="line">      ]), </span><br><span class="line">    VarFileInfo([VarStruct(u&#x27;Translation&#x27;, [2052, 1200])])</span><br><span class="line">  ]</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="set-version"><a href="#set-version" class="headerlink" title="set version"></a>set version</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">python pyinstaller.py \</span><br><span class="line">--version-file=file_version_info.txt \</span><br><span class="line">--icon=ico.ico \</span><br><span class="line">-y -D \</span><br><span class="line">--path=<span class="string">&quot;sdk/superdog;sdk/detect&quot;</span> \</span><br><span class="line">demo.py</span><br></pre></td></tr></table></figure>
+
+<h2 id="Advanced"><a href="#Advanced" class="headerlink" title="Advanced"></a>Advanced</h2><h3 id="Running-PyInstaller-with-Python-optimizations"><a href="#Running-PyInstaller-with-Python-optimizations" class="headerlink" title="Running PyInstaller with Python optimizations"></a>Running PyInstaller with Python optimizations</h3><blockquote>
+<p>Tips: be carefull with optimizations.</p>
+</blockquote>
+<p>PyInstaller can be run with Python optimization flags (<code>-O</code> or <code>-OO</code>)<br>by executing it as a Python module, rather than using the <code>pyinstaller</code> command:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -O -m PyInstaller -y -D --path=<span class="string">&quot;sdk/superdog&quot;</span> demo.py</span><br></pre></td></tr></table></figure>
+
+<p>Or, by explicitly setting the <code>PYTHONOPTIMIZE</code> environment variable to a non-zero value:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Unix</span></span><br><span class="line">PYTHONOPTIMIZE=1 pyinstaller myscript.py</span><br><span class="line"></span><br><span class="line"><span class="comment"># Windows</span></span><br><span class="line"><span class="built_in">set</span> PYTHONOPTIMIZE=1 &amp;&amp; pyinstaller myscript.py</span><br></pre></td></tr></table></figure>
+
+<h3 id="only-import-what-you-need"><a href="#only-import-what-you-need" class="headerlink" title="only import what you need"></a>only import what you need</h3><p>replace <code>import os</code> with <code>from os import path</code> to reduce final executable size.</p>
+<h3 id="Using-UPX"><a href="#Using-UPX" class="headerlink" title="Using UPX"></a>Using UPX</h3><p>see <a target="_blank" rel="noopener" href="https://upx.github.io/">upx</a></p>
+<h3 id="Encrypting-Python-Bytecode"><a href="#Encrypting-Python-Bytecode" class="headerlink" title="Encrypting Python Bytecode"></a>Encrypting Python Bytecode</h3><p>To encrypt the Python bytecode modules stored in the bundle, pass the <code>--key=key-string</code> argument on the command line.</p>
+<p>For this to work, you must have the <code>PyCrypto</code> module installed. The key-string is a string of 16 characters which is used to encrypt each file of Python byte-code before it is stored in the archive inside the executable file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pycrypto</span><br></pre></td></tr></table></figure>
+
+<h3 id="Other-similar-tools"><a href="#Other-similar-tools" class="headerlink" title="Other similar tools"></a>Other similar tools</h3><ul>
+<li><a target="_blank" rel="noopener" href="http://www.py2exe.org/">py2exe</a>: pip install py2exe</li>
+<li><a target="_blank" rel="noopener" href="https://cx-freeze.readthedocs.io/en/latest/">cx_freeze</a>: pip install cx_freeze</li>
+<li><a target="_blank" rel="noopener" href="https://bitbucket.org/ronaldoussoren/py2app">py2app</a>: pip install py2app</li>
+<li><a target="_blank" rel="noopener" href="http://nuitka.net/">nuitka</a> from <a target="_blank" rel="noopener" href="http://nuitka.net/pages/download.html">here</a></li>
+</ul>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://pyinstaller.readthedocs.io/en/stable/usage.html">pyinstaller usage</a></li>
+<li><a target="_blank" rel="noopener" href="https://pyinstaller.readthedocs.io/en/stable/spec-files.html#adding-data-files">pyinstaller add data binary</a></li>
+<li><a target="_blank" rel="noopener" href="https://pyinstaller.readthedocs.io/en/v3.3.1/feature-notes.html">pyinstaller feature notes</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20181213: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/pyinstaller/" rel="tag"># pyinstaller</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/compile-caffe-yolov3-on-ubuntu-16-04/" rel="prev" title="compile and install caffe-yolov3 on ubuntu 16.04">
+      <i class="fa fa-chevron-left"></i> compile and install caffe-yolov3 on ubuntu 16.04
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/tmux-tutorial-on-ubuntu-16-04/" rel="next" title="tmux tutorial on ubuntu 16.04">
+      tmux tutorial on ubuntu 16.04 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#install"><span class="nav-number">1.1.</span> <span class="nav-text">install</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#usage"><span class="nav-number">1.2.</span> <span class="nav-text">usage</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">2.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#use-pyd"><span class="nav-number">2.1.</span> <span class="nav-text">use pyd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#use-ctype-DLLs"><span class="nav-number">2.2.</span> <span class="nav-text">use ctype DLLs</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Version"><span class="nav-number">3.</span> <span class="nav-text">Version</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#get-version"><span class="nav-number">3.1.</span> <span class="nav-text">get version</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set-version"><span class="nav-number">3.2.</span> <span class="nav-text">set version</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Advanced"><span class="nav-number">4.</span> <span class="nav-text">Advanced</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Running-PyInstaller-with-Python-optimizations"><span class="nav-number">4.1.</span> <span class="nav-text">Running PyInstaller with Python optimizations</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#only-import-what-you-need"><span class="nav-number">4.2.</span> <span class="nav-text">only import what you need</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Using-UPX"><span class="nav-number">4.3.</span> <span class="nav-text">Using UPX</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Encrypting-Python-Bytecode"><span class="nav-number">4.4.</span> <span class="nav-text">Encrypting Python Bytecode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Other-similar-tools"><span class="nav-number">4.5.</span> <span class="nav-text">Other similar tools</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">6.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

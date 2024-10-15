@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Series Part 1: compile protobuf-cpp on ubuntu 16.04 Part 2: compile protobuf-cpp on windows 10 Part 3: protobuf usage  Guide protobuf 2.6.1 protobuf 3.6.1 latest  old versioninstall1234567sudo apt-get">
+<meta property="og:type" content="article">
+<meta property="og:title" content="compile protobuf-cpp on ubuntu 16.04">
+<meta property="og:url" content="https://kezunlin.me/blog/compile-protobuf-cpp-on-ubuntu-16-04/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Series Part 1: compile protobuf-cpp on ubuntu 16.04 Part 2: compile protobuf-cpp on windows 10 Part 3: protobuf usage  Guide protobuf 2.6.1 protobuf 3.6.1 latest  old versioninstall1234567sudo apt-get">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-12-19T01:05:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="protobuf">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/compile-protobuf-cpp-on-ubuntu-16-04/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>compile protobuf-cpp on ubuntu 16.04 | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/compile-protobuf-cpp-on-ubuntu-16-04/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          compile protobuf-cpp on ubuntu 16.04
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-12-19 09:05:00" itemprop="dateCreated datePublished" datetime="2018-12-19T09:05:00+08:00">2018-12-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h2><ul>
+<li><strong><a href="https://kezunlin.me/post/d60ff6fe/">Part 1: compile protobuf-cpp on ubuntu 16.04</a></strong></li>
+<li><a href="https://kezunlin.me/post/876d75f2/">Part 2: compile protobuf-cpp on windows 10</a></li>
+<li><a href="https://kezunlin.me/post/ba8b6dea/">Part 3: protobuf usage</a></li>
+</ul>
+<h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><ul>
+<li>protobuf 2.6.1</li>
+<li>protobuf 3.6.1 latest</li>
+</ul>
+<h3 id="old-version"><a href="#old-version" class="headerlink" title="old version"></a>old version</h3><h4 id="install"><a href="#install" class="headerlink" title="install"></a>install</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install libprotobuf-dev</span><br><span class="line"></span><br><span class="line"><span class="built_in">which</span> protoc</span><br><span class="line">/usr/bin/protoc </span><br><span class="line"></span><br><span class="line">protoc --version</span><br><span class="line">2.6.1</span><br></pre></td></tr></table></figure>
+
+<h4 id="remove"><a href="#remove" class="headerlink" title="remove"></a>remove</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#remove exist `protobuf 2.6.1`</span></span><br><span class="line">	</span><br><span class="line"><span class="built_in">sudo</span> apt-get remove libprotobuf-dev</span><br><span class="line">```    </span><br><span class="line"></span><br><span class="line"><span class="comment">### compile</span></span><br><span class="line"></span><br><span class="line">```bash</span><br><span class="line">wget https://github.com/protocolbuffers/protobuf/releases/download/v3.6.1/protobuf-cpp-3.6.1.tar.gz</span><br><span class="line"></span><br><span class="line">tar -xvf protobuf-cpp-3.6.1.tar.gz</span><br><span class="line"><span class="built_in">cd</span> protobuf-3.6.1 </span><br><span class="line">./configure --disable-shared CXXFLAGS=<span class="string">&quot;-fPIC&quot;</span></span><br><span class="line">make -j8 </span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>tips: we compile static library with <code>--disable-shared CXXFLAGS=&quot;-fPIC&quot;</code>. 编译动态库dll&#x2F;so的时候，如果依赖static library(比如profobuf)，那么static library编译的时候需要加上<code>-fPIC</code>,否则动态库编译出错。<br>对于CMake,使用<code>cmake CMAKE_CXX_FLGAS=&quot;-fPIC&quot; ..</code></p>
+</blockquote>
+<p>otherwise, error occurs </p>
+<pre><code>Linking CXX shared library ../../../../bin/libcommon.so
+/usr/bin/ld: /usr/local/lib/libprotobuf.a(common.o): relocation R_X86_64_32S against `.rodata&#39; can not be used when makinga shared object; recompile with -fPIC
+/usr/local/lib/libprotobuf.a: error adding symbols: Bad value
+</code></pre>
+<h3 id="install-1"><a href="#install-1" class="headerlink" title="install"></a>install</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> make install</span><br><span class="line"><span class="built_in">sudo</span> ldconfig</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> make uninstall</span><br></pre></td></tr></table></figure>
+
+<p>install path:</p>
+<ul>
+<li>header: <code>/usr/local/include/google/protobuf</code></li>
+<li>lib: <code>/usr/local/lib</code></li>
+<li>executable: <code>/usr/local/bin</code></li>
+</ul>
+<p>static libs</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ll /usr/local/lib/libproto</span><br><span class="line">libprotobuf.a        libprotobuf-lite.a   libprotoc.a          </span><br><span class="line">libprotobuf.la       libprotobuf-lite.la  libprotoc.la  </span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>By default, <code>make install&#39; will install all the files in </code>&#x2F;usr&#x2F;local&#x2F;bin’, <code>/usr/local/lib&#39; etc.  You can specify an installation prefix other than </code>&#x2F;usr&#x2F;local’ using <code>--prefix&#39;, for instance </code>–prefix&#x3D;$HOME’.</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">./configure -h</span><br><span class="line"></span><br><span class="line">--enable-shared[=PKGS]  build shared libraries [default=<span class="built_in">yes</span>]</span><br><span class="line">--enable-static[=PKGS]  build static libraries [default=<span class="built_in">yes</span>]</span><br></pre></td></tr></table></figure>
+
+<h3 id="Static-Linking-vs-DLL"><a href="#Static-Linking-vs-DLL" class="headerlink" title="Static Linking vs DLL"></a>Static Linking vs DLL</h3><blockquote>
+<p><code>Static linking</code> is now the default for the Protocol Buffer libraries. Due to issues with Win32’s use of a separate heap for each DLL, as well as binary compatibility issues between different versions of MSVC’s STL library, it is recommended that you use static linkage only.<br>However, it is possible to build libprotobuf and libprotoc as DLLs if you really want. To do this, do the following:</p>
+</blockquote>
+<ul>
+<li>Add an additional flag <code>-Dprotobuf_BUILD_SHARED_LIBS=ON</code> when invoking cmake</li>
+<li>Follow the same steps as described in the above section.</li>
+<li>When compiling your project, make sure to <code>#define PROTOBUF_USE_DLLS</code>.</li>
+</ul>
+<h3 id="test"><a href="#test" class="headerlink" title="test"></a>test</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">which</span> protoc</span><br><span class="line">/usr/local/bin/protoc</span><br><span class="line"></span><br><span class="line">protoc --version</span><br><span class="line">libprotoc 3.6.1</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>tips install openmpi</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install -y  libiomp-dev libopenmpi-dev </span><br></pre></td></tr></table></figure>
+
+<h3 id="multiple-protoc"><a href="#multiple-protoc" class="headerlink" title="multiple protoc"></a>multiple protoc</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">whereis protoc </span><br><span class="line">protoc: /usr/bin/protoc  <span class="comment"># 2.6.0</span></span><br><span class="line">/usr/local/bin/protoc    <span class="comment"># 3.6.1</span></span><br><span class="line">/usr/share/man/man1/protoc.1.gz</span><br></pre></td></tr></table></figure>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><h3 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">protoc --cpp_out=. ./point_cloud.proto </span><br><span class="line">protoc --java_out=./java/ ./proto/helloworld.proto</span><br><span class="line">protoc --go_out=./go/ ./proto/helloworld.proto</span><br></pre></td></tr></table></figure>
+
+<h3 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">find_package</span>(Protobuf REQUIRED)</span><br><span class="line"><span class="comment">#add_definitions( -DPROTOBUF_USE_DLLS )  # KEY STEPS</span></span><br><span class="line"><span class="keyword">MESSAGE</span>( [Main] <span class="string">&quot; PROTOBUF_INCLUDE_DIRS = $&#123;PROTOBUF_INCLUDE_DIRS&#125;&quot;</span>)   </span><br><span class="line"><span class="keyword">MESSAGE</span>( [Main] <span class="string">&quot; PROTOBUF_LIBRARIES = $&#123;PROTOBUF_LIBRARIES&#125;&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="error"><a href="#error" class="headerlink" title="error"></a>error</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">./node_perception </span><br><span class="line"></span><br><span class="line">[libprotobuf ERROR google/protobuf/descriptor_database.cc:58] File already exists <span class="keyword">in</span> database: adapter_config.proto</span><br><span class="line">[libprotobuf FATAL google/protobuf/descriptor.cc:1315] CHECK failed: generated_database_-&gt;Add(encoded_file_descriptor, size): </span><br><span class="line">terminate called after throwing an instance of <span class="string">&#x27;google::protobuf::FatalException&#x27;</span></span><br><span class="line">    what():  CHECK failed: generated_database_-&gt;Add(encoded_file_descriptor, size): </span><br><span class="line">Aborted (core dumped)</span><br></pre></td></tr></table></figure>
+
+<p>reasons</p>
+<pre><code>The problem happens when you have multiple compiled copies of the same .pb.cc file sharing a single copy of libprotobuf.so. 
+
+`common`模块编译了`adapter_config.pb.cc`,`node_perception`依赖于`common`，同时也要编译`adapter_config.pb.cc`。运行`node_perception`就会报错。
+</code></pre>
+<p>solutions</p>
+<pre><code>同一份`adapter_config.pb.cc`只编译到`node_perception`等executable,不要编译到所依赖的`common`模块。
+</code></pre>
+<blockquote>
+<p>common和node_perception使用static或者dynamic的protobuf，都会遇到同样的问题。</p>
+</blockquote>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/protocolbuffers/protobuf/blob/master/cmake/README.md">protobuf on windows</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/37051635/several-shared-object-using-same-proto-leading-the-the-error-file-already-exist">several-shared-object-using-same-proto</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20181219: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/protobuf/" rel="tag"># protobuf</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/ros-publisher-and-subscriber-tutorial/" rel="prev" title="ros publisher and subscriber tutorial">
+      <i class="fa fa-chevron-left"></i> ros publisher and subscriber tutorial
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/extern-c/" rel="next" title="extern c ">
+      extern c  <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Series"><span class="nav-number">1.</span> <span class="nav-text">Series</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">2.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#old-version"><span class="nav-number">2.1.</span> <span class="nav-text">old version</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#install"><span class="nav-number">2.1.1.</span> <span class="nav-text">install</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#remove"><span class="nav-number">2.1.2.</span> <span class="nav-text">remove</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-1"><span class="nav-number">2.2.</span> <span class="nav-text">install</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Static-Linking-vs-DLL"><span class="nav-number">2.3.</span> <span class="nav-text">Static Linking vs DLL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#test"><span class="nav-number">2.4.</span> <span class="nav-text">test</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#multiple-protoc"><span class="nav-number">2.5.</span> <span class="nav-text">multiple protoc</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">3.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#usage"><span class="nav-number">3.1.</span> <span class="nav-text">usage</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">3.2.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#error"><span class="nav-number">3.3.</span> <span class="nav-text">error</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Series Part 1: install and configure tensorrt 4 on ubuntu 16.04 Part 2: tensorrt fp32 fp16 tutorial Part 3: tensorrt int8 tutorial  Guideversion ubuntu 16.04 (14.04,16.04 only) not support Windows CUD">
+<meta property="og:type" content="article">
+<meta property="og:title" content="install and configure tensorrt 4 on ubuntu 16.04">
+<meta property="og:url" content="https://kezunlin.me/blog/install%20-and-configure-%20tensorrt-4-on-%20ubuntu-16.04/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Series Part 1: install and configure tensorrt 4 on ubuntu 16.04 Part 2: tensorrt fp32 fp16 tutorial Part 3: tensorrt int8 tutorial  Guideversion ubuntu 16.04 (14.04,16.04 only) not support Windows CUD">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180912150412426-572657767.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20181119095055341-1432624267.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20190422151849087-402485522.png">
+<meta property="article:published_time" content="2018-09-07T04:36:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="tensorrt">
+<meta property="article:tag" content="nvidia">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kezunlin.me/images/posts/635233-20180912150412426-572657767.png">
+
+<link rel="canonical" href="https://kezunlin.me/blog/install%20-and-configure-%20tensorrt-4-on-%20ubuntu-16.04/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>install and configure tensorrt 4 on ubuntu 16.04 | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/install%20-and-configure-%20tensorrt-4-on-%20ubuntu-16.04/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          install and configure tensorrt 4 on ubuntu 16.04
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-09-07 12:36:00" itemprop="dateCreated datePublished" datetime="2018-09-07T12:36:00+08:00">2018-09-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deep-learning/" itemprop="url" rel="index"><span itemprop="name">deep learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h2><ul>
+<li><strong><a href="https://kezunlin.me/post/dacc4196/">Part 1: install and configure tensorrt 4 on ubuntu 16.04</a></strong></li>
+<li><a href="https://kezunlin.me/post/bcdfb73c/">Part 2: tensorrt fp32 fp16 tutorial</a></li>
+<li><a href="https://kezunlin.me/post/30e0cb19/">Part 3: tensorrt int8 tutorial</a></li>
+</ul>
+<h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="version"><a href="#version" class="headerlink" title="version"></a>version</h3><ul>
+<li>ubuntu 16.04 (14.04,16.04 only) not support Windows</li>
+<li><del>CUDA 8.0</del> (8.0,9.0,9.2 only)</li>
+<li>CUDA 9.2</li>
+<li>cudnn 7.1.4 (7.1 only)</li>
+<li>TensorRT 4.0.1.6 </li>
+<li>TensorFlow-gpu v1.4+</li>
+<li>python: 3.5.2 (2.7 or 3.5)</li>
+</ul>
+<h3 id="TensorRT-support-matrix"><a href="#TensorRT-support-matrix" class="headerlink" title="TensorRT support matrix"></a>TensorRT support matrix</h3><ul>
+<li><p>4.0.1.6<br><img src="https://kezunlin.me/images/posts/635233-20180912150412426-572657767.png" alt="support matrix"></p>
+</li>
+<li><p>5.0.2.6<br><img src="https://kezunlin.me/images/posts/635233-20181119095055341-1432624267.png" alt="support matrix"></p>
+</li>
+</ul>
+<h3 id="hardware-precision-matrix"><a href="#hardware-precision-matrix" class="headerlink" title="hardware precision matrix"></a>hardware precision matrix</h3><p>hardware precision support matrix<br><img src="https://kezunlin.me/images/posts/635233-20190422151849087-402485522.png" alt="hardware precision support matrix"></p>
+<blockquote>
+<p>see <a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-support-matrix/index.html#hardware-precision-matrix">tensorrt-support-matrix</a></p>
+</blockquote>
+<h4 id="ubuntu"><a href="#ubuntu" class="headerlink" title="ubuntu"></a>ubuntu</h4><ul>
+<li>GeForce 1060 (fp32,int8)  no fp16</li>
+</ul>
+<h4 id="jetson-products"><a href="#jetson-products" class="headerlink" title="jetson products"></a>jetson products</h4><ul>
+<li>Jetson TX1   (fp32,fp16)</li>
+<li>Jetson TX2    (fp32,fp16)</li>
+<li>Jetson AGX Xavier (fp32,fp16,int8,dla)</li>
+<li>Jetson Nano (Jetbot)</li>
+</ul>
+<h3 id="install"><a href="#install" class="headerlink" title="install"></a>install</h3><h4 id="download-and-install"><a href="#download-and-install" class="headerlink" title="download and install"></a>download and install</h4><p>download <code>TensorRT-4.0.1.6.Ubuntu-16.04.4.x86_64-gnu.cuda-8.0.cudnn7.1.tar.gz</code> from <a target="_blank" rel="noopener" href="https://developer.nvidia.com/tensorrt">here</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">tar zxvf TensorRT-4.0.1.6.Ubuntu-16.04.4.x86_64-gnu.cuda-8.0.cudnn7.1.tar.gz </span><br><span class="line"></span><br><span class="line"><span class="built_in">ls</span> TensorRT-4.0.1.6</span><br><span class="line">bin  data  doc  graphsurgeon  include  lib  python  samples  targets  TensorRT-Release-Notes.pdf  uff</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">mv</span> TensorRT-4.0.1.6 /opt/</span><br><span class="line"><span class="built_in">cd</span> /opt</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">ln</span> -s TensorRT-4.0.1.6/ tensorrt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Updates: from cuda-8.0 &#x3D;&#x3D;&#x3D;&gt; cuda-9.2. download <code>TensorRT-4.0.1.6.Ubuntu-16.04.4.x86_64-gnu.cuda-9.2.cudnn7.1.tar.gz</code> from <a target="_blank" rel="noopener" href="https://developer.nvidia.com/tensorrt">here</a></p>
+</blockquote>
+<h4 id="add-lib-to-path"><a href="#add-lib-to-path" class="headerlink" title="add lib to path"></a>add lib to path</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vim /etc/ld.so.conf.d/tensorrt</span><br><span class="line">/opt/tensorrt/lib</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> ldconfig</span><br></pre></td></tr></table></figure>
+
+<p>or </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.bashrc</span><br><span class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=/opt/tensorrt/lib:<span class="variable">$LD_LIBRARY_PATH</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<h4 id="python-package"><a href="#python-package" class="headerlink" title="python package"></a>python package</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/tensorrt/python</span><br><span class="line"><span class="built_in">sudo</span> pip2 install tensorrt-4.0.1.6-cp27-cp27mu-linux_x86_64.whl </span><br></pre></td></tr></table></figure>
+
+<p>or </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/tensorrt/python</span><br><span class="line"><span class="built_in">sudo</span> pip3 install tensorrt-4.0.1.6-cp35-cp35m-linux_x86_64.whl </span><br></pre></td></tr></table></figure>
+
+<h4 id="uff-package"><a href="#uff-package" class="headerlink" title="uff package"></a>uff package</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/tensorrt/uff </span><br><span class="line"><span class="built_in">sudo</span> pip install uff-0.4.0-py2.py3-none-any.whl </span><br><span class="line"></span><br><span class="line"><span class="built_in">which</span> convert-to-uff</span><br><span class="line">/usr/local/bin/convert-to-uff</span><br></pre></td></tr></table></figure>
+
+<h3 id="folder-structure"><a href="#folder-structure" class="headerlink" title="folder structure"></a>folder structure</h3><h4 id="include"><a href="#include" class="headerlink" title="include"></a>include</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">tree include/</span><br><span class="line">include/</span><br><span class="line">├── NvCaffeParser.h</span><br><span class="line">├── NvInfer.h</span><br><span class="line">├── NvInferPlugin.h</span><br><span class="line">├── NvOnnxConfig.h</span><br><span class="line">├── NvOnnxParser.h</span><br><span class="line">├── NvUffParser.h</span><br><span class="line">└── NvUtils.h</span><br></pre></td></tr></table></figure>
+
+<h4 id="lib"><a href="#lib" class="headerlink" title="lib"></a>lib</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> -al *.4.1.2</span><br><span class="line">lrwxrwxrwx 1 kezunlin kezunlin       21 6月  12 15:42 libnvcaffe_parser.so.4.1.2 -&gt; libnvparsers.so.4.1.2</span><br><span class="line">-rwxrwxr-x 1 kezunlin kezunlin  2806840 6月  12 15:42 libnvinfer_plugin.so.4.1.2</span><br><span class="line">-rwxrwxr-x 1 kezunlin kezunlin 80434488 6月  12 15:42 libnvinfer.so.4.1.2</span><br><span class="line">-rwxrwxr-x 1 kezunlin kezunlin  3951712 6月  12 15:42 libnvparsers.so.4.1.2</span><br></pre></td></tr></table></figure>
+
+<h4 id="bin"><a href="#bin" class="headerlink" title="bin"></a>bin</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tree bin</span><br><span class="line">bin</span><br><span class="line">├── download-digits-model.py</span><br><span class="line">├── giexec</span><br><span class="line">└── trtexec</span><br></pre></td></tr></table></figure>
+
+<h4 id="sample"><a href="#sample" class="headerlink" title="sample"></a>sample</h4><p>add envs </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.bashrc</span><br><span class="line"></span><br><span class="line"><span class="comment"># tensorrt cuda and cudnn</span></span><br><span class="line"><span class="built_in">export</span> CUDA_INSTALL_DIR=/usr/local/cuda</span><br><span class="line"><span class="built_in">export</span> CUDNN_INSTALL_DIR=/usr/local/cuda</span><br></pre></td></tr></table></figure>
+
+<h4 id="compile-all"><a href="#compile-all" class="headerlink" title="compile all"></a>compile all</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> samples/</span><br><span class="line">make -j8</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>generate all sample_xxx to bin&#x2F; folder.</p>
+</blockquote>
+<h4 id="compile-sampleMNIST"><a href="#compile-sampleMNIST" class="headerlink" title="compile sampleMNIST"></a>compile sampleMNIST</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> samples/sampleMNIST</span><br><span class="line"><span class="built_in">ls</span> </span><br><span class="line">Makefile  sampleMNIST.cpp</span><br><span class="line">make -j8</span><br></pre></td></tr></table></figure>
+
+<p>error occurs</p>
+<pre><code>dpkg-query: no packages found matching cuda-cudart-[0-9]*
+../Makefile.config:6: CUDA_INSTALL_DIR variable is not specified, using /usr/local/cuda- by default, use CUDA_INSTALL_DIR=&lt;cuda_directory&gt; to change.
+../Makefile.config:9: CUDNN_INSTALL_DIR variable is not specified, using  by default, use CUDNN_INSTALL_DIR=&lt;cudnn_directory&gt; to change.
+</code></pre>
+<p>fix solutions:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.bashrc</span><br><span class="line"></span><br><span class="line"><span class="comment"># tensorrt cuda and cudnn</span></span><br><span class="line"><span class="built_in">export</span> CUDA_INSTALL_DIR=/opt/cuda</span><br><span class="line"><span class="built_in">export</span> CUDNN_INSTALL_DIR=/opt/cuda</span><br></pre></td></tr></table></figure>
+
+<p>make again </p>
+<pre><code>:
+:
+Compiling: sampleMNIST.cpp
+Compiling: sampleMNIST.cpp
+Linking: ../../bin/sample_mnist
+Linking: ../../bin/sample_mnist_debug
+# Copy every EXTRA_FILE of this sample to bin dir
+</code></pre>
+<p>test <code>sample_mnist</code></p>
+<pre><code>./sample_mnist
+Reading Caffe prototxt: ../../../data/mnist/mnist.prototxt
+Reading Caffe model: ../../../data/mnist/mnist.caffemodel
+
+Input:
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@%.:@@@@@@@@@@@@
+@@@@@@@@@@@@@: *@@@@@@@@@@@@
+@@@@@@@@@@@@* =@@@@@@@@@@@@@
+@@@@@@@@@@@% :@@@@@@@@@@@@@@
+@@@@@@@@@@@- *@@@@@@@@@@@@@@
+@@@@@@@@@@# .@@@@@@@@@@@@@@@
+@@@@@@@@@@: #@@@@@@@@@@@@@@@
+@@@@@@@@@+ -@@@@@@@@@@@@@@@@
+@@@@@@@@@: %@@@@@@@@@@@@@@@@
+@@@@@@@@+ +@@@@@@@@@@@@@@@@@
+@@@@@@@@:.%@@@@@@@@@@@@@@@@@
+@@@@@@@% -@@@@@@@@@@@@@@@@@@
+@@@@@@@% -@@@@@@#..:@@@@@@@@
+@@@@@@@% +@@@@@-    :@@@@@@@
+@@@@@@@% =@@@@%.#@@- +@@@@@@
+@@@@@@@@..%@@@*+@@@@ :@@@@@@
+@@@@@@@@= -%@@@@@@@@ :@@@@@@
+@@@@@@@@@- .*@@@@@@+ +@@@@@@
+@@@@@@@@@@+  .:-+-: .@@@@@@@
+@@@@@@@@@@@@+:    :*@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+Output:
+
+0: 
+1: 
+2: 
+3: 
+4: 
+5: 
+6: **********
+7: 
+8: 
+9: 
+</code></pre>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+<h2 id="Sample"><a href="#Sample" class="headerlink" title="Sample"></a>Sample</h2><p>compile all samples </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> sample</span><br><span class="line">make -j8</span><br></pre></td></tr></table></figure>
+
+<h3 id="sample-mnist"><a href="#sample-mnist" class="headerlink" title="sample_mnist"></a>sample_mnist</h3><p>see above. skip.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ldd sample_mnist</span><br><span class="line">    linux-vdso.so.1 =&gt;  (0x00007ffecd9f3000)</span><br><span class="line">    libnvinfer.so.4 =&gt; /opt/tensorrt/lib/libnvinfer.so.4 (0x00007f48de6f2000)</span><br><span class="line">    libnvparsers.so.4.1.2 =&gt; /opt/tensorrt/lib/libnvparsers.so.4.1.2 (0x00007f48de12c000)</span><br><span class="line">    librt.so.1 =&gt; /lib/x86_64-linux-gnu/librt.so.1 (0x00007f48ddf24000)</span><br><span class="line">    libdl.so.2 =&gt; /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f48ddd20000)</span><br><span class="line">    libpthread.so.0 =&gt; /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f48ddb03000)</span><br><span class="line">    libstdc++.so.6 =&gt; /usr/lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f48dd781000)</span><br><span class="line">    libm.so.6 =&gt; /lib/x86_64-linux-gnu/libm.so.6 (0x00007f48dd478000)</span><br><span class="line">    libgcc_s.so.1 =&gt; /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f48dd262000)</span><br><span class="line">    libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007f48dce98000)</span><br><span class="line">    libcudnn.so.7 =&gt; /usr/local/cuda/lib64/libcudnn.so.7 (0x00007f48c8818000)</span><br><span class="line">    libcublas.so.9.2 =&gt; /usr/local/cuda/lib64/libcublas.so.9.2 (0x00007f48c4dca000)</span><br><span class="line">    libcudart.so.9.2 =&gt; /usr/local/cuda/lib64/libcudart.so.9.2 (0x00007f48c4b60000)</span><br><span class="line">    /lib64/ld-linux-x86-64.so.2 (0x00007f48e42bc000)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>libnvinfer.so, libnvparsers.so, libcudart.so, libcudnn.so, libcublas.so</p>
+</blockquote>
+<h3 id="sample-onnx-mnist"><a href="#sample-onnx-mnist" class="headerlink" title="sample_onnx_mnist"></a>sample_onnx_mnist</h3><pre><code>./sample_onnx_mnist
+
+
+
+---------------------------
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@%.-@@@@@@@@@@@
+@@@@@@@@@@@*-    %@@@@@@@@@@
+@@@@@@@@@@= .-.  *@@@@@@@@@@
+@@@@@@@@@= +@@@  *@@@@@@@@@@
+@@@@@@@@* =@@@@  %@@@@@@@@@@
+@@@@@@@@..@@@@%  @@@@@@@@@@@
+@@@@@@@# *@@@@-  @@@@@@@@@@@
+@@@@@@@: @@@@%   @@@@@@@@@@@
+@@@@@@@: @@@@-   @@@@@@@@@@@
+@@@@@@@: =+*= +: *@@@@@@@@@@
+@@@@@@@*.    +@: *@@@@@@@@@@
+@@@@@@@@%#**#@@: *@@@@@@@@@@
+@@@@@@@@@@@@@@@: -@@@@@@@@@@
+@@@@@@@@@@@@@@@+ :@@@@@@@@@@
+@@@@@@@@@@@@@@@*  @@@@@@@@@@
+@@@@@@@@@@@@@@@@  %@@@@@@@@@
+@@@@@@@@@@@@@@@@  #@@@@@@@@@
+@@@@@@@@@@@@@@@@: +@@@@@@@@@
+@@@@@@@@@@@@@@@@- +@@@@@@@@@
+@@@@@@@@@@@@@@@@*:%@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+ Prob 0  0.00000: 
+ Prob 1  0.00001: 
+ Prob 2  0.00002: 
+ Prob 3  0.00003: 
+ Prob 4  0.00044: 
+ Prob 5  0.00005: 
+ Prob 6  0.00006: 
+ Prob 7  0.00007: 
+ Prob 8  0.00008: 
+ Prob 9  0.99969: **********
+</code></pre>
+<h3 id="sample-uff-mnist"><a href="#sample-uff-mnist" class="headerlink" title="sample_uff_mnist"></a>sample_uff_mnist</h3><pre><code>../../../data/mnist/lenet5.uff
+
+
+
+---------------------------
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@%.-@@@@@@@@@@@
+@@@@@@@@@@@*-    %@@@@@@@@@@
+@@@@@@@@@@= .-.  *@@@@@@@@@@
+@@@@@@@@@= +@@@  *@@@@@@@@@@
+@@@@@@@@* =@@@@  %@@@@@@@@@@
+@@@@@@@@..@@@@%  @@@@@@@@@@@
+@@@@@@@# *@@@@-  @@@@@@@@@@@
+@@@@@@@: @@@@%   @@@@@@@@@@@
+@@@@@@@: @@@@-   @@@@@@@@@@@
+@@@@@@@: =+*= +: *@@@@@@@@@@
+@@@@@@@*.    +@: *@@@@@@@@@@
+@@@@@@@@%#**#@@: *@@@@@@@@@@
+@@@@@@@@@@@@@@@: -@@@@@@@@@@
+@@@@@@@@@@@@@@@+ :@@@@@@@@@@
+@@@@@@@@@@@@@@@*  @@@@@@@@@@
+@@@@@@@@@@@@@@@@  %@@@@@@@@@
+@@@@@@@@@@@@@@@@  #@@@@@@@@@
+@@@@@@@@@@@@@@@@: +@@@@@@@@@
+@@@@@@@@@@@@@@@@- +@@@@@@@@@
+@@@@@@@@@@@@@@@@*:%@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+10 eltCount
+--- OUTPUT ---
+0 =&gt; -2.75228	 : 
+1 =&gt; -1.51534	 : 
+2 =&gt; -4.11729	 : 
+3 =&gt; 0.316925	 : 
+4 =&gt; 3.73423	 : 
+5 =&gt; -3.00593	 : 
+6 =&gt; -6.18866	 : 
+7 =&gt; -1.02671	 : 
+8 =&gt; 1.937	 : 
+9 =&gt; 14.8275	 : ***
+
+Average over 10 runs is 0.0843257 ms.
+</code></pre>
+<h3 id="sample-mnist-api"><a href="#sample-mnist-api" class="headerlink" title="sample_mnist_api"></a>sample_mnist_api</h3><pre><code>./sample_mnist_api
+Loading weights: ../../../data/mnist/mnistapi.wts
+
+Input:
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@+ @@@@@@@@@@@@@@
+@@@@@@@@@@@@. @@@@@@@@@@@@@@
+@@@@@@@@@@@@- @@@@@@@@@@@@@@
+@@@@@@@@@@@#  @@@@@@@@@@@@@@
+@@@@@@@@@@@#  *@@@@@@@@@@@@@
+@@@@@@@@@@@@  :@@@@@@@@@@@@@
+@@@@@@@@@@@@= .@@@@@@@@@@@@@
+@@@@@@@@@@@@#  %@@@@@@@@@@@@
+@@@@@@@@@@@@% .@@@@@@@@@@@@@
+@@@@@@@@@@@@%  %@@@@@@@@@@@@
+@@@@@@@@@@@@%  %@@@@@@@@@@@@
+@@@@@@@@@@@@@= +@@@@@@@@@@@@
+@@@@@@@@@@@@@* -@@@@@@@@@@@@
+@@@@@@@@@@@@@*  @@@@@@@@@@@@
+@@@@@@@@@@@@@@  @@@@@@@@@@@@
+@@@@@@@@@@@@@@  *@@@@@@@@@@@
+@@@@@@@@@@@@@@  *@@@@@@@@@@@
+@@@@@@@@@@@@@@  *@@@@@@@@@@@
+@@@@@@@@@@@@@@  *@@@@@@@@@@@
+@@@@@@@@@@@@@@* @@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+Output:
+
+0: 
+1: **********
+2: 
+3: 
+4: 
+5: 
+6: 
+7: 
+8: 
+9: 
+</code></pre>
+<h3 id="sample-int8"><a href="#sample-int8" class="headerlink" title="sample_int8"></a>sample_int8</h3><pre><code>./sample_int8 mnist
+
+FP32 run:400 batches of size 100 starting at 100
+........................................
+Top1: 0.9904, Top5: 1
+Processing 40000 images averaged 0.00332707 ms/image and 0.332707 ms/batch.
+
+FP16 run:400 batches of size 100 starting at 100
+Engine could not be created at this precision
+
+INT8 run:400 batches of size 100 starting at 100
+........................................
+Top1: 0.9909, Top5: 1
+Processing 40000 images averaged 0.00215323 ms/image and 0.215323 ms/batch.
+</code></pre>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-developer-guide/index.html">TensorRT developer guide</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-developer-guide/index.htm">TensorRT install guide</a></li>
+<li><a target="_blank" rel="noopener" href="https://devblogs.nvidia.com/speed-up-inference-tensorrt/">speed-up-inference-tensorrt</a></li>
+<li><a target="_blank" rel="noopener" href="https://devblogs.nvidia.com/large-scale-object-detection-tensorrt/">large-scale-object-detection-tensorrt</a></li>
+<li><a target="_blank" rel="noopener" href="https://devblogs.nvidia.com/int8-inference-autonomous-vehicles-tensorrt/">int8-inference-autonomous-vehicles-tensorrt</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_builder.html">tensorrt api</a><br><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-support-matrix/index.html#hardware-precision-matrix">tensorrt-support-matrix</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180907: created.</li>
+<li>20181119: add tensorrt-5.0.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/tensorrt/" rel="tag"># tensorrt</a>
+              <a href="/tags/nvidia/" rel="tag"># nvidia</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/anakin-guide-on-ubuntu-16-04/" rel="prev" title="compile baidu anakin on ubuntu 16.04">
+      <i class="fa fa-chevron-left"></i> compile baidu anakin on ubuntu 16.04
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/install-and-configure-cuda-9-2-with-cudnn-7-1-on-ubuntu-16-04/" rel="next" title="install and configure cuda 9.2 with cudnn 7.1 on ubuntu 16.04">
+      install and configure cuda 9.2 with cudnn 7.1 on ubuntu 16.04 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Series"><span class="nav-number">1.</span> <span class="nav-text">Series</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">2.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#version"><span class="nav-number">2.1.</span> <span class="nav-text">version</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TensorRT-support-matrix"><span class="nav-number">2.2.</span> <span class="nav-text">TensorRT support matrix</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hardware-precision-matrix"><span class="nav-number">2.3.</span> <span class="nav-text">hardware precision matrix</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ubuntu"><span class="nav-number">2.3.1.</span> <span class="nav-text">ubuntu</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jetson-products"><span class="nav-number">2.3.2.</span> <span class="nav-text">jetson products</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install"><span class="nav-number">2.4.</span> <span class="nav-text">install</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#download-and-install"><span class="nav-number">2.4.1.</span> <span class="nav-text">download and install</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#add-lib-to-path"><span class="nav-number">2.4.2.</span> <span class="nav-text">add lib to path</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#python-package"><span class="nav-number">2.4.3.</span> <span class="nav-text">python package</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#uff-package"><span class="nav-number">2.4.4.</span> <span class="nav-text">uff package</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#folder-structure"><span class="nav-number">2.5.</span> <span class="nav-text">folder structure</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#include"><span class="nav-number">2.5.1.</span> <span class="nav-text">include</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lib"><span class="nav-number">2.5.2.</span> <span class="nav-text">lib</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bin"><span class="nav-number">2.5.3.</span> <span class="nav-text">bin</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sample"><span class="nav-number">2.5.4.</span> <span class="nav-text">sample</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#compile-all"><span class="nav-number">2.5.5.</span> <span class="nav-text">compile all</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#compile-sampleMNIST"><span class="nav-number">2.5.6.</span> <span class="nav-text">compile sampleMNIST</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sample"><span class="nav-number">3.</span> <span class="nav-text">Sample</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sample-mnist"><span class="nav-number">3.1.</span> <span class="nav-text">sample_mnist</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sample-onnx-mnist"><span class="nav-number">3.2.</span> <span class="nav-text">sample_onnx_mnist</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sample-uff-mnist"><span class="nav-number">3.3.</span> <span class="nav-text">sample_uff_mnist</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sample-mnist-api"><span class="nav-number">3.4.</span> <span class="nav-text">sample_mnist_api</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sample-int8"><span class="nav-number">3.5.</span> <span class="nav-text">sample_int8</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

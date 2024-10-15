@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="GuideQuick guide with Demo1234567891011121314151617181920212223242526272829# install packagespip install cython  pip install easydict  apt-get install python-opencv  # Make sure to clone with --recurs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="a quick guide to py-faster-rcnn">
+<meta property="og:url" content="https://kezunlin.me/blog/py-faster-rcnn-tutorials/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="GuideQuick guide with Demo1234567891011121314151617181920212223242526272829# install packagespip install cython  pip install easydict  apt-get install python-opencv  # Make sure to clone with --recurs">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-08-16T02:42:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="caffe">
+<meta property="article:tag" content="rcnn">
+<meta property="article:tag" content="faster rcnn">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/py-faster-rcnn-tutorials/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>a quick guide to py-faster-rcnn | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/py-faster-rcnn-tutorials/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          a quick guide to py-faster-rcnn
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-08-16 10:42:00" itemprop="dateCreated datePublished" datetime="2018-08-16T10:42:00+08:00">2018-08-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deep-learning/" itemprop="url" rel="index"><span itemprop="name">deep learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="Quick-guide-with-Demo"><a href="#Quick-guide-with-Demo" class="headerlink" title="Quick guide with Demo"></a>Quick guide with Demo</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># install packages</span></span><br><span class="line"></span><br><span class="line">pip install cython  </span><br><span class="line">pip install easydict  </span><br><span class="line">apt-get install python-opencv  </span><br><span class="line"></span><br><span class="line"><span class="comment"># Make sure to clone with --recursive</span></span><br><span class="line">git <span class="built_in">clone</span> --recursive https://github.com/rbgirshick/py-faster-rcnn.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># Build the Cython modules</span></span><br><span class="line">py-faster-rcnn/lib</span><br><span class="line">make</span><br><span class="line"></span><br><span class="line"><span class="comment"># Build Caffe and pycaffe</span></span><br><span class="line"><span class="built_in">cd</span> py-faster-rcnn/caffe-fast-rcnn</span><br><span class="line"><span class="built_in">mkdir</span> build &amp;&amp; <span class="built_in">cd</span> build &amp;&amp; cmake-gui ..</span><br><span class="line">make -j8</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#Download pre-computed Faster R-CNN detectors</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> py-faster-rcnn</span><br><span class="line">./data/scripts/fetch_faster_rcnn_models.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># This will populate the `FRCN_ROOT/data` folder with faster_rcnn_models. See `data/README.md` for details. These models were trained on VOC 2007 trainval.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Demo </span></span><br><span class="line">./tools/demo.py　--gpu 0 --net zf </span><br><span class="line">./tools/demo.py　--gpu 0 --net vgg16</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="fix-gflags-error"><a href="#fix-gflags-error" class="headerlink" title="fix gflags error"></a>fix gflags error</h4><ul>
+<li>caffe-fast-rcnn&#x2F;include&#x2F;caffe&#x2F;common.hpp</li>
+<li>caffe-fast-rcnn&#x2F;examples&#x2F;mnist&#x2F;convert_mnist_data.cpp</li>
+</ul>
+<p>Comment out the ifndef</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// #ifndef GFLAGS_GFLAGS_H_</span></span><br><span class="line"><span class="keyword">namespace</span> gflags = google;</span><br><span class="line"><span class="comment">// #endif  // GFLAGS_GFLAGS_H_</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Train-net-with-your-own-data"><a href="#Train-net-with-your-own-data" class="headerlink" title="Train net with your own data"></a>Train net with your own data</h3><p>faster rcnn训练方式有两种</p>
+<ul>
+<li>一种是交替优化方法（alternating optimization），即训练两个网络，一个是rpn，一个是fast rcnn，总计两个stage，每个stage各训练一次rpn和fast rcnn。</li>
+<li>另外一种训练方式为近似联合训练（approximate joint training），也称end to end的训练方式，训练过程中只训练一个权重网络，训练速度有可观的提升，而训练精度不变。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># prepare data</span></span><br><span class="line">wget http://host.robots.ox.ac.uk/pascal/VOC/voc2007/VOCtrainval_06-Nov-2007.tar</span><br><span class="line">wget http://host.robots.ox.ac.uk/pascal/VOC/voc2007/VOCtest_06-Nov-2007.tar</span><br><span class="line">wget http://host.robots.ox.ac.uk/pascal/VOC/voc2007/VOCdevkit_08-Jun-2007.tar</span><br><span class="line"></span><br><span class="line">tar xvf VOCtrainval_06-Nov-2007.tar</span><br><span class="line">tar xvf VOCtest_06-Nov-2007.tar</span><br><span class="line">tar xvf VOCdevkit_08-Jun-2007.tar</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">VOCdevkit/                           <span class="comment"># development kit</span></span><br><span class="line">VOCdevkit/VOCcode/                   <span class="comment"># VOC utility code</span></span><br><span class="line">VOCdevkit/VOC2007                    <span class="comment"># image sets, annotations, etc.</span></span><br><span class="line"><span class="comment"># ... and several other directories ...</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> py-faster-rcnn/data</span><br><span class="line"><span class="built_in">ln</span> -s VOCdevkit VOCdevkit2007</span><br><span class="line"><span class="comment"># Using symlinks is a good idea because you will likely want to share the same PASCAL dataset installation between multiple projects.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># download pre-trained imagenet models</span></span><br><span class="line">./data/scripts/fetch_imagenet_models.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># train net</span></span><br><span class="line">./experiments/scripts/faster_rcnn_end2end.sh 0 ZF pascal_voc</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="error-fixs"><a href="#error-fixs" class="headerlink" title="error fixs"></a>error fixs</h4><p>error </p>
+<pre><code>AttributeError: &#39;module&#39; object has no attribute &#39;text_format&#39;
+</code></pre>
+<p>fix </p>
+<p>.&#x2F;lib&#x2F;fast_rcnn&#x2F;train.py增加一行</p>
+<pre><code>import google.protobuf.text_format
+</code></pre>
+<h4 id="training-results"><a href="#training-results" class="headerlink" title="training results"></a>training results</h4><pre><code>AP for aeroplane = 0.6312
+AP for bicycle = 0.7069
+AP for bird = 0.5836
+AP for boat = 0.4471
+AP for bottle = 0.3562
+AP for bus = 0.6682
+AP for car = 0.7569
+AP for cat = 0.7249
+AP for chair = 0.3844
+AP for cow = 0.6152
+AP for diningtable = 0.6162
+AP for dog = 0.6502
+AP for horse = 0.7580
+AP for motorbike = 0.7128
+AP for person = 0.6744
+AP for pottedplant = 0.3358
+AP for sheep = 0.5872
+AP for sofa = 0.5649
+AP for train = 0.7128
+AP for tvmonitor = 0.6133
+Mean AP = 0.6050
+
+Results:
+0.631
+0.707
+0.584
+0.447
+0.356
+0.668
+0.757
+0.725
+0.384
+0.615
+0.616
+0.650
+0.758
+0.713
+0.674
+0.336
+0.587
+0.565
+0.713
+0.613
+0.605
+
+--------------------------------------------------------------
+Results computed with the **unofficial** Python eval code.
+Results should be very close to the official MATLAB eval code.
+Recompute with `./tools/reval.py --matlab ...` for your paper.
+-- Thanks, The Management
+--------------------------------------------------------------
+
+real	5m16.906s
+user	4m6.179s
+sys	1m16.157s
+</code></pre>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/rbgirshick/py-faster-rcnn">py-faster-rcnn</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://huangying-zhan.github.io/2016/09/22/detection-faster-rcnn.html">faster rcnn and train net</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/hansjorn/p/7724852.html">py faster rcnn and train your own data</a></p>
+</li>
+<li><p><strong><a target="_blank" rel="noopener" href="https://www.slideshare.net/hpkim0512/tutorial-of-faster-rcnn">ppt for faster rcnn</a></strong></p>
+</li>
+<li><p><strong><a target="_blank" rel="noopener" href="https://tryolabs.com/blog/2018/01/18/faster-r-cnn-down-the-rabbit-hole-of-modern-object-detection/">faster-r-cnn-down-the-rabbit-hole-of-modern-object-detection</a></strong></p>
+</li>
+<li><p><strong><a target="_blank" rel="noopener" href="http://kaiminghe.com/iccv17tutorial/maskrcnn_iccv2017_tutorial_kaiminghe.pdf">kaiminghe mask rcnn tutorial</a></strong></p>
+</li>
+<li><p><strong><a target="_blank" rel="noopener" href="https://www.slideshare.net/windmdk/mask-rcnn">kaiminghe mask rcnn oral</a></strong></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.slideshare.net/JinwonLee9/pr12-faster-rcnn170528">ppt2 for faster rcnn</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/skyfsm/p/6806246.html">rcnn, fast rcnn, faster rcnn</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_17448289/article/details/52871461">faster rcnn notes</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/cognitive-toolkit/object-detection-using-faster-r-cnn">object-detection-using-faster-r-cnn</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://huangying-zhan.github.io/2016/09/22/detection-faster-rcnn.html">detection-faster-rcnn</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.pyimagesearch.com/2018/05/14/a-gentle-guide-to-deep-learning-object-detection/">a-gentle-guide-to-deep-learning-object-detection</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://cv-tricks.com/object-detection/faster-r-cnn-yolo-ssd/">faster rcnn yolo ssd</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://research.fb.com/wp-content/uploads/2017/08/maskrcnn.pdf">paper mask rcnn</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/jiongnima/article/details/79094159">csdn mask rcnn</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/JNingWei/article/details/78822159">roialign</a></p>
+</li>
+<li><p><strong><a target="_blank" rel="noopener" href="http://blog.leanote.com/post/afanti.deng@gmail.com/b5f4f526490b">roialign roipool</a></strong></p>
+</li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180816: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/caffe/" rel="tag"># caffe</a>
+              <a href="/tags/rcnn/" rel="tag"># rcnn</a>
+              <a href="/tags/faster-rcnn/" rel="tag"># faster rcnn</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/matplot-RGB-vs-opencv-BGR-vs-caffe-images/" rel="prev" title="matplot RGB vs opencv BGR vs caffe images">
+      <i class="fa fa-chevron-left"></i> matplot RGB vs opencv BGR vs caffe images
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/introduction-to-neural-network-forward-inference-framework/" rel="next" title="introduction to neural network forward/inference framework">
+      introduction to neural network forward/inference framework <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Quick-guide-with-Demo"><span class="nav-number">1.1.</span> <span class="nav-text">Quick guide with Demo</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#fix-gflags-error"><span class="nav-number">1.1.1.</span> <span class="nav-text">fix gflags error</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Train-net-with-your-own-data"><span class="nav-number">1.2.</span> <span class="nav-text">Train net with your own data</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#error-fixs"><span class="nav-number">1.2.1.</span> <span class="nav-text">error fixs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#training-results"><span class="nav-number">1.2.2.</span> <span class="nav-text">training results</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

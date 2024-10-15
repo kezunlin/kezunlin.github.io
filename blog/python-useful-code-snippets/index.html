@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Guideflip1234567891011121314import cv2image &#x3D; cv2.imread(&quot;demo.jpg&quot;)# Flipped Horizontally 水平翻转h_flip &#x3D; cv2.flip(image, 1)cv2.imwrite(&quot;demo-h.jpg&quot;, h_flip)# Flipped Vertically 垂直翻转">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python useful tools and code snippets">
+<meta property="og:url" content="https://kezunlin.me/blog/python-useful-code-snippets/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Guideflip1234567891011121314import cv2image &#x3D; cv2.imread(&quot;demo.jpg&quot;)# Flipped Horizontally 水平翻转h_flip &#x3D; cv2.flip(image, 1)cv2.imwrite(&quot;demo-h.jpg&quot;, h_flip)# Flipped Vertically 垂直翻转">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-11-22T02:05:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.667Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="json">
+<meta property="article:tag" content="simplekml">
+<meta property="article:tag" content="smote">
+<meta property="article:tag" content="yaml">
+<meta property="article:tag" content="requests">
+<meta property="article:tag" content="base64">
+<meta property="article:tag" content="cupy">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/python-useful-code-snippets/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>python useful tools and code snippets | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/python-useful-code-snippets/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          python useful tools and code snippets
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-11-22 10:05:00" itemprop="dateCreated datePublished" datetime="2019-11-22T10:05:00+08:00">2019-11-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="flip"><a href="#flip" class="headerlink" title="flip"></a>flip</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line">image = cv2.imread(<span class="string">&quot;demo.jpg&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Flipped Horizontally 水平翻转</span></span><br><span class="line">h_flip = cv2.flip(image, <span class="number">1</span>)</span><br><span class="line">cv2.imwrite(<span class="string">&quot;demo-h.jpg&quot;</span>, h_flip)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Flipped Vertically 垂直翻转</span></span><br><span class="line">v_flip = cv2.flip(image, <span class="number">0</span>)</span><br><span class="line">cv2.imwrite(<span class="string">&quot;demo-v.jpg&quot;</span>, v_flip)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Flipped Horizontally &amp; Vertically 水平垂直翻转</span></span><br><span class="line">hv_flip = cv2.flip(image, -<span class="number">1</span>)</span><br><span class="line">cv2.imwrite(<span class="string">&quot;demo-hv.jpg&quot;</span>, hv_flip)</span><br></pre></td></tr></table></figure>
+
+<h3 id="rotate"><a href="#rotate" class="headerlink" title="rotate"></a>rotate</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">rotate_anti_90</span>(<span class="params">image</span>):</span><br><span class="line">    image = cv2.transpose(image)</span><br><span class="line">    image = cv2.flip(image, <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> image</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">rotate_anti_180</span>(<span class="params">image</span>):</span><br><span class="line">    image = cv2.flip(image, <span class="number">0</span>)</span><br><span class="line">    image = cv2.flip(image, <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> image</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">rotate_anti_270</span>(<span class="params">image</span>):</span><br><span class="line">    image = cv2.transpose(image)</span><br><span class="line">    image = cv2.flip(image, <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> image</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">rotate</span>(<span class="params">image, angle, center=<span class="literal">None</span>, scale=<span class="number">1.0</span></span>):</span><br><span class="line">    <span class="comment"># rotate by angle</span></span><br><span class="line">    (h, w) = image.shape[:<span class="number">2</span>] <span class="comment"># hwc</span></span><br><span class="line">    <span class="keyword">if</span> center <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        center = (w / <span class="number">2.</span>, h / <span class="number">2.</span>)</span><br><span class="line"></span><br><span class="line">    M = cv2.getRotationMatrix2D(center, angle, scale)</span><br><span class="line"></span><br><span class="line">    rotated = cv2.warpAffine(image, M, (w, h))</span><br><span class="line">    <span class="keyword">return</span> rotated</span><br></pre></td></tr></table></figure>
+
+<h3 id="compression"><a href="#compression" class="headerlink" title="compression"></a>compression</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cv2.imwrite(full_image_path, image, [<span class="built_in">int</span>( cv2.IMWRITE_JPEG_QUALITY), <span class="number">100</span>]) <span class="comment"># no compression for jpg</span></span><br><span class="line"><span class="comment"># [int(cv2.IMWRITE_PNG_COMPRESSION), 9]  0-9 for png</span></span><br><span class="line"><span class="comment"># [int( cv2.IMWRITE_JPEG_QUALITY), 100]  0-100 for jpg</span></span><br></pre></td></tr></table></figure>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<h3 id="get-video-info"><a href="#get-video-info" class="headerlink" title="get video info"></a>get video info</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">from</span> moviepy.editor <span class="keyword">import</span> VideoFileClip</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_video_info</span>(<span class="params">video_path</span>):</span><br><span class="line">    cap = cv2.VideoCapture(video_path)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> cap.isOpened():</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    </span><br><span class="line">    frame_number = cap.get(cv2.CAP_PROP_FRAME_COUNT)</span><br><span class="line">    h  = <span class="built_in">int</span>(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))</span><br><span class="line">    w  = <span class="built_in">int</span>(cap.get(cv2.CAP_PROP_FRAME_WIDTH))</span><br><span class="line">    fps = <span class="built_in">int</span>(cap.get(cv2.CAP_PROP_FPS))</span><br><span class="line"></span><br><span class="line">    cap.release() <span class="comment"># release video capture</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;fps = &quot;</span>,fps)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;frame_number = &quot;</span>,frame_number)</span><br><span class="line">    size = (w,h)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;size = &quot;</span>,size)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># frame number MAY BE WRONG ! so video time may be also wrong!</span></span><br><span class="line">    duration = <span class="built_in">int</span>(frame_number / fps)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;seconds=&quot;</span>,duration)</span><br><span class="line">    video_time = <span class="built_in">str</span>(datetime.timedelta(seconds = duration))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;video_time=&quot;</span>,video_time)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;-----------------------using VideoFileClip------------------&quot;</span>)</span><br><span class="line">    clip = VideoFileClip(video_path)</span><br><span class="line">    duration = clip.duration</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;video duration is &quot;</span>+ <span class="built_in">str</span>(duration) + <span class="string">&quot; seconds&quot;</span>)</span><br><span class="line">    video_time = <span class="built_in">str</span>(datetime.timedelta(seconds = <span class="built_in">int</span>(duration)))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;video_time=&quot;</span>,video_time)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">clip_video</span>():</span><br><span class="line">    clip = VideoFileClip(<span class="string">&quot;1.mp4&quot;</span>)</span><br><span class="line">    starting_point = <span class="number">120</span>  <span class="comment"># start at second minute</span></span><br><span class="line">    end_point = <span class="number">420</span>  <span class="comment"># record for 300 seconds (120+300)</span></span><br><span class="line">    subclip = clip.subclip(starting_point, end_point)</span><br><span class="line">    subclip.write_videofile(<span class="string">&quot;/path/to/new/video.mp4&quot;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="numpy-argmax"><a href="#numpy-argmax" class="headerlink" title="numpy argmax"></a>numpy argmax</h3><p>numpy argmax for 2-dim and 3-dim </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># for 2-dim</span></span><br><span class="line">array = np.array([</span><br><span class="line">    [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</span><br><span class="line">    [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>],</span><br><span class="line">    [<span class="number">9</span>,<span class="number">8</span>,<span class="number">7</span>],</span><br><span class="line">    [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</span><br><span class="line">    [<span class="number">10</span>,<span class="number">1</span>,<span class="number">2</span>]</span><br><span class="line">])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;array.shape=&quot;</span>,array.shape)</span><br><span class="line">result1 = array.argmax(axis=<span class="number">0</span>) <span class="comment"># hw  axis-0 ===&gt; h  shape=(w,) value range[0,1,2,3,4]</span></span><br><span class="line">result2 = array.argmax(axis=<span class="number">1</span>) <span class="comment"># hw  axis-0 ===&gt; w  shape=(h,) value range[0,1,2]</span></span><br><span class="line"><span class="built_in">print</span>(result1)</span><br><span class="line"><span class="built_in">print</span>(result1.shape)</span><br><span class="line"><span class="built_in">print</span>(result2)</span><br><span class="line"><span class="built_in">print</span>(result2.shape)</span><br></pre></td></tr></table></figure>
+<p>output</p>
+<pre><code>(&#39;array.shape=&#39;, (5, 3))
+[4 2 2]
+(3,)
+[2 2 0 2 0]
+(5,)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># for 3-dim</span></span><br><span class="line">array2 = np.array([</span><br><span class="line">    [<span class="number">3</span>,<span class="number">2</span>,<span class="number">1</span>],</span><br><span class="line">    [<span class="number">6</span>,<span class="number">5</span>,<span class="number">4</span>],</span><br><span class="line">    [<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>],</span><br><span class="line">    [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</span><br><span class="line">    [<span class="number">1</span>,<span class="number">1</span>,<span class="number">10</span>]</span><br><span class="line">])</span><br><span class="line">image = np.array([</span><br><span class="line">    array,array2</span><br><span class="line">])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;image.shape=&quot;</span>,image.shape)</span><br><span class="line"><span class="built_in">print</span>(image)</span><br><span class="line"></span><br><span class="line">out = image.argmax(axis=<span class="number">0</span>) <span class="comment"># chw  axis=0 ===&gt; c  shape=(h,w) value range[0,1]</span></span><br><span class="line"><span class="built_in">print</span>(out)</span><br><span class="line"><span class="built_in">print</span>(out.shape)</span><br><span class="line"><span class="built_in">print</span>(out.dtype)</span><br></pre></td></tr></table></figure>
+
+<p>output</p>
+<pre><code>(&#39;image.shape=&#39;, (2, 5, 3))
+[[[ 1  2  3]
+  [ 4  5  6]
+  [ 9  8  7]
+  [ 1  2  3]
+  [10  1  2]]
+
+ [[ 3  2  1]
+  [ 6  5  4]
+  [ 7  8  9]
+  [ 1  2  3]
+  [ 1  1 10]]]
+[[1 0 0]
+ [1 0 0]
+ [0 0 1]
+ [0 0 0]
+ [0 0 1]]
+(5, 3)
+int64
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># for view segmentation output</span></span><br><span class="line">output = np.load(<span class="string">&#x27;output.npy&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;output.shape=&quot;</span>,output.shape) <span class="comment"># 1, 2, 512, 512</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;output.dtype=&quot;</span>,output.dtype)</span><br><span class="line"></span><br><span class="line">image = output[<span class="number">0</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;image.shape=&quot;</span>,image.shape) <span class="comment"># 2, 512, 512</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;image.dtype=&quot;</span>,image.dtype)</span><br><span class="line"></span><br><span class="line">out = image.argmax(axis=<span class="number">0</span>)     <span class="comment"># chw   axis=0 ===&gt; c </span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;out.shape=&quot;</span>,out.shape) <span class="comment"># 512, 512</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;out.dtype=&quot;</span>,out.dtype) <span class="comment"># int64</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(out.<span class="built_in">min</span>())</span><br><span class="line"><span class="built_in">print</span>(out.<span class="built_in">max</span>())</span><br></pre></td></tr></table></figure>
+
+<p>output</p>
+<pre><code>(&#39;output.shape=&#39;, (1, 2, 512, 512))
+(&#39;output.dtype=&#39;, dtype(&#39;float32&#39;))
+(&#39;image.shape=&#39;, (2, 512, 512))
+(&#39;image.dtype=&#39;, dtype(&#39;float32&#39;))
+(&#39;out.shape=&#39;, (512, 512))
+(&#39;out.dtype=&#39;, dtype(&#39;int64&#39;))
+0
+1
+</code></pre>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<h3 id="pandas-quantile"><a href="#pandas-quantile" class="headerlink" title="pandas quantile"></a>pandas quantile</h3><h4 id="basic"><a href="#basic" class="headerlink" title="basic"></a>basic</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">for array of length n:</span></span><br><span class="line"><span class="string">1. pos = 1 + (n-1)*p</span></span><br><span class="line"><span class="string">2. get integer part and fraction part of pos: i, f </span></span><br><span class="line"><span class="string">3. return a[i-1] + (a[i]-a[i-1])*f</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">quantile_p</span>(<span class="params">data, p, method=<span class="number">1</span></span>):</span><br><span class="line">    data.sort()</span><br><span class="line">    <span class="keyword">if</span> method == <span class="number">2</span>:</span><br><span class="line">        pos = <span class="number">1</span> + (<span class="built_in">len</span>(data)-<span class="number">1</span>)*p</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        pos = (<span class="built_in">len</span>(data) + <span class="number">1</span>)*p</span><br><span class="line">    i = <span class="built_in">int</span>(math.modf(pos)[<span class="number">1</span>])</span><br><span class="line">    f = pos - i</span><br><span class="line">    Q = data[i-<span class="number">1</span>] + (data[i]-data[i-<span class="number">1</span>])*f</span><br><span class="line">    Q1 = quantile_p(data, <span class="number">0.25</span>)</span><br><span class="line">    Q2 = quantile_p(data, <span class="number">0.5</span>)</span><br><span class="line">    Q3 = quantile_p(data, <span class="number">0.75</span>)</span><br><span class="line">    IQR = Q3 - Q1</span><br><span class="line">    <span class="keyword">return</span> Q1, Q2, Q3, IQR</span><br></pre></td></tr></table></figure>
+
+<h4 id="quantile"><a href="#quantile" class="headerlink" title="quantile"></a>quantile</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">df = pd.Series(np.array([<span class="number">6</span>, <span class="number">47</span>, <span class="number">49</span>, <span class="number">15</span>, <span class="number">42</span>, <span class="number">41</span>, <span class="number">7</span>, <span class="number">39</span>, <span class="number">43</span>, <span class="number">40</span>, <span class="number">36</span>])</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(dt)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Q1:&#x27;</span>, df.quantile(<span class="number">.25</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Q2:&#x27;</span>, df.quantile(<span class="number">.5</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Q3:&#x27;</span>, df.quantile(<span class="number">.75</span>))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>pandas</code> use method 2: <code>pos = 1 + (n-1)*p</code></p>
+</blockquote>
+<h3 id="image-to-from-base64-string"><a href="#image-to-from-base64-string" class="headerlink" title="image to&#x2F;from base64 string"></a>image to&#x2F;from base64 string</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_base64_str_from_file</span>(<span class="params">filepath</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(filepath, <span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        bytes_content = f.read() <span class="comment"># bytes</span></span><br><span class="line">        bytes_64 = base64.b64encode(bytes_content)</span><br><span class="line">    <span class="keyword">return</span> bytes_64.decode(<span class="string">&#x27;utf-8&#x27;</span>) <span class="comment"># bytes---&gt;str  (remove `b`)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">save_base64_str_to_file</span>(<span class="params">str_base64, to_file</span>):</span><br><span class="line">    bytes_64 = str_base64.encode(<span class="string">&#x27;utf-8&#x27;</span>) <span class="comment"># str---&gt; bytes (add `b`)</span></span><br><span class="line">    bytes_content = base64.decodebytes(bytes_64) <span class="comment"># bytes</span></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(to_file, <span class="string">&quot;wb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(bytes_content)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test_base64</span>():</span><br><span class="line">    <span class="comment"># image to/from base64</span></span><br><span class="line">    image_path = <span class="string">&quot;images/1.jpg&quot;</span></span><br><span class="line">    str_base64 = get_base64_str_from_file(image_path)</span><br><span class="line">    save_base64_str_to_file(str_base64, <span class="string">&quot;images/2.jpg&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;OK&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    test_base64()</span><br></pre></td></tr></table></figure>
+
+<p>output </p>
+<pre><code>OK
+</code></pre>
+<h3 id="normal-string-to-from-base64-string"><a href="#normal-string-to-from-base64-string" class="headerlink" title="normal string to&#x2F;from base64 string"></a>normal string to&#x2F;from base64 string</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">str_to_base64</span>(<span class="params">normal_str</span>):</span><br><span class="line">    bytes_str = normal_str.encode(<span class="string">&#x27;utf-8&#x27;</span>) <span class="comment"># str ===&gt; bytes</span></span><br><span class="line">    bytes_64 = base64.b64encode(bytes_str) <span class="comment"># bytes ===&gt; bytes</span></span><br><span class="line">    <span class="keyword">return</span> bytes_64.decode(<span class="string">&#x27;utf-8&#x27;</span>) <span class="comment"># bytes ===&gt; str</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">base64_to_str</span>(<span class="params">base64_str</span>):</span><br><span class="line">    bytes_64 = base64_str.encode(<span class="string">&#x27;utf-8&#x27;</span>) <span class="comment"># str ===&gt; bytes</span></span><br><span class="line">    bytes_content = base64.decodebytes(bytes_64) <span class="comment"># bytes ===&gt; bytes</span></span><br><span class="line">    <span class="keyword">return</span> bytes_content.decode(<span class="string">&#x27;utf-8&#x27;</span>) <span class="comment"># bytes ===&gt; str</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test_base64</span>():</span><br><span class="line">    normal_str = <span class="string">&quot;Hello World !&quot;</span></span><br><span class="line">    str_base64 = str_to_base64(normal_str)</span><br><span class="line">    normal_str2 = base64_to_str(str_base64)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;normal_str = &quot;</span>,normal_str)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;str_base64 = &quot;</span>,str_base64)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;normal_str2 = &quot;</span>,normal_str2)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    test_base64()</span><br></pre></td></tr></table></figure>
+
+<p>output </p>
+<pre><code>normal_str =  Hello World !
+str_base64 =  SGVsbG8gV29ybGQgIQ==
+normal_str2 =  Hello World !
+</code></pre>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<h3 id="json-loads-and-dumps"><a href="#json-loads-and-dumps" class="headerlink" title="json loads and dumps"></a>json loads and dumps</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line">str_text=<span class="string">&#x27;&#123;&quot;status&quot;:0,&quot;msg&quot;:&quot;成功&quot;&#125;&#x27;</span></span><br><span class="line">dict_json = json.loads(str_text)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(dict_json)) <span class="comment"># dict </span></span><br><span class="line"><span class="built_in">print</span>(dict_json)</span><br><span class="line"></span><br><span class="line">str_pretty_result = json.dumps(</span><br><span class="line">    dict_json, indent=<span class="number">4</span>, </span><br><span class="line">    sort_keys=<span class="literal">True</span>, ensure_ascii=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(str_pretty_result)) <span class="comment"># str</span></span><br><span class="line"><span class="built_in">print</span>(str_pretty_result)</span><br></pre></td></tr></table></figure>
+
+<p>output </p>
+<pre><code>&lt;class &#39;dict&#39;&gt;
+&#123;&#39;status&#39;: 0, &#39;msg&#39;: &#39;成功&#39;&#125;
+&lt;class &#39;str&#39;&gt;
+&#123;
+    &quot;msg&quot;: &quot;成功&quot;,
+    &quot;status&quot;: 0
+&#125;
+</code></pre>
+<blockquote>
+<p>str to dict<br>dict to str</p>
+</blockquote>
+<h3 id="datetime"><a href="#datetime" class="headerlink" title="datetime"></a>datetime</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">demo_string_datetime</span>():</span><br><span class="line">    <span class="comment"># date_time = now.strftime(&quot;%m/%d/%Y, %H:%M:%S&quot;)</span></span><br><span class="line">    </span><br><span class="line">    datetime_str = <span class="string">&#x27;09/19/18 13:55:26&#x27;</span></span><br><span class="line">    datetime_object = datetime.datetime.strptime(datetime_str, <span class="string">&#x27;%m/%d/%y %H:%M:%S&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">type</span>(datetime_object))</span><br><span class="line">    <span class="built_in">print</span>(datetime_object)  <span class="comment"># printed in default format</span></span><br><span class="line">    </span><br><span class="line">    datetime_str = <span class="string">&#x27;19910403&#x27;</span></span><br><span class="line">    datetime_object = datetime.datetime.strptime(datetime_str, <span class="string">&#x27;%Y%m%d&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">type</span>(datetime_object))</span><br><span class="line">    <span class="built_in">print</span>(datetime_object)  <span class="comment"># printed in default format</span></span><br><span class="line">    </span><br><span class="line">    datetime_result_str = datetime_object.strftime(<span class="string">&#x27;%Y%m%d&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(datetime_result_str)</span><br></pre></td></tr></table></figure>
+
+<h3 id="simplekml"><a href="#simplekml" class="headerlink" title="simplekml"></a>simplekml</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> simplekml</span><br><span class="line">kml = simplekml.Kml()</span><br><span class="line">kml.newpoint(name=<span class="string">&quot;point a&quot;</span>, coords=[(<span class="number">18.432314</span>,-<span class="number">33.988862</span>)])  <span class="comment"># lon, lat, optional height</span></span><br><span class="line">kml.newpoint(name=<span class="string">&quot;point b&quot;</span>, coords=[(<span class="number">28.432314</span>,-<span class="number">43.988862</span>)])  <span class="comment"># lon, lat, optional height</span></span><br><span class="line">kml.save(<span class="string">&quot;1.kml&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>1.kml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">kml</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.opengis.net/kml/2.2&quot;</span> <span class="attr">xmlns:gx</span>=<span class="string">&quot;http://www.google.com/kml/ext/2.2&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Document</span> <span class="attr">id</span>=<span class="string">&quot;1&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Placemark</span> <span class="attr">id</span>=<span class="string">&quot;3&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">name</span>&gt;</span>point a<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">Point</span> <span class="attr">id</span>=<span class="string">&quot;2&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">coordinates</span>&gt;</span>18.432314,-33.988862,0.0<span class="tag">&lt;/<span class="name">coordinates</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">Point</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">Placemark</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Placemark</span> <span class="attr">id</span>=<span class="string">&quot;5&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">name</span>&gt;</span>point b<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">Point</span> <span class="attr">id</span>=<span class="string">&quot;4&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">coordinates</span>&gt;</span>28.432314,-43.988862,0.0<span class="tag">&lt;/<span class="name">coordinates</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">Point</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">Placemark</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">Document</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">kml</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+<h3 id="python-requests"><a href="#python-requests" class="headerlink" title="python requests"></a>python requests</h3><h4 id="install"><a href="#install" class="headerlink" title="install"></a>install</h4><pre><code>pip install requests
+conda install requests
+</code></pre>
+<h3 id="usage"><a href="#usage" class="headerlink" title="usage"></a>usage</h3><pre><code>&gt;&gt;&gt; requests.get(&#39;https://httpbin.org/get&#39;)
+&gt;&gt;&gt; requests.post(&#39;https://httpbin.org/post&#39;, data=&#123;&#39;key&#39;:&#39;value&#39;&#125;)
+&gt;&gt;&gt; requests.put(&#39;https://httpbin.org/put&#39;, data=&#123;&#39;key&#39;:&#39;value&#39;&#125;)
+&gt;&gt;&gt; requests.delete(&#39;https://httpbin.org/delete&#39;)
+&gt;&gt;&gt; requests.head(&#39;https://httpbin.org/get&#39;)
+&gt;&gt;&gt; requests.patch(&#39;https://httpbin.org/patch&#39;, data=&#123;&#39;key&#39;:&#39;value&#39;&#125;)
+&gt;&gt;&gt; requests.options(&#39;https://httpbin.org/get&#39;)
+</code></pre>
+<h4 id="code-example"><a href="#code-example" class="headerlink" title="code example"></a>code example</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line">data = &#123;<span class="string">&quot;name&quot;</span>:<span class="string">&quot;admin&quot;</span>,</span><br><span class="line">        <span class="string">&quot;password&quot;</span>:<span class="string">&quot;21232f297a57a5a743894a0e4a801fc3&quot;</span>&#125;</span><br><span class="line">r = requests.post(</span><br><span class="line">    <span class="string">&quot;127.0.0.1/api/login&quot;</span>,</span><br><span class="line">    headers=&#123;<span class="string">&quot;Accept&quot;</span>: <span class="string">&quot;application/json&quot;</span>, </span><br><span class="line">             <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/json&quot;</span>&#125;,</span><br><span class="line">    data=json.dumps(data)</span><br><span class="line">)</span><br><span class="line"><span class="built_in">print</span>(r.text)</span><br><span class="line"></span><br><span class="line">r = requests.post(</span><br><span class="line">    <span class="string">&quot;127.0.0.1/api/login&quot;</span>,</span><br><span class="line">    headers=&#123;<span class="string">&quot;Accept&quot;</span>: <span class="string">&quot;application/json&quot;</span>, </span><br><span class="line">             <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/json&quot;</span>&#125;,</span><br><span class="line">    json=data</span><br><span class="line">)</span><br><span class="line"><span class="built_in">print</span>(r.text)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">session_id = <span class="string">&quot;157480890@kezunlin.me&quot;</span></span><br><span class="line">myheaders=&#123;<span class="string">&quot;Accept&quot;</span>: <span class="string">&quot;application/json&quot;</span>, </span><br><span class="line">           <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/json&quot;</span>, </span><br><span class="line">           <span class="string">&quot;session_id&quot;</span>:session_id&#125;</span><br><span class="line">r=requests.get(</span><br><span class="line">    <span class="string">&quot;127.0.0.1/api/book&quot;</span>, </span><br><span class="line">    headers=myheaders</span><br><span class="line">)</span><br><span class="line"><span class="built_in">print</span>(r.text)</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="requests-html"><a href="#requests-html" class="headerlink" title="requests-html"></a>requests-html</h3><p>requests-html for human</p>
+<p>install </p>
+<pre><code>pip install requests-html
+</code></pre>
+<p>usage </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> requests_html <span class="keyword">import</span> HTMLSession</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>session = HTMLSession()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r = session.get(<span class="string">&#x27;https://python.org/&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r.text</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r.html.find(<span class="string">&#x27;title&#x27;</span>, first=<span class="literal">True</span>).text</span><br></pre></td></tr></table></figure>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<h3 id="selenium-chromedriver"><a href="#selenium-chromedriver" class="headerlink" title="selenium chromedriver"></a>selenium chromedriver</h3><p>versions </p>
+<ul>
+<li>Selenium – version 3.11.0</li>
+<li>Chrome Browser – version 77</li>
+<li>ChromeDriver – version 77</li>
+</ul>
+<p>steps</p>
+<ol>
+<li>download and install chrome browser 77</li>
+<li>download <a target="_blank" rel="noopener" href="https://chromedriver.storage.googleapis.com/77.0.3865.40/chromedriver_linux64.zip">ChromeDriver for Chrome Browser 77</a> </li>
+<li>install and check version</li>
+</ol>
+<p>commands</p>
+<pre><code>sudo cp chromedriver /usr/local/bin
+chromedriver -v
+ChromeDriver 77.0.3865.40
+</code></pre>
+<h3 id="smote"><a href="#smote" class="headerlink" title="smote"></a>smote</h3><p>using smote to over sampling datasets</p>
+<p>install </p>
+<pre><code>pip install smote_variants
+pip install imbalanced_databases
+</code></pre>
+<h3 id="class-member-vs-instance-member"><a href="#class-member-vs-instance-member" class="headerlink" title="class member vs instance member"></a>class member vs instance member</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding: UTF-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Info</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    rects = []   <span class="comment"># by ref (object):  all instances has only 1 same copy.</span></span><br><span class="line">    counter = <span class="number">0</span>  <span class="comment"># by value: all instances has 1 different copy</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.new_rects = []</span><br><span class="line">        <span class="variable language_">self</span>.new_counter = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">func</span>():</span><br><span class="line">    it = Info()</span><br><span class="line">    <span class="keyword">return</span> it</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test1</span>():</span><br><span class="line">    info = func()</span><br><span class="line"></span><br><span class="line">    info.rects.extend([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])</span><br><span class="line">    info.counter += <span class="number">1</span></span><br><span class="line">    info.new_rects.extend([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])</span><br><span class="line">    info.new_counter += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;rect size&quot;</span>, <span class="built_in">len</span>(info.rects),<span class="built_in">len</span>(info.new_rects))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;counter&quot;</span>, info.counter,info.new_counter)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;--------------------------&quot;</span>)</span><br><span class="line"></span><br><span class="line">    info2 = func()</span><br><span class="line">    info2.rects.extend([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])</span><br><span class="line">    info2.counter += <span class="number">1</span></span><br><span class="line">    info2.new_rects.extend([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])</span><br><span class="line">    info2.new_counter += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;rect size&quot;</span>, <span class="built_in">len</span>(info2.rects),<span class="built_in">len</span>(info2.new_rects))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;counter&quot;</span>, info2.counter,info2.new_counter)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;--------------------------&quot;</span>)</span><br><span class="line">   </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    test1()</span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">rect size 5 5</span></span><br><span class="line"><span class="string">counter 1 1</span></span><br><span class="line"><span class="string">--------------------------</span></span><br><span class="line"><span class="string">rect size 10 5</span></span><br><span class="line"><span class="string">counter 1 1</span></span><br><span class="line"><span class="string">--------------------------</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="pyyaml"><a href="#pyyaml" class="headerlink" title="pyyaml"></a>pyyaml</h3><p>install </p>
+<pre><code>pip install pyyaml
+pip freeze &gt; requirements.txt
+</code></pre>
+<p>usage<br>cfg.yaml</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="comment"># cfg.yaml</span></span><br><span class="line"><span class="attr">debug:</span> <span class="literal">true</span> <span class="comment"># debug or not (default: false)</span></span><br><span class="line"><span class="attr">input_dir:</span> <span class="string">&quot;./input/&quot;</span> <span class="comment"># input dir </span></span><br><span class="line"><span class="attr">output_dir:</span> <span class="string">&quot;./output/&quot;</span> <span class="comment"># output dir</span></span><br></pre></td></tr></table></figure>
+
+<p>code</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> yaml </span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">load_cfg</span>(<span class="params">cfg_path=<span class="string">&#x27;./cfg.yaml&#x27;</span></span>):</span><br><span class="line">    cfg = <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> os.path.exists(cfg_path):</span><br><span class="line">        cfg = yaml.load(<span class="built_in">open</span>(cfg_path))</span><br><span class="line">        input_dir = cfg.get(<span class="string">&quot;input_dir&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;&#123;&#125; not exist&quot;</span>.<span class="built_in">format</span>(cfg_path))</span><br><span class="line">    <span class="keyword">return</span> cfg </span><br></pre></td></tr></table></figure>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+<h3 id="cupy"><a href="#cupy" class="headerlink" title="cupy"></a>cupy</h3><blockquote>
+<p>CuPy: NumPy-like API accelerated with CUDA.<br>CuPy: numpy on GPU</p>
+</blockquote>
+<h4 id="install-1"><a href="#install-1" class="headerlink" title="install"></a>install</h4><pre><code>(For CUDA 8.0)
+% pip install cupy-cuda80
+
+(For CUDA 9.0)
+% pip install cupy-cuda90
+
+(For CUDA 9.1)
+% pip install cupy-cuda91
+
+(For CUDA 9.2)
+% pip install cupy-cuda92
+
+(For CUDA 10.0)
+% pip install cupy-cuda100
+
+(For CUDA 10.1)
+% pip install cupy-cuda101
+
+(Install CuPy from source)
+% pip install cupy
+</code></pre>
+<h4 id="usage-1"><a href="#usage-1" class="headerlink" title="usage"></a>usage</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> cupy <span class="keyword">as</span> cp</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = cp.arange(<span class="number">6</span>).reshape(<span class="number">2</span>, <span class="number">3</span>).astype(<span class="string">&#x27;f&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x</span><br><span class="line">array([[ <span class="number">0.</span>,  <span class="number">1.</span>,  <span class="number">2.</span>],</span><br><span class="line">       [ <span class="number">3.</span>,  <span class="number">4.</span>,  <span class="number">5.</span>]], dtype=float32)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x.<span class="built_in">sum</span>(axis=<span class="number">1</span>)</span><br><span class="line">array([  <span class="number">3.</span>,  <span class="number">12.</span>], dtype=float32)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = cp.arange(<span class="number">6</span>, dtype=<span class="string">&#x27;f&#x27;</span>).reshape(<span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = cp.arange(<span class="number">3</span>, dtype=<span class="string">&#x27;f&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>kernel = cp.ElementwiseKernel(</span><br><span class="line"><span class="meta">... </span>    <span class="string">&#x27;float32 x, float32 y&#x27;</span>, <span class="string">&#x27;float32 z&#x27;</span>,</span><br><span class="line"><span class="meta">... </span>    <span class="string">&#x27;&#x27;&#x27;if (x - 2 &gt; y) &#123;</span></span><br><span class="line"><span class="string"><span class="meta">... </span>      z = x * y;</span></span><br><span class="line"><span class="string"><span class="meta">... </span>    &#125; else &#123;</span></span><br><span class="line"><span class="string"><span class="meta">... </span>      z = x + y;</span></span><br><span class="line"><span class="string"><span class="meta">... </span>    &#125;&#x27;&#x27;&#x27;</span>, <span class="string">&#x27;my_kernel&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>kernel(x, y)</span><br><span class="line">array([[ <span class="number">0.</span>,  <span class="number">2.</span>,  <span class="number">4.</span>],</span><br><span class="line">       [ <span class="number">0.</span>,  <span class="number">4.</span>,  <span class="number">10.</span>]], dtype=float32)</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="SORT"><a href="#SORT" class="headerlink" title="SORT"></a>SORT</h3><p>SORT: A Simple, Online and Realtime Tracker based on Kalman</p>
+<p>code </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sort <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment">#create instance of SORT</span></span><br><span class="line">mot_tracker = Sort() </span><br><span class="line"></span><br><span class="line"><span class="comment"># get detections</span></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="comment"># update SORT</span></span><br><span class="line">track_bbs_ids = mot_tracker.update(detections)</span><br><span class="line"></span><br><span class="line"><span class="comment"># track_bbs_ids is a np array where each row contains a valid bounding box and track_id (last column)</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.tutorialexample.com/a-beginner-guide-to-python-get-video-duration-with-opencv-python-tutorial/">a-beginner-guide-to-python-get-video-duration-with-opencv-python-tutorial</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.learnopencv.com/read-write-and-display-a-video-using-opencv-cpp-python/">read-write-and-display-a-video-using-opencv-cpp-python</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/brightyuxl/p/9815780.html">pandas quantile</a></li>
+<li><a target="_blank" rel="noopener" href="https://simplekml.readthedocs.io/en/latest/gettingstarted.html#getting-started">simplekml</a></li>
+<li><a target="_blank" rel="noopener" href="https://pythonhosted.org/pykml/tutorial.html">pykml</a></li>
+<li><a target="_blank" rel="noopener" href="https://realpython.com/python-requests/">python-requests</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/6260457/using-headers-with-the-python-requests-librarys-get-method">using-headers-with-the-python-requests-librarys-get-method</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.automationtestinghub.com/selenium-chromedriver/">selenium-chromedriver</a></li>
+<li><a target="_blank" rel="noopener" href="https://smote-variants.readthedocs.io/en/latest/installation.html">smote-variants</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/gykovacs/smote_variants/blob/master/examples/000_binary_oversampling.ipynb">examples</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/psf/requests-html">requests-html</a></li>
+<li><a target="_blank" rel="noopener" href="https://jeffknupp.com/blog/2012/11/13/is-python-callbyvalue-or-callbyreference-neither/">is-python-callbyvalue-or-callbyreference-neither</a></li>
+<li><a target="_blank" rel="noopener" href="https://robertheaton.com/2014/02/09/pythons-pass-by-object-reference-as-explained-by-philip-k-dick/">pythons-pass-by-object-reference-as-explained-by-philip-k-dick</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/cupy/cupy">cupy</a></li>
+<li><a target="_blank" rel="noopener" href="https://cupy.chainer.org/">cupy</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/abewley/sort">sort</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/yasenh/sort-cpp">sort-cpp</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>2019&#x2F;11&#x2F;08: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/json/" rel="tag"># json</a>
+              <a href="/tags/simplekml/" rel="tag"># simplekml</a>
+              <a href="/tags/smote/" rel="tag"># smote</a>
+              <a href="/tags/yaml/" rel="tag"># yaml</a>
+              <a href="/tags/requests/" rel="tag"># requests</a>
+              <a href="/tags/base64/" rel="tag"># base64</a>
+              <a href="/tags/cupy/" rel="tag"># cupy</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/Why%20does%20the%20order%20of%20the%20loops%20affect%20performance%20when%20iterating%20over%20a%202D%20array/" rel="prev" title="Why does the order of the loops affect performance when iterating over a 2D array ?">
+      <i class="fa fa-chevron-left"></i> Why does the order of the loops affect performance when iterating over a 2D array ?
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/python-convert-yaml-to-json/" rel="next" title="python convert yaml to json">
+      python convert yaml to json <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#flip"><span class="nav-number">1.1.</span> <span class="nav-text">flip</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rotate"><span class="nav-number">1.2.</span> <span class="nav-text">rotate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#compression"><span class="nav-number">1.3.</span> <span class="nav-text">compression</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get-video-info"><span class="nav-number">1.4.</span> <span class="nav-text">get video info</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#numpy-argmax"><span class="nav-number">1.5.</span> <span class="nav-text">numpy argmax</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pandas-quantile"><span class="nav-number">1.6.</span> <span class="nav-text">pandas quantile</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#basic"><span class="nav-number">1.6.1.</span> <span class="nav-text">basic</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#quantile"><span class="nav-number">1.6.2.</span> <span class="nav-text">quantile</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#image-to-from-base64-string"><span class="nav-number">1.7.</span> <span class="nav-text">image to&#x2F;from base64 string</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#normal-string-to-from-base64-string"><span class="nav-number">1.8.</span> <span class="nav-text">normal string to&#x2F;from base64 string</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#json-loads-and-dumps"><span class="nav-number">1.9.</span> <span class="nav-text">json loads and dumps</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#datetime"><span class="nav-number">1.10.</span> <span class="nav-text">datetime</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#simplekml"><span class="nav-number">1.11.</span> <span class="nav-text">simplekml</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python-requests"><span class="nav-number">1.12.</span> <span class="nav-text">python requests</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#install"><span class="nav-number">1.12.1.</span> <span class="nav-text">install</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#usage"><span class="nav-number">1.13.</span> <span class="nav-text">usage</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#code-example"><span class="nav-number">1.13.1.</span> <span class="nav-text">code example</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#requests-html"><span class="nav-number">1.14.</span> <span class="nav-text">requests-html</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#selenium-chromedriver"><span class="nav-number">1.15.</span> <span class="nav-text">selenium chromedriver</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#smote"><span class="nav-number">1.16.</span> <span class="nav-text">smote</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#class-member-vs-instance-member"><span class="nav-number">1.17.</span> <span class="nav-text">class member vs instance member</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pyyaml"><span class="nav-number">1.18.</span> <span class="nav-text">pyyaml</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cupy"><span class="nav-number">1.19.</span> <span class="nav-text">cupy</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#install-1"><span class="nav-number">1.19.1.</span> <span class="nav-text">install</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#usage-1"><span class="nav-number">1.19.2.</span> <span class="nav-text">usage</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SORT"><span class="nav-number">1.20.</span> <span class="nav-text">SORT</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

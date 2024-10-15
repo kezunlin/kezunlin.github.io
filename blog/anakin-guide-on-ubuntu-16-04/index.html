@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Guideversion gcc 4.8.5&#x2F;5.4.0 g++ 4.8.5&#x2F;5.4.0 cmake 3.2.2 nvidia driver 396.54 + cuda 9.2 + cudnn 7.1.4 protobuf 3.4.0  install nvidia-docker2see nvidia-docker2 guide on ubuntu 16.04 test  1s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="compile baidu anakin on ubuntu 16.04">
+<meta property="og:url" content="https://kezunlin.me/blog/anakin-guide-on-ubuntu-16-04/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Guideversion gcc 4.8.5&#x2F;5.4.0 g++ 4.8.5&#x2F;5.4.0 cmake 3.2.2 nvidia driver 396.54 + cuda 9.2 + cudnn 7.1.4 protobuf 3.4.0  install nvidia-docker2see nvidia-docker2 guide on ubuntu 16.04 test  1s">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180906173919156-600432026.png">
+<meta property="article:published_time" content="2018-09-03T10:16:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="anakin">
+<meta property="article:tag" content="baidu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kezunlin.me/images/posts/635233-20180906173919156-600432026.png">
+
+<link rel="canonical" href="https://kezunlin.me/blog/anakin-guide-on-ubuntu-16-04/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>compile baidu anakin on ubuntu 16.04 | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/anakin-guide-on-ubuntu-16-04/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          compile baidu anakin on ubuntu 16.04
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-09-03 18:16:00" itemprop="dateCreated datePublished" datetime="2018-09-03T18:16:00+08:00">2018-09-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deep-learning/" itemprop="url" rel="index"><span itemprop="name">deep learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="version"><a href="#version" class="headerlink" title="version"></a>version</h3><ul>
+<li>gcc 4.8.5&#x2F;5.4.0</li>
+<li>g++ 4.8.5&#x2F;5.4.0</li>
+<li>cmake 3.2.2</li>
+<li>nvidia driver 396.54 + cuda 9.2 + cudnn 7.1.4</li>
+<li>protobuf 3.4.0</li>
+</ul>
+<h3 id="install-nvidia-docker2"><a href="#install-nvidia-docker2" class="headerlink" title="install nvidia-docker2"></a>install nvidia-docker2</h3><p>see <a href="https://kezunlin.me/post/6293dd25/">nvidia-docker2 guide on ubuntu 16.04</a></p>
+<p>test </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> docker run --runtime=nvidia --<span class="built_in">rm</span> nvidia/cuda nvidia-smi</span><br></pre></td></tr></table></figure>
+
+<h3 id="build-and-run"><a href="#build-and-run" class="headerlink" title="build and run"></a>build and run</h3><p>build</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/PaddlePaddle/Anakin.git anakin</span><br><span class="line"><span class="built_in">cd</span> anakin/docker</span><br><span class="line">./anakin_docker_build_and_run.sh -p NVIDIA-GPU -o Ubuntu -m Build</span><br></pre></td></tr></table></figure>
+
+<p>error occur with <code>cudnn</code>. skip.</p>
+<p>run</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./anakin_docker_build_and_run.sh  -p NVIDIA-GPU -o Ubuntu -m Run</span><br></pre></td></tr></table></figure>
+
+<h3 id="compile-anakin"><a href="#compile-anakin" class="headerlink" title="compile anakin"></a>compile anakin</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> docker run -it --runtime=nvidia fdcda959f60a bin/bash</span><br><span class="line">root@962077742ae9:/# <span class="built_in">cd</span> Anakin/</span><br><span class="line">git checkout developing</span><br></pre></td></tr></table></figure>
+
+<p>build</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. use script to build</span></span><br><span class="line">./tools/gpu_build.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. or you can build directly.</span></span><br><span class="line"><span class="built_in">mkdir</span> build  </span><br><span class="line"><span class="built_in">cd</span> build  </span><br><span class="line">cmake ..  </span><br><span class="line">make -j8</span><br></pre></td></tr></table></figure>
+
+<h4 id="x86-build"><a href="#x86-build" class="headerlink" title="x86 build"></a>x86 build</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./tools/x86_build.sh</span><br></pre></td></tr></table></figure>
+<p>OK. no errors.</p>
+<h4 id="gpu-build"><a href="#gpu-build" class="headerlink" title="gpu build"></a>gpu build</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./tools/gpu_build.sh</span><br></pre></td></tr></table></figure>
+
+<p>build errors occur. no <code>cudnn</code> found.</p>
+<h2 id="compile-anakin-in-host"><a href="#compile-anakin-in-host" class="headerlink" title="compile anakin in host"></a>compile anakin in host</h2><h3 id="install-protobuf"><a href="#install-protobuf" class="headerlink" title="install protobuf"></a>install protobuf</h3><p>install protobuf 3.4.0, see <a href="https://kezunlin.me/post/d60ff6fe/">Part 1: compile protobuf-cpp on ubuntu 16.04</a></p>
+<h3 id="configure-env"><a href="#configure-env" class="headerlink" title="configure env"></a>configure env</h3><p>vim .bashrc </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cuda for anakin</span></span><br><span class="line"><span class="built_in">export</span> PATH=/usr/local/cuda/bin:<span class="variable">$PATH</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># CUDNN for anakin</span></span><br><span class="line"><span class="built_in">export</span> CUDNN_ROOT=/usr/local/cuda/</span><br><span class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=<span class="variable">$&#123;CUDNN_ROOT&#125;</span>/lib64:<span class="variable">$LD_LIBRARY_PATH</span></span><br><span class="line"><span class="built_in">export</span> CPLUS_INCLUDE_PATH=<span class="variable">$&#123;CUDNN_ROOT&#125;</span>/include:<span class="variable">$CPLUS_INCLUDE_PATH</span></span><br></pre></td></tr></table></figure>
+
+<p>source .bashrc</p>
+<h3 id="build-anakin"><a href="#build-anakin" class="headerlink" title="build anakin"></a>build anakin</h3><h4 id="x86-build-1"><a href="#x86-build-1" class="headerlink" title="x86 build"></a>x86 build</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git checkout developing  </span><br><span class="line">./tools/x86_build.sh</span><br><span class="line"></span><br><span class="line"><span class="built_in">mv</span> output x86_output</span><br></pre></td></tr></table></figure>
+<p>OK. no errors.</p>
+<p>if error occurs, then </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">rm</span> -rf CMakeFiles</span><br><span class="line"><span class="built_in">rm</span> -rf anakin/framework/model_parser/proto/*.h</span><br><span class="line"><span class="built_in">rm</span> output</span><br><span class="line"></span><br><span class="line"><span class="built_in">chown</span> -R kezunlin:kezunlin anakin</span><br></pre></td></tr></table></figure>
+
+<h4 id="gpu-build-1"><a href="#gpu-build-1" class="headerlink" title="gpu build"></a>gpu build</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./tools/gpu_build.sh</span><br><span class="line"><span class="built_in">mv</span> output gpu_output</span><br></pre></td></tr></table></figure>
+
+<h4 id="gpu-build-with-cmake"><a href="#gpu-build-with-cmake" class="headerlink" title="gpu build with cmake"></a>gpu build with cmake</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> anakin</span><br><span class="line"><span class="built_in">mkdir</span> build</span><br><span class="line"><span class="built_in">cd</span> build &amp;&amp; cmake-gui ..</span><br></pre></td></tr></table></figure>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+<h2 id="anakin-overview"><a href="#anakin-overview" class="headerlink" title="anakin overview"></a>anakin overview</h2><p><img src="https://kezunlin.me/images/posts/635233-20180906173919156-600432026.png" alt="anakin"></p>
+<p>用Anakin来进行前向计算主要分为三个步骤：</p>
+<ol>
+<li>将外部模型通过Anakin Parser解析为Anakin模型</li>
+<li>加载Anakin模型生成原始计算图，然后需要对原始计算图进行优化。</li>
+<li>Anakin会选择不同硬件平台执行计算图。</li>
+</ol>
+<h3 id="Tensor"><a href="#Tensor" class="headerlink" title="Tensor"></a>Tensor</h3><p><code>Tensor</code>接受三个模板参数:</p>
+<pre><code> template&lt;typename TargetType, DataType datatype, typename LayOutType = NCHW&gt;
+ class Tensor .../* Inherit other class */&#123;
+  //some implements
+  ...
+ &#125;;
+</code></pre>
+<ul>
+<li><a href="#target">TargetType</a>是平台类型，如X86，GPU等等，在Anakin内部有相应的标识与之对应；</li>
+<li><a href="#datatype">datatype</a>是普通的数据类型，在Anakin内部也有相应的标志与之对应；</li>
+<li><a href="#layout">LayOutType</a>是数据分布类型，如batch x channel x height x width [NxCxHxW], 在Anakin内部用一个struct来标识。 Anakin中数据类型与基本数据类型的对应如下:</li>
+</ul>
+<p><span id='target'>TargetType</span></p>
+<p>Anakin TargetType | platform<br>:—-: |<br>NV | NVIDIA GPU<br>ARM | ARM<br>AMD | AMD GPU<br>X86 | X86<br>NVHX86 | NVIDIA GPU with Pinned Memory</p>
+<p><sapn id='datatype'>DataType</span></p>
+<table>
+<thead>
+<tr>
+<th align="center">Anakin DataType</th>
+<th align="center">C++</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">AK_HALF</td>
+<td align="center">short</td>
+<td align="center">fp16</td>
+</tr>
+<tr>
+<td align="center">AK_FLOAT</td>
+<td align="center">float</td>
+<td align="center">fp32</td>
+</tr>
+<tr>
+<td align="center">AK_DOUBLE</td>
+<td align="center">double</td>
+<td align="center">fp64</td>
+</tr>
+<tr>
+<td align="center">AK_INT8</td>
+<td align="center">char</td>
+<td align="center">int8</td>
+</tr>
+<tr>
+<td align="center">AK_INT16</td>
+<td align="center">short</td>
+<td align="center">int16</td>
+</tr>
+<tr>
+<td align="center">AK_INT32</td>
+<td align="center">int</td>
+<td align="center">int32</td>
+</tr>
+<tr>
+<td align="center">AK_INT64</td>
+<td align="center">long</td>
+<td align="center">int64</td>
+</tr>
+<tr>
+<td align="center">AK_UINT8</td>
+<td align="center">unsigned char</td>
+<td align="center">uint8</td>
+</tr>
+<tr>
+<td align="center">AK_UINT16</td>
+<td align="center">unsigned short</td>
+<td align="center">uint8</td>
+</tr>
+<tr>
+<td align="center">AK_UINT32</td>
+<td align="center">unsigned int</td>
+<td align="center">uint32</td>
+</tr>
+<tr>
+<td align="center">AK_STRING</td>
+<td align="center">std::string</td>
+<td align="center">&#x2F;</td>
+</tr>
+<tr>
+<td align="center">AK_BOOL</td>
+<td align="center">bool</td>
+<td align="center">&#x2F;</td>
+</tr>
+<tr>
+<td align="center">AK_SHAPE</td>
+<td align="center">&#x2F;</td>
+<td align="center">Anakin Shape</td>
+</tr>
+<tr>
+<td align="center">AK_TENSOR</td>
+<td align="center">&#x2F;</td>
+<td align="center">Anakin Tensor</td>
+</tr>
+</tbody></table>
+<p><span id = 'layout'>LayOutType </span></p>
+<table>
+<thead>
+<tr>
+<th align="center">Anakin LayOutType ( Tensor LayOut )</th>
+<th align="center">Tensor Dimention</th>
+<th align="center">Tensor Support</th>
+<th align="center">Op Support</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">W</td>
+<td align="center">1-D</td>
+<td align="center">YES</td>
+<td align="center">NO</td>
+</tr>
+<tr>
+<td align="center">HW</td>
+<td align="center">2-D</td>
+<td align="center">YES</td>
+<td align="center">NO</td>
+</tr>
+<tr>
+<td align="center">WH</td>
+<td align="center">2-D</td>
+<td align="center">YES</td>
+<td align="center">NO</td>
+</tr>
+<tr>
+<td align="center">NW</td>
+<td align="center">2-D</td>
+<td align="center">YES</td>
+<td align="center">YES</td>
+</tr>
+<tr>
+<td align="center">NHW</td>
+<td align="center">3-D</td>
+<td align="center">YES</td>
+<td align="center">YES</td>
+</tr>
+<tr>
+<td align="center">NCHW ( default )</td>
+<td align="center">4-D</td>
+<td align="center">YES</td>
+<td align="center">YES</td>
+</tr>
+<tr>
+<td align="center">NHWC</td>
+<td align="center">4-D</td>
+<td align="center">YES</td>
+<td align="center">NO</td>
+</tr>
+<tr>
+<td align="center">NCHW_C4</td>
+<td align="center">5-D</td>
+<td align="center">YES</td>
+<td align="center">YES</td>
+</tr>
+</tbody></table>
+<p>理论上，Anakin支持申明1维以上的tensor，但是对于Anakin中的Op来说，只支持NW、NHW、NCHW、NCHW_C4这四种LayOut，其中NCHW是默认的LayOutType，NCHW_C4是专门针对于int8这种数据类型的。</p>
+<h3 id="Graph"><a href="#Graph" class="headerlink" title="Graph"></a>Graph</h3><p><code>Graph</code>类负责加载Anakin模型生成计算图、对图进行优化、存储模型等操作。</p>
+<pre><code>template&lt;typename TargetType, DataType Dtype, Precision Ptype&gt;
+class Graph ... /* inherit other class*/&#123;
+
+  //some implements
+  ...
+
+&#125;;
+</code></pre>
+<h4 id="load"><a href="#load" class="headerlink" title="load"></a>load</h4><pre><code>//some declarations
+...
+auto graph = new Graph&lt;NV, AK_FLOAT, Precision::FP32&gt;();
+std::string model_path = &quot;the/path/to/where/your/models/are&quot;;
+const char *model_path1 = &quot;the/path/to/where/your/models/are&quot;;
+
+//Loading Anakin model to generate a compute graph.
+auto status = graph-&gt;load(model_path);
+
+//Or this way.
+auto status = graph-&gt;load(model_path1);
+//Check whether load operation success.
+if(!status)&#123;
+  std::cout &lt;&lt; &quot;error&quot; &lt;&lt; endl;
+  //do something...
+&#125;
+</code></pre>
+<h4 id="optimize"><a href="#optimize" class="headerlink" title="optimize"></a>optimize</h4><pre><code>//some declarations
+...
+//Load graph.
+...
+//According to the ops of loaded graph, optimize compute graph.
+graph-&gt;Optimize();
+</code></pre>
+<h4 id="save"><a href="#save" class="headerlink" title="save"></a>save</h4><pre><code>//some declarations
+...
+//Load graph.
+...
+// save a model
+//save_model_path: the path to where your model is.
+auto status = graph-&gt;save(save_model_path);
+
+//Checking
+if(!status)&#123;
+  cout &lt;&lt; &quot;error&quot; &lt;&lt; endl;
+  //do somethin...
+&#125;
+</code></pre>
+<h3 id="Net"><a href="#Net" class="headerlink" title="Net"></a>Net</h3><p><code>Net</code>是计算图的执行器，通过Net对象获得输入和输出。</p>
+<pre><code>template&lt;typename TargetType, DataType Dtype, Precision PType, OpRunType RunType = OpRunType::ASYNC&gt;
+class Net&#123;
+  //some implements
+  ...
+
+&#125;;
+</code></pre>
+<ul>
+<li><a href="#precision">Precision</a>指定Op的精度。</li>
+<li><a href="#opruntype">OpRunType</a>表示同步或异步类型，异步是默认类型。OpRunType::SYNC表示同步，在GPU上只有单个流；OpRunType::ASYNC表示异步，在GPU上有多个流并以异步方式执行。</li>
+</ul>
+<p><span id = 'precision'> Precision </span></p>
+<table>
+<thead>
+<tr>
+<th align="center">Precision</th>
+<th align="center">Op support</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Precision::INT4</td>
+<td align="center">NO</td>
+</tr>
+<tr>
+<td align="center">Precision::INT8</td>
+<td align="center">NO</td>
+</tr>
+<tr>
+<td align="center">Precision::FP16</td>
+<td align="center">NO</td>
+</tr>
+<tr>
+<td align="center">Precision::FP32</td>
+<td align="center">YES</td>
+</tr>
+<tr>
+<td align="center">Precision::FP64</td>
+<td align="center">NO</td>
+</tr>
+</tbody></table>
+<p>现在Op的精度只支持FP32， 但在将来我们会支持剩下的Precision.</p>
+<p><span id = 'opruntype'> OpRunType </span></p>
+<table>
+<thead>
+<tr>
+<th align="center">OpRunType</th>
+<th align="center">Sync&#x2F;Aync</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">OpRunType::SYNC</td>
+<td align="center">Synchronization</td>
+<td align="center">single-stream on GPU</td>
+</tr>
+<tr>
+<td align="center">OpRunType::ASYNC</td>
+<td align="center">Asynchronization</td>
+<td align="center">multi-stream on GPU</td>
+</tr>
+</tbody></table>
+<h4 id="create-a-executor"><a href="#create-a-executor" class="headerlink" title="create a executor"></a>create a executor</h4><pre><code>//some declarations
+...
+//Create a pointer to a graph.
+auto graph = new Graph&lt;NV, AK_FLOAT, Precision::FP32&gt;();
+//do something...
+...
+
+//create a executor
+Net&lt;NV, AK_FLOAT, Precision::FP32&gt; executor(*graph);
+</code></pre>
+<h4 id="get-input-tensor"><a href="#get-input-tensor" class="headerlink" title="get input tensor"></a>get input tensor</h4><pre><code>//some declaratinos
+...
+
+//create a executor
+//TargetType is NV [NVIDIA GPU]
+Net&lt;NV, AK_FLOAT, Precision::FP32&gt; executor(*graph);
+
+//Get the first input tensor.
+//The following tensors(tensor_in0, tensor_in2 ...) are resident at GPU.
+//Note: Member function get_in returns an pointer to tensor.
+Tensor&lt;NV, AK_FLOAT&gt;* tensor_in0 = executor.get_in(&quot;input_0&quot;);
+
+//If you have multiple input tensors
+//You just type this code below.
+Tensor&lt;NV, AK_FLOAT&gt;* tensor_in1 = executor.get_in(&quot;input_1&quot;);
+...
+auto tensor_inn = executor.get_in(&quot;input_n&quot;);
+</code></pre>
+<h4 id="fill-input-tensor"><a href="#fill-input-tensor" class="headerlink" title="fill input tensor"></a>fill input tensor</h4><pre><code>//This tensor is resident at GPU.
+auto tensor_d_in = executor.get_in(&quot;input_0&quot;);
+
+//If we want to feed above tensor, we must feed the tensor which is resident at host. And then copy the host tensor to the device&#39;s one.
+
+//using Tensor4d = Tensor&lt;Ttype, Dtype&gt;;
+Tensor4d&lt;X86, AK_FLOAT&gt; tensor_h_in; //host tensor;
+//Tensor&lt;X86, AK_FLOAT&gt; tensor_h_in; 
+
+//Allocate memory for host tensor.
+tensor_h_in.re_alloc(tensor_d_in-&gt;valid_shape());
+//Get a writable pointer to tensor.
+float *h_data = tensor_h_in.mutable_data();
+
+//Feed your tensor.
+/** example
+for(int i = 0; i &lt; tensor_h_in.size(); i++)&#123;
+  h_data[i] = 1.0f;
+&#125;
+*/
+//Copy host tensor&#39;s data to device tensor.
+tensor_d_in-&gt;copy_from(tensor_h_in);
+
+// And then
+</code></pre>
+<h4 id="get-output-tensor"><a href="#get-output-tensor" class="headerlink" title="get output tensor"></a>get output tensor</h4><pre><code>//Note: this tensor are resident at GPU.
+Tensor&lt;NV, AK_FLOAT&gt;* tensor_out_d = executor.get_out(&quot;pred_out&quot;);
+</code></pre>
+<h4 id="execute-graph"><a href="#execute-graph" class="headerlink" title="execute graph"></a>execute graph</h4><pre><code>executor.prediction();
+</code></pre>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+<h3 id="code-example"><a href="#code-example" class="headerlink" title="code example"></a>code example</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">std::string model_path = <span class="string">&quot;your_Anakin_models/xxxxx.anakin.bin&quot;</span>;</span><br><span class="line"><span class="comment">// Create an empty graph object.</span></span><br><span class="line"><span class="keyword">auto</span> graph = <span class="keyword">new</span> <span class="built_in">Graph</span>&lt;NV, AK_FLOAT, Precision::FP32&gt;();</span><br><span class="line"><span class="comment">// Load Anakin model.</span></span><br><span class="line"><span class="keyword">auto</span> status = graph-&gt;<span class="built_in">load</span>(model_path);</span><br><span class="line"><span class="keyword">if</span>(!status ) &#123;</span><br><span class="line">    <span class="built_in">LOG</span>(FATAL) &lt;&lt; <span class="string">&quot; [ERROR] &quot;</span> &lt;&lt; status.<span class="built_in">info</span>();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Reshape</span></span><br><span class="line">graph-&gt;<span class="built_in">Reshape</span>(<span class="string">&quot;input_0&quot;</span>, &#123;<span class="number">10</span>, <span class="number">384</span>, <span class="number">960</span>, <span class="number">10</span>&#125;);</span><br><span class="line"><span class="comment">// You must optimize graph for the first time.</span></span><br><span class="line">graph-&gt;<span class="built_in">Optimize</span>();</span><br><span class="line"><span class="comment">// Create a executer.</span></span><br><span class="line"><span class="function">Net&lt;NV, AK_FLOAT, Precision::FP32&gt; <span class="title">net_executer</span><span class="params">(*graph)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Get your input tensors through some specific string such as &quot;input_0&quot;, &quot;input_1&quot;, and </span></span><br><span class="line"><span class="comment">//so on. </span></span><br><span class="line"><span class="comment">//And then, feed the input tensor.</span></span><br><span class="line"><span class="comment">//If you don&#x27;t know Which input do these specific string (&quot;input_0&quot;, &quot;input_1&quot;) correspond with, you can launch dash board to find out.</span></span><br><span class="line"><span class="keyword">auto</span> d_tensor_in_p = net_executer.<span class="built_in">get_in</span>(<span class="string">&quot;input_0&quot;</span>);</span><br><span class="line">Tensor4d&lt;X86, AK_FLOAT&gt; h_tensor_in;</span><br><span class="line"><span class="keyword">auto</span> valid_shape_in = d_tensor_in_p-&gt;<span class="built_in">valid_shape</span>();</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>; i&lt;valid_shape_in.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">    <span class="built_in">LOG</span>(INFO) &lt;&lt; <span class="string">&quot;detect input dims[&quot;</span> &lt;&lt; i &lt;&lt; <span class="string">&quot;]&quot;</span> &lt;&lt; valid_shape_in[i]; <span class="comment">//see tensor&#x27;s dimentions</span></span><br><span class="line">&#125;</span><br><span class="line">h_tensor_in.<span class="built_in">re_alloc</span>(valid_shape_in);</span><br><span class="line"><span class="type">float</span>* h_data = h_tensor_in.<span class="built_in">mutable_data</span>();</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>; i&lt;h_tensor_in.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">    h_data[i] = <span class="number">1.0f</span>;</span><br><span class="line">&#125;</span><br><span class="line">d_tensor_in_p-&gt;<span class="built_in">copy_from</span>(h_tensor_in);</span><br><span class="line"></span><br><span class="line"><span class="comment">//Do inference.</span></span><br><span class="line">net_executer.<span class="built_in">prediction</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">//Get result tensor through the name of output node.</span></span><br><span class="line"><span class="comment">//And also, you need to see the dash board again to find out how many output nodes are and remember their name.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//For example, you&#x27;ve got a output node named obj_pre_out</span></span><br><span class="line"><span class="comment">//Then, you can get an output tensor.</span></span><br><span class="line"><span class="keyword">auto</span> d_tensor_out_0_p = net_executer.<span class="built_in">get_out</span>(<span class="string">&quot;obj_pred_out&quot;</span>); <span class="comment">//get_out returns a pointer to output tensor.</span></span><br><span class="line"><span class="keyword">auto</span> d_tensor_out_1_p = net_executer.<span class="built_in">get_out</span>(<span class="string">&quot;lc_pred_out&quot;</span>); <span class="comment">//get_out returns a pointer to output tensor.</span></span><br><span class="line"><span class="comment">//......</span></span><br><span class="line"><span class="comment">// do something else ...</span></span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="comment">//save model.</span></span><br><span class="line"><span class="comment">//You might not optimize the graph when you load the saved model again.</span></span><br><span class="line">std::string save_model_path = model_path + std::<span class="built_in">string</span>(<span class="string">&quot;.saved&quot;</span>);</span><br><span class="line"><span class="keyword">auto</span> status = graph-&gt;<span class="built_in">save</span>(save_model_path);</span><br><span class="line"><span class="keyword">if</span> (!status ) &#123;</span><br><span class="line">    <span class="built_in">LOG</span>(FATAL) &lt;&lt; <span class="string">&quot; [ERROR] &quot;</span> &lt;&lt; status.<span class="built_in">info</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="anakin-converter"><a href="#anakin-converter" class="headerlink" title="anakin converter"></a>anakin converter</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> anakin/tools/external_converter_v2</span><br><span class="line"><span class="built_in">sudo</span> pip install flask prettytable</span><br><span class="line"></span><br><span class="line">vim config.yaml </span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line">python converter.py</span><br></pre></td></tr></table></figure>
+
+<p>config.yaml</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">OPTIONS:</span></span><br><span class="line">    <span class="attr">Framework:</span> <span class="string">CAFFE</span></span><br><span class="line">    <span class="attr">SavePath:</span> <span class="string">./output</span></span><br><span class="line">    <span class="attr">ResultName:</span> <span class="string">mylenet</span></span><br><span class="line">    <span class="attr">Config:</span></span><br><span class="line">        <span class="attr">LaunchBoard:</span> <span class="string">ON</span></span><br><span class="line">        <span class="attr">Server:</span></span><br><span class="line">            <span class="attr">ip:</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line">            <span class="attr">port:</span> <span class="number">8888</span></span><br><span class="line">        <span class="attr">OptimizedGraph:</span> </span><br><span class="line">            <span class="attr">enable:</span> <span class="string">OFF</span></span><br><span class="line">            <span class="attr">path:</span> <span class="string">./anakin_optimized/lenet.anakin.bin.saved</span></span><br><span class="line">    <span class="attr">LOGGER:</span></span><br><span class="line">        <span class="attr">LogToPath:</span> <span class="string">./log/</span></span><br><span class="line">        <span class="attr">WithColor:</span> <span class="string">ON</span> </span><br><span class="line"></span><br><span class="line"><span class="attr">TARGET:</span></span><br><span class="line">    <span class="attr">CAFFE:</span></span><br><span class="line">        <span class="comment"># path to proto files</span></span><br><span class="line">        <span class="attr">ProtoPaths:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">/home/kezunlin/program/caffe/src/caffe/proto/caffe.proto</span></span><br><span class="line">        <span class="attr">PrototxtPath:</span> <span class="string">/home/kezunlin/program/caffe/examples/mnist/lenet.prototxt</span></span><br><span class="line">        <span class="attr">ModelPath:</span> <span class="string">/home/kezunlin/program/caffe/examples/mnist/lenet_iter_10000.caffemodel</span></span><br><span class="line"></span><br><span class="line">    <span class="attr">FLUID:</span></span><br><span class="line">        <span class="comment"># path of fluid inference model</span></span><br><span class="line">        <span class="attr">Debug:</span> <span class="literal">NULL</span>                            <span class="comment"># Generally no need to modify.</span></span><br><span class="line">        <span class="attr">ModelPath:</span> <span class="string">/path/to/your/model/</span>        <span class="comment"># The upper path of a fluid inference model.</span></span><br><span class="line">        <span class="attr">NetType:</span>                               <span class="comment"># Generally no need to modify.</span></span><br><span class="line">    </span><br><span class="line">    <span class="attr">LEGO:</span></span><br><span class="line">        <span class="comment"># path to proto files</span></span><br><span class="line">        <span class="attr">ProtoPath:</span></span><br><span class="line">        <span class="attr">PrototxtPath:</span></span><br><span class="line">        <span class="attr">ModelPath:</span></span><br><span class="line">    </span><br><span class="line">    <span class="attr">TENSORFLOW:</span></span><br><span class="line">        <span class="attr">ProtoPaths:</span> <span class="string">/</span></span><br><span class="line">        <span class="attr">PrototxtPath:</span> <span class="string">/</span></span><br><span class="line">        <span class="attr">ModelPath:</span> <span class="string">/</span></span><br><span class="line">        <span class="attr">OutPuts:</span></span><br><span class="line">    </span><br><span class="line">    <span class="attr">ONNX:</span></span><br><span class="line">        <span class="attr">ProtoPath:</span></span><br><span class="line">        <span class="attr">PrototxtPath:</span></span><br><span class="line">        <span class="attr">ModelPath:</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>input: caffe.proto + lenet.prototxt + lenet_iter_10000.caffemodel</li>
+<li>output: output&#x2F;mylenet.anakin.bin + log&#x2F;xxx.log</li>
+</ul>
+<h2 id="anakin-test"><a href="#anakin-test" class="headerlink" title="anakin test"></a>anakin test</h2><h3 id="model-test-cpp"><a href="#model-test-cpp" class="headerlink" title="model_test.cpp"></a>model_test.cpp</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> Anakin/test/framework/net/model_test.cpp</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> gpu_output</span><br><span class="line">./unit_test/model_test <span class="string">&#x27;/home/kezunlin/program/anakin/demo/model/&#x27;</span> </span><br></pre></td></tr></table></figure>
+
+<h3 id="example-nv-cnn-net-cpp"><a href="#example-nv-cnn-net-cpp" class="headerlink" title="example_nv_cnn_net.cpp"></a>example_nv_cnn_net.cpp</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> Anakin/examples/cuda/example_nv_cnn_net.cpp</span><br></pre></td></tr></table></figure>
+
+<h2 id="my-example"><a href="#my-example" class="headerlink" title="my example"></a>my example</h2><h3 id="my-workspace"><a href="#my-workspace" class="headerlink" title="my workspace"></a>my workspace</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> demo/</span><br><span class="line">anakin_lib  build  cmake  CMakeLists.txt  image  model  src</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tree demo/src/ demo/model/ demo/cmake demo/image</span><br><span class="line">demo/src/</span><br><span class="line">└── demo.cpp</span><br><span class="line">demo/model/</span><br><span class="line">└── mylenet.anakin.bin</span><br><span class="line">demo/cmake</span><br><span class="line">├── anakin-config.cmake</span><br><span class="line">├── msg_color.cmake</span><br><span class="line">├── statistic.cmake</span><br><span class="line">└── utils.cmake</span><br><span class="line">demo/image</span><br><span class="line">├── big.jpg</span><br><span class="line">└── cat.jpg</span><br><span class="line"></span><br><span class="line">0 directories, 8 files</span><br></pre></td></tr></table></figure>
+
+<h3 id="anakin-lib"><a href="#anakin-lib" class="headerlink" title="anakin_lib"></a>anakin_lib</h3><p>use <code>./tools/gpu_build.sh</code> to generate <code>gpu_build_sm61</code> and rename to <code>anakin_lib</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">./tools/gpu_build.sh</span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">mv</span> gpu_build_sm61 anakin_lib</span><br><span class="line"></span><br><span class="line"><span class="built_in">ls</span> anakin_lib/</span><br><span class="line">anakin_config.h  libanakin_saber_common.so        libanakin.so        <span class="built_in">log</span>    unit_test</span><br><span class="line">framework        libanakin_saber_common.so.0.1.2  libanakin.so.0.1.2  saber  utils</span><br></pre></td></tr></table></figure>
+
+<h4 id="anakin-config-cmake"><a href="#anakin-config-cmake" class="headerlink" title="anakin-config.cmake"></a>anakin-config.cmake</h4><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span>(ANAKIN_FOUND <span class="keyword">TRUE</span>) <span class="comment"># auto </span></span><br><span class="line"><span class="keyword">set</span>(ANAKIN_VERSION <span class="number">0.1</span>.<span class="number">2</span>)</span><br><span class="line"><span class="keyword">set</span>(ANAKIN_ROOT_DIR <span class="string">&quot;/home/kezunlin/program/anakin/demo/anakin_lib&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(ANAKIN_ROOT <span class="variable">$&#123;ANAKIN_ROOT_DIR&#125;</span>)</span><br><span class="line"><span class="keyword">set</span>(ANAKIN_FRAMEWORK <span class="variable">$&#123;ANAKIN_ROOT&#125;</span>/framework)</span><br><span class="line"><span class="keyword">set</span>(ANAKIN_SABER <span class="variable">$&#123;ANAKIN_ROOT&#125;</span>/saber)</span><br><span class="line"><span class="keyword">set</span>(ANAKIN_UTILS <span class="variable">$&#123;ANAKIN_ROOT&#125;</span>/utils)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(ANAKIN_FRAMEWORK_CORE <span class="variable">$&#123;ANAKIN_FRAMEWORK&#125;</span>/core)</span><br><span class="line"><span class="keyword">set</span>(ANAKIN_FRAMEWORK_GRAPH <span class="variable">$&#123;ANAKIN_FRAMEWORK&#125;</span>/graph)</span><br><span class="line"><span class="keyword">set</span>(ANAKIN_FRAMEWORK_LITE <span class="variable">$&#123;ANAKIN_FRAMEWORK&#125;</span>/lite)</span><br><span class="line"><span class="keyword">set</span>(ANAKIN_FRAMEWORK_MODEL_PARSER <span class="variable">$&#123;ANAKIN_FRAMEWORK&#125;</span>/model_parser)</span><br><span class="line"><span class="keyword">set</span>(ANAKIN_FRAMEWORK_OPERATORS <span class="variable">$&#123;ANAKIN_FRAMEWORK&#125;</span>/operators)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(ANAKIN_SABER_CORE <span class="variable">$&#123;ANAKIN_SABER&#125;</span>/core)</span><br><span class="line"><span class="keyword">set</span>(ANAKIN_SABER_FUNCS <span class="variable">$&#123;ANAKIN_SABER&#125;</span>/funcs)</span><br><span class="line"><span class="keyword">set</span>(ANAKIN_SABER_LITE <span class="variable">$&#123;ANAKIN_SABER&#125;</span>/lite)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(ANAKIN_UTILS_LOGGER <span class="variable">$&#123;ANAKIN_UTILS&#125;</span>/logger)</span><br><span class="line"><span class="keyword">set</span>(ANAKIN_UTILS_UINT_TEST <span class="variable">$&#123;ANAKIN_UTILS&#125;</span>/unit_test)</span><br><span class="line"></span><br><span class="line"><span class="comment">#find_path(ANAKIN_INCLUDE_DIR NAMES anakin_config.h PATHS &quot;$&#123;ANAKIN_ROOT_DIR&#125;&quot;) </span></span><br><span class="line"><span class="keyword">mark_as_advanced</span>(ANAKIN_INCLUDE_DIR) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">find_library</span>(ANAKIN_SABER_COMMON_LIBRARY NAMES anakin_saber_common PATHS <span class="string">&quot;$&#123;ANAKIN_ROOT_DIR&#125;&quot;</span>) </span><br><span class="line"><span class="keyword">mark_as_advanced</span>(ANAKIN_SABER_COMMON_LIBRARY) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">find_library</span>(ANAKIN_LIBRARY NAMES anakin PATHS <span class="string">&quot;$&#123;ANAKIN_ROOT_DIR&#125;&quot;</span>) </span><br><span class="line"><span class="keyword">mark_as_advanced</span>(ANAKIN_LIBRARY) <span class="comment"># show entry in cmake-gui</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># use xxx_INCLUDE_DIRS and xxx_LIBRARIES in CMakeLists.txt</span></span><br><span class="line"><span class="keyword">set</span>(ANAKIN_INCLUDE_DIRS </span><br><span class="line">    <span class="variable">$&#123;ANAKIN_ROOT&#125;</span> </span><br><span class="line">    <span class="variable">$&#123;ANAKIN_FRAMEWORK&#125;</span> </span><br><span class="line">    <span class="variable">$&#123;ANAKIN_SABER&#125;</span> </span><br><span class="line">    <span class="variable">$&#123;ANAKIN_UTILS&#125;</span> </span><br><span class="line"></span><br><span class="line">    <span class="variable">$&#123;ANAKIN_FRAMEWORK_CORE&#125;</span> </span><br><span class="line">    <span class="variable">$&#123;ANAKIN_FRAMEWORK_GRAPH&#125;</span> </span><br><span class="line">    <span class="variable">$&#123;ANAKIN_FRAMEWORK_LITE&#125;</span> </span><br><span class="line">    <span class="variable">$&#123;ANAKIN_FRAMEWORK_MODEL_PARSER&#125;</span> </span><br><span class="line">    <span class="variable">$&#123;ANAKIN_FRAMEWORK_OPERATORS&#125;</span> </span><br><span class="line"></span><br><span class="line">    <span class="variable">$&#123;ANAKIN_SABER_CORE&#125;</span> </span><br><span class="line">    <span class="variable">$&#123;ANAKIN_SABER_FUNCS&#125;</span> </span><br><span class="line">    <span class="variable">$&#123;ANAKIN_SABER_LITE&#125;</span> </span><br><span class="line"></span><br><span class="line">    <span class="variable">$&#123;ANAKIN_UTILS_LOGGER&#125;</span> </span><br><span class="line">    <span class="variable">$&#123;ANAKIN_UTILS_UINT_TEST&#125;</span> </span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(ANAKIN_LIBRARIES <span class="variable">$&#123;ANAKIN_SABER_COMMON_LIBRARY&#125;</span> <span class="variable">$&#123;ANAKIN_LIBRARY&#125;</span> )</span><br><span class="line"></span><br><span class="line"><span class="keyword">message</span>( <span class="string">&quot;anakin-config.cmake &quot;</span> <span class="variable">$&#123;ANAKIN_ROOT_DIR&#125;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">2.8</span>.<span class="number">8</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">project</span>(demo)</span><br><span class="line"></span><br><span class="line"><span class="keyword">include</span>(cmake/msg_color.cmake)</span><br><span class="line"><span class="keyword">include</span>(cmake/utils.cmake)</span><br><span class="line"><span class="keyword">include</span>(cmake/statistic.cmake)</span><br><span class="line"></span><br><span class="line"><span class="comment">#add_definitions( -Dshared_DEBUG) # define macro</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_FLAGS <span class="string">&quot;$&#123;CMAKE_CXX_FLAGS&#125; -std=c++11&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(ROOT_CMAKE_DIR ./cmake)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_PREFIX_PATH <span class="variable">$&#123;CMAKE_PREFIX_PATH&#125;</span> <span class="string">&quot;$&#123;ROOT_CMAKE_DIR&#125;;$&#123;CMAKE_PREFIX_PATH&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">MESSAGE</span>( [cmake] <span class="string">&quot; CMAKE_PREFIX_PATH = $&#123;CMAKE_PREFIX_PATH&#125; for find_package&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Find includes in corresponding build directories</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_INCLUDE_CURRENT_DIR <span class="keyword">ON</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_package</span>(OpenCV REQUIRED COMPONENTS core highgui imgproc features2d calib3d) </span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;OpenCV_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># find anakin-config.cmake file</span></span><br><span class="line"><span class="comment">#include(cmake/anakin-config.cmake)</span></span><br><span class="line"><span class="keyword">find_package</span>(ANAKIN REQUIRED)</span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;ANAKIN_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#message( [opencv] $&#123;OpenCV_INCLUDE_DIRS&#125; )</span></span><br><span class="line"><span class="comment">#message( [opencv] $&#123;OpenCV_LIBS&#125; )</span></span><br><span class="line"><span class="comment">#message( [anakin] $&#123;ANAKIN_INCLUDE_DIRS&#125; )</span></span><br><span class="line"><span class="comment">#message( [anakin] $&#123;ANAKIN_LIBRARIES&#125; )</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">add_executable</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span> </span><br><span class="line">    src/demo.cpp</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># dl pthread </span></span><br><span class="line"><span class="comment"># error with  -std=c++11 -lpthread -ldl </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">target_link_libraries</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span> </span><br><span class="line">    dl </span><br><span class="line">    pthread</span><br><span class="line">    <span class="variable">$&#123;OpenCV_LIBS&#125;</span> </span><br><span class="line">    <span class="variable">$&#123;ANAKIN_LIBRARIES&#125;</span></span><br><span class="line">)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="src-demo-cpp"><a href="#src-demo-cpp" class="headerlink" title="src&#x2F;demo.cpp"></a>src&#x2F;demo.cpp</h3><p>edit from <code>Anakin/examples/cuda/example_nv_cnn_net.cpp</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="comment">// opencv</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/core.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/imgproc.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/highgui.hpp&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"></span><br><span class="line"><span class="comment">// anakin</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;utils/logger/logger.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;framework/graph/graph.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;framework/core/net/net.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*util to fill tensor*/</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;saber/core/tensor_op.h&quot;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> anakin;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> anakin::graph;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> anakin::saber;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">+------------+-----------------+-------+-----------+</span></span><br><span class="line"><span class="comment">| Input Name |      Shape      | Alias | Data Type |</span></span><br><span class="line"><span class="comment">+------------+-----------------+-------+-----------+</span></span><br><span class="line"><span class="comment">|  input_0   | [64, 1, 28, 28] |  NULL |    NULL   |</span></span><br><span class="line"><span class="comment">+------------+-----------------+-------+-----------+</span></span><br><span class="line"><span class="comment">+-------------+</span></span><br><span class="line"><span class="comment">| Output Name |</span></span><br><span class="line"><span class="comment">+-------------+</span></span><br><span class="line"><span class="comment">|   prob_out  |</span></span><br><span class="line"><span class="comment">+-------------+</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">fill_tensor</span><span class="params">(Tensor4d&lt;X86, AK_FLOAT&gt;&amp; h_tensor_in, <span class="type">const</span> cv::Mat&amp; image)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// write data to tensor</span></span><br><span class="line">    <span class="type">int</span> height = image.rows;</span><br><span class="line">    <span class="type">int</span> width = image.cols;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">LOG</span>(INFO)&lt;&lt;<span class="string">&quot;height*width =&quot;</span>&lt;&lt; height*width &lt;&lt;std::endl;  <span class="comment">// 784</span></span><br><span class="line">    <span class="built_in">LOG</span>(INFO)&lt;&lt;<span class="string">&quot;h_tensor_in.size() =&quot;</span>&lt;&lt;h_tensor_in.<span class="built_in">size</span>()&lt;&lt;std::endl; <span class="comment">// 784</span></span><br><span class="line"></span><br><span class="line">    <span class="type">float</span>* tensor_ptr = h_tensor_in.<span class="built_in">mutable_data</span>(); <span class="comment">// int, float or double.</span></span><br><span class="line"></span><br><span class="line">    <span class="type">const</span> <span class="type">float</span>* ptr;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> h = <span class="number">0</span>; h &lt; height; ++h)</span><br><span class="line">    &#123;</span><br><span class="line">        ptr = image.<span class="built_in">ptr</span>&lt;<span class="type">float</span>&gt;(h); <span class="comment">// row ptr</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> w = <span class="number">0</span>; w &lt; width; ++w)</span><br><span class="line">        &#123;</span><br><span class="line">            *tensor_ptr++ = *ptr++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">const</span> <span class="type">char</span>** argv)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="type">const</span> <span class="type">char</span> *model_path = <span class="string">&quot;../model/mylenet.anakin.bin&quot;</span>;</span><br><span class="line"></span><br><span class="line">    Mat image = <span class="built_in">imread</span>(<span class="string">&quot;../image/cat.jpg&quot;</span>,<span class="number">0</span>);</span><br><span class="line">    cv::<span class="built_in">resize</span>(image,image,<span class="built_in">Size</span>(<span class="number">28</span>,<span class="number">28</span>));</span><br><span class="line">    <span class="comment">//imshow(&quot;image&quot;,image);</span></span><br><span class="line">    <span class="comment">//waitKey(0);</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/*init graph object, graph is the skeleton of model*/</span></span><br><span class="line">    Graph&lt;NV, AK_FLOAT, Precision::FP32&gt; graph;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*load model from file to init the graph*/</span></span><br><span class="line">    <span class="keyword">auto</span> status = graph.<span class="built_in">load</span>(model_path);</span><br><span class="line">    <span class="keyword">if</span> (!status) &#123;</span><br><span class="line">        <span class="built_in">LOG</span>(FATAL) &lt;&lt; <span class="string">&quot; [ERROR] &quot;</span> &lt;&lt; status.<span class="built_in">info</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*set net input shape and use this shape to optimize the graph(fusion and init operator),shape is n,c,h,w*/</span></span><br><span class="line">    graph.<span class="built_in">Reshape</span>(<span class="string">&quot;input_0&quot;</span>, &#123;<span class="number">1</span>, <span class="number">1</span>, <span class="number">28</span>, <span class="number">28</span>&#125;);</span><br><span class="line">    graph.<span class="built_in">Optimize</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*net_executer is the executor object of model. use graph to init Net*/</span></span><br><span class="line">    <span class="function">Net&lt;NV, AK_FLOAT, Precision::FP32&gt; <span class="title">net_executer</span><span class="params">(graph, <span class="literal">true</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*use input string to get the input tensor of net. for we use NV as target, the tensor of net_executer is on GPU memory*/</span></span><br><span class="line">    <span class="keyword">auto</span> d_tensor_in_p = net_executer.<span class="built_in">get_in</span>(<span class="string">&quot;input_0&quot;</span>);</span><br><span class="line">    <span class="keyword">auto</span> valid_shape_in = d_tensor_in_p-&gt;<span class="built_in">valid_shape</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*create tensor located in host*/</span></span><br><span class="line">    Tensor4d&lt;X86, AK_FLOAT&gt; h_tensor_in;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*alloc for host tensor*/</span></span><br><span class="line">    h_tensor_in.<span class="built_in">re_alloc</span>(valid_shape_in);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*init host tensor by random*/</span></span><br><span class="line">    <span class="comment">//fill_tensor_host_rand(h_tensor_in, -1.0f, 1.0f);</span></span><br><span class="line"></span><br><span class="line">    image.<span class="built_in">convertTo</span>(image, CV_32FC1); <span class="comment">// faster</span></span><br><span class="line">    <span class="built_in">fill_tensor</span>(h_tensor_in,image);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*use host tensor to int device tensor which is net input*/</span></span><br><span class="line">    d_tensor_in_p-&gt;<span class="built_in">copy_from</span>(h_tensor_in);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*run infer*/</span></span><br><span class="line">    net_executer.<span class="built_in">prediction</span>();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">LOG</span>(INFO)&lt;&lt;<span class="string">&quot;infer finish&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*get the out put of net, which is a device tensor*/</span></span><br><span class="line">    <span class="keyword">auto</span> d_out=net_executer.<span class="built_in">get_out</span>(<span class="string">&quot;prob_out&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*create another host tensor, and copy the content of device tensor to host*/</span></span><br><span class="line">    Tensor4d&lt;X86, AK_FLOAT&gt; h_tensor_out;</span><br><span class="line">    h_tensor_out.<span class="built_in">re_alloc</span>(d_out-&gt;<span class="built_in">valid_shape</span>());</span><br><span class="line">    h_tensor_out.<span class="built_in">copy_from</span>(*d_out);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*show output content*/</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;h_tensor_out.<span class="built_in">valid_size</span>();i++)&#123;</span><br><span class="line">        <span class="built_in">LOG</span>(INFO)&lt;&lt;<span class="string">&quot;out [&quot;</span>&lt;&lt;i&lt;&lt;<span class="string">&quot;] = &quot;</span>&lt;&lt;h_tensor_out.<span class="built_in">data</span>()[i];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>compile demo</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> build</span><br><span class="line"><span class="built_in">cd</span> build </span><br><span class="line">cmake ..</span><br><span class="line">make </span><br><span class="line">./demo </span><br></pre></td></tr></table></figure>
+
+<p>output </p>
+<pre><code>ERR| 16:45:56.00581| 110838.067s|         37CBF8C0| operator_attr.h:94]  you have set the argument: is_reverse , so it&#39;s igrored by anakin
+ ERR| 16:45:56.00581| 110838.067s|         37CBF8C0| operator_attr.h:94]  you have set the argument: is_reverse , so it&#39;s igrored by anakin
+   0| 16:45:56.00681| 0.098s|         37CBF8C0| parser.cpp:96] graph name: LeNet
+   0| 16:45:56.00681| 0.099s|         37CBF8C0| parser.cpp:101] graph in: input_0
+   0| 16:45:56.00681| 0.099s|         37CBF8C0| parser.cpp:107] graph out: prob_out
+   0| 16:45:56.00742| 0.159s|         37CBF8C0| graph.cpp:153]  processing in-ordered fusion : ConvBatchnormScaleReluPool
+   0| 16:45:56.00742| 0.160s|         37CBF8C0| graph.cpp:153]  processing in-ordered fusion : ConvBatchnormScaleRelu
+   0| 16:45:56.00742| 0.160s|         37CBF8C0| graph.cpp:153]  processing in-ordered fusion : ConvReluPool
+   0| 16:45:56.00742| 0.160s|         37CBF8C0| graph.cpp:153]  processing in-ordered fusion : ConvBatchnormScale
+   0| 16:45:56.00742| 0.160s|         37CBF8C0| graph.cpp:153]  processing in-ordered fusion : DeconvRelu
+   0| 16:45:56.00742| 0.160s|         37CBF8C0| graph.cpp:153]  processing in-ordered fusion : ConvRelu
+   0| 16:45:56.00742| 0.160s|         37CBF8C0| graph.cpp:153]  processing in-ordered fusion : PermutePower
+   0| 16:45:56.00742| 0.160s|         37CBF8C0| graph.cpp:153]  processing in-ordered fusion : ConvBatchnorm
+   0| 16:45:56.00742| 0.160s|         37CBF8C0| graph.cpp:153]  processing in-ordered fusion : EltwiseRelu
+   0| 16:45:56.00742| 0.160s|         37CBF8C0| graph.cpp:153]  processing in-ordered fusion : EltwiseActivation
+ WAN| 16:45:56.00743| 0.160s|         37CBF8C0| net.cpp:663] Detect and initial 1 lanes.
+   0| 16:45:56.00743| 0.161s|         37CBF8C0| env.h:44] found 1 device(s)
+   0| 16:45:56.00743| 0.161s|         37CBF8C0| cuda_device.cpp:45] Device id: 0 , name: GeForce GTX 1060
+   0| 16:45:56.00743| 0.161s|         37CBF8C0| cuda_device.cpp:47] Multiprocessors: 10
+   0| 16:45:56.00743| 0.161s|         37CBF8C0| cuda_device.cpp:50] frequency:1733MHz
+   0| 16:45:56.00743| 0.161s|         37CBF8C0| cuda_device.cpp:52] CUDA Capability : 6.1
+   0| 16:45:56.00743| 0.161s|         37CBF8C0| cuda_device.cpp:54] total global memory: 6078MBytes.
+ WAN| 16:45:56.00743| 0.161s|         37CBF8C0| net.cpp:667] Current used device id : 0
+ WAN| 16:45:56.00744| 0.161s|         37CBF8C0| input.cpp:16] Parsing Input op parameter.
+   0| 16:45:56.00744| 0.161s|         37CBF8C0| input.cpp:19]  |-- shape [0]: 1
+   0| 16:45:56.00744| 0.161s|         37CBF8C0| input.cpp:19]  |-- shape [1]: 1
+   0| 16:45:56.00744| 0.161s|         37CBF8C0| input.cpp:19]  |-- shape [2]: 28
+   0| 16:45:56.00744| 0.161s|         37CBF8C0| input.cpp:19]  |-- shape [3]: 28
+ ERR| 16:45:56.00744| 0.161s|         37CBF8C0| net.cpp:210] node_ptr-&gt;get_op_name()  sass not support yet.
+ ERR| 16:45:56.00744| 0.161s|         37CBF8C0| net.cpp:210] node_ptr-&gt;get_op_name()  sass not support yet.
+ WAN| 16:45:57.00269| 0.686s|         37CBF8C0| context.h:40] device index exceeds the number of devices, set to default device(0)!
+   0| 16:45:57.00270| 0.687s|         37CBF8C0| net.cpp:300] Temp mem used:        0 MB
+   0| 16:45:57.00270| 0.687s|         37CBF8C0| net.cpp:301] Original mem used:    0 MB
+   0| 16:45:57.00270| 0.687s|         37CBF8C0| net.cpp:302] Model mem used:       1 MB
+   0| 16:45:57.00270| 0.687s|         37CBF8C0| net.cpp:303] System mem used:      153 MB
+   0| 16:45:57.00270| 0.687s|         37CBF8C0| demo.cpp:40] height*width =784
+   0| 16:45:57.00270| 0.687s|         37CBF8C0| demo.cpp:41] h_tensor_in.size() =784
+   0| 16:45:57.00270| 0.688s|         37CBF8C0| demo.cpp:105] infer finish
+   0| 16:45:57.00270| 0.688s|         37CBF8C0| demo.cpp:117] out [0] = 0
+   0| 16:45:57.00270| 0.688s|         37CBF8C0| demo.cpp:117] out [1] = 0
+   0| 16:45:57.00270| 0.688s|         37CBF8C0| demo.cpp:117] out [2] = 0
+   0| 16:45:57.00270| 0.688s|         37CBF8C0| demo.cpp:117] out [3] = 1
+   0| 16:45:57.00270| 0.688s|         37CBF8C0| demo.cpp:117] out [4] = 0
+   0| 16:45:57.00270| 0.688s|         37CBF8C0| demo.cpp:117] out [5] = 0
+   0| 16:45:57.00270| 0.688s|         37CBF8C0| demo.cpp:117] out [6] = 0
+   0| 16:45:57.00270| 0.688s|         37CBF8C0| demo.cpp:117] out [7] = 0
+   0| 16:45:57.00270| 0.688s|         37CBF8C0| demo.cpp:117] out [8] = 0
+   0| 16:45:57.00270| 0.688s|         37CBF8C0| demo.cpp:117] out [9] = 0
+</code></pre>
+<h2 id="For-Windows-skip"><a href="#For-Windows-skip" class="headerlink" title="For Windows (skip)"></a>For Windows (skip)</h2><h3 id="version-1"><a href="#version-1" class="headerlink" title="version"></a>version</h3><ul>
+<li>windows 10</li>
+<li>vs 2015</li>
+<li>cmake 3.2.2</li>
+<li>cuda 8.0 + cudnn 6.0.21 (same as caffe) sm_61</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/protocolbuffers/protobuf/releases/download/v3.4.0/protobuf-cpp-3.4.0.zip">protobuf 3.4.0</a></li>
+</ul>
+<h3 id="protobuf"><a href="#protobuf" class="headerlink" title="protobuf"></a>protobuf</h3><p>see <a href="https://kezunlin.me/post/876d75f2/">compile protobuf-cpp on windows 10</a></p>
+<h3 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#git clone https://github.com/PaddlePaddle/Anakin.git anakin</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/kezunlin/Anakin.git anakin</span><br><span class="line"><span class="built_in">cd</span> anakin </span><br><span class="line"><span class="built_in">mkdir</span> build &amp;&amp; <span class="built_in">cd</span> build &amp;&amp; cmake-gui ..</span><br></pre></td></tr></table></figure>
+
+<p>with options </p>
+<pre><code>CUDNN_ROOT &quot;C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0/&quot;
+PROTOBUF_ROOT &quot;C:/Program Files/protobuf&quot; 
+
+BUILD_SHARED ON
+USE_GPU_PLACE ON
+USE_OPENMP OFF
+USE_OPENCV ON
+</code></pre>
+<p>generate <code>Anakin.sln</code> and compile with <code>VS 2015</code> with <code>x64 Release</code> mode.</p>
+<h3 id="error-fixs"><a href="#error-fixs" class="headerlink" title="error fixs"></a>error fixs</h3><blockquote>
+<p>we get 101 errors, hard to fix.<br>skip now.</p>
+</blockquote>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/PaddlePaddle/Anakin/blob/developing/docker/README.md">anakin with docker on ubuntu</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/PaddlePaddle/Anakin/blob/developing/docs/Manual/Tutorial_ch.md">anakin tutorial</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/PaddlePaddle/Anakin/blob/developing/docs/Manual/Converter_ch.md">Converter</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180903: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/anakin/" rel="tag"># anakin</a>
+              <a href="/tags/baidu/" rel="tag"># baidu</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/nvidia-docker2-guide-on-ubuntu-16-04/" rel="prev" title="how to install docker and nvidia-docker2  on ubuntu 16.04">
+      <i class="fa fa-chevron-left"></i> how to install docker and nvidia-docker2  on ubuntu 16.04
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/install%20-and-configure-%20tensorrt-4-on-%20ubuntu-16.04/" rel="next" title="install and configure tensorrt 4 on ubuntu 16.04">
+      install and configure tensorrt 4 on ubuntu 16.04 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#version"><span class="nav-number">1.1.</span> <span class="nav-text">version</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-nvidia-docker2"><span class="nav-number">1.2.</span> <span class="nav-text">install nvidia-docker2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#build-and-run"><span class="nav-number">1.3.</span> <span class="nav-text">build and run</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#compile-anakin"><span class="nav-number">1.4.</span> <span class="nav-text">compile anakin</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#x86-build"><span class="nav-number">1.4.1.</span> <span class="nav-text">x86 build</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gpu-build"><span class="nav-number">1.4.2.</span> <span class="nav-text">gpu build</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compile-anakin-in-host"><span class="nav-number">2.</span> <span class="nav-text">compile anakin in host</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#install-protobuf"><span class="nav-number">2.1.</span> <span class="nav-text">install protobuf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#configure-env"><span class="nav-number">2.2.</span> <span class="nav-text">configure env</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#build-anakin"><span class="nav-number">2.3.</span> <span class="nav-text">build anakin</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#x86-build-1"><span class="nav-number">2.3.1.</span> <span class="nav-text">x86 build</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gpu-build-1"><span class="nav-number">2.3.2.</span> <span class="nav-text">gpu build</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gpu-build-with-cmake"><span class="nav-number">2.3.3.</span> <span class="nav-text">gpu build with cmake</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#anakin-overview"><span class="nav-number">3.</span> <span class="nav-text">anakin overview</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Tensor"><span class="nav-number">3.1.</span> <span class="nav-text">Tensor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Graph"><span class="nav-number">3.2.</span> <span class="nav-text">Graph</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#load"><span class="nav-number">3.2.1.</span> <span class="nav-text">load</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#optimize"><span class="nav-number">3.2.2.</span> <span class="nav-text">optimize</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#save"><span class="nav-number">3.2.3.</span> <span class="nav-text">save</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Net"><span class="nav-number">3.3.</span> <span class="nav-text">Net</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#create-a-executor"><span class="nav-number">3.3.1.</span> <span class="nav-text">create a executor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#get-input-tensor"><span class="nav-number">3.3.2.</span> <span class="nav-text">get input tensor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#fill-input-tensor"><span class="nav-number">3.3.3.</span> <span class="nav-text">fill input tensor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#get-output-tensor"><span class="nav-number">3.3.4.</span> <span class="nav-text">get output tensor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#execute-graph"><span class="nav-number">3.3.5.</span> <span class="nav-text">execute graph</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#code-example"><span class="nav-number">3.4.</span> <span class="nav-text">code example</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#anakin-converter"><span class="nav-number">4.</span> <span class="nav-text">anakin converter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#anakin-test"><span class="nav-number">5.</span> <span class="nav-text">anakin test</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#model-test-cpp"><span class="nav-number">5.1.</span> <span class="nav-text">model_test.cpp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#example-nv-cnn-net-cpp"><span class="nav-number">5.2.</span> <span class="nav-text">example_nv_cnn_net.cpp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#my-example"><span class="nav-number">6.</span> <span class="nav-text">my example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#my-workspace"><span class="nav-number">6.1.</span> <span class="nav-text">my workspace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#anakin-lib"><span class="nav-number">6.2.</span> <span class="nav-text">anakin_lib</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#anakin-config-cmake"><span class="nav-number">6.2.1.</span> <span class="nav-text">anakin-config.cmake</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">6.3.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#src-demo-cpp"><span class="nav-number">6.4.</span> <span class="nav-text">src&#x2F;demo.cpp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#For-Windows-skip"><span class="nav-number">7.</span> <span class="nav-text">For Windows (skip)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#version-1"><span class="nav-number">7.1.</span> <span class="nav-text">version</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#protobuf"><span class="nav-number">7.2.</span> <span class="nav-text">protobuf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#compile"><span class="nav-number">7.3.</span> <span class="nav-text">compile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#error-fixs"><span class="nav-number">7.4.</span> <span class="nav-text">error fixs</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">8.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">9.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

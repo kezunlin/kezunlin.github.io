@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Series Part 1: install and configure tensorrt 4 on ubuntu 16.04 Part 2: tensorrt fp32 fp16 tutorial Part 3: tensorrt int8 tutorial  Code Exampleinclude headers12345678910111213141516171819202122232425">
+<meta property="og:type" content="article">
+<meta property="og:title" content="use nvidia tensorrt fp32 fp16 to do inference with caffe and pytorch model">
+<meta property="og:url" content="https://kezunlin.me/blog/tensorrt-fp32-fp16-tutorial/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Series Part 1: install and configure tensorrt 4 on ubuntu 16.04 Part 2: tensorrt fp32 fp16 tutorial Part 3: tensorrt int8 tutorial  Code Exampleinclude headers12345678910111213141516171819202122232425">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-04-22T07:38:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="caffe">
+<meta property="article:tag" content="mnist">
+<meta property="article:tag" content="tensorrt">
+<meta property="article:tag" content="pytorch">
+<meta property="article:tag" content="onnx">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/tensorrt-fp32-fp16-tutorial/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>use nvidia tensorrt fp32 fp16 to do inference with caffe and pytorch model | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/tensorrt-fp32-fp16-tutorial/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          use nvidia tensorrt fp32 fp16 to do inference with caffe and pytorch model
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-04-22 15:38:00" itemprop="dateCreated datePublished" datetime="2019-04-22T15:38:00+08:00">2019-04-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deep-learning/" itemprop="url" rel="index"><span itemprop="name">deep learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h2><ul>
+<li><a href="https://kezunlin.me/post/dacc4196/">Part 1: install and configure tensorrt 4 on ubuntu 16.04</a></li>
+<li><strong><a href="https://kezunlin.me/post/bcdfb73c/">Part 2: tensorrt fp32 fp16 tutorial</a></strong></li>
+<li><a href="https://kezunlin.me/post/30e0cb19/">Part 3: tensorrt int8 tutorial</a></li>
+</ul>
+<h2 id="Code-Example"><a href="#Code-Example" class="headerlink" title="Code Example"></a>Code Example</h2><h3 id="include-headers"><a href="#include-headers" class="headerlink" title="include headers"></a>include headers</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iomanip&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cuda_runtime_api.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;NvCaffeParser.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;NvOnnxConfig.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;NvOnnxParser.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;NvInfer.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;common.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> nvinfer1;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> nvcaffeparser1;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> Logger gLogger;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Attributes of MNIST Caffe model</span></span><br><span class="line"><span class="type">static</span> <span class="type">const</span> <span class="type">int</span> INPUT_H = <span class="number">28</span>;</span><br><span class="line"><span class="type">static</span> <span class="type">const</span> <span class="type">int</span> INPUT_W = <span class="number">28</span>;</span><br><span class="line"><span class="type">static</span> <span class="type">const</span> <span class="type">int</span> OUTPUT_SIZE = <span class="number">10</span>;</span><br><span class="line"><span class="comment">//const char* INPUT_BLOB_NAME = &quot;data&quot;;</span></span><br><span class="line"><span class="type">const</span> <span class="type">char</span>* OUTPUT_BLOB_NAME = <span class="string">&quot;prob&quot;</span>;</span><br><span class="line"><span class="type">const</span> std::string mnist_data_dir = <span class="string">&quot;data/mnist/&quot;</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// Simple PGM (portable greyscale map) reader</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">readPGMFile</span><span class="params">(<span class="type">const</span> std::string&amp; fileName, <span class="type">uint8_t</span> buffer[INPUT_H * INPUT_W])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">readPGMFile</span>(fileName, buffer, INPUT_H, INPUT_W);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="caffe-model-to-tensorrt"><a href="#caffe-model-to-tensorrt" class="headerlink" title="caffe model to tensorrt"></a>caffe model to tensorrt</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">caffeToTRTModel</span><span class="params">(<span class="type">const</span> std::string&amp; deployFilepath,       <span class="comment">// Path of Caffe prototxt file</span></span></span></span><br><span class="line"><span class="params"><span class="function">                     <span class="type">const</span> std::string&amp; modelFilepath,        <span class="comment">// Path of Caffe model file</span></span></span></span><br><span class="line"><span class="params"><span class="function">                     <span class="type">const</span> std::vector&lt;std::string&gt;&amp; outputs, <span class="comment">// Names of network outputs</span></span></span></span><br><span class="line"><span class="params"><span class="function">                     <span class="type">unsigned</span> <span class="type">int</span> maxBatchSize,               <span class="comment">// Note: Must be at least as large as the batch we want to run with</span></span></span></span><br><span class="line"><span class="params"><span class="function">                     IHostMemory*&amp; trtModelStream)</span>            <span class="comment">// Output buffer for the TRT model</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// Create builder</span></span><br><span class="line">    IBuilder* builder = <span class="built_in">createInferBuilder</span>(gLogger);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Parse caffe model to populate network, then set the outputs</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Reading Caffe prototxt: &quot;</span> &lt;&lt; deployFilepath &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Reading Caffe model: &quot;</span> &lt;&lt; modelFilepath &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">    INetworkDefinition* network = builder-&gt;<span class="built_in">createNetwork</span>();</span><br><span class="line">    ICaffeParser* parser = <span class="built_in">createCaffeParser</span>();</span><br><span class="line"></span><br><span class="line">    <span class="type">bool</span> useFp16 = builder-&gt;<span class="built_in">platformHasFastFp16</span>();</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;platformHasFastFp16: &quot;</span> &lt;&lt; useFp16 &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">bool</span> useInt8 = builder-&gt;<span class="built_in">platformHasFastInt8</span>();</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;platformHasFastInt8: &quot;</span> &lt;&lt; useInt8 &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// create a 16-bit model if it&#x27;s natively supported</span></span><br><span class="line">    DataType modelDataType = useFp16 ? DataType::kHALF : DataType::kFLOAT; </span><br><span class="line">    </span><br><span class="line">    <span class="type">const</span> IBlobNameToTensor* blobNameToTensor = parser-&gt;<span class="built_in">parse</span>(deployFilepath.<span class="built_in">c_str</span>(),</span><br><span class="line">                                                              modelFilepath.<span class="built_in">c_str</span>(),</span><br><span class="line">                                                              *network,</span><br><span class="line">                                                              modelDataType);</span><br><span class="line">    <span class="comment">// Specify output tensors of network</span></span><br><span class="line">    <span class="comment">// ERROR: Network must have at least one output</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; s : outputs)&#123;</span><br><span class="line">        std::cout&lt;&lt;<span class="string">&quot;output = &quot;</span>&lt;&lt; s.<span class="built_in">c_str</span>() &lt;&lt; std::endl;</span><br><span class="line">        network-&gt;<span class="built_in">markOutput</span>(*blobNameToTensor-&gt;<span class="built_in">find</span>(s.<span class="built_in">c_str</span>())); <span class="comment">// prob</span></span><br><span class="line">    &#125; </span><br><span class="line"></span><br><span class="line">    builder-&gt;<span class="built_in">setMaxBatchSize</span>(maxBatchSize);</span><br><span class="line">    builder-&gt;<span class="built_in">setMaxWorkspaceSize</span>(<span class="number">1</span> &lt;&lt; <span class="number">20</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// set up the network for paired-fp16 format if available</span></span><br><span class="line">    <span class="keyword">if</span>(useFp16)</span><br><span class="line">        builder-&gt;<span class="built_in">setFp16Mode</span>(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Build engine</span></span><br><span class="line">    ICudaEngine* engine = builder-&gt;<span class="built_in">buildCudaEngine</span>(*network);</span><br><span class="line">    <span class="built_in">assert</span>(engine);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Destroy parser and network</span></span><br><span class="line">    network-&gt;<span class="built_in">destroy</span>();</span><br><span class="line">    parser-&gt;<span class="built_in">destroy</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Serialize engine and destroy it</span></span><br><span class="line">    trtModelStream = engine-&gt;<span class="built_in">serialize</span>();</span><br><span class="line">    engine-&gt;<span class="built_in">destroy</span>();</span><br><span class="line">    builder-&gt;<span class="built_in">destroy</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//shutdownProtobufLibrary();</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="pytorch-onnx-to-tensorrt"><a href="#pytorch-onnx-to-tensorrt" class="headerlink" title="pytorch onnx to tensorrt"></a>pytorch onnx to tensorrt</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">onnxToTRTModel</span><span class="params">( <span class="type">const</span> std::string&amp; modelFilepath,        <span class="comment">// name of the onnx model </span></span></span></span><br><span class="line"><span class="params"><span class="function">                     <span class="type">unsigned</span> <span class="type">int</span> maxBatchSize,            <span class="comment">// batch size - NB must be at least as large as the batch we want to run with</span></span></span></span><br><span class="line"><span class="params"><span class="function">                     IHostMemory *&amp;trtModelStream)</span>      <span class="comment">// output buffer for the TensorRT model</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// create the builder</span></span><br><span class="line">    IBuilder* builder = <span class="built_in">createInferBuilder</span>(gLogger);</span><br><span class="line"></span><br><span class="line">    nvonnxparser::IOnnxConfig* config = nvonnxparser::<span class="built_in">createONNXConfig</span>();</span><br><span class="line">    config-&gt;<span class="built_in">setModelFileName</span>(modelFilepath.<span class="built_in">c_str</span>());</span><br><span class="line">    </span><br><span class="line">    nvonnxparser::IONNXParser* parser = nvonnxparser::<span class="built_in">createONNXParser</span>(*config);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//Optional - uncomment below lines to view network layer information</span></span><br><span class="line">    <span class="comment">//config-&gt;setPrintLayerInfo(true);</span></span><br><span class="line">    <span class="comment">//parser-&gt;reportParsingInfo();</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (!parser-&gt;<span class="built_in">parse</span>(modelFilepath.<span class="built_in">c_str</span>(), DataType::kFLOAT))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function">string <span class="title">msg</span><span class="params">(<span class="string">&quot;failed to parse onnx file&quot;</span>)</span></span>;</span><br><span class="line">        gLogger.<span class="built_in">log</span>(nvinfer1::ILogger::Severity::kERROR, msg.<span class="built_in">c_str</span>());</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (!parser-&gt;<span class="built_in">convertToTRTNetwork</span>()) &#123;</span><br><span class="line">        <span class="function">string <span class="title">msg</span><span class="params">(<span class="string">&quot;ERROR, failed to convert onnx network into TRT network&quot;</span>)</span></span>;</span><br><span class="line">        gLogger.<span class="built_in">log</span>(nvinfer1::ILogger::Severity::kERROR, msg.<span class="built_in">c_str</span>());</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line">    nvinfer1::INetworkDefinition* network = parser-&gt;<span class="built_in">getTRTNetwork</span>();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Build the engine</span></span><br><span class="line">    builder-&gt;<span class="built_in">setMaxBatchSize</span>(maxBatchSize);</span><br><span class="line">    builder-&gt;<span class="built_in">setMaxWorkspaceSize</span>(<span class="number">1</span> &lt;&lt; <span class="number">20</span>);</span><br><span class="line"></span><br><span class="line">    ICudaEngine* engine = builder-&gt;<span class="built_in">buildCudaEngine</span>(*network);</span><br><span class="line">    <span class="built_in">assert</span>(engine);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// we don&#x27;t need the network any more, and we can destroy the parser</span></span><br><span class="line">    network-&gt;<span class="built_in">destroy</span>();</span><br><span class="line">    parser-&gt;<span class="built_in">destroy</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// serialize the engine, then close everything down</span></span><br><span class="line">    trtModelStream = engine-&gt;<span class="built_in">serialize</span>();</span><br><span class="line">    engine-&gt;<span class="built_in">destroy</span>();</span><br><span class="line">    builder-&gt;<span class="built_in">destroy</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//shutdownProtobufLibrary();</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="do-inference"><a href="#do-inference" class="headerlink" title="do inference"></a>do inference</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">doInference</span><span class="params">(IExecutionContext&amp; context, <span class="type">float</span>* input, <span class="type">float</span>* output, <span class="type">int</span> batchSize)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">const</span> ICudaEngine&amp; engine = context.<span class="built_in">getEngine</span>();</span><br><span class="line">    <span class="comment">// Pointers to input and output device buffers to pass to engine.</span></span><br><span class="line">    <span class="comment">// Engine requires exactly IEngine::getNbBindings() number of buffers.</span></span><br><span class="line">    <span class="built_in">assert</span>(engine.<span class="built_in">getNbBindings</span>() == <span class="number">2</span>);</span><br><span class="line">    <span class="type">void</span>* buffers[<span class="number">2</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// In order to bind the buffers, we need to know the names of the input and output tensors.</span></span><br><span class="line">    <span class="comment">// Note that indices are guaranteed to be less than IEngine::getNbBindings()</span></span><br><span class="line">    <span class="type">int</span> inputIndex, outputIndex;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Bindings after deserializing:\n&quot;</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> bi = <span class="number">0</span>; bi &lt; engine.<span class="built_in">getNbBindings</span>(); bi++) </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (engine.<span class="built_in">bindingIsInput</span>(bi) == <span class="literal">true</span>) </span><br><span class="line">        &#123;</span><br><span class="line">            inputIndex = bi;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;Binding %d (%s): Input.\n&quot;</span>,  bi, engine.<span class="built_in">getBindingName</span>(bi));</span><br><span class="line">        &#125; <span class="keyword">else</span> </span><br><span class="line">        &#123;</span><br><span class="line">            outputIndex = bi;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;Binding %d (%s): Output.\n&quot;</span>, bi, engine.<span class="built_in">getBindingName</span>(bi));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//const int inputIndex = engine.getBindingIndex(INPUT_BLOB_NAME);</span></span><br><span class="line">    <span class="comment">//const int outputIndex = engine.getBindingIndex(OUTPUT_BLOB_NAME);</span></span><br><span class="line"></span><br><span class="line">    std::cout&lt;&lt;<span class="string">&quot;inputIndex = &quot;</span>&lt;&lt; inputIndex &lt;&lt; std::endl; <span class="comment">// 0   data</span></span><br><span class="line">    std::cout&lt;&lt;<span class="string">&quot;outputIndex = &quot;</span>&lt;&lt; outputIndex &lt;&lt; std::endl; <span class="comment">// 1  prob</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Create GPU buffers on device</span></span><br><span class="line">    <span class="built_in">CHECK</span>(<span class="built_in">cudaMalloc</span>(&amp;buffers[inputIndex], batchSize * INPUT_H * INPUT_W * <span class="built_in">sizeof</span>(<span class="type">float</span>)));</span><br><span class="line">    <span class="built_in">CHECK</span>(<span class="built_in">cudaMalloc</span>(&amp;buffers[outputIndex], batchSize * OUTPUT_SIZE * <span class="built_in">sizeof</span>(<span class="type">float</span>)));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Create stream</span></span><br><span class="line">    cudaStream_t stream;</span><br><span class="line">    <span class="built_in">CHECK</span>(<span class="built_in">cudaStreamCreate</span>(&amp;stream));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// DMA input batch data to device, infer on the batch asynchronously, and DMA output back to host</span></span><br><span class="line">    <span class="built_in">CHECK</span>(<span class="built_in">cudaMemcpyAsync</span>(buffers[inputIndex], input, batchSize * INPUT_H * INPUT_W * <span class="built_in">sizeof</span>(<span class="type">float</span>), cudaMemcpyHostToDevice, stream));</span><br><span class="line">    context.<span class="built_in">enqueue</span>(batchSize, buffers, stream, <span class="literal">nullptr</span>);</span><br><span class="line">    <span class="built_in">CHECK</span>(<span class="built_in">cudaMemcpyAsync</span>(output, buffers[outputIndex], batchSize * OUTPUT_SIZE * <span class="built_in">sizeof</span>(<span class="type">float</span>), cudaMemcpyDeviceToHost, stream));</span><br><span class="line">    <span class="built_in">cudaStreamSynchronize</span>(stream);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Release stream and buffers</span></span><br><span class="line">    <span class="built_in">cudaStreamDestroy</span>(stream);</span><br><span class="line">    <span class="built_in">CHECK</span>(<span class="built_in">cudaFree</span>(buffers[inputIndex]));</span><br><span class="line">    <span class="built_in">CHECK</span>(<span class="built_in">cudaFree</span>(buffers[outputIndex]));</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<h3 id="save-and-load-engine"><a href="#save-and-load-engine" class="headerlink" title="save and load engine"></a>save and load engine</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">SaveEngine</span><span class="params">(<span class="type">const</span> nvinfer1::IHostMemory&amp; trtModelStream, <span class="type">const</span> std::string&amp; engine_filepath)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::ofstream file;</span><br><span class="line">    file.<span class="built_in">open</span>(engine_filepath, std::ios::binary | std::ios::out);</span><br><span class="line">    <span class="keyword">if</span>(!file.<span class="built_in">is_open</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;read create engine file&quot;</span> &lt;&lt; engine_filepath &lt;&lt;<span class="string">&quot; failed&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    file.<span class="built_in">write</span>((<span class="type">const</span> <span class="type">char</span>*)trtModelStream.<span class="built_in">data</span>(), trtModelStream.<span class="built_in">size</span>());</span><br><span class="line">    file.<span class="built_in">close</span>();</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function">ICudaEngine* <span class="title">LoadEngine</span><span class="params">(IRuntime&amp; runtime, <span class="type">const</span> std::string&amp; engine_filepath)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ifstream file;</span><br><span class="line">    file.<span class="built_in">open</span>(engine_filepath, ios::binary | ios::in);</span><br><span class="line">    file.<span class="built_in">seekg</span>(<span class="number">0</span>, ios::end); </span><br><span class="line">    <span class="type">int</span> length = file.<span class="built_in">tellg</span>();         </span><br><span class="line">    file.<span class="built_in">seekg</span>(<span class="number">0</span>, ios::beg); </span><br><span class="line"></span><br><span class="line">    <span class="function">std::shared_ptr&lt;<span class="type">char</span>&gt; <span class="title">data</span><span class="params">(<span class="keyword">new</span> <span class="type">char</span>[length], std::default_delete&lt;<span class="type">char</span>[]&gt;())</span></span>;</span><br><span class="line">    file.<span class="built_in">read</span>(data.<span class="built_in">get</span>(), length);</span><br><span class="line">    file.<span class="built_in">close</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// runtime-&gt;deserializeCudaEngine(trtModelStream-&gt;data(), trtModelStream-&gt;size(), nullptr);</span></span><br><span class="line">    ICudaEngine* engine = runtime.<span class="built_in">deserializeCudaEngine</span>(data.<span class="built_in">get</span>(), length, <span class="literal">nullptr</span>);</span><br><span class="line">    <span class="built_in">assert</span>(engine != <span class="literal">nullptr</span>);</span><br><span class="line">    <span class="keyword">return</span> engine;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="example"><a href="#example" class="headerlink" title="example"></a>example</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">demo_save_caffe_to_trt</span><span class="params">(<span class="type">const</span> std::string&amp; engine_filepath)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::string deploy_filepath = mnist_data_dir + <span class="string">&quot;mnist.prototxt&quot;</span>;</span><br><span class="line">    std::string model_filepath = mnist_data_dir + <span class="string">&quot;mnist.caffemodel&quot;</span>;</span><br><span class="line">    </span><br><span class="line">     <span class="comment">// Create TRT model from caffe model and serialize it to a stream</span></span><br><span class="line">    IHostMemory* trtModelStream&#123;<span class="literal">nullptr</span>&#125;;</span><br><span class="line">    <span class="built_in">caffeToTRTModel</span>(deploy_filepath, model_filepath, std::vector&lt;std::string&gt;&#123;OUTPUT_BLOB_NAME&#125;, <span class="number">1</span>, trtModelStream);</span><br><span class="line">    <span class="built_in">assert</span>(trtModelStream != <span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">SaveEngine</span>(*trtModelStream, engine_filepath);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// destroy stream</span></span><br><span class="line">    trtModelStream-&gt;<span class="built_in">destroy</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">demo_save_onnx_to_trt</span><span class="params">(<span class="type">const</span> std::string&amp; engine_filepath)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::string onnx_filepath = mnist_data_dir + <span class="string">&quot;mnist.onnx&quot;</span>;</span><br><span class="line">    </span><br><span class="line">     <span class="comment">// Create TRT model from caffe model and serialize it to a stream</span></span><br><span class="line">    IHostMemory* trtModelStream&#123;<span class="literal">nullptr</span>&#125;;</span><br><span class="line">    <span class="built_in">onnxToTRTModel</span>(onnx_filepath, <span class="number">1</span>, trtModelStream);</span><br><span class="line">    <span class="built_in">assert</span>(trtModelStream != <span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">SaveEngine</span>(*trtModelStream, engine_filepath);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// destroy stream</span></span><br><span class="line">    trtModelStream-&gt;<span class="built_in">destroy</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">mnist_demo</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">bool</span> use_caffe = <span class="literal">false</span>; </span><br><span class="line">    std::string engine_filepath;</span><br><span class="line">    <span class="keyword">if</span> (use_caffe)&#123;</span><br><span class="line">        engine_filepath = <span class="string">&quot;cfg/mnist/caffe_minist_fp32.trt&quot;</span>;</span><br><span class="line">        <span class="built_in">demo_save_caffe_to_trt</span>(engine_filepath);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        engine_filepath = <span class="string">&quot;cfg/mnist/onnx_minist_fp32.trt&quot;</span>;</span><br><span class="line">        <span class="built_in">demo_save_onnx_to_trt</span>(engine_filepath);</span><br><span class="line">    &#125;</span><br><span class="line">    std::cout&lt;&lt;<span class="string">&quot;[API] Save engine to &quot;</span>&lt;&lt; engine_filepath &lt;&lt;std::endl;</span><br><span class="line">    </span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> num = <span class="number">6</span>;</span><br><span class="line">    std::string digit_filepath = mnist_data_dir + std::<span class="built_in">to_string</span>(num) + <span class="string">&quot;.pgm&quot;</span>;</span><br><span class="line"></span><br><span class="line">     <span class="comment">// Read a digit file</span></span><br><span class="line">    <span class="type">uint8_t</span> fileData[INPUT_H * INPUT_W];</span><br><span class="line">    <span class="built_in">readPGMFile</span>(digit_filepath, fileData);</span><br><span class="line">    <span class="type">float</span> data[INPUT_H * INPUT_W];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (use_caffe)&#123;</span><br><span class="line"></span><br><span class="line">        std::string mean_filepath = mnist_data_dir + <span class="string">&quot;mnist_mean.binaryproto&quot;</span>;</span><br><span class="line">        <span class="comment">// Parse mean file</span></span><br><span class="line">        ICaffeParser* parser = <span class="built_in">createCaffeParser</span>();</span><br><span class="line">        IBinaryProtoBlob* meanBlob = parser-&gt;<span class="built_in">parseBinaryProto</span>(mean_filepath.<span class="built_in">c_str</span>());</span><br><span class="line">        parser-&gt;<span class="built_in">destroy</span>();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Subtract mean from image</span></span><br><span class="line">        <span class="type">const</span> <span class="type">float</span>* meanData = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">const</span> <span class="type">float</span>*&gt;(meanBlob-&gt;<span class="built_in">getData</span>()); <span class="comment">// size 786</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; INPUT_H * INPUT_W; i++)</span><br><span class="line">            data[i] = <span class="built_in">float</span>(fileData[i]) - meanData[i];</span><br><span class="line">        </span><br><span class="line">        meanBlob-&gt;<span class="built_in">destroy</span>();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; INPUT_H * INPUT_W; i++)</span><br><span class="line">            data[i] = <span class="number">1.0</span> - <span class="built_in">float</span>(fileData[i]/<span class="number">255.0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    <span class="comment">// Deserialize engine we serialized earlier</span></span><br><span class="line">    IRuntime* runtime = <span class="built_in">createInferRuntime</span>(gLogger);</span><br><span class="line">    <span class="built_in">assert</span>(runtime != <span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">    std::cout&lt;&lt;<span class="string">&quot;[API] Load engine from &quot;</span>&lt;&lt; engine_filepath &lt;&lt;std::endl;</span><br><span class="line">    ICudaEngine* engine = <span class="built_in">LoadEngine</span>(*runtime, engine_filepath);</span><br><span class="line">    <span class="built_in">assert</span>(engine != <span class="literal">nullptr</span>);</span><br><span class="line">    </span><br><span class="line">    IExecutionContext* context = engine-&gt;<span class="built_in">createExecutionContext</span>();</span><br><span class="line">    <span class="built_in">assert</span>(context != <span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Run inference on input data</span></span><br><span class="line">    <span class="type">float</span> prob[OUTPUT_SIZE];</span><br><span class="line">    <span class="built_in">doInference</span>(*context, data, prob, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Destroy the engine</span></span><br><span class="line">    context-&gt;<span class="built_in">destroy</span>();</span><br><span class="line">    engine-&gt;<span class="built_in">destroy</span>();</span><br><span class="line">    runtime-&gt;<span class="built_in">destroy</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Print histogram of the output distribution</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;\nOutput:\n\n&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// for onnx,we get z as output, we need to use softmax to get probs</span></span><br><span class="line">    <span class="keyword">if</span> ( !use_caffe)&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//Calculate Softmax</span></span><br><span class="line">        <span class="type">float</span> sum&#123;<span class="number">0.0f</span>&#125;;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; OUTPUT_SIZE; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            prob[i] = <span class="built_in">exp</span>(prob[i]);</span><br><span class="line">            sum += prob[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; OUTPUT_SIZE; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            prob[i] /= sum;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// find max probs</span></span><br><span class="line">    <span class="type">float</span> val&#123;<span class="number">0.0f</span>&#125;;</span><br><span class="line">    <span class="type">int</span> idx&#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">unsigned</span> <span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        val = std::<span class="built_in">max</span>(val, prob[i]);</span><br><span class="line">        <span class="keyword">if</span> (val == prob[i]) &#123;</span><br><span class="line">            idx = i;</span><br><span class="line">        &#125;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot; Prob &quot;</span> &lt;&lt; i &lt;&lt; <span class="string">&quot;  &quot;</span>&lt;&lt; std::fixed &lt;&lt; std::<span class="built_in">setw</span>(<span class="number">5</span>) &lt;&lt; std::<span class="built_in">setprecision</span>(<span class="number">4</span>) &lt;&lt; prob[i];</span><br><span class="line">        std::cout &lt;&lt; i &lt;&lt; <span class="string">&quot;: &quot;</span> &lt;&lt; std::<span class="built_in">string</span>(<span class="built_in">int</span>(std::<span class="built_in">floor</span>(prob[i] * <span class="number">10</span> + <span class="number">0.5f</span>)), <span class="string">&#x27;*&#x27;</span>) &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    std::cout &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (idx == num &amp;&amp; val &gt; <span class="number">0.9f</span>) ? EXIT_SUCCESS : EXIT_FAILURE;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">mnist_demo</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="results"><a href="#results" class="headerlink" title="results"></a>results</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">./bin/sample_mnist </span><br><span class="line">[API] Save engine to cfg/mnist/onnx_minist_fp32.trt</span><br><span class="line">[API] Load engine from cfg/mnist/onnx_minist_fp32.trt</span><br><span class="line">Bindings after deserializing:</span><br><span class="line">Binding 0 (Input3): Input.</span><br><span class="line">Binding 1 (Plus214_Output_0): Output.</span><br><span class="line">inputIndex = 0</span><br><span class="line">outputIndex = 1</span><br><span class="line"></span><br><span class="line">Output:</span><br><span class="line"></span><br><span class="line"> Prob 0  0.00000: </span><br><span class="line"> Prob 1  0.00001: </span><br><span class="line"> Prob 2  0.00002: </span><br><span class="line"> Prob 3  0.00003: </span><br><span class="line"> Prob 4  0.00004: </span><br><span class="line"> Prob 5  0.00005: </span><br><span class="line"> Prob 6  1.00006: **********</span><br><span class="line"> Prob 7  0.00007: </span><br><span class="line"> Prob 8  0.00008: </span><br><span class="line"> Prob 9  0.00009: </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/">tensorrt-api</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20190422 created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/caffe/" rel="tag"># caffe</a>
+              <a href="/tags/mnist/" rel="tag"># mnist</a>
+              <a href="/tags/tensorrt/" rel="tag"># tensorrt</a>
+              <a href="/tags/pytorch/" rel="tag"># pytorch</a>
+              <a href="/tags/onnx/" rel="tag"># onnx</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/python-tkinter-tutorial/" rel="prev" title="python tkinter tutorial">
+      <i class="fa fa-chevron-left"></i> python tkinter tutorial
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/cpp11-push-back-and-emplace-back/" rel="next" title="difference between push_back and emplace_back with C++ 11">
+      difference between push_back and emplace_back with C++ 11 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Series"><span class="nav-number">1.</span> <span class="nav-text">Series</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Code-Example"><span class="nav-number">2.</span> <span class="nav-text">Code Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#include-headers"><span class="nav-number">2.1.</span> <span class="nav-text">include headers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#caffe-model-to-tensorrt"><span class="nav-number">2.2.</span> <span class="nav-text">caffe model to tensorrt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pytorch-onnx-to-tensorrt"><span class="nav-number">2.3.</span> <span class="nav-text">pytorch onnx to tensorrt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#do-inference"><span class="nav-number">2.4.</span> <span class="nav-text">do inference</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#save-and-load-engine"><span class="nav-number">2.5.</span> <span class="nav-text">save and load engine</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#example"><span class="nav-number">2.6.</span> <span class="nav-text">example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#results"><span class="nav-number">2.7.</span> <span class="nav-text">results</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

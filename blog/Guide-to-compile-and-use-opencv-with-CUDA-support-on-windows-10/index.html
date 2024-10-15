@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Series Part 1: compile opencv on ubuntu 16.04 Part 2: compile opencv with CUDA support on windows 10 Part 3: opencv mat for loop Part 4: speed up opencv image processing with openmp  Guiderequirements">
+<meta property="og:type" content="article">
+<meta property="og:title" content="compile opencv with CUDA support on windows 10">
+<meta property="og:url" content="https://kezunlin.me/blog/Guide-to-compile-and-use-opencv-with-CUDA-support-on-windows-10/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Series Part 1: compile opencv on ubuntu 16.04 Part 2: compile opencv with CUDA support on windows 10 Part 3: opencv mat for loop Part 4: speed up opencv image processing with openmp  Guiderequirements">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180717092113975-663849717.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180713160537940-1813231033.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180719170434104-1649296827.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180719170526770-1424061706.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180716195321260-638321227.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180716195324728-1445413102.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180716195328292-1498836513.png">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180716195739586-1774251249.png">
+<meta property="article:published_time" content="2018-07-13T09:16:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="cuda">
+<meta property="article:tag" content="cudnn">
+<meta property="article:tag" content="opencv">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kezunlin.me/images/posts/635233-20180717092113975-663849717.png">
+
+<link rel="canonical" href="https://kezunlin.me/blog/Guide-to-compile-and-use-opencv-with-CUDA-support-on-windows-10/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>compile opencv with CUDA support on windows 10 | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/Guide-to-compile-and-use-opencv-with-CUDA-support-on-windows-10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          compile opencv with CUDA support on windows 10
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-07-13 17:16:00" itemprop="dateCreated datePublished" datetime="2018-07-13T17:16:00+08:00">2018-07-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Series"><a href="#Series" class="headerlink" title="Series"></a>Series</h2><ul>
+<li><a href="https://kezunlin.me/post/15f5c3e8/">Part 1: compile opencv on ubuntu 16.04</a></li>
+<li><strong><a href="https://kezunlin.me/post/6580691f/">Part 2: compile opencv with CUDA support on windows 10</a></strong></li>
+<li><a href="https://kezunlin.me/post/61d55ab4/">Part 3: opencv mat for loop</a></li>
+<li><a href="https://kezunlin.me/post/7a6ba82e/">Part 4: speed up opencv image processing with openmp</a></li>
+</ul>
+<h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><p>requirements:</p>
+<ul>
+<li>windows: 10</li>
+<li>opencv: 3.1.0</li>
+<li>nvidia driver: gtx 1060  382.05  (gtx 970m)</li>
+<li>GPU arch(s): sm_61  (sm_52)</li>
+<li>cuda: 8.0 </li>
+<li>cudnn: 5.0.5</li>
+<li>cmake: 3.10.0</li>
+<li>vs: vs2015 64</li>
+</ul>
+<h3 id="nvidia-cuda-CC"><a href="#nvidia-cuda-CC" class="headerlink" title="nvidia cuda CC"></a>nvidia cuda CC</h3><p>see <a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-gpus">cuda compute capacity</a></p>
+<p><img src="https://kezunlin.me/images/posts/635233-20180717092113975-663849717.png" alt="cuda-enabled nvidia GeForce cc"></p>
+<h3 id="cpu-vs-gpu"><a href="#cpu-vs-gpu" class="headerlink" title="cpu vs gpu"></a>cpu vs gpu</h3><p>for opencv functions</p>
+<p><img src="https://kezunlin.me/images/posts/635233-20180713160537940-1813231033.png" alt="speed for cpu and gpu"></p>
+<h3 id="get-source"><a href="#get-source" class="headerlink" title="get source"></a>get source</h3><p>Get opencv 3.1.0 for git and fix some bugs </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/opencv/opencv.git</span><br><span class="line"><span class="built_in">cd</span> opencv</span><br><span class="line">git checkout -b v3.1.0 3.1.0</span><br><span class="line"></span><br><span class="line"><span class="comment"># fix bugs for 3.1.0</span></span><br><span class="line">git cherry-pick 10896</span><br><span class="line">git cherry-pick cdb9c</span><br><span class="line">git cherry-pick 24dbb</span><br><span class="line"></span><br><span class="line">git branch </span><br><span class="line"></span><br><span class="line">master</span><br><span class="line">* v3.1.0</span><br></pre></td></tr></table></figure>
+
+<h3 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> build &amp;&amp; <span class="built_in">cd</span> build &amp;&amp; cmake-gui ..</span><br></pre></td></tr></table></figure>
+
+<h4 id="config"><a href="#config" class="headerlink" title="config"></a>config</h4><p>configure with <code>VS 2015 win64</code> with options </p>
+<pre><code>BUILD_SHARED_LIBS  ON
+CMAKE_CONFIGURATION_TYPES Release # Release
+CMAKE_CXX_FLAGS_RELEASE /MD /O2 /Ob2 /DNDEBUG /MP # for multiple processor
+
+WITH_VTK OFF
+BUILD_PERF_TESTS OFF # if ON, build errors occur
+
+WITH_CUDA ON
+CUDA_TOOLKIT_ROOT_DIR  C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0
+#CUDA_ARCH_BIN  3.0 3.5 5.0 5.2 6.0 6.1 # very time-consuming 
+CUDA_ARCH_PTX 3.0
+</code></pre>
+<p>for opencv<br><img src="https://kezunlin.me/images/posts/635233-20180719170434104-1649296827.png" alt="opencv cuda arch"></p>
+<p><code>CUDA_ARCH_BIN  3.0 3.5 5.0 5.2 6.0 6.1</code> relate with</p>
+<pre><code>-gencode;arch=compute_30,code=sm_30;-gencode;arch=compute_35,code=sm_35;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_52,code=sm_52;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_61,code=sm_61;
+</code></pre>
+<p><code>CUDA_ARCH_PTX 3.0</code> relate with</p>
+<pre><code>    -gencode;arch=compute_30,code=compute_30;
+</code></pre>
+<p>for caffe<br><img src="https://kezunlin.me/images/posts/635233-20180719170526770-1424061706.png" alt="caffe cuda arch"></p>
+<blockquote>
+<p>the <code>CUDA_ARCH_BIN</code> parameter specifies multiple architectures so as to support a variety of GPU boards. otherwise, cuda programs will not run with other type of GPU boards.<br>为了支持在多个不同计算能力的GPU上运行可执行程序，opencv&#x2F;caffe编译过程中需要支持多个不同架构，<code>eg. CUDA_ARCH_BIN  3.0 3.5 5.0 5.2 6.0 6.1</code>, 因此编译过程非常耗时。在编译的而过程中尽可能选择需要发布release版本的GPU架构进行配置编译。</p>
+</blockquote>
+<p>configure and output:</p>
+<pre><code>Selecting Windows SDK version 10.0.14393.0 to target Windows 10.0.17134.
+found IPP (ICV version): 9.0.1 [9.0.1]
+at: C:/compile/opencv/3rdparty/ippicv/unpack/ippicv_win
+CUDA detected: 8.0
+CUDA NVCC target flags: -gencode;arch=compute_30,code=sm_30;-gencode;arch=compute_30,code=compute_30
+
+General configuration for OpenCV 3.1.0 =====================================
+  Version control:               3.1.0-3-g5e9beb8
+
+  Platform:
+    Host:                        Windows 10.0.17134 AMD64
+    CMake:                       3.10.0
+    CMake generator:             Visual Studio 14 2015 Win64
+    CMake build tool:            C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe
+    MSVC:                        1900
+
+  C/C++:
+    Built as dynamic libs?:      YES
+    C++ Compiler:                C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/bin/x86_amd64/cl.exe  (ver 19.0.24215.1)
+    C++ flags (Release):         /DWIN32 /D_WINDOWS /W4 /GR /EHa  /D _CRT_SECURE_NO_DEPRECATE /D _CRT_NONSTDC_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS /Gy /bigobj /Oi  /wd4251 /wd4324 /wd4275 /wd4589 /MP8  /MD /O2 /Ob2 /DNDEBUG /MP  /Zi
+    C++ flags (Debug):           /DWIN32 /D_WINDOWS /W4 /GR /EHa  /D _CRT_SECURE_NO_DEPRECATE /D _CRT_NONSTDC_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS /Gy /bigobj /Oi  /wd4251 /wd4324 /wd4275 /wd4589 /MP8  /MDd /Zi /Ob0 /Od /RTC1 
+    C Compiler:                  C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/bin/x86_amd64/cl.exe
+    C flags (Release):           /DWIN32 /D_WINDOWS /W3  /D _CRT_SECURE_NO_DEPRECATE /D _CRT_NONSTDC_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS /Gy /bigobj /Oi    /MP8  /MD /O2 /Ob2 /DNDEBUG  /Zi
+    C flags (Debug):             /DWIN32 /D_WINDOWS /W3  /D _CRT_SECURE_NO_DEPRECATE /D _CRT_NONSTDC_NO_DEPRECATE /D _SCL_SECURE_NO_WARNINGS /Gy /bigobj /Oi    /MP8  /MDd /Zi /Ob0 /Od /RTC1 
+    Linker flags (Release):      /machine:x64  /INCREMENTAL:NO  /debug
+    Linker flags (Debug):        /machine:x64  /debug /INCREMENTAL 
+    Precompiled headers:         YES
+    Extra dependencies:          comctl32 gdi32 ole32 setupapi ws2_32 vfw32 cudart nppc nppi npps cufft -LC:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0/lib/x64
+    3rdparty dependencies:       zlib libjpeg libwebp libpng libtiff libjasper IlmImf
+
+  OpenCV modules:
+    To be built:                 cudev core cudaarithm flann imgproc ml video cudabgsegm cudafilters cudaimgproc cudawarping imgcodecs photo shape videoio cudacodec highgui objdetect ts features2d calib3d cudafeatures2d cudalegacy cudaobjdetect cudaoptflow cudastereo stitching superres videostab python2
+    Disabled:                    world
+    Disabled by dependency:      -
+    Unavailable:                 java python3 viz
+
+  Windows RT support:            NO
+
+  GUI: 
+    QT:                          NO
+    Win32 UI:                    YES
+    OpenGL support:              NO
+    VTK support:                 NO
+
+  Media I/O: 
+    ZLib:                        build (ver 1.2.8)
+    JPEG:                        build (ver 90)
+    WEBP:                        build (ver 0.3.1)
+    PNG:                         build (ver 1.6.19)
+    TIFF:                        build (ver 42 - 4.0.2)
+    JPEG 2000:                   build (ver 1.900.1)
+    OpenEXR:                     build (ver 1.7.1)
+    GDAL:                        NO
+
+  Video I/O:
+    Video for Windows:           YES
+    DC1394 1.x:                  NO
+    DC1394 2.x:                  NO
+    FFMPEG:                      YES (prebuilt binaries)
+      codec:                     YES (ver 56.41.100)
+      format:                    YES (ver 56.36.101)
+      util:                      YES (ver 54.27.100)
+      swscale:                   YES (ver 3.1.101)
+      resample:                  NO
+      gentoo-style:              YES
+    GStreamer:                   NO
+    OpenNI:                      NO
+    OpenNI PrimeSensor Modules:  NO
+    OpenNI2:                     NO
+    PvAPI:                       NO
+    GigEVisionSDK:               NO
+    DirectShow:                  YES
+    Media Foundation:            NO
+    XIMEA:                       NO
+    Intel PerC:                  NO
+
+  Parallel framework:            Concurrency
+
+  Other third-party libraries:
+    Use IPP:                     9.0.1 [9.0.1]
+         at:                     C:/compile/opencv/3rdparty/ippicv/unpack/ippicv_win
+    Use IPP Async:               NO
+    Use Eigen:                   NO
+    Use Cuda:                    YES (ver 8.0)
+    Use OpenCL:                  YES
+    Use custom HAL:              NO
+
+  NVIDIA CUDA
+    Use CUFFT:                   YES
+    Use CUBLAS:                  NO
+    USE NVCUVID:                 NO
+    NVIDIA GPU arch:             30 35 50 52 60 61
+    NVIDIA PTX archs:            30
+    Use fast math:               NO
+
+  OpenCL:
+    Version:                     dynamic
+    Include path:                C:/compile/opencv/3rdparty/include/opencl/1.2
+    Use AMDFFT:                  NO
+    Use AMDBLAS:                 NO
+
+  Python 2:
+    Interpreter:                 C:/Python27/python.exe (ver 2.7.13)
+    Libraries:                   C:/Python27/libs/python27.lib (ver 2.7.13)
+    numpy:                       C:/Python27/lib/site-packages/numpy/core/include (ver 1.11.3)
+    packages path:               C:/Python27/Lib/site-packages
+
+  Python 3:
+    Interpreter:                 NO
+
+  Python (for build):            C:/Python27/python.exe
+
+  Java:
+    ant:                         NO
+    JNI:                         C:/Program Files/Java/jdk1.8.0_161/include C:/Program Files/Java/jdk1.8.0_161/include/win32 C:/Program Files/Java/jdk1.8.0_161/include
+    Java wrappers:               NO
+    Java tests:                  NO
+
+  Matlab:                        Matlab not found or implicitly disabled
+
+  Documentation:
+    Doxygen:                     NO
+    PlantUML:                    NO
+
+  Tests and samples:
+    Tests:                       YES
+    Performance tests:           NO
+    C/C++ Examples:              NO
+
+  Install path:                  C:/compile/opencv/build/install
+
+  cvconfig.h is in:              C:/compile/opencv/build
+-----------------------------------------------------------------
+
+Configuring done
+Generating done
+</code></pre>
+<p>Notice for <code>gencode</code></p>
+<pre><code>CUDA NVCC target flags: -gencode;arch=compute_30,code=sm_30;-gencode;arch=compute_35,code=sm_35;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_52,code=sm_52;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_61,code=sm_61;-gencode;arch=compute_30,code=compute_30
+</code></pre>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+<h4 id="build"><a href="#build" class="headerlink" title="build"></a>build</h4><p>Open <code>OpenCV.sln</code> with <code>VS 2015</code> and build release version.</p>
+<blockquote>
+<p> this may take hours to finish.</p>
+</blockquote>
+<p><img src="https://kezunlin.me/images/posts/635233-20180716195321260-638321227.png" alt="build success"></p>
+<h4 id="errors"><a href="#errors" class="headerlink" title="errors"></a>errors</h4><p><img src="https://kezunlin.me/images/posts/635233-20180716195324728-1445413102.png" alt="opencv build errors"></p>
+<p>possible solutions</p>
+<blockquote>
+<p>With <code>BUILD_PERF_TESTS</code> and <code>BUILD_TESTS</code> disabled, I managed to build OpenCV 3.1 with CUDA 8.0 on Windows 10 with VS2015 x64 arch target. Without building test&#x2F;performance modules, the build process costs less time as well : )</p>
+</blockquote>
+<blockquote>
+<p>I actually got it to work both on my laptop and my desktop (GTX960M and GTX970 respectively) running with OpenCV 3.2 and the latest version of CUDA 8.0 for Win10 in Visual Studio 15 Community! What I did was to enable <code>WITH_CUBLAS</code> aswell as <code>WITH_CUDA</code>. I also turned off <code>BUILD_PERF_TESTS</code> and <code>BUILD_TESTS</code>. The configuration was built using the Visual Studio 14 2015 C++ compiler.</p>
+</blockquote>
+<p>my solution:</p>
+<pre><code>disable `BUILD_PERF_TESTS`
+</code></pre>
+<p><img src="https://kezunlin.me/images/posts/635233-20180716195328292-1498836513.png" alt="opencv disable build perf tests"></p>
+<p>configure and build again. this time cost only about 1 minutes.</p>
+<p>after error fixed,build results<br><img src="https://kezunlin.me/images/posts/635233-20180716195739586-1774251249.png" alt="after errors fixed"></p>
+<h3 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h3><h4 id="cuda-module"><a href="#cuda-module" class="headerlink" title="cuda-module"></a>cuda-module</h4><p><code>OpenCV GPU</code> module is written using <code>CUDA</code>, therefore it benefits from the <code>CUDA</code> ecosystem. </p>
+<p>GPU modules includes class <code>cv::cuda::GpuMat</code> which is a primary container for data kept in GPU memory. It’s interface is very similar with <code>cv::Mat</code>, its CPU counterpart. All GPU functions receive GpuMat as input and output arguments. This allows to invoke several GPU algorithms without downloading data. GPU module API interface is also kept similar with CPU interface where possible. So developers who are familiar with Opencv on CPU could start using GPU straightaway.</p>
+<p>The GPU module is designed as a host-level API. This means that if you have pre-compiled OpenCV GPU binaries, you are not required to have the CUDA Toolkit installed or write any extra code to make use of the GPU.</p>
+<h4 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h4><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">find_package</span>(OpenCV REQUIRED COMPONENTS core highgui imgproc features2d calib3d </span><br><span class="line">	cudaarithm cudabgsegm cudafilters cudaimgproc cudawarping cudafeatures2d <span class="comment"># for cuda-enabled</span></span><br><span class="line">) <span class="comment">#</span></span><br><span class="line"><span class="keyword">MESSAGE</span>( [Main] <span class="string">&quot; OpenCV_INCLUDE_DIRS = $&#123;OpenCV_INCLUDE_DIRS&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">MESSAGE</span>( [Main] <span class="string">&quot; OpenCV_LIBS = $&#123;OpenCV_LIBS&#125;&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="demo-cpp"><a href="#demo-cpp" class="headerlink" title="demo.cpp"></a>demo.cpp</h4><p>In the sample below an image is loaded from local file, next it is uploaded to GPU, thresholded, downloaded and displayed.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/cudaarithm.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/cudabgsegm.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/cudafilters.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/cudaimgproc.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/cudawarping.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;opencv2/cudafeatures2d.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">test_opencv_gpu</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">try</span></span><br><span class="line">	&#123;</span><br><span class="line">		cv::Mat src_host = cv::<span class="built_in">imread</span>(<span class="string">&quot;file.png&quot;</span>, CV_LOAD_IMAGE_GRAYSCALE);</span><br><span class="line">		cv::cuda::GpuMat dst, src;</span><br><span class="line">		src.<span class="built_in">upload</span>(src_host);</span><br><span class="line"></span><br><span class="line">		cv::cuda::<span class="built_in">threshold</span>(src, dst, <span class="number">128.0</span>, <span class="number">255.0</span>, CV_THRESH_BINARY);</span><br><span class="line"></span><br><span class="line">		cv::Mat result_host;</span><br><span class="line">		dst.<span class="built_in">download</span>(result_host);</span><br><span class="line"></span><br><span class="line">		cv::<span class="built_in">imshow</span>(<span class="string">&quot;Result&quot;</span>, result_host);</span><br><span class="line">		cv::<span class="built_in">waitKey</span>();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">catch</span> (<span class="type">const</span> cv::Exception&amp; ex)</span><br><span class="line">	&#123;</span><br><span class="line">		std::cout &lt;&lt; <span class="string">&quot;Error: &quot;</span> &lt;&lt; ex.<span class="built_in">what</span>() &lt;&lt; std::endl;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="cpu-vs-gpu-time-cost"><a href="#cpu-vs-gpu-time-cost" class="headerlink" title="cpu vs gpu time cost"></a>cpu vs gpu time cost</h3><ul>
+<li>(1)对于分辨率不特别大的图片间的ORB特征匹配，CPU运算得比GPU版的快（由于图像上传到GPU消耗了时间）</li>
+<li>(2)但对于分辨率较大的图片，或者GPU比CPU好的机器（比如Nvidia Jetson系列），GPU版的ORB算法比CPU版的程序更高效。</li>
+</ul>
+<h4 id="problems"><a href="#problems" class="headerlink" title="problems"></a>problems</h4><blockquote>
+<p>(1) 使用cuda版本的opencv caffe网络的第一次创建非常耗时，后面的网络创建则非常快。<br><del>(2) opencv的gpu代码比cpu代码慢，初次启动多耗费20s左右</del>。(事实是由于编译的caffe和GPU计算力不匹配导致的)</p>
+</blockquote>
+<h4 id="reasons"><a href="#reasons" class="headerlink" title="reasons"></a>reasons</h4><blockquote>
+<p>Your problem is that CUDA needs to initialize! And it will generally takes between serveral seconds</p>
+</blockquote>
+<blockquote>
+<p>Why first function call is slow?<br>That is because of initialization overheads. On first GPU function call <code>Cuda Runtime API</code> is initialized implicitly.</p>
+</blockquote>
+<blockquote>
+<p>The first gpu function call is always takes more time, because CUDA initialize context for device.<br>The following calls will be faster.</p>
+</blockquote>
+<blockquote>
+<p>Not Reasons:<br>(1) CPU clockspeed is 10x faster than GPU clockspeed.<br>(2) memory transfer times between host (CPU) and device (GPU)  (upload,downloa data)</p>
+</blockquote>
+<h3 id="deploy"><a href="#deploy" class="headerlink" title="deploy"></a>deploy</h3><h4 id="runtime-errors"><a href="#runtime-errors" class="headerlink" title="runtime errors"></a>runtime errors</h4><p>gtx 1060 编译的opencv caffe在gtx 970m上运行出现错误</p>
+<p><code>im2col.cu  Check failed: error == cudaSuccess (8 vs. 0) invalid device function</code></p>
+<pre><code>    gtx 1060   sm_61
+    gtx 970m   sm_52
+</code></pre>
+<p>im2col 是caffe的源文件，表明<code>gtx 970m</code>的计算能力不支持可执行文件的运行。</p>
+<h4 id="reasons-1"><a href="#reasons-1" class="headerlink" title="reasons"></a>reasons</h4><p>see <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/17599189/what-is-the-purpose-of-using-multiple-arch-flags-in-nvidias-nvcc-compiler/17599585#17599585">what-is-the-purpose-of-using-multiple-arch-flags-in-nvidias-nvcc-compiler</a></p>
+<blockquote>
+<p>Roughly speaking, the code compilation flow goes like this: <code>CUDA C/C++ device code source --&gt; PTX --&gt; SASS</code><br>The virtual architecture (e.g. <code>compute_20</code>, whatever is specified by <code>-arch compute</code>…) determines what type of PTX code will be generated. The additional switches (e.g. <code>-code sm_21</code>) determine what type of SASS code will be generated. SASS is actually executable object code for a GPU (machine language). An executable can contain multiple versions of SASS and&#x2F;or PTX, and there is a runtime loader mechanism that will pick appropriate versions based on the GPU actually being used.</p>
+</blockquote>
+<h4 id="win7-win10-deploy"><a href="#win7-win10-deploy" class="headerlink" title="win7&#x2F;win10 deploy"></a>win7&#x2F;win10 deploy</h4><ul>
+<li>compile opencv caffe on windows 10 for GTX 1060</li>
+<li>deoply on windows 7 for GTX 1080 Ti successfully</li>
+</ul>
+<p>for win7, if we install <code>398.82-desktop-win8-win7-64bit-international-whql.exe</code>,errors may occur:</p>
+<pre><code>&gt; nvidia-smi.exe 
+Failed to initialize NVML: Unknown error
+</code></pre>
+<p>Solutions: use older drivers <code>385.69</code></p>
+<h4 id="linux-window-performance"><a href="#linux-window-performance" class="headerlink" title="linux&#x2F;window performance"></a>linux&#x2F;window performance</h4><blockquote>
+<p>(1) api在linux平均耗时3ms;同样的代码在windows平均耗时14ms<br>(2) vs编译开启代码优化前后性能相差接近5倍，125ms vs 25ms<br>(3) cmake编译RELEASE选项默认已经开启了代码优化 -O3</p>
+</blockquote>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://docs.opencv.org/3.2.0/d6/d15/tutorial_building_tegra_cuda.html">Building OpenCV for Tegra with CUDA</a></li>
+<li><a target="_blank" rel="noopener" href="https://opencv.org/platforms/cuda.html">opencv with cuda introduction</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.opencv.org/2.4/modules/gpu/doc/gpu.html">ref doc for opencv gpu</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.opencv.org/3.1.0/">opencv 3.1.0 doc</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/opencv/opencv/issues/6716">std::tuple errors when Building OpenCV (Main Branch) for Microsoft VS 2015 (x64) </a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/opencv/opencv/issues/7992">opencv github issues</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/42122634/building-opencv-3-cuda-errors">building-opencv-3-cuda-errors</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/12074281/why-opencv-gpu-code-is-slower-than-cpu/16038287#16038287">why-opencv-gpu-code-is-slower-than-cpu</a></li>
+<li><a target="_blank" rel="noopener" href="http://answers.opencv.org/question/1670/huge-time-to-upload-data-to-gpu/#1676">huge-time-to-upload-data-to-gpu</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/floydhub/dl-docker/issues/12">https://github.com/floydhub/dl-docker/issues/12</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/BVLC/caffe/issues/138">Cuda kernel failed. Error: invalid device function </a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#initialization">offical cuda-c-programming-guide</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/17599189/what-is-the-purpose-of-using-multiple-arch-flags-in-nvidias-nvcc-compiler/17599585#17599585">what-is-the-purpose-of-using-multiple-arch-flags-in-nvidias-nvcc-compiler</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180713: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/cuda/" rel="tag"># cuda</a>
+              <a href="/tags/cudnn/" rel="tag"># cudnn</a>
+              <a href="/tags/opencv/" rel="tag"># opencv</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/cpp-caffe-net-run-in-multiple-threads/" rel="prev" title="caffe failed to use gpu in multiple threads, how to fix it ?">
+      <i class="fa fa-chevron-left"></i> caffe failed to use gpu in multiple threads, how to fix it ?
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/Linear-Regression-with-gradient-descent/" rel="next" title="linear Regression with gradient descent">
+      linear Regression with gradient descent <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Series"><span class="nav-number">1.</span> <span class="nav-text">Series</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">2.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nvidia-cuda-CC"><span class="nav-number">2.1.</span> <span class="nav-text">nvidia cuda CC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cpu-vs-gpu"><span class="nav-number">2.2.</span> <span class="nav-text">cpu vs gpu</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get-source"><span class="nav-number">2.3.</span> <span class="nav-text">get source</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#compile"><span class="nav-number">2.4.</span> <span class="nav-text">compile</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#config"><span class="nav-number">2.4.1.</span> <span class="nav-text">config</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#build"><span class="nav-number">2.4.2.</span> <span class="nav-text">build</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#errors"><span class="nav-number">2.4.3.</span> <span class="nav-text">errors</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#demo"><span class="nav-number">2.5.</span> <span class="nav-text">demo</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#cuda-module"><span class="nav-number">2.5.1.</span> <span class="nav-text">cuda-module</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">2.5.2.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#demo-cpp"><span class="nav-number">2.5.3.</span> <span class="nav-text">demo.cpp</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cpu-vs-gpu-time-cost"><span class="nav-number">2.6.</span> <span class="nav-text">cpu vs gpu time cost</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#problems"><span class="nav-number">2.6.1.</span> <span class="nav-text">problems</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#reasons"><span class="nav-number">2.6.2.</span> <span class="nav-text">reasons</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#deploy"><span class="nav-number">2.7.</span> <span class="nav-text">deploy</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#runtime-errors"><span class="nav-number">2.7.1.</span> <span class="nav-text">runtime errors</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#reasons-1"><span class="nav-number">2.7.2.</span> <span class="nav-text">reasons</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#win7-win10-deploy"><span class="nav-number">2.7.3.</span> <span class="nav-text">win7&#x2F;win10 deploy</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#linux-window-performance"><span class="nav-number">2.7.4.</span> <span class="nav-text">linux&#x2F;window performance</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

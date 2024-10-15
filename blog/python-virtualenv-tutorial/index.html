@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Guideinstall pythoninstall commands 1234sudo apt-get install python3-pip python3-devpip3 -Vpip 8.1.1 from &#x2F;usr&#x2F;lib&#x2F;python3&#x2F;dist-packages (python 3.5)  change pip sourceubuntuedit .pip&#x2F;pip.conf 1234[gl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python virtualenv tutorial">
+<meta property="og:url" content="https://kezunlin.me/blog/python-virtualenv-tutorial/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Guideinstall pythoninstall commands 1234sudo apt-get install python3-pip python3-devpip3 -Vpip 8.1.1 from &#x2F;usr&#x2F;lib&#x2F;python3&#x2F;dist-packages (python 3.5)  change pip sourceubuntuedit .pip&#x2F;pip.conf 1234[gl">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-09-20T06:28:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="virtualenv">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/python-virtualenv-tutorial/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>python virtualenv tutorial | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/python-virtualenv-tutorial/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          python virtualenv tutorial
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-09-20 14:28:00" itemprop="dateCreated datePublished" datetime="2018-09-20T14:28:00+08:00">2018-09-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="install-python"><a href="#install-python" class="headerlink" title="install python"></a>install python</h3><p>install commands</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install python3-pip python3-dev</span><br><span class="line"></span><br><span class="line">pip3 -V</span><br><span class="line">pip 8.1.1 from /usr/lib/python3/dist-packages (python 3.5)</span><br></pre></td></tr></table></figure>
+
+<h3 id="change-pip-source"><a href="#change-pip-source" class="headerlink" title="change pip source"></a>change pip source</h3><h4 id="ubuntu"><a href="#ubuntu" class="headerlink" title="ubuntu"></a>ubuntu</h4><p>edit <code>.pip/pip.conf</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[global]</span><br><span class="line">index-url = http://pypi.douban.com/simple</span><br><span class="line">[install]</span><br><span class="line">trusted-host = pypi.douban.com</span><br></pre></td></tr></table></figure>
+
+<h4 id="windows"><a href="#windows" class="headerlink" title="windows"></a>windows</h4><p>edit <code>C:\Users\zunli\AppData\Roaming\pip\pip.ini</code></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[global]</span></span><br><span class="line"><span class="attr">index-url</span> = http://pypi.douban.com/simple</span><br><span class="line"><span class="section">[install]</span></span><br><span class="line"><span class="attr">trusted-host</span> = pypi.douban.com</span><br></pre></td></tr></table></figure>
+
+<h3 id="temp-solutions"><a href="#temp-solutions" class="headerlink" title="temp solutions"></a>temp solutions</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple tensorflow-gpu==1.4.0</span><br></pre></td></tr></table></figure>
+
+<h3 id="install-virtualenv"><a href="#install-virtualenv" class="headerlink" title="install virtualenv"></a>install virtualenv</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pip3 install virtualenv virtualenvwrapper</span><br></pre></td></tr></table></figure>
+
+<p>vim <code>.bashrc</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># for virtualenv and virtualenvwrapper</span></span><br><span class="line"><span class="built_in">export</span> WORKON_HOME=<span class="variable">$HOME</span>/.local</span><br><span class="line"><span class="built_in">export</span> VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3</span><br><span class="line"><span class="built_in">source</span> /usr/local/bin/virtualenvwrapper.sh</span><br></pre></td></tr></table></figure>
+
+<p>source <code>.bashrc</code></p>
+<h4 id="mkvirtualenv"><a href="#mkvirtualenv" class="headerlink" title="mkvirtualenv"></a>mkvirtualenv</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kezunlin@ke: mkvirtualenv py3 -p python3</span><br><span class="line">(py3) kezunlin@ke:~$ </span><br></pre></td></tr></table></figure>
+
+<h4 id="commands"><a href="#commands" class="headerlink" title="commands"></a>commands</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> <span class="variable">$WORKON_HOME</span></span><br><span class="line">mkvirtualenv py3 -p python3</span><br><span class="line">mkvirtualenv py2 -p python2</span><br><span class="line">rmvirtualenv py3</span><br><span class="line"></span><br><span class="line">lsvirtualenv </span><br><span class="line">lssitepackages</span><br><span class="line"></span><br><span class="line">workon py3</span><br><span class="line">deactivate</span><br></pre></td></tr></table></figure>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+<h2 id="Opencv-with-virtualenv"><a href="#Opencv-with-virtualenv" class="headerlink" title="Opencv with virtualenv"></a>Opencv with virtualenv</h2><h3 id="python2"><a href="#python2" class="headerlink" title="python2"></a>python2</h3><p>OpenCV should now be installed in </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">locate cv2.so</span><br><span class="line">/usr/local/lib/python2.7/dist-packages/cv2.so</span><br></pre></td></tr></table></figure>
+
+<p>However, our <code>py2</code>  virtual environment is located in our home directory — thus to use OpenCV within our <code>py2</code> environment, we first need to sym-link OpenCV into the site-packages  directory of the <code>py2</code>  virtual environment:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/.local/py2/lib/python2.7/site-packages/</span><br><span class="line"><span class="built_in">ln</span> -s /usr/local/lib/python2.7/site-packages/cv2.so cv2.so</span><br><span class="line"><span class="built_in">ln</span> -s /usr/local/lib/python2.7/dist-packages/cv2.so cv2.so</span><br><span class="line"> ```   </span><br><span class="line"></span><br><span class="line">import opencv </span><br><span class="line"></span><br><span class="line">```bash</span><br><span class="line">workon py2</span><br><span class="line">python</span><br><span class="line">&gt;import cv2</span><br><span class="line">&gt;<span class="built_in">print</span>(cv2.__version__)</span><br><span class="line"><span class="string">&#x27;3.1.0&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="python3"><a href="#python3" class="headerlink" title="python3"></a>python3</h3><p>you may get error </p>
+<pre><code>ImportError: dynamic module does not define init function (PyInit_cv2) 
+</code></pre>
+<p>when import <code>cv2</code> in python3 (no such problem in python2).</p>
+<p>install <code>opencv-python</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">workon py3</span><br><span class="line">pip3 install opencv-contrib-python</span><br></pre></td></tr></table></figure>
+
+<p>test version</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">workon py3</span><br><span class="line">python</span><br><span class="line">import cv2</span><br><span class="line"><span class="built_in">print</span>(cv2.__version__)</span><br><span class="line"><span class="string">&#x27;3.4.2&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="install-pycharm"><a href="#install-pycharm" class="headerlink" title="install pycharm"></a>install pycharm</h2><h3 id="apt-get-slow"><a href="#apt-get-slow" class="headerlink" title="apt-get (slow)"></a>apt-get (slow)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> add-apt-repository ppa:mystic-mirage/pycharm</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"></span><br><span class="line"><span class="comment"># no free</span></span><br><span class="line"><span class="built_in">sudo</span> apt install pycharm</span><br><span class="line"></span><br><span class="line"><span class="comment"># free</span></span><br><span class="line"><span class="built_in">sudo</span> apt install pycharm-community</span><br><span class="line"></span><br><span class="line"><span class="comment"># remove</span></span><br><span class="line"><span class="built_in">sudo</span> apt remove pycharm pycharm-community &amp;&amp; <span class="built_in">sudo</span> apt autoremove</span><br></pre></td></tr></table></figure>
+
+<h3 id="offical-faster"><a href="#offical-faster" class="headerlink" title="offical (faster)"></a>offical (faster)</h3><p>download from <a target="_blank" rel="noopener" href="https://www.jetbrains.com/pycharm/download/download-thanks.html?platform=linux">here</a></p>
+<p>start by</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh pycharm.sh</span><br></pre></td></tr></table></figure>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/iamjqy/p/7000874.html">install pycharm</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180920: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/virtualenv/" rel="tag"># virtualenv</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/compile-opencv-on-ubuntu-16-04/" rel="prev" title="compile and install opencv on ubuntu 16.04">
+      <i class="fa fa-chevron-left"></i> compile and install opencv on ubuntu 16.04
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/OpenCV-OCR-and-text-recognition-with-Tesseract-on-ubuntu-16-04/" rel="next" title="OpenCV OCR and text recognition with Tesseract on ubuntu 16.04">
+      OpenCV OCR and text recognition with Tesseract on ubuntu 16.04 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#install-python"><span class="nav-number">1.1.</span> <span class="nav-text">install python</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#change-pip-source"><span class="nav-number">1.2.</span> <span class="nav-text">change pip source</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ubuntu"><span class="nav-number">1.2.1.</span> <span class="nav-text">ubuntu</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#windows"><span class="nav-number">1.2.2.</span> <span class="nav-text">windows</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#temp-solutions"><span class="nav-number">1.3.</span> <span class="nav-text">temp solutions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#install-virtualenv"><span class="nav-number">1.4.</span> <span class="nav-text">install virtualenv</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#mkvirtualenv"><span class="nav-number">1.4.1.</span> <span class="nav-text">mkvirtualenv</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#commands"><span class="nav-number">1.4.2.</span> <span class="nav-text">commands</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Opencv-with-virtualenv"><span class="nav-number">2.</span> <span class="nav-text">Opencv with virtualenv</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#python2"><span class="nav-number">2.1.</span> <span class="nav-text">python2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python3"><span class="nav-number">2.2.</span> <span class="nav-text">python3</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-pycharm"><span class="nav-number">3.</span> <span class="nav-text">install pycharm</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#apt-get-slow"><span class="nav-number">3.1.</span> <span class="nav-text">apt-get (slow)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#offical-faster"><span class="nav-number">3.2.</span> <span class="nav-text">offical (faster)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

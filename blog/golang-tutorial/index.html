@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="go tutorialversions:  go:  1.13.1  install123456789wget https:&#x2F;&#x2F;dl.google.com&#x2F;go&#x2F;go1.13.1.linux-amd64.tar.gzsudo tar -C &#x2F;usr&#x2F;local -xzf go1.13.1.linux-amd64.tar.gzll &#x2F;usr&#x2F;local&#x2F;govim ~&#x2F;.bashrcexport P">
+<meta property="og:type" content="article">
+<meta property="og:title" content="your first golang tutorial">
+<meta property="og:url" content="https://kezunlin.me/blog/golang-tutorial/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="go tutorialversions:  go:  1.13.1  install123456789wget https:&#x2F;&#x2F;dl.google.com&#x2F;go&#x2F;go1.13.1.linux-amd64.tar.gzsudo tar -C &#x2F;usr&#x2F;local -xzf go1.13.1.linux-amd64.tar.gzll &#x2F;usr&#x2F;local&#x2F;govim ~&#x2F;.bashrcexport P">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-10-11T09:21:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.667Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="go">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/golang-tutorial/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>your first golang tutorial | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/golang-tutorial/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          your first golang tutorial
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-10-11 17:21:00" itemprop="dateCreated datePublished" datetime="2019-10-11T17:21:00+08:00">2019-10-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/golang/" itemprop="url" rel="index"><span itemprop="name">golang</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="go-tutorial"><a href="#go-tutorial" class="headerlink" title="go tutorial"></a>go tutorial</h2><p>versions:</p>
+<ul>
+<li>go:  1.13.1</li>
+</ul>
+<h3 id="install"><a href="#install" class="headerlink" title="install"></a>install</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">wget https://dl.google.com/go/go1.13.1.linux-amd64.tar.gz</span><br><span class="line"><span class="built_in">sudo</span> tar -C /usr/local -xzf go1.13.1.linux-amd64.tar.gz</span><br><span class="line"></span><br><span class="line">ll /usr/local/go</span><br><span class="line"></span><br><span class="line">vim ~/.bashrc</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/usr/local/go/bin</span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<blockquote>
+<p>zsh uses env profile <code>~/.zshrc</code>, bash use env profile <code>~/.bashrc</code>.</p>
+</blockquote>
+</blockquote>
+<p>check version</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">go version</span><br><span class="line">go version go1.13.1 linux/amd64</span><br></pre></td></tr></table></figure>
+
+<h3 id="uninstall"><a href="#uninstall" class="headerlink" title="uninstall"></a>uninstall</h3><p>just delete <code> /usr/local/go</code></p>
+<h3 id="set-GOPATH"><a href="#set-GOPATH" class="headerlink" title="set GOPATH"></a>set GOPATH</h3><p>Create your workspace directory, <code>$HOME/go</code>.</p>
+<blockquote>
+<p>The <code>GOPATH</code> environment variable specifies the location of your workspace. If no <code>GOPATH</code> is set, it is assumed to be <code>$HOME/go</code> on Unix systems.</p>
+</blockquote>
+<blockquote>
+<p>Note that <code>GOPATH</code> must not be the same path as your Go installation.</p>
+</blockquote>
+<p>issue the commands</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">vim .bashrc </span><br><span class="line"><span class="comment"># for golang</span></span><br><span class="line"><span class="built_in">export</span> GOPATH=<span class="variable">$HOME</span>/go</span><br><span class="line"><span class="built_in">export</span> PATH=/usr/local/go/bin:<span class="variable">$GOPATH</span>:<span class="variable">$PATH</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> .bashrc</span><br><span class="line"></span><br><span class="line"><span class="comment">#go env -w GOPATH=$HOME/go</span></span><br><span class="line"></span><br><span class="line">$ <span class="built_in">echo</span> <span class="variable">$GOPATH</span> </span><br><span class="line">/home/kezunlin/go</span><br><span class="line"></span><br><span class="line">$ go <span class="built_in">env</span> GOPATH</span><br><span class="line">/home/kezunlin/go</span><br></pre></td></tr></table></figure>
+
+<h3 id="code-organization"><a href="#code-organization" class="headerlink" title="code organization"></a>code organization</h3><ul>
+<li>Go programmers typically keep all their Go code in a single workspace.</li>
+<li>A workspace contains many version control repositories (managed by Git, for example).</li>
+<li>Each repository contains one or more packages.</li>
+<li>Each package consists of one or more Go source files in a single directory.</li>
+<li>The path to a package’s directory determines its import path.</li>
+</ul>
+<p>like this </p>
+<pre><code>bin/
+    hello                          # command executable
+    outyet                         # command executable
+src/
+    github.com/golang/example/
+        .git/                      # Git repository metadata
+        hello/
+            hello.go               # command source
+        outyet/
+            main.go                # command source
+            main_test.go           # test source
+        stringutil/
+            reverse.go             # package source
+            reverse_test.go        # test source
+    golang.org/x/image/
+        .git/                      # Git repository metadata
+        bmp/
+            reader.go              # package source
+            writer.go              # package source
+    ... (many more repositories and packages omitted) ...
+</code></pre>
+<blockquote>
+<p>Note that <code>symbolic links</code> should not be used to link files or directories into your workspace.</p>
+</blockquote>
+<blockquote>
+<p>An <code>import path</code> is a string that uniquely identifies a package.</p>
+</blockquote>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+<h3 id="go-example"><a href="#go-example" class="headerlink" title="go example"></a>go example</h3><h4 id="your-first-program"><a href="#your-first-program" class="headerlink" title="your first program"></a>your first program</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$GOPATH</span>/src/github.com/kezunlin/hello</span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$GOPATH</span>/src/github.com/kezunlin/hello</span><br><span class="line">vim hello.go</span><br></pre></td></tr></table></figure>
+
+<p>hello.go</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;hello, world\n&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>build and run </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">go build</span><br><span class="line">./hello</span><br><span class="line">hello, world</span><br></pre></td></tr></table></figure>
+
+<p>install and clean binary files</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># install hello to $HOME/go/bin</span></span><br><span class="line">go install  </span><br><span class="line"></span><br><span class="line"><span class="comment"># clean $HOME/go/bin/*</span></span><br><span class="line">go clean -i</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>~&#x2F;go&#x2F;src$ <code>go build github.com/kezunlin/hello/</code><br>~&#x2F;go&#x2F;src$ <code>go install github.com/kezunlin/hello/</code></p>
+</blockquote>
+<h4 id="your-first-library"><a href="#your-first-library" class="headerlink" title="your first library"></a>your first library</h4><p>stringutil library</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$GOPATH</span>/src/github.com/kezunlin/stringutil</span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$GOPATH</span>/src/github.com/kezunlin/stringutil</span><br><span class="line">vim reverse.go</span><br></pre></td></tr></table></figure>
+
+<p>reverse.go</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Package stringutil contains utility functions for working with strings.</span></span><br><span class="line"><span class="keyword">package</span> stringutil</span><br><span class="line"></span><br><span class="line"><span class="comment">// Reverse returns its argument string reversed rune-wise left to right.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Reverse</span><span class="params">(s <span class="type">string</span>)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">    r := []<span class="type">rune</span>(s)</span><br><span class="line">    <span class="keyword">for</span> i, j := <span class="number">0</span>, <span class="built_in">len</span>(r)<span class="number">-1</span>; i &lt; <span class="built_in">len</span>(r)/<span class="number">2</span>; i, j = i+<span class="number">1</span>, j<span class="number">-1</span> &#123;</span><br><span class="line">        r[i], r[j] = r[j], r[i]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="type">string</span>(r)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<pre><code>package &lt;name&gt;
+</code></pre>
+<blockquote>
+<p>where <code>name</code> is the package’s default name for imports. (All files in a package must use the same name.)<br>executable commands must always use <code>package main</code>.</p>
+</blockquote>
+<p>build library</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">go build github.com/kezunlin/stringutil</span><br><span class="line"><span class="comment">#This won&#x27;t produce an output file. Instead it saves </span></span><br><span class="line"><span class="comment">#the compiled package in the local build cache.</span></span><br></pre></td></tr></table></figure>
+
+<p>use <code>stringutil</code> in <code>hello.go</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/kezunlin/stringutil&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Printf(<span class="string">&quot;hello, world\n&quot;</span>)</span><br><span class="line">    fmt.Println(stringutil.Reverse(<span class="string">&quot;!oG ,olleH&quot;</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>build and install</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">go build github.com/kezunlin/hello</span><br><span class="line">go install github.com/kezunlin/hello</span><br><span class="line"></span><br><span class="line">~/go/bin$ ./hello </span><br><span class="line">hello, world</span><br><span class="line">Hello, Go!</span><br></pre></td></tr></table></figure>
+
+<p>folder structure</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">tree .</span><br><span class="line">.</span><br><span class="line">├── bin</span><br><span class="line">│   └── hello</span><br><span class="line">└── src</span><br><span class="line">    └── github.com</span><br><span class="line">        └── kezunlin</span><br><span class="line">            ├── hello</span><br><span class="line">            │   └── hello.go</span><br><span class="line">            └── stringutil</span><br><span class="line">                └── reverse.go</span><br><span class="line"></span><br><span class="line">6 directories, 3 files</span><br></pre></td></tr></table></figure>
+
+<h4 id="testing"><a href="#testing" class="headerlink" title="testing"></a>testing</h4><p>You write a test by creating a file with a name ending in <code>_test.go</code> that contains functions named <code>TestXXX</code> with signature func <code>(t *testing.T)</code>. The test framework runs each such function; if the function calls a failure function such as <code>t.Error</code> or <code>t.Fail</code>, the test is considered to have failed.</p>
+<ul>
+<li>file name: xxx_test.go</li>
+<li>function name:  TextXXX</li>
+<li>error:  <code>t.Error</code> or <code>t.Fail</code></li>
+</ul>
+<p>reverse_test.go</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> stringutil</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;testing&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestReverse</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	cases := []<span class="keyword">struct</span> &#123;</span><br><span class="line">		in, want <span class="type">string</span></span><br><span class="line">	&#125;&#123;</span><br><span class="line">		&#123;<span class="string">&quot;Hello, world&quot;</span>, <span class="string">&quot;dlrow ,olleH&quot;</span>&#125;,</span><br><span class="line">		&#123;<span class="string">&quot;Hello, 世界&quot;</span>, <span class="string">&quot;界世 ,olleH&quot;</span>&#125;,</span><br><span class="line">		&#123;<span class="string">&quot;&quot;</span>, <span class="string">&quot;&quot;</span>&#125;,</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> _, c := <span class="keyword">range</span> cases &#123;</span><br><span class="line">		got := Reverse(c.in)</span><br><span class="line">		<span class="keyword">if</span> got != c.want &#123;</span><br><span class="line">			t.Errorf(<span class="string">&quot;Reverse(%q) == %q, want %q&quot;</span>, c.in, got, c.want)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>test ok</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ go <span class="built_in">test</span> github.com/kezunlin/stringutil</span><br><span class="line">ok  	github.com/kezunlin/stringutil 0.165s</span><br></pre></td></tr></table></figure>
+
+<p>test error </p>
+<pre><code>--- FAIL: TestReverse (0.00s)
+    reverse_test.go:16: Reverse(&quot;Hello, 世界2&quot;) == &quot;2界世 ,olleH&quot;, want &quot;界世 ,olleH&quot;
+FAIL
+exit status 1
+FAIL    github.com/kezunlin/stringutil  0.003s    
+</code></pre>
+<h3 id="remote-packages"><a href="#remote-packages" class="headerlink" title="remote packages"></a>remote packages</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ go get github.com/golang/example/hello</span><br><span class="line">$ <span class="variable">$GOPATH</span>/bin/hello</span><br><span class="line">Hello, Go examples!</span><br></pre></td></tr></table></figure>
+
+<h3 id="go-commands"><a href="#go-commands" class="headerlink" title="go commands"></a>go commands</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">go <span class="built_in">help</span> gopath </span><br><span class="line">go <span class="built_in">help</span> importpath </span><br><span class="line">go <span class="built_in">help</span> <span class="built_in">test</span></span><br><span class="line"></span><br><span class="line">go build</span><br><span class="line">go install </span><br><span class="line">go clean</span><br><span class="line"></span><br><span class="line">go get <span class="comment"># fetch,build and install</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://golang.org/doc/install#install">go</a></li>
+<li><a target="_blank" rel="noopener" href="https://golang.org/doc/code.html">how to write go code</a></li>
+<li><a target="_blank" rel="noopener" href="https://tour.golang.org/welcome/1">tour</a></li>
+<li><a target="_blank" rel="noopener" href="https://golang.org/doc/effective_go.html">effective_go</a></li>
+<li><a target="_blank" rel="noopener" href="https://gocv.io/getting-started/">gocv.io</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/hybridgroup/gocv">gocv</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20191011: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/go/" rel="tag"># go</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/colorwheel-for-colored-print-and-trace-for-cpp-programs/" rel="prev" title="use colorwheel to print colored message in console with cpp programs">
+      <i class="fa fa-chevron-left"></i> use colorwheel to print colored message in console with cpp programs
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/concurrent-queue-or-blocking-queue-implemented-in-cpp/" rel="next" title="concurrent queue or blocking queue implemented in cpp">
+      concurrent queue or blocking queue implemented in cpp <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#go-tutorial"><span class="nav-number">1.</span> <span class="nav-text">go tutorial</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#install"><span class="nav-number">1.1.</span> <span class="nav-text">install</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uninstall"><span class="nav-number">1.2.</span> <span class="nav-text">uninstall</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set-GOPATH"><span class="nav-number">1.3.</span> <span class="nav-text">set GOPATH</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#code-organization"><span class="nav-number">1.4.</span> <span class="nav-text">code organization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#go-example"><span class="nav-number">1.5.</span> <span class="nav-text">go example</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#your-first-program"><span class="nav-number">1.5.1.</span> <span class="nav-text">your first program</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#your-first-library"><span class="nav-number">1.5.2.</span> <span class="nav-text">your first library</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#testing"><span class="nav-number">1.5.3.</span> <span class="nav-text">testing</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#remote-packages"><span class="nav-number">1.6.</span> <span class="nav-text">remote packages</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#go-commands"><span class="nav-number">1.7.</span> <span class="nav-text">go commands</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

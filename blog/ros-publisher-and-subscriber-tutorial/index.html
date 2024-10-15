@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Guidecreate workspaceLet’s create and build a catkin workspace: mkdir -p ~&#x2F;catkin_ws&#x2F;src cd ~&#x2F;catkin_ws&#x2F; catkin_make source devel&#x2F;setup.bash  env | grep ROS  create packagecd ~&#x2F;catkin_ws&#x2F;src catkin_cr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ros publisher and subscriber tutorial">
+<meta property="og:url" content="https://kezunlin.me/blog/ros-publisher-and-subscriber-tutorial/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Guidecreate workspaceLet’s create and build a catkin workspace: mkdir -p ~&#x2F;catkin_ws&#x2F;src cd ~&#x2F;catkin_ws&#x2F; catkin_make source devel&#x2F;setup.bash  env | grep ROS  create packagecd ~&#x2F;catkin_ws&#x2F;src catkin_cr">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-12-14T07:35:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="ros">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/ros-publisher-and-subscriber-tutorial/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>ros publisher and subscriber tutorial | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/ros-publisher-and-subscriber-tutorial/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ros publisher and subscriber tutorial
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-12-14 15:35:00" itemprop="dateCreated datePublished" datetime="2018-12-14T15:35:00+08:00">2018-12-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="create-workspace"><a href="#create-workspace" class="headerlink" title="create workspace"></a>create workspace</h3><p>Let’s create and build a catkin workspace:</p>
+<pre><code>mkdir -p ~/catkin_ws/src
+cd ~/catkin_ws/
+catkin_make
+source devel/setup.bash 
+env | grep ROS
+</code></pre>
+<h3 id="create-package"><a href="#create-package" class="headerlink" title="create package"></a>create package</h3><pre><code>cd ~/catkin_ws/src
+catkin_create_pkg beginner_tutorials roscpp rospy std_msgs
+
+tree .
+.
+├── beginner_tutorials
+│   ├── CMakeLists.txt
+│   ├── include
+│   │   └── beginner_tutorials
+│   ├── package.xml
+│   └── src
+└── CMakeLists.txt -&gt; /opt/ros/kinetic/share/catkin/cmake/toplevel.cmake
+
+4 directories, 3 files
+</code></pre>
+<h3 id="create-msg"><a href="#create-msg" class="headerlink" title="create msg"></a>create msg</h3><pre><code>roscd beginner_tutorials
+mkdir msg
+echo &quot;int64 num&quot; &gt; msg/Num.msg
+</code></pre>
+<p>vim package.xml</p>
+<pre><code>&lt;build_depend&gt;message_generation&lt;/build_depend&gt;
+&lt;exec_depend&gt;message_runtime&lt;/exec_depend&gt;
+</code></pre>
+<p>vim CMakeLists.txt</p>
+<pre><code>find_package(catkin REQUIRED COMPONENTS
+   roscpp
+   rospy
+   std_msgs
+   message_generation
+)
+
+catkin_package(
+  ...
+  CATKIN_DEPENDS message_runtime ...
+  ...)
+
+
+add_message_files(
+  FILES
+  Num.msg
+)
+</code></pre>
+<h3 id="create-srv"><a href="#create-srv" class="headerlink" title="create srv"></a>create srv</h3><pre><code>roscd beginner_tutorials
+mkdir srv
+roscp rospy_tutorials AddTwoInts.srv srv/AddTwoInts.srv
+</code></pre>
+<blockquote>
+<p>roscp [package_name] [file_to_copy_path] [copy_path]<br>roscp rospy_tutorials AddTwoInts.srv srv&#x2F;AddTwoInts.srv</p>
+</blockquote>
+<p>vim CMakeLists.txt</p>
+<pre><code>add_service_files(
+  FILES
+  AddTwoInts.srv
+)
+</code></pre>
+<h3 id="show-msg"><a href="#show-msg" class="headerlink" title="show msg"></a>show msg</h3><pre><code>rosmsg show beginner_tutorials/Num
+int64 num
+
+rosmsg show Num
+[beginner_tutorials/Num]:
+int64 num
+</code></pre>
+<h3 id="show-srv"><a href="#show-srv" class="headerlink" title="show srv"></a>show srv</h3><blockquote>
+<p>rossrv show <service type></p>
+</blockquote>
+<pre><code>rossrv show beginner_tutorials/AddTwoInts 
+
+int64 a
+int64 b
+---
+int64 sum
+
+
+rossrv show AddTwoInts
+
+[beginner_tutorials/AddTwoInts]:
+int64 a
+int64 b
+---
+int64 sum
+
+[rospy_tutorials/AddTwoInts]:
+int64 a
+int64 b
+---
+int64 sum
+</code></pre>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+
+<h2 id="Code-Example"><a href="#Code-Example" class="headerlink" title="Code Example"></a>Code Example</h2><h3 id="talker-cpp"><a href="#talker-cpp" class="headerlink" title="talker.cpp"></a>talker.cpp</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;ros/ros.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;std_msgs/String.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sstream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * This tutorial demonstrates simple sending of messages over the ROS system.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * The ros::init() function needs to see argc and argv so that it can perform</span></span><br><span class="line"><span class="comment">   * any ROS arguments and name remapping that were provided at the command line.</span></span><br><span class="line"><span class="comment">   * For programmatic remappings you can use a different version of init() which takes</span></span><br><span class="line"><span class="comment">   * remappings directly, but for most command-line programs, passing argc and argv is</span></span><br><span class="line"><span class="comment">   * the easiest way to do it.  The third argument to init() is the name of the node.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * You must call one of the versions of ros::init() before using any other</span></span><br><span class="line"><span class="comment">   * part of the ROS system.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  ros::<span class="built_in">init</span>(argc, argv, <span class="string">&quot;talker&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * NodeHandle is the main access point to communications with the ROS system.</span></span><br><span class="line"><span class="comment">   * The first NodeHandle constructed will fully initialize this node, and the last</span></span><br><span class="line"><span class="comment">   * NodeHandle destructed will close down the node.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  ros::NodeHandle n;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * The advertise() function is how you tell ROS that you want to</span></span><br><span class="line"><span class="comment">   * publish on a given topic name. This invokes a call to the ROS</span></span><br><span class="line"><span class="comment">   * master node, which keeps a registry of who is publishing and who</span></span><br><span class="line"><span class="comment">   * is subscribing. After this advertise() call is made, the master</span></span><br><span class="line"><span class="comment">   * node will notify anyone who is trying to subscribe to this topic name,</span></span><br><span class="line"><span class="comment">   * and they will in turn negotiate a peer-to-peer connection with this</span></span><br><span class="line"><span class="comment">   * node.  advertise() returns a Publisher object which allows you to</span></span><br><span class="line"><span class="comment">   * publish messages on that topic through a call to publish().  Once</span></span><br><span class="line"><span class="comment">   * all copies of the returned Publisher object are destroyed, the topic</span></span><br><span class="line"><span class="comment">   * will be automatically unadvertised.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * The second parameter to advertise() is the size of the message queue</span></span><br><span class="line"><span class="comment">   * used for publishing messages.  If messages are published more quickly</span></span><br><span class="line"><span class="comment">   * than we can send them, the number here specifies how many messages to</span></span><br><span class="line"><span class="comment">   * buffer up before throwing some away.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  ros::Publisher chatter_pub = n.<span class="built_in">advertise</span>&lt;std_msgs::String&gt;(<span class="string">&quot;chatter&quot;</span>, <span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">  <span class="function">ros::Rate <span class="title">loop_rate</span><span class="params">(<span class="number">10</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * A count of how many messages we have sent. This is used to create</span></span><br><span class="line"><span class="comment">   * a unique string for each message.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="type">int</span> count = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">while</span> (ros::<span class="built_in">ok</span>())</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * This is a message object. You stuff it with data, and then publish it.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    std_msgs::String msg;</span><br><span class="line"></span><br><span class="line">    std::stringstream ss;</span><br><span class="line">    ss &lt;&lt; <span class="string">&quot;hello world &quot;</span> &lt;&lt; count;</span><br><span class="line">    msg.data = ss.<span class="built_in">str</span>();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">ROS_INFO</span>(<span class="string">&quot;%s&quot;</span>, msg.data.<span class="built_in">c_str</span>());</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The publish() function is how you send messages. The parameter</span></span><br><span class="line"><span class="comment">     * is the message object. The type of this object must agree with the type</span></span><br><span class="line"><span class="comment">     * given as a template parameter to the advertise&lt;&gt;() call, as was done</span></span><br><span class="line"><span class="comment">     * in the constructor above.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    chatter_pub.<span class="built_in">publish</span>(msg);</span><br><span class="line"></span><br><span class="line">    ros::<span class="built_in">spinOnce</span>();</span><br><span class="line"></span><br><span class="line">    loop_rate.<span class="built_in">sleep</span>();</span><br><span class="line">    ++count;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="listener-cpp"><a href="#listener-cpp" class="headerlink" title="listener.cpp"></a>listener.cpp</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;ros/ros.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;std_msgs/String.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * This tutorial demonstrates simple receipt of messages over the ROS system.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">chatterCallback</span><span class="params">(<span class="type">const</span> std_msgs::String::ConstPtr&amp; msg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">ROS_INFO</span>(<span class="string">&quot;I heard: [%s]&quot;</span>, msg-&gt;data.<span class="built_in">c_str</span>());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * The ros::init() function needs to see argc and argv so that it can perform</span></span><br><span class="line"><span class="comment">   * any ROS arguments and name remapping that were provided at the command line.</span></span><br><span class="line"><span class="comment">   * For programmatic remappings you can use a different version of init() which takes</span></span><br><span class="line"><span class="comment">   * remappings directly, but for most command-line programs, passing argc and argv is</span></span><br><span class="line"><span class="comment">   * the easiest way to do it.  The third argument to init() is the name of the node.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * You must call one of the versions of ros::init() before using any other</span></span><br><span class="line"><span class="comment">   * part of the ROS system.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  ros::<span class="built_in">init</span>(argc, argv, <span class="string">&quot;listener&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * NodeHandle is the main access point to communications with the ROS system.</span></span><br><span class="line"><span class="comment">   * The first NodeHandle constructed will fully initialize this node, and the last</span></span><br><span class="line"><span class="comment">   * NodeHandle destructed will close down the node.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  ros::NodeHandle n;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * The subscribe() call is how you tell ROS that you want to receive messages</span></span><br><span class="line"><span class="comment">   * on a given topic.  This invokes a call to the ROS</span></span><br><span class="line"><span class="comment">   * master node, which keeps a registry of who is publishing and who</span></span><br><span class="line"><span class="comment">   * is subscribing.  Messages are passed to a callback function, here</span></span><br><span class="line"><span class="comment">   * called chatterCallback.  subscribe() returns a Subscriber object that you</span></span><br><span class="line"><span class="comment">   * must hold on to until you want to unsubscribe.  When all copies of the Subscriber</span></span><br><span class="line"><span class="comment">   * object go out of scope, this callback will automatically be unsubscribed from</span></span><br><span class="line"><span class="comment">   * this topic.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * The second parameter to the subscribe() function is the size of the message</span></span><br><span class="line"><span class="comment">   * queue.  If messages are arriving faster than they are being processed, this</span></span><br><span class="line"><span class="comment">   * is the number of messages that will be buffered up before beginning to throw</span></span><br><span class="line"><span class="comment">   * away the oldest ones.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  ros::Subscriber sub = n.<span class="built_in">subscribe</span>(<span class="string">&quot;chatter&quot;</span>, <span class="number">1000</span>, chatterCallback);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * ros::spin() will enter a loop, pumping callbacks.  With this version, all</span></span><br><span class="line"><span class="comment">   * callbacks will be called from within this thread (the main one).  ros::spin()</span></span><br><span class="line"><span class="comment">   * will exit when Ctrl-C is pressed, or the node is shutdown by the master.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  ros::<span class="built_in">spin</span>();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h2><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">2.8</span>.<span class="number">3</span>)</span><br><span class="line"><span class="keyword">project</span>(beginner_tutorials)</span><br><span class="line"></span><br><span class="line"><span class="comment">## Compile as C++11, supported in ROS Kinetic and newer</span></span><br><span class="line"><span class="keyword">add_compile_options</span>(-std=c++<span class="number">11</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">## Find catkin macros and libraries</span></span><br><span class="line"><span class="comment">## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)</span></span><br><span class="line"><span class="comment">## is used, also find other catkin packages</span></span><br><span class="line"><span class="keyword">find_package</span>(catkin REQUIRED COMPONENTS</span><br><span class="line">  roscpp</span><br><span class="line">  rospy</span><br><span class="line">  std_msgs</span><br><span class="line">  message_generation</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">## System dependencies are found with CMake&#x27;s conventions</span></span><br><span class="line"><span class="comment"># find_package(Boost REQUIRED COMPONENTS system)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## Generate messages in the &#x27;msg&#x27; folder</span></span><br><span class="line">add_message_files(</span><br><span class="line">  FILES</span><br><span class="line">  Num.msg</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">## Generate services in the &#x27;srv&#x27; folder</span></span><br><span class="line">add_service_files(</span><br><span class="line">   FILES</span><br><span class="line">   AddTwoInts.srv</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">## Generate actions in the &#x27;action&#x27; folder</span></span><br><span class="line"><span class="comment"># add_action_files(</span></span><br><span class="line"><span class="comment">#   FILES</span></span><br><span class="line"><span class="comment">#   Action1.action</span></span><br><span class="line"><span class="comment">#   Action2.action</span></span><br><span class="line"><span class="comment"># )</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## Generate added messages and services with any dependencies listed here</span></span><br><span class="line">generate_messages(</span><br><span class="line">  DEPENDENCIES</span><br><span class="line">  std_msgs</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">catkin_package(</span><br><span class="line">  INCLUDE_DIRS <span class="keyword">include</span></span><br><span class="line">  LIBRARIES beginner_tutorials</span><br><span class="line">  CATKIN_DEPENDS roscpp rospy std_msgs message_runtime</span><br><span class="line"><span class="comment">#  DEPENDS system_lib</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">###########</span></span><br><span class="line"><span class="comment">## Build ##</span></span><br><span class="line"><span class="comment">###########</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## Specify additional locations of header files</span></span><br><span class="line"><span class="comment">## Your package locations should be listed before other locations</span></span><br><span class="line"><span class="keyword">include_directories</span>(</span><br><span class="line">  <span class="keyword">include</span></span><br><span class="line">  <span class="variable">$&#123;catkin_INCLUDE_DIRS&#125;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">add_executable</span>(talker src/talker.cpp)</span><br><span class="line"><span class="keyword">target_link_libraries</span>(talker <span class="variable">$&#123;catkin_LIBRARIES&#125;</span>)</span><br><span class="line"><span class="keyword">add_dependencies</span>(talker beginner_tutorials_generate_messages_cpp)</span><br><span class="line"></span><br><span class="line"><span class="keyword">add_executable</span>(listener src/listener.cpp)</span><br><span class="line"><span class="keyword">target_link_libraries</span>(listener <span class="variable">$&#123;catkin_LIBRARIES&#125;</span>)</span><br><span class="line"><span class="keyword">add_dependencies</span>(listener beginner_tutorials_generate_messages_cpp)</span><br></pre></td></tr></table></figure>
+
+<h2 id="catkin-make"><a href="#catkin-make" class="headerlink" title="catkin_make"></a>catkin_make</h2><pre><code>cd ~/catkin_ws
+catkin_make 
+
+Base path: /home/kezunlin/workspace/ros/catkin_ws
+Source space: /home/kezunlin/workspace/ros/catkin_ws/src
+Build space: /home/kezunlin/workspace/ros/catkin_ws/build
+Devel space: /home/kezunlin/workspace/ros/catkin_ws/devel
+Install space: /home/kezunlin/workspace/ros/catkin_ws/install
+####
+#### Running command: &quot;make cmake_check_build_system&quot; in &quot;/home/kezunlin/workspace/ros/catkin_ws/build&quot;
+####
+-- Using CATKIN_DEVEL_PREFIX: /home/kezunlin/workspace/ros/catkin_ws/devel
+-- Using CMAKE_PREFIX_PATH: /home/kezunlin/workspace/ros/catkin_ws/devel;/home/kezunlin/catkin_ws/devel;/opt/ros/kinetic
+-- This workspace overlays: /home/kezunlin/workspace/ros/catkin_ws/devel;/home/kezunlin/catkin_ws/devel;/opt/ros/kinetic
+-- Using PYTHON_EXECUTABLE: /usr/bin/python
+-- Using Debian Python package layout
+-- Using empy: /usr/bin/empy
+-- Using CATKIN_ENABLE_TESTING: ON
+-- Call enable_testing()
+-- Using CATKIN_TEST_RESULTS_DIR: /home/kezunlin/workspace/ros/catkin_ws/build/test_results
+-- Found gtest: gtests will be built
+-- Using Python nosetests: /usr/local/bin/nosetests-2.7
+-- catkin 0.7.14
+-- BUILD_SHARED_LIBS is on
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- ~~  traversing 1 packages in topological order:
+-- ~~  - beginner_tutorials
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- +++ processing catkin package: &#39;beginner_tutorials&#39;
+-- ==&gt; add_subdirectory(beginner_tutorials)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- beginner_tutorials: 1 messages, 1 services
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/kezunlin/workspace/ros/catkin_ws/build
+####
+#### Running command: &quot;make -j8 -l8&quot; in &quot;/home/kezunlin/workspace/ros/catkin_ws/build&quot;
+####
+[  0%] [  0%] [  0%] [  0%] Built target std_msgs_generate_messages_cpp
+Built target std_msgs_generate_messages_py
+[  0%] Built target std_msgs_generate_messages_nodejs
+Built target std_msgs_generate_messages_lisp
+Built target std_msgs_generate_messages_eus
+[  0%] [  0%] Built target _beginner_tutorials_generate_messages_check_deps_AddTwoInts
+Built target _beginner_tutorials_generate_messages_check_deps_Num
+[ 20%] [ 20%] [ 20%] [ 26%] [ 33%] [ 40%] [ 46%] Generating Lisp code from beginner_tutorials/Num.msg
+Generating EusLisp code from beginner_tutorials/AddTwoInts.srv
+Generating EusLisp code from beginner_tutorials/Num.msg
+Generating Javascript code from beginner_tutorials/Num.msg
+Generating Javascript code from beginner_tutorials/AddTwoInts.srv
+Generating C++ code from beginner_tutorials/Num.msg
+[ 53%] Generating C++ code from beginner_tutorials/AddTwoInts.srv
+Generating Python from MSG beginner_tutorials/Num
+[ 60%] Generating Lisp code from beginner_tutorials/AddTwoInts.srv
+[ 66%] Generating Python code from SRV beginner_tutorials/AddTwoInts
+[ 66%] Built target beginner_tutorials_generate_messages_nodejs
+[ 73%] Built target beginner_tutorials_generate_messages_eus
+[ 73%] Built target beginner_tutorials_generate_messages_lisp
+[ 80%] [ 86%] Generating Python srv __init__.py for beginner_tutorials
+Generating Python msg __init__.py for beginner_tutorials
+[ 86%] Built target beginner_tutorials_generate_messages_cpp
+Scanning dependencies of target listener
+Scanning dependencies of target talker
+[ 93%] [100%] Building CXX object beginner_tutorials/CMakeFiles/listener.dir/src/listener.cpp.o
+Building CXX object beginner_tutorials/CMakeFiles/talker.dir/src/talker.cpp.o
+[100%] Built target beginner_tutorials_generate_messages_py
+[100%] Built target beginner_tutorials_generate_messages
+Linking CXX executable /home/kezunlin/workspace/ros/catkin_ws/devel/lib/beginner_tutorials/talker
+[100%] Built target talker
+Linking CXX executable /home/kezunlin/workspace/ros/catkin_ws/devel/lib/beginner_tutorials/listener
+[100%] Built target listener
+</code></pre>
+<h3 id="play-with-talker-and-listener"><a href="#play-with-talker-and-listener" class="headerlink" title="play with talker and listener"></a>play with talker and listener</h3><pre><code>roscore 
+
+cd ~/catkin_ws
+./devel/lib/beginner_tutorials/talker
+./devel/lib/beginner_tutorials/listener
+</code></pre>
+<p><code>rosrun beginner_tutorials talker</code></p>
+<pre><code>[ INFO] [1545039519.457624559]: hello world 803
+[ INFO] [1545039519.557624500]: hello world 804
+[ INFO] [1545039519.657595852]: hello world 805
+[ INFO] [1545039519.757538635]: hello world 806
+</code></pre>
+<p><code>rosrun beginner_tutorials listener</code></p>
+<pre><code>[ INFO] [1545039519.458099942]: I heard: [hello world 803]
+[ INFO] [1545039519.558116295]: I heard: [hello world 804]
+[ INFO] [1545039519.658085716]: I heard: [hello world 805]
+[ INFO] [1545039519.757998160]: I heard: [hello world 806]
+</code></pre>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+<h2 id="Quick-Ref"><a href="#Quick-Ref" class="headerlink" title="Quick Ref"></a>Quick Ref</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># install and configure ros environment</span></span><br><span class="line"><span class="comment">## install</span></span><br><span class="line"><span class="built_in">sudo</span> sh -c <span class="string">&#x27;. /etc/lsb-release &amp;&amp; echo &quot;deb [arch=amd64] http://mirrors.ustc.edu.cn/ros/ubuntu/ $DISTRIB_CODENAME main&quot; &gt; /etc/apt/sources.list.d/ros-latest.list&#x27;</span></span><br><span class="line"><span class="built_in">sudo</span> apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt-get update</span><br><span class="line"><span class="built_in">sudo</span> apt-get install ros-kinetic-desktop-full</span><br><span class="line"><span class="built_in">sudo</span> apt-get install python-rosinstall python-rosinstall-generator python-wstool build-essential</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> rosdep init</span><br><span class="line">rosdep update</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;source /opt/ros/kinetic/setup.bash&quot;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br><span class="line"></span><br><span class="line"><span class="built_in">env</span> | grep ROS</span><br><span class="line"></span><br><span class="line"><span class="comment">## test </span></span><br><span class="line">roscore</span><br><span class="line"></span><br><span class="line"><span class="comment">## create workspace</span></span><br><span class="line"><span class="built_in">mkdir</span> -p ~/catkin_ws/src</span><br><span class="line"><span class="built_in">cd</span> ~/catkin_ws/</span><br><span class="line">catkin_make</span><br><span class="line"><span class="built_in">source</span> devel/setup.bash </span><br><span class="line"><span class="built_in">env</span> | grep ROS</span><br></pre></td></tr></table></figure>
+
+<h2 id="Navigating-the-ROS-Filesystem"><a href="#Navigating-the-ROS-Filesystem" class="headerlink" title="Navigating the ROS Filesystem"></a>Navigating the ROS Filesystem</h2><p>commands</p>
+<ul>
+<li>rospack &#x3D; ros + pack(age)</li>
+<li>roscd &#x3D; ros + cd</li>
+<li>rosls &#x3D; ros + ls</li>
+</ul>
+<p>sudo apt-get install ros-kinetic-ros-tutorials</p>
+<p>rosls roscpp_tutorials</p>
+<p>rospack find roscpp</p>
+<p>&#x2F;opt&#x2F;ros&#x2F;kinetic&#x2F;share&#x2F;roscpp</p>
+<p>roscd roscpp<br>pwd<br>&#x2F;opt&#x2F;ros&#x2F;kinetic&#x2F;share&#x2F;roscpp</p>
+<blockquote>
+<p>Note that <code>roscd</code>, like other ROS tools, will only find ROS packages that are within the directories listed in your <code>ROS_PACKAGE_PATH</code>.<br><code>echo $ROS_PACKAGE_PATH</code></p>
+</blockquote>
+<p>roscd roscpp&#x2F;cmake<br>pwd<br>&#x2F;opt&#x2F;ros&#x2F;kinetic&#x2F;share&#x2F;roscpp&#x2F;cmake</p>
+<p>roscd log<br>pwd<br>&#x2F;home&#x2F;kezunlin&#x2F;.ros&#x2F;log&#x2F;42e6e804-0199-11e9-93c2-80fa5b47928a</p>
+<p>rosls roscpp<br>cmake  msg  package.xml  rosbuild  srv</p>
+<h2 id="Creating-a-ROS-Package"><a href="#Creating-a-ROS-Package" class="headerlink" title="Creating a ROS Package"></a>Creating a ROS Package</h2><h3 id="package-structure"><a href="#package-structure" class="headerlink" title="package structure"></a>package structure</h3><p>workspace_folder&#x2F;        – WORKSPACE<br>  src&#x2F;                   – SOURCE SPACE<br>    CMakeLists.txt       – ‘Toplevel’ CMake file, provided by catkin<br>    package_1&#x2F;<br>      CMakeLists.txt     – CMakeLists.txt file for package_1<br>      package.xml        – Package manifest for package_1<br>    …<br>    package_n&#x2F;<br>      CMakeLists.txt     – CMakeLists.txt file for package_n<br>      package.xml        – Package manifest for package_n</p>
+<h3 id="create-a-catkin-package"><a href="#create-a-catkin-package" class="headerlink" title="create a catkin package"></a>create a catkin package</h3><blockquote>
+<p>catkin_create_pkg <package_name> [depend1] [depend2] [depend3]</p>
+</blockquote>
+<p>cd ~&#x2F;catkin_ws&#x2F;src<br>catkin_create_pkg beginner_tutorials roscpp rospy std_msgs</p>
+<pre><code>Created file beginner_tutorials/CMakeLists.txt
+Created file beginner_tutorials/package.xml
+Created folder beginner_tutorials/include/beginner_tutorials
+Created folder beginner_tutorials/src
+</code></pre>
+<h3 id="build-a-catkin-workspace-and-source-setup-file"><a href="#build-a-catkin-workspace-and-source-setup-file" class="headerlink" title="build a catkin workspace and source setup file"></a>build a catkin workspace and source setup file</h3><p>cd ~&#x2F;catkin_ws&#x2F;<br>catkin_make</p>
+<p>. ~&#x2F;catkin_ws&#x2F;devel&#x2F;setup.bash</p>
+<h3 id="package-dependencies"><a href="#package-dependencies" class="headerlink" title="package dependencies"></a>package dependencies</h3><h4 id="first-order-dependencies"><a href="#first-order-dependencies" class="headerlink" title="first-order dependencies"></a>first-order dependencies</h4><p>rospack depends1 beginner_tutorials<br>roscpp<br>rospy<br>std_msgs</p>
+<p>roscd beginner_tutorials<br>cat package.xml</p>
+<pre><code>&lt;package format=&quot;2&quot;&gt;
+...
+  &lt;buildtool_depend&gt;catkin&lt;/buildtool_depend&gt;
+  &lt;build_depend&gt;roscpp&lt;/build_depend&gt;
+  &lt;build_depend&gt;rospy&lt;/build_depend&gt;
+  &lt;build_depend&gt;std_msgs&lt;/build_depend&gt;
+...
+&lt;/package&gt;
+</code></pre>
+<h4 id="Indirect-dependencies"><a href="#Indirect-dependencies" class="headerlink" title="Indirect dependencies"></a>Indirect dependencies</h4><p>rospack depends1 rospy<br>genpy<br>roscpp<br>rosgraph<br>rosgraph_msgs<br>roslib<br>std_msgs</p>
+<h4 id="list-all-dependencies"><a href="#list-all-dependencies" class="headerlink" title="list all dependencies"></a>list all dependencies</h4><p>rospack depends beginner_tutorials</p>
+<h3 id="Customizing-Your-Package"><a href="#Customizing-Your-Package" class="headerlink" title="Customizing Your Package"></a>Customizing Your Package</h3><p>vim package.xml</p>
+<h2 id="Building-a-ROS-Package"><a href="#Building-a-ROS-Package" class="headerlink" title="Building a ROS Package"></a>Building a ROS Package</h2><h3 id="catkin-make-1"><a href="#catkin-make-1" class="headerlink" title="catkin_make"></a>catkin_make</h3><pre><code># In a CMake project
+$ mkdir build
+$ cd build
+$ cmake ..
+$ make
+$ make install  # (optionally)
+
+# In a catkin workspace
+$ catkin_make
+$ catkin_make install  # (optionally)
+</code></pre>
+<h2 id="Understanding-ROS-Nodes"><a href="#Understanding-ROS-Nodes" class="headerlink" title="Understanding ROS Nodes"></a>Understanding ROS Nodes</h2><p>commands</p>
+<ul>
+<li>roscore &#x3D; ros+core : master (provides name service for ROS) + rosout (stdout&#x2F;stderr) + parameter server (parameter server will be introduced later)</li>
+<li>rosnode &#x3D; ros+node : ROS tool to get information about a node.</li>
+<li>rosrun &#x3D; ros+run : runs a node from a given package.</li>
+</ul>
+<h3 id="concepts"><a href="#concepts" class="headerlink" title="concepts"></a>concepts</h3><p>Quick Overview of Graph Concepts</p>
+<ul>
+<li>Nodes: A node is an executable that uses ROS to communicate with other nodes.</li>
+<li>Messages: ROS data type used when subscribing or publishing to a topic.</li>
+<li>Topics: Nodes can publish messages to a topic as well as subscribe to a topic to receive messages.</li>
+<li>Master: Name service for ROS (i.e. helps nodes find each other)</li>
+<li>rosout: ROS equivalent of stdout&#x2F;stderr</li>
+<li>roscore: Master + rosout + parameter server (parameter server will be introduced later)</li>
+</ul>
+<p>Client Libraries</p>
+<ul>
+<li>rospy &#x3D; python client library</li>
+<li>roscpp &#x3D; c++ client library</li>
+</ul>
+<h3 id="play-with-nodes"><a href="#play-with-nodes" class="headerlink" title="play with nodes"></a>play with nodes</h3><p>roscore</p>
+<p>rosnode list<br>&#x2F;rosout</p>
+<p>rosnode info &#x2F;rosout</p>
+<pre><code>--------------------------------------------------------------------------------
+Node [/rosout]
+Publications: 
+ * /rosout_agg [rosgraph_msgs/Log]
+
+Subscriptions: 
+ * /rosout [unknown type]
+
+Services: 
+ * /rosout/get_loggers
+ * /rosout/set_logger_level
+
+
+contacting node http://ke:40803/ ...
+Pid: 31049
+</code></pre>
+<h3 id="run-new-nodes"><a href="#run-new-nodes" class="headerlink" title="run new nodes"></a>run new nodes</h3><blockquote>
+<p>rosrun [package_name] [node_name]</p>
+</blockquote>
+<p>rosrun turtlesim turtlesim_node</p>
+<p>rosnode list<br>&#x2F;rosout<br>&#x2F;turtlesim</p>
+<p>rosnode info &#x2F;turtlesim</p>
+<h3 id="rename-node-name"><a href="#rename-node-name" class="headerlink" title="rename node name"></a>rename node name</h3><p>rosrun turtlesim turtlesim_node __name:&#x3D;my_turtle</p>
+<p>rosnode list<br>&#x2F;my_turtle<br>&#x2F;rosout</p>
+<blockquote>
+<p>Note: If you still see <code>/turtlesim</code> in the list, it might mean that you stopped the node in the terminal using <code>ctrl-C</code> instead of <code>closing the window</code></p>
+</blockquote>
+<h3 id="ping-node"><a href="#ping-node" class="headerlink" title="ping node"></a>ping node</h3><p>rosnode ping my_turtle<br>rosnode: node is [&#x2F;my_turtle]<br>pinging &#x2F;my_turtle with a timeout of 3.0s<br>xmlrpc reply from <a target="_blank" rel="noopener" href="http://ke:33523/">http://ke:33523/</a>	time&#x3D;0.274181ms<br>xmlrpc reply from <a target="_blank" rel="noopener" href="http://ke:33523/">http://ke:33523/</a>	time&#x3D;1.040220ms<br>xmlrpc reply from <a target="_blank" rel="noopener" href="http://ke:33523/">http://ke:33523/</a>	time&#x3D;1.013041ms<br>^Cping average: 0.775814ms</p>
+<h2 id="Understanding-ROS-Topics"><a href="#Understanding-ROS-Topics" class="headerlink" title="Understanding ROS Topics"></a>Understanding ROS Topics</h2><p>roscore<br>rosrun turtlesim turtlesim_node<br>rosrun turtlesim turtle_teleop_key</p>
+<p>rosrun rqt_graph rqt_graph</p>
+<p>rostopic echo &#x2F;turtle1&#x2F;cmd_vel</p>
+<h2 id="linear-x-2-0-y-0-0-z-0-0angular-x-0-0-y-0-0-z-0-0"><a href="#linear-x-2-0-y-0-0-z-0-0angular-x-0-0-y-0-0-z-0-0" class="headerlink" title="linear:  x: 2.0  y: 0.0  z: 0.0angular:  x: 0.0  y: 0.0  z: 0.0"></a>linear:<br>  x: 2.0<br>  y: 0.0<br>  z: 0.0<br>angular:<br>  x: 0.0<br>  y: 0.0<br>  z: 0.0</h2><p>rostopic list -v</p>
+<pre><code>Published topics:
+ * /turtle1/color_sensor [turtlesim/Color] 1 publisher
+ * /turtle1/cmd_vel [geometry_msgs/Twist] 1 publisher
+ * /rosout [rosgraph_msgs/Log] 3 publishers
+ * /rosout_agg [rosgraph_msgs/Log] 1 publisher
+ * /turtle1/pose [turtlesim/Pose] 1 publisher
+
+Subscribed topics:
+ * /turtle1/cmd_vel [geometry_msgs/Twist] 1 subscriber
+ * /rosout [rosgraph_msgs/Log] 1 subscriber
+ * /statistics [rosgraph_msgs/TopicStatistics] 1 subscriber
+</code></pre>
+<p>rostopic type &#x2F;turtle1&#x2F;cmd_vel<br>geometry_msgs&#x2F;Twist</p>
+<p>rosmsg show geometry_msgs&#x2F;Twist<br>geometry_msgs&#x2F;Vector3 linear<br>  float64 x<br>  float64 y<br>  float64 z<br>geometry_msgs&#x2F;Vector3 angular<br>  float64 x<br>  float64 y<br>  float64 z</p>
+<p>rostopic type &#x2F;turtle1&#x2F;cmd_vel | rosmsg show</p>
+<h3 id="publish-messages"><a href="#publish-messages" class="headerlink" title="publish messages"></a>publish messages</h3><blockquote>
+<p>rostopic pub [topic] [msg_type] [args]</p>
+</blockquote>
+<p>rostopic pub &#x2F;turtle1&#x2F;cmd_vel geometry_msgs&#x2F;Twist “linear:<br>  x: 2.0<br>  y: 0.0<br>  z: 0.0<br>angular:<br>  x: 0.0<br>  y: 0.0<br>  z: 1.8” </p>
+<p>rostopic pub -1 &#x2F;turtle1&#x2F;cmd_vel geometry_msgs&#x2F;Twist – ‘[2.0, 0.0, 0.0]’ ‘[0.0, 0.0, 1.8]’</p>
+<p>rostopic pub &#x2F;turtle1&#x2F;cmd_vel geometry_msgs&#x2F;Twist -r 1 – ‘[2.0, 0.0, 0.0]’ ‘[0.0, 0.0, -1.8]’</p>
+<blockquote>
+<p>YAML syntax</p>
+</blockquote>
+<p>rostopic hz &#x2F;turtle1&#x2F;pose<br>$ 60 HZ</p>
+<p>rosrun rqt_plot rqt_plot</p>
+<h2 id="Understanding-ROS-Services-and-Parameters"><a href="#Understanding-ROS-Services-and-Parameters" class="headerlink" title="Understanding ROS Services and Parameters"></a>Understanding ROS Services and Parameters</h2><h3 id="rosservice"><a href="#rosservice" class="headerlink" title="rosservice"></a>rosservice</h3><p>Services are another way that nodes can communicate with each other. Services allow nodes to send a <code>request</code> and <code>receive</code> a response.</p>
+<p>rosnode list<br>&#x2F;rosout<br>&#x2F;rqt_gui_py_node_1614<br>&#x2F;teleop_turtle<br>&#x2F;turtlesim</p>
+<p>rosservice list<br>&#x2F;clear<br>&#x2F;kill<br>&#x2F;reset<br>&#x2F;rosout&#x2F;get_loggers<br>&#x2F;rosout&#x2F;set_logger_level<br>&#x2F;rqt_gui_py_node_1614&#x2F;get_loggers<br>&#x2F;rqt_gui_py_node_1614&#x2F;set_logger_level<br>&#x2F;spawn<br>&#x2F;teleop_turtle&#x2F;get_loggers<br>&#x2F;teleop_turtle&#x2F;set_logger_level<br>&#x2F;turtle1&#x2F;set_pen<br>&#x2F;turtle1&#x2F;teleport_absolute<br>&#x2F;turtle1&#x2F;teleport_relative<br>&#x2F;turtlesim&#x2F;get_loggers<br>&#x2F;turtlesim&#x2F;set_logger_level</p>
+<blockquote>
+<p>rosservice type [service]<br>rosservice call [service] [args]</p>
+</blockquote>
+<p>rosservice type &#x2F;clear<br>std_srvs&#x2F;Empty</p>
+<p>rosservice call &#x2F;clear</p>
+<blockquote>
+<p>clear the background of turtlesim_node</p>
+</blockquote>
+<h2 id="rosservice-type-spawn-rossrv-showfloat32-xfloat32-yfloat32-thetastring-name"><a href="#rosservice-type-spawn-rossrv-showfloat32-xfloat32-yfloat32-thetastring-name" class="headerlink" title="rosservice type &#x2F;spawn | rossrv showfloat32 xfloat32 yfloat32 thetastring name"></a>rosservice type &#x2F;spawn | rossrv show<br>float32 x<br>float32 y<br>float32 theta<br>string name</h2><p>string name</p>
+<p>rosservice call &#x2F;spawn 2 2 0.2 “”</p>
+<blockquote>
+<p>This service lets us spawn a new turtle at a given location and orientation. The name field is optional.</p>
+</blockquote>
+<h3 id="rosparam"><a href="#rosparam" class="headerlink" title="rosparam"></a>rosparam</h3><p> rosparam list<br>&#x2F;background_b<br>&#x2F;background_g<br>&#x2F;background_r<br>&#x2F;rosdistro<br>&#x2F;roslaunch&#x2F;uris&#x2F;host_ke__35701<br>&#x2F;rosversion<br>&#x2F;run_id</p>
+<blockquote>
+<p>rosparam set [param_name]<br>rosparam get [param_name]</p>
+</blockquote>
+<p>rosparam set &#x2F;background_r 150<br>rosservice call &#x2F;clear</p>
+<p>rosparam get &#x2F;<br>background_b: 255<br>background_g: 86<br>background_r: 150<br>rosdistro: ‘kinetic</p>
+<p>  ‘<br>roslaunch:<br>  uris: {host_ke__35701: ‘<a target="_blank" rel="noopener" href="http://ke:35701/'%7D">http://ke:35701/&#39;}</a><br>rosversion: ‘1.12.14</p>
+<p>  ‘<br>run_id: eb9e9f1e-01a3-11e9-93c2-80fa5b47928a</p>
+<p>rosparam get &#x2F;background_b<br>255</p>
+<blockquote>
+<p>rosparam dump [file_name] [namespace]<br>rosparam load [file_name] [namespace]</p>
+</blockquote>
+<p>rosparam dump params.yaml</p>
+<p>rosparam load params.yaml copy<br>rosparam get &#x2F;copy&#x2F;background_b</p>
+<h2 id="Using-rqt-console-and-roslaunch"><a href="#Using-rqt-console-and-roslaunch" class="headerlink" title="Using rqt_console and roslaunch"></a>Using rqt_console and roslaunch</h2><p>rosrun rqt_console rqt_console<br>rosrun rqt_logger_level rqt_logger_level</p>
+<blockquote>
+<p>2 windows pop up.</p>
+</blockquote>
+<p>logger levels</p>
+<p>Fatal<br>Error<br>Warn<br>Info<br>Debug</p>
+<blockquote>
+<p>roslaunch starts nodes as defined in a launch file.<br>roslaunch [package] [filename.launch]</p>
+</blockquote>
+<p>cd ~&#x2F;catkin_ws<br>source devel&#x2F;setup.bash<br>roscd beginner_tutorials</p>
+<p>mkdir launch<br>cd launch</p>
+<p>vim turtle.launch</p>
+<launch>
+
+  <group ns="turtlesim1">
+    <node pkg="turtlesim" name="sim" type="turtlesim_node"/>
+  </group>
+
+  <group ns="turtlesim2">
+    <node pkg="turtlesim" name="sim" type="turtlesim_node"/>
+  </group>
+
+  <node pkg="turtlesim" name="mimic" type="mimic">
+    <remap from="input" to="turtlesim1/turtle1"/>
+    <remap from="output" to="turtlesim2/turtle1"/>
+  </node>
+
+</launch>
+
+
+<p>rosnode list<br>&#x2F;mimic<br>&#x2F;rosout<br>&#x2F;turtlesim1&#x2F;sim<br>&#x2F;turtlesim2&#x2F;sim</p>
+<p>rostopic list<br>&#x2F;rosout<br>&#x2F;rosout_agg<br>&#x2F;turtlesim1&#x2F;turtle1&#x2F;cmd_vel<br>&#x2F;turtlesim1&#x2F;turtle1&#x2F;color_sensor<br>&#x2F;turtlesim1&#x2F;turtle1&#x2F;pose<br>&#x2F;turtlesim2&#x2F;turtle1&#x2F;cmd_vel<br>&#x2F;turtlesim2&#x2F;turtle1&#x2F;color_sensor<br>&#x2F;turtlesim2&#x2F;turtle1&#x2F;pose</p>
+<p>rostopic pub &#x2F;turtlesim1&#x2F;turtle1&#x2F;cmd_vel geometry_msgs&#x2F;Twist -r 1 – ‘[2.0, 0.0, 0.0]’ ‘[0.0, 0.0, -1.8]’</p>
+<blockquote>
+<p>You will see the two turtlesims start moving even though the publish command is only being sent to turtlesim1.</p>
+</blockquote>
+<h2 id="rosed"><a href="#rosed" class="headerlink" title="rosed"></a>rosed</h2><p>rosed roscpp <tab><tab></p>
+<p>rosed roscpp Logger.msg</p>
+<h2 id="Creating-a-ROS-msg-and-srv"><a href="#Creating-a-ROS-msg-and-srv" class="headerlink" title="Creating a ROS msg and srv"></a>Creating a ROS msg and srv</h2><ul>
+<li>msg: msg files are simple text files that describe the fields of a ROS message. They are used to generate source code for messages in different languages.</li>
+<li>srv: an srv file describes a service. It is composed of two parts: a request and a response.</li>
+</ul>
+<h3 id="msg"><a href="#msg" class="headerlink" title="msg"></a>msg</h3><p>msgs are just simple text files with a field type and field name per line. The field types you can use are:</p>
+<p>int8, int16, int32, int64 (plus uint*)<br>float32, float64<br>string<br>time, duration<br>other msg files<br>variable-length array[] and fixed-length array[C]</p>
+<blockquote>
+<p>There is also a special type in ROS: Header, the header contains a timestamp and coordinate frame information that are commonly used in ROS.</p>
+</blockquote>
+<p>Header header<br>string child_frame_id<br>geometry_msgs&#x2F;PoseWithCovariance pose<br>geometry_msgs&#x2F;TwistWithCovariance twist</p>
+<h3 id="srv"><a href="#srv" class="headerlink" title="srv"></a>srv</h3><h2 id="int64-Aint64-B"><a href="#int64-Aint64-B" class="headerlink" title="int64 Aint64 B"></a>int64 A<br>int64 B</h2><p>int64 Sum</p>
+<blockquote>
+<p>A and B are the request, and Sum is the response.</p>
+</blockquote>
+<h3 id="create-msg-1"><a href="#create-msg-1" class="headerlink" title="create msg"></a>create msg</h3><p>roscd beginner_tutorials<br>mkdir msg<br>echo “int64 num” &gt; msg&#x2F;Num.msg</p>
+<p>vim package.xml</p>
+<p><build_depend>message_generation</build_depend><br><exec_depend>message_runtime</exec_depend></p>
+<p>vim CMakeLists.txt</p>
+<p>find_package(catkin REQUIRED COMPONENTS<br>   roscpp<br>   rospy<br>   std_msgs<br>   message_generation<br>)</p>
+<p>catkin_package(<br>  …<br>  CATKIN_DEPENDS message_runtime …<br>  …)</p>
+<p>add_message_files(<br>  FILES<br>  Num.msg<br>)</p>
+<h3 id="create-srv-1"><a href="#create-srv-1" class="headerlink" title="create srv"></a>create srv</h3><p>roscd beginner_tutorials<br>mkdir srv</p>
+<blockquote>
+<p>roscp [package_name] [file_to_copy_path] [copy_path]<br>roscp rospy_tutorials AddTwoInts.srv srv&#x2F;AddTwoInts.srv</p>
+</blockquote>
+<p>vim CMakeLists.txt</p>
+<p>add_service_files(<br>  FILES<br>  AddTwoInts.srv<br>)</p>
+<h3 id="show-msg-1"><a href="#show-msg-1" class="headerlink" title="show msg"></a>show msg</h3><p>rosmsg show beginner_tutorials&#x2F;Num<br>int64 num</p>
+<p>rosmsg show Num<br>[beginner_tutorials&#x2F;Num]:<br>int64 num</p>
+<h3 id="show-srv-1"><a href="#show-srv-1" class="headerlink" title="show srv"></a>show srv</h3><blockquote>
+<p>rossrv show <service type><br>rossrv show beginner_tutorials&#x2F;AddTwoInts </p>
+</blockquote>
+<pre><code>int64 a
+int64 b
+---
+int64 sum
+</code></pre>
+<p>rossrv show AddTwoInts</p>
+<pre><code>[beginner_tutorials/AddTwoInts]:
+int64 a
+int64 b
+---
+int64 sum
+
+[rospy_tutorials/AddTwoInts]:
+int64 a
+int64 b
+---
+int64 sum
+</code></pre>
+<h3 id="catkin-make-2"><a href="#catkin-make-2" class="headerlink" title="catkin_make"></a>catkin_make</h3><p>roscd beginner_tutorials<br>cd ..&#x2F;..<br>catkin_make install</p>
+<h3 id="review"><a href="#review" class="headerlink" title="review"></a>review</h3><p>rospack &#x3D; ros+pack(age) : provides information related to ROS packages<br>roscd &#x3D; ros+cd : changes directory to a ROS package or stack<br>rosls &#x3D; ros+ls : lists files in a ROS package<br>roscp &#x3D; ros+cp : copies files from&#x2F;to a ROS package<br>rosmsg &#x3D; ros+msg : provides information related to ROS message definitions<br>rossrv &#x3D; ros+srv : provides information related to ROS service definitions<br>catkin_make : makes (compiles) a ROS package<br>rosmake &#x3D; ros+make : makes (compiles) a ROS package (if you’re not using a catkin workspace)</p>
+<h2 id="Writing-a-Simple-Publisher-and-Subscriber"><a href="#Writing-a-Simple-Publisher-and-Subscriber" class="headerlink" title="Writing a Simple Publisher and Subscriber"></a>Writing a Simple Publisher and Subscriber</h2><h3 id="src"><a href="#src" class="headerlink" title="src"></a>src</h3><p>roscd beginner_tutorials<br>vim src&#x2F;talker.cpp<br>vim src&#x2F;listener.cpp</p>
+<h3 id="build"><a href="#build" class="headerlink" title="build"></a>build</h3><p>cd ~&#x2F;catkin_ws<br>catkin_make</p>
+<h3 id="play-with-talker-and-listener-1"><a href="#play-with-talker-and-listener-1" class="headerlink" title="play with talker and listener"></a>play with talker and listener</h3><p>roscore </p>
+<p>rosrun beginner_tutorials talker</p>
+<pre><code>[ INFO] [1545039519.457624559]: hello world 803
+[ INFO] [1545039519.557624500]: hello world 804
+[ INFO] [1545039519.657595852]: hello world 805
+[ INFO] [1545039519.757538635]: hello world 806
+</code></pre>
+<p>rosrun beginner_tutorials listener</p>
+<pre><code>[ INFO] [1545039519.458099942]: I heard: [hello world 803]
+[ INFO] [1545039519.558116295]: I heard: [hello world 804]
+[ INFO] [1545039519.658085716]: I heard: [hello world 805]
+[ INFO] [1545039519.757998160]: I heard: [hello world 806]
+</code></pre>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://wiki.ros.org/ROS/Tutorials/WritingPublisherSubscriber%28c%2B%2B%29">ros WritingPublisherSubscriber</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.cnblogs.com/lizhongpingchn/p/5543013.html">ros publisher subscriber</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.cnblogs.com/xuanxiaochen/p/6013886.html">ros publisher subscriber</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20181214: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ros/" rel="tag"># ros</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/tmux-tutorial-on-ubuntu-16-04/" rel="prev" title="tmux tutorial on ubuntu 16.04">
+      <i class="fa fa-chevron-left"></i> tmux tutorial on ubuntu 16.04
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/compile-protobuf-cpp-on-ubuntu-16-04/" rel="next" title="compile protobuf-cpp on ubuntu 16.04">
+      compile protobuf-cpp on ubuntu 16.04 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#create-workspace"><span class="nav-number">1.1.</span> <span class="nav-text">create workspace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#create-package"><span class="nav-number">1.2.</span> <span class="nav-text">create package</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#create-msg"><span class="nav-number">1.3.</span> <span class="nav-text">create msg</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#create-srv"><span class="nav-number">1.4.</span> <span class="nav-text">create srv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#show-msg"><span class="nav-number">1.5.</span> <span class="nav-text">show msg</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#show-srv"><span class="nav-number">1.6.</span> <span class="nav-text">show srv</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Code-Example"><span class="nav-number">2.</span> <span class="nav-text">Code Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#talker-cpp"><span class="nav-number">2.1.</span> <span class="nav-text">talker.cpp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#listener-cpp"><span class="nav-number">2.2.</span> <span class="nav-text">listener.cpp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">3.</span> <span class="nav-text">CMakeLists.txt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#catkin-make"><span class="nav-number">4.</span> <span class="nav-text">catkin_make</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#play-with-talker-and-listener"><span class="nav-number">4.1.</span> <span class="nav-text">play with talker and listener</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-Ref"><span class="nav-number">5.</span> <span class="nav-text">Quick Ref</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Navigating-the-ROS-Filesystem"><span class="nav-number">6.</span> <span class="nav-text">Navigating the ROS Filesystem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Creating-a-ROS-Package"><span class="nav-number">7.</span> <span class="nav-text">Creating a ROS Package</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#package-structure"><span class="nav-number">7.1.</span> <span class="nav-text">package structure</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#create-a-catkin-package"><span class="nav-number">7.2.</span> <span class="nav-text">create a catkin package</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#build-a-catkin-workspace-and-source-setup-file"><span class="nav-number">7.3.</span> <span class="nav-text">build a catkin workspace and source setup file</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#package-dependencies"><span class="nav-number">7.4.</span> <span class="nav-text">package dependencies</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#first-order-dependencies"><span class="nav-number">7.4.1.</span> <span class="nav-text">first-order dependencies</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Indirect-dependencies"><span class="nav-number">7.4.2.</span> <span class="nav-text">Indirect dependencies</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#list-all-dependencies"><span class="nav-number">7.4.3.</span> <span class="nav-text">list all dependencies</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Customizing-Your-Package"><span class="nav-number">7.5.</span> <span class="nav-text">Customizing Your Package</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Building-a-ROS-Package"><span class="nav-number">8.</span> <span class="nav-text">Building a ROS Package</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#catkin-make-1"><span class="nav-number">8.1.</span> <span class="nav-text">catkin_make</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Understanding-ROS-Nodes"><span class="nav-number">9.</span> <span class="nav-text">Understanding ROS Nodes</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#concepts"><span class="nav-number">9.1.</span> <span class="nav-text">concepts</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#play-with-nodes"><span class="nav-number">9.2.</span> <span class="nav-text">play with nodes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#run-new-nodes"><span class="nav-number">9.3.</span> <span class="nav-text">run new nodes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rename-node-name"><span class="nav-number">9.4.</span> <span class="nav-text">rename node name</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ping-node"><span class="nav-number">9.5.</span> <span class="nav-text">ping node</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Understanding-ROS-Topics"><span class="nav-number">10.</span> <span class="nav-text">Understanding ROS Topics</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#linear-x-2-0-y-0-0-z-0-0angular-x-0-0-y-0-0-z-0-0"><span class="nav-number">11.</span> <span class="nav-text">linear:  x: 2.0  y: 0.0  z: 0.0angular:  x: 0.0  y: 0.0  z: 0.0</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#publish-messages"><span class="nav-number">11.1.</span> <span class="nav-text">publish messages</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Understanding-ROS-Services-and-Parameters"><span class="nav-number">12.</span> <span class="nav-text">Understanding ROS Services and Parameters</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#rosservice"><span class="nav-number">12.1.</span> <span class="nav-text">rosservice</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rosservice-type-spawn-rossrv-showfloat32-xfloat32-yfloat32-thetastring-name"><span class="nav-number">13.</span> <span class="nav-text">rosservice type &#x2F;spawn | rossrv showfloat32 xfloat32 yfloat32 thetastring name</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#rosparam"><span class="nav-number">13.1.</span> <span class="nav-text">rosparam</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Using-rqt-console-and-roslaunch"><span class="nav-number">14.</span> <span class="nav-text">Using rqt_console and roslaunch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rosed"><span class="nav-number">15.</span> <span class="nav-text">rosed</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Creating-a-ROS-msg-and-srv"><span class="nav-number">16.</span> <span class="nav-text">Creating a ROS msg and srv</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#msg"><span class="nav-number">16.1.</span> <span class="nav-text">msg</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#srv"><span class="nav-number">16.2.</span> <span class="nav-text">srv</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#int64-Aint64-B"><span class="nav-number">17.</span> <span class="nav-text">int64 Aint64 B</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#create-msg-1"><span class="nav-number">17.1.</span> <span class="nav-text">create msg</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#create-srv-1"><span class="nav-number">17.2.</span> <span class="nav-text">create srv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#show-msg-1"><span class="nav-number">17.3.</span> <span class="nav-text">show msg</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#show-srv-1"><span class="nav-number">17.4.</span> <span class="nav-text">show srv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#catkin-make-2"><span class="nav-number">17.5.</span> <span class="nav-text">catkin_make</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#review"><span class="nav-number">17.6.</span> <span class="nav-text">review</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Writing-a-Simple-Publisher-and-Subscriber"><span class="nav-number">18.</span> <span class="nav-text">Writing a Simple Publisher and Subscriber</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#src"><span class="nav-number">18.1.</span> <span class="nav-text">src</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#build"><span class="nav-number">18.2.</span> <span class="nav-text">build</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#play-with-talker-and-listener-1"><span class="nav-number">18.3.</span> <span class="nav-text">play with talker and listener</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">19.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">20.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

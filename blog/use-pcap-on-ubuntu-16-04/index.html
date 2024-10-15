@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Guide pcap: 1.7.4  install12345678910sudo apt-get -y install libpcap-devlocate pcap.so&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libpcap.so&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libpcap.so.0.8&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libpcap.so.1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="use pcap on ubuntu 16.04">
+<meta property="og:url" content="https://kezunlin.me/blog/use-pcap-on-ubuntu-16-04/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Guide pcap: 1.7.4  install12345678910sudo apt-get -y install libpcap-devlocate pcap.so&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libpcap.so&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libpcap.so.0.8&#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libpcap.so.1">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-12-29T08:59:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="pcap">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/use-pcap-on-ubuntu-16-04/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>use pcap on ubuntu 16.04 | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/use-pcap-on-ubuntu-16-04/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          use pcap on ubuntu 16.04
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-12-29 16:59:00" itemprop="dateCreated datePublished" datetime="2018-12-29T16:59:00+08:00">2018-12-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><ul>
+<li>pcap: 1.7.4</li>
+</ul>
+<h3 id="install"><a href="#install" class="headerlink" title="install"></a>install</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get -y install libpcap-dev</span><br><span class="line"></span><br><span class="line">locate pcap.so</span><br><span class="line">/usr/lib/x86_64-linux-gnu/libpcap.so</span><br><span class="line">/usr/lib/x86_64-linux-gnu/libpcap.so.0.8</span><br><span class="line">/usr/lib/x86_64-linux-gnu/libpcap.so.1.7.4</span><br><span class="line"></span><br><span class="line">locate pcap.h</span><br><span class="line">/usr/include/pcap.h</span><br><span class="line">/usr/include/pcap/pcap.h</span><br></pre></td></tr></table></figure>
+
+<h3 id="pcap-config-cmake"><a href="#pcap-config-cmake" class="headerlink" title="pcap-config.cmake"></a>pcap-config.cmake</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># - Try to find libpcap include dirs and libraries</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Usage of this module as follows:</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#     find_package(PCAP)</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Variables used by this module, they can change the default behaviour and need</span></span><br><span class="line"><span class="comment"># to be set before calling find_package:</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#  PCAP_ROOT_DIR             Set this variable to the root installation of</span></span><br><span class="line"><span class="comment">#                            libpcap if the module has problems finding the</span></span><br><span class="line"><span class="comment">#                            proper installation path.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Variables defined by this module:</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#  PCAP_FOUND                System has libpcap, include and library dirs found</span></span><br><span class="line"><span class="comment">#  PCAP_INCLUDE_DIR          The libpcap include directories.</span></span><br><span class="line"><span class="comment">#  PCAP_LIBRARY              The libpcap library (possibly includes a thread</span></span><br><span class="line"><span class="comment">#                            library e.g. required by pf_ring&#x27;s libpcap)</span></span><br><span class="line"><span class="comment">#  HAVE_PF_RING              If a found version of libpcap supports PF_RING</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">find_path</span>(PCAP_ROOT_DIR</span><br><span class="line">    NAMES <span class="keyword">include</span>/pcap.h</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_path</span>(PCAP_INCLUDE_DIR</span><br><span class="line">    NAMES pcap.h</span><br><span class="line">    HINTS <span class="variable">$&#123;PCAP_ROOT_DIR&#125;</span>/<span class="keyword">include</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">find_library</span>(PCAP_LIBRARY</span><br><span class="line">    NAMES pcap</span><br><span class="line">    HINTS <span class="variable">$&#123;PCAP_ROOT_DIR&#125;</span>/lib</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">include</span>(FindPackageHandleStandardArgs)</span><br><span class="line">find_package_handle_standard_args(PCAP DEFAULT_MSG</span><br><span class="line">    PCAP_LIBRARY</span><br><span class="line">    PCAP_INCLUDE_DIR</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">include</span>(CheckCSourceCompiles)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_REQUIRED_LIBRARIES <span class="variable">$&#123;PCAP_LIBRARY&#125;</span>)</span><br><span class="line">check_c_source_compiles(<span class="string">&quot;int main() &#123; return 0; &#125;&quot;</span> PCAP_LINKS_SOLO)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_REQUIRED_LIBRARIES)</span><br><span class="line"></span><br><span class="line"><span class="comment"># check if linking against libpcap also needs to link against a thread library</span></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">NOT</span> PCAP_LINKS_SOLO)</span><br><span class="line">    <span class="keyword">find_package</span>(Threads)</span><br><span class="line">    <span class="keyword">if</span> (THREADS_FOUND)</span><br><span class="line">        <span class="keyword">set</span>(CMAKE_REQUIRED_LIBRARIES <span class="variable">$&#123;PCAP_LIBRARY&#125;</span> <span class="variable">$&#123;CMAKE_THREAD_LIBS_INIT&#125;</span>)</span><br><span class="line">        check_c_source_compiles(<span class="string">&quot;int main() &#123; return 0; &#125;&quot;</span> PCAP_NEEDS_THREADS)</span><br><span class="line">        <span class="keyword">set</span>(CMAKE_REQUIRED_LIBRARIES)</span><br><span class="line">    <span class="keyword">endif</span> ()</span><br><span class="line">    <span class="keyword">if</span> (THREADS_FOUND <span class="keyword">AND</span> PCAP_NEEDS_THREADS)</span><br><span class="line">        <span class="keyword">set</span>(_tmp <span class="variable">$&#123;PCAP_LIBRARY&#125;</span> <span class="variable">$&#123;CMAKE_THREAD_LIBS_INIT&#125;</span>)</span><br><span class="line">        <span class="keyword">list</span>(REMOVE_DUPLICATES _tmp)</span><br><span class="line">        <span class="keyword">set</span>(PCAP_LIBRARY <span class="variable">$&#123;_tmp&#125;</span></span><br><span class="line">            CACHE <span class="keyword">STRING</span> <span class="string">&quot;Libraries needed to link against libpcap&quot;</span> FORCE)</span><br><span class="line">    <span class="keyword">else</span> ()</span><br><span class="line">        <span class="keyword">message</span>(FATAL_ERROR <span class="string">&quot;Couldn&#x27;t determine how to link against libpcap&quot;</span>)</span><br><span class="line">    <span class="keyword">endif</span> ()</span><br><span class="line"><span class="keyword">endif</span> ()</span><br><span class="line"></span><br><span class="line"><span class="keyword">include</span>(CheckFunctionExists)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_REQUIRED_LIBRARIES <span class="variable">$&#123;PCAP_LIBRARY&#125;</span>)</span><br><span class="line">check_function_exists(pcap_get_pfring_id HAVE_PF_RING)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_REQUIRED_LIBRARIES)</span><br><span class="line"></span><br><span class="line"><span class="keyword">mark_as_advanced</span>(</span><br><span class="line">    PCAP_ROOT_DIR</span><br><span class="line">    PCAP_INCLUDE_DIR</span><br><span class="line">    PCAP_LIBRARY</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="CMakeLists-txt"><a href="#CMakeLists-txt" class="headerlink" title="CMakeLists.txt"></a>CMakeLists.txt</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">find_package</span>(PCAP REQUIRED) </span><br><span class="line"><span class="keyword">MESSAGE</span>( [Main] <span class="string">&quot; PCAP_INCLUDE_DIR = $&#123;PCAP_INCLUDE_DIR&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">MESSAGE</span>( [Main] <span class="string">&quot; PCAP_LIBRARY = $&#123;PCAP_LIBRARY&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#[Main] PCAP_INCLUDE_DIR = /usr/include</span></span><br><span class="line"><span class="comment">#[Main] PCAP_LIBRARY = /usr/lib/x86_64-linux-gnu/libpcap.so</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/bro/cmake/blob/master/FindPCAP.cmake">FindPCAP.cmake</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20181229: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/pcap/" rel="tag"># pcap</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/extern-c/" rel="prev" title="extern c ">
+      <i class="fa fa-chevron-left"></i> extern c 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/zsh-for-linux/" rel="next" title="how to install and use zsh command on linux">
+      how to install and use zsh command on linux <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#install"><span class="nav-number">1.1.</span> <span class="nav-text">install</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pcap-config-cmake"><span class="nav-number">1.2.</span> <span class="nav-text">pcap-config.cmake</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt"><span class="nav-number">1.3.</span> <span class="nav-text">CMakeLists.txt</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

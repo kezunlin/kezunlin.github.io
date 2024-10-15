@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Iterable &amp;&amp; Iterator 可迭代对象（iterable），只定义了__iter__方法； 字符串、列表、元组、字典、文件；可以通过iter(iterable)方法获取iterator对象，也可以通过list(iterable) for xxx in iterable间接调用__iter__方法  迭代器（iterator）， Iteration Protocol:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python iterator and generator">
+<meta property="og:url" content="https://kezunlin.me/blog/python-iterator-and-generator/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Iterable &amp;&amp; Iterator 可迭代对象（iterable），只定义了__iter__方法； 字符串、列表、元组、字典、文件；可以通过iter(iterable)方法获取iterator对象，也可以通过list(iterable) for xxx in iterable间接调用__iter__方法  迭代器（iterator）， Iteration Protocol:">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-10-29T07:48:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="iterator">
+<meta property="article:tag" content="generator">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/python-iterator-and-generator/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>python iterator and generator | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/python-iterator-and-generator/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          python iterator and generator
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-10-29 15:48:00" itemprop="dateCreated datePublished" datetime="2018-10-29T15:48:00+08:00">2018-10-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Iterable-Iterator"><a href="#Iterable-Iterator" class="headerlink" title="Iterable &amp;&amp; Iterator"></a>Iterable &amp;&amp; Iterator</h2><ul>
+<li><p>可迭代对象（iterable），只定义了<code>__iter__</code>方法； 字符串、列表、元组、字典、文件；可以通过<code>iter(iterable)</code>方法获取iterator对象，也可以通过<code>list(iterable)</code> <code>for xxx in iterable</code>间接调用<code>__iter__</code>方法</p>
+</li>
+<li><p>迭代器（iterator）， Iteration Protocol: 定义了<code>__iter__</code>和<code>__next__</code>两个方法，<code>__iter__</code>返回迭代器本身(用于for loop)，<code>__next__</code>方法返回下一个元素，如果没有元素了，抛出StopIteration异常； for python2, use <code>next</code>; for python3, use <code>__next__</code></p>
+<pre><code>iterator = iter(l) #
+iterator2 = l.__iter__() 
+
+list(l)
+for xxx in l:
+</code></pre>
+</li>
+</ul>
+<h3 id="yrange"><a href="#yrange" class="headerlink" title="yrange"></a>yrange</h3><p>例子1：iterable和iterator是同一个对象。</p>
+<pre><code>y = iterable()
+list(y) 
+list(y)
+for i in y
+</code></pre>
+<blockquote>
+<p>只有第一次输出所有值；后续输出未空。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">yrange</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, n</span>):</span><br><span class="line">        <span class="variable language_">self</span>.i = <span class="number">0</span></span><br><span class="line">        <span class="variable language_">self</span>.n = n</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__iter__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;__iter__1&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">next</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.i &lt; <span class="variable language_">self</span>.n:</span><br><span class="line">            i = <span class="variable language_">self</span>.i</span><br><span class="line">            <span class="variable language_">self</span>.i += <span class="number">1</span></span><br><span class="line">            <span class="keyword">return</span> i</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> StopIteration()</span><br></pre></td></tr></table></figure>
+
+<p>当使用<code>list(iterable)</code>的时候，会调用iterable的<code>__iter__</code>方法返回iterator</p>
+<p>output </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">y = yrange(<span class="number">3</span>)</span><br><span class="line"><span class="number">0</span></span><br><span class="line">y = yrange(<span class="number">3</span>)</span><br><span class="line"><span class="number">1</span></span><br><span class="line">y = yrange(<span class="number">3</span>)</span><br><span class="line"><span class="number">2</span></span><br><span class="line">y = yrange(<span class="number">3</span>)</span><br><span class="line">StopIteration </span><br><span class="line"></span><br><span class="line"><span class="built_in">list</span>(yrange(<span class="number">3</span>))</span><br><span class="line">__iter__1</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line"></span><br><span class="line"><span class="built_in">sum</span>(yrange(<span class="number">3</span>))</span><br><span class="line">__iter__1</span><br><span class="line"><span class="number">3</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">y = yrange(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">list</span>(y)</span><br><span class="line">__iter__1</span><br><span class="line">    [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line"></span><br><span class="line"><span class="built_in">list</span>(y)</span><br><span class="line">__iter__1</span><br><span class="line">    []</span><br><span class="line">    </span><br><span class="line">y = yrange(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">list</span>(y.__iter__())</span><br><span class="line">__iter__1</span><br><span class="line">__iter__1</span><br><span class="line">    [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line"></span><br><span class="line"><span class="built_in">list</span>(y.__iter__())</span><br><span class="line">__iter__1</span><br><span class="line">__iter__1</span><br><span class="line">    []</span><br></pre></td></tr></table></figure>
+
+<h3 id="zrange"><a href="#zrange" class="headerlink" title="zrange"></a>zrange</h3><p>例子2：iterable和iterator是不同对象。</p>
+<pre><code>z = iterable()
+list(z)
+list(z)
+for i in z
+</code></pre>
+<p>调用N次，都会输出所有值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">zrange</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, n</span>):</span><br><span class="line">        <span class="variable language_">self</span>.n = n</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__iter__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;__iter__1&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> zrange_iter(<span class="variable language_">self</span>.n)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">zrange_iter</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, n</span>):</span><br><span class="line">        <span class="variable language_">self</span>.i = <span class="number">0</span></span><br><span class="line">        <span class="variable language_">self</span>.n = n</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__iter__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;__iter__2&quot;</span>)</span><br><span class="line">        <span class="comment"># Iterators are iterables too.</span></span><br><span class="line">        <span class="comment"># Adding this functions to make them so.</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">next</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.i &lt; <span class="variable language_">self</span>.n:</span><br><span class="line">            i = <span class="variable language_">self</span>.i</span><br><span class="line">            <span class="variable language_">self</span>.i += <span class="number">1</span></span><br><span class="line">            <span class="keyword">return</span> i</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> StopIteration()</span><br></pre></td></tr></table></figure>
+
+<p>output</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">z = zrange(<span class="number">3</span>)</span><br><span class="line"><span class="built_in">list</span>(z)</span><br><span class="line">__iter__1</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line"></span><br><span class="line"><span class="built_in">list</span>(z)</span><br><span class="line">__iter__1</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line"></span><br><span class="line">z = zrange(<span class="number">3</span>)</span><br><span class="line"><span class="built_in">list</span>(z.__iter__())</span><br><span class="line">__iter__1</span><br><span class="line">__iter__2</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line"></span><br><span class="line"><span class="built_in">list</span>(z.__iter__())</span><br><span class="line">__iter__1</span><br><span class="line">__iter__2</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]</span><br></pre></td></tr></table></figure>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+<h2 id="Generator"><a href="#Generator" class="headerlink" title="Generator"></a>Generator</h2><p><code>Generator functions</code> are ordinary functions defined using <code>yield</code> instead of <code>return</code>. When called, a <code>generator function</code> returns a <code>generator object</code>, which is a kind of <code>iterator</code> - it has a <code>next()</code> method. When you call <code>next()</code>, the next value yielded by the generator function is returned.</p>
+<blockquote>
+<p>use the word “generator” to mean the genearted object and “generator function” to mean the function that generates it.</p>
+</blockquote>
+<p>generator也是一个iterator。 <code>Generator functions</code>简化了<code>iterator</code>的创建。只需要yield就可以代替实现iterator的<code>__iter__</code>和<code>next</code>方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">yrange</span>(<span class="params">n</span>):</span><br><span class="line">    i = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> i &lt; n:</span><br><span class="line">        <span class="keyword">yield</span> i</span><br><span class="line">        i += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>output </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>y = yrange(<span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y</span><br><span class="line">&lt;generator <span class="built_in">object</span> yrange at <span class="number">0x401f30</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y.<span class="built_in">next</span>()</span><br><span class="line"><span class="number">0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y.<span class="built_in">next</span>()</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y.<span class="built_in">next</span>()</span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>y.<span class="built_in">next</span>()</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">    File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">StopIteration</span><br></pre></td></tr></table></figure>
+
+<h3 id="How-to-work"><a href="#How-to-work" class="headerlink" title="How to work"></a>How to work</h3><p>When a <code>generator function</code> is called, it returns a <code>generator object</code> without even beginning execution of the function.<br>When <code>next</code> method is called for the first time, the function starts executing until it reaches <code>yield</code> statement. The yielded value is returned by the <code>next</code> call.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">def</span> <span class="title function_">foo</span>():</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span> <span class="string">&quot;begin&quot;</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line"><span class="meta">... </span>        <span class="built_in">print</span> <span class="string">&quot;before yield&quot;</span>, i</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">yield</span> i</span><br><span class="line"><span class="meta">... </span>        <span class="built_in">print</span> <span class="string">&quot;after yield&quot;</span>, i</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span> <span class="string">&quot;end&quot;</span></span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f = foo() <span class="comment"># 不执行任何语句，返回generator object</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.<span class="built_in">next</span>() <span class="comment"># 执行语句直到yield,返回结果</span></span><br><span class="line">begin</span><br><span class="line">before <span class="keyword">yield</span> <span class="number">0</span></span><br><span class="line"><span class="number">0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.<span class="built_in">next</span>() <span class="comment"># 从上一次yield语句的下一句开始执行语句直到再次到达yield,返回结果</span></span><br><span class="line">after <span class="keyword">yield</span> <span class="number">0</span></span><br><span class="line">before <span class="keyword">yield</span> <span class="number">1</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.<span class="built_in">next</span>() <span class="comment"># 从上一次yield语句的下一句开始执行语句直到再次到达yield,返回结果</span></span><br><span class="line">after <span class="keyword">yield</span> <span class="number">1</span></span><br><span class="line">before <span class="keyword">yield</span> <span class="number">2</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.<span class="built_in">next</span>() <span class="comment"># 从上一次yield语句的下一句开始执行语句，由于没有再次到达yield所以抛出StopIteration异常</span></span><br><span class="line">after <span class="keyword">yield</span> <span class="number">2</span></span><br><span class="line">end</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">    File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">StopIteration</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>再看一下例子</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">integers</span>():</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Infinite sequence of integers.&quot;&quot;&quot;</span></span><br><span class="line">    i = <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">yield</span> i</span><br><span class="line">        i = i + <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">squares</span>():</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> integers():</span><br><span class="line">        <span class="keyword">yield</span> i * i</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">take</span>(<span class="params">n, seq</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Returns first n values from the given sequence.&quot;&quot;&quot;</span></span><br><span class="line">    seq = <span class="built_in">iter</span>(seq)</span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">            result.append(seq.<span class="built_in">next</span>())</span><br><span class="line">    <span class="keyword">except</span> StopIteration:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> take(<span class="number">5</span>, squares()) <span class="comment"># prints [1, 4, 9, 16, 25]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Generator-Expressions"><a href="#Generator-Expressions" class="headerlink" title="Generator Expressions"></a>Generator Expressions</h3><p>Generator Expressions are generator version of <code>list comprehensions</code>.<br>They look like list comprehensions, but returns a generator back instead of a list.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">a = [x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>)]</span><br><span class="line">a</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">a = (x*x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>))</span><br><span class="line">a</span><br><span class="line">&lt;generator <span class="built_in">object</span> &lt;genexpr&gt; at <span class="number">0x0000000005232630</span>&gt;</span><br><span class="line"></span><br><span class="line"><span class="built_in">sum</span>(a)</span><br><span class="line"><span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sum</span>((x*x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>)))</span><br><span class="line"><span class="comment">#如果只有一个参数，generator expression的()可以省略</span></span><br><span class="line"><span class="built_in">sum</span>(x*x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>))</span><br><span class="line"></span><br><span class="line">pyt = ((x, y, z) <span class="keyword">for</span> z <span class="keyword">in</span> integers() </span><br><span class="line">                    <span class="keyword">for</span> y <span class="keyword">in</span> xrange(<span class="number">1</span>, z) </span><br><span class="line">                            <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, y) </span><br><span class="line">                                <span class="keyword">if</span> x*x + y*y == z*z)</span><br><span class="line"></span><br><span class="line">pyt</span><br><span class="line">&lt;generator <span class="built_in">object</span> &lt;genexpr&gt; at <span class="number">0x0000000005232828</span>&gt;</span><br><span class="line"></span><br><span class="line">take(<span class="number">5</span>,pyt)</span><br><span class="line">[(<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>), (<span class="number">6</span>, <span class="number">8</span>, <span class="number">10</span>), (<span class="number">5</span>, <span class="number">12</span>, <span class="number">13</span>), (<span class="number">9</span>, <span class="number">12</span>, <span class="number">15</span>), (<span class="number">8</span>, <span class="number">15</span>, <span class="number">17</span>)]</span><br></pre></td></tr></table></figure>
+
+<h3 id="Example-Reading-multiple-files"><a href="#Example-Reading-multiple-files" class="headerlink" title="Example: Reading multiple files"></a>Example: Reading multiple files</h3><p>python提供的file对象就是一个iterator对象</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">f = <span class="built_in">open</span>(<span class="string">&#x27;./1.txt&#x27;</span>)</span><br><span class="line">f.<span class="built_in">next</span>()</span><br><span class="line">f.<span class="built_in">next</span>()</span><br></pre></td></tr></table></figure>
+
+<p>使用generator简化代码<br>old</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">cat</span>(<span class="params">filenames</span>):</span><br><span class="line">    <span class="keyword">for</span> f <span class="keyword">in</span> filenames:</span><br><span class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> <span class="built_in">open</span>(f):</span><br><span class="line">            <span class="built_in">print</span> line,</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">grep</span>(<span class="params">pattern, filenames</span>):</span><br><span class="line">    <span class="keyword">for</span> f <span class="keyword">in</span> filenames:</span><br><span class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> <span class="built_in">open</span>(f):</span><br><span class="line">            <span class="keyword">if</span> pattern <span class="keyword">in</span> line:</span><br><span class="line">                <span class="built_in">print</span> line,</span><br></pre></td></tr></table></figure>
+
+<p>new with generator</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">readfiles</span>(<span class="params">filenames</span>):</span><br><span class="line">    <span class="keyword">for</span> f <span class="keyword">in</span> filenames:</span><br><span class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> <span class="built_in">open</span>(f):</span><br><span class="line">            <span class="keyword">yield</span> line</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">grep</span>(<span class="params">pattern, lines</span>):</span><br><span class="line">    <span class="keyword">return</span> (line <span class="keyword">for</span> line <span class="keyword">in</span> lines <span class="keyword">if</span> pattern <span class="keyword">in</span> line)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">printlines</span>(<span class="params">lines</span>):</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> lines:</span><br><span class="line">        <span class="built_in">print</span> line,</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>(<span class="params">pattern, filenames</span>):</span><br><span class="line">    lines = readfiles(filenames)</span><br><span class="line">    lines = grep(pattern, lines)</span><br><span class="line">    printlines(lines)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Itertools"><a href="#Itertools" class="headerlink" title="Itertools"></a>Itertools</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line">it1 = <span class="built_in">iter</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line">it2 = <span class="built_in">iter</span>([<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>])</span><br><span class="line"><span class="keyword">for</span> v <span class="keyword">in</span> itertools.chain(it1, it2):</span><br><span class="line">    <span class="built_in">print</span> v</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> x, y <span class="keyword">in</span> itertools.izip([<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>], [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]:</span><br><span class="line">    <span class="built_in">print</span> x, y</span><br><span class="line"></span><br><span class="line"><span class="comment">#a 1</span></span><br><span class="line"><span class="comment">#b 2</span></span><br><span class="line"><span class="comment">#c 3</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://anandology.com/python-practice-book/iterators.html">iterators</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/2776829/difference-between-pythons-generators-and-iterators">difference-between-pythons-generators-and-iterators</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20181029: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iterator/" rel="tag"># iterator</a>
+              <a href="/tags/generator/" rel="tag"># generator</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/compile-protobuf-cpp-on-windows-10/" rel="prev" title="compile and install protobuf-cpp on windows 10">
+      <i class="fa fa-chevron-left"></i> compile and install protobuf-cpp on windows 10
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/nvidia-gpu-products/" rel="next" title="nvidia gpu products">
+      nvidia gpu products <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Iterable-Iterator"><span class="nav-number">1.</span> <span class="nav-text">Iterable &amp;&amp; Iterator</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#yrange"><span class="nav-number">1.1.</span> <span class="nav-text">yrange</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zrange"><span class="nav-number">1.2.</span> <span class="nav-text">zrange</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Generator"><span class="nav-number">2.</span> <span class="nav-text">Generator</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#How-to-work"><span class="nav-number">2.1.</span> <span class="nav-text">How to work</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generator-Expressions"><span class="nav-number">2.2.</span> <span class="nav-text">Generator Expressions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Example-Reading-multiple-files"><span class="nav-number">2.3.</span> <span class="nav-text">Example: Reading multiple files</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Itertools"><span class="nav-number">3.</span> <span class="nav-text">Itertools</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">5.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

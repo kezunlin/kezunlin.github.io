@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Guidencnnncnn 是一个为手机端极致优化的高性能神经网络前向计算框架。ncnn 从设计之初深刻考虑手机端的部署和使用。无第三方依赖，跨平台，手机端 cpu 的速度快于目前所有已知的开源框架。基于 ncnn，开发者能够将深度学习算法轻松移植到手机端高效执行，开发出人工智能 APP，将 AI 带到你的指尖。ncnn 目前已在腾讯多款应用中使用，如 QQ，Qzone，微信，天天P图等。 功能概">
+<meta property="og:type" content="article">
+<meta property="og:title" content="introduction to neural network forward&#x2F;inference framework">
+<meta property="og:url" content="https://kezunlin.me/blog/introduction-to-neural-network-forward-inference-framework/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="Guidencnnncnn 是一个为手机端极致优化的高性能神经网络前向计算框架。ncnn 从设计之初深刻考虑手机端的部署和使用。无第三方依赖，跨平台，手机端 cpu 的速度快于目前所有已知的开源框架。基于 ncnn，开发者能够将深度学习算法轻松移植到手机端高效执行，开发出人工智能 APP，将 AI 带到你的指尖。ncnn 目前已在腾讯多款应用中使用，如 QQ，Qzone，微信，天天P图等。 功能概">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-08-17T02:54:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="inference framework">
+<meta property="article:tag" content="ncnn">
+<meta property="article:tag" content="anakin">
+<meta property="article:tag" content="tensorrt">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://kezunlin.me/blog/introduction-to-neural-network-forward-inference-framework/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>introduction to neural network forward/inference framework | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/introduction-to-neural-network-forward-inference-framework/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          introduction to neural network forward/inference framework
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-08-17 10:54:00" itemprop="dateCreated datePublished" datetime="2018-08-17T10:54:00+08:00">2018-08-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deep-learning/" itemprop="url" rel="index"><span itemprop="name">deep learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Guide"><a href="#Guide" class="headerlink" title="Guide"></a>Guide</h2><h3 id="ncnn"><a href="#ncnn" class="headerlink" title="ncnn"></a>ncnn</h3><p>ncnn 是一个为手机端极致优化的高性能神经网络前向计算框架。ncnn 从设计之初深刻考虑手机端的部署和使用。无第三方依赖，跨平台，手机端 cpu 的速度快于目前所有已知的开源框架。基于 ncnn，开发者能够将深度学习算法轻松移植到手机端高效执行，开发出人工智能 APP，将 AI 带到你的指尖。ncnn 目前已在腾讯多款应用中使用，如 QQ，Qzone，微信，天天P图等。</p>
+<p>功能概述</p>
+<ul>
+<li>支持卷积神经网络，支持多输入和多分支结构，可计算部分分支</li>
+<li>无任何第三方库依赖，不依赖 BLAS&#x2F;NNPACK 等计算框架</li>
+<li>纯 C++ 实现，跨平台，支持 android ios 等</li>
+<li>ARM NEON 汇编级良心优化，计算速度极快</li>
+<li>精细的内存管理和数据结构设计，内存占用极低</li>
+<li>支持多核并行计算加速，ARM big.LITTLE cpu 调度优化</li>
+<li>整体库体积小于 500K，并可轻松精简到小于 300K</li>
+<li>可扩展的模型设计，支持 8bit 量化和半精度浮点存储，可导入 caffe 模型</li>
+<li>支持直接内存零拷贝引用加载网络模型</li>
+<li>可注册自定义层实现并扩展</li>
+<li>恩，很强就是了，不怕被塞卷 QvQ</li>
+</ul>
+<p>nihui，喜爱C&#x2F;C++，腾讯优图实验室基础研究组高级研究员，负责图像和人脸相关的技术研究和软件开发，非常热爱开源社区，系腾讯社交网络事业群首个AI开源项目ncnn负责人。</p>
+<p>features:</p>
+<ul>
+<li>跑vgg、googlenet、resnet等模型速度比其他已知的开源框架快2~4倍</li>
+<li>C++较接近底层，能控制几乎所有资源，运行代价小。目前主要是面向android和ios的，实际上只要有C++编译器就可以。无任何第三方库依赖，不依赖 BLAS&#x2F;NNPACK等计算框架</li>
+<li>ncnn代码全部使用C&#x2F;C++实现，跨平台的cmake编译系统，可在已知的绝大多数平台编译运行，如Linux，Windows，MacOS，Android，iOS等。由于ncnn不依赖第三方库，且采用C++03标准实现，只用到了std::vector和std::string两个STL模板，可轻松移植到其他系统和设备上。</li>
+<li>为什么在计算硬件上选择CPU而不是GPU？CPU的兼容性很好，但是各种各样的GPU功能支持都不一样，不容易实现，比如ios的metal和android的opencl。不否认GPU会更快，但GPU优化很复杂，想写一个通用的GPU路径很难，目前实现起来也有一定的难度。</li>
+<li>ncnn支撑着一些优图提供的算法，例如人脸相关的应用:人像自动美颜，照片风格化，超分辨率，物体识别等等，对于小型的网络模型可以跑到实时。</li>
+<li>云端vs终端？AR，VR都需要实时性，云端即使再快也无法实时，所以终端部署是很有必要的。云端适合处理大数据，比如推荐系统，安全系统，终端适合实时化的应用场景，比如智能机器人，无人驾驶。</li>
+</ul>
+<p>tools:</p>
+<ul>
+<li>caffe2ncnn: caffe模型(prototxt,caffemodel)转换为ncnn的xxx.param,xxx.bin文件</li>
+<li>ncnn2mem: 对模型xxx.param进行加密生成二进制文件xxx.param.bin</li>
+</ul>
+<p>NCNN暂时只支持opencv2。</p>
+<h3 id="FeatherCNN"><a href="#FeatherCNN" class="headerlink" title="FeatherCNN"></a>FeatherCNN</h3><p>腾讯出品。</p>
+<p>see <a target="_blank" rel="noopener" href="https://github.com/Tencent/FeatherCNN">here</a></p>
+<h3 id="mace"><a href="#mace" class="headerlink" title="mace"></a>mace</h3><p>小米出品。</p>
+<p>features</p>
+<ul>
+<li>速度：对于放在移动端进行计算的模型，一般对整体的预测延迟有着非常高的要求。在框架底层，针对ARM CPU进行了NEON指令级优化，针对移动端GPU，实现了高效的OpenCL内核代码。针对高通DSP，集成了nnlib计算库进行HVX加速。同时在算法层面，采用Winograd算法对卷积进行加速。</li>
+<li>功耗：移动端对功耗非常敏感，框架针对ARM处理器的big.LITTLE架构，提供了高性能，低功耗等多种组合配置。针对Adreno GPU，提供了不同的功耗性能选项，使得开发者能够对性能和功耗进行灵活的调整。</li>
+<li>系统响应：对于GPU计算模式，框架底层对OpenCL内核自适应的进行分拆调度，保证GPU渲染任务能够更好的进行抢占调度，从而保证系统的流畅度。</li>
+<li>初始化延迟：在实际项目中，初始化时间对用户体验至关重要，框架对此进行了针对性的优化。</li>
+<li>内存占用：通过对模型的算子进行依赖分析，引入内存复用技术，大大减少了内存的占用。</li>
+<li>模型保护：对于移动端模型，知识产权的保护往往非常重要，MACE支持将模型转换成C++代码，大大提高了逆向工程的难度。<br>此外，MACE 支持 TensorFlow 和 Caffe 模型，提供转换工具，可以将训练好的模型转换成专有的模型数据文件，同时还可以选择将模型转换成C++代码，支持生成动态库或者静态库，提高模型保密性。</li>
+</ul>
+<h3 id="TensorRT"><a href="#TensorRT" class="headerlink" title="TensorRT"></a>TensorRT</h3><p>NVIDIA TensorRT是一种用于产品开发的高性能的深度学习推理引擎，应用有图像分类，分割和目标检测，提供的帧&#x2F;秒速度比只有CPU的推理引擎高14倍。</p>
+<p>主要特点：</p>
+<p>1）生成优化了的、实现好了的、可以用于预测的模型；</p>
+<p>2）优化和部署广泛的神经网络层，如卷积，全连接，LRN，汇集，激活，softmax，Concat和反卷积层</p>
+<p>3）支持caffe prototxt网络描述文件;</p>
+<p>4）实现神经网络在全精度上（FP32）或减少（INT8、FP16精度）；</p>
+<p>5）使用自定义层API来定义和实现独特的功能；</p>
+<p>DIGITS 5和TensorRT可供NVIDIA开发者计划成员免费下载。</p>
+<p>在线的部署最大的特点是对实时性要求很高，它对latency非常敏感，要我们能非常快的给出推断（Inference）的结果。部署端不只是成本的问题，如果方法不得当，即使使用目前最先进的GPU，也无法满足推断（Inference）的实时性要求。因为模型如果做得不好，没有做优化，可能需要二三百毫秒才能做完一次推断（Inference），再加上来回的网络传输，用户可能一秒后才能得到结果。在语音识别的场景之下，用户可以等待；但是在驾驶的场景之下，可能会有性命之庾。</p>
+<p>在部署阶段，latency是非常重要的点，而TensorRT是专门针对部署端进行优化的，目前TensorRT支持大部分主流的深度学习应用，当然最擅长的是CNN（卷积神经网络）领域，但是的TensorRT 3.0也是有RNN的API。</p>
+<p>总结一下推断（Inference）和训练（Training）的不同：</p>
+<ul>
+<li><p>推断（Inference）的网络权值已经固定下来，无后向传播过程，因此可以模型固定，可以对计算图进行优化； 输入输出大小固定，可以做memory优化（注意：有一个概念是fine-tuning，即训练好的模型继续调优，只是在已有的模型做小的改动，本质上仍然是训练（Training）的过程，TensorRT没有fine-tuning）</p>
+</li>
+<li><p>推断（Inference）的batch size要小很多，仍然是latency的问题，因为训练(training)如果batch size很大，吞吐可以达到很大，比如每秒可以处理1024个batch，500毫秒处理完，吞吐可以达到2048，可以很好地利用GPU；但是推断（Inference）不能做500毫秒处理，可以是8或者16，吞吐降低，没有办法很好地利用GPU.</p>
+</li>
+<li><p>推断（Inference）可以使用低精度的技术，训练的时候因为要保证前后向传播，每次梯度的更新是很微小的，这个时候需要相对较高的精度，一般来说需要float型，如FP32，32位的浮点型来处理数据，但是在推断（Inference）的时候，对精度的要求没有那么高，很多研究表明可以用低精度，如半长（16）的float型，即FP16，也可以用8位的整型（INT8）来做推断（Inference），研究结果表明没有特别大的精度损失，尤其对CNN。更有甚者，对Binary（二进制）的使用也处在研究过程中，即权值只有0和1。目前FP16和INT8的研究使用相对来说比较成熟。低精度计算的好处是一方面可以减少计算量，原来计算32位的单元处理FP16的时候，理论上可以达到两倍的速度，处理INT8的时候理论上可以达到四倍的速度。当然会引入一些其他额外的操作，后面的讲解中会详细介绍FP18和INT8；另一方面是模型需要的空间减少，不管是权值的存储还是中间值的存储，应用更低的精度，模型大小会相应减小。</p>
+</li>
+</ul>
+<p>暂时抛开TensorRT，如果让大家从头写一个深度学习模型的前向过程，具体过程应该是</p>
+<ol>
+<li><p>首先实现NN的layer，如卷积的实现，pooling的实现。</p>
+</li>
+<li><p>管理memory，数据在各层之间如何流动。</p>
+</li>
+<li><p>推断（Inference）的engine来调用各层的实现。</p>
+</li>
+</ol>
+<p>TensorRT高级特征介绍:</p>
+<ul>
+<li>插件支持: 在某些层TensorRT不支持的情况下，需要通过Plugin的形式自己去实现。</li>
+<li>低精度支持: 低精度指的是之前所说过的FP16和INT8，其中FP16主要是Pascal P100和V100（tensor core）这两张卡支持；而INT8主要针对的是 P4和P40这两张卡，P4是专门针对线上做推断（Inference）的小卡，和IPhone手机差不多大，75瓦的一张卡，功耗和性能非常好。</li>
+<li>Python接口和更多的框架支持: TensorRT目前支持Python和C++的API。Model importer（即Parser）主要支持Caffe和Uff，其他的框架可以通过API来添加。TensorRT去做推断（Inference）的时候是不再需要框架的（caffe,tensorflow）</li>
+</ul>
+<p>低精度的推断（Inference）</p>
+<ul>
+<li><p>FP16 推断（Inference: TensorRT支持高度自动化的FP16推断（Inference），解析模型要将模型的的数据类型设置为DataType::kHALF，同时通过builder- &gt;setHalf2Mode(true)指令将推断（Inference）设置为FP16的模式。需要注意两点，一点是FP16推断（Inference）不需要额外的输入，只需要输入预先训练好的FP32模型，另一点是目前只有Tesla P100&#x2F;V100支持原生的FP16。</p>
+</li>
+<li><p>INT8 推断（Inference: 主要关注INT8推断（Inference）的几个方面，即：如何生成校准表，如何使用校准表，和INT8推断（Inference）实例。</p>
+</li>
+</ul>
+<p> 最后总结一下TensorRT的优点：</p>
+<ul>
+<li>TensorRT是一个高性能的深度学习推断（Inference）的优化器和运行的引擎；</li>
+<li>TensorRT支持Plugin，对于不支持的层，用户可以通过Plugin来支持自定义创建；</li>
+<li>TensorRT使用低精度的技术获得相对于FP32二到三倍的加速，用户只需要通过相应的代码来实现。</li>
+</ul>
+<h3 id="Anakin"><a href="#Anakin" class="headerlink" title="Anakin"></a>Anakin</h3><p>百度PaddlePaddle Anakin。<br>see <a target="_blank" rel="noopener" href="https://github.com/PaddlePaddle/Anakin">here</a></p>
+<p>Anakin supports a wide range of neural network architectures and different hardware platforms. It is easy to run Anakin on GPU &#x2F; x86 &#x2F; ARM platform.</p>
+<h3 id="TVM"><a href="#TVM" class="headerlink" title="TVM"></a>TVM</h3><p>see <a target="_blank" rel="noopener" href="https://github.com/dmlc/tvm">here</a></p>
+<p>TVM是一个全新的框架，可以：</p>
+<ul>
+<li>为CPU、GPU和其他专用硬件，表示和优化常见的深度学习计算工作负载</li>
+<li>自动转换计算图以最小化内存占用，优化数据布局和融合计算模式</li>
+<li>提供端到端编译，从现有的前端框架到裸机硬件，直到浏览器可执行的javascript</li>
+</ul>
+<p>在TVM的帮助下，可以轻松在手机、嵌入式设备甚至浏览器上运行深度学习的工作负载，而不需要额外的工作。TVM还为许多硬件平台上的深度学习工作负载，提供统一的优化框架，包括依赖于新计算基元的专用加速器。</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://news.yesky.com/hotnews/305/275888305.shtml">腾讯优图　ncnn</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/sanallen/article/details/79022669">ncnn compile for arm</a></li>
+<li><a target="_blank" rel="noopener" href="https://baijiahao.baidu.com/s?id=1604506265110753139&wfr=spider&for=pc">小米　mace</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Tencent/ncnn">ncnn git</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/XiaoMi/mace">mace igt</a></li>
+</ul>
+<p>TenorRT</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-developer-guide/index.html">tensorrt-developer-guide</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/dusty-nv/jetson-inference">TensorRT inferene for classification</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/59fe26073a41">NVIDIA TensorRT使用记录</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/35657027">高性能深度学习支持引擎实战——TensorRT</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/28597477">tvm</a></p>
+</li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180817: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/inference-framework/" rel="tag"># inference framework</a>
+              <a href="/tags/ncnn/" rel="tag"># ncnn</a>
+              <a href="/tags/anakin/" rel="tag"># anakin</a>
+              <a href="/tags/tensorrt/" rel="tag"># tensorrt</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/py-faster-rcnn-tutorials/" rel="prev" title="a quick guide to py-faster-rcnn">
+      <i class="fa fa-chevron-left"></i> a quick guide to py-faster-rcnn
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/guide-to-install-and-use-bazel-on-ubuntu-16-04/" rel="next" title="how to install and use bazel on ubuntu 16.04">
+      how to install and use bazel on ubuntu 16.04 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Guide"><span class="nav-number">1.</span> <span class="nav-text">Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ncnn"><span class="nav-number">1.1.</span> <span class="nav-text">ncnn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FeatherCNN"><span class="nav-number">1.2.</span> <span class="nav-text">FeatherCNN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mace"><span class="nav-number">1.3.</span> <span class="nav-text">mace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TensorRT"><span class="nav-number">1.4.</span> <span class="nav-text">TensorRT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Anakin"><span class="nav-number">1.5.</span> <span class="nav-text">Anakin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TVM"><span class="nav-number">1.6.</span> <span class="nav-text">TVM</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

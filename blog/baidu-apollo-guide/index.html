@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="opendriveintroductionfeatures  xml .xodr  version   v0.7 2005 v1.1 2007-04-11 v1.2 2008-01-06 v1.3 2010-08-07 v1.4 2015-11-04  viewer12wget http:&#x2F;&#x2F;www.opendrive.org&#x2F;tools&#x2F;odrViewer64.zipwget http:&#x2F;&#x2F;ww">
+<meta property="og:type" content="article">
+<meta property="og:title" content="opendrive and baidu apollo guide">
+<meta property="og:url" content="https://kezunlin.me/blog/baidu-apollo-guide/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="opendriveintroductionfeatures  xml .xodr  version   v0.7 2005 v1.1 2007-04-11 v1.2 2008-01-06 v1.3 2010-08-07 v1.4 2015-11-04  viewer12wget http:&#x2F;&#x2F;www.opendrive.org&#x2F;tools&#x2F;odrViewer64.zipwget http:&#x2F;&#x2F;ww">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://aliyunzixunbucket.oss-cn-beijing.aliyuncs.com/csdn/273d4d4b-0514-49e9-be27-a0c6f224f525">
+<meta property="og:image" content="http://aliyunzixunbucket.oss-cn-beijing.aliyuncs.com/csdn/3876d155-5bce-40a4-9632-d201bb34b528">
+<meta property="og:image" content="https://img-blog.csdn.net/20180416100106333?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0Rpbm5lckhvd2U=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="article:published_time" content="2019-01-09T07:58:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="baidu">
+<meta property="article:tag" content="apollo">
+<meta property="article:tag" content="opendrive">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://aliyunzixunbucket.oss-cn-beijing.aliyuncs.com/csdn/273d4d4b-0514-49e9-be27-a0c6f224f525">
+
+<link rel="canonical" href="https://kezunlin.me/blog/baidu-apollo-guide/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>opendrive and baidu apollo guide | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/baidu-apollo-guide/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          opendrive and baidu apollo guide
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-01-09 15:58:00" itemprop="dateCreated datePublished" datetime="2019-01-09T15:58:00+08:00">2019-01-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deep-learning/" itemprop="url" rel="index"><span itemprop="name">deep learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="opendrive"><a href="#opendrive" class="headerlink" title="opendrive"></a>opendrive</h2><h3 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h3><p>features</p>
+<ul>
+<li>xml</li>
+<li>.xodr</li>
+</ul>
+<p>version </p>
+<ul>
+<li>v0.7 2005</li>
+<li>v1.1 2007-04-11</li>
+<li>v1.2 2008-01-06</li>
+<li>v1.3 2010-08-07</li>
+<li>v1.4 2015-11-04</li>
+</ul>
+<h3 id="viewer"><a href="#viewer" class="headerlink" title="viewer"></a>viewer</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget http://www.opendrive.org/tools/odrViewer64.zip</span><br><span class="line">wget http://www.opendrive.org/tools/CulDeSac.xodr</span><br></pre></td></tr></table></figure>
+
+<h3 id="apollo-opendrive"><a href="#apollo-opendrive" class="headerlink" title="apollo opendrive"></a>apollo opendrive</h3><p>The <code>Apollo OpenDrive Format</code> has modified and extended the standard <code>OpenDrive specification</code>, so if necessary, you can email us，or you can leave your email address，we will send the the Apollo OpenDrive specification to you.</p>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<h2 id="Baidu-Apollo"><a href="#Baidu-Apollo" class="headerlink" title="Baidu Apollo"></a>Baidu Apollo</h2><h3 id="intro"><a href="#intro" class="headerlink" title="intro"></a>intro</h3><ul>
+<li>去中心化</li>
+</ul>
+<p>ROS 在安全性上的一个不足是 ROS 需要有一个节点作为主服务器，用于建立各节点之间的通信连接。这一机制使得ROS节点的容错性增强，各模块的隔离程度增高，但也带来了单点失效（single-point failure）的风险。由于 ROS 本身缺乏针对这种状况的异常恢复机制，当服务器宕机时，整个系统会崩溃。这种情况如果发生在自动驾驶行驶过程中，无疑会造成车毁人忙的后果。针对于此，Apollo 采用了FAST RTPS (real-time Publish&#x2F;Subscribe）来实现去中心化。</p>
+<ul>
+<li>共享内存</li>
+</ul>
+<p>ROS节点之间的通信是通过 socket 完成的，在进行数据广播的时候，底层使用的是多个点对点的传送。这种方式速度比较缓慢，且使用了较多的资源。Apollo 使用共享内存的方式对其进行改进，加快了通信速率，减少了CPU损耗。</p>
+<ul>
+<li>支持Protobuf</li>
+</ul>
+<p>Apollo 将 google 的 Protobuf 与 ROS 深度集成，用于提高数据的版本兼容性。其优势在于当模块接口升级以后，通讯的数据也可以相互兼容。另一个好处是宝贵的自动驾驶的历史数据在模块升级后也可以一直被使用。</p>
+<h3 id="modules"><a href="#modules" class="headerlink" title="modules"></a>modules</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/ApolloAuto/apollo.git</span><br></pre></td></tr></table></figure>
+
+<p>Apollo源码主要是c++实现的，也有少量python，主要程序在<code>apollo/modules</code>目录中</p>
+<p>其中每个模块的作用如下：</p>
+<ul>
+<li>apollo&#x2F;modules&#x2F;calibration ： 校准模块，使用前必须对系统进行校准和标定，包括激光雷达与摄像头、毫米波雷达与摄像头等。所谓校准就是要对齐激光雷达、摄像头以及毫米波雷达获得的信息，我们知道激光雷达可以获得详细的3D信息，但是不能获得颜色信息，摄像头可以获得颜色信息，但是无法获得深度等3D信息，毫米波雷达不能获得颜色信息，但是可以获得3D信息，三者获得的信息对齐后，就可以同时获得实际环境中的3D信息和颜色信息。</li>
+</ul>
+<p><img src="http://aliyunzixunbucket.oss-cn-beijing.aliyuncs.com/csdn/273d4d4b-0514-49e9-be27-a0c6f224f525" alt="camera+lidar"></p>
+<p><img src="http://aliyunzixunbucket.oss-cn-beijing.aliyuncs.com/csdn/3876d155-5bce-40a4-9632-d201bb34b528" alt="lidar+radar"></p>
+<ul>
+<li>apollo&#x2F;modules&#x2F;canbus：汽车can总线控制模块。接收控制指令，同时给控制模块control发送车身状态信息。</li>
+<li>apollo&#x2F;modules&#x2F;common：公共源码模块。包括如日志，工厂模式的实现，日志系统，监控模块，数学算法等。</li>
+<li>apollo&#x2F;modules&#x2F;control：控制模块。基于决策规划的输出路径及车身的状态使用不同的控制算法来输出控制命令，如转向刹车，控制等。</li>
+<li>apollo&#x2F;modules&#x2F;data：数据模块。收集、存储、处理收集到的各种数据的。</li>
+<li>apollo&#x2F;modules&#x2F;dreamview：可视化模块。查看规划的轨迹及实时的转向刹车油门信息</li>
+<li>apollo&#x2F;modules&#x2F;drivers：驱动模块。各种传感器驱动。</li>
+<li>apollo&#x2F;modules&#x2F;e2e：end to end，端到端强化学习。所谓e2e指的是由传感器的输入，直接决定车的行为，例如油门，刹车，方向等。也就是机器学习的算法直接学习人类司机的驾驶行为。这部分在代码中需要另外下载，学习的数据主要来源于传感器的原始数据，包括图像、激光雷达、雷达等。end-to-end输入以图像为主。 输出是车辆的控制决策指令，如方向盘角度、加速、刹车。 连接输入输出的是深度神经网络，即通过神经网络直接生成车辆控制指令对车辆进行横向控制和纵向控制，中间没有人工参与的逻辑程序。横向控制，主要是指通过方向盘控制车身横向移动，即方向盘角度。纵向控制，是指通过油门和刹车控制车身纵向的移动，即加速、刹车等。横向模型的输出没有采用方向盘角度，而是使用要行驶的曲率（即拐弯半径的倒数)。</li>
+<li>apollo&#x2F;modules&#x2F;elo：利用高精地图的自定位模块。这部分的代码也是另外下载。前向的摄像头会采集车道数据以实现更精确的定位，输出的位置信息包括车辆的x y z坐标，还有就是在百度高精度地图中的ID。</li>
+<li>apollo&#x2F;modules&#x2F;localization：定位模块。输入GPS和IMU信息输出自车定位信息</li>
+<li>apollo&#x2F;modules&#x2F;map：高精地图模块。输出结构化地图信息，如车道线，十字路口等。</li>
+<li>apollo&#x2F;modules&#x2F;monitor：监控模块。监控硬件状态，同时把状态发给交互界面。</li>
+<li>apollo&#x2F;modules&#x2F;perception：感知模块。输入激光点云，高精地图，变换坐标，输出3D障碍物包括速度大小和方向。</li>
+<li>apollo&#x2F;modules&#x2F;planning：局部决策规划模块。</li>
+<li>apollo&#x2F;modules&#x2F;prediction：预测模块。输出感知的障碍物信息及自定位信息输出障碍物未来的轨迹。</li>
+<li>apollo&#x2F;modules&#x2F;routing：全局规划模块。输入包括地图信息各起点终点地址，输出一个全局的导航信息。</li>
+<li>apollo&#x2F;modules&#x2F;third_party_perception：第三方感知模块。</li>
+<li>apollo&#x2F;modules&#x2F;tools：通用监控与可视化模块。</li>
+</ul>
+<blockquote>
+<p>感知模块也只是使用了激光雷达，没有和camera或者雷达做融合，也没有单独使用到camera和雷达。</p>
+</blockquote>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+<h4 id="AdapterManager"><a href="#AdapterManager" class="headerlink" title="AdapterManager"></a>AdapterManager</h4><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/davidhopper/article/details/79183557">AdapterManager解析</a></li>
+</ul>
+<h4 id="perception"><a href="#perception" class="headerlink" title="perception"></a>perception</h4><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33801763/article/details/79092240">百度Apollo(二)：障碍物感知模块</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ApolloAuto/apollo/blob/master/docs/specs/3d_obstacle_perception_cn.md">3d_obstacle_perception</a></li>
+</ul>
+<h3 id="workflow"><a href="#workflow" class="headerlink" title="workflow"></a>workflow</h3><p><img src="https://img-blog.csdn.net/20180416100106333?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0Rpbm5lckhvd2U=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="workflow"></p>
+<p>在实时系统中一个任务的调度方式通常可大致分为两类：时间驱动(timer-triggered) 和 事件驱动(event-triggered)。</p>
+<h3 id="coordinate"><a href="#coordinate" class="headerlink" title="coordinate"></a>coordinate</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/ApolloAuto/apollo/blob/master/docs/specs/coordination_cn.md">coordination_cn</a></li>
+</ul>
+<h3 id="lidar-calibration"><a href="#lidar-calibration" class="headerlink" title="lidar calibration"></a>lidar calibration</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/ApolloAuto/apollo/blob/master/docs/specs/lidar_calibration_cn.pdf">lidar_calibration_cn</a></li>
+</ul>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://www.opendrive.org/download.html">opendrive</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/OpenDRIVE_(specification)">OpenDRIVE_(specification)</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ApolloAuto/apollo/issues/603">Apollo HDMap</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ApolloAuto/apollo">baidu apollo</a></li>
+<li><strong><a target="_blank" rel="noopener" href="https://apolloauto.github.io/doxygen/apollo/namespaces.html">apollo doxygen</a></strong></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/DinnerHowe/article/details/79936038">apollo简介</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/dinnerhowe/article/details/79957589">apollo源码解析</a></li>
+<li><a target="_blank" rel="noopener" href="https://yq.aliyun.com/ziliao/303177">apollo 2.0源码解析</a></li>
+<li><strong><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/28708170">Apollo 1.0 源码分析</a></strong></li>
+<li><strong><a target="_blank" rel="noopener" href="https://www.zhihu.com/people/is_yuanji/posts">Apollo 2.0 框架及源码分析</a></strong></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/davidhopper/article/details/79183557">AdapterManager解析</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20190109: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/baidu/" rel="tag"># baidu</a>
+              <a href="/tags/apollo/" rel="tag"># apollo</a>
+              <a href="/tags/opendrive/" rel="tag"># opendrive</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/zsh-for-linux/" rel="prev" title="how to install and use zsh command on linux">
+      <i class="fa fa-chevron-left"></i> how to install and use zsh command on linux
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/protobuf-usage/" rel="next" title="protobuf tutorial">
+      protobuf tutorial <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#opendrive"><span class="nav-number">1.</span> <span class="nav-text">opendrive</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#introduction"><span class="nav-number">1.1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#viewer"><span class="nav-number">1.2.</span> <span class="nav-text">viewer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#apollo-opendrive"><span class="nav-number">1.3.</span> <span class="nav-text">apollo opendrive</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Baidu-Apollo"><span class="nav-number">2.</span> <span class="nav-text">Baidu Apollo</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#intro"><span class="nav-number">2.1.</span> <span class="nav-text">intro</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#modules"><span class="nav-number">2.2.</span> <span class="nav-text">modules</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AdapterManager"><span class="nav-number">2.2.1.</span> <span class="nav-text">AdapterManager</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#perception"><span class="nav-number">2.2.2.</span> <span class="nav-text">perception</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#workflow"><span class="nav-number">2.3.</span> <span class="nav-text">workflow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#coordinate"><span class="nav-number">2.4.</span> <span class="nav-text">coordinate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lidar-calibration"><span class="nav-number">2.5.</span> <span class="nav-text">lidar calibration</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">4.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

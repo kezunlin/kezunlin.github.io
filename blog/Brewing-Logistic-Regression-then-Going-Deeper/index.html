@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kezunlin.me","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="TutorialWhile Caffe is made for deep networks it can likewise represent “shallow” models like logistic regression for classification. We’ll do simple logistic regression on synthetic data that we’ll g">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Brewing Logistic Regression then Going Deeper">
+<meta property="og:url" content="https://kezunlin.me/blog/Brewing-Logistic-Regression-then-Going-Deeper/index.html">
+<meta property="og:site_name" content="Kezunlin&#39;s Blog">
+<meta property="og:description" content="TutorialWhile Caffe is made for deep networks it can likewise represent “shallow” models like logistic regression for classification. We’ll do simple logistic regression on synthetic data that we’ll g">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kezunlin.me/images/posts/635233-20180102164944737-905775071.png">
+<meta property="article:published_time" content="2018-01-02T08:53:00.000Z">
+<meta property="article:modified_time" content="2024-10-14T05:39:28.656Z">
+<meta property="article:author" content="kezunlin">
+<meta property="article:tag" content="caffe">
+<meta property="article:tag" content="sklearn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kezunlin.me/images/posts/635233-20180102164944737-905775071.png">
+
+<link rel="canonical" href="https://kezunlin.me/blog/Brewing-Logistic-Regression-then-Going-Deeper/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Brewing Logistic Regression then Going Deeper | Kezunlin's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Kezunlin's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Kezunlin's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Live and Learn</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kezunlin.me/blog/Brewing-Logistic-Regression-then-Going-Deeper/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="kezunlin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kezunlin's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Brewing Logistic Regression then Going Deeper
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-01-02 16:53:00" itemprop="dateCreated datePublished" datetime="2018-01-02T16:53:00+08:00">2018-01-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-10-14 13:39:28" itemprop="dateModified" datetime="2024-10-14T13:39:28+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index"><span itemprop="name">machine learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Tutorial"><a href="#Tutorial" class="headerlink" title="Tutorial"></a>Tutorial</h2><p>While Caffe is made for deep networks it can likewise represent “shallow” models like logistic regression for classification. We’ll do simple logistic regression on synthetic data that we’ll generate and save to HDF5 to feed vectors to Caffe. Once that model is done, we’ll add layers to improve accuracy. That’s what Caffe is about: define a model, experiment, and then deploy.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">%matplotlib inline</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.chdir(<span class="string">&#x27;..&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.path.insert(<span class="number">0</span>, <span class="string">&#x27;./python&#x27;</span>)</span><br><span class="line"><span class="keyword">import</span> caffe</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> h5py</span><br><span class="line"><span class="keyword">import</span> shutil</span><br><span class="line"><span class="keyword">import</span> tempfile</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sklearn</span><br><span class="line"><span class="keyword">import</span> sklearn.datasets</span><br><span class="line"><span class="keyword">import</span> sklearn.linear_model</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br></pre></td></tr></table></figure>
+
+<p>Synthesize a dataset of 10,000 4-vectors for binary classification with 2 informative features and 2 noise features.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">X, y = sklearn.datasets.make_classification(</span><br><span class="line">    n_samples=<span class="number">10000</span>, n_features=<span class="number">4</span>, n_redundant=<span class="number">0</span>, n_informative=<span class="number">2</span>, </span><br><span class="line">    n_clusters_per_class=<span class="number">2</span>, hypercube=<span class="literal">False</span>, random_state=<span class="number">0</span></span><br><span class="line">)</span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;data,&#x27;</span>,X.shape,y.shape <span class="comment"># (10000, 4) (10000,) x0,x1,x2,x3, y</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Split into train and test</span></span><br><span class="line">X, Xt, y, yt = sklearn.model_selection.train_test_split(X, y)</span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;train,&#x27;</span>,X.shape,y.shape  <span class="comment">#train: (7500, 4) (7500,)</span></span><br><span class="line"><span class="built_in">print</span> <span class="string">&#x27;test,&#x27;</span>, Xt.shape,yt.shape<span class="comment">#test:  (2500, 4) (2500,)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Visualize sample of the data</span></span><br><span class="line">ind = np.random.permutation(X.shape[<span class="number">0</span>])[:<span class="number">1000</span>] <span class="comment"># (7500,)---&gt;(1000,)   x0,x1,x2,x3, y</span></span><br><span class="line">df = pd.DataFrame(X[ind])</span><br><span class="line">_ = pd.plotting.scatter_matrix(df, figsize=(<span class="number">9</span>, <span class="number">9</span>), diagonal=<span class="string">&#x27;kde&#x27;</span>, marker=<span class="string">&#x27;o&#x27;</span>, s=<span class="number">40</span>, alpha=<span class="number">.4</span>, c=y[ind])</span><br></pre></td></tr></table></figure>
+
+<pre><code>data, (10000, 4) (10000,)
+train, (7500, 4) (7500,)
+test, (2500, 4) (2500,)
+</code></pre>
+<p><img src="https://kezunlin.me/images/posts/635233-20180102164944737-905775071.png" alt="scatter matrix"></p>
+<p>Learn and evaluate scikit-learn’s logistic regression with stochastic gradient descent (SGD) training. Time and check the classifier’s accuracy.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">%%timeit</span><br><span class="line"><span class="comment"># Train and test the scikit-learn SGD logistic regression.</span></span><br><span class="line">clf = sklearn.linear_model.SGDClassifier(</span><br><span class="line">    loss=<span class="string">&#x27;log&#x27;</span>, n_iter=<span class="number">1000</span>, penalty=<span class="string">&#x27;l2&#x27;</span>, alpha=<span class="number">5e-4</span>, class_weight=<span class="string">&#x27;balanced&#x27;</span>)</span><br><span class="line"></span><br><span class="line">clf.fit(X, y)</span><br><span class="line">yt_pred = clf.predict(Xt)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Accuracy: &#123;:.3f&#125;&#x27;</span>.<span class="built_in">format</span>(sklearn.metrics.accuracy_score(yt, yt_pred)))</span><br></pre></td></tr></table></figure>
+
+<pre><code>Accuracy: 0.781
+Accuracy: 0.781
+Accuracy: 0.781
+Accuracy: 0.781
+1 loop, best of 3: 372 ms per loop
+</code></pre>
+<p>Save the dataset to HDF5 for loading in Caffe.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Write out the data to HDF5 files in a temp directory.</span></span><br><span class="line"><span class="comment"># This file is assumed to be caffe_root/examples/hdf5_classification.ipynb</span></span><br><span class="line">dirname = os.path.abspath(<span class="string">&#x27;./examples/hdf5_classification/data&#x27;</span>)</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(dirname):</span><br><span class="line">    os.makedirs(dirname)</span><br><span class="line"></span><br><span class="line">train_filename = os.path.join(dirname, <span class="string">&#x27;train.h5&#x27;</span>)</span><br><span class="line">test_filename = os.path.join(dirname, <span class="string">&#x27;test.h5&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># HDF5DataLayer source should be a file containing a list of HDF5 filenames.</span></span><br><span class="line"><span class="comment"># To show this off, we&#x27;ll list the same data file twice.</span></span><br><span class="line"><span class="keyword">with</span> h5py.File(train_filename, <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f[<span class="string">&#x27;data&#x27;</span>] = X</span><br><span class="line">    f[<span class="string">&#x27;label&#x27;</span>] = y.astype(np.float32)</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(os.path.join(dirname, <span class="string">&#x27;train.txt&#x27;</span>), <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(train_filename + <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    f.write(train_filename + <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    </span><br><span class="line"><span class="comment"># HDF5 is pretty efficient, but can be further compressed.</span></span><br><span class="line">comp_kwargs = &#123;<span class="string">&#x27;compression&#x27;</span>: <span class="string">&#x27;gzip&#x27;</span>, <span class="string">&#x27;compression_opts&#x27;</span>: <span class="number">1</span>&#125;</span><br><span class="line"><span class="keyword">with</span> h5py.File(test_filename, <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.create_dataset(<span class="string">&#x27;data&#x27;</span>, data=Xt, **comp_kwargs)</span><br><span class="line">    f.create_dataset(<span class="string">&#x27;label&#x27;</span>, data=yt.astype(np.float32), **comp_kwargs)</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(os.path.join(dirname, <span class="string">&#x27;test.txt&#x27;</span>), <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(test_filename + <span class="string">&#x27;\n&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>Let’s define logistic regression in Caffe through Python net specification. This is a quick and natural way to define nets that sidesteps manually editing the protobuf model.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> caffe <span class="keyword">import</span> layers <span class="keyword">as</span> L</span><br><span class="line"><span class="keyword">from</span> caffe <span class="keyword">import</span> params <span class="keyword">as</span> P</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">logreg</span>(<span class="params">hdf5, batch_size</span>):</span><br><span class="line">    <span class="comment"># logistic regression: data, matrix multiplication, and 2-class softmax loss</span></span><br><span class="line">    n = caffe.NetSpec()</span><br><span class="line">    n.data, n.label = L.HDF5Data(batch_size=batch_size, source=hdf5, ntop=<span class="number">2</span>)</span><br><span class="line">    n.ip1 = L.InnerProduct(n.data, num_output=<span class="number">2</span>, weight_filler=<span class="built_in">dict</span>(<span class="built_in">type</span>=<span class="string">&#x27;xavier&#x27;</span>))</span><br><span class="line">    n.accuracy = L.Accuracy(n.ip1, n.label)</span><br><span class="line">    n.loss = L.SoftmaxWithLoss(n.ip1, n.label)</span><br><span class="line">    <span class="keyword">return</span> n.to_proto()</span><br><span class="line"></span><br><span class="line">train_net_path = <span class="string">&#x27;examples/hdf5_classification/logreg_auto_train.prototxt&#x27;</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(train_net_path, <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(<span class="built_in">str</span>(logreg(<span class="string">&#x27;examples/hdf5_classification/data/train.txt&#x27;</span>, <span class="number">10</span>)))</span><br><span class="line"></span><br><span class="line">test_net_path = <span class="string">&#x27;examples/hdf5_classification/logreg_auto_test.prototxt&#x27;</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(test_net_path, <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(<span class="built_in">str</span>(logreg(<span class="string">&#x27;examples/hdf5_classification/data/test.txt&#x27;</span>, <span class="number">10</span>)))</span><br></pre></td></tr></table></figure>
+
+<p>Now, we’ll define our “solver” which trains the network by specifying the locations of the train and test nets we defined above, as well as setting values for various parameters used for learning, display, and “snapshotting”.</p>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- kzl in-article ad -->
+<p><ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5653382914441020"
+     data-ad-slot="7925631830"></ins></p>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> caffe.proto <span class="keyword">import</span> caffe_pb2</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">solver</span>(<span class="params">train_net_path, test_net_path</span>):</span><br><span class="line">    s = caffe_pb2.SolverParameter()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Specify locations of the train and test networks.</span></span><br><span class="line">    s.train_net = train_net_path</span><br><span class="line">    s.test_net.append(test_net_path)</span><br><span class="line"></span><br><span class="line">    s.test_interval = <span class="number">1000</span>  <span class="comment"># Test after every 1000 training iterations.</span></span><br><span class="line">    s.test_iter.append(<span class="number">250</span>) <span class="comment"># Test 250 &quot;batches&quot; each time we test.</span></span><br><span class="line"></span><br><span class="line">    s.max_iter = <span class="number">10000</span>      <span class="comment"># # of times to update the net (training iterations)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Set the initial learning rate for stochastic gradient descent (SGD).</span></span><br><span class="line">    s.base_lr = <span class="number">0.01</span>        </span><br><span class="line"></span><br><span class="line">    <span class="comment"># Set `lr_policy` to define how the learning rate changes during training.</span></span><br><span class="line">    <span class="comment"># Here, we &#x27;step&#x27; the learning rate by multiplying it by a factor `gamma`</span></span><br><span class="line">    <span class="comment"># every `stepsize` iterations.</span></span><br><span class="line">    s.lr_policy = <span class="string">&#x27;step&#x27;</span></span><br><span class="line">    s.gamma = <span class="number">0.1</span></span><br><span class="line">    s.stepsize = <span class="number">5000</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Set other optimization parameters. Setting a non-zero `momentum` takes a</span></span><br><span class="line">    <span class="comment"># weighted average of the current gradient and previous gradients to make</span></span><br><span class="line">    <span class="comment"># learning more stable. L2 weight decay regularizes learning, to help prevent</span></span><br><span class="line">    <span class="comment"># the model from overfitting.</span></span><br><span class="line">    s.momentum = <span class="number">0.9</span></span><br><span class="line">    s.weight_decay = <span class="number">5e-4</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Display the current training loss and accuracy every 1000 iterations.</span></span><br><span class="line">    s.display = <span class="number">1000</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Snapshots are files used to store networks we&#x27;ve trained.  Here, we&#x27;ll</span></span><br><span class="line">    <span class="comment"># snapshot every 10K iterations -- just once at the end of training.</span></span><br><span class="line">    <span class="comment"># For larger networks that take longer to train, you may want to set</span></span><br><span class="line">    <span class="comment"># snapshot &lt; max_iter to save the network and training state to disk during</span></span><br><span class="line">    <span class="comment"># optimization, preventing disaster in case of machine crashes, etc.</span></span><br><span class="line">    s.snapshot = <span class="number">10000</span></span><br><span class="line">    s.snapshot_prefix = <span class="string">&#x27;examples/hdf5_classification/data/train&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># We&#x27;ll train on the CPU for fair benchmarking against scikit-learn.</span></span><br><span class="line">    <span class="comment"># Changing to GPU should result in much faster training!</span></span><br><span class="line">    s.solver_mode = caffe_pb2.SolverParameter.CPU</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> s</span><br><span class="line"></span><br><span class="line">solver_path = <span class="string">&#x27;examples/hdf5_classification/logreg_solver.prototxt&#x27;</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(solver_path, <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(<span class="built_in">str</span>(solver(train_net_path, test_net_path)))</span><br></pre></td></tr></table></figure>
+
+<p>Time to learn and evaluate our Caffeinated logistic regression in Python.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">%%timeit</span><br><span class="line">caffe.set_mode_cpu()</span><br><span class="line">solver = caffe.get_solver(solver_path)</span><br><span class="line">solver.solve()</span><br><span class="line"></span><br><span class="line">accuracy = <span class="number">0</span></span><br><span class="line">batch_size = solver.test_nets[<span class="number">0</span>].blobs[<span class="string">&#x27;data&#x27;</span>].num</span><br><span class="line">test_iters = <span class="built_in">int</span>(<span class="built_in">len</span>(Xt) / batch_size)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(test_iters):</span><br><span class="line">    solver.test_nets[<span class="number">0</span>].forward()</span><br><span class="line">    accuracy += solver.test_nets[<span class="number">0</span>].blobs[<span class="string">&#x27;accuracy&#x27;</span>].data</span><br><span class="line">accuracy /= test_iters</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Accuracy: &#123;:.3f&#125;&quot;</span>.<span class="built_in">format</span>(accuracy))</span><br></pre></td></tr></table></figure>
+
+<pre><code>Accuracy: 0.770
+Accuracy: 0.770
+Accuracy: 0.770
+Accuracy: 0.770
+1 loop, best of 3: 195 ms per loop
+</code></pre>
+<p>Do the same through the command line interface for detailed output on the model and solving.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!./build/tools/caffe train -solver examples/hdf5_classification/logreg_solver.prototxt</span><br></pre></td></tr></table></figure>
+
+<pre><code>I0224 00:32:03.232779   655 caffe.cpp:178] Use CPU.
+I0224 00:32:03.391911   655 solver.cpp:48] Initializing solver from parameters: 
+train_net: &quot;examples/hdf5_classification/logreg_auto_train.prototxt&quot;
+test_net: &quot;examples/hdf5_classification/logreg_auto_test.prototxt&quot;
+......
+I0224 00:32:04.087514   655 solver.cpp:406]     Test net output #0: accuracy = 0.77
+I0224 00:32:04.087532   655 solver.cpp:406]     Test net output #1: loss = 0.593815 (* 1 = 0.593815 loss)
+I0224 00:32:04.087541   655 solver.cpp:323] Optimization Done.
+I0224 00:32:04.087548   655 caffe.cpp:222] Optimization Done.
+</code></pre>
+<p>If you look at output or the <code>logreg_auto_train.prototxt</code>, you’ll see that the model is simple logistic regression.<br>We can make it a little more advanced by introducing a non-linearity between weights that take the input and weights that give the output – now we have a two-layer network.<br>That network is given in <code>nonlinear_auto_train.prototxt</code>, and that’s the only change made in <code>nonlinear_logreg_solver.prototxt</code> which we will now use.</p>
+<p>The final accuracy of the new network should be higher than logistic regression!</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> caffe <span class="keyword">import</span> layers <span class="keyword">as</span> L</span><br><span class="line"><span class="keyword">from</span> caffe <span class="keyword">import</span> params <span class="keyword">as</span> P</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">nonlinear_net</span>(<span class="params">hdf5, batch_size</span>):</span><br><span class="line">    <span class="comment"># one small nonlinearity, one leap for model kind</span></span><br><span class="line">    n = caffe.NetSpec()</span><br><span class="line">    n.data, n.label = L.HDF5Data(batch_size=batch_size, source=hdf5, ntop=<span class="number">2</span>)</span><br><span class="line">    <span class="comment"># define a hidden layer of dimension 40</span></span><br><span class="line">    n.ip1 = L.InnerProduct(n.data, num_output=<span class="number">40</span>, weight_filler=<span class="built_in">dict</span>(<span class="built_in">type</span>=<span class="string">&#x27;xavier&#x27;</span>))</span><br><span class="line">    <span class="comment"># transform the output through the ReLU (rectified linear) non-linearity</span></span><br><span class="line">    n.relu1 = L.ReLU(n.ip1, in_place=<span class="literal">True</span>)</span><br><span class="line">    <span class="comment"># score the (now non-linear) features</span></span><br><span class="line">    n.ip2 = L.InnerProduct(n.ip1, num_output=<span class="number">2</span>, weight_filler=<span class="built_in">dict</span>(<span class="built_in">type</span>=<span class="string">&#x27;xavier&#x27;</span>))</span><br><span class="line">    <span class="comment"># same accuracy and loss as before</span></span><br><span class="line">    n.accuracy = L.Accuracy(n.ip2, n.label)</span><br><span class="line">    n.loss = L.SoftmaxWithLoss(n.ip2, n.label)</span><br><span class="line">    <span class="keyword">return</span> n.to_proto()</span><br><span class="line"></span><br><span class="line">train_net_path = <span class="string">&#x27;examples/hdf5_classification/nonlinear_auto_train.prototxt&#x27;</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(train_net_path, <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(<span class="built_in">str</span>(nonlinear_net(<span class="string">&#x27;examples/hdf5_classification/data/train.txt&#x27;</span>, <span class="number">10</span>)))</span><br><span class="line"></span><br><span class="line">test_net_path = <span class="string">&#x27;examples/hdf5_classification/nonlinear_auto_test.prototxt&#x27;</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(test_net_path, <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(<span class="built_in">str</span>(nonlinear_net(<span class="string">&#x27;examples/hdf5_classification/data/test.txt&#x27;</span>, <span class="number">10</span>)))</span><br><span class="line"></span><br><span class="line">solver_path = <span class="string">&#x27;examples/hdf5_classification/nonlinear_logreg_solver.prototxt&#x27;</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(solver_path, <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(<span class="built_in">str</span>(solver(train_net_path, test_net_path)))</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">%%timeit</span><br><span class="line">caffe.set_mode_cpu()</span><br><span class="line">solver = caffe.get_solver(solver_path)</span><br><span class="line">solver.solve()</span><br><span class="line"></span><br><span class="line">accuracy = <span class="number">0</span></span><br><span class="line">batch_size = solver.test_nets[<span class="number">0</span>].blobs[<span class="string">&#x27;data&#x27;</span>].num</span><br><span class="line">test_iters = <span class="built_in">int</span>(<span class="built_in">len</span>(Xt) / batch_size)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(test_iters):</span><br><span class="line">    solver.test_nets[<span class="number">0</span>].forward()</span><br><span class="line">    accuracy += solver.test_nets[<span class="number">0</span>].blobs[<span class="string">&#x27;accuracy&#x27;</span>].data</span><br><span class="line">accuracy /= test_iters</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Accuracy: &#123;:.3f&#125;&quot;</span>.<span class="built_in">format</span>(accuracy))</span><br></pre></td></tr></table></figure>
+
+<pre><code>Accuracy: 0.838
+Accuracy: 0.837
+Accuracy: 0.838
+Accuracy: 0.834
+1 loop, best of 3: 277 ms per loop
+</code></pre>
+<p>Do the same through the command line interface for detailed output on the model and solving.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!./build/tools/caffe train -solver examples/hdf5_classification/nonlinear_logreg_solver.prototxt</span><br></pre></td></tr></table></figure>
+
+<pre><code>I0224 00:32:05.654265   658 caffe.cpp:178] Use CPU.
+I0224 00:32:05.810444   658 solver.cpp:48] Initializing solver from parameters: 
+train_net: &quot;examples/hdf5_classification/nonlinear_auto_train.prototxt&quot;
+test_net: &quot;examples/hdf5_classification/nonlinear_auto_test.prototxt&quot;
+......
+I0224 00:32:06.078208   658 solver.cpp:406]     Test net output #0: accuracy = 0.8388
+I0224 00:32:06.078225   658 solver.cpp:406]     Test net output #1: loss = 0.382042 (* 1 = 0.382042 loss)
+I0224 00:32:06.078234   658 solver.cpp:323] Optimization Done.
+I0224 00:32:06.078241   658 caffe.cpp:222] Optimization Done.
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Clean up (comment this out if you want to examine the hdf5_classification/data directory).</span></span><br><span class="line">shutil.rmtree(dirname)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://demo.vislab.berkeleyvision.org/">demo</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/BVLC/caffe">caffe git</a></li>
+</ul>
+<h2 id="History"><a href="#History" class="headerlink" title="History"></a>History</h2><ul>
+<li>20180102: created.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/caffe/" rel="tag"># caffe</a>
+              <a href="/tags/sklearn/" rel="tag"># sklearn</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/Using-Github-Pages-and-Hexo-to-manage-personal-blogs/" rel="prev" title="Part 1 Using Github Pages and Hexo to manage personal blogs on Ubuntu">
+      <i class="fa fa-chevron-left"></i> Part 1 Using Github Pages and Hexo to manage personal blogs on Ubuntu
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/Install-and-Configure-ROS-Kinetic-on-Ubuntu-16-04/" rel="next" title="Install and Configure ROS Kinetic on Ubuntu 16.04">
+      Install and Configure ROS Kinetic on Ubuntu 16.04 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Tutorial"><span class="nav-number">1.</span> <span class="nav-text">Tutorial</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-number">3.</span> <span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">kezunlin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">181</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">213</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kezunlin</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
